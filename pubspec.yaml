@@ -1,0 +1,70 @@
+name: netzoon
+description: A new Flutter project.
+
+publish_to: 'none' 
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.19.6 <3.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.5
+  flutter_bloc: ^8.1.2
+  flutter_screenutil: ^5.7.0
+  dartz: ^0.10.1
+  equatable: ^2.0.5
+  retrofit: ^4.0.1
+  get_it: ^7.2.0
+  flutter_svg: ^2.0.4
+  internet_connection_checker: ^0.0.1+4
+  form_field_validator: ^1.1.0
+  dio: ^5.1.1
+  injectable: ^2.1.1
+  shared_preferences: ^2.1.0
+  json_annotation: ^4.8.0
+  shimmer: ^2.0.0
+  auto_route: ^6.1.0
+  easy_localization: ^3.0.1
+  carousel_slider: ^4.2.1
+  google_nav_bar: ^5.0.6
+  flutter_localizations: 
+    sdk: flutter  
+  dropdown_button2: ^2.0.0
+  cached_network_image: ^3.2.3
+  dynamic_height_grid_view: ^0.0.3
+  geolocator: ^9.0.2
+  country_code_picker: ^3.0.0
+  youtube_player_flutter: ^8.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  injectable_generator: ^2.1.4
+  build_runner: ^2.3.3
+  built_value_generator: ^8.4.4
+  json_serializable: ^6.6.1
+  retrofit_generator: ^6.0.0+1
+  auto_route_generator: ^6.1.0
+
+
+flutter:
+
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/
+
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo-Regular.ttf
+        - asset: assets/fonts/Cairo-Bold.ttf
+          weight: 700
