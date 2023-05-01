@@ -37,10 +37,10 @@ class TitleAndButton extends StatelessWidget {
               alignment: Alignment.center,
               decoration:
                   BoxDecoration(border: Border.all(color: Colors.blueAccent)),
-              child: const Text(
+              child: Text(
                 'عرض الكل',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.blue),
+                style: TextStyle(color: Colors.blue, fontSize: 13.sp),
               ),
             ),
           ),

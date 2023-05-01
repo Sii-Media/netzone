@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/presentation/auth/screens/signin.dart';
 import 'package:netzoon/presentation/auth/screens/user_type.dart';
 import 'package:netzoon/presentation/auth/widgets/button_auth_widget.dart';
 import 'package:netzoon/presentation/auth/widgets/text_form_auth_widget.dart';
@@ -91,11 +92,11 @@ class _LogInScreenState extends State<LogInScreen> {
                         colorText: AppColor.backgroundColor,
                         text: 'تسجيل الدخول',
                         onPressed: () {
-                          // Navigator.of(context)
-                          //     .push(MaterialPageRoute(builder: (context) {
-                          //   // ignore: prefer_const_constructors
-                          //   return UserType();
-                          // }));
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            // ignore: prefer_const_constructors
+                            return SignInScreen();
+                          }));
                         },
                       ),
                       SizedBox(
