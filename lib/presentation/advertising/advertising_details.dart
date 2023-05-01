@@ -30,10 +30,25 @@ class AdvertismentDetalsScreen extends StatelessWidget {
                         imageUrl: ads.advertisingImage,
                         fit: BoxFit.cover,
                       ),
-                      // child: Image.network(
-                      //   ads.advertisingImage,
-                      //   fit: BoxFit.cover,
-                      // ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Icon(
+                            Icons.share,
+                            color: AppColor.backgroundColor,
+                          ),
+                          SizedBox(
+                            width: 5.w,
+                          ),
+                          const Icon(
+                            Icons.favorite_border,
+                            color: AppColor.backgroundColor,
+                          ),
+                        ],
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/categories/entities/governmental.dart';
+import 'package:netzoon/presentation/categories/governmental/govermental_details.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 
 class GovernmentInstitutionScreen extends StatelessWidget {
@@ -120,7 +121,15 @@ class GovernmentInstitutionScreen extends StatelessWidget {
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(20)),
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(builder: (context) {
+                                  return GovermentalDetailsScreen(
+                                    govermentalDetails:
+                                        government.govermentalDetails,
+                                  );
+                                }));
+                              },
                               child: Card(
                                 shadowColor: Colors.grey,
                                 child: CachedNetworkImage(
