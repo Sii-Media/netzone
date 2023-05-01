@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
+import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   const ProductDetailsScreen({super.key, required this.products});
@@ -39,6 +41,7 @@ class Product extends StatelessWidget {
   final String img;
   @override
   Widget build(BuildContext context) {
+    final TextEditingController input = TextEditingController();
     return Padding(
       padding: const EdgeInsets.only(
         top: 2,
@@ -58,18 +61,41 @@ class Product extends StatelessWidget {
           SizedBox(
             height: 10.h,
           ),
-          Row(
-            children: [
-              const Icon(
-                Icons.favorite_border,
-              ),
-              SizedBox(
-                width: 10.w,
-              ),
-              const Icon(
-                Icons.share,
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.favorite_border,
+                        ),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        const Icon(
+                          Icons.share,
+                        ),
+                      ],
+                    ),
+                    Text(
+                      'السعر : 20000',
+                      style: TextStyle(
+                          color: AppColor.colorOne,
+                          fontSize: 17.sp,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                PriceSuggestionButton(input: input),
+              ],
+            ),
           ),
           SizedBox(
             height: 10.h,

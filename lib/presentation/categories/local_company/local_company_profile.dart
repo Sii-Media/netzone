@@ -128,12 +128,29 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          Text(
-                            widget.localCompany.description,
-                            style: TextStyle(
-                              color: AppColor.black,
-                              fontSize: 16.sp,
-                            ),
+                          Column(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                widget.localCompany.description,
+                                style: TextStyle(
+                                  color: AppColor.black,
+                                  fontSize: 16.sp,
+                                ),
+                              ),
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      AppColor.backgroundColor),
+                                  shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                  )),
+                                ),
+                                child: const Text('follow'),
+                                onPressed: () {},
+                              ),
+                            ],
                           ),
                           SizedBox(
                             height: 12.h,
