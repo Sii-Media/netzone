@@ -98,29 +98,29 @@ class GovermentalDetailsScreen extends StatelessWidget {
                         SizedBox(
                           height: 20.h,
                         ),
-                        customNamed('اسم المؤسسة', govermentalDetails.name),
+                        customNamed('اسم المؤسسة :', govermentalDetails.name),
                         SizedBox(
                           height: 20.h,
                         ),
                         customNamed(
-                            'المنطقة أو الامارة', govermentalDetails.city),
+                            'المنطقة أو الامارة :', govermentalDetails.city),
                         SizedBox(
                           height: 20.h,
                         ),
-                        customNamed('العنوان', govermentalDetails.address),
+                        customNamed('العنوان :', govermentalDetails.address),
                         SizedBox(
                           height: 20.h,
                         ),
-                        customNamed('موبايل', govermentalDetails.mobile!),
+                        customNamed('موبايل :', govermentalDetails.mobile!),
                         SizedBox(
                           height: 20.h,
                         ),
-                        customNamed('الهاتف', govermentalDetails.phone!),
+                        customNamed('الهاتف :', govermentalDetails.phone!),
                         SizedBox(
                           height: 20.h,
                         ),
                         customNamed(
-                            'البريد الالكتروني', govermentalDetails.email),
+                            'البريد الالكتروني :', govermentalDetails.email),
                         SizedBox(
                           height: 20.h,
                         ),
@@ -141,7 +141,7 @@ class GovermentalDetailsScreen extends StatelessWidget {
                           height: 20.h,
                         ),
                         VideoFreeZoneWidget(
-                            title: 'الفيديوهات',
+                            title: 'الفيديوهات :',
                             vediourl: govermentalDetails.videourl!),
                       ],
                     ),
@@ -172,9 +172,8 @@ class GovermentalDetailsScreen extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            color: const Color.fromARGB(255, 96, 95, 95),
+            color: AppColor.black,
             fontSize: 14.sp,
-            fontWeight: FontWeight.w500,
           ),
         ),
         SizedBox(
@@ -184,7 +183,7 @@ class GovermentalDetailsScreen extends StatelessWidget {
           child: Text(
             desc,
             style: TextStyle(
-              color: Colors.grey,
+              color: AppColor.mainGrey,
               fontSize: 14.sp,
             ),
           ),
@@ -200,7 +199,7 @@ class GovermentalDetailsScreen extends StatelessWidget {
         Text(
           'تفاصيل المؤسسة الحكومية :',
           style: TextStyle(
-            color: const Color.fromARGB(255, 96, 95, 95),
+            color: AppColor.black,
             fontSize: 14.sp,
             fontWeight: FontWeight.w500,
           ),
@@ -211,7 +210,7 @@ class GovermentalDetailsScreen extends StatelessWidget {
         Text(
           info,
           style: TextStyle(
-            color: Colors.grey,
+            color: AppColor.mainGrey,
             fontSize: 14.sp,
           ),
         ),

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/categories/entities/customs_category.dart';
 import 'package:netzoon/presentation/categories/widgets/free_zone_video_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:url_launcher/link.dart';
 
 class CustomsScreen extends StatelessWidget {
   const CustomsScreen({super.key, required this.customsCategory});
@@ -132,6 +133,13 @@ class CustomsScreen extends StatelessWidget {
                         SizedBox(
                           height: 20.h,
                         ),
+                        customsCategory.link == '' ||
+                                customsCategory.link == null
+                            ? Container()
+                            : servicesInfo(url: customsCategory.link!),
+                        SizedBox(
+                          height: 20.h,
+                        ),
                         Center(
                           child: Text(
                             'لا يوجد صور',
@@ -169,14 +177,47 @@ class CustomsScreen extends StatelessWidget {
     );
   }
 
+  Row servicesInfo({required String url}) {
+    return Row(
+      children: [
+        Text(
+          'الخدمات :',
+          style: TextStyle(
+            color: AppColor.black,
+            fontSize: 15.sp,
+          ),
+        ),
+        SizedBox(
+          width: 12.w,
+        ),
+        Link(
+          uri: Uri.parse(
+            url,
+          ),
+          builder: ((context, followLink) => GestureDetector(
+                onTap: followLink,
+                child: Text(
+                  'اضغط هنا',
+                  style: TextStyle(
+                    color: AppColor.backgroundColor,
+                    fontSize: 15.sp,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              )),
+        ),
+      ],
+    );
+  }
+
   Row customNamed(String title, String desc) {
     return Row(
       children: [
         Text(
           title,
           style: TextStyle(
-            color: const Color.fromARGB(255, 96, 95, 95),
-            fontSize: 17.sp,
+            color: AppColor.black,
+            fontSize: 15.sp,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -186,8 +227,8 @@ class CustomsScreen extends StatelessWidget {
         Text(
           desc,
           style: TextStyle(
-            color: Colors.grey,
-            fontSize: 15.sp,
+            color: AppColor.mainGrey,
+            fontSize: 14.sp,
           ),
         ),
       ],
@@ -201,9 +242,8 @@ class CustomsScreen extends StatelessWidget {
         Text(
           'تفاصيل المؤسسة الحكومية :',
           style: TextStyle(
-            color: const Color.fromARGB(255, 96, 95, 95),
-            fontSize: 17.sp,
-            fontWeight: FontWeight.w500,
+            color: AppColor.black,
+            fontSize: 15.sp,
           ),
         ),
         SizedBox(
@@ -212,8 +252,8 @@ class CustomsScreen extends StatelessWidget {
         Text(
           info,
           style: TextStyle(
-            color: Colors.grey,
-            fontSize: 15.sp,
+            color: AppColor.mainGrey,
+            fontSize: 14.sp,
           ),
         ),
       ],

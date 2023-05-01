@@ -28,7 +28,7 @@ class ListOfWatches extends StatelessWidget {
                       BorderRadius.only(bottomLeft: Radius.circular(1000)),
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(50.0),
+                  borderRadius: BorderRadius.circular(20.0),
                   child: InkWell(
                     onTap: () {
                       Navigator.of(context)
@@ -52,7 +52,7 @@ class ListOfWatches extends StatelessWidget {
                         children: [
                           CachedNetworkImage(
                             imageUrl: watches[index].imgUrl,
-                            fit: BoxFit.contain,
+                            fit: BoxFit.cover,
                             height: MediaQuery.of(context).size.height,
                           ),
                           // Image.network(

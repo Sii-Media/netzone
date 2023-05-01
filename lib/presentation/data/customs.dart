@@ -19,6 +19,7 @@ List<Customs> customs = [
             'تعتبر جمارك دبي من أقدم الدوائر الحكومية، وعُرفت سابقاً باسم "الفرضة" أي جمع الضرائب والرسوم التي كانت تفرض وتحصل على السلع المستوردة، ونظراً لعراقة الجمارك أطلق عليها البعض "أم الدوائر"، خاصة وأن العديد من الدوائر الحكومية الراهنة اتخذت في السابق مكاتب لها في مبنى الجمارك القديم وكانت تموَّل من الايرادات التي تحصلها الجمارك إلى أن تطورت تلك الدوائر واتخذت مبان مستقلة لها.',
         companyimages: [],
         videourl: 'xfYqb96ApWg',
+        link: 'https://www.dubaicustoms.gov.ae/ar/eServices/Pages/default.aspx',
       ),
     ],
   ),
@@ -38,6 +39,7 @@ List<Customs> customs = [
         info: '',
         companyimages: [],
         videourl: 'Q7RqFHzhKqI',
+        link: 'https://www.adcustoms.gov.ae/ar-AE/AD-Customs-Main-Services',
       ),
       CustomsCategory(
         name: 'جمرك ميناء زايد',
@@ -50,6 +52,7 @@ List<Customs> customs = [
         info: '',
         companyimages: [],
         videourl: 'Q7RqFHzhKqI',
+        link: '',
       ),
       CustomsCategory(
         name: 'جمرك مطار أبو ظبي الدولي',
@@ -62,6 +65,7 @@ List<Customs> customs = [
         info: '',
         companyimages: [],
         videourl: 'P2mb8_pR44s',
+        link: '',
       ),
     ],
   ),
@@ -81,6 +85,7 @@ List<Customs> customs = [
         info: '',
         companyimages: [],
         videourl: 'pe-BoBy9Gc8',
+        link: '',
       ),
     ],
   ),
@@ -102,6 +107,7 @@ List<Customs> customs = [
           'https://media-whichmedia.s3.ap-southeast-1.amazonaws.com/media/large/0/9/097dce26400c.jpeg'
         ],
         videourl: 'n6MnpcRiIT8',
+        link: '',
       ),
     ],
   ),
@@ -122,6 +128,7 @@ List<Customs> customs = [
           'https://safarin.net/wp-content/uploads/2016/12/16-12-17_09-24-27.jpg'
         ],
         videourl: 'T9K3b5AewJQ',
+        link: '',
       ),
     ],
   ),
@@ -143,6 +150,7 @@ List<Customs> customs = [
           'https://mybayutcdn.bayut.com/mybayut/wp-content/uploads/city-of-fujairah-ar0206222.jpg'
         ],
         videourl: 'zbJogqPnC34',
+        link: '',
       ),
     ],
   ),
@@ -164,6 +172,7 @@ List<Customs> customs = [
           'https://mybayutcdn.bayut.com/mybayut/wp-content/uploads/city-of-fujairah-ar0206222.jpg'
         ],
         videourl: '',
+        link: '',
       ),
     ],
   ),

@@ -12,6 +12,7 @@ class CompanyCategory extends Equatable {
   final String info;
   final List<String> companyimages;
   final String? videourl;
+  final String? link;
 
   const CompanyCategory({
     required this.name,
@@ -25,9 +26,19 @@ class CompanyCategory extends Equatable {
     required this.info,
     required this.companyimages,
     this.videourl,
+    this.link,
   });
 
   @override
-  List<Object?> get props =>
-      [name, categoryName, city, address, email, imgurl, info, companyimages];
+  List<Object?> get props => [
+        name,
+        categoryName,
+        city,
+        address,
+        email,
+        imgurl,
+        info,
+        companyimages,
+        link,
+      ];
 }

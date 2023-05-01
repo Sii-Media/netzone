@@ -14,22 +14,22 @@ class TitleAndButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onPress,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Expanded(
-            flex: 3,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 8.0, left: 5, right: 5),
-              child: Text(
-                title,
-                style: TextStyle(fontSize: 18.sp, color: Colors.black),
-              ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Expanded(
+          flex: 3,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 8.0, left: 5, right: 5),
+            child: Text(
+              title,
+              style: TextStyle(fontSize: 18.sp, color: Colors.black),
             ),
           ),
-          Container(
+        ),
+        InkWell(
+          onTap: onPress,
+          child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 6),
             width: 70.w,
             height: 30.h,
@@ -43,9 +43,9 @@ class TitleAndButton extends StatelessWidget {
                 style: TextStyle(color: Colors.blue),
               ),
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }

@@ -9,5 +9,6 @@ final List<Category> cat = [
   const Category(url: 'assets/images/governmental.jpg', name: 'مؤسسات حكومية'),
   const Category(url: 'assets/images/ships.png', name: 'سفن'),
   const Category(url: 'assets/images/cars.png', name: 'سيارات'),
+  const Category(url: 'assets/images/plan.jpg', name: 'طائرات مدنية'),
   const Category(url: 'assets/images/governmental.jpg', name: 'الجمارك'),
 ];

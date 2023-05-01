@@ -4,7 +4,9 @@ import 'package:netzoon/domain/categories/entities/categories.dart';
 import 'package:netzoon/presentation/categories/factories/factories_categories.dart';
 import 'package:netzoon/presentation/categories/free_zoon/category_free_zoon.dart';
 import 'package:netzoon/presentation/categories/local_company/local_companies.dart';
+import 'package:netzoon/presentation/categories/plans/plans_categories_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/widgets/vehicle_list_screen.dart';
 import 'package:netzoon/presentation/data/categories.dart';
 
 class ListGridView extends StatelessWidget {
@@ -124,6 +126,24 @@ class GridCategory extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) {
                   return const FactoriesCategoryScreen();
+                },
+              ),
+            );
+          } else if (category.name == 'طائرات مدنية') {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return const PlansCategoriesScreen();
+                },
+              ),
+            );
+          } else if (category.name == 'سيارات') {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return const VehicleListScreen(
+                    type: 'cars',
+                  );
                 },
               ),
             );

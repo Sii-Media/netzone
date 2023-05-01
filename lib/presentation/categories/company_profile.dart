@@ -5,6 +5,7 @@ import 'package:netzoon/domain/categories/entities/company_category.dart';
 import 'package:netzoon/presentation/categories/widgets/free_zone_video_widget.dart';
 import 'package:netzoon/presentation/categories/widgets/image_free_zone_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:url_launcher/link.dart';
 
 class CompanyProfile extends StatelessWidget {
   const CompanyProfile({super.key, required this.companyCategory});
@@ -90,8 +91,8 @@ class CompanyProfile extends StatelessWidget {
                 right: 0,
                 left: 0,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 12.0, horizontal: 20),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 1, horizontal: 20),
                   height: MediaQuery.of(context).size.height - 191.h,
                   child: SingleChildScrollView(
                     child: Column(
@@ -122,6 +123,13 @@ class CompanyProfile extends StatelessWidget {
                         companyCategory.info == ''
                             ? Container()
                             : freeZoonInfo(),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        companyCategory.link == '' ||
+                                companyCategory.link == null
+                            ? Container()
+                            : servicesInfo(url: companyCategory.link!),
                         SizedBox(
                           height: 20.h,
                         ),
@@ -158,7 +166,7 @@ class CompanyProfile extends StatelessWidget {
                 child: Center(
                   child: Text(
                     companyCategory.name,
-                    style: TextStyle(fontSize: 22.sp, color: Colors.white),
+                    style: TextStyle(fontSize: 20.sp, color: Colors.white),
                   ),
                 ),
               ),
@@ -177,9 +185,8 @@ class CompanyProfile extends StatelessWidget {
             Text(
               'الهاتف :',
               style: TextStyle(
-                color: const Color.fromARGB(255, 96, 95, 95),
-                fontSize: 17.sp,
-                fontWeight: FontWeight.w500,
+                color: AppColor.black,
+                fontSize: 15.sp,
               ),
             ),
             SizedBox(
@@ -188,8 +195,8 @@ class CompanyProfile extends StatelessWidget {
             Text(
               companyCategory.phone!,
               style: TextStyle(
-                color: Colors.grey,
-                fontSize: 15.sp,
+                color: AppColor.mainGrey,
+                fontSize: 14.sp,
               ),
             ),
           ],
@@ -209,9 +216,8 @@ class CompanyProfile extends StatelessWidget {
             Text(
               'موبايل :',
               style: TextStyle(
-                color: const Color.fromARGB(255, 96, 95, 95),
-                fontSize: 17.sp,
-                fontWeight: FontWeight.w500,
+                color: AppColor.black,
+                fontSize: 15.sp,
               ),
             ),
             SizedBox(
@@ -220,8 +226,8 @@ class CompanyProfile extends StatelessWidget {
             Text(
               companyCategory.mobile!,
               style: TextStyle(
-                color: Colors.grey,
-                fontSize: 15.sp,
+                color: AppColor.mainGrey,
+                fontSize: 14.sp,
               ),
             ),
           ],
@@ -239,9 +245,8 @@ class CompanyProfile extends StatelessWidget {
         Text(
           'اسم المنطقة الحرة :',
           style: TextStyle(
-            color: const Color.fromARGB(255, 96, 95, 95),
-            fontSize: 17.sp,
-            fontWeight: FontWeight.w500,
+            color: AppColor.black,
+            fontSize: 15.sp,
           ),
         ),
         SizedBox(
@@ -250,8 +255,8 @@ class CompanyProfile extends StatelessWidget {
         Text(
           companyCategory.categoryName,
           style: TextStyle(
-            color: Colors.grey,
-            fontSize: 15.sp,
+            color: AppColor.mainGrey,
+            fontSize: 14.sp,
           ),
         ),
       ],
@@ -264,9 +269,8 @@ class CompanyProfile extends StatelessWidget {
         Text(
           'المنطقة أو الإمارة :',
           style: TextStyle(
-            color: const Color.fromARGB(255, 96, 95, 95),
-            fontSize: 17.sp,
-            fontWeight: FontWeight.w500,
+            color: AppColor.black,
+            fontSize: 15.sp,
           ),
         ),
         SizedBox(
@@ -275,8 +279,8 @@ class CompanyProfile extends StatelessWidget {
         Text(
           companyCategory.city,
           style: TextStyle(
-            color: Colors.grey,
-            fontSize: 15.sp,
+            color: AppColor.mainGrey,
+            fontSize: 14.sp,
           ),
         ),
       ],
@@ -290,9 +294,8 @@ class CompanyProfile extends StatelessWidget {
         Text(
           'العنوان :',
           style: TextStyle(
-            color: const Color.fromARGB(255, 96, 95, 95),
-            fontSize: 17.sp,
-            fontWeight: FontWeight.w500,
+            color: AppColor.black,
+            fontSize: 15.sp,
           ),
         ),
         SizedBox(
@@ -302,8 +305,8 @@ class CompanyProfile extends StatelessWidget {
           child: Text(
             companyCategory.address,
             style: TextStyle(
-              color: Colors.grey,
-              fontSize: 15.sp,
+              color: AppColor.mainGrey,
+              fontSize: 14.sp,
             ),
           ),
         ),
@@ -317,9 +320,8 @@ class CompanyProfile extends StatelessWidget {
         Text(
           'البريد الإلكتروني: ',
           style: TextStyle(
-            color: const Color.fromARGB(255, 96, 95, 95),
-            fontSize: 17.sp,
-            fontWeight: FontWeight.w500,
+            color: AppColor.black,
+            fontSize: 15.sp,
           ),
         ),
         SizedBox(
@@ -328,8 +330,8 @@ class CompanyProfile extends StatelessWidget {
         Text(
           companyCategory.email,
           style: TextStyle(
-            color: Colors.grey,
-            fontSize: 15.sp,
+            color: AppColor.mainGrey,
+            fontSize: 14.sp,
           ),
         ),
       ],
@@ -362,7 +364,7 @@ class CompanyProfile extends StatelessWidget {
                 'الشركات',
                 style: TextStyle(
                   color: AppColor.black,
-                  fontSize: 17.sp,
+                  fontSize: 15.sp,
                   fontWeight: FontWeight.w800,
                 ),
               ),
@@ -395,7 +397,7 @@ class CompanyProfile extends StatelessWidget {
                     "اللطافة",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 17.sp,
+                        fontSize: 15.sp,
                         fontWeight: FontWeight.w300),
                   ),
                 ),
@@ -414,9 +416,8 @@ class CompanyProfile extends StatelessWidget {
         Text(
           'تفاصيل المنطقة الحرة :',
           style: TextStyle(
-            color: const Color.fromARGB(255, 96, 95, 95),
-            fontSize: 17.sp,
-            fontWeight: FontWeight.w500,
+            color: AppColor.black,
+            fontSize: 15.sp,
           ),
         ),
         SizedBox(
@@ -425,9 +426,42 @@ class CompanyProfile extends StatelessWidget {
         Text(
           companyCategory.info,
           style: TextStyle(
-            color: Colors.grey,
+            color: AppColor.mainGrey,
+            fontSize: 14.sp,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row servicesInfo({required String url}) {
+    return Row(
+      children: [
+        Text(
+          'الخدمات :',
+          style: TextStyle(
+            color: AppColor.black,
             fontSize: 15.sp,
           ),
+        ),
+        SizedBox(
+          width: 12.w,
+        ),
+        Link(
+          uri: Uri.parse(
+            url,
+          ),
+          builder: ((context, followLink) => GestureDetector(
+                onTap: followLink,
+                child: Text(
+                  'اضغط هنا',
+                  style: TextStyle(
+                    color: AppColor.backgroundColor,
+                    fontSize: 15.sp,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              )),
         ),
       ],
     );

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/auth/screens/login.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/home/pages/home_page.dart';
 import 'package:netzoon/presentation/more/more_screen.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 class TestScreen extends StatefulWidget {
   const TestScreen({super.key});
@@ -15,6 +15,29 @@ class TestScreen extends StatefulWidget {
 
 class _TestScreenState extends State<TestScreen> {
   int _currentIndex = 0;
+  final _items = <Widget>[
+    const Icon(
+      Icons.home,
+      size: 25,
+    ),
+    const Icon(
+      Icons.shopping_cart,
+      size: 25,
+    ),
+    const Icon(
+      Icons.add,
+      size: 25,
+    ),
+    const Icon(
+      Icons.person,
+      size: 25,
+    ),
+    const Icon(
+      Icons.more_horiz,
+      size: 25,
+    ),
+  ];
+
   final List<Widget> _children = [
     const HomePage(),
     const Center(
@@ -41,83 +64,110 @@ class _TestScreenState extends State<TestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        child: Scaffold(
-          body: BackgroundWidget(
-            widget: _children[_currentIndex],
-          ),
-          bottomNavigationBar: SizedBox(
-            height: 65.h,
-            child: BottomNavigationBar(
-              currentIndex: _currentIndex,
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: AppColor.backgroundColor,
-              selectedItemColor: AppColor.white,
-              unselectedItemColor: AppColor.white.withOpacity(0.5),
-              onTap: _onItemTapped,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: 'الرئيسية',
+    return Container(
+      color: AppColor.backgroundColor,
+      child: SafeArea(
+        top: false,
+        child: Directionality(
+          textDirection: TextDirection.rtl,
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: ClipRRect(
+              child: Scaffold(
+                extendBody: true,
+                body: BackgroundWidget(
+                  widget: _children[_currentIndex],
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_cart),
-                  label: 'السلة',
+                bottomNavigationBar: Theme(
+                  data: Theme.of(context).copyWith(
+                    iconTheme: const IconThemeData(
+                      color: AppColor.white,
+                    ),
+                  ),
+                  child: CurvedNavigationBar(
+                    items: _items,
+                    height: 60,
+                    index: _currentIndex,
+                    onTap: _onItemTapped,
+                    backgroundColor: Colors.transparent,
+                    color: AppColor.backgroundColor,
+                    buttonBackgroundColor: AppColor.backgroundColor,
+                    animationCurve: Curves.easeInOut,
+                    animationDuration: const Duration(milliseconds: 400),
+                  ),
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.add),
-                  label: 'إضافة',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: 'حسابي',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.more_horiz),
-                  label: 'المزيد',
-                ),
-              ],
+                // bottomNavigationBar: SizedBox(
+                //   height: 65.h,
+                //   child: BottomNavigationBar(
+                //     currentIndex: _currentIndex,
+                //     type: BottomNavigationBarType.fixed,
+                //     backgroundColor: AppColor.backgroundColor,
+                //     selectedItemColor: AppColor.white,
+                //     unselectedItemColor: AppColor.white.withOpacity(0.5),
+                //     onTap: _onItemTapped,
+                //     items: const [
+                //       BottomNavigationBarItem(
+                //         icon: Icon(Icons.home),
+                //         label: 'الرئيسية',
+                //       ),
+                //       BottomNavigationBarItem(
+                //         icon: Icon(Icons.shopping_cart),
+                //         label: 'السلة',
+                //       ),
+                //       BottomNavigationBarItem(
+                //         icon: Icon(Icons.add),
+                //         label: 'إضافة',
+                //       ),
+                //       BottomNavigationBarItem(
+                //         icon: Icon(Icons.person),
+                //         label: 'حسابي',
+                //       ),
+                //       BottomNavigationBarItem(
+                //         icon: Icon(Icons.more_horiz),
+                //         label: 'المزيد',
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // bottomNavigationBar: SizedBox(
+                //   height: 65.h,
+                //   width: MediaQuery.of(context).size.width,
+                //   child: GNav(
+                //     style: GnavStyle.google,
+                //     onTabChange: _onItemTapped,
+                //     backgroundColor: AppColor.backgroundColor,
+                //     iconSize: 22.sp,
+                //     textSize: 10.sp,
+                //     gap: 2,
+                //     color: Colors.white,
+                //     activeColor: Colors.white,
+                //     tabs: const [
+                //       GButton(
+                //         icon: Icons.home,
+                //         text: 'الرئيسية',
+                //       ),
+                //       GButton(
+                //         icon: Icons.shopping_cart,
+                //         text: 'السلة',
+                //       ),
+                //       GButton(
+                //         icon: Icons.add,
+                //         text: 'إضافة',
+                //       ),
+                //       GButton(
+                //         icon: Icons.person,
+                //         text: 'حسابي',
+                //       ),
+                //       GButton(
+                //         icon: Icons.list_rounded,
+                //         text: 'المزيد',
+                //       )
+                //     ],
+                //   ),
+                // ),
+              ),
             ),
           ),
-          // bottomNavigationBar: SizedBox(
-          //   height: 65.h,
-          //   width: MediaQuery.of(context).size.width,
-          //   child: GNav(
-          //     style: GnavStyle.google,
-          //     onTabChange: _onItemTapped,
-          //     backgroundColor: AppColor.backgroundColor,
-          //     iconSize: 22.sp,
-          //     textSize: 10.sp,
-          //     gap: 2,
-          //     color: Colors.white,
-          //     activeColor: Colors.white,
-          //     tabs: const [
-          //       GButton(
-          //         icon: Icons.home,
-          //         text: 'الرئيسية',
-          //       ),
-          //       GButton(
-          //         icon: Icons.shopping_cart,
-          //         text: 'السلة',
-          //       ),
-          //       GButton(
-          //         icon: Icons.add,
-          //         text: 'إضافة',
-          //       ),
-          //       GButton(
-          //         icon: Icons.person,
-          //         text: 'حسابي',
-          //       ),
-          //       GButton(
-          //         icon: Icons.list_rounded,
-          //         text: 'المزيد',
-          //       )
-          //     ],
-          //   ),
-          // ),
         ),
       ),
     );

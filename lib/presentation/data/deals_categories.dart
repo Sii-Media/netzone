@@ -17,9 +17,12 @@ List<DealsCategory> dealsCategories = [
     dealsCategoryName: 'القوارب والسفن المدنية والخاصة والمستخدمة',
   ),
   const DealsCategory(
-    dealsCategoryName: 'السيارات',
+    dealsCategoryName: 'مواد بناء',
   ),
   const DealsCategory(
-    dealsCategoryName: 'المؤسسات الحكومية',
+    dealsCategoryName: 'سكراب',
+  ),
+  const DealsCategory(
+    dealsCategoryName: 'مواد بناء تحتية',
   ),
 ];

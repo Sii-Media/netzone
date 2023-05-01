@@ -8,6 +8,7 @@ class CustomsCategory extends Equatable {
   final String email;
   final String imgurl;
   final String info;
+  final String? link;
   final List<String> companyimages;
   final String? videourl;
 
@@ -21,9 +22,19 @@ class CustomsCategory extends Equatable {
     required this.info,
     required this.companyimages,
     this.videourl,
+    this.link,
   });
 
   @override
-  List<Object?> get props =>
-      [name, categoryName, city, address, email, imgurl, info, companyimages];
+  List<Object?> get props => [
+        name,
+        categoryName,
+        city,
+        address,
+        email,
+        imgurl,
+        info,
+        companyimages,
+        link
+      ];
 }
