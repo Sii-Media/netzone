@@ -4,7 +4,7 @@ import 'package:netzoon/domain/electronic_devices/entities/device_list.dart';
 class WomanFashionList extends Equatable {
   final String name;
   final String imgUrl;
-  final List<DeviceList> deviceList;
+  final List<ItemList> deviceList;
 
   const WomanFashionList(
       {required this.name, required this.imgUrl, required this.deviceList});

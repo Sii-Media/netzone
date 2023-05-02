@@ -5,7 +5,7 @@ import '../../electronic_devices/entities/device_list.dart';
 class FoodProductList extends Equatable {
   final String name;
   final String imgUrl;
-  final List<DeviceList> deviceList;
+  final List<ItemList> deviceList;
 
   const FoodProductList(
       {required this.name, required this.imgUrl, required this.deviceList});

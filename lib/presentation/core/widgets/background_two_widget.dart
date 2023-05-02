@@ -21,6 +21,7 @@ class BackgroundTwoWidget extends StatelessWidget {
     'مناطق حرة',
     'زبائن',
     'شركات',
+    'عقارات',
   ];
   final String? selectedValue;
 

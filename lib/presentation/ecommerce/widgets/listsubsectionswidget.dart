@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 
 class ListSubSectionsWidget extends StatelessWidget {
   const ListSubSectionsWidget({super.key, required this.deviceList});
@@ -10,6 +11,17 @@ class ListSubSectionsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return ProductDetailScreen(
+                item: deviceList,
+              );
+            },
+          ),
+        );
+      },
       child: Card(
         child: Padding(
           padding: EdgeInsets.all(size.height * 0.002),
