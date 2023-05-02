@@ -54,15 +54,15 @@ class ListSubSectionsWidget extends StatelessWidget {
                 child: SizedBox(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text(
-                        'السعر: 9',
-                        style: TextStyle(
+                        '${deviceList.price} درهم',
+                        style: const TextStyle(
                           color: AppColor.backgroundColor,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      Icon(
+                      const Icon(
                         Icons.share,
                         color: AppColor.backgroundColor,
                       ),

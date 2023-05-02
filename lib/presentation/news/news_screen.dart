@@ -15,9 +15,12 @@ class NewsScreen extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         body: BackgroundWidget(
-          widget: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: AllNewsWidget(news: news),
+          widget: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: AllNewsWidget(news: news),
+            ),
           ),
         ),
       ),
@@ -34,24 +37,49 @@ class AllNewsWidget extends StatelessWidget {
         shrinkWrap: true,
         itemCount: news.length,
         itemBuilder: (BuildContext context, index) {
-          return SizedBox(
-            height: MediaQuery.of(context).size.height * 0.41,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 240.h,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) {
-                          return NewsDetails(
-                            news: news[index],
-                          );
-                        }),
-                      );
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: SizedBox(
+              // height: MediaQuery.of(context).size.height * 0.44,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: CachedNetworkImage(
+                          width: 35.w,
+                          height: 35.h,
+                          fit: BoxFit.cover,
+                          imageUrl: news[index].ownerImage,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 6.w,
+                      ),
+                      Text(
+                        news[index].ownerName,
+                        style: TextStyle(
+                          color: AppColor.backgroundColor,
+                          fontSize: 16.sp,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 240.h,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) {
+                            return NewsDetails(
+                              news: news[index],
+                            );
+                          }),
+                        );
+                      },
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(25.0),
                           child: Card(
@@ -116,25 +144,31 @@ class AllNewsWidget extends StatelessWidget {
                           )),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Icon(
-                        Icons.favorite_border,
-                      ),
-                      SizedBox(
-                        width: 5.w,
-                      ),
-                      const Icon(
-                        Icons.share,
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Icon(
+                          Icons.favorite_border,
+                        ),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        const Icon(
+                          Icons.mode_comment_outlined,
+                        ),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        const Icon(
+                          Icons.share,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         });

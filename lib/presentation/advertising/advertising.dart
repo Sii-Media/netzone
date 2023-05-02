@@ -78,68 +78,38 @@ class Advertising extends StatelessWidget {
                 style: TextStyle(
                     color: AppColor.backgroundColor,
                     fontWeight: FontWeight.bold,
-                    fontSize: 12.sp),
+                    fontSize: 13.sp),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        advertisment.advertisingEndDate,
-                        style: TextStyle(
-                            color: AppColor.backgroundColor, fontSize: 13.sp),
-                      ),
-                      Text(
-                        ': تاريخ الإنتهاء',
-                        style: TextStyle(color: Colors.black, fontSize: 13.sp),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        advertisment.advertisingStartDate,
-                        style: TextStyle(
-                            color: AppColor.backgroundColor, fontSize: 13.sp),
-                      ),
-                      Text(
-                        ": تاريخ البدأ",
-                        style: TextStyle(color: Colors.black, fontSize: 13.sp),
-                      ),
-                    ],
-                  ),
-                ],
+              SizedBox(
+                height: 5.h,
               ),
-              InkWell(
+              Text(
+                advertisment.advertisingDescription,
+                style: TextStyle(
+                  color: AppColor.mainGrey,
+                  fontSize: 12.sp,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+              GestureDetector(
                 onTap: () {
-                  // Get.to(AdvertisingDetailsWidget(
-                  //   title: advertisingModel.advertisingTitle,
-                  //   image: advertisingModel.advertisingImage,
-                  //   description: advertisingModel.advertisingDescription,
-                  //   dateEnd: advertisingModel.advertisingEndDate,
-                  //   dateStart: advertisingModel.advertisingStartDate,
-                  // ));
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) {
+                      return AdvertismentDetalsScreen(
+                        ads: advertisment,
+                      );
+                    }),
+                  );
                 },
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return AdvertismentDetalsScreen(
-                          ads: advertisment,
-                        );
-                      }),
-                    );
-                  },
-                  child: Container(
-                    color: AppColor.backgroundColor,
-                    height: 30.h,
-                    width: MediaQuery.of(context).size.width,
-                    child: Center(
-                      child: Text(
-                        "تفاصيل الإعلان",
-                        style: TextStyle(color: Colors.white, fontSize: 13.sp),
-                      ),
+                child: Container(
+                  color: AppColor.backgroundColor,
+                  height: 30.h,
+                  width: MediaQuery.of(context).size.width,
+                  child: Center(
+                    child: Text(
+                      "تفاصيل الإعلان",
+                      style: TextStyle(color: Colors.white, fontSize: 13.sp),
                     ),
                   ),
                 ),

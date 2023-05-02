@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:netzoon/presentation/add_items/add_product_screen.dart';
 import 'package:netzoon/presentation/auth/screens/login.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
@@ -46,12 +47,7 @@ class _TestScreenState extends State<TestScreen> {
         style: TextStyle(color: Colors.black),
       ),
     ),
-    const Center(
-      child: Text(
-        'إضافة منتج',
-        style: TextStyle(color: Colors.black),
-      ),
-    ),
+    const AddProductScreen(),
     const LogInScreen(),
     const MoreScreen(),
   ];

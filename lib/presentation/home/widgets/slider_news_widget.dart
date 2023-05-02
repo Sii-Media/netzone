@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/news/entities/news.dart';
+import 'package:netzoon/presentation/news/news_details.dart';
 
 class SliderNewsWidget extends StatelessWidget {
   const SliderNewsWidget({
@@ -39,13 +40,13 @@ class SliderNewsWidget extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20)),
                         child: InkWell(
                           onTap: () {
-                            // Get.to(ViewNews(
-                            //     date:
-                            //         "${newsModel.newsDate.year}/${newsModel.newsDate.month}/${newsModel.newsDate.day}",
-                            //     image: newsModel.newsImage,
-                            //     title: newsModel.newsTitleAr,
-                            //     description: newsModel.newsDescriptionAr,
-                            //     codeCountry: controller.codeCountry!));
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) {
+                                return NewsDetails(
+                                  news: news[index],
+                                );
+                              }),
+                            );
                           },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(25.0),

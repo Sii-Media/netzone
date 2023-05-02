@@ -14,7 +14,7 @@ class BackgroundTwoWidget extends StatelessWidget {
     this.selectedValue,
   }) : super(key: key);
   final TextEditingController search = TextEditingController();
-  final List<String> list = <String>['One', 'Two', 'Three', 'Four'];
+  final List<String> list = <String>['One', 'Two', 'Three', 'Four', 'Five'];
 
   final List<String> items = [
     'عرض الكل',
@@ -190,7 +190,7 @@ class BackgroundTwoWidget extends StatelessWidget {
                     iconDisabledColor: Colors.grey,
                   ),
                   dropdownStyleData: DropdownStyleData(
-                    maxHeight: 200,
+                    maxHeight: 240,
                     width: 200,
                     padding: null,
                     decoration: BoxDecoration(
