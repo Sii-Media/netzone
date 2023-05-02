@@ -5,6 +5,7 @@ import 'package:netzoon/domain/news/entities/news.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/news/news_details.dart';
+import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
 
 class NewsScreen extends StatelessWidget {
   const NewsScreen({super.key, required this.news});
@@ -149,22 +150,63 @@ class AllNewsWidget extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        const Icon(Icons.favorite_border),
+                        SizedBox(
+                          width: 5.w,
+                        ),
                         const Icon(
-                          Icons.favorite_border,
+                          Feather.message_circle,
                         ),
                         SizedBox(
                           width: 5.w,
                         ),
                         const Icon(
-                          Icons.mode_comment_outlined,
-                        ),
-                        SizedBox(
-                          width: 5.w,
-                        ),
-                        const Icon(
-                          Icons.share,
+                          Feather.send,
                         ),
                       ],
+                    ),
+                  ),
+                  // SizedBox(
+                  //   height: 5.h,
+                  // ),
+                  // // Row(
+                  // //   children: [
+                  // //     Text(
+                  // //       news[index].ownerName,
+                  // //       style: TextStyle(
+                  // //         color: AppColor.black,
+                  // //         fontWeight: FontWeight.bold,
+                  // //         fontSize: 16.sp,
+                  // //       ),
+                  // //     ),
+                  // //     SizedBox(
+                  // //       width: 5.w,
+                  // //     ),
+                  // //     Text(
+                  // //       'بعض التفاصيل',
+                  // //       style: TextStyle(
+                  // //         color: AppColor.black,
+                  // //         fontSize: 13.sp,
+                  // //       ),
+                  // //     ),
+                  // //   ],
+                  // // ),
+                  SizedBox(
+                    height: 5.h,
+                  ),
+                  const Text(
+                    'لا يوجد تعليقات على هذا الخبر ..',
+                    style: TextStyle(
+                      color: AppColor.secondGrey,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5.h,
+                  ),
+                  const Text(
+                    '12/04/2023',
+                    style: TextStyle(
+                      color: Colors.grey,
                     ),
                   ),
                 ],
