@@ -55,7 +55,7 @@ class ListOfOfficeDevices extends StatelessWidget {
                         children: [
                           CachedNetworkImage(
                             imageUrl: devices[index].imgUrl,
-                            fit: BoxFit.contain,
+                            fit: BoxFit.fill,
                             height: MediaQuery.of(context).size.height,
                           ),
                           // Image.network(

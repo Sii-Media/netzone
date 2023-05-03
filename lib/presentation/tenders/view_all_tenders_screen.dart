@@ -1,17 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/domain/tenders/entities/tender.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
-import 'package:netzoon/presentation/data/tenders.dart';
 import 'package:netzoon/presentation/tenders/tender_info_screen.dart';
 
 class ViewAllTendersScreen extends StatelessWidget {
-  const ViewAllTendersScreen({super.key});
-
+  const ViewAllTendersScreen({super.key, required this.tenders});
+  final List<Tender> tenders;
   @override
   Widget build(BuildContext context) {
-    final tendersList = tenders;
+    // final tendersList = tendersCategrories;
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -20,7 +20,7 @@ class ViewAllTendersScreen extends StatelessWidget {
             child: ListView.builder(
               shrinkWrap: true,
               physics: const BouncingScrollPhysics(),
-              itemCount: tendersList.length,
+              itemCount: tenders.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
@@ -28,7 +28,7 @@ class ViewAllTendersScreen extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) {
                           return TenderInfoScreen(
-                            tender: tendersList[index],
+                            tender: tenders[index],
                           );
                         },
                       ),
@@ -79,7 +79,7 @@ class ViewAllTendersScreen extends StatelessWidget {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    tendersList[index].name,
+                                                    tenders[index].name,
                                                     style: TextStyle(
                                                         color: Colors.black,
                                                         fontSize: 16.sp),
@@ -88,7 +88,7 @@ class ViewAllTendersScreen extends StatelessWidget {
                                                     height: 8.0.h,
                                                   ),
                                                   Text(
-                                                    'اسم الشركة: ${tendersList[index].companyName}',
+                                                    'اسم الشركة: ${tenders[index].companyName}',
                                                     style: TextStyle(
                                                       color: Colors.black,
                                                       fontSize: 14.sp,
@@ -111,7 +111,7 @@ class ViewAllTendersScreen extends StatelessWidget {
                                                     height: 8.0.h,
                                                   ),
                                                   Text(
-                                                    'تاريخ البدأ : ${tendersList[index].startDate}',
+                                                    'تاريخ البدأ : ${tenders[index].startDate}',
                                                     style: TextStyle(
                                                         color: Colors.orange,
                                                         fontSize: 12.sp),
@@ -120,7 +120,7 @@ class ViewAllTendersScreen extends StatelessWidget {
                                                     height: 4.h,
                                                   ),
                                                   Text(
-                                                    'تاريخ الانتهاء : ${tendersList[index].endDate}',
+                                                    'تاريخ الانتهاء : ${tenders[index].endDate}',
                                                     style: TextStyle(
                                                         color: Colors.orange,
                                                         fontSize: 12.sp),
@@ -138,8 +138,7 @@ class ViewAllTendersScreen extends StatelessWidget {
                                               //   height: 150.h,
                                               // ),
                                               child: CachedNetworkImage(
-                                                imageUrl:
-                                                    tendersList[index].imgUrl,
+                                                imageUrl: tenders[index].imgUrl,
                                                 fit: BoxFit.fitHeight,
                                                 width: 170.w,
                                                 height: 150.h,

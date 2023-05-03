@@ -8,6 +8,8 @@ List<Tender> tenders = [
     companyName: 'سي ميديا',
     startDate: '13/05/2023',
     endDate: '20/05/2023',
+    startPrice: '',
+    tenderValue: '',
   ),
   const Tender(
     name: 'سيارة BMW',
@@ -16,5 +18,7 @@ List<Tender> tenders = [
     companyName: 'سي ميديا',
     startDate: '13/05/2023',
     endDate: '20/05/2023',
+    startPrice: '',
+    tenderValue: '',
   ),
 ];

@@ -4,18 +4,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/deals/entities/deals_info.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
-import 'package:netzoon/presentation/data/deals_info.dart';
 import 'package:netzoon/presentation/deals/deals_details.dart';
 
 class ViewAllDealsScreen extends StatefulWidget {
-  const ViewAllDealsScreen({super.key});
+  const ViewAllDealsScreen({super.key, required this.dealsInfoList});
+
+  final List<DealsInfo> dealsInfoList;
 
   @override
   State<ViewAllDealsScreen> createState() => _ViewAllDealsScreenState();
 }
 
 class _ViewAllDealsScreenState extends State<ViewAllDealsScreen> {
-  final dealsInfoList = dealsInfo;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -35,7 +35,7 @@ class _ViewAllDealsScreenState extends State<ViewAllDealsScreen> {
                       child: ListView.builder(
                         shrinkWrap: true,
                         physics: const BouncingScrollPhysics(),
-                        itemCount: dealsInfoList.length,
+                        itemCount: widget.dealsInfoList.length,
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
                           return Container(
@@ -43,7 +43,8 @@ class _ViewAllDealsScreenState extends State<ViewAllDealsScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 5),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20)),
-                            child: Deals(dealsInfo: dealsInfoList[index]),
+                            child:
+                                Deals(dealsInfo: widget.dealsInfoList[index]),
                           );
                         },
                       ),

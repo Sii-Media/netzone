@@ -8,6 +8,7 @@ class DealsInfo extends Equatable {
   final String currpeice;
   final String startDate;
   final String endDate;
+  final String location;
 
   const DealsInfo({
     required this.name,
@@ -17,6 +18,7 @@ class DealsInfo extends Equatable {
     required this.currpeice,
     required this.startDate,
     required this.endDate,
+    required this.location,
   });
   @override
   List<Object?> get props =>

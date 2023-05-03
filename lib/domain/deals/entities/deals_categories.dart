@@ -1,10 +1,15 @@
 import 'package:equatable/equatable.dart';
+import 'package:netzoon/domain/deals/entities/deals_info.dart';
 
 class DealsCategory extends Equatable {
-  final String dealsCategoryName;
+  final String categoryName;
+  final List<DealsInfo> dealList;
 
-  const DealsCategory({required this.dealsCategoryName});
+  const DealsCategory({
+    required this.categoryName,
+    required this.dealList,
+  });
 
   @override
-  List<Object?> get props => [dealsCategoryName];
+  List<Object?> get props => [categoryName];
 }

@@ -41,12 +41,12 @@ class TenderInfoScreen extends StatelessWidget {
               SizedBox(
                 height: 5.h,
               ),
-              myspec(context, 'قيمة المناقصة', '1', AppColor.backgroundColor,
-                  Colors.black),
+              myspec(context, 'قيمة المناقصة', tender.tenderValue,
+                  AppColor.backgroundColor, Colors.black),
               SizedBox(
                 height: 5.h,
               ),
-              myspec(context, "السعر يبدأ : ", 'dealsInfo.currpeice',
+              myspec(context, "السعر يبدأ : ", tender.startPrice,
                   AppColor.backgroundColor, Colors.black),
               SizedBox(
                 height: 20.h,
@@ -66,7 +66,7 @@ class TenderInfoScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),
                         textStyle: const TextStyle(fontSize: 15)),
-                    child: const Text("بدء المناقصة")),
+                    child: const Text("شراء المناقصة")),
               )
             ],
           ),

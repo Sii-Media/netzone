@@ -44,7 +44,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
   late TextEditingController productImage = TextEditingController();
   late TextEditingController productPrice = TextEditingController();
   late TextEditingController productDesc = TextEditingController();
-  late TextEditingController productYear = TextEditingController();
+  late TextEditingController productAddress = TextEditingController();
+  late TextEditingController mobileController = TextEditingController();
+  late TextEditingController madeInController = TextEditingController();
+
   late TextEditingController productProps = TextEditingController();
 
   @override
@@ -99,6 +102,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   controller: productDesc,
                   title: 'الوصف :',
                   isNumber: false,
+                  maxLine: 3,
                 ),
                 SizedBox(
                   height: 7.h,
@@ -114,8 +118,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ),
                 addProductTextField(
                   context: context,
-                  title: 'السنة :',
-                  controller: productYear,
+                  title: 'العنوان :',
+                  controller: productAddress,
+                  isNumber: false,
+                ),
+                SizedBox(
+                  height: 7.h,
+                ),
+                addProductTextField(
+                  context: context,
+                  title: 'رقم الهاتف :',
+                  controller: mobileController,
                   isNumber: false,
                 ),
                 SizedBox(
@@ -125,6 +138,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   context: context,
                   title: 'الخصائص :',
                   controller: productProps,
+                  isNumber: false,
+                  maxLine: 2,
+                ),
+                SizedBox(
+                  height: 7.h,
+                ),
+                addProductTextField(
+                  context: context,
+                  title: 'بلد الصنع :',
+                  controller: madeInController,
                   isNumber: false,
                 ),
                 SizedBox(
@@ -252,6 +275,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     required String title,
     required bool isNumber,
     TextEditingController? controller,
+    int? maxLine,
   }) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -274,6 +298,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 : TextInputType.text,
             // validator: (){},
             controller: controller,
+            maxLines: maxLine,
             decoration: InputDecoration(
               filled: true,
               //<-- SEE HERE

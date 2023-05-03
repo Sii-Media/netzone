@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/domain/tenders/entities/tender.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
-import 'package:netzoon/presentation/data/tenders_categories.dart';
 import 'package:netzoon/presentation/tenders/view_all_tenders_screen.dart';
 
 class TendersCategoriesScreen extends StatefulWidget {
-  const TendersCategoriesScreen({super.key});
+  const TendersCategoriesScreen({super.key, required this.tenders});
+
+  final List<Tender> tenders;
 
   @override
   State<TendersCategoriesScreen> createState() =>
@@ -14,7 +16,6 @@ class TendersCategoriesScreen extends StatefulWidget {
 }
 
 class _TendersCategoriesScreenState extends State<TendersCategoriesScreen> {
-  final tendersCategoryList = tendersCategrories;
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -56,7 +57,9 @@ class _TendersCategoriesScreenState extends State<TendersCategoriesScreen> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) {
-                    return const ViewAllTendersScreen();
+                    return ViewAllTendersScreen(
+                      tenders: widget.tenders,
+                    );
                   },
                 ),
               );

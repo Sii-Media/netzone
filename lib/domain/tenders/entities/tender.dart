@@ -6,6 +6,8 @@ class Tender extends Equatable {
   final String companyName;
   final String startDate;
   final String endDate;
+  final String tenderValue;
+  final String startPrice;
 
   const Tender({
     required this.name,
@@ -13,6 +15,8 @@ class Tender extends Equatable {
     required this.companyName,
     required this.startDate,
     required this.endDate,
+    required this.tenderValue,
+    required this.startPrice,
   });
 
   @override
