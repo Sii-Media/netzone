@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/categories/entities/govermental_details.dart';
 import 'package:netzoon/presentation/categories/widgets/free_zone_video_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:url_launcher/link.dart';
 
 class GovermentalDetailsScreen extends StatelessWidget {
   const GovermentalDetailsScreen({super.key, required this.govermentalDetails});
@@ -128,6 +129,9 @@ class GovermentalDetailsScreen extends StatelessWidget {
                         SizedBox(
                           height: 20.h,
                         ),
+                        govermentalDetails.link == null
+                            ? Container()
+                            : servicesInfo(url: govermentalDetails.link!),
                         Center(
                           child: Text(
                             'لا يوجد صور',
@@ -213,6 +217,39 @@ class GovermentalDetailsScreen extends StatelessWidget {
             color: AppColor.mainGrey,
             fontSize: 14.sp,
           ),
+        ),
+      ],
+    );
+  }
+
+  Row servicesInfo({required String url}) {
+    return Row(
+      children: [
+        Text(
+          'الخدمات :',
+          style: TextStyle(
+            color: AppColor.black,
+            fontSize: 15.sp,
+          ),
+        ),
+        SizedBox(
+          width: 12.w,
+        ),
+        Link(
+          uri: Uri.parse(
+            url,
+          ),
+          builder: ((context, followLink) => GestureDetector(
+                onTap: followLink,
+                child: Text(
+                  'اضغط هنا',
+                  style: TextStyle(
+                    color: AppColor.backgroundColor,
+                    fontSize: 15.sp,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              )),
         ),
       ],
     );

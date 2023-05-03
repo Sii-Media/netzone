@@ -11,6 +11,7 @@ class GovermentalDetails extends Equatable {
   final String? mobile;
   final String info;
   final String? videourl;
+  final String? link;
 
   const GovermentalDetails({
     required this.govname,
@@ -23,6 +24,7 @@ class GovermentalDetails extends Equatable {
     this.mobile,
     required this.info,
     this.videourl,
+    this.link,
   });
   @override
   List<Object?> get props => [
