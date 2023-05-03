@@ -94,7 +94,7 @@ class BackgroundTwoWidget extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 143.h,
+            top: 146,
             right: 0,
             left: 0,
             child: Container(

@@ -6,6 +6,7 @@ import 'package:netzoon/presentation/categories/free_zoon/category_free_zoon.dar
 import 'package:netzoon/presentation/categories/local_company/local_companies.dart';
 import 'package:netzoon/presentation/categories/plans/plans_categories_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/widgets/vehicle_list_screen.dart';
 
 class ListOfCategories extends StatelessWidget {
   const ListOfCategories({
@@ -85,6 +86,16 @@ class ListOfCategories extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) {
                               return const PlansCategoriesScreen();
+                            },
+                          ),
+                        );
+                      } else if (categories[index].name == 'سيارات') {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const VehicleListScreen(
+                                type: 'cars',
+                              );
                             },
                           ),
                         );

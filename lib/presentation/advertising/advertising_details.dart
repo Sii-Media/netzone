@@ -257,22 +257,29 @@ class AdvertismentDetalsScreen extends StatelessWidget {
                             ),
                           ),
                           ads.advertisingImageList!.isNotEmpty
-                              ? GridView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: ads.advertisingImageList?.length,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          childAspectRatio: 0.94),
-                                  itemBuilder: (BuildContext context, index) {
-                                    return ClipRRect(
-                                      borderRadius: BorderRadius.circular(25.0),
-                                      child: ListOfPictures(
-                                        img: ads.advertisingImageList![index],
-                                      ),
-                                    );
-                                  })
+                              ? SizedBox(
+                                  child: GridView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount:
+                                          ads.advertisingImageList?.length,
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2,
+                                              childAspectRatio: 0.94),
+                                      itemBuilder:
+                                          (BuildContext context, index) {
+                                        return ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(25.0),
+                                          child: ListOfPictures(
+                                            img: ads
+                                                .advertisingImageList![index],
+                                          ),
+                                        );
+                                      }),
+                                )
                               : Text(
                                   'لا يوجد صور',
                                   style: TextStyle(

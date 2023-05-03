@@ -15,23 +15,20 @@ class TitleAndButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(
-          flex: 3,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 8.0, left: 5, right: 5),
-            child: Text(
-              title,
-              style: TextStyle(fontSize: 18.sp, color: Colors.black),
-            ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0, left: 5, right: 5),
+          child: Text(
+            title,
+            style: TextStyle(fontSize: 18.sp, color: Colors.black),
           ),
         ),
         InkWell(
           onTap: onPress,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 6),
-            width: 70.w,
+            width: 100.w,
             height: 30.h,
             child: Container(
               alignment: Alignment.center,

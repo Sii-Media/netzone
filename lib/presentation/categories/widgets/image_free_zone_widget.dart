@@ -53,6 +53,7 @@ class ListOfPictures extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CachedNetworkImage(
             height: 150.h,
