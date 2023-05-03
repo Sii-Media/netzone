@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/news/entities/news.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
+import 'package:netzoon/presentation/news/add_new_page.dart';
 import 'package:netzoon/presentation/news/news_details.dart';
 import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
 
@@ -21,6 +22,26 @@ class NewsScreen extends StatelessWidget {
             child: SizedBox(
               height: MediaQuery.of(context).size.height,
               child: AllNewsWidget(news: news),
+            ),
+          ),
+        ),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: FloatingActionButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const AddNewScreen();
+                  },
+                ),
+              );
+            },
+            backgroundColor: AppColor.backgroundColor,
+            tooltip: 'إضافة خبر',
+            child: const Icon(
+              Icons.add,
+              size: 30,
             ),
           ),
         ),
