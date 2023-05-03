@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/news/entities/news.dart';
+import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/news/news_details.dart';
 
 class SliderNewsWidget extends StatelessWidget {
@@ -38,62 +39,92 @@ class SliderNewsWidget extends StatelessWidget {
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20)),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) {
-                                return NewsDetails(
-                                  news: news[index],
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: CachedNetworkImage(
+                                    width: 35.w,
+                                    height: 35.h,
+                                    fit: BoxFit.cover,
+                                    imageUrl: news[index].ownerImage,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 6.w,
+                                ),
+                                Text(
+                                  news[index].ownerName,
+                                  style: TextStyle(
+                                    color: AppColor.backgroundColor,
+                                    fontSize: 16.sp,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) {
+                                    return NewsDetails(
+                                      news: news[index],
+                                    );
+                                  }),
                                 );
-                              }),
-                            );
-                          },
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(25.0),
-                            child: Container(
-                              padding: const EdgeInsets.only(bottom: 5),
-                              margin: const EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.2),
-                                      blurRadius: 1,
-                                    )
-                                  ]),
-                              child: Column(
-                                children: [
-                                  CachedNetworkImage(
-                                    imageUrl: news[index].imgUrl,
-                                    fit: BoxFit.fitWidth,
-                                    height: 90,
-                                    width: MediaQuery.of(context).size.width,
+                              },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(25.0),
+                                child: Container(
+                                  padding: const EdgeInsets.only(bottom: 5),
+                                  margin: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.2),
+                                          blurRadius: 1,
+                                        )
+                                      ]),
+                                  child: Column(
+                                    children: [
+                                      CachedNetworkImage(
+                                        imageUrl: news[index].imgUrl,
+                                        fit: BoxFit.fitWidth,
+                                        height: 90,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                      ),
+                                      // Image.network(
+                                      //   news[index].imgUrl,
+                                      //   fit: BoxFit.fitWidth,
+                                      //   height: 90,
+                                      //   width: MediaQuery.of(context).size.width,
+                                      // ),
+                                      Text(
+                                        news[index].title,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15.sp),
+                                        maxLines: 1,
+                                        softWrap: false,
+                                      ),
+                                      Text(
+                                        news[index].description,
+                                        style: TextStyle(
+                                            color:
+                                                Colors.grey.withOpacity(0.6)),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        softWrap: false,
+                                      )
+                                    ],
                                   ),
-                                  // Image.network(
-                                  //   news[index].imgUrl,
-                                  //   fit: BoxFit.fitWidth,
-                                  //   height: 90,
-                                  //   width: MediaQuery.of(context).size.width,
-                                  // ),
-                                  Text(
-                                    news[index].title,
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 15.sp),
-                                    maxLines: 1,
-                                    softWrap: false,
-                                  ),
-                                  Text(
-                                    news[index].description,
-                                    style: TextStyle(
-                                        color: Colors.grey.withOpacity(0.6)),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    softWrap: false,
-                                  )
-                                ],
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
                       ),
                     ),

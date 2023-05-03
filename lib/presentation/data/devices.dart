@@ -5,47 +5,54 @@ List<Device> devices = [
   const Device(
     name: 'حواسيب',
     imgUrl:
-        'https://images.pexels.com/photos/777001/pexels-photo-777001.jpeg?auto=compress&cs=tinysrgb&w=600',
+        'https://media.istockphoto.com/id/1140541722/photo/modern-laptop-on-white-background.jpg?s=170667a&w=0&k=20&c=T00CzYcAaqwrlZHuF1UgioIorHni-wy-AJ22rhOYt4I=',
     deviceList: [
       ItemList(
         deviceName: 'Mac',
         deviceImg:
-            'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8bWFjfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+            'https://media.istockphoto.com/id/1140541722/photo/modern-laptop-on-white-background.jpg?s=170667a&w=0&k=20&c=T00CzYcAaqwrlZHuF1UgioIorHni-wy-AJ22rhOYt4I=',
         price: '123',
         category: 'حواسيب',
         description: 'بعض التفاصيل',
         year: '2021',
         property: 'بعض الخواص',
+        images: [
+          'https://media.istockphoto.com/id/1140541722/photo/modern-laptop-on-white-background.jpg?s=170667a&w=0&k=20&c=T00CzYcAaqwrlZHuF1UgioIorHni-wy-AJ22rhOYt4I='
+        ],
+        vedio: '',
       ),
     ],
   ),
   const Device(
     name: 'طاولات',
     imgUrl:
-        'https://images.pexels.com/photos/159213/hall-congress-architecture-building-159213.jpeg?auto=compress&cs=tinysrgb&w=600',
+        'https://media.istockphoto.com/id/941224542/vector/real-wood-table-on-a-white-background.jpg?s=170667a&w=0&k=20&c=bR59-yb-Xc-BM2zPNv-SJDuy6KSpWxoNgUGAthxTxmY=',
     deviceList: [
       ItemList(
-        deviceName: 'طاولة طعام',
+        deviceName: 'طاولة خشبية',
         deviceImg:
-            'https://cdn.decoist.com/wp-content/uploads/2014/03/Beautiful-dining-table-in-wood.jpg',
+            'https://media.istockphoto.com/id/941224542/vector/real-wood-table-on-a-white-background.jpg?s=170667a&w=0&k=20&c=bR59-yb-Xc-BM2zPNv-SJDuy6KSpWxoNgUGAthxTxmY=',
         price: '123',
         category: 'pc',
         description: 'this is the pc of the year',
+        images: [],
+        vedio: '',
       ),
     ],
   ),
   const Device(
     name: 'كراسي',
-    imgUrl:
-        'https://images.pexels.com/photos/416320/pexels-photo-416320.jpeg?auto=compress&cs=tinysrgb&w=600',
+    imgUrl: 'https://m.media-amazon.com/images/I/51yifZpYZUL._AC_SY450_.jpg',
     deviceList: [
       ItemList(
         deviceName: 'كرسي',
         deviceImg:
-            'https://images.pexels.com/photos/416320/pexels-photo-416320.jpeg?auto=compress&cs=tinysrgb&w=600',
+            'https://m.media-amazon.com/images/I/51yifZpYZUL._AC_SY450_.jpg',
         price: '123',
         category: 'pc',
         description: 'this is the pc of the year',
+        images: [],
+        vedio: '',
       ),
     ],
   ),

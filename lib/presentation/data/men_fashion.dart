@@ -5,29 +5,32 @@ List<MenFashionList> menFashion = [
   const MenFashionList(
     name: 'ملابس رياضية',
     imgUrl:
-        'https://media.istockphoto.com/id/1125038961/photo/young-man-running-outdoors-in-morning.jpg?s=612x612&w=0&k=20&c=LVAlQIforg7ZRAF-bOvdvoD_k3ejEeimrWbGq2IA5ak=',
+        'https://img.freepik.com/premium-photo/sport-fashion-style-trend-man-tshirt-shorts-isolated-white-background-bearded-man-blue-casual-clothes-macho-active-wear-workout-training-fitness-gym-activity_474717-50973.jpg?w=360',
     deviceList: [
       ItemList(
         deviceName: 'رياضية',
         deviceImg:
-            'https://media.istockphoto.com/id/1125038961/photo/young-man-running-outdoors-in-morning.jpg?s=612x612&w=0&k=20&c=LVAlQIforg7ZRAF-bOvdvoD_k3ejEeimrWbGq2IA5ak=',
+            'https://img.freepik.com/premium-photo/sport-fashion-style-trend-man-tshirt-shorts-isolated-white-background-bearded-man-blue-casual-clothes-macho-active-wear-workout-training-fitness-gym-activity_474717-50973.jpg?w=360',
         price: '123',
         category: 'ملابس رياضية',
         description: 'بعض التفاصيل',
         year: '2021',
         property: 'بعض الخواص',
+        images: [
+          'https://img.freepik.com/premium-photo/sport-fashion-style-trend-man-tshirt-shorts-isolated-white-background-bearded-man-blue-casual-clothes-macho-active-wear-workout-training-fitness-gym-activity_474717-50973.jpg?w=360'
+        ],
+        vedio: '',
       ),
     ],
   ),
   const MenFashionList(
     name: 'تيشيرتات',
-    imgUrl:
-        'https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg?auto=compress&cs=tinysrgb&w=600',
+    imgUrl: 'https://m.media-amazon.com/images/I/710oR+PvLUL._UL1212_.jpg',
     deviceList: [
       ItemList(
         deviceName: 'تيشيرت',
         deviceImg:
-            'https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg?auto=compress&cs=tinysrgb&w=600',
+            'https://m.media-amazon.com/images/I/710oR+PvLUL._UL1212_.jpg',
         price: '123',
         category: 'تيشيرت',
         description: 'بعض التفاصيل',
@@ -39,12 +42,12 @@ List<MenFashionList> menFashion = [
   const MenFashionList(
     name: 'بنطلونات',
     imgUrl:
-        'https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?auto=compress&cs=tinysrgb&w=600',
+        'https://previews.123rf.com/images/nanastudio/nanastudio1903/nanastudio190300704/119056220-a-stack-of-clothes-jeans-pants-on-a-white-background-isolation.jpg',
     deviceList: [
       ItemList(
         deviceName: 'بنطلون جينز',
         deviceImg:
-            'https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?auto=compress&cs=tinysrgb&w=600',
+            'https://previews.123rf.com/images/nanastudio/nanastudio1903/nanastudio190300704/119056220-a-stack-of-clothes-jeans-pants-on-a-white-background-isolation.jpg',
         price: '123',
         category: 'بنطلون جينز',
         description: 'بعض التفاصيل',

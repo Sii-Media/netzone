@@ -55,7 +55,7 @@ class ListOfMenFashion extends StatelessWidget {
                         children: [
                           CachedNetworkImage(
                             imageUrl: menfashion[index].imgUrl,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                             height: MediaQuery.of(context).size.height,
                           ),
                           // Image.network(

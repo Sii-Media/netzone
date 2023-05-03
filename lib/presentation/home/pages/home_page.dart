@@ -393,7 +393,7 @@ class _HomePageState extends State<HomePage> {
               height: 7.0,
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.3,
+              height: MediaQuery.of(context).size.height * 0.35,
               child: SliderNewsWidget(controller: controller, news: newsList),
             ),
           ],

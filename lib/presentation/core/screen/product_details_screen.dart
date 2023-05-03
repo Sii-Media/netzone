@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/electronic_devices/entities/device_list.dart';
+import 'package:netzoon/presentation/categories/widgets/free_zone_video_widget.dart';
+import 'package:netzoon/presentation/categories/widgets/image_free_zone_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 
@@ -16,7 +18,7 @@ class ProductDetailScreen extends StatelessWidget {
         body: BackgroundWidget(
           widget: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.only(bottom: 30.0.h),
+              padding: EdgeInsets.only(top: 8.0, bottom: 30.0.h),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,6 +183,79 @@ class ProductDetailScreen extends StatelessWidget {
                         ),
                       ],
                     ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 7,
+                          color: Colors.grey.withOpacity(0.4),
+                        ),
+                      ),
+                    ),
+                    child: Column(
+                      // mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'الصور :',
+                          style: TextStyle(
+                            color: AppColor.black,
+                            fontSize: 17.sp,
+                          ),
+                        ),
+                        item.images!.isNotEmpty
+                            ? GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: item.images!.length,
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        childAspectRatio: 0.94),
+                                itemBuilder: (BuildContext context, index) {
+                                  return ClipRRect(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                    child: ListOfPictures(
+                                      img: item.images![index],
+                                    ),
+                                  );
+                                })
+                            : Text(
+                                'لا يوجد صور',
+                                style: TextStyle(
+                                  color: AppColor.mainGrey,
+                                  fontSize: 15.sp,
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 7,
+                          color: Colors.grey.withOpacity(0.4),
+                        ),
+                      ),
+                    ),
+                    child: item.vedio! != ''
+                        ? VideoFreeZoneWidget(
+                            title: "فيديو  : ",
+                            vediourl: item.vedio!,
+                          )
+                        : Text(
+                            'لا يوجد فيديو',
+                            style: TextStyle(
+                              color: AppColor.mainGrey,
+                              fontSize: 15.sp,
+                            ),
+                          ),
                   ),
                 ],
               ),

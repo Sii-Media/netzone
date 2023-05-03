@@ -262,7 +262,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
             text,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 15.0.sp,
+              fontSize: 11.0.sp,
             ),
           ),
         ),

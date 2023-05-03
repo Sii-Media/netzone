@@ -8,6 +8,8 @@ class ItemList extends Equatable {
   final String category;
   final String? year;
   final String? property;
+  final List<String>? images;
+  final String? vedio;
   const ItemList({
     required this.deviceName,
     required this.deviceImg,
@@ -16,6 +18,8 @@ class ItemList extends Equatable {
     required this.category,
     this.year,
     this.property,
+    this.images,
+    this.vedio,
   });
   @override
   List<Object?> get props => [deviceName, deviceImg];

@@ -166,7 +166,7 @@ class _AddNewScreenState extends State<AddNewScreen> {
             text,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 15.0.sp,
+              fontSize: 11.0.sp,
             ),
           ),
         ),

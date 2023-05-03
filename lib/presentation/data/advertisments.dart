@@ -23,6 +23,23 @@ List<Advertisement> advertisments = [
     advertisingVedio: 'LM0F4LHUWJE',
   ),
   const Advertisement(
+    advertisingTitle: 'أرض للبيع في دبي ',
+    advertisingStartDate: '16/03/2023',
+    advertisingEndDate: '31/03/2023',
+    advertisingDescription: 'أرض للبيع في دبي ',
+    advertisingImage: 'https://www.elitejo.com/sites/default/files/sa_23.jpg',
+    advertisingCountryAlphaCode: '',
+    advertisingBrand: 'ارض للبيع',
+    advertisingLocation: 'دبي',
+    advertisingViews: '22',
+    advertisingYear: '2023',
+    advertisingPrice: '50000',
+    advertisingImageList: [
+      'https://www.elitejo.com/sites/default/files/sa_23.jpg',
+    ],
+    advertisingVedio: '',
+  ),
+  const Advertisement(
     advertisingTitle: 'نيسان للبيع في إمارة عجمان',
     advertisingStartDate: '16/03/2023',
     advertisingEndDate: '31/03/2023',

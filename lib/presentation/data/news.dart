@@ -9,9 +9,9 @@ List<News> news = [
     imgUrl:
         'https://www.emaratalyoum.com/polopoly_fs/1.1739617.1681807932!/image/image.jpg',
     date: '27/04/2023',
-    ownerName: 'nissan',
+    ownerName: 'BBC News',
     ownerImage:
-        'https://www.android.com/static/2016/img/auto/logos/nissan_w_1x.jpg',
+        'https://is3-ssl.mzstatic.com/image/thumb/Purple112/v4/31/17/79/311779d6-bfe8-d8d5-4782-81bd4c5f01ea/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/1200x630wa.png',
   ),
   const News(
     title: 'الذكاء الصناعي',

@@ -53,7 +53,7 @@ class ListOfFoodProducts extends StatelessWidget {
                         children: [
                           CachedNetworkImage(
                             imageUrl: foodProducts[index].imgUrl,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                             height: MediaQuery.of(context).size.height,
                           ),
                           // Image.network(
