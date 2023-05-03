@@ -52,7 +52,7 @@ class ListOfWatches extends StatelessWidget {
                         children: [
                           CachedNetworkImage(
                             imageUrl: watches[index].imgUrl,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                             height: MediaQuery.of(context).size.height,
                           ),
                           // Image.network(

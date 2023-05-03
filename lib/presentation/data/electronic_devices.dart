@@ -58,12 +58,12 @@ List<ElectronicDevice> elecDevices = [
   const ElectronicDevice(
     name: 'سماعات',
     imgUrl:
-        'https://images.unsplash.com/photo-1546435770-a3e426bf472b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8aGVhZHBob25lc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
+        'https://www.shutterstock.com/image-photo/wireless-overear-headphones-black-leather-260nw-1199089237.jpg',
     deviceList: [
       ItemList(
         deviceName: 'HeadPhone',
         deviceImg:
-            'https://images.unsplash.com/photo-1546435770-a3e426bf472b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8aGVhZHBob25lc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
+            'https://www.shutterstock.com/image-photo/wireless-overear-headphones-black-leather-260nw-1199089237.jpg',
         price: '123',
         category: 'سماعات',
         description: 'بعض التفاصيل',

@@ -87,7 +87,7 @@ class CompanyProfile extends StatelessWidget {
                 ),
               ),
               Positioned(
-                top: 204.h,
+                top: 205.h,
                 right: 0,
                 left: 0,
                 child: Container(

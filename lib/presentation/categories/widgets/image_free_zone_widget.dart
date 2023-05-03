@@ -56,7 +56,7 @@ class ListOfPictures extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CachedNetworkImage(
-            height: 130.h,
+            height: 105.h,
             width: MediaQuery.of(context).size.width,
             imageUrl: img,
             fit: BoxFit.cover,

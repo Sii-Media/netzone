@@ -5,12 +5,12 @@ List<WatchesList> watches = [
   const WatchesList(
     name: 'رقمية',
     imgUrl:
-        'https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZGlnaXRhbCUyMHdhdGNofGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+        'https://media.gq.com/photos/628fb606ef6cfbae4e494244/master/w_2000,h_1333,c_limit/watch-7.jpg',
     deviceList: [
       ItemList(
         deviceName: 'رقمية',
         deviceImg:
-            'https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZGlnaXRhbCUyMHdhdGNofGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+            'https://media.gq.com/photos/628fb606ef6cfbae4e494244/master/w_2000,h_1333,c_limit/watch-7.jpg',
         price: '123',
         category: 'ساعة رقمية',
         description: 'بعض التفاصيل للساعة',
@@ -22,12 +22,12 @@ List<WatchesList> watches = [
   const WatchesList(
     name: 'سوار معدني',
     imgUrl:
-        'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHdhdGNofGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2ZK0ngTmb14y5Z228lsCW7bovEX13rt0Q-x8wxLGMnqNeh2zhKS8lTkp_1eTpm38iuPk&usqp=CAU',
     deviceList: [
       ItemList(
         deviceName: 'سوار معدني',
         deviceImg:
-            'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHdhdGNofGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2ZK0ngTmb14y5Z228lsCW7bovEX13rt0Q-x8wxLGMnqNeh2zhKS8lTkp_1eTpm38iuPk&usqp=CAU',
         price: '123',
         category: 'سوار معدني',
         description: 'بعض التفاصيل للساعة',
