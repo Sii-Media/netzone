@@ -21,12 +21,6 @@ class DealDetails extends StatelessWidget {
             child: BackgroundWidget(
                 widget: ListView(
               children: [
-                myspec(context, "اسم الصفقة : ", dealsInfo.name,
-                    AppColor.backgroundColor, Colors.black),
-                myspec(context, "اسم البائع : ", dealsInfo.companyName,
-                    AppColor.backgroundColor, Colors.black),
-                myspec(context, "منتجات الصفقة : ", 'قطع غيار',
-                    AppColor.backgroundColor, Colors.black),
                 Container(
                   margin: const EdgeInsets.all(8),
                   height: size.height * 0.30,
@@ -38,6 +32,12 @@ class DealDetails extends StatelessWidget {
                     ),
                   ),
                 ),
+                myspec(context, "اسم الصفقة : ", dealsInfo.name,
+                    AppColor.backgroundColor, Colors.black),
+                myspec(context, "اسم البائع : ", dealsInfo.companyName,
+                    AppColor.backgroundColor, Colors.black),
+                myspec(context, "منتجات الصفقة : ", 'قطع غيار',
+                    AppColor.backgroundColor, Colors.black),
                 myspec(context, "تاريخ بدء الصفقة : ", dealsInfo.startDate,
                     AppColor.backgroundColor, Colors.black),
                 myspec(context, "تاريخ انتهاء الصفقة: ", dealsInfo.endDate,
@@ -54,6 +54,23 @@ class DealDetails extends StatelessWidget {
                     AppColor.backgroundColor, Colors.black),
                 SizedBox(
                   height: 20.h,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 4.h),
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        // Get.to(ViewDetailsDeals(dealsModel: dealsModel));
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.backgroundColor,
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          //shadowColor: Colors.black,
+                          //  elevation: 5
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          textStyle: const TextStyle(fontSize: 15)),
+                      child: const Text("اشتري الان")),
                 )
               ],
             )),
@@ -68,7 +85,12 @@ myspec(context, String feature, String details, Color colorbackground,
     Color colortext) {
   return Container(
     width: MediaQuery.of(context).size.width,
-    padding: const EdgeInsets.all(10),
+    padding: const EdgeInsets.only(
+      bottom: 5,
+      top: 5,
+      right: 10,
+      left: 10,
+    ),
     child: RichText(
       text: TextSpan(
           style: TextStyle(fontSize: 17.sp, color: colorbackground),
