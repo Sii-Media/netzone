@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/data/tenders_categories.dart';
-import 'package:netzoon/presentation/deals/view_all_deals.dart';
+import 'package:netzoon/presentation/tenders/view_all_tenders_screen.dart';
 
 class TendersCategoriesScreen extends StatefulWidget {
   const TendersCategoriesScreen({super.key});
@@ -56,7 +56,7 @@ class _TendersCategoriesScreenState extends State<TendersCategoriesScreen> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) {
-                    return const ViewAllDealsScreen();
+                    return const ViewAllTendersScreen();
                   },
                 ),
               );
