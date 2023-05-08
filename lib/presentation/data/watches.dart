@@ -35,6 +35,8 @@ List<WatchesList> watches = [
         description: 'بعض التفاصيل للساعة',
         year: '2021',
         property: 'بعض الخواص',
+        images: [],
+        vedio: '',
       ),
     ],
   ),

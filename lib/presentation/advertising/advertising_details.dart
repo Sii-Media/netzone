@@ -121,7 +121,6 @@ class AdvertismentDetalsScreen extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-                                    PriceSuggestionButton(input: input),
                                   ],
                                 ),
                               ],
@@ -311,6 +310,31 @@ class AdvertismentDetalsScreen extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          height: 60.h,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    AppColor.backgroundColor,
+                  ),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  )),
+                  fixedSize: const MaterialStatePropertyAll(
+                    Size.fromWidth(200),
+                  ),
+                ),
+                child: const Text('شراء المنتج'),
+                onPressed: () {},
+              ),
+              PriceSuggestionButton(input: input),
+            ],
           ),
         ),
       ),

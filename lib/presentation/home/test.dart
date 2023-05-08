@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:netzoon/presentation/add_items/add_product_screen.dart';
 import 'package:netzoon/presentation/auth/screens/login.dart';
+import 'package:netzoon/presentation/cart/cart_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/home/pages/home_page.dart';
@@ -41,12 +42,7 @@ class _TestScreenState extends State<TestScreen> {
 
   final List<Widget> _children = [
     const HomePage(),
-    const Center(
-      child: Text(
-        'السلة',
-        style: TextStyle(color: Colors.black),
-      ),
-    ),
+    const CartScreen(),
     const AddProductScreen(),
     const LogInScreen(),
     const MoreScreen(),

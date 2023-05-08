@@ -6,12 +6,15 @@ import 'package:netzoon/presentation/categories/widgets/free_zone_video_widget.d
 import 'package:netzoon/presentation/categories/widgets/image_free_zone_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
+import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   const ProductDetailScreen({super.key, required this.item});
   final ItemList item;
   @override
   Widget build(BuildContext context) {
+    final TextEditingController input = TextEditingController();
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -257,9 +260,37 @@ class ProductDetailScreen extends StatelessWidget {
                             ),
                           ),
                   ),
+                  SizedBox(
+                    height: 50.h,
+                  )
                 ],
               ),
             ),
+          ),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          height: 60.h,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    AppColor.backgroundColor,
+                  ),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  )),
+                  fixedSize: const MaterialStatePropertyAll(
+                    Size.fromWidth(200),
+                  ),
+                ),
+                child: const Text('إضافة للسلة'),
+                onPressed: () {},
+              ),
+              PriceSuggestionButton(input: input),
+            ],
           ),
         ),
       ),

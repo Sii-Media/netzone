@@ -35,6 +35,8 @@ List<WomanFashionList> womanFashion = [
         description: 'بعض التفاصيل',
         year: '2021',
         property: 'بعض الخواص',
+        images: [],
+        vedio: '',
       ),
     ],
   ),

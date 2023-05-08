@@ -14,14 +14,22 @@ class PriceSuggestionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(
-          AppColor.backgroundColor,
+          backgroundColor: MaterialStateProperty.all(
+            AppColor.white,
+          ),
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+          )),
+          side: MaterialStateProperty.all(const BorderSide(
+            color: AppColor.backgroundColor,
+            width: 2,
+          ))),
+      child: const Text(
+        'عرض السعر',
+        style: TextStyle(
+          color: AppColor.backgroundColor,
         ),
-        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-        )),
       ),
-      child: const Text('عرض السعر'),
       onPressed: () {
         showDialog(
           context: context,
