@@ -1,15 +1,31 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/advertisements/entities/advertisement.dart';
+import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/advertising/advertising_details.dart';
+import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/core/widgets/background_two_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 
-class AdvertisingScreen extends StatelessWidget {
+class AdvertisingScreen extends StatefulWidget {
   const AdvertisingScreen({super.key, required this.advertisment});
 
   final List<Advertisement> advertisment;
+
+  @override
+  State<AdvertisingScreen> createState() => _AdvertisingScreenState();
+}
+
+class _AdvertisingScreenState extends State<AdvertisingScreen> {
+  final adsBloc = sl<AdsBlocBloc>();
+
+  @override
+  void initState() {
+    adsBloc.add(GetAllAdsEvent());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,26 +33,49 @@ class AdvertisingScreen extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         body: BackgroundTwoWidget(
-          title: "الإعلانات",
-          widget: Container(
-            padding: const EdgeInsets.only(bottom: 60).r,
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: const BouncingScrollPhysics(),
-              itemCount: advertisment.length,
-              scrollDirection: Axis.vertical,
-              itemBuilder: (context, index) {
-                return Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 240.h,
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(20).w),
-                  child: Advertising(advertisment: advertisment[index]),
-                );
+            title: "الإعلانات",
+            widget: BlocBuilder<AdsBlocBloc, AdsBlocState>(
+              bloc: adsBloc,
+              builder: (context, state) {
+                if (state is AdsBlocInProgress) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColor.backgroundColor,
+                    ),
+                  );
+                } else if (state is AdsBlocFailure) {
+                  final failure = state.message;
+                  return Center(
+                    child: Text(
+                      failure,
+                      style: const TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
+                  );
+                } else if (state is AdsBlocSuccess) {
+                  return Container(
+                    padding: const EdgeInsets.only(bottom: 60).r,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: state.ads.length,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 240.h,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20).w),
+                          child: Advertising(advertisment: state.ads[index]),
+                        );
+                      },
+                    ),
+                  );
+                }
+                return Container();
               },
-            ),
-          ),
-        ),
+            )),
       ),
     );
   }

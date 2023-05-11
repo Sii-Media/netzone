@@ -8,14 +8,26 @@ import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
 
-class AdvertismentDetalsScreen extends StatelessWidget {
+class AdvertismentDetalsScreen extends StatefulWidget {
   const AdvertismentDetalsScreen({super.key, required this.ads});
 
   final Advertisement ads;
 
   @override
+  State<AdvertismentDetalsScreen> createState() =>
+      _AdvertismentDetalsScreenState();
+}
+
+class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final TextEditingController input = TextEditingController();
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -42,7 +54,7 @@ class AdvertismentDetalsScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           CachedNetworkImage(
-                            imageUrl: ads.advertisingImage,
+                            imageUrl: widget.ads.advertisingImage,
                             width: 700.w,
                             height: 200.h,
                             fit: BoxFit.cover,
@@ -58,7 +70,7 @@ class AdvertismentDetalsScreen extends StatelessWidget {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      '${ads.advertisingPrice} درهم',
+                                      '${widget.ads.advertisingPrice} درهم',
                                       style: TextStyle(
                                           color: AppColor.colorOne,
                                           fontSize: 17.sp,
@@ -84,7 +96,7 @@ class AdvertismentDetalsScreen extends StatelessWidget {
                                   height: 7.h,
                                 ),
                                 Text(
-                                  ads.advertisingTitle,
+                                  widget.ads.advertisingTitle,
                                   style: TextStyle(
                                     color: AppColor.black,
                                     fontSize: 20.sp,
@@ -113,7 +125,7 @@ class AdvertismentDetalsScreen extends StatelessWidget {
                                           width: 8.0.w,
                                         ),
                                         Text(
-                                          ads.advertisingViews,
+                                          widget.ads.advertisingViews,
                                           style: TextStyle(
                                             color: AppColor.backgroundColor,
                                             fontSize: 15.sp,
@@ -157,14 +169,14 @@ class AdvertismentDetalsScreen extends StatelessWidget {
                             ),
                             titleAndInput(
                               title: 'الفئة',
-                              input: ads.advertisingBrand,
+                              input: widget.ads.advertisingBrand,
                             ),
                             SizedBox(
                               height: 7.h,
                             ),
                             titleAndInput(
                               title: 'السنة',
-                              input: ads.advertisingYear,
+                              input: widget.ads.advertisingYear,
                             ),
                             SizedBox(
                               height: 7.h,
@@ -192,7 +204,7 @@ class AdvertismentDetalsScreen extends StatelessWidget {
                             ),
                             titleAndInput(
                               title: 'الموقع',
-                              input: ads.advertisingLocation,
+                              input: widget.ads.advertisingLocation,
                             ),
                             SizedBox(
                               height: 7.h,
@@ -224,7 +236,7 @@ class AdvertismentDetalsScreen extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            ads.advertisingDescription,
+                            widget.ads.advertisingDescription,
                             style: TextStyle(
                               color: AppColor.mainGrey,
                               fontSize: 15.sp,
@@ -255,11 +267,12 @@ class AdvertismentDetalsScreen extends StatelessWidget {
                               fontSize: 17.sp,
                             ),
                           ),
-                          ads.advertisingImageList!.isNotEmpty
+                          widget.ads.advertisingImageList?.isNotEmpty == true
                               ? GridView.builder(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: ads.advertisingImageList?.length,
+                                  itemCount:
+                                      widget.ads.advertisingImageList?.length,
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 2,
@@ -268,15 +281,19 @@ class AdvertismentDetalsScreen extends StatelessWidget {
                                     return ClipRRect(
                                       borderRadius: BorderRadius.circular(25.0),
                                       child: ListOfPictures(
-                                        img: ads.advertisingImageList![index],
+                                        img: widget
+                                            .ads.advertisingImageList![index],
                                       ),
                                     );
                                   })
-                              : Text(
-                                  'لا يوجد صور',
-                                  style: TextStyle(
-                                    color: AppColor.mainGrey,
-                                    fontSize: 15.sp,
+                              : GestureDetector(
+                                  onTap: () {},
+                                  child: Text(
+                                    'لا يوجد صور',
+                                    style: TextStyle(
+                                      color: AppColor.mainGrey,
+                                      fontSize: 15.sp,
+                                    ),
                                   ),
                                 ),
                         ],
@@ -293,10 +310,11 @@ class AdvertismentDetalsScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      child: ads.advertisingVedio != null
+                      child: widget.ads.advertisingVedio != null &&
+                              widget.ads.advertisingVedio != ''
                           ? VideoFreeZoneWidget(
                               title: "فيديو  : ",
-                              vediourl: ads.advertisingVedio!,
+                              vediourl: widget.ads.advertisingVedio ?? '',
                             )
                           : Text(
                               'لا يوجد فيديو',
@@ -305,6 +323,9 @@ class AdvertismentDetalsScreen extends StatelessWidget {
                                 fontSize: 15.sp,
                               ),
                             ),
+                    ),
+                    SizedBox(
+                      height: 60.h,
                     ),
                   ],
                 ),
