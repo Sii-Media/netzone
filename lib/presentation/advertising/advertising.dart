@@ -34,47 +34,54 @@ class _AdvertisingScreenState extends State<AdvertisingScreen> {
       child: Scaffold(
         body: BackgroundTwoWidget(
             title: "الإعلانات",
-            widget: BlocBuilder<AdsBlocBloc, AdsBlocState>(
-              bloc: adsBloc,
-              builder: (context, state) {
-                if (state is AdsBlocInProgress) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColor.backgroundColor,
-                    ),
-                  );
-                } else if (state is AdsBlocFailure) {
-                  final failure = state.message;
-                  return Center(
-                    child: Text(
-                      failure,
-                      style: const TextStyle(
-                        color: Colors.red,
-                      ),
-                    ),
-                  );
-                } else if (state is AdsBlocSuccess) {
-                  return Container(
-                    padding: const EdgeInsets.only(bottom: 60).r,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: state.ads.length,
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 240.h,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20).w),
-                          child: Advertising(advertisment: state.ads[index]),
-                        );
-                      },
-                    ),
-                  );
-                }
-                return Container();
+            widget: RefreshIndicator(
+              onRefresh: () async {
+                adsBloc.add(GetAllAdsEvent());
               },
+              color: AppColor.white,
+              backgroundColor: AppColor.backgroundColor,
+              child: BlocBuilder<AdsBlocBloc, AdsBlocState>(
+                bloc: adsBloc,
+                builder: (context, state) {
+                  if (state is AdsBlocInProgress) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.backgroundColor,
+                      ),
+                    );
+                  } else if (state is AdsBlocFailure) {
+                    final failure = state.message;
+                    return Center(
+                      child: Text(
+                        failure,
+                        style: const TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                    );
+                  } else if (state is AdsBlocSuccess) {
+                    return Container(
+                      padding: const EdgeInsets.only(bottom: 60).r,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: state.ads.length,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 240.h,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20).w),
+                            child: Advertising(advertisment: state.ads[index]),
+                          );
+                        },
+                      ),
+                    );
+                  }
+                  return Container();
+                },
+              ),
             )),
       ),
     );

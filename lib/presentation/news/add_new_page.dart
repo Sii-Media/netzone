@@ -2,10 +2,14 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
+import 'package:netzoon/presentation/news/blocs/add_news/add_news_bloc.dart';
 
 class AddNewScreen extends StatefulWidget {
   const AddNewScreen({super.key});
@@ -14,13 +18,21 @@ class AddNewScreen extends StatefulWidget {
   State<AddNewScreen> createState() => _AddNewScreenState();
 }
 
-class _AddNewScreenState extends State<AddNewScreen> {
+class _AddNewScreenState extends State<AddNewScreen>
+    with ScreenLoader<AddNewScreen> {
   late TextEditingController titleController = TextEditingController();
   late TextEditingController descController = TextEditingController();
   File? _image;
 
+  final newsBloc = sl<AddNewsBloc>();
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget screen(BuildContext context) {
     Future getImage(ImageSource imageSource) async {
       final image = await ImagePicker().pickImage(source: imageSource);
 
@@ -43,98 +55,133 @@ class _AddNewScreenState extends State<AddNewScreen> {
               right: 8.0,
               left: 8.0,
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Text(
-                      'إضافة خبر',
-                      style: TextStyle(
-                        color: AppColor.backgroundColor,
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w600,
+            child: BlocListener<AddNewsBloc, AddNewsState>(
+              bloc: newsBloc,
+              listener: (context, state) {
+                if (state is AddNewsInProgress) {
+                  startLoading();
+                } else if (state is AddNewsFailure) {
+                  stopLoading();
+
+                  final failure = state.message;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(failure)),
+                  );
+                } else if (state is AddNewsSuccess) {
+                  stopLoading();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: const Text(
+                      'success',
+                    ),
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                  ));
+                }
+              },
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Text(
+                        'إضافة خبر',
+                        style: TextStyle(
+                          color: AppColor.backgroundColor,
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                  ),
-                  const Divider(
-                    color: AppColor.secondGrey,
-                    thickness: 0.2,
-                    endIndent: 30,
-                    indent: 30,
-                  ),
-                  addNewsTextField(
-                    context: context,
-                    controller: titleController,
-                    title: 'العنوان',
-                    isNumber: false,
-                  ),
-                  SizedBox(
-                    height: 5.h,
-                  ),
-                  addNewsTextField(
-                    context: context,
-                    controller: descController,
-                    title: 'موضوع الخبر',
-                    isNumber: false,
-                    maxLines: 5,
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  addPhotoButton(
-                      text: 'إضافة صورة من المعرض',
-                      onPressed: () {
-                        getImage(ImageSource.gallery);
-                      }),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  _image != null
-                      ? Center(
-                          child: Image.file(
-                            _image!,
-                            width: 250.w,
-                            height: 250.h,
-                            fit: BoxFit.cover,
+                    const Divider(
+                      color: AppColor.secondGrey,
+                      thickness: 0.2,
+                      endIndent: 30,
+                      indent: 30,
+                    ),
+                    addNewsTextField(
+                      context: context,
+                      controller: titleController,
+                      title: 'العنوان',
+                      isNumber: false,
+                    ),
+                    SizedBox(
+                      height: 5.h,
+                    ),
+                    addNewsTextField(
+                      context: context,
+                      controller: descController,
+                      title: 'موضوع الخبر',
+                      isNumber: false,
+                      maxLines: 5,
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    addPhotoButton(
+                        text: 'إضافة صورة من المعرض',
+                        onPressed: () {
+                          getImage(ImageSource.gallery);
+                        }),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    _image != null
+                        ? Center(
+                            child: Image.file(
+                              _image!,
+                              width: 250.w,
+                              height: 250.h,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Center(
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
+                              width: 250.w,
+                              height: 250.h,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        )
-                      : Center(
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
-                            width: 250.w,
-                            height: 250.h,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  Center(
-                    child:
-                        addPhotoButton(text: 'إضافة الخبر', onPressed: () {}),
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  // TextFormField(
-                  //   style: const TextStyle(color: Colors.black),
-                  //   controller: descController,
-                  //   maxLines: 5,
-                  //   decoration: InputDecoration(
-                  //     hintStyle:
-                  //         const TextStyle(color: AppColor.backgroundColor),
-                  //     hintText: 'موضوع الخبر',
-                  //     border: const OutlineInputBorder(),
-                  //     floatingLabelBehavior: FloatingLabelBehavior.always,
-                  //     contentPadding: const EdgeInsets.symmetric(
-                  //             vertical: 5, horizontal: 10)
-                  //         .flipped,
-                  //   ),
-                  // )
-                ],
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    Center(
+                      child: addPhotoButton(
+                          text: 'إضافة الخبر',
+                          onPressed: () {
+                            newsBloc.add(AddNewsRequested(
+                              title: titleController.text,
+                              description: descController.text,
+                              imgUrl:
+                                  'https://media.istockphoto.com/id/1311148884/vector/abstract-globe-background.jpg?s=612x612&w=0&k=20&c=9rVQfrUGNtR5Q0ygmuQ9jviVUfrnYHUHcfiwaH5-WFE=',
+                              ownerName: 'ownerName',
+                              ownerImage:
+                                  'https://is3-ssl.mzstatic.com/image/thumb/Purple112/v4/31/17/79/311779d6-bfe8-d8d5-4782-81bd4c5f01ea/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/1200x630wa.png',
+                              creator: '645506caac0f6323fa7b0d3f',
+                            ));
+                          }),
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    // TextFormField(
+                    //   style: const TextStyle(color: Colors.black),
+                    //   controller: descController,
+                    //   maxLines: 5,
+                    //   decoration: InputDecoration(
+                    //     hintStyle:
+                    //         const TextStyle(color: AppColor.backgroundColor),
+                    //     hintText: 'موضوع الخبر',
+                    //     border: const OutlineInputBorder(),
+                    //     floatingLabelBehavior: FloatingLabelBehavior.always,
+                    //     contentPadding: const EdgeInsets.symmetric(
+                    //             vertical: 5, horizontal: 10)
+                    //         .flipped,
+                    //   ),
+                    // )
+                  ],
+                ),
               ),
             ),
           ),
@@ -142,6 +189,11 @@ class _AddNewScreenState extends State<AddNewScreen> {
       ),
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+
+  // }
 
   ClipRRect addPhotoButton(
       {required String text, required void Function()? onPressed}) {

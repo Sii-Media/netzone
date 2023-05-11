@@ -43,6 +43,60 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
     return value;
   }
 
+  @override
+  Future<AddNewsModel> addNews(
+    title,
+    description,
+    imgUrl,
+    ownerName,
+    ownerImage,
+    creator,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'title',
+      title,
+    ));
+    _data.fields.add(MapEntry(
+      'description',
+      description,
+    ));
+    _data.fields.add(MapEntry(
+      'imgUrl',
+      imgUrl,
+    ));
+    _data.fields.add(MapEntry(
+      'ownerName',
+      ownerName,
+    ));
+    _data.fields.add(MapEntry(
+      'ownerImage',
+      ownerImage,
+    ));
+    _data.fields.add(MapEntry(
+      'creator',
+      creator,
+    ));
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<AddNewsModel>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/news/createNews',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = AddNewsModel.fromJson(_result.data!);
+    return value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

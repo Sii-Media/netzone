@@ -13,9 +13,11 @@ import 'package:netzoon/domain/advertisements/usercases/get_advertisements_useca
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
 import 'package:netzoon/domain/auth/usecases/sign_up_use_case.dart';
 import 'package:netzoon/domain/news/repositories/news_repository.dart';
+import 'package:netzoon/domain/news/usecases/add_news_use_case.dart';
 import 'package:netzoon/domain/news/usecases/get_all_news_usecase.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
+import 'package:netzoon/presentation/news/blocs/add_news/add_news_bloc.dart';
 import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
 
 final sl = GetIt.instance;
@@ -25,6 +27,7 @@ Future<void> init() async {
   sl.registerFactory(() => SignUpBloc(signUpUseCase: sl()));
   sl.registerFactory(() => AdsBlocBloc(getAdvertismentsUseCase: sl()));
   sl.registerFactory(() => NewsBloc(getAllNewsUseCase: sl()));
+  sl.registerFactory(() => AddNewsBloc(addNewsUseCase: sl()));
 
   // UseCases
 
@@ -33,6 +36,7 @@ Future<void> init() async {
       () => GetAdvertismentsUseCase(advertismentRepository: sl()));
 
   sl.registerLazySingleton(() => GetAllNewsUseCase(newsRepository: sl()));
+  sl.registerLazySingleton(() => AddNewsUseCase(newsRepository: sl()));
 
   // Repositories
 

@@ -35,36 +35,43 @@ class _NewsScreenState extends State<NewsScreen> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         body: BackgroundWidget(
-          widget: BlocBuilder<NewsBloc, NewsState>(
-            bloc: newsBloc,
-            builder: (context, state) {
-              if (state is NewsInProgress) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColor.backgroundColor,
-                  ),
-                );
-              } else if (state is NewsFailure) {
-                final failure = state.message;
-                return Center(
-                  child: Text(
-                    failure,
-                    style: const TextStyle(
-                      color: Colors.red,
-                    ),
-                  ),
-                );
-              } else if (state is NewsSuccess) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height,
-                    child: AllNewsWidget(news: state.news),
-                  ),
-                );
-              }
-              return Container();
+          widget: RefreshIndicator(
+            onRefresh: () async {
+              newsBloc.add(GetAllNewsEvent());
             },
+            color: AppColor.white,
+            backgroundColor: AppColor.backgroundColor,
+            child: BlocBuilder<NewsBloc, NewsState>(
+              bloc: newsBloc,
+              builder: (context, state) {
+                if (state is NewsInProgress) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColor.backgroundColor,
+                    ),
+                  );
+                } else if (state is NewsFailure) {
+                  final failure = state.message;
+                  return Center(
+                    child: Text(
+                      failure,
+                      style: const TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
+                  );
+                } else if (state is NewsSuccess) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: AllNewsWidget(news: state.news),
+                    ),
+                  );
+                }
+                return Container();
+              },
+            ),
           ),
         ),
         floatingActionButton: Padding(
