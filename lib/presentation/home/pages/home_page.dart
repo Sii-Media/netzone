@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/advertising/advertising.dart';
 import 'package:netzoon/presentation/categories/main_categories.dart';
+import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/data/advertisments.dart';
 import 'package:netzoon/presentation/data/categories.dart';
 import 'package:netzoon/presentation/data/deals.dart';
@@ -27,6 +30,7 @@ import 'package:netzoon/presentation/home/widgets/list_of_woman_fashion.dart';
 import 'package:netzoon/presentation/home/widgets/slider_news_widget.dart';
 import 'package:netzoon/presentation/home/widgets/tender_widget.dart';
 import 'package:netzoon/presentation/home/widgets/title_and_button.dart';
+import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
 import 'package:netzoon/presentation/news/news_screen.dart';
 
 class HomePage extends StatefulWidget {
@@ -55,6 +59,15 @@ class _HomePageState extends State<HomePage> {
     'https://static.vecteezy.com/system/resources/thumbnails/004/216/831/original/3d-world-news-background-loop-free-video.jpg',
   ];
   final PageController controller = PageController(initialPage: 0);
+
+  final newsBloc = sl<NewsBloc>();
+
+  @override
+  void initState() {
+    newsBloc.add(GetAllNewsEvent());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -392,10 +405,35 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 7.0,
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.35,
-              child: SliderNewsWidget(controller: controller, news: newsList),
-            ),
+            BlocBuilder<NewsBloc, NewsState>(
+              bloc: newsBloc,
+              builder: (context, state) {
+                if (state is NewsInProgress) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColor.backgroundColor,
+                    ),
+                  );
+                } else if (state is NewsFailure) {
+                  final failure = state.message;
+                  return Center(
+                    child: Text(
+                      failure,
+                      style: const TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
+                  );
+                } else if (state is NewsSuccess) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.35,
+                    child: SliderNewsWidget(
+                        controller: controller, news: state.news),
+                  );
+                }
+                return Container();
+              },
+            )
           ],
         ),
       ),

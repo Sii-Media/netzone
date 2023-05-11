@@ -4,14 +4,19 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/remote/advertisements/ads_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/auth/auth_remote_datasource.dart';
+import 'package:netzoon/data/datasource/remote/news/news_remote_data_source.dart';
 import 'package:netzoon/data/repositories/advertisments/advertisment_repository_impl.dart';
 import 'package:netzoon/data/repositories/auth_repository_impl.dart';
+import 'package:netzoon/data/repositories/news/news_repositories_impl.dart';
 import 'package:netzoon/domain/advertisements/repositories/advertisment_repository.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_advertisements_usecase.dart';
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
 import 'package:netzoon/domain/auth/usecases/sign_up_use_case.dart';
+import 'package:netzoon/domain/news/repositories/news_repository.dart';
+import 'package:netzoon/domain/news/usecases/get_all_news_usecase.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
+import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -19,12 +24,15 @@ Future<void> init() async {
   // Bloc
   sl.registerFactory(() => SignUpBloc(signUpUseCase: sl()));
   sl.registerFactory(() => AdsBlocBloc(getAdvertismentsUseCase: sl()));
+  sl.registerFactory(() => NewsBloc(getAllNewsUseCase: sl()));
 
   // UseCases
 
   sl.registerLazySingleton(() => SignUpUseCase(authRepository: sl()));
   sl.registerLazySingleton(
       () => GetAdvertismentsUseCase(advertismentRepository: sl()));
+
+  sl.registerLazySingleton(() => GetAllNewsUseCase(newsRepository: sl()));
 
   // Repositories
 
@@ -35,6 +43,9 @@ Future<void> init() async {
       AdvertismentRepositoryImpl(
           advertismentRemotDataSource: sl(), networkInfo: sl()));
 
+  sl.registerLazySingleton<NewsRepository>(
+      () => NewsRepositoryImpl(newsRemoteDataSourse: sl(), networkInfo: sl()));
+
   // DataSourses
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
@@ -42,6 +53,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton<AdvertismentRemotDataSource>(() =>
       AdvertismentRemotDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
+
+  sl.registerLazySingleton<NewsRemoteDataSourse>(
+      () => NewsRemoteDataSourseImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
 
   //! Core
 

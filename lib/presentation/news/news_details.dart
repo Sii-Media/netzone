@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:netzoon/domain/news/entities/news.dart';
+import 'package:netzoon/domain/news/entities/news_info.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
+import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 
 class NewsDetails extends StatelessWidget {
   const NewsDetails({super.key, required this.news});
@@ -32,7 +33,7 @@ class NewsDetails extends StatelessWidget {
                   alignment: Alignment.topCenter,
                   // height: size.height * 0.05,
                   child: Text(
-                    news.date,
+                    convertDateToString(news.createdAt ?? ''),
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 13.sp,

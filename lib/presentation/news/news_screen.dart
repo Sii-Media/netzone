@@ -1,28 +1,70 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:netzoon/domain/news/entities/news.dart';
+import 'package:netzoon/domain/news/entities/news_info.dart';
+import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/news/add_new_page.dart';
+import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
 import 'package:netzoon/presentation/news/news_details.dart';
 import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
+import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 
-class NewsScreen extends StatelessWidget {
+class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key, required this.news});
   final List<News> news;
+
+  @override
+  State<NewsScreen> createState() => _NewsScreenState();
+}
+
+class _NewsScreenState extends State<NewsScreen> {
+  final newsBloc = sl<NewsBloc>();
+
+  @override
+  void initState() {
+    newsBloc.add(GetAllNewsEvent());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
         body: BackgroundWidget(
-          widget: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: AllNewsWidget(news: news),
-            ),
+          widget: BlocBuilder<NewsBloc, NewsState>(
+            bloc: newsBloc,
+            builder: (context, state) {
+              if (state is NewsInProgress) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: AppColor.backgroundColor,
+                  ),
+                );
+              } else if (state is NewsFailure) {
+                final failure = state.message;
+                return Center(
+                  child: Text(
+                    failure,
+                    style: const TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                );
+              } else if (state is NewsSuccess) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: AllNewsWidget(news: state.news),
+                  ),
+                );
+              }
+              return Container();
+            },
           ),
         ),
         floatingActionButton: Padding(
@@ -128,7 +170,8 @@ class AllNewsWidget extends StatelessWidget {
                                     child: Column(
                                       children: [
                                         Text(
-                                          news[index].date,
+                                          convertDateToString(
+                                              news[index].createdAt ?? ''),
                                           style: TextStyle(
                                               fontSize: 12.sp,
                                               color: Colors.white),

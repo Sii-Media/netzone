@@ -1,21 +1,11 @@
 import 'package:equatable/equatable.dart';
+import 'package:netzoon/domain/news/entities/news_info.dart';
 
-class News extends Equatable {
-  final String title;
-  final String description;
-  final String imgUrl;
-  final String date;
-  final String ownerName;
-  final String ownerImage;
+class NewsBasic extends Equatable {
+  final String message;
+  final List<News> news;
 
-  const News({
-    required this.title,
-    required this.description,
-    required this.imgUrl,
-    required this.date,
-    required this.ownerName,
-    required this.ownerImage,
-  });
+  const NewsBasic({required this.message, required this.news});
   @override
-  List<Object?> get props => [title, description, imgUrl, date];
+  List<Object?> get props => [message, news];
 }
