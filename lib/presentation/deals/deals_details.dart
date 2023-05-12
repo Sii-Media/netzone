@@ -1,14 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:netzoon/domain/deals/entities/deals_info.dart';
+import 'package:netzoon/domain/deals/entities/dealsItems/deals_items.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
+import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 
 class DealDetails extends StatelessWidget {
   const DealDetails({super.key, required this.dealsInfo});
 
-  final DealsInfo dealsInfo;
+  final DealsItems dealsInfo;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -38,20 +39,32 @@ class DealDetails extends StatelessWidget {
                     AppColor.backgroundColor, Colors.black),
                 myspec(context, "منتجات الصفقة : ", 'قطع غيار',
                     AppColor.backgroundColor, Colors.black),
-                myspec(context, "تاريخ بدء الصفقة : ", dealsInfo.startDate,
-                    AppColor.backgroundColor, Colors.black),
-                myspec(context, "تاريخ انتهاء الصفقة: ", dealsInfo.endDate,
+                myspec(
+                    context,
+                    "تاريخ بدء الصفقة : ",
+                    convertDateToString(dealsInfo.startDate),
+                    AppColor.backgroundColor,
+                    Colors.black),
+                myspec(
+                    context,
+                    "تاريخ انتهاء الصفقة: ",
+                    convertDateToString(dealsInfo.endDate),
+                    AppColor.backgroundColor,
+                    Colors.black),
+                SizedBox(
+                  height: 5.h,
+                ),
+                myspec(context, "السعر قبل:", dealsInfo.prevPrice.toString(),
                     AppColor.backgroundColor, Colors.black),
                 SizedBox(
                   height: 5.h,
                 ),
-                myspec(context, "السعر قبل:", dealsInfo.prepeice,
-                    AppColor.backgroundColor, Colors.black),
-                SizedBox(
-                  height: 5.h,
-                ),
-                myspec(context, "السعر بعد : ", dealsInfo.currpeice,
-                    AppColor.backgroundColor, Colors.black),
+                myspec(
+                    context,
+                    "السعر بعد : ",
+                    dealsInfo.currentPrice.toString(),
+                    AppColor.backgroundColor,
+                    Colors.black),
                 SizedBox(
                   height: 20.h,
                 ),

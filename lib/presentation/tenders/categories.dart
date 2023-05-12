@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:netzoon/domain/deals/entities/deals_categories.dart';
+import 'package:netzoon/domain/deals/entities/deals/deals_result.dart';
 import 'package:netzoon/domain/tenders/entities/tender_result.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
@@ -8,14 +8,16 @@ import 'package:netzoon/presentation/deals/view_all_deals.dart';
 import 'package:netzoon/presentation/tenders/tenders_categories.dart';
 
 class Categories extends StatefulWidget {
-  const Categories(
-      {super.key,
-      this.dealsCategory,
-      required this.category,
-      this.tendersCategory});
+  const Categories({
+    super.key,
+    this.dealsCategory,
+    required this.category,
+    this.tendersCategory,
+  });
 
-  final DealsCategory? dealsCategory;
+  // final DealsCategory? dealsCategory;
   final TenderResult? tendersCategory;
+  final DealsResult? dealsCategory;
   final String category;
 
   @override
@@ -37,7 +39,8 @@ class _CategoriesState extends State<Categories> {
                   // );
                   if (widget.category == 'فئات الصفقات') {
                     return ViewAllDealsScreen(
-                      dealsInfoList: widget.dealsCategory!.dealList,
+                      // dealsInfoList: widget.dealsCategory!.dealsItems,
+                      category: widget.dealsCategory?.name ?? '',
                     );
                   } else if (widget.category == 'فئات المناقصات') {
                     return TendersCategoriesScreen(
@@ -60,7 +63,7 @@ class _CategoriesState extends State<Categories> {
             color: AppColor.backgroundColor,
             child: Text(
               widget.dealsCategory != null
-                  ? widget.dealsCategory!.categoryName
+                  ? widget.dealsCategory!.name
                   : widget.tendersCategory!.name,
               style: TextStyle(fontSize: 15.sp, color: AppColor.white),
             ),

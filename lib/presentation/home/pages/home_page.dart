@@ -33,6 +33,7 @@ import 'package:netzoon/presentation/home/widgets/title_and_button.dart';
 import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
 import 'package:netzoon/presentation/news/news_screen.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersItem/tenders_item_bloc.dart';
+import 'package:netzoon/presentation/tenders/tender_categories_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -350,7 +351,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) {
-                        return const DealsCategoriesScreen(
+                        return const TenderCategoriesScreen(
                           title: 'فئات المناقصات',
                         );
                       },

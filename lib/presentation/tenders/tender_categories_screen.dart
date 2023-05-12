@@ -5,34 +5,36 @@ import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/data/deals_categories.dart';
-import 'package:netzoon/presentation/deals/blocs/deals_category/deals_categoty_bloc.dart';
+import 'package:netzoon/presentation/data/tenders_categories.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersCategory/tender_cat_bloc.dart';
 import 'package:netzoon/presentation/tenders/categories.dart';
 
-class DealsCategoriesScreen extends StatefulWidget {
-  const DealsCategoriesScreen({super.key, required this.title});
-
+class TenderCategoriesScreen extends StatefulWidget {
+  const TenderCategoriesScreen({super.key, required this.title});
   final String title;
-
   @override
-  State<DealsCategoriesScreen> createState() => _DealsCategoriesScreenState();
+  State<TenderCategoriesScreen> createState() => _TenderCategoriesScreenState();
 }
 
-class _DealsCategoriesScreenState extends State<DealsCategoriesScreen> {
+class _TenderCategoriesScreenState extends State<TenderCategoriesScreen> {
   List<dynamic> list = [];
   final tenderBloc = sl<TenderCatBloc>();
-  final dealBloc = sl<DealsCategotyBloc>();
 
   @override
   void initState() {
-    dealBloc.add(GetDealsCategoryEvent());
-    list = dealsCategories;
-
+    if (widget.title == 'فئات الصفقات') {
+      list = dealsCategories;
+    } else {
+      tenderBloc.add(GetAllTendersCatEvent());
+      list = tendersCategrories;
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    // final dealsCategoryList = dealsCategories;
+    // final tendersCategoryList = tendersCategrories;
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -42,29 +44,28 @@ class _DealsCategoriesScreenState extends State<DealsCategoriesScreen> {
           child: BackgroundWidget(
             widget: RefreshIndicator(
               onRefresh: () async {
-                dealBloc.add(GetDealsCategoryEvent());
+                tenderBloc.add(GetAllTendersCatEvent());
               },
-              child: BlocBuilder<DealsCategotyBloc, DealsCategotyState>(
-                bloc: dealBloc,
+              child: BlocBuilder<TenderCatBloc, TenderCatState>(
+                bloc: tenderBloc,
                 builder: (context, state) {
-                  if (state is DealsCategotyInProgress) {
+                  if (state is TenderCatInProgress) {
                     return const Center(
                       child: CircularProgressIndicator(
                         color: AppColor.backgroundColor,
                       ),
                     );
-                  } else if (state is DealsCategotyFailure) {
+                  } else if (state is TenderCatFailure) {
                     final failure = state.message;
                     return Center(
                       child: Text(
                         failure,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.red,
-                          fontSize: 25.sp,
                         ),
                       ),
                     );
-                  } else if (state is DealsCategotySuccess) {
+                  } else if (state is TenderCatSuccess) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -83,16 +84,22 @@ class _DealsCategoriesScreenState extends State<DealsCategoriesScreen> {
                               // height: MediaQuery.of(context).size.height,
                               child: ListView.builder(
                                 shrinkWrap: true,
-                                itemCount: state.dealsCat.length,
+                                itemCount: state.tenderCat.length,
                                 scrollDirection: Axis.vertical,
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 5, vertical: 8),
-                                    child: Categories(
-                                      dealsCategory: state.dealsCat[index],
-                                      category: widget.title,
-                                    ),
+                                    child: widget.title == 'فئات الصفقات'
+                                        ? Categories(
+                                            dealsCategory: list[index],
+                                            category: widget.title,
+                                          )
+                                        : Categories(
+                                            tendersCategory:
+                                                state.tenderCat[index],
+                                            category: widget.title,
+                                          ),
                                   );
                                 },
                               ),

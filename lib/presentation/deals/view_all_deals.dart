@@ -1,21 +1,38 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:netzoon/domain/deals/entities/deals_info.dart';
+import 'package:netzoon/domain/deals/entities/dealsItems/deals_items.dart';
+import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
+import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dart';
 import 'package:netzoon/presentation/deals/deals_details.dart';
+import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 
 class ViewAllDealsScreen extends StatefulWidget {
-  const ViewAllDealsScreen({super.key, required this.dealsInfoList});
+  const ViewAllDealsScreen({
+    super.key,
+    // required this.dealsInfoList,
+    required this.category,
+  });
 
-  final List<DealsInfo> dealsInfoList;
+  // final List<DealsInfo> dealsInfoList;
+  final String category;
 
   @override
   State<ViewAllDealsScreen> createState() => _ViewAllDealsScreenState();
 }
 
 class _ViewAllDealsScreenState extends State<ViewAllDealsScreen> {
+  final dealsItemBloc = sl<DealsItemsBloc>();
+
+  @override
+  void initState() {
+    dealsItemBloc.add(DealsItemsByCatEvent(category: widget.category));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -27,30 +44,58 @@ class _ViewAllDealsScreenState extends State<ViewAllDealsScreen> {
           height: MediaQuery.of(context).size.height,
           child: BackgroundWidget(
             // title: "المناقصات",
-            widget: SizedBox(
-                height: size.height,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: widget.dealsInfoList.length,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            width: MediaQuery.of(context).size.width,
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20)),
-                            child:
-                                Deals(dealsInfo: widget.dealsInfoList[index]),
-                          );
-                        },
+            widget: BlocBuilder<DealsItemsBloc, DealsItemsState>(
+              bloc: dealsItemBloc,
+              builder: (context, state) {
+                if (state is DealsItemsInProgress) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColor.backgroundColor,
+                    ),
+                  );
+                } else if (state is DealsItemsFailure) {
+                  final failure = state.message;
+                  return Center(
+                    child: Text(
+                      failure,
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 25.sp,
                       ),
-                    )
-                  ],
-                )),
+                    ),
+                  );
+                } else if (state is DealsItemsSuccess) {
+                  return SizedBox(
+                    height: size.height,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: state.dealsItems.length,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                width: MediaQuery.of(context).size.width,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Deals(
+                                  dealsInfo: state.dealsItems[index],
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                }
+                return Container();
+              },
+            ),
           ),
         ),
       )),
@@ -61,7 +106,7 @@ class _ViewAllDealsScreenState extends State<ViewAllDealsScreen> {
 class Deals extends StatelessWidget {
   const Deals({super.key, required this.dealsInfo});
 
-  final DealsInfo dealsInfo;
+  final DealsItems dealsInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +186,7 @@ class Deals extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  dealsInfo.prepeice,
+                                  dealsInfo.prevPrice.toString(),
                                   style: TextStyle(
                                     color: AppColor.black,
                                     fontWeight: FontWeight.bold,
@@ -160,7 +205,7 @@ class Deals extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  dealsInfo.currpeice,
+                                  dealsInfo.currentPrice.toString(),
                                   style: TextStyle(
                                     color: AppColor.black,
                                     fontWeight: FontWeight.bold,
@@ -170,7 +215,7 @@ class Deals extends StatelessWidget {
                               ],
                             ),
                             Text(
-                              '${dealsInfo.endDate} الصفقة صالحة لغاية ',
+                              '${convertDateToString(dealsInfo.endDate)} الصفقة صالحة لغاية ',
                               style: TextStyle(
                                   color: Colors.grey, fontSize: 13.sp),
                               textAlign: TextAlign.start,
