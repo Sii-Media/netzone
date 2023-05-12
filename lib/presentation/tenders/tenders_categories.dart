@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:netzoon/domain/tenders/entities/tender.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/tenders/view_all_tenders_screen.dart';
 
 class TendersCategoriesScreen extends StatefulWidget {
-  const TendersCategoriesScreen({super.key, required this.tenders});
-
-  final List<Tender> tenders;
+  const TendersCategoriesScreen({
+    super.key,
+    required this.category,
+  });
+  final String category;
+  // final List<Tender> tenders;
 
   @override
   State<TendersCategoriesScreen> createState() =>
@@ -35,11 +37,19 @@ class _TendersCategoriesScreenState extends State<TendersCategoriesScreen> {
                     style: TextStyle(fontSize: 18.sp, color: Colors.black),
                   ),
                 ),
-                tendersCategory(name: 'من الأقل سعراً'),
+                tendersCategory(
+                  name: 'من الأقل سعراً',
+                  sort: 'min',
+                  category: widget.category,
+                ),
                 SizedBox(
                   height: 20.h,
                 ),
-                tendersCategory(name: 'من الأعلى سعراً'),
+                tendersCategory(
+                  name: 'من الأعلى سعراً',
+                  sort: 'max',
+                  category: widget.category,
+                ),
               ],
             ),
           ),
@@ -48,7 +58,10 @@ class _TendersCategoriesScreenState extends State<TendersCategoriesScreen> {
     );
   }
 
-  Center tendersCategory({required String name}) {
+  Center tendersCategory(
+      {required String name,
+      required final String sort,
+      required String category}) {
     return Center(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10.0),
@@ -58,7 +71,9 @@ class _TendersCategoriesScreenState extends State<TendersCategoriesScreen> {
                 MaterialPageRoute(
                   builder: (context) {
                     return ViewAllTendersScreen(
-                      tenders: widget.tenders,
+                      sort: sort,
+                      category: category,
+                      // tenders: widget.tenders,
                     );
                   },
                 ),

@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/domain/tenders/entities/tendersItems/tender_item.dart';
+import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 
 class TenderWidget extends StatelessWidget {
   const TenderWidget({
@@ -12,7 +14,7 @@ class TenderWidget extends StatelessWidget {
     required this.desTitle2,
   });
 
-  final List tenders;
+  final List<TenderItem> tenders;
   final String buttonText;
   final String subTitle;
   final String desTitle1;
@@ -62,7 +64,7 @@ class TenderWidget extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          tenders[index].name,
+                                          tenders[index].nameAr,
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 20.sp),
@@ -83,7 +85,7 @@ class TenderWidget extends StatelessWidget {
                                           height: 8.0.h,
                                         ),
                                         Text(
-                                          '$desTitle1: ${tenders[index].startDate}',
+                                          '$desTitle1: ${convertDateToString(tenders[index].startDate)}',
                                           style: TextStyle(
                                               color: Colors.orange,
                                               fontSize: 13.sp),
@@ -92,7 +94,7 @@ class TenderWidget extends StatelessWidget {
                                           height: 4.h,
                                         ),
                                         Text(
-                                          '$desTitle2 : ${tenders[index].endDate}',
+                                          '$desTitle2 : ${convertDateToString(tenders[index].endDate)}',
                                           style: TextStyle(
                                               color: Colors.orange,
                                               fontSize: 13.sp),
@@ -109,7 +111,7 @@ class TenderWidget extends StatelessWidget {
                                     //   height: 150.h,
                                     // ),
                                     child: CachedNetworkImage(
-                                      imageUrl: tenders[index].imgUrl,
+                                      imageUrl: tenders[index].type,
                                       fit: BoxFit.fitHeight,
                                       width: 170.w,
                                       height: 150.h,

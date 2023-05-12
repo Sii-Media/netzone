@@ -1,14 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:netzoon/domain/tenders/entities/tender.dart';
+import 'package:netzoon/domain/tenders/entities/tendersItems/tender_item.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
+import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 
 class TenderInfoScreen extends StatelessWidget {
   const TenderInfoScreen({super.key, required this.tender});
 
-  final Tender tender;
+  final TenderItem tender;
 
   @override
   Widget build(BuildContext context) {
@@ -25,28 +26,36 @@ class TenderInfoScreen extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(25.0),
                   child: CachedNetworkImage(
-                    imageUrl: tender.imgUrl,
+                    imageUrl: tender.type,
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              myspec(context, "اسم المناقصة : ", tender.name,
+              myspec(context, "اسم المناقصة : ", tender.nameAr,
                   AppColor.backgroundColor, Colors.black),
               myspec(context, "اسم الشركة : ", tender.companyName,
                   AppColor.backgroundColor, Colors.black),
-              myspec(context, "تاريخ بدء المناقصة : ", tender.startDate,
-                  AppColor.backgroundColor, Colors.black),
-              myspec(context, "تاريخ انتهاء المناقصة: ", tender.endDate,
+              myspec(
+                  context,
+                  "تاريخ بدء المناقصة : ",
+                  convertDateToString(tender.startDate),
+                  AppColor.backgroundColor,
+                  Colors.black),
+              myspec(
+                  context,
+                  "تاريخ انتهاء المناقصة: ",
+                  convertDateToString(tender.endDate),
+                  AppColor.backgroundColor,
+                  Colors.black),
+              SizedBox(
+                height: 5.h,
+              ),
+              myspec(context, 'قيمة المناقصة : ', tender.value.toString(),
                   AppColor.backgroundColor, Colors.black),
               SizedBox(
                 height: 5.h,
               ),
-              myspec(context, 'قيمة المناقصة', tender.tenderValue,
-                  AppColor.backgroundColor, Colors.black),
-              SizedBox(
-                height: 5.h,
-              ),
-              myspec(context, "السعر يبدأ : ", tender.startPrice,
+              myspec(context, "السعر يبدأ : ", tender.price.toString(),
                   AppColor.backgroundColor, Colors.black),
               SizedBox(
                 height: 20.h,
