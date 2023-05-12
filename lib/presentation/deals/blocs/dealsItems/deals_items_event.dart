@@ -12,3 +12,5 @@ class DealsItemsByCatEvent extends DealsItemsEvent {
 
   const DealsItemsByCatEvent({required this.category});
 }
+
+class GetDealsItemEvent extends DealsItemsEvent {}

@@ -10,6 +10,7 @@ abstract class DealsRemoteDataSource {
   Future<DealsItemsResponseModel> getDealsByCategory(
     final String category,
   );
+  Future<DealsItemsResponseModel> getDealsItems();
 }
 
 @RestApi(baseUrl: 'http://10.0.2.2:5000')
@@ -33,4 +34,8 @@ abstract class DealsRemoteDataSourceImpl implements DealsRemoteDataSource {
   Future<DealsItemsResponseModel> getDealsByCategory(
     @Part() String category,
   );
+
+  @override
+  @GET('/deals/alldealsItems')
+  Future<DealsItemsResponseModel> getDealsItems();
 }

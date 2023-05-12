@@ -16,6 +16,8 @@ import 'package:netzoon/presentation/data/perfumes.dart';
 import 'package:netzoon/presentation/data/tenders.dart';
 import 'package:netzoon/presentation/data/watches.dart';
 import 'package:netzoon/presentation/data/woman_fashion.dart';
+import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dart';
+import 'package:netzoon/presentation/deals/blocs/deals_list_widget.dart';
 import 'package:netzoon/presentation/deals/deals_screen.dart';
 import 'package:netzoon/presentation/ecommerce/screens/ecommerce.dart';
 import 'package:netzoon/presentation/home/widgets/images_slider.dart';
@@ -64,11 +66,13 @@ class _HomePageState extends State<HomePage> {
 
   final newsBloc = sl<NewsBloc>();
   final tenderItemBloc = sl<TendersItemBloc>();
+  final dealsItemBloc = sl<DealsItemsBloc>();
 
   @override
   void initState() {
     newsBloc.add(GetAllNewsEvent());
     tenderItemBloc.add(const GetTendersItemEvent());
+    dealsItemBloc.add(GetDealsItemEvent());
     super.initState();
   }
 
@@ -412,14 +416,37 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.38,
-                child: Container(),
-                // child: TenderWidget(
-                //   tenders: dealslist,
-                //   buttonText: 'شراء الصفقة',
-                //   subTitle: 'البائع:',
-                //   desTitle1: 'السعر قبل',
-                //   desTitle2: 'السعر بعد',
-                // ),
+                child: BlocBuilder<DealsItemsBloc, DealsItemsState>(
+                  bloc: dealsItemBloc,
+                  builder: (context, state) {
+                    if (state is DealsItemsInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (state is DealsItemsFailure) {
+                      final failure = state.message;
+                      return Center(
+                        child: Text(
+                          failure,
+                          style: const TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
+                      );
+                    } else if (state is DealsItemsSuccess) {
+                      return DealsListWidget(
+                        deals: state.dealsItems,
+                        buttonText: 'شراء الصفقة',
+                        subTitle: 'البائع:',
+                        desTitle1: 'السعر قبل',
+                        desTitle2: 'السعر بعد',
+                      );
+                    }
+                    return Container();
+                  },
+                ),
               ),
               const SizedBox(
                 height: 10.0,

@@ -45,8 +45,16 @@ class DealsRepositoryImpl implements DealsRepository {
   }
 
   @override
-  Future<Either<Failure, DealsItemsResponse>> getDealsItems() {
-    // TODO: implement getDealsItems
-    throw UnimplementedError();
+  Future<Either<Failure, DealsItemsResponse>> getDealsItems() async {
+    try {
+      if (await networkInfo.isConnected) {
+        final dealItem = await dealsRemoteDataSource.getDealsItems();
+        return Right(dealItem.toDomain());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
   }
 }

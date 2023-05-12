@@ -17,6 +17,7 @@ import 'package:netzoon/domain/advertisements/usercases/get_advertisements_useca
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
 import 'package:netzoon/domain/auth/usecases/sign_up_use_case.dart';
 import 'package:netzoon/domain/deals/repositories/deals_repository.dart';
+import 'package:netzoon/domain/deals/usecases/get_all_deals_items_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_deals_cat_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_deals_items_by_cat_use_case.dart';
 import 'package:netzoon/domain/news/repositories/news_repository.dart';
@@ -51,7 +52,8 @@ Future<void> init() async {
       getTendersItem: sl()));
 
   sl.registerFactory(() => DealsCategotyBloc(getDealsCategoriesUseCase: sl()));
-  sl.registerFactory(() => DealsItemsBloc(getDealsItemsByCat: sl()));
+  sl.registerFactory(() =>
+      DealsItemsBloc(getDealsItemsByCat: sl(), getDealsItemUsecase: sl()));
 
   // UseCases
 
@@ -72,6 +74,8 @@ Future<void> init() async {
       () => GetDealsCategoriesUseCase(dealsRepository: sl()));
   sl.registerLazySingleton(
       () => GetDealsItemsByCatUseCase(dealsRepository: sl()));
+
+  sl.registerLazySingleton(() => GetDealsItemUsecase(dealsRepository: sl()));
 
   // Repositories
 
