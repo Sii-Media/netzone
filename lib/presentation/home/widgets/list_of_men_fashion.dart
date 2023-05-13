@@ -36,8 +36,10 @@ class ListOfMenFashion extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context)
                           .push(MaterialPageRoute(builder: (context) {
-                        return SubSectionsScreen(
-                          list: menfashion[index].deviceList,
+                        return const SubSectionsScreen(
+                          filter: '',
+                          category: '',
+                          // list: menfashion[index].deviceList,
                         );
                       }));
                     },

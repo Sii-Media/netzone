@@ -34,8 +34,10 @@ class ListOfPerfumes extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context)
                           .push(MaterialPageRoute(builder: (context) {
-                        return SubSectionsScreen(
-                          list: perfumes[index].deviceList,
+                        return const SubSectionsScreen(
+                          filter: '',
+                          category: '',
+                          // list: perfumes[index].deviceList,
                         );
                       }));
                     },

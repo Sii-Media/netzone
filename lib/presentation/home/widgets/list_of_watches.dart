@@ -33,8 +33,10 @@ class ListOfWatches extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context)
                           .push(MaterialPageRoute(builder: (context) {
-                        return SubSectionsScreen(
-                          list: watches[index].deviceList,
+                        return const SubSectionsScreen(
+                          filter: '',
+                          category: '',
+                          // list: watches[index].deviceList,
                         );
                       }));
                     },

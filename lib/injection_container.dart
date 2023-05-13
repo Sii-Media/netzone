@@ -5,11 +5,13 @@ import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/remote/advertisements/ads_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/auth/auth_remote_datasource.dart';
 import 'package:netzoon/data/datasource/remote/deals/deals_remote_data_source.dart';
+import 'package:netzoon/data/datasource/remote/departments/departments_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/news/news_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/tenders/tenders_remote_data_source.dart';
 import 'package:netzoon/data/repositories/advertisments/advertisment_repository_impl.dart';
 import 'package:netzoon/data/repositories/auth_repository_impl.dart';
 import 'package:netzoon/data/repositories/deals/deals_repository_impl.dart';
+import 'package:netzoon/data/repositories/departments/departments_repository_impl.dart';
 import 'package:netzoon/data/repositories/news/news_repositories_impl.dart';
 import 'package:netzoon/data/repositories/tenders/tenders_repository_impl.dart';
 import 'package:netzoon/domain/advertisements/repositories/advertisment_repository.dart';
@@ -20,6 +22,9 @@ import 'package:netzoon/domain/deals/repositories/deals_repository.dart';
 import 'package:netzoon/domain/deals/usecases/get_all_deals_items_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_deals_cat_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_deals_items_by_cat_use_case.dart';
+import 'package:netzoon/domain/departments/repositories/departments_repository.dart';
+import 'package:netzoon/domain/departments/usecases/get_categories_by_departments_use_case.dart';
+import 'package:netzoon/domain/departments/usecases/get_category_products_use_case.dart';
 import 'package:netzoon/domain/news/repositories/news_repository.dart';
 import 'package:netzoon/domain/news/usecases/add_news_use_case.dart';
 import 'package:netzoon/domain/news/usecases/get_all_news_usecase.dart';
@@ -32,6 +37,7 @@ import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/deals_category/deals_categoty_bloc.dart';
+import 'package:netzoon/presentation/home/blocs/elec_devices/elec_devices_bloc.dart';
 import 'package:netzoon/presentation/news/blocs/add_news/add_news_bloc.dart';
 import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersCategory/tender_cat_bloc.dart';
@@ -55,6 +61,10 @@ Future<void> init() async {
   sl.registerFactory(() =>
       DealsItemsBloc(getDealsItemsByCat: sl(), getDealsItemUsecase: sl()));
 
+  sl.registerFactory(() => ElecDevicesBloc(
+      getCategoriesByDepartmentUsecase: sl(),
+      getCategoryProductsUseCase: sl()));
+
   // UseCases
 
   sl.registerLazySingleton(() => SignUpUseCase(authRepository: sl()));
@@ -77,6 +87,12 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => GetDealsItemUsecase(dealsRepository: sl()));
 
+  sl.registerLazySingleton(
+      () => GetCategoriesByDepartmentUsecase(departmentRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => GetCategoryProductsUseCase(departmentRepository: sl()));
+
   // Repositories
 
   sl.registerLazySingleton<AuthRepository>(
@@ -95,6 +111,9 @@ Future<void> init() async {
   sl.registerLazySingleton<DealsRepository>(() =>
       DealsRepositoryImpl(dealsRemoteDataSource: sl(), networkInfo: sl()));
 
+  sl.registerLazySingleton<DepartmentRepository>(() => DepartmentRepositoryImpl(
+      departmentsRemoteDataSource: sl(), networkInfo: sl()));
+
   // DataSourses
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
@@ -111,6 +130,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton<DealsRemoteDataSource>(
       () => DealsRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
+
+  sl.registerLazySingleton<DepartmentsRemoteDataSource>(() =>
+      DepartmentsRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
 
   //! Core
 

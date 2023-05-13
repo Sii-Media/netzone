@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/domain/departments/entities/departments_categories/departments_categories.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/ecommerce/screens/subsection_screen.dart';
 
 class ListCategoriesEcommerce extends StatelessWidget {
-  const ListCategoriesEcommerce({super.key, required this.items});
+  const ListCategoriesEcommerce(
+      {super.key, required this.items, required this.filter});
   final List<dynamic> items;
+  final String filter;
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -25,7 +28,8 @@ class ListCategoriesEcommerce extends StatelessWidget {
                   child: Container(
                     decoration:
                         BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                    child: CategoriesEcommerce(item: items[index]),
+                    child:
+                        CategoriesEcommerce(item: items[index], filter: filter),
                   ),
                 ),
               );
@@ -58,10 +62,11 @@ class ListCategoriesEcommerce extends StatelessWidget {
 }
 
 class CategoriesEcommerce extends StatelessWidget {
-  const CategoriesEcommerce({super.key, required this.item});
+  const CategoriesEcommerce(
+      {super.key, required this.item, required this.filter});
 
-  final dynamic item;
-
+  final DepartmentsCategories item;
+  final String filter;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -69,12 +74,12 @@ class CategoriesEcommerce extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) {
             return SubSectionsScreen(
-              list: item.deviceList,
+              filter: filter,
+              category: item.name,
+              // list: item.deviceList,
             );
           }),
         );
-        // controller
-        //     .goToSubSections(categoriesEcommerceModel.categoriesEcommerceId);
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25.0),

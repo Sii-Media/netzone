@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:netzoon/domain/electronic_devices/entities/device_list.dart';
+import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 import 'package:netzoon/presentation/categories/widgets/free_zone_video_widget.dart';
 import 'package:netzoon/presentation/categories/widgets/image_free_zone_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
@@ -10,7 +10,7 @@ import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   const ProductDetailScreen({super.key, required this.item});
-  final ItemList item;
+  final CategoryProducts item;
   @override
   Widget build(BuildContext context) {
     final TextEditingController input = TextEditingController();
@@ -39,7 +39,7 @@ class ProductDetailScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         CachedNetworkImage(
-                          imageUrl: item.deviceImg,
+                          imageUrl: item.imageUrl,
                           width: 700.w,
                           height: 200.h,
                           fit: BoxFit.contain,
@@ -81,7 +81,7 @@ class ProductDetailScreen extends StatelessWidget {
                                 height: 7.h,
                               ),
                               Text(
-                                item.deviceName,
+                                item.name,
                                 style: TextStyle(
                                   color: AppColor.black,
                                   fontSize: 22.sp,
@@ -135,10 +135,10 @@ class ProductDetailScreen extends StatelessWidget {
                           SizedBox(
                             height: 7.h,
                           ),
-                          item.property != null
+                          item.propert != null
                               ? titleAndInput(
                                   title: 'المواصفات الاقليمية',
-                                  input: item.property ?? '',
+                                  input: item.propert ?? '',
                                 )
                               : Container(),
                           SizedBox(
@@ -209,7 +209,7 @@ class ProductDetailScreen extends StatelessWidget {
                             fontSize: 17.sp,
                           ),
                         ),
-                        item.images!.isNotEmpty
+                        item.images?.isNotEmpty == true
                             ? GridView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
@@ -247,10 +247,10 @@ class ProductDetailScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    child: item.vedio! != ''
+                    child: item.vedioUrl != null && item.vedioUrl != ''
                         ? VideoFreeZoneWidget(
                             title: "فيديو  : ",
-                            vediourl: item.vedio!,
+                            vediourl: item.vedioUrl ?? '',
                           )
                         : Text(
                             'لا يوجد فيديو',

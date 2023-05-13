@@ -20,15 +20,12 @@ import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dar
 import 'package:netzoon/presentation/deals/blocs/deals_list_widget.dart';
 import 'package:netzoon/presentation/deals/deals_screen.dart';
 import 'package:netzoon/presentation/ecommerce/screens/ecommerce.dart';
+import 'package:netzoon/presentation/home/blocs/elec_devices/elec_devices_bloc.dart';
 import 'package:netzoon/presentation/home/widgets/images_slider.dart';
 import 'package:netzoon/presentation/home/widgets/list_of_categories.dart';
-import 'package:netzoon/presentation/home/widgets/list_of_food_products.dart';
 import 'package:netzoon/presentation/home/widgets/list_of_items.dart';
-import 'package:netzoon/presentation/home/widgets/list_of_men_fashion.dart';
-import 'package:netzoon/presentation/home/widgets/list_of_office_devices.dart';
 import 'package:netzoon/presentation/home/widgets/list_of_perfumes.dart';
 import 'package:netzoon/presentation/home/widgets/list_of_watches.dart';
-import 'package:netzoon/presentation/home/widgets/list_of_woman_fashion.dart';
 import 'package:netzoon/presentation/home/widgets/slider_news_widget.dart';
 import 'package:netzoon/presentation/home/widgets/tender_widget.dart';
 import 'package:netzoon/presentation/home/widgets/title_and_button.dart';
@@ -67,12 +64,23 @@ class _HomePageState extends State<HomePage> {
   final newsBloc = sl<NewsBloc>();
   final tenderItemBloc = sl<TendersItemBloc>();
   final dealsItemBloc = sl<DealsItemsBloc>();
+  final elcDeviceBloc = sl<ElecDevicesBloc>();
+  final deviceBloc = sl<ElecDevicesBloc>();
+  final manFashionBloc = sl<ElecDevicesBloc>();
+  final womanFashionBloc = sl<ElecDevicesBloc>();
+  final foodsBloc = sl<ElecDevicesBloc>();
 
   @override
   void initState() {
     newsBloc.add(GetAllNewsEvent());
     tenderItemBloc.add(const GetTendersItemEvent());
     dealsItemBloc.add(GetDealsItemEvent());
+    elcDeviceBloc.add(const GetElcDevicesEvent(department: 'Elec'));
+    deviceBloc.add(const GetElcDevicesEvent(department: 'Devices'));
+    manFashionBloc.add(const GetElcDevicesEvent(department: 'MenFashion'));
+    womanFashionBloc.add(const GetElcDevicesEvent(department: 'WomanFashion'));
+    foodsBloc.add(const GetElcDevicesEvent(department: 'Foods'));
+
     super.initState();
   }
 
@@ -82,6 +90,13 @@ class _HomePageState extends State<HomePage> {
       onRefresh: () async {
         newsBloc.add(GetAllNewsEvent());
         tenderItemBloc.add(const GetTendersItemEvent());
+        dealsItemBloc.add(GetDealsItemEvent());
+        elcDeviceBloc.add(const GetElcDevicesEvent(department: 'Elec'));
+        deviceBloc.add(const GetElcDevicesEvent(department: 'Devices'));
+        manFashionBloc.add(const GetElcDevicesEvent(department: 'MenFashion'));
+        womanFashionBloc
+            .add(const GetElcDevicesEvent(department: 'WomanFashion'));
+        foodsBloc.add(const GetElcDevicesEvent(department: 'Foods'));
       },
       color: AppColor.white,
       backgroundColor: AppColor.backgroundColor,
@@ -126,22 +141,51 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(builder: (context) {
                       return CategoriesScreen(
                         items: elecDevices,
+                        filter: 'Elec',
                       );
                     }),
                   );
                 },
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 3.0,
-                ),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color:
-                      const Color.fromARGB(255, 209, 219, 235).withOpacity(0.8),
-                ),
-                height: MediaQuery.of(context).size.height * 0.20,
-                child: ListofItems(devices: elecDevices),
+              BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                bloc: elcDeviceBloc,
+                builder: (context, state) {
+                  if (state is ElecDevicesInProgress) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.backgroundColor,
+                      ),
+                    );
+                  } else if (state is ElecDevicesFailure) {
+                    final failure = state.message;
+                    return Center(
+                      child: Text(
+                        failure,
+                        style: const TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                    );
+                  } else if (state is ElecDevicesSuccess) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 3.0,
+                      ),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 209, 219, 235)
+                            .withOpacity(0.8),
+                      ),
+                      height: MediaQuery.of(context).size.height * 0.20,
+                      child: ListofItems(
+                        filter: 'Elec',
+                        // devices: elecDevices,
+                        elec: state.elecDevices,
+                      ),
+                    );
+                  }
+                  return Container();
+                },
               ),
               const SizedBox(
                 height: 10.0,
@@ -153,25 +197,52 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return CategoriesScreen(
+                        filter: 'Devices',
                         items: devices,
                       );
                     }),
                   );
                 },
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 3.0,
-                ),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color:
-                      const Color.fromARGB(255, 209, 219, 235).withOpacity(0.8),
-                ),
-                height: MediaQuery.of(context).size.height * 0.20,
-                child: ListOfOfficeDevices(
-                  devices: homeDevices,
-                ),
+              BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                bloc: deviceBloc,
+                builder: (context, state) {
+                  if (state is ElecDevicesInProgress) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.backgroundColor,
+                      ),
+                    );
+                  } else if (state is ElecDevicesFailure) {
+                    final failure = state.message;
+                    return Center(
+                      child: Text(
+                        failure,
+                        style: const TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                    );
+                  } else if (state is ElecDevicesSuccess) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 3.0,
+                      ),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 209, 219, 235)
+                            .withOpacity(0.8),
+                      ),
+                      height: MediaQuery.of(context).size.height * 0.20,
+                      child: ListofItems(
+                        filter: 'Devices',
+                        // devices: elecDevices,
+                        elec: state.elecDevices,
+                      ),
+                    );
+                  }
+                  return Container();
+                },
               ),
               const SizedBox(
                 height: 10.0,
@@ -183,26 +254,67 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return CategoriesScreen(
+                        filter: 'MenFashion',
                         items: menfasion,
                       );
                     }),
                   );
                 },
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 3.0,
-                ),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color:
-                      const Color.fromARGB(255, 209, 219, 235).withOpacity(0.8),
-                ),
-                height: MediaQuery.of(context).size.height * 0.20,
-                child: ListOfMenFashion(
-                  menfashion: menfasion,
-                ),
+              BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                bloc: manFashionBloc,
+                builder: (context, state) {
+                  if (state is ElecDevicesInProgress) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.backgroundColor,
+                      ),
+                    );
+                  } else if (state is ElecDevicesFailure) {
+                    final failure = state.message;
+                    return Center(
+                      child: Text(
+                        failure,
+                        style: const TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                    );
+                  } else if (state is ElecDevicesSuccess) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 3.0,
+                      ),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 209, 219, 235)
+                            .withOpacity(0.8),
+                      ),
+                      height: MediaQuery.of(context).size.height * 0.20,
+                      child: ListofItems(
+                        filter: 'MenFashion',
+                        // devices: elecDevices,
+                        elec: state.elecDevices,
+                      ),
+                    );
+                  }
+                  return Container();
+                },
               ),
+              // Container(
+              //   padding: const EdgeInsets.symmetric(
+              //     vertical: 3.0,
+              //   ),
+              //   width: MediaQuery.of(context).size.width,
+              //   decoration: BoxDecoration(
+              //     color:
+              //         const Color.fromARGB(255, 209, 219, 235).withOpacity(0.8),
+              //   ),
+              //   height: MediaQuery.of(context).size.height * 0.20,
+              //   child: ListOfMenFashion(
+              //     menfashion: menfasion,
+              //   ),
+              // ),
               const SizedBox(
                 height: 10.0,
               ),
@@ -213,26 +325,54 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return CategoriesScreen(
+                        filter: 'WomanFashion',
                         items: womanFashion,
                       );
                     }),
                   );
                 },
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 3.0,
-                ),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color:
-                      const Color.fromARGB(255, 209, 219, 235).withOpacity(0.8),
-                ),
-                height: MediaQuery.of(context).size.height * 0.20,
-                child: ListOfWomanFashion(
-                  womanFashion: womanFashion,
-                ),
+              BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                bloc: womanFashionBloc,
+                builder: (context, state) {
+                  if (state is ElecDevicesInProgress) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.backgroundColor,
+                      ),
+                    );
+                  } else if (state is ElecDevicesFailure) {
+                    final failure = state.message;
+                    return Center(
+                      child: Text(
+                        failure,
+                        style: const TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                    );
+                  } else if (state is ElecDevicesSuccess) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 3.0,
+                      ),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 209, 219, 235)
+                            .withOpacity(0.8),
+                      ),
+                      height: MediaQuery.of(context).size.height * 0.20,
+                      child: ListofItems(
+                        filter: 'WomanFashion',
+                        // devices: elecDevices,
+                        elec: state.elecDevices,
+                      ),
+                    );
+                  }
+                  return Container();
+                },
               ),
+
               const SizedBox(
                 height: 10.0,
               ),
@@ -243,26 +383,67 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return CategoriesScreen(
+                        filter: 'Foods',
                         items: foodProducts,
                       );
                     }),
                   );
                 },
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 3.0,
-                ),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color:
-                      const Color.fromARGB(255, 209, 219, 235).withOpacity(0.8),
-                ),
-                height: MediaQuery.of(context).size.height * 0.20,
-                child: ListOfFoodProducts(
-                  foodProducts: foodproduct,
-                ),
+              BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                bloc: foodsBloc,
+                builder: (context, state) {
+                  if (state is ElecDevicesInProgress) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.backgroundColor,
+                      ),
+                    );
+                  } else if (state is ElecDevicesFailure) {
+                    final failure = state.message;
+                    return Center(
+                      child: Text(
+                        failure,
+                        style: const TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                    );
+                  } else if (state is ElecDevicesSuccess) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 3.0,
+                      ),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 209, 219, 235)
+                            .withOpacity(0.8),
+                      ),
+                      height: MediaQuery.of(context).size.height * 0.20,
+                      child: ListofItems(
+                        filter: 'Foods',
+                        // devices: elecDevices,
+                        elec: state.elecDevices,
+                      ),
+                    );
+                  }
+                  return Container();
+                },
               ),
+              // Container(
+              //   padding: const EdgeInsets.symmetric(
+              //     vertical: 3.0,
+              //   ),
+              //   width: MediaQuery.of(context).size.width,
+              //   decoration: BoxDecoration(
+              //     color:
+              //         const Color.fromARGB(255, 209, 219, 235).withOpacity(0.8),
+              //   ),
+              //   height: MediaQuery.of(context).size.height * 0.20,
+              //   child: ListOfFoodProducts(
+              //     foodProducts: foodproduct,
+              //   ),
+              // ),
               const SizedBox(
                 height: 10.0,
               ),
@@ -273,6 +454,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return CategoriesScreen(
+                        filter: '',
                         items: perfumeslist,
                       );
                     }),
@@ -303,6 +485,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return CategoriesScreen(
+                        filter: '',
                         items: watches,
                       );
                     }),

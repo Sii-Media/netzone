@@ -34,8 +34,10 @@ class ListOfFoodProducts extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context)
                           .push(MaterialPageRoute(builder: (context) {
-                        return SubSectionsScreen(
-                          list: foodProducts[index].deviceList,
+                        return const SubSectionsScreen(
+                          filter: '',
+                          category: '',
+                          // list: foodProducts[index].deviceList,
                         );
                       }));
                     },

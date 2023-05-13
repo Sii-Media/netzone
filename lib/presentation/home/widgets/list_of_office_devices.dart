@@ -36,8 +36,10 @@ class ListOfOfficeDevices extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context)
                           .push(MaterialPageRoute(builder: (context) {
-                        return SubSectionsScreen(
-                          list: devices[index].deviceList,
+                        return const SubSectionsScreen(
+                          filter: '',
+                          category: '',
+                          // list: devices[index].deviceList,
                         );
                       }));
                     },
