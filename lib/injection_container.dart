@@ -17,6 +17,7 @@ import 'package:netzoon/data/repositories/tenders/tenders_repository_impl.dart';
 import 'package:netzoon/domain/advertisements/repositories/advertisment_repository.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_advertisements_usecase.dart';
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
+import 'package:netzoon/domain/auth/usecases/sign_in_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/sign_up_use_case.dart';
 import 'package:netzoon/domain/deals/repositories/deals_repository.dart';
 import 'package:netzoon/domain/deals/usecases/get_all_deals_items_use_case.dart';
@@ -34,6 +35,7 @@ import 'package:netzoon/domain/tenders/usecases/get_tenders_cat_use_case.dart';
 import 'package:netzoon/domain/tenders/usecases/get_tenders_items_by_min.dart';
 import 'package:netzoon/domain/tenders/usecases/get_tenders_items_by_max.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
+import 'package:netzoon/presentation/auth/blocs/sign_in/sign_in_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/deals_category/deals_categoty_bloc.dart';
@@ -48,6 +50,7 @@ final sl = GetIt.instance;
 Future<void> init() async {
   // Bloc
   sl.registerFactory(() => SignUpBloc(signUpUseCase: sl()));
+  sl.registerFactory(() => SignInBloc(signInUseCase: sl()));
   sl.registerFactory(() => AdsBlocBloc(getAdvertismentsUseCase: sl()));
   sl.registerFactory(() => NewsBloc(getAllNewsUseCase: sl()));
   sl.registerFactory(() => AddNewsBloc(addNewsUseCase: sl()));
@@ -68,6 +71,7 @@ Future<void> init() async {
   // UseCases
 
   sl.registerLazySingleton(() => SignUpUseCase(authRepository: sl()));
+  sl.registerLazySingleton(() => SignInUseCase(authRepository: sl()));
   sl.registerLazySingleton(
       () => GetAdvertismentsUseCase(advertismentRepository: sl()));
 

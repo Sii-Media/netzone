@@ -24,8 +24,6 @@ import 'package:netzoon/presentation/home/blocs/elec_devices/elec_devices_bloc.d
 import 'package:netzoon/presentation/home/widgets/images_slider.dart';
 import 'package:netzoon/presentation/home/widgets/list_of_categories.dart';
 import 'package:netzoon/presentation/home/widgets/list_of_items.dart';
-import 'package:netzoon/presentation/home/widgets/list_of_perfumes.dart';
-import 'package:netzoon/presentation/home/widgets/list_of_watches.dart';
 import 'package:netzoon/presentation/home/widgets/slider_news_widget.dart';
 import 'package:netzoon/presentation/home/widgets/tender_widget.dart';
 import 'package:netzoon/presentation/home/widgets/title_and_button.dart';
@@ -69,6 +67,8 @@ class _HomePageState extends State<HomePage> {
   final manFashionBloc = sl<ElecDevicesBloc>();
   final womanFashionBloc = sl<ElecDevicesBloc>();
   final foodsBloc = sl<ElecDevicesBloc>();
+  final perfumesBloc = sl<ElecDevicesBloc>();
+  final watchesBloc = sl<ElecDevicesBloc>();
 
   @override
   void initState() {
@@ -80,7 +80,8 @@ class _HomePageState extends State<HomePage> {
     manFashionBloc.add(const GetElcDevicesEvent(department: 'MenFashion'));
     womanFashionBloc.add(const GetElcDevicesEvent(department: 'WomanFashion'));
     foodsBloc.add(const GetElcDevicesEvent(department: 'Foods'));
-
+    perfumesBloc.add(const GetElcDevicesEvent(department: 'Perfumes'));
+    watchesBloc.add(const GetElcDevicesEvent(department: 'Watches'));
     super.initState();
   }
 
@@ -97,6 +98,8 @@ class _HomePageState extends State<HomePage> {
         womanFashionBloc
             .add(const GetElcDevicesEvent(department: 'WomanFashion'));
         foodsBloc.add(const GetElcDevicesEvent(department: 'Foods'));
+        perfumesBloc.add(const GetElcDevicesEvent(department: 'Perfumes'));
+        watchesBloc.add(const GetElcDevicesEvent(department: 'Watches'));
       },
       color: AppColor.white,
       backgroundColor: AppColor.backgroundColor,
@@ -301,20 +304,6 @@ class _HomePageState extends State<HomePage> {
                   return Container();
                 },
               ),
-              // Container(
-              //   padding: const EdgeInsets.symmetric(
-              //     vertical: 3.0,
-              //   ),
-              //   width: MediaQuery.of(context).size.width,
-              //   decoration: BoxDecoration(
-              //     color:
-              //         const Color.fromARGB(255, 209, 219, 235).withOpacity(0.8),
-              //   ),
-              //   height: MediaQuery.of(context).size.height * 0.20,
-              //   child: ListOfMenFashion(
-              //     menfashion: menfasion,
-              //   ),
-              // ),
               const SizedBox(
                 height: 10.0,
               ),
@@ -372,7 +361,6 @@ class _HomePageState extends State<HomePage> {
                   return Container();
                 },
               ),
-
               const SizedBox(
                 height: 10.0,
               ),
@@ -430,20 +418,6 @@ class _HomePageState extends State<HomePage> {
                   return Container();
                 },
               ),
-              // Container(
-              //   padding: const EdgeInsets.symmetric(
-              //     vertical: 3.0,
-              //   ),
-              //   width: MediaQuery.of(context).size.width,
-              //   decoration: BoxDecoration(
-              //     color:
-              //         const Color.fromARGB(255, 209, 219, 235).withOpacity(0.8),
-              //   ),
-              //   height: MediaQuery.of(context).size.height * 0.20,
-              //   child: ListOfFoodProducts(
-              //     foodProducts: foodproduct,
-              //   ),
-              // ),
               const SizedBox(
                 height: 10.0,
               ),
@@ -454,26 +428,52 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return CategoriesScreen(
-                        filter: '',
+                        filter: 'Perfumes',
                         items: perfumeslist,
                       );
                     }),
                   );
                 },
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 3.0,
-                ),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color:
-                      const Color.fromARGB(255, 209, 219, 235).withOpacity(0.8),
-                ),
-                height: MediaQuery.of(context).size.height * 0.20,
-                child: ListOfPerfumes(
-                  perfumes: perfumeslist,
-                ),
+              BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                bloc: perfumesBloc,
+                builder: (context, state) {
+                  if (state is ElecDevicesInProgress) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.backgroundColor,
+                      ),
+                    );
+                  } else if (state is ElecDevicesFailure) {
+                    final failure = state.message;
+                    return Center(
+                      child: Text(
+                        failure,
+                        style: const TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                    );
+                  } else if (state is ElecDevicesSuccess) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 3.0,
+                      ),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 209, 219, 235)
+                            .withOpacity(0.8),
+                      ),
+                      height: MediaQuery.of(context).size.height * 0.20,
+                      child: ListofItems(
+                        filter: 'Perfumes',
+                        // devices: elecDevices,
+                        elec: state.elecDevices,
+                      ),
+                    );
+                  }
+                  return Container();
+                },
               ),
               const SizedBox(
                 height: 10.0,
@@ -485,26 +485,52 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return CategoriesScreen(
-                        filter: '',
+                        filter: 'Watches',
                         items: watches,
                       );
                     }),
                   );
                 },
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 3.0,
-                ),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color:
-                      const Color.fromARGB(255, 209, 219, 235).withOpacity(0.8),
-                ),
-                height: MediaQuery.of(context).size.height * 0.20,
-                child: ListOfWatches(
-                  watches: watchesList,
-                ),
+              BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                bloc: watchesBloc,
+                builder: (context, state) {
+                  if (state is ElecDevicesInProgress) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.backgroundColor,
+                      ),
+                    );
+                  } else if (state is ElecDevicesFailure) {
+                    final failure = state.message;
+                    return Center(
+                      child: Text(
+                        failure,
+                        style: const TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                    );
+                  } else if (state is ElecDevicesSuccess) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 3.0,
+                      ),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 209, 219, 235)
+                            .withOpacity(0.8),
+                      ),
+                      height: MediaQuery.of(context).size.height * 0.20,
+                      child: ListofItems(
+                        filter: 'Watches',
+                        // devices: elecDevices,
+                        elec: state.elecDevices,
+                      ),
+                    );
+                  }
+                  return Container();
+                },
               ),
               const SizedBox(
                 height: 10.0,

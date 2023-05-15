@@ -4,7 +4,6 @@ import 'package:netzoon/data/models/auth/user/user_model.dart';
 import 'package:netzoon/domain/auth/entities/user.dart';
 import 'package:dartz/dartz.dart';
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
-import 'package:netzoon/domain/core/error/exceptions.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -30,8 +29,23 @@ class AuthRepositoryImpl implements AuthRepository {
       } else {
         return Left(OfflineFailure());
       }
-    } on ServerException {
+    } catch (e) {
       return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> signIn(
+      {required String email, required String password}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final user = await authRemoteDataSource.signIn(email, password);
+        return Right(user.toDomain());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(CredintialFailure());
     }
   }
 }

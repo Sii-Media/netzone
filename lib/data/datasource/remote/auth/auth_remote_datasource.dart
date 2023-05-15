@@ -12,6 +12,11 @@ abstract class AuthRemoteDataSource {
     final String firstMobile,
     final bool isFreeZoon,
   );
+
+  Future<UserModel> signIn(
+    final String email,
+    final String password,
+  );
 }
 
 @RestApi(baseUrl: 'http://10.0.2.2:5000')
@@ -35,5 +40,12 @@ abstract class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     @Part() String userType,
     @Part() String firstMobile,
     @Part() bool isFreeZoon,
+  );
+
+  @override
+  @POST('/user/signin')
+  Future<UserModel> signIn(
+    @Part() String email,
+    @Part() String password,
   );
 }

@@ -7,7 +7,9 @@ String mapFailureToString(Failure failure) {
     case EmptyCacheFailure:
       return "EmptyCacheFailure";
     case OfflineFailure:
-      return "OfflineFailure";
+      return "Offline Failure";
+    case CredintialFailure:
+      return 'Credintial Failure';
     default:
       return "UnExpected Error, Please try again later.";
   }

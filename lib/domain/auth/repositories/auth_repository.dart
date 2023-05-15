@@ -11,4 +11,9 @@ abstract class AuthRepository {
     required String firstMobile,
     required bool isFreeZoon,
   });
+
+  Future<Either<Failure, User>> signIn({
+    required String email,
+    required String password,
+  });
 }

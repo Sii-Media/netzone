@@ -19,7 +19,7 @@ class UserInfoModel {
   final String? address;
 
   final String? businessLicense;
-  final String? companyProductsNumber;
+  final int? companyProductsNumber;
 
   final String? sellType;
 

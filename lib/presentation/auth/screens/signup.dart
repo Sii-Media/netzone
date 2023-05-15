@@ -39,7 +39,15 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
 
           final failure = state.message;
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(failure)),
+            SnackBar(
+              content: Text(
+                failure,
+                style: const TextStyle(
+                  color: AppColor.white,
+                ),
+              ),
+              backgroundColor: AppColor.red,
+            ),
           );
         } else if (state is SignUpSuccess) {
           stopLoading();

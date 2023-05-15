@@ -19,7 +19,7 @@ UserInfoModel _$UserInfoModelFromJson(Map<String, dynamic> json) =>
       address: json['address'] as String?,
       isFreeZoon: json['isFreeZoon'] as bool,
       businessLicense: json['businessLicense'] as String?,
-      companyProductsNumber: json['companyProductsNumber'] as String?,
+      companyProductsNumber: json['companyProductsNumber'] as int?,
       sellType: json['sellType'] as String?,
       toCountry: json['toCountry'] as String?,
       profilePhoto: json['profilePhoto'] as String?,

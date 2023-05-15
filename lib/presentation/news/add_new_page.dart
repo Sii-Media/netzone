@@ -65,7 +65,15 @@ class _AddNewScreenState extends State<AddNewScreen>
 
                   final failure = state.message;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(failure)),
+                    SnackBar(
+                      content: Text(
+                        failure,
+                        style: const TextStyle(
+                          color: AppColor.white,
+                        ),
+                      ),
+                      backgroundColor: AppColor.red,
+                    ),
                   );
                 } else if (state is AddNewsSuccess) {
                   stopLoading();

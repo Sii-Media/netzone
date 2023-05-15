@@ -121,7 +121,7 @@ class ProductDetailScreen extends StatelessWidget {
                           ),
                           titleAndInput(
                             title: 'الفئة',
-                            input: item.category,
+                            input: item.name,
                           ),
                           SizedBox(
                             height: 7.h,
