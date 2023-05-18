@@ -7,11 +7,15 @@ class QuestionFormField extends StatelessWidget {
     required this.textController,
     this.hintText,
     this.maxLines,
+    this.onChanged,
+    this.validator,
   });
 
   final TextEditingController textController;
   final String? hintText;
   final int? maxLines;
+  final void Function(String)? onChanged;
+  final String? Function(String?)? validator;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -26,6 +30,9 @@ class QuestionFormField extends StatelessWidget {
         contentPadding:
             const EdgeInsets.symmetric(vertical: 5, horizontal: 10).flipped,
       ),
+      onChanged: onChanged,
+      textInputAction: TextInputAction.done,
+      validator: validator,
     );
   }
 }

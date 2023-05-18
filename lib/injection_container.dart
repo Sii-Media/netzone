@@ -8,6 +8,8 @@ import 'package:netzoon/data/datasource/remote/deals/deals_remote_data_source.da
 import 'package:netzoon/data/datasource/remote/departments/departments_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/legal_advice/legal_advice_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/news/news_remote_data_source.dart';
+import 'package:netzoon/data/datasource/remote/openions/openion_remote_data_source.dart';
+import 'package:netzoon/data/datasource/remote/questions/question_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/tenders/tenders_remote_data_source.dart';
 import 'package:netzoon/data/repositories/advertisments/advertisment_repository_impl.dart';
 import 'package:netzoon/data/repositories/auth_repository_impl.dart';
@@ -15,6 +17,8 @@ import 'package:netzoon/data/repositories/deals/deals_repository_impl.dart';
 import 'package:netzoon/data/repositories/departments/departments_repository_impl.dart';
 import 'package:netzoon/data/repositories/legal_advice/legal_advice_repository_impl.dart';
 import 'package:netzoon/data/repositories/news/news_repositories_impl.dart';
+import 'package:netzoon/data/repositories/openions/openion_repository_impl.dart';
+import 'package:netzoon/data/repositories/questions/question_repository_impl.dart';
 import 'package:netzoon/data/repositories/tenders/tenders_repository_impl.dart';
 import 'package:netzoon/domain/advertisements/repositories/advertisment_repository.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_ads_by_type_use_case.dart';
@@ -35,6 +39,10 @@ import 'package:netzoon/domain/legal_advice/usecases/get_legal_advices_use_case.
 import 'package:netzoon/domain/news/repositories/news_repository.dart';
 import 'package:netzoon/domain/news/usecases/add_news_use_case.dart';
 import 'package:netzoon/domain/news/usecases/get_all_news_usecase.dart';
+import 'package:netzoon/domain/openions/repositories/openion_repository.dart';
+import 'package:netzoon/domain/openions/usecases/add_openion_use_case.dart';
+import 'package:netzoon/domain/questions/repositories/question_repository.dart';
+import 'package:netzoon/domain/questions/usecases/add_question_use_case.dart';
 import 'package:netzoon/domain/tenders/repositories/tenders_repository.dart';
 import 'package:netzoon/domain/tenders/usecases/get_all_tenders_items.dart';
 import 'package:netzoon/domain/tenders/usecases/get_tenders_cat_use_case.dart';
@@ -45,6 +53,8 @@ import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_in/sign_in_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
 import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
+import 'package:netzoon/presentation/contact/blocs/add_openion/add_openion_bloc.dart';
+import 'package:netzoon/presentation/contact/blocs/add_question/add_question_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/deals_category/deals_categoty_bloc.dart';
 import 'package:netzoon/presentation/home/blocs/elec_devices/elec_devices_bloc.dart';
@@ -57,7 +67,7 @@ import 'package:netzoon/presentation/tenders/blocs/tendersItem/tenders_item_bloc
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  // Bloc
+  //! Bloc
   sl.registerFactory(() => SignUpBloc(signUpUseCase: sl()));
   sl.registerFactory(() => SignInBloc(signInUseCase: sl()));
   sl.registerFactory(() => AdsBlocBloc(
@@ -85,7 +95,11 @@ Future<void> init() async {
 
   sl.registerFactory(() => LegalAdviceBloc(getLegalAdvicesUseCase: sl()));
 
-  // UseCases
+  sl.registerFactory(() => AddOpenionBloc(addOpenionUseCase: sl()));
+
+  sl.registerFactory(() => AddQuestionBloc(addQuestionUseCase: sl()));
+
+  //! UseCases
 
   sl.registerLazySingleton(() => SignUpUseCase(authRepository: sl()));
   sl.registerLazySingleton(() => SignInUseCase(authRepository: sl()));
@@ -122,7 +136,11 @@ Future<void> init() async {
   sl.registerLazySingleton(
       () => GetLegalAdvicesUseCase(legalAdviceRepository: sl()));
 
-  // Repositories
+  sl.registerLazySingleton(() => AddOpenionUseCase(openionsRepository: sl()));
+
+  sl.registerLazySingleton(() => AddQuestionUseCase(questionRepository: sl()));
+
+  //! Repositories
 
   sl.registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(authRemoteDataSource: sl(), networkInfo: sl()));
@@ -146,7 +164,14 @@ Future<void> init() async {
   sl.registerLazySingleton<LegalAdviceRepository>(() =>
       LegalAdviceRepositoryImpl(
           networkInfo: sl(), legalAdviceRemoteDataSource: sl()));
-  // DataSourses
+
+  sl.registerLazySingleton<OpenionsRepository>(() => OpenionsRepositoryImpl(
+      networkInfo: sl(), openionsRemoteDataSource: sl()));
+
+  sl.registerLazySingleton<QuestionRepository>(() => QuestionRepositoryImpl(
+      networkInfo: sl(), questionRemoteDataSource: sl()));
+
+  //! DataSourses
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
       () => AuthRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
@@ -168,6 +193,12 @@ Future<void> init() async {
 
   sl.registerLazySingleton<LegalAdviceRemoteDataSource>(() =>
       LegalAdviceRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
+
+  sl.registerLazySingleton<OpenionsRemoteDataSource>(() =>
+      OpenionsRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
+
+  sl.registerLazySingleton<QuestionRemoteDataSource>(() =>
+      QuestionRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
 
   //! Core
 

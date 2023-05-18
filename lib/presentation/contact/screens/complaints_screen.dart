@@ -16,120 +16,125 @@ class ComplaintsScreen extends StatelessWidget {
       child: BackgroundWidget(
         widget: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.circle,
-                    size: 13.sp,
-                    color: AppColor.backgroundColor,
-                  ),
-                  SizedBox(
-                    width: 5.w,
-                  ),
-                  Text(
-                    'الشكاوى',
-                    style: TextStyle(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.circle,
+                      size: 13.sp,
                       color: AppColor.backgroundColor,
-                      fontSize: 20.sp,
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              QuestionFormField(
-                textController: textController1,
-                hintText: 'العنوان',
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              QuestionFormField(
-                textController: textController2,
-                hintText: 'الموضوع',
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        height: 30.h,
-                        width: 130.w,
+                    SizedBox(
+                      width: 5.w,
+                    ),
+                    Text(
+                      'الشكاوى',
+                      style: TextStyle(
                         color: AppColor.backgroundColor,
-                        child: Center(
-                          child: Text(
-                            'حفظ',
-                            style: TextStyle(
-                                fontSize: 13.sp, color: AppColor.white),
+                        fontSize: 20.sp,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                QuestionFormField(
+                  textController: textController1,
+                  hintText: 'العنوان',
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                QuestionFormField(
+                  textController: textController2,
+                  hintText: 'الموضوع',
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: InkWell(
+                        onTap: () {},
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          height: 30.h,
+                          width: 130.w,
+                          color: AppColor.backgroundColor,
+                          child: Center(
+                            child: Text(
+                              'حفظ',
+                              style: TextStyle(
+                                  fontSize: 13.sp, color: AppColor.white),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        height: 30.h,
-                        width: 130.w,
-                        color: AppColor.backgroundColor,
-                        child: Center(
-                          child: Text(
-                            'جديد',
-                            style: TextStyle(
-                                fontSize: 13.sp, color: AppColor.white),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: InkWell(
+                        onTap: () {},
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          height: 30.h,
+                          width: 130.w,
+                          color: AppColor.backgroundColor,
+                          child: Center(
+                            child: Text(
+                              'جديد',
+                              style: TextStyle(
+                                  fontSize: 13.sp, color: AppColor.white),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              const TitleAndNumber(
-                title: 'الرقم',
-                number: '1',
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              const TitleAndNumber(
-                title: 'بتاريخ',
-                number: '12/09/2022',
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              const TitleAndNumber(
-                title: 'العنوان',
-                number: 'Cancle order',
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              const TitleAndNumber(
-                title: 'الرد',
-                number: 'Thank for order cancellation',
-              ),
-            ],
+                  ],
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                const TitleAndNumber(
+                  title: 'الرقم',
+                  number: '1',
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                const TitleAndNumber(
+                  title: 'بتاريخ',
+                  number: '12/09/2022',
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                const TitleAndNumber(
+                  title: 'العنوان',
+                  number: 'Cancle order',
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                const TitleAndNumber(
+                  title: 'الرد',
+                  number: 'Thank for order cancellation',
+                ),
+                SizedBox(
+                  height: 50.h,
+                ),
+              ],
+            ),
           ),
         ),
       ),
