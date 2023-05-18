@@ -1,16 +1,15 @@
 import 'package:equatable/equatable.dart';
+import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 
 class Cart extends Equatable {
-  final String name;
-  final String image;
-  final double price;
+  final CategoryProducts products;
+  final int quantity;
 
   const Cart({
-    required this.name,
-    required this.image,
-    required this.price,
+    required this.products,
+    required this.quantity,
   });
 
   @override
-  List<Object?> get props => [name, image, price];
+  List<Object?> get props => [products, quantity];
 }

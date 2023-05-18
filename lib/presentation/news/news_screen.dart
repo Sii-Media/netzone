@@ -13,8 +13,9 @@ import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
 import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 
 class NewsScreen extends StatefulWidget {
-  const NewsScreen({super.key, required this.news});
-  final List<News> news;
+  const NewsScreen({
+    super.key,
+  });
 
   @override
   State<NewsScreen> createState() => _NewsScreenState();

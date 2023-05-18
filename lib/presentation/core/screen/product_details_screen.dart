@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
+import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
 import 'package:netzoon/presentation/categories/widgets/free_zone_video_widget.dart';
 import 'package:netzoon/presentation/categories/widgets/image_free_zone_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
@@ -287,7 +289,28 @@ class ProductDetailScreen extends StatelessWidget {
                   ),
                 ),
                 child: const Text('إضافة للسلة'),
-                onPressed: () {},
+                onPressed: () {
+                  // final cartBloc = sl<CartBlocBloc>();
+                  final cartBloc = context.read<CartBlocBloc>();
+                  final cartItems = cartBloc.state.props;
+                  if (cartItems.any((elm) => elm.id == item.id)) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text(
+                        'Product Already added to cart',
+                        style: TextStyle(color: AppColor.white),
+                      ),
+                      backgroundColor: AppColor.red,
+                      duration: Duration(seconds: 2),
+                    ));
+                  } else {
+                    cartBloc.add(AddToCart(product: item));
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Product added to cart'),
+                      backgroundColor: AppColor.backgroundColor,
+                      duration: Duration(seconds: 2),
+                    ));
+                  }
+                },
               ),
               PriceSuggestionButton(input: input),
             ],

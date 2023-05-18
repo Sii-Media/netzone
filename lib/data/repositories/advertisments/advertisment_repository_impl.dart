@@ -29,4 +29,22 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, Advertising>> getAdvertisementByType(
+      {required String userAdvertisingType}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final ads = await advertismentRemotDataSource
+            .getAdvertisementByType(userAdvertisingType);
+
+        return Right(ads.toDomain());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      // print(e);
+      return Left(ServerFailure());
+    }
+  }
 }

@@ -83,6 +83,96 @@ class _DepartmentsRemoteDataSourceImpl
     return value;
   }
 
+  @override
+  Future<String> addProduct(
+    departmentName,
+    categoryName,
+    name,
+    description,
+    price,
+    images,
+    videoUrl,
+    guarantee,
+    property,
+    madeIn,
+    image,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'departmentName',
+      departmentName,
+    ));
+    _data.fields.add(MapEntry(
+      'categoryName',
+      categoryName,
+    ));
+    _data.fields.add(MapEntry(
+      'name',
+      name,
+    ));
+    _data.fields.add(MapEntry(
+      'description',
+      description,
+    ));
+    _data.fields.add(MapEntry(
+      'price',
+      price.toString(),
+    ));
+    images?.forEach((i) {
+      _data.fields.add(MapEntry('images', i));
+    });
+    if (videoUrl != null) {
+      _data.fields.add(MapEntry(
+        'videoUrl',
+        videoUrl,
+      ));
+    }
+    if (guarantee != null) {
+      _data.fields.add(MapEntry(
+        'guarantee',
+        guarantee,
+      ));
+    }
+    if (property != null) {
+      _data.fields.add(MapEntry(
+        'property',
+        property,
+      ));
+    }
+    if (madeIn != null) {
+      _data.fields.add(MapEntry(
+        'madeIn',
+        madeIn,
+      ));
+    }
+    _data.files.add(MapEntry(
+      'image',
+      MultipartFile.fromFileSync(
+        image.path,
+        filename: image.path.split(Platform.pathSeparator).last,
+      ),
+    ));
+    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+        .compose(
+          _dio.options,
+          '/departments/addProduct',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!;
+    return value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

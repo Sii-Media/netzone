@@ -5,6 +5,7 @@ import 'package:netzoon/domain/auth/entities/user.dart';
 import 'package:dartz/dartz.dart';
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;
@@ -24,13 +25,14 @@ class AuthRepositoryImpl implements AuthRepository {
       if (await networkInfo.isConnected) {
         final user = await authRemoteDataSource.signUp(
             username, email, password, userType, firstMobile, isFreeZoon);
-
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        await preferences.setBool('IsLoggedIn', true);
         return Right(user.toDomain());
       } else {
         return Left(OfflineFailure());
       }
     } catch (e) {
-      return Left(ServerFailure());
+      return Left(CredintialFailure());
     }
   }
 
@@ -40,6 +42,8 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       if (await networkInfo.isConnected) {
         final user = await authRemoteDataSource.signIn(email, password);
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        await preferences.setBool('IsLoggedIn', true);
         return Right(user.toDomain());
       } else {
         return Left(OfflineFailure());

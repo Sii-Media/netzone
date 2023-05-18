@@ -666,9 +666,7 @@ class _HomePageState extends State<HomePage> {
                 onPress: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
-                      return NewsScreen(
-                        news: newsList,
-                      );
+                      return const NewsScreen();
                     }),
                   );
                 },

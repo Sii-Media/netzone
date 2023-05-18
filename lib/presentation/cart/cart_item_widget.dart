@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:netzoon/domain/cart/cart.dart';
+import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
+import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 
 class CartItemWidget extends StatefulWidget {
@@ -9,7 +11,7 @@ class CartItemWidget extends StatefulWidget {
     super.key,
     required this.cart,
   });
-  final Cart cart;
+  final CategoryProducts cart;
 
   @override
   State<CartItemWidget> createState() => _CartItemWidgetState();
@@ -17,7 +19,7 @@ class CartItemWidget extends StatefulWidget {
 
 class _CartItemWidgetState extends State<CartItemWidget> {
   int _quantity = 1;
-
+  late final CartBlocBloc cartBloc;
   void _incrementQuantity() {
     setState(() {
       _quantity++;
@@ -30,6 +32,13 @@ class _CartItemWidgetState extends State<CartItemWidget> {
         _quantity--;
       }
     });
+  }
+
+  @override
+  void initState() {
+    cartBloc = BlocProvider.of<CartBlocBloc>(context);
+
+    super.initState();
   }
 
   @override
@@ -62,7 +71,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                 right: 3.0,
               ),
               child: CachedNetworkImage(
-                imageUrl: widget.cart.image,
+                imageUrl: widget.cart.imageUrl,
                 fit: BoxFit.cover,
               ),
             ),
@@ -98,9 +107,16 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Icon(
-                    Icons.delete_rounded,
-                    color: AppColor.red,
+                  GestureDetector(
+                    onTap: () {
+                      cartBloc.add(RemoveFromCart(
+                        product: widget.cart,
+                      ));
+                    },
+                    child: const Icon(
+                      Icons.delete_rounded,
+                      color: AppColor.red,
+                    ),
                   ),
                   Row(
                     children: [
@@ -116,8 +132,12 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                                   blurRadius: 10,
                                   offset: const Offset(0, 3)),
                             ]),
-                        child: GestureDetector(
-                          onTap: _incrementQuantity,
+                        child: InkWell(
+                          onTap: () {
+                            _incrementQuantity();
+                            cartBloc.add(ChangeQuantity(
+                                product: widget.cart, quantity: _quantity));
+                          },
                           child: Icon(
                             Icons.add,
                             color: AppColor.red.withOpacity(0.6),
@@ -149,8 +169,12 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                                   blurRadius: 10,
                                   offset: const Offset(0, 3)),
                             ]),
-                        child: GestureDetector(
-                          onTap: _decrementQuantity,
+                        child: InkWell(
+                          onTap: () {
+                            _decrementQuantity();
+                            cartBloc.add(ChangeQuantity(
+                                product: widget.cart, quantity: _quantity));
+                          },
                           child: Icon(
                             Icons.remove,
                             color: AppColor.red.withOpacity(0.6),

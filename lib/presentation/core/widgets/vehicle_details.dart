@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
+import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
 
 class VehicleDetailsScreen extends StatelessWidget {
   const VehicleDetailsScreen({super.key, required this.vehicle});
@@ -11,6 +12,7 @@ class VehicleDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController input = TextEditingController();
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -189,6 +191,31 @@ class VehicleDetailsScreen extends StatelessWidget {
                 ],
               ),
             ),
+          ),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          height: 60.h,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    AppColor.backgroundColor,
+                  ),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  )),
+                  fixedSize: const MaterialStatePropertyAll(
+                    Size.fromWidth(200),
+                  ),
+                ),
+                child: const Text('شراء'),
+                onPressed: () {},
+              ),
+              PriceSuggestionButton(input: input),
+            ],
           ),
         ),
       ),

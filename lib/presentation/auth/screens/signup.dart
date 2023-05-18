@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
 import 'package:netzoon/presentation/auth/widgets/background_auth_widget.dart';
 import 'package:netzoon/presentation/auth/widgets/text_form_signup_widget.dart';
@@ -8,6 +9,7 @@ import 'package:netzoon/presentation/auth/widgets/text_signup_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/injection_container.dart' as di;
+import 'package:netzoon/presentation/home/test.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key, required this.accountTitle});
@@ -26,7 +28,17 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
   final TextEditingController numberPhoneOne = TextEditingController();
   final TextEditingController numberPhoneTow = TextEditingController();
   final TextEditingController numberPhoneThree = TextEditingController();
+  final TextEditingController subcategory = TextEditingController();
+  final TextEditingController address = TextEditingController();
+  final TextEditingController isFreeZoon = TextEditingController();
+  final TextEditingController companyProductsNumber = TextEditingController();
+  final TextEditingController sellType = TextEditingController();
+  final TextEditingController toCountry = TextEditingController();
 
+  final GlobalKey<FormFieldState> _emailFormFieldKey =
+      GlobalKey<FormFieldState>();
+  final GlobalKey<FormFieldState> passwordFormFieldKey =
+      GlobalKey<FormFieldState>();
   @override
   Widget screen(BuildContext context) {
     return BlocListener(
@@ -57,6 +69,9 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
             ),
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            return const TestScreen();
+          }));
         }
       },
       child: SignUpWidget(
@@ -65,11 +80,18 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
         emailSignup: emailSignup,
         username: username,
         passwordSignup: passwordSignup,
+        passwordFormFieldKey: passwordFormFieldKey,
         numberPhoneOne: numberPhoneOne,
         numberPhoneTow: numberPhoneTow,
         numberPhoneThree: numberPhoneThree,
         rememberMe: true,
         bloc: bloc,
+        emailFormFieldKey: _emailFormFieldKey,
+        address: address,
+        subcategory: subcategory,
+        companyProductsNumber: companyProductsNumber,
+        sellType: sellType,
+        toCountry: toCountry,
       ),
     );
   }
@@ -88,8 +110,17 @@ class SignUpWidget extends StatefulWidget {
     required this.numberPhoneThree,
     required this.rememberMe,
     required this.bloc,
+    required this.emailFormFieldKey,
+    required this.passwordFormFieldKey,
+    required this.subcategory,
+    required this.address,
+    required this.companyProductsNumber,
+    required this.sellType,
+    required this.toCountry,
   });
   final GlobalKey<FormState>? formKey;
+  final GlobalKey<FormFieldState> emailFormFieldKey;
+  final GlobalKey<FormFieldState> passwordFormFieldKey;
   final String accountTitle;
   final TextEditingController emailSignup;
   final TextEditingController username;
@@ -97,6 +128,12 @@ class SignUpWidget extends StatefulWidget {
   final TextEditingController numberPhoneOne;
   final TextEditingController numberPhoneTow;
   final TextEditingController numberPhoneThree;
+  final TextEditingController subcategory;
+  final TextEditingController address;
+  final TextEditingController companyProductsNumber;
+  final TextEditingController sellType;
+  final TextEditingController toCountry;
+
   final bool rememberMe;
   final SignUpBloc bloc;
 
@@ -130,19 +167,23 @@ class _SignUpWidgetState extends State<SignUpWidget> {
             children: [
               const TextSignup(text: "البريد الإلكتروني"),
               TextFormField(
+                key: widget.emailFormFieldKey,
                 controller: widget.emailSignup,
                 style: const TextStyle(color: Colors.black),
-                validator: (val) {
-                  if (val!.isEmpty) {
-                    return 'البريد الإلكتروني مطلوب';
+                validator: (text) {
+                  if (text == null || text.isEmpty) {
+                    return 'يجب إدخال الإيميل أو رقم الهاتف';
                   }
 
-                  if (!RegExp(
-                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                      .hasMatch(val)) {
-                    return 'البريد الإلكتروني غير صالح';
+                  if (!EmailValidator(errorText: 'الرجاء ادخال ايميل صحيح')
+                      .isValid(text.toLowerCase())) {
+                    return 'الرجاء ادخال ايميل صحيح';
                   }
+
                   return null;
+                },
+                onChanged: (text) {
+                  widget.emailFormFieldKey.currentState!.validate();
                 },
                 decoration: InputDecoration(
                   filled: true,
@@ -187,18 +228,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               ),
               const TextSignup(text: "كلمة المرور"),
               TextFormField(
+                key: widget.passwordFormFieldKey,
                 controller: widget.passwordSignup,
-                style: const TextStyle(color: Colors.black),
-                obscureText: showPass,
-                validator: (val) {
-                  if (val!.isEmpty) {
-                    return 'كلمة المرور مطلوبة';
-                  }
-                  if (val.length < 8) {
-                    return 'يجب أن يحتوي كلمة المرور على 8 أحرف على الأقل';
-                  }
-                  return null;
-                },
+                style: const TextStyle(color: AppColor.black),
                 decoration: InputDecoration(
                   filled: true,
                   //<-- SEE HERE
@@ -221,6 +253,18 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
+                keyboardType: TextInputType.visiblePassword,
+                obscureText: showPass,
+                // textInputAction: widget.textInputAction ?? TextInputAction.done,
+                validator: MultiValidator([
+                  RequiredValidator(errorText: 'يجب إدخال كلمة المرور'),
+                  MinLengthValidator(8,
+                      errorText:
+                          'يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل'),
+                ]),
+                onChanged: (text) {
+                  widget.passwordFormFieldKey.currentState!.validate();
+                },
               ),
               const TextSignup(text: "أرقام التواصل"),
               Row(
@@ -230,9 +274,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       password: false,
                       isNumber: false,
                       valid: (val) {
-                        // if (val!.isEmpty) {
-                        //   return 'مطلوب';
-                        // }
+                        if (val!.isEmpty) {
+                          return 'مطلوب';
+                        }
 
                         return null;
                       },
@@ -278,7 +322,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
                         // return validInput(val!, 5, 100, "password");
                       },
-                      myController: widget.passwordSignup,
+                      myController: widget.subcategory,
                     ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
@@ -293,7 +337,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
                         // return validInput(val!, 5, 100, "password");
                       },
-                      myController: widget.passwordSignup,
+                      myController: widget.address,
                     ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
@@ -341,7 +385,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
                         // return validInput(val!, 5, 100, "password");
                       },
-                      myController: widget.passwordSignup,
+                      myController: widget.companyProductsNumber,
                     ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
@@ -358,7 +402,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
                         // return validInput(val!, 5, 100, "password");
                       },
-                      myController: widget.passwordSignup,
+                      myController: widget.sellType,
                     ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
@@ -375,7 +419,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
                         // return validInput(val!, 5, 100, "password");
                       },
-                      myController: widget.passwordSignup,
+                      myController: widget.toCountry,
                     ),
               const TextSignup(
                 text: "الصورة الشخصية",

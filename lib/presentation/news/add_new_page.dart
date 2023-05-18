@@ -158,11 +158,36 @@ class _AddNewScreenState extends State<AddNewScreen>
                       child: addPhotoButton(
                           text: 'إضافة الخبر',
                           onPressed: () {
+                            if (_image == null) {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text(
+                                      'No Image Selected',
+                                      style: TextStyle(color: AppColor.red),
+                                    ),
+                                    content: const Text(
+                                      'Please select an image before uploading.',
+                                      style: TextStyle(color: AppColor.red),
+                                    ),
+                                    actions: [
+                                      ElevatedButton(
+                                        child: const Text('OK'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                              return;
+                            }
                             newsBloc.add(AddNewsRequested(
                               title: titleController.text,
                               description: descController.text,
-                              imgUrl:
-                                  'https://media.istockphoto.com/id/1311148884/vector/abstract-globe-background.jpg?s=612x612&w=0&k=20&c=9rVQfrUGNtR5Q0ygmuQ9jviVUfrnYHUHcfiwaH5-WFE=',
+                              image: _image!,
                               ownerName: 'ownerName',
                               ownerImage:
                                   'https://is3-ssl.mzstatic.com/image/thumb/Purple112/v4/31/17/79/311779d6-bfe8-d8d5-4782-81bd4c5f01ea/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/1200x630wa.png',

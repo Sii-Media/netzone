@@ -1,19 +1,19 @@
 import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:dartz/dartz.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
-import 'package:netzoon/domain/news/entities/add_news.dart';
 import 'package:netzoon/domain/news/repositories/news_repository.dart';
+import 'dart:io';
 
-class AddNewsUseCase extends UseCase<AddNews, AddNewsParams> {
+class AddNewsUseCase extends UseCase<String, AddNewsParams> {
   final NewsRepository newsRepository;
 
   AddNewsUseCase({required this.newsRepository});
   @override
-  Future<Either<Failure, AddNews>> call(AddNewsParams params) {
+  Future<Either<Failure, String>> call(AddNewsParams params) {
     return newsRepository.addNews(
       title: params.title,
       description: params.description,
-      imgUrl: params.imgUrl,
+      image: params.image,
       ownerName: params.ownerName,
       ownerImage: params.ownerImage,
       creator: params.creator,
@@ -24,7 +24,7 @@ class AddNewsUseCase extends UseCase<AddNews, AddNewsParams> {
 class AddNewsParams {
   final String title;
   final String description;
-  final String imgUrl;
+  final File image;
   final String ownerName;
   final String ownerImage;
   final String creator;
@@ -32,7 +32,7 @@ class AddNewsParams {
   AddNewsParams({
     required this.title,
     required this.description,
-    required this.imgUrl,
+    required this.image,
     required this.ownerName,
     required this.ownerImage,
     required this.creator,

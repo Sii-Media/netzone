@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
+import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
 import 'package:netzoon/presentation/start_screen.dart';
 import 'injection_container.dart' as di;
 
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => di.sl<SignUpBloc>()),
+        BlocProvider(create: (_) => di.sl<CartBlocBloc>()..add(LoadCart())),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),

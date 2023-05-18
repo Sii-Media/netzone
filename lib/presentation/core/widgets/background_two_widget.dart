@@ -3,27 +3,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 
-class BackgroundTwoWidget extends StatelessWidget {
+class BackgroundTwoWidget extends StatefulWidget {
   final Widget widget;
   final String title;
 
-  BackgroundTwoWidget({
+  const BackgroundTwoWidget({
     Key? key,
     required this.widget,
     required this.title,
     this.selectedValue,
+    this.onChanged,
   }) : super(key: key);
-  final TextEditingController search = TextEditingController();
-  final List<String> list = <String>['One', 'Two', 'Three', 'Four', 'Five'];
+  final String? selectedValue;
+  final void Function(String?)? onChanged;
+  @override
+  State<BackgroundTwoWidget> createState() => _BackgroundTwoWidgetState();
+}
 
+class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
+  final TextEditingController search = TextEditingController();
+
+  // final List<String> list = <String>['One', 'Two', 'Three', 'Four', 'Five'];
   final List<String> items = [
     'عرض الكل',
     'مناطق حرة',
+    'سيارات',
+    'عقارات',
     'زبائن',
     'شركات',
-    'عقارات',
   ];
-  final String? selectedValue;
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +110,7 @@ class BackgroundTwoWidget extends StatelessWidget {
               height: MediaQuery.of(context).size.height,
               child: Column(
                 children: [
-                  Expanded(child: widget),
+                  Expanded(child: widget.widget),
                   SizedBox(
                     height: 80.h,
                   ),
@@ -118,7 +126,7 @@ class BackgroundTwoWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40.0),
                   child: Text(
-                    title,
+                    widget.title,
                     style: TextStyle(fontSize: 22.sp, color: Colors.white),
                   ),
                 ),
@@ -154,12 +162,8 @@ class BackgroundTwoWidget extends StatelessWidget {
                             ),
                           ))
                       .toList(),
-                  value: selectedValue,
-                  onChanged: (value) {
-                    // setState(() {
-                    //   selectedValue = value as String;
-                    // });
-                  },
+                  value: widget.selectedValue,
+                  onChanged: widget.onChanged,
                   buttonStyleData: ButtonStyleData(
                     height: 40.h,
                     width: 170.w,

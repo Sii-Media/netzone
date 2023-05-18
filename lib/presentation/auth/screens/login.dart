@@ -4,6 +4,7 @@ import 'package:netzoon/presentation/auth/screens/signin.dart';
 import 'package:netzoon/presentation/auth/screens/user_type.dart';
 import 'package:netzoon/presentation/auth/widgets/button_auth_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -14,6 +15,22 @@ class LogInScreen extends StatefulWidget {
 
 class _LogInScreenState extends State<LogInScreen> {
   late TextEditingController emailController;
+  late bool? isLoggedIn = false;
+
+  @override
+  void initState() {
+    getIsLoggedIn();
+    super.initState();
+  }
+
+  void getIsLoggedIn() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      isLoggedIn = prefs.getBool('IsLoggedIn');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -48,84 +65,66 @@ class _LogInScreenState extends State<LogInScreen> {
                           fit: BoxFit.cover),
                     ),
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      // TextFormAuthWidget(
-                      //   password: false,
-                      //   isNumber: false,
-                      //   valid: (val) {
-                      //     return null;
-
-                      //     // return validInput(val!, 5, 100, "email");
-                      //   },
-                      //   // myController: emailController,
-                      //   hintText: 'email',
-                      //   iconData: Icons.email,
-                      //   labelText: 'email',
-                      // ),
-                      // SizedBox(
-                      //   height: 15.h,
-                      // ),
-                      // TextFormAuthWidget(
-                      //   password: true,
-                      //   obscureText: true,
-                      //   onTapIcon: () {
-                      //     // controller.showPassword();
-                      //   },
-                      //   isNumber: false,
-                      //   valid: (val) {
-                      //     return null;
-
-                      //     // return validInput(val!, 5, 30, "password");
-                      //   },
-                      //   // myController: controller.password,
-                      //   hintText: 'Password',
-                      //   iconData: Icons.lock_outline_rounded,
-                      //   labelText: "Password",
-                      // ),
-                      SizedBox(
-                        height: 12.h,
-                      ),
-                      ButtonAuthWidget(
-                        color: AppColor.white,
-                        colorText: AppColor.backgroundColor,
-                        text: 'تسجيل الدخول',
-                        onPressed: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
-                            // ignore: prefer_const_constructors
-                            return SignInScreen();
-                          }));
-                        },
-                      ),
-                      SizedBox(
-                        height: 7.h,
-                      ),
-                      const Text(
-                        "- أو -",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      SizedBox(
-                        height: 7.h,
-                      ),
-                      ButtonAuthWidget(
-                        color: AppColor.backgroundColor.withOpacity(0.5),
-                        colorText: AppColor.white,
-                        text: 'إنشاء حساب جديد',
-                        onPressed: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
-                            return const UserType();
-                          }));
-                          // controller.nextPage();
-                        },
-                      ),
-                    ],
-                  ),
+                  isLoggedIn == false
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 30.h,
+                            ),
+                            SizedBox(
+                              height: 12.h,
+                            ),
+                            ButtonAuthWidget(
+                              color: AppColor.white,
+                              colorText: AppColor.backgroundColor,
+                              text: 'تسجيل الدخول',
+                              onPressed: () {
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(builder: (context) {
+                                  // ignore: prefer_const_constructors
+                                  return SignInScreen();
+                                }));
+                              },
+                            ),
+                            SizedBox(
+                              height: 7.h,
+                            ),
+                            const Text(
+                              "- أو -",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            SizedBox(
+                              height: 7.h,
+                            ),
+                            ButtonAuthWidget(
+                              color: AppColor.backgroundColor.withOpacity(0.5),
+                              colorText: AppColor.white,
+                              text: 'إنشاء حساب جديد',
+                              onPressed: () {
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(builder: (context) {
+                                  return const UserType();
+                                }));
+                                // controller.nextPage();
+                              },
+                            ),
+                          ],
+                        )
+                      : ButtonAuthWidget(
+                          color: AppColor.backgroundColor.withOpacity(0.5),
+                          colorText: AppColor.white,
+                          text: 'تسجيل الخروج',
+                          onPressed: () async {
+                            final SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            // await prefs.remove('IsLoggedIn');
+                            prefs.setBool('IsLoggedIn', false);
+                            setState(() {
+                              isLoggedIn = false;
+                            });
+                          },
+                        ),
                 ],
               ),
             ),

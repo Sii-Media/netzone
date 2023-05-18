@@ -20,7 +20,7 @@ class AdvertisingScreen extends StatefulWidget {
 
 class _AdvertisingScreenState extends State<AdvertisingScreen> {
   final adsBloc = sl<AdsBlocBloc>();
-
+  String? selectedValue;
   @override
   void initState() {
     adsBloc.add(GetAllAdsEvent());
@@ -34,6 +34,18 @@ class _AdvertisingScreenState extends State<AdvertisingScreen> {
       child: Scaffold(
         body: BackgroundTwoWidget(
             title: "الإعلانات",
+            selectedValue: selectedValue,
+            onChanged: (value) {
+              setState(() {
+                selectedValue = value as String;
+              });
+              if (selectedValue == 'عرض الكل') {
+                adsBloc.add(GetAllAdsEvent());
+              } else {
+                adsBloc.add(
+                    GetAdsByType(userAdvertisingType: selectedValue as String));
+              }
+            },
             widget: RefreshIndicator(
               onRefresh: () async {
                 adsBloc.add(GetAllAdsEvent());
@@ -60,6 +72,18 @@ class _AdvertisingScreenState extends State<AdvertisingScreen> {
                       ),
                     );
                   } else if (state is AdsBlocSuccess) {
+                    if (state.ads.isEmpty) {
+                      return Center(
+                        child: Text(
+                          'لا يوجد عناصر..',
+                          style: TextStyle(
+                            color: AppColor.backgroundColor,
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    }
                     return Container(
                       padding: const EdgeInsets.only(bottom: 60).r,
                       child: ListView.builder(

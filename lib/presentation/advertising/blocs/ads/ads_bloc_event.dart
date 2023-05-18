@@ -8,3 +8,9 @@ abstract class AdsBlocEvent extends Equatable {
 }
 
 class GetAllAdsEvent extends AdsBlocEvent {}
+
+class GetAdsByType extends AdsBlocEvent {
+  final String userAdvertisingType;
+
+  const GetAdsByType({required this.userAdvertisingType});
+}

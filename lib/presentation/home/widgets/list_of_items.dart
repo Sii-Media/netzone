@@ -20,6 +20,8 @@ class ListofItems extends StatefulWidget {
 }
 
 class _ListofItemsState extends State<ListofItems> {
+  String backendHost = 'http://10.0.2.2:5000';
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -65,14 +67,13 @@ class _ListofItemsState extends State<ListofItems> {
                         children: [
                           CachedNetworkImage(
                             imageUrl: widget.elec[index].imageUrl,
-                            fit: BoxFit.contain,
+                            fit: BoxFit.cover,
                             height: MediaQuery.of(context).size.height,
+                            // placeholder: (context, url) =>
+                            //     CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
                           ),
-                          // Image.network(
-                          //   devices[index].imgUrl,
-                          //   fit: BoxFit.fill,
-                          //   height: MediaQuery.of(context).size.height,
-                          // ),
                           Positioned(
                             bottom: 0,
                             left: 0,

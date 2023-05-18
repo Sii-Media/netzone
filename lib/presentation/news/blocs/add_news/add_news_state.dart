@@ -12,7 +12,7 @@ class AddNewsInitial extends AddNewsState {}
 class AddNewsInProgress extends AddNewsState {}
 
 class AddNewsSuccess extends AddNewsState {
-  final News news;
+  final String news;
 
   const AddNewsSuccess({required this.news});
 }

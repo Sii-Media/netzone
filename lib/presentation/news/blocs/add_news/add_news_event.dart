@@ -10,7 +10,7 @@ abstract class AddNewsEvent extends Equatable {
 class AddNewsRequested extends AddNewsEvent {
   final String title;
   final String description;
-  final String imgUrl;
+  final File image;
   final String ownerName;
   final String ownerImage;
   final String creator;
@@ -18,7 +18,7 @@ class AddNewsRequested extends AddNewsEvent {
   const AddNewsRequested({
     required this.title,
     required this.description,
-    required this.imgUrl,
+    required this.image,
     required this.ownerName,
     required this.ownerImage,
     required this.creator,

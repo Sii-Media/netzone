@@ -35,7 +35,7 @@ class TextFormSignupWidget extends StatelessWidget {
           fillColor: Colors.green.withOpacity(0.1),
           floatingLabelBehavior: FloatingLabelBehavior.always,
           contentPadding:
-              const EdgeInsets.symmetric(vertical: 5, horizontal: 30).flipped,
+              const EdgeInsets.symmetric(vertical: 5, horizontal: 3).flipped,
           suffixIcon: password
               ? InkWell(
                   onTap: onTapIcon, child: const Icon(Icons.remove_red_eye))

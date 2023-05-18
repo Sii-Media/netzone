@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:netzoon/domain/news/entities/news_info.dart';
 import 'package:netzoon/domain/news/usecases/add_news_use_case.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
+import 'dart:io';
 
 part 'add_news_event.dart';
 part 'add_news_state.dart';
@@ -16,7 +16,7 @@ class AddNewsBloc extends Bloc<AddNewsEvent, AddNewsState> {
         AddNewsParams(
           title: event.title,
           description: event.description,
-          imgUrl: event.imgUrl,
+          image: event.image,
           ownerName: event.ownerName,
           ownerImage: event.ownerImage,
           creator: event.creator,
@@ -26,7 +26,7 @@ class AddNewsBloc extends Bloc<AddNewsEvent, AddNewsState> {
       emit(
         failureOrNews.fold(
           (failure) => AddNewsFailure(message: mapFailureToString(failure)),
-          (news) => AddNewsSuccess(news: news.news),
+          (news) => AddNewsSuccess(news: news),
         ),
       );
     });

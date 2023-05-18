@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:netzoon/data/models/departments/category_products/category_products_response_model.dart';
 import 'package:netzoon/data/models/departments/departments_categories/departments_categories_response_model.dart';
@@ -13,6 +15,20 @@ abstract class DepartmentsRemoteDataSource {
     final String department,
     final String category,
   );
+
+  Future<String> addProduct(
+    final String departmentName,
+    final String categoryName,
+    final String name,
+    final String description,
+    final int price,
+    final List<String>? images,
+    final String? videoUrl,
+    final String? guarantee,
+    final String? property,
+    final String? madeIn,
+    final File image,
+  );
 }
 
 @RestApi(baseUrl: 'http://10.0.2.2:5000')
@@ -22,8 +38,8 @@ abstract class DepartmentsRemoteDataSourceImpl
     dio.options = BaseOptions(
       receiveTimeout: const Duration(seconds: 10),
       connectTimeout: const Duration(seconds: 10),
-      contentType: 'application/json',
-      headers: {'Content-Type': 'application/json'},
+      // contentType: 'application/json',
+      // headers: {'Content-Type': 'application/json'},
     );
     return _DepartmentsRemoteDataSourceImpl(dio, baseUrl: baseUrl);
   }
@@ -40,4 +56,20 @@ abstract class DepartmentsRemoteDataSourceImpl
     @Part() String department,
     @Part() String category,
   );
+
+  @override
+  @POST('/departments/addProduct')
+  @MultiPart()
+  Future<String> addProduct(
+      @Part() String departmentName,
+      @Part() String categoryName,
+      @Part() String name,
+      @Part() String description,
+      @Part() int price,
+      @Part() List<String>? images,
+      @Part() String? videoUrl,
+      @Part() String? guarantee,
+      @Part() String? property,
+      @Part() String? madeIn,
+      @Part(name: "image") File image);
 }
