@@ -6,12 +6,14 @@ import 'package:netzoon/data/datasource/remote/advertisements/ads_remote_data_so
 import 'package:netzoon/data/datasource/remote/auth/auth_remote_datasource.dart';
 import 'package:netzoon/data/datasource/remote/deals/deals_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/departments/departments_remote_data_source.dart';
+import 'package:netzoon/data/datasource/remote/legal_advice/legal_advice_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/news/news_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/tenders/tenders_remote_data_source.dart';
 import 'package:netzoon/data/repositories/advertisments/advertisment_repository_impl.dart';
 import 'package:netzoon/data/repositories/auth_repository_impl.dart';
 import 'package:netzoon/data/repositories/deals/deals_repository_impl.dart';
 import 'package:netzoon/data/repositories/departments/departments_repository_impl.dart';
+import 'package:netzoon/data/repositories/legal_advice/legal_advice_repository_impl.dart';
 import 'package:netzoon/data/repositories/news/news_repositories_impl.dart';
 import 'package:netzoon/data/repositories/tenders/tenders_repository_impl.dart';
 import 'package:netzoon/domain/advertisements/repositories/advertisment_repository.dart';
@@ -28,6 +30,8 @@ import 'package:netzoon/domain/departments/repositories/departments_repository.d
 import 'package:netzoon/domain/departments/usecases/add_product_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_categories_by_departments_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_category_products_use_case.dart';
+import 'package:netzoon/domain/legal_advice/repositories/legal_advice_repository.dart';
+import 'package:netzoon/domain/legal_advice/usecases/get_legal_advices_use_case.dart';
 import 'package:netzoon/domain/news/repositories/news_repository.dart';
 import 'package:netzoon/domain/news/usecases/add_news_use_case.dart';
 import 'package:netzoon/domain/news/usecases/get_all_news_usecase.dart';
@@ -44,6 +48,7 @@ import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/deals_category/deals_categoty_bloc.dart';
 import 'package:netzoon/presentation/home/blocs/elec_devices/elec_devices_bloc.dart';
+import 'package:netzoon/presentation/legal_advice/blocs/legal_advice/legal_advice_bloc.dart';
 import 'package:netzoon/presentation/news/blocs/add_news/add_news_bloc.dart';
 import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersCategory/tender_cat_bloc.dart';
@@ -77,6 +82,8 @@ Future<void> init() async {
 
   sl.registerFactory(() => AddProductBloc(addProductUseCase: sl()));
   sl.registerFactory(() => CartBlocBloc());
+
+  sl.registerFactory(() => LegalAdviceBloc(getLegalAdvicesUseCase: sl()));
 
   // UseCases
 
@@ -112,6 +119,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => AddProductUseCase(departmentRepository: sl()));
 
+  sl.registerLazySingleton(
+      () => GetLegalAdvicesUseCase(legalAdviceRepository: sl()));
+
   // Repositories
 
   sl.registerLazySingleton<AuthRepository>(
@@ -133,6 +143,9 @@ Future<void> init() async {
   sl.registerLazySingleton<DepartmentRepository>(() => DepartmentRepositoryImpl(
       departmentsRemoteDataSource: sl(), networkInfo: sl()));
 
+  sl.registerLazySingleton<LegalAdviceRepository>(() =>
+      LegalAdviceRepositoryImpl(
+          networkInfo: sl(), legalAdviceRemoteDataSource: sl()));
   // DataSourses
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
@@ -152,6 +165,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton<DepartmentsRemoteDataSource>(() =>
       DepartmentsRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
+
+  sl.registerLazySingleton<LegalAdviceRemoteDataSource>(() =>
+      LegalAdviceRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
 
   //! Core
 

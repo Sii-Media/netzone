@@ -1,9 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/legal_advice/blocs/legal_advice/legal_advice_bloc.dart';
 
-class LegalAdviceScreen extends StatelessWidget {
+class LegalAdviceScreen extends StatefulWidget {
   const LegalAdviceScreen({super.key});
+
+  @override
+  State<LegalAdviceScreen> createState() => _LegalAdviceScreenState();
+}
+
+class _LegalAdviceScreenState extends State<LegalAdviceScreen> {
+  final LegalAdviceBloc adviceBloc = sl<LegalAdviceBloc>();
+
+  @override
+  void initState() {
+    adviceBloc.add(GetLegalAdviceEvent());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,17 +111,45 @@ class LegalAdviceScreen extends StatelessWidget {
                 right: 0,
                 child: SizedBox(
                   height: size.height - 200.h,
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 10.w, vertical: 12.h),
-                      child: Text(
-                        'تؤمن دولة الإمارات بضرورة تقديم المساعدة القانونية والقضائية للذين لا يستطيعون تحمل الرسوم القانونية. ووفقا لدستور الدولة، يحب أن يكون للجميع الحق والقدرة على توكيل محامي يملك القدرة للدفاع عنهم أثناء المحاكمة، ويجب ألا تشكل الظروف الاقتصادية والاجتماعية عائقا يمنع أي شخص من سهولة الوصول إلى العدالة.قانوني في عونك تقدم وزارة العدل خدمة مجانية في الاستشارات القانونية وترجمة المستندات المقدمة الى المحاكم للغير قادرين على الدفع. تم إنشاء قسم المساعدات القانونية بدائرة القضاء أبو ظبي بهدف توفير المساعدة القانونية المجانية لغير ميسوري الحال، والتوجيه القانوني المحايد لمراجعي الدائرة لدعم حقهم في سهولة الوصول إلى العدالة، سواء قبل رفع الدعوى أو خلالها مهما كان مركزهم القانوني فيها وتأتي هذه المبادرة تنفيذاً للموجهات الدستورية لدستور دولة الإمارات، والتي تقضي بأن يجد كل إنسان طريقاً ميسوراً للوصول إلى قاضيه الطبيعي، وألا تحول الظروف الاقتصادية أو الاجتماعية لأي شخص من وصوله إلى العدالة. وتشمل الخدمات المقدمة كل من التوجيه والإرشاد القانوني، وطلب تكليف محامي، ونفقات أمانة الخبرة، ونفقات الإعلان بالنشر. ويتم تقييم إمكانية تقديم هذه الخدمات للمستفيد وفقاً لمعايير الاستحقاق المتمثلة في جدية الطلب ومعيار الدخل.',
-                        style: TextStyle(
-                          color: AppColor.black,
-                          fontSize: 14.sp,
-                        ),
-                      ),
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
+                    child: BlocBuilder<LegalAdviceBloc, LegalAdviceState>(
+                      bloc: adviceBloc,
+                      builder: (context, state) {
+                        if (state is LegalAdviceProgress) {
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColor.backgroundColor,
+                            ),
+                          );
+                        } else if (state is LegalAdviceFailure) {
+                          final failure = state.message;
+                          return Center(
+                            child: Text(
+                              failure,
+                              style: const TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                          );
+                        } else if (state is LegalAdviceSuccess) {
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: state.legalAdvices.length,
+                            itemBuilder: (BuildContext context, index) {
+                              return Text(
+                                state.legalAdvices[index].text,
+                                style: TextStyle(
+                                  color: AppColor.black,
+                                  fontSize: 14.sp,
+                                ),
+                              );
+                            },
+                          );
+                        }
+                        return Container();
+                      },
                     ),
                   ),
                 ),
