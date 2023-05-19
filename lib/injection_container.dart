@@ -4,6 +4,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/remote/advertisements/ads_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/auth/auth_remote_datasource.dart';
+import 'package:netzoon/data/datasource/remote/complaints/complaints_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/deals/deals_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/departments/departments_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/legal_advice/legal_advice_remote_data_source.dart';
@@ -14,6 +15,7 @@ import 'package:netzoon/data/datasource/remote/requests/requests_remote_data_sou
 import 'package:netzoon/data/datasource/remote/tenders/tenders_remote_data_source.dart';
 import 'package:netzoon/data/repositories/advertisments/advertisment_repository_impl.dart';
 import 'package:netzoon/data/repositories/auth_repository_impl.dart';
+import 'package:netzoon/data/repositories/complaints/complaints_repository_impl.dart';
 import 'package:netzoon/data/repositories/deals/deals_repository_impl.dart';
 import 'package:netzoon/data/repositories/departments/departments_repository_impl.dart';
 import 'package:netzoon/data/repositories/legal_advice/legal_advice_repository_impl.dart';
@@ -28,6 +30,9 @@ import 'package:netzoon/domain/advertisements/usercases/get_advertisements_useca
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
 import 'package:netzoon/domain/auth/usecases/sign_in_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/sign_up_use_case.dart';
+import 'package:netzoon/domain/complaints/repositories/complaints_repository.dart';
+import 'package:netzoon/domain/complaints/usecases/add_complaints_usecase.dart';
+import 'package:netzoon/domain/complaints/usecases/get_complaints_usecase.dart';
 import 'package:netzoon/domain/deals/repositories/deals_repository.dart';
 import 'package:netzoon/domain/deals/usecases/get_all_deals_items_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_deals_cat_use_case.dart';
@@ -57,9 +62,11 @@ import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_in/sign_in_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
 import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
+import 'package:netzoon/presentation/contact/blocs/add_complaint/add_complaint_bloc.dart';
 import 'package:netzoon/presentation/contact/blocs/add_openion/add_openion_bloc.dart';
 import 'package:netzoon/presentation/contact/blocs/add_question/add_question_bloc.dart';
 import 'package:netzoon/presentation/contact/blocs/add_request/add_request_bloc.dart';
+import 'package:netzoon/presentation/contact/blocs/get_complaints/get_complaint_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/deals_category/deals_categoty_bloc.dart';
 import 'package:netzoon/presentation/home/blocs/elec_devices/elec_devices_bloc.dart';
@@ -106,6 +113,9 @@ Future<void> init() async {
 
   sl.registerFactory(() => AddRequestBloc(addRequestUseCase: sl()));
 
+  sl.registerFactory(() => GetComplaintBloc(getComplaintsUseCase: sl()));
+  sl.registerFactory(() => AddComplaintBloc(addComplaintsUseCase: sl()));
+
   //! UseCases
 
   sl.registerLazySingleton(() => SignUpUseCase(authRepository: sl()));
@@ -148,6 +158,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => AddQuestionUseCase(questionRepository: sl()));
 
   sl.registerLazySingleton(() => AddRequestUseCase(requestsRepository: sl()));
+  sl.registerLazySingleton(
+      () => GetComplaintsUseCase(complaintsRepository: sl()));
+  sl.registerLazySingleton(
+      () => AddComplaintsUseCase(complaintsRepository: sl()));
 
   //! Repositories
 
@@ -183,6 +197,9 @@ Future<void> init() async {
   sl.registerLazySingleton<RequestsRepository>(() => RequestsRepositoryImpl(
       networkInfo: sl(), requestsRemoteDataSource: sl()));
 
+  sl.registerLazySingleton<ComplaintsRepository>(() => ComplaintsRepositoryImpl(
+      networkInfo: sl(), complaintsRemoteDataSource: sl()));
+
   //! DataSourses
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
@@ -214,6 +231,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton<RequestsRemoteDataSource>(() =>
       RequestsRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
+
+  sl.registerLazySingleton<ComplaintsRemoteDataSource>(() =>
+      ComplaintsRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
 
   //! Core
 
