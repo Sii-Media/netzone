@@ -12,7 +12,7 @@ List<Advertisement> advertisments = [
     advertisingCountryAlphaCode: '',
     advertisingBrand: 'نسيان',
     advertisingLocation: 'دبي',
-    advertisingViews: '22',
+    advertisingViews: 22,
     advertisingPrice: '50000',
     advertisingYear: '2023',
     advertisingImageList: [
@@ -21,6 +21,7 @@ List<Advertisement> advertisments = [
       'https://images.unsplash.com/photo-1584920735791-be9a8eba8baa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fG5pc3NhbnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
     ],
     advertisingVedio: 'LM0F4LHUWJE',
+    advertisingType: '',
   ),
   const Advertisement(
     advertisingTitle: 'أرض للبيع في دبي ',
@@ -31,13 +32,14 @@ List<Advertisement> advertisments = [
     advertisingCountryAlphaCode: '',
     advertisingBrand: 'ارض للبيع',
     advertisingLocation: 'دبي',
-    advertisingViews: '22',
+    advertisingViews: 22,
     advertisingYear: '2023',
     advertisingPrice: '50000',
     advertisingImageList: [
       'https://www.elitejo.com/sites/default/files/sa_23.jpg',
     ],
     advertisingVedio: '',
+    advertisingType: '',
   ),
   const Advertisement(
     advertisingTitle: 'نيسان للبيع في إمارة عجمان',
@@ -49,13 +51,14 @@ List<Advertisement> advertisments = [
     advertisingCountryAlphaCode: '',
     advertisingBrand: 'نسيان',
     advertisingLocation: 'دبي',
-    advertisingViews: '22',
+    advertisingViews: 22,
     advertisingYear: '2023',
     advertisingPrice: '50000',
     advertisingImageList: [
       'https://images.unsplash.com/photo-1581540222194-0def2dda95b8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8bmlzc2FufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
     ],
     advertisingVedio: 'LM0F4LHUWJE',
+    advertisingType: '',
   ),
   const Advertisement(
     advertisingTitle: 'نيسان للبيع في إمارة عجمان',
@@ -67,12 +70,13 @@ List<Advertisement> advertisments = [
     advertisingCountryAlphaCode: '',
     advertisingBrand: 'نسيان',
     advertisingLocation: 'دبي',
-    advertisingViews: '22',
+    advertisingViews: 22,
     advertisingYear: '2023',
     advertisingPrice: '50000',
     advertisingImageList: [
       'https://images.unsplash.com/photo-1581540222194-0def2dda95b8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8bmlzc2FufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
     ],
     advertisingVedio: 'LM0F4LHUWJE',
+    advertisingType: '',
   ),
 ];

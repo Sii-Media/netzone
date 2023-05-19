@@ -125,7 +125,10 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
                                           width: 8.0.w,
                                         ),
                                         Text(
-                                          widget.ads.advertisingViews,
+                                          widget.ads.advertisingViews == null
+                                              ? "0"
+                                              : widget.ads.advertisingViews
+                                                  .toString(),
                                           style: TextStyle(
                                             color: AppColor.backgroundColor,
                                             fontSize: 15.sp,
@@ -169,7 +172,7 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
                             ),
                             titleAndInput(
                               title: 'الفئة',
-                              input: widget.ads.advertisingBrand,
+                              input: widget.ads.advertisingType,
                             ),
                             SizedBox(
                               height: 7.h,

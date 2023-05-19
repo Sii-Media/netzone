@@ -25,6 +25,7 @@ import 'package:netzoon/data/repositories/questions/question_repository_impl.dar
 import 'package:netzoon/data/repositories/requests/requests_repository_impl.dart';
 import 'package:netzoon/data/repositories/tenders/tenders_repository_impl.dart';
 import 'package:netzoon/domain/advertisements/repositories/advertisment_repository.dart';
+import 'package:netzoon/domain/advertisements/usercases/add_ads_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_ads_by_type_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_advertisements_usecase.dart';
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
@@ -58,6 +59,7 @@ import 'package:netzoon/domain/tenders/usecases/get_tenders_cat_use_case.dart';
 import 'package:netzoon/domain/tenders/usecases/get_tenders_items_by_min.dart';
 import 'package:netzoon/domain/tenders/usecases/get_tenders_items_by_max.dart';
 import 'package:netzoon/presentation/add_items/blocs/bloc/add_product_bloc.dart';
+import 'package:netzoon/presentation/advertising/blocs/add_ads/add_ads_bloc.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_in/sign_in_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
@@ -116,6 +118,8 @@ Future<void> init() async {
   sl.registerFactory(() => GetComplaintBloc(getComplaintsUseCase: sl()));
   sl.registerFactory(() => AddComplaintBloc(addComplaintsUseCase: sl()));
 
+  sl.registerFactory(() => AddAdsBloc(addAdvertisementUseCase: sl()));
+
   //! UseCases
 
   sl.registerLazySingleton(() => SignUpUseCase(authRepository: sl()));
@@ -162,6 +166,9 @@ Future<void> init() async {
       () => GetComplaintsUseCase(complaintsRepository: sl()));
   sl.registerLazySingleton(
       () => AddComplaintsUseCase(complaintsRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => AddAdvertisementUseCase(advertismentRepository: sl()));
 
   //! Repositories
 

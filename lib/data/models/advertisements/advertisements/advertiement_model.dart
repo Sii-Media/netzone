@@ -14,12 +14,13 @@ class AdvertisemenetModel {
   final String advertisingImage;
   final String advertisingCountryAlphaCode;
   final String advertisingBrand;
-  final int advertisingViews;
+  final int? advertisingViews;
   final String advertisingYear;
   final String advertisingLocation;
   final int advertisingPrice;
   final List<String>? advertisingImageList;
   final String? advertisingVedio;
+  final String advertisingType;
 
   AdvertisemenetModel({
     required this.id,
@@ -36,6 +37,7 @@ class AdvertisemenetModel {
     required this.advertisingPrice,
     this.advertisingImageList,
     this.advertisingVedio,
+    required this.advertisingType,
   });
 
   factory AdvertisemenetModel.fromJson(Map<String, dynamic> json) =>
@@ -53,11 +55,12 @@ extension MapToDomain on AdvertisemenetModel {
         advertisingImage: advertisingImage,
         advertisingCountryAlphaCode: advertisingCountryAlphaCode,
         advertisingBrand: advertisingBrand,
-        advertisingViews: advertisingViews.toString(),
+        advertisingViews: advertisingViews,
         advertisingYear: advertisingYear,
         advertisingLocation: advertisingLocation,
         advertisingPrice: advertisingPrice.toString(),
         advertisingImageList: advertisingImageList,
         advertisingVedio: advertisingVedio,
+        advertisingType: advertisingType,
       );
 }

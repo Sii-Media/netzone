@@ -8,12 +8,13 @@ class Advertisement extends Equatable {
   final String advertisingImage;
   final String advertisingCountryAlphaCode;
   final String advertisingBrand;
-  final String advertisingViews;
+  final int? advertisingViews;
   final String advertisingYear;
   final String advertisingLocation;
   final String advertisingPrice;
   final List<String>? advertisingImageList;
   final String? advertisingVedio;
+  final String advertisingType;
   const Advertisement({
     required this.advertisingTitle,
     required this.advertisingStartDate,
@@ -28,6 +29,7 @@ class Advertisement extends Equatable {
     required this.advertisingPrice,
     this.advertisingImageList,
     this.advertisingVedio,
+    required this.advertisingType,
   });
 
   @override
@@ -40,5 +42,6 @@ class Advertisement extends Equatable {
         advertisingCountryAlphaCode,
         advertisingImageList,
         advertisingVedio,
+        advertisingType,
       ];
 }

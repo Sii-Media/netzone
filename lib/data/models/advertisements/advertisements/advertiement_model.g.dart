@@ -17,7 +17,7 @@ AdvertisemenetModel _$AdvertisemenetModelFromJson(Map<String, dynamic> json) =>
       advertisingCountryAlphaCode:
           json['advertisingCountryAlphaCode'] as String,
       advertisingBrand: json['advertisingBrand'] as String,
-      advertisingViews: json['advertisingViews'] as int,
+      advertisingViews: json['advertisingViews'] as int?,
       advertisingYear: json['advertisingYear'] as String,
       advertisingLocation: json['advertisingLocation'] as String,
       advertisingPrice: json['advertisingPrice'] as int,
@@ -25,6 +25,7 @@ AdvertisemenetModel _$AdvertisemenetModelFromJson(Map<String, dynamic> json) =>
           ?.map((e) => e as String)
           .toList(),
       advertisingVedio: json['advertisingVedio'] as String?,
+      advertisingType: json['advertisingType'] as String,
     );
 
 Map<String, dynamic> _$AdvertisemenetModelToJson(
@@ -44,4 +45,5 @@ Map<String, dynamic> _$AdvertisemenetModelToJson(
       'advertisingPrice': instance.advertisingPrice,
       'advertisingImageList': instance.advertisingImageList,
       'advertisingVedio': instance.advertisingVedio,
+      'advertisingType': instance.advertisingType,
     };
