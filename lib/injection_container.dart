@@ -2,6 +2,7 @@ import 'package:dio/dio.dart' as dio;
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:netzoon/data/core/utils/network/network_info.dart';
+import 'package:netzoon/data/datasource/local/auth/auth_local_data_source.dart';
 import 'package:netzoon/data/datasource/remote/advertisements/ads_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/auth/auth_remote_datasource.dart';
 import 'package:netzoon/data/datasource/remote/complaints/complaints_remote_data_source.dart';
@@ -29,6 +30,10 @@ import 'package:netzoon/domain/advertisements/usercases/add_ads_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_ads_by_type_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_advertisements_usecase.dart';
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
+import 'package:netzoon/domain/auth/usecases/get_first_time_logged_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/logout_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/set_first_time_logged_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/sign_in_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/sign_up_use_case.dart';
 import 'package:netzoon/domain/complaints/repositories/complaints_repository.dart';
@@ -61,6 +66,7 @@ import 'package:netzoon/domain/tenders/usecases/get_tenders_items_by_max.dart';
 import 'package:netzoon/presentation/add_items/blocs/bloc/add_product_bloc.dart';
 import 'package:netzoon/presentation/advertising/blocs/add_ads/add_ads_bloc.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
+import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_in/sign_in_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
 import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
@@ -77,6 +83,7 @@ import 'package:netzoon/presentation/news/blocs/add_news/add_news_bloc.dart';
 import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersCategory/tender_cat_bloc.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersItem/tenders_item_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
 
@@ -120,8 +127,20 @@ Future<void> init() async {
 
   sl.registerFactory(() => AddAdsBloc(addAdvertisementUseCase: sl()));
 
-  //! UseCases
+  sl.registerFactory(() => AuthBloc(
+        getSignedInUser: sl(),
+        getFirstTimeLogged: sl(),
+        setFirstTimeLogged: sl(),
+        logoutUseCase: sl(),
+      ));
 
+  //! UseCases
+  sl.registerLazySingleton(() => GetSignedInUserUseCase(authRepository: sl()));
+  sl.registerLazySingleton(
+      () => GetFirstTimeLoggedUseCase(authRepository: sl()));
+  sl.registerLazySingleton(
+      () => SetFirstTimeLoggedUseCase(authRepository: sl()));
+  sl.registerLazySingleton(() => LogoutUseCase(repository: sl()));
   sl.registerLazySingleton(() => SignUpUseCase(authRepository: sl()));
   sl.registerLazySingleton(() => SignInUseCase(authRepository: sl()));
   sl.registerLazySingleton(
@@ -172,8 +191,8 @@ Future<void> init() async {
 
   //! Repositories
 
-  sl.registerLazySingleton<AuthRepository>(
-      () => AuthRepositoryImpl(authRemoteDataSource: sl(), networkInfo: sl()));
+  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
+      authRemoteDataSource: sl(), local: sl(), networkInfo: sl()));
 
   sl.registerLazySingleton<AdvertismentRepository>(() =>
       AdvertismentRepositoryImpl(
@@ -242,12 +261,16 @@ Future<void> init() async {
   sl.registerLazySingleton<ComplaintsRemoteDataSource>(() =>
       ComplaintsRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
 
+  sl.registerLazySingleton<AuthLocalDatasource>(
+      () => AuthLocalDatasourceImpl(sharedPreferences: sl()));
+
   //! Core
 
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
   //! External
-
+  final sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => dio.Dio());
   sl.registerLazySingleton(() => InternetConnectionChecker());
 }

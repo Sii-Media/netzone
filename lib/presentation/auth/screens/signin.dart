@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_in/sign_in_bloc.dart';
+import 'package:netzoon/presentation/auth/screens/user_type.dart';
 import 'package:netzoon/presentation/auth/widgets/password_control.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
@@ -70,9 +71,10 @@ class _SignInScreenState extends State<SignInScreen>
             ),
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ));
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) {
             return const TestScreen();
-          }));
+          }), (route) => false);
         }
       },
       child: Directionality(
@@ -145,8 +147,11 @@ class _SignInScreenState extends State<SignInScreen>
                           controller: _passwordController,
                           validator: _passwordValidator,
                         ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Text(
                               'هل نسيت كلمة المرور ؟!',
@@ -154,6 +159,25 @@ class _SignInScreenState extends State<SignInScreen>
                                 decoration: TextDecoration.underline,
                                 fontSize: 13.sp,
                                 color: AppColor.secondGrey,
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return const UserType();
+                                    },
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                'إنشاء حساب جديد!',
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  fontSize: 13.sp,
+                                  color: AppColor.backgroundColor,
+                                ),
                               ),
                             ),
                           ],

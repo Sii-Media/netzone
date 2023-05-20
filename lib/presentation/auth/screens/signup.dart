@@ -69,9 +69,10 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
             ),
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ));
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) {
             return const TestScreen();
-          }));
+          }), (route) => false);
         }
       },
       child: SignUpWidget(

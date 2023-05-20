@@ -1,18 +1,21 @@
 import 'package:netzoon/data/core/utils/network/network_info.dart';
+import 'package:netzoon/data/datasource/local/auth/auth_local_data_source.dart';
 import 'package:netzoon/data/datasource/remote/auth/auth_remote_datasource.dart';
 import 'package:netzoon/data/models/auth/user/user_model.dart';
 import 'package:netzoon/domain/auth/entities/user.dart';
 import 'package:dartz/dartz.dart';
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;
+  final AuthLocalDatasource local;
   final NetworkInfo networkInfo;
 
   AuthRepositoryImpl(
-      {required this.authRemoteDataSource, required this.networkInfo});
+      {required this.authRemoteDataSource,
+      required this.local,
+      required this.networkInfo});
   @override
   Future<Either<Failure, User>> signUp(
       {required String username,
@@ -25,8 +28,10 @@ class AuthRepositoryImpl implements AuthRepository {
       if (await networkInfo.isConnected) {
         final user = await authRemoteDataSource.signUp(
             username, email, password, userType, firstMobile, isFreeZoon);
-        SharedPreferences preferences = await SharedPreferences.getInstance();
-        await preferences.setBool('IsLoggedIn', true);
+        // SharedPreferences preferences = await SharedPreferences.getInstance();
+        // await preferences.setBool('IsLoggedIn', true);
+        local.signInUser(user);
+
         return Right(user.toDomain());
       } else {
         return Left(OfflineFailure());
@@ -42,8 +47,9 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       if (await networkInfo.isConnected) {
         final user = await authRemoteDataSource.signIn(email, password);
-        SharedPreferences preferences = await SharedPreferences.getInstance();
-        await preferences.setBool('IsLoggedIn', true);
+        // SharedPreferences preferences = await SharedPreferences.getInstance();
+        // await preferences.setBool('IsLoggedIn', true);
+        local.signInUser(user);
         return Right(user.toDomain());
       } else {
         return Left(OfflineFailure());
@@ -51,5 +57,26 @@ class AuthRepositoryImpl implements AuthRepository {
     } catch (e) {
       return Left(CredintialFailure());
     }
+  }
+
+  @override
+  Future<Either<Failure, User?>> getSignedInUser() async {
+    return right(local.getSignedInUser()?.toDomain());
+  }
+
+  @override
+  Future<Either<Failure, Unit>> logout() async {
+    local.logout();
+    return right(unit);
+  }
+
+  @override
+  Future<Either<Failure, bool>> getIsFirstTimeLogged() async {
+    return right(local.getIsFirstTimeLogged());
+  }
+
+  @override
+  Future<Either<Failure, void>> setFirstTimeLogged(bool firstTimeLogged) async {
+    return right(local.setFirstTimeLogged(firstTimeLogged));
   }
 }

@@ -257,7 +257,7 @@ class _AddProductScreenState extends State<AddProductScreen>
                                       child:
                                           DropdownButton<DepartmentsCategories>(
                                         // Set the selected value
-                                        // value: selectCat,
+                                        value: selectCat,
                                         // // Handle the value change
                                         onChanged:
                                             (DepartmentsCategories? newValue) {

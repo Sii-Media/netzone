@@ -1,15 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/data/core/constants/constants.dart';
+import 'package:netzoon/injection_container.dart';
+import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
 import 'package:netzoon/presentation/contact/screens/contact_us_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
+import 'package:netzoon/presentation/home/test.dart';
 import 'package:netzoon/presentation/language_screen/languages_screen.dart';
 import 'package:netzoon/presentation/legal_advice/legal_advice_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class MoreScreen extends StatelessWidget {
+class MoreScreen extends StatefulWidget {
   const MoreScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<MoreScreen> createState() => _MoreScreenState();
+}
+
+class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
+  late String? isLoggedIn = '';
+
+  void getIsLoggedIn() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isLoggedIn = prefs.getString(SharedPreferencesKeys.user);
+    });
+  }
+
+  @override
+  void initState() {
+    getIsLoggedIn();
+    super.initState();
+  }
+
+  final authBloc = sl<AuthBloc>();
+  @override
+  Widget screen(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Padding(
@@ -84,6 +111,23 @@ class MoreScreen extends StatelessWidget {
                 );
               },
             ),
+            SizedBox(
+              height: 10.h,
+            ),
+            isLoggedIn != null && isLoggedIn != ''
+                ? SettingsCategory(
+                    name: 'تسجيل الخروج',
+                    icon: Icons.logout,
+                    onTap: () {
+                      authBloc.add(AuthLogout());
+
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) {
+                        return const TestScreen();
+                      }), (route) => false);
+                    },
+                  )
+                : const SizedBox(),
           ],
         ),
       ),

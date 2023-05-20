@@ -30,6 +30,12 @@ class _TestScreenState extends State<TestScreen> {
       Icons.add,
       size: 25,
     ),
+    // CircleAvatar(
+    //   radius: 16,
+    //   backgroundColor: Colors.grey.shade800,
+    //   backgroundImage: const NetworkImage(
+    //       'https://newprofilepic2.photo-cdn.net//assets/images/article/profile.jpg'),
+    // ),
     const Icon(
       Icons.person,
       size: 25,
@@ -39,7 +45,7 @@ class _TestScreenState extends State<TestScreen> {
       size: 25,
     ),
   ];
-
+  // late bool? isLoggedIn = false;
   final List<Widget> _children = [
     const HomePage(),
     const CartScreen(),
@@ -52,6 +58,20 @@ class _TestScreenState extends State<TestScreen> {
     setState(() {
       _currentIndex = index;
     });
+  }
+
+  // void getIsLoggedIn() async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  //   setState(() {
+  //     isLoggedIn = prefs.getBool('IsLoggedIn');
+  //   });
+  // }
+
+  @override
+  void initState() {
+    // getIsLoggedIn();
+    super.initState();
   }
 
   @override
