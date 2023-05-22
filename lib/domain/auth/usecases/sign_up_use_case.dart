@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:netzoon/domain/auth/entities/user.dart';
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
@@ -17,6 +19,8 @@ class SignUpUseCase extends UseCase<User, SignUpUseCaseParams> {
       userType: params.userType,
       firstMobile: params.firstMobile,
       isFreeZoon: params.isFreeZoon,
+      profilePhoto: params.profilePhoto,
+      banerPhoto: params.banerPhoto,
     );
   }
 }
@@ -28,6 +32,8 @@ class SignUpUseCaseParams {
   final String userType;
   final String firstMobile;
   final bool isFreeZoon;
+  final File? profilePhoto;
+  final File? banerPhoto;
 
   SignUpUseCaseParams({
     required this.username,
@@ -36,5 +42,7 @@ class SignUpUseCaseParams {
     required this.userType,
     required this.firstMobile,
     required this.isFreeZoon,
+    this.profilePhoto,
+    this.banerPhoto,
   });
 }

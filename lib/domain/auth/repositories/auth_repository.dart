@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:netzoon/domain/auth/entities/user.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
@@ -10,6 +12,8 @@ abstract class AuthRepository {
     required String userType,
     required String firstMobile,
     required bool isFreeZoon,
+    File? profilePhoto,
+    File? banerPhoto,
   });
 
   Future<Either<Failure, User>> signIn({

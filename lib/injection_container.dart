@@ -85,6 +85,7 @@ import 'package:netzoon/presentation/tenders/blocs/tendersCategory/tender_cat_bl
 import 'package:netzoon/presentation/tenders/blocs/tendersItem/tenders_item_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+const String baseUrl = 'https://net-zoon.onrender.com';
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -229,37 +230,37 @@ Future<void> init() async {
   //! DataSourses
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
-      () => AuthRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
+      () => AuthRemoteDataSourceImpl(sl(), baseUrl: baseUrl));
 
-  sl.registerLazySingleton<AdvertismentRemotDataSource>(() =>
-      AdvertismentRemotDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
+  sl.registerLazySingleton<AdvertismentRemotDataSource>(
+      () => AdvertismentRemotDataSourceImpl(sl(), baseUrl: baseUrl));
 
   sl.registerLazySingleton<NewsRemoteDataSourse>(
-      () => NewsRemoteDataSourseImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
+      () => NewsRemoteDataSourseImpl(sl(), baseUrl: baseUrl));
 
   sl.registerLazySingleton<TendersRemoteDataSource>(
-      () => TendersRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
+      () => TendersRemoteDataSourceImpl(sl(), baseUrl: baseUrl));
 
   sl.registerLazySingleton<DealsRemoteDataSource>(
-      () => DealsRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
+      () => DealsRemoteDataSourceImpl(sl(), baseUrl: baseUrl));
 
-  sl.registerLazySingleton<DepartmentsRemoteDataSource>(() =>
-      DepartmentsRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
+  sl.registerLazySingleton<DepartmentsRemoteDataSource>(
+      () => DepartmentsRemoteDataSourceImpl(sl(), baseUrl: baseUrl));
 
-  sl.registerLazySingleton<LegalAdviceRemoteDataSource>(() =>
-      LegalAdviceRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
+  sl.registerLazySingleton<LegalAdviceRemoteDataSource>(
+      () => LegalAdviceRemoteDataSourceImpl(sl(), baseUrl: baseUrl));
 
-  sl.registerLazySingleton<OpenionsRemoteDataSource>(() =>
-      OpenionsRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
+  sl.registerLazySingleton<OpenionsRemoteDataSource>(
+      () => OpenionsRemoteDataSourceImpl(sl(), baseUrl: baseUrl));
 
-  sl.registerLazySingleton<QuestionRemoteDataSource>(() =>
-      QuestionRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
+  sl.registerLazySingleton<QuestionRemoteDataSource>(
+      () => QuestionRemoteDataSourceImpl(sl(), baseUrl: baseUrl));
 
-  sl.registerLazySingleton<RequestsRemoteDataSource>(() =>
-      RequestsRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
+  sl.registerLazySingleton<RequestsRemoteDataSource>(
+      () => RequestsRemoteDataSourceImpl(sl(), baseUrl: baseUrl));
 
-  sl.registerLazySingleton<ComplaintsRemoteDataSource>(() =>
-      ComplaintsRemoteDataSourceImpl(sl(), baseUrl: 'http://10.0.2.2:5000'));
+  sl.registerLazySingleton<ComplaintsRemoteDataSource>(
+      () => ComplaintsRemoteDataSourceImpl(sl(), baseUrl: baseUrl));
 
   sl.registerLazySingleton<AuthLocalDatasource>(
       () => AuthLocalDatasourceImpl(sharedPreferences: sl()));

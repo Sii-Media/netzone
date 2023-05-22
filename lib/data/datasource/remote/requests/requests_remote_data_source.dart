@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:netzoon/data/models/requests/requests_response_model.dart';
 import 'package:retrofit/http.dart';
+import '../../../../injection_container.dart';
 
 part 'requests_remote_data_source.g.dart';
 
@@ -11,7 +12,7 @@ abstract class RequestsRemoteDataSource {
   );
 }
 
-@RestApi(baseUrl: 'http://10.0.2.2:5000')
+@RestApi(baseUrl: baseUrl)
 abstract class RequestsRemoteDataSourceImpl
     implements RequestsRemoteDataSource {
   factory RequestsRemoteDataSourceImpl(Dio dio, {required String baseUrl}) {

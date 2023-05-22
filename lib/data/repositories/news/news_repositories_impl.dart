@@ -53,8 +53,9 @@ class NewsRepositoryImpl implements NewsRepository {
           'ownerImage': ownerImage,
         });
 
-        Response response = await dio
-            .post('http://10.0.2.2:5000/news/createNews', data: formData);
+        Response response = await dio.post(
+            'https://net-zoon.onrender.com/news/createNews',
+            data: formData);
         // Handle the response as needed
         if (response.statusCode == 201) {
           return Right(response.data);

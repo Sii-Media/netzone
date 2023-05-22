@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:netzoon/data/models/complaints/complaints_response_model.dart';
 import 'package:retrofit/http.dart';
+import '../../../../injection_container.dart';
 
 part 'complaints_remote_data_source.g.dart';
 
@@ -12,7 +13,7 @@ abstract class ComplaintsRemoteDataSource {
   );
 }
 
-@RestApi(baseUrl: 'http://10.0.2.2:5000')
+@RestApi(baseUrl: baseUrl)
 abstract class ComplaintsRemoteDataSourceImpl
     extends ComplaintsRemoteDataSource {
   factory ComplaintsRemoteDataSourceImpl(Dio dio, {required String baseUrl}) {

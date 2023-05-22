@@ -1,15 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
 import 'package:netzoon/presentation/auth/widgets/background_auth_widget.dart';
 import 'package:netzoon/presentation/auth/widgets/text_form_signup_widget.dart';
 import 'package:netzoon/presentation/auth/widgets/text_signup_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/widgets/add_photo_button.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/injection_container.dart' as di;
 import 'package:netzoon/presentation/home/test.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key, required this.accountTitle});
@@ -34,11 +39,12 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
   final TextEditingController companyProductsNumber = TextEditingController();
   final TextEditingController sellType = TextEditingController();
   final TextEditingController toCountry = TextEditingController();
-
+  File? profileImage;
   final GlobalKey<FormFieldState> _emailFormFieldKey =
       GlobalKey<FormFieldState>();
   final GlobalKey<FormFieldState> passwordFormFieldKey =
       GlobalKey<FormFieldState>();
+
   @override
   Widget screen(BuildContext context) {
     return BlocListener(
@@ -142,9 +148,33 @@ class SignUpWidget extends StatefulWidget {
   State<SignUpWidget> createState() => _SignUpWidgetState();
 }
 
-bool showPass = false;
+bool showPass = true;
 
 class _SignUpWidgetState extends State<SignUpWidget> {
+  File? profileImage;
+  File? banerImage;
+  Future getProfileImage(ImageSource imageSource) async {
+    final image = await ImagePicker().pickImage(source: imageSource);
+
+    if (image == null) return;
+    final imageTemporary = File(image.path);
+
+    setState(() {
+      profileImage = imageTemporary;
+    });
+  }
+
+  Future getBanerImage(ImageSource imageSource) async {
+    final image = await ImagePicker().pickImage(source: imageSource);
+
+    if (image == null) return;
+    final imageTemporary = File(image.path);
+
+    setState(() {
+      banerImage = imageTemporary;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BackgroundAuthWidget(
@@ -261,7 +291,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   RequiredValidator(errorText: 'يجب إدخال كلمة المرور'),
                   MinLengthValidator(8,
                       errorText:
-                          'يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل'),
+                          'يجب أن تحتوي كلمة المرور على 9 أحرف على الأقل'),
                 ]),
                 onChanged: (text) {
                   widget.passwordFormFieldKey.currentState!.validate();
@@ -425,14 +455,53 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               const TextSignup(
                 text: "الصورة الشخصية",
               ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.5,
-                decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
-                    image: const DecorationImage(
-                        image: AssetImage("assets/images/logo.png"),
-                        fit: BoxFit.cover)),
+              SizedBox(
+                height: 10.h,
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  addPhotoButton(
+                      text: 'إضافة صورة من الكاميرا',
+                      onPressed: () {
+                        getProfileImage(ImageSource.camera);
+                      }),
+                  addPhotoButton(
+                      text: 'إضافة صورة من المعرض',
+                      onPressed: () {
+                        getProfileImage(ImageSource.gallery);
+                      }),
+                ],
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              profileImage != null
+                  ? Center(
+                      child: Image.file(
+                        profileImage!,
+                        width: 250.w,
+                        height: 250.h,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : Center(
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
+                        width: 250.w,
+                        height: 250.h,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+              // Container(
+              //   height: MediaQuery.of(context).size.height * 0.5,
+              //   decoration: BoxDecoration(
+              //       color: Colors.green.withOpacity(0.1),
+              //       image: const DecorationImage(
+              //           image: AssetImage("assets/images/logo.png"),
+              //           fit: BoxFit.cover)),
+              // ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
                   : const TextSignup(
@@ -440,14 +509,58 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
-                  : Container(
-                      height: MediaQuery.of(context).size.height * 0.5,
-                      decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.1),
-                          image: const DecorationImage(
-                              image: AssetImage("assets/images/logo.png"),
-                              fit: BoxFit.cover)),
+                  : Column(
+                      children: [
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            addPhotoButton(
+                                text: 'إضافة صورة من الكاميرا',
+                                onPressed: () {
+                                  getBanerImage(ImageSource.camera);
+                                }),
+                            addPhotoButton(
+                                text: 'إضافة صورة من المعرض',
+                                onPressed: () {
+                                  getBanerImage(ImageSource.gallery);
+                                }),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        banerImage != null
+                            ? Center(
+                                child: Image.file(
+                                  banerImage!,
+                                  width: 250.w,
+                                  height: 250.h,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : Center(
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
+                                  width: 250.w,
+                                  height: 250.h,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                      ],
                     ),
+
+              // : Container(
+              //     height: MediaQuery.of(context).size.height * 0.5,
+              //     decoration: BoxDecoration(
+              //         color: Colors.green.withOpacity(0.1),
+              //         image: const DecorationImage(
+              //             image: AssetImage("assets/images/logo.png"),
+              //             fit: BoxFit.cover)),
+              //   ),
               SizedBox(
                 height: 10.h,
               ),
@@ -473,14 +586,18 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     ),
                     child: RawMaterialButton(
                       onPressed: () {
+                        final String userType = getUserType();
+
                         if (!widget.formKey!.currentState!.validate()) return;
                         widget.bloc.add(SignUpRequested(
                           username: widget.username.text,
                           email: widget.emailSignup.text,
                           password: widget.passwordSignup.text,
-                          userType: 'user',
+                          userType: userType,
                           firstMobile: widget.numberPhoneOne.text,
                           isFreeZoon: true,
+                          profilePhoto: profileImage,
+                          banerPhoto: banerImage,
                         ));
                       },
                       child: const Text(
@@ -499,5 +616,25 @@ class _SignUpWidgetState extends State<SignUpWidget> {
         ),
       ),
     );
+  }
+
+  String getUserType() {
+    switch (widget.accountTitle) {
+      case 'المستهلك':
+        return 'user';
+      case 'الشركات المحلية':
+        return 'local_company';
+      case 'السيارات':
+        return 'car';
+      case 'السفن':
+        return 'ship';
+      case 'منطقة حرة':
+        return 'freezoon';
+      case 'المصانع':
+        return 'factory';
+
+      default:
+        return 'user';
+    }
   }
 }

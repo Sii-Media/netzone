@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:netzoon/data/models/legal_advice/legal_advice_response_model.dart';
 import 'package:retrofit/http.dart';
+import '../../../../injection_container.dart';
 
 part 'legal_advice_remote_data_source.g.dart';
 
@@ -8,7 +9,7 @@ abstract class LegalAdviceRemoteDataSource {
   Future<LegalAdviceResponseModel> getLegalAdvices();
 }
 
-@RestApi(baseUrl: 'http://10.0.2.2:5000')
+@RestApi(baseUrl: baseUrl)
 abstract class LegalAdviceRemoteDataSourceImpl
     implements LegalAdviceRemoteDataSource {
   factory LegalAdviceRemoteDataSourceImpl(Dio dio, {required String baseUrl}) {

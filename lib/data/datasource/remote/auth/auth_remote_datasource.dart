@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:netzoon/data/models/auth/user/user_model.dart';
 import 'package:retrofit/http.dart';
+import '../../../../injection_container.dart';
+
 part 'auth_remote_datasource.g.dart';
 
 abstract class AuthRemoteDataSource {
@@ -19,7 +21,7 @@ abstract class AuthRemoteDataSource {
   );
 }
 
-@RestApi(baseUrl: 'http://10.0.2.2:5000')
+@RestApi(baseUrl: baseUrl)
 abstract class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   factory AuthRemoteDataSourceImpl(Dio dio, {required String baseUrl}) {
     dio.options = BaseOptions(

@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/local/auth/auth_local_data_source.dart';
 import 'package:netzoon/data/datasource/remote/auth/auth_remote_datasource.dart';
@@ -17,22 +21,64 @@ class AuthRepositoryImpl implements AuthRepository {
       required this.local,
       required this.networkInfo});
   @override
-  Future<Either<Failure, User>> signUp(
-      {required String username,
-      required String email,
-      required String password,
-      required String userType,
-      required String firstMobile,
-      required bool isFreeZoon}) async {
+  Future<Either<Failure, User>> signUp({
+    required String username,
+    required String email,
+    required String password,
+    required String userType,
+    required String firstMobile,
+    required bool isFreeZoon,
+    File? profilePhoto,
+    File? banerPhoto,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
-        final user = await authRemoteDataSource.signUp(
-            username, email, password, userType, firstMobile, isFreeZoon);
+        FormData formData;
+        // final user = await authRemoteDataSource.signUp(
+        //     username, email, password, userType, firstMobile, isFreeZoon);
         // SharedPreferences preferences = await SharedPreferences.getInstance();
         // await preferences.setBool('IsLoggedIn', true);
-        local.signInUser(user);
+        Dio dio = Dio();
+        if (profilePhoto != null && banerPhoto != null) {
+          formData = FormData.fromMap({
+            'username': username,
+            'email': email,
+            'password': password,
+            'userType': userType,
+            'firstMobile': firstMobile,
+            'isFreeZoon': isFreeZoon,
+            'profilePhoto': await MultipartFile.fromFile(profilePhoto.path,
+                filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
+            'bannerPhoto': await MultipartFile.fromFile(banerPhoto.path,
+                filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
+          });
+        } else if (profilePhoto != null && banerPhoto == null) {
+          formData = FormData.fromMap({
+            'username': username,
+            'email': email,
+            'password': password,
+            'userType': userType,
+            'firstMobile': firstMobile,
+            'isFreeZoon': isFreeZoon,
+            'profilePhoto': await MultipartFile.fromFile(profilePhoto.path,
+                filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
+          });
+        } else {
+          return Left(ServerFailure());
+        }
 
-        return Right(user.toDomain());
+        Response response = await dio.post(
+            'https://net-zoon.onrender.com/user/register',
+            data: formData);
+        if (response.statusCode == 201) {
+          final UserModel user = UserModel.fromJson(response.data!);
+
+          local.signInUser(user);
+
+          return Right(user.toDomain());
+        } else {
+          return Left(ServerFailure());
+        }
       } else {
         return Left(OfflineFailure());
       }

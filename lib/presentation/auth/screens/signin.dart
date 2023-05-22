@@ -35,7 +35,7 @@ class _SignInScreenState extends State<SignInScreen>
     _passwordValidator = MultiValidator([
       RequiredValidator(errorText: 'يجب إدخال كلمة المرور'),
       MinLengthValidator(8,
-          errorText: 'يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل'),
+          errorText: 'يجب أن تحتوي كلمة المرور على 9 أحرف على الأقل'),
     ]);
 
     super.initState();

@@ -14,7 +14,7 @@ class _DepartmentsRemoteDataSourceImpl
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://10.0.2.2:5000';
+    baseUrl ??= 'https://net-zoon.onrender.com';
   }
 
   final Dio _dio;

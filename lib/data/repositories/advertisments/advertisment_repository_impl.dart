@@ -84,7 +84,7 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
         });
 
         Response response = await dio.post(
-            'http://10.0.2.2:5000/advertisements/createAds',
+            'https://net-zoon.onrender.com/advertisements/createAds',
             data: formData);
         // Handle the response as needed
         if (response.statusCode == 201) {

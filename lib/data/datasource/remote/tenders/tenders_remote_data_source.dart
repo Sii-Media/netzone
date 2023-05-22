@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:netzoon/data/models/tenders/tenders_items/tendres_item_response_model.dart';
 import 'package:netzoon/data/models/tenders/tenders_response/tender_response_model.dart';
 import 'package:retrofit/http.dart';
+import '../../../../injection_container.dart';
 
 part 'tenders_remote_data_source.g.dart';
 
@@ -16,7 +17,7 @@ abstract class TendersRemoteDataSource {
   Future<TendersItemResponseModel> getTendersItems();
 }
 
-@RestApi(baseUrl: 'http://10.0.2.2:5000')
+@RestApi(baseUrl: baseUrl)
 abstract class TendersRemoteDataSourceImpl implements TendersRemoteDataSource {
   factory TendersRemoteDataSourceImpl(Dio dio, {required String baseUrl}) {
     dio.options = BaseOptions(

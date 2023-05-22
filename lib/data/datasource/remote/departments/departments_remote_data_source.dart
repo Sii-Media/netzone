@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:netzoon/data/models/departments/category_products/category_products_response_model.dart';
 import 'package:netzoon/data/models/departments/departments_categories/departments_categories_response_model.dart';
 import 'package:retrofit/http.dart';
+import '../../../../injection_container.dart';
 
 part 'departments_remote_data_source.g.dart';
 
@@ -31,7 +32,7 @@ abstract class DepartmentsRemoteDataSource {
   );
 }
 
-@RestApi(baseUrl: 'http://10.0.2.2:5000')
+@RestApi(baseUrl: baseUrl)
 abstract class DepartmentsRemoteDataSourceImpl
     implements DepartmentsRemoteDataSource {
   factory DepartmentsRemoteDataSourceImpl(Dio dio, {required String baseUrl}) {

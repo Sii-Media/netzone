@@ -78,8 +78,9 @@ Future<Response<dynamic>> _uploadFile({
           filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
     });
 
-    Response response = await dio
-        .post('http://10.0.2.2:5000/departments/addProduct', data: formData);
+    Response response = await dio.post(
+        'https://net-zoon.onrender.com/departments/addProduct',
+        data: formData);
     // Handle the response as needed
 
     return response;

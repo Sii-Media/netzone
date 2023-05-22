@@ -184,8 +184,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           child: CircleAvatar(
             radius: profileHeight / 2,
             backgroundColor: Colors.grey.shade800,
-            backgroundImage: const NetworkImage(
-                'https://newprofilepic2.photo-cdn.net//assets/images/article/profile.jpg'),
+            backgroundImage:
+                NetworkImage(widget.user.userInfo.profilePhoto ?? ''),
           ),
         ),
       ],

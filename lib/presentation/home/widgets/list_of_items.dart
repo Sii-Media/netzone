@@ -67,7 +67,7 @@ class _ListofItemsState extends State<ListofItems> {
                         children: [
                           CachedNetworkImage(
                             imageUrl: widget.elec[index].imageUrl,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                             height: MediaQuery.of(context).size.height,
                             // placeholder: (context, url) =>
                             //     CircularProgressIndicator(),

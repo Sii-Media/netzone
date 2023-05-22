@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:netzoon/data/models/advertisements/advertising/advertising_model.dart';
 import 'package:retrofit/http.dart';
+import '../../../../injection_container.dart';
 
 part 'ads_remote_data_source.g.dart';
 
@@ -11,7 +12,7 @@ abstract class AdvertismentRemotDataSource {
   );
 }
 
-@RestApi(baseUrl: 'http://10.0.2.2:5000')
+@RestApi(baseUrl: baseUrl)
 abstract class AdvertismentRemotDataSourceImpl
     implements AdvertismentRemotDataSource {
   factory AdvertismentRemotDataSourceImpl(Dio dio, {required String baseUrl}) {

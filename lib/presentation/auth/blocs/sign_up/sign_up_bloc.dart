@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/auth/entities/user.dart';
@@ -20,6 +22,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
           userType: event.userType,
           firstMobile: event.firstMobile,
           isFreeZoon: event.isFreeZoon,
+          profilePhoto: event.profilePhoto,
+          banerPhoto: event.banerPhoto,
         ));
 
         emit(failureOrUser.fold(

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:netzoon/data/models/news/add_news/add_news_model.dart';
 import 'package:netzoon/data/models/news/news/news_model.dart';
 import 'package:retrofit/http.dart';
+import '../../../../injection_container.dart';
 
 part 'news_remote_data_source.g.dart';
 
@@ -17,7 +18,7 @@ abstract class NewsRemoteDataSourse {
   );
 }
 
-@RestApi(baseUrl: 'http://10.0.2.2:5000')
+@RestApi(baseUrl: baseUrl)
 abstract class NewsRemoteDataSourseImpl implements NewsRemoteDataSourse {
   factory NewsRemoteDataSourseImpl(Dio dio, {required String baseUrl}) {
     dio.options = BaseOptions(
