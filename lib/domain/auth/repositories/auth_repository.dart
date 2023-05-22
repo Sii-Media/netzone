@@ -13,6 +13,7 @@ abstract class AuthRepository {
     required String firstMobile,
     required bool isFreeZoon,
     File? profilePhoto,
+    File? coverPhoto,
     File? banerPhoto,
   });
 

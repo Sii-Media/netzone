@@ -75,13 +75,14 @@ class _HomePageState extends State<HomePage> {
     newsBloc.add(GetAllNewsEvent());
     tenderItemBloc.add(const GetTendersItemEvent());
     dealsItemBloc.add(GetDealsItemEvent());
-    elcDeviceBloc.add(const GetElcDevicesEvent(department: 'Elec'));
-    deviceBloc.add(const GetElcDevicesEvent(department: 'Devices'));
-    manFashionBloc.add(const GetElcDevicesEvent(department: 'MenFashion'));
-    womanFashionBloc.add(const GetElcDevicesEvent(department: 'WomanFashion'));
-    foodsBloc.add(const GetElcDevicesEvent(department: 'Foods'));
-    perfumesBloc.add(const GetElcDevicesEvent(department: 'Perfumes'));
-    watchesBloc.add(const GetElcDevicesEvent(department: 'Watches'));
+    elcDeviceBloc.add(const GetElcDevicesEvent(department: 'الكترونيات'));
+    deviceBloc
+        .add(const GetElcDevicesEvent(department: 'أجهزة المنزل والمكتب'));
+    manFashionBloc.add(const GetElcDevicesEvent(department: 'موضة رجالية'));
+    womanFashionBloc.add(const GetElcDevicesEvent(department: 'موضة نسائية'));
+    foodsBloc.add(const GetElcDevicesEvent(department: 'منتجات غذائية'));
+    perfumesBloc.add(const GetElcDevicesEvent(department: 'عطور'));
+    watchesBloc.add(const GetElcDevicesEvent(department: 'ساعات'));
     super.initState();
   }
 
@@ -92,14 +93,15 @@ class _HomePageState extends State<HomePage> {
         newsBloc.add(GetAllNewsEvent());
         tenderItemBloc.add(const GetTendersItemEvent());
         dealsItemBloc.add(GetDealsItemEvent());
-        elcDeviceBloc.add(const GetElcDevicesEvent(department: 'Elec'));
-        deviceBloc.add(const GetElcDevicesEvent(department: 'Devices'));
-        manFashionBloc.add(const GetElcDevicesEvent(department: 'MenFashion'));
+        elcDeviceBloc.add(const GetElcDevicesEvent(department: 'الكترونيات'));
+        deviceBloc
+            .add(const GetElcDevicesEvent(department: 'أجهزة المنزل والمكتب'));
+        manFashionBloc.add(const GetElcDevicesEvent(department: 'موضة رجالية'));
         womanFashionBloc
-            .add(const GetElcDevicesEvent(department: 'WomanFashion'));
-        foodsBloc.add(const GetElcDevicesEvent(department: 'Foods'));
-        perfumesBloc.add(const GetElcDevicesEvent(department: 'Perfumes'));
-        watchesBloc.add(const GetElcDevicesEvent(department: 'Watches'));
+            .add(const GetElcDevicesEvent(department: 'موضة نسائية'));
+        foodsBloc.add(const GetElcDevicesEvent(department: 'منتجات غذائية'));
+        perfumesBloc.add(const GetElcDevicesEvent(department: 'عطور'));
+        watchesBloc.add(const GetElcDevicesEvent(department: 'ساعات'));
       },
       color: AppColor.white,
       backgroundColor: AppColor.backgroundColor,
@@ -144,7 +146,7 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(builder: (context) {
                       return CategoriesScreen(
                         items: elecDevices,
-                        filter: 'Elec',
+                        filter: 'الكترونيات',
                       );
                     }),
                   );
@@ -181,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       height: MediaQuery.of(context).size.height * 0.20,
                       child: ListofItems(
-                        filter: 'Elec',
+                        filter: 'الكترونيات',
                         // devices: elecDevices,
                         elec: state.elecDevices,
                       ),
@@ -200,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return CategoriesScreen(
-                        filter: 'Devices',
+                        filter: 'أجهزة المنزل والمكتب',
                         items: devices,
                       );
                     }),
@@ -238,7 +240,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       height: MediaQuery.of(context).size.height * 0.20,
                       child: ListofItems(
-                        filter: 'Devices',
+                        filter: 'أجهزة المنزل والمكتب',
                         // devices: elecDevices,
                         elec: state.elecDevices,
                       ),
@@ -257,7 +259,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return CategoriesScreen(
-                        filter: 'MenFashion',
+                        filter: 'موضة رجالية',
                         items: menfasion,
                       );
                     }),
@@ -295,7 +297,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       height: MediaQuery.of(context).size.height * 0.20,
                       child: ListofItems(
-                        filter: 'MenFashion',
+                        filter: 'موضة رجالية',
                         // devices: elecDevices,
                         elec: state.elecDevices,
                       ),
@@ -314,7 +316,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return CategoriesScreen(
-                        filter: 'WomanFashion',
+                        filter: 'موضة نسائية',
                         items: womanFashion,
                       );
                     }),
@@ -352,7 +354,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       height: MediaQuery.of(context).size.height * 0.20,
                       child: ListofItems(
-                        filter: 'WomanFashion',
+                        filter: 'موضة نسائية',
                         // devices: elecDevices,
                         elec: state.elecDevices,
                       ),
@@ -371,7 +373,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return CategoriesScreen(
-                        filter: 'Foods',
+                        filter: 'منتجات غذائية',
                         items: foodProducts,
                       );
                     }),
@@ -409,7 +411,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       height: MediaQuery.of(context).size.height * 0.20,
                       child: ListofItems(
-                        filter: 'Foods',
+                        filter: 'منتجات غذائية',
                         // devices: elecDevices,
                         elec: state.elecDevices,
                       ),
@@ -428,7 +430,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return CategoriesScreen(
-                        filter: 'Perfumes',
+                        filter: 'عطور',
                         items: perfumeslist,
                       );
                     }),
@@ -466,7 +468,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       height: MediaQuery.of(context).size.height * 0.20,
                       child: ListofItems(
-                        filter: 'Perfumes',
+                        filter: 'عطور',
                         // devices: elecDevices,
                         elec: state.elecDevices,
                       ),
@@ -485,7 +487,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return CategoriesScreen(
-                        filter: 'Watches',
+                        filter: 'ساعات',
                         items: watches,
                       );
                     }),
@@ -523,7 +525,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       height: MediaQuery.of(context).size.height * 0.20,
                       child: ListofItems(
-                        filter: 'Watches',
+                        filter: 'ساعات',
                         // devices: elecDevices,
                         elec: state.elecDevices,
                       ),

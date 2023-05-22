@@ -15,6 +15,7 @@ class SignUpRequested extends SignUpEvent {
   final String firstMobile;
   final bool isFreeZoon;
   final File? profilePhoto;
+  final File? coverPhoto;
   final File? banerPhoto;
 
   const SignUpRequested({
@@ -25,6 +26,7 @@ class SignUpRequested extends SignUpEvent {
     required this.firstMobile,
     required this.isFreeZoon,
     this.profilePhoto,
+    this.coverPhoto,
     this.banerPhoto,
   });
 }

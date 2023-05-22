@@ -21,6 +21,7 @@ class UserInfo {
   final String? toCountry;
 
   final String? profilePhoto;
+  final String? coverPhoto;
   final String? banerPhoto;
 
   final List? vehicles;
@@ -44,6 +45,7 @@ class UserInfo {
     this.sellType,
     this.toCountry,
     this.profilePhoto,
+    this.coverPhoto,
     this.banerPhoto,
     this.vehicles,
     this.products,

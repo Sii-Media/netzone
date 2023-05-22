@@ -23,6 +23,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
           firstMobile: event.firstMobile,
           isFreeZoon: event.isFreeZoon,
           profilePhoto: event.profilePhoto,
+          coverPhoto: event.coverPhoto,
           banerPhoto: event.banerPhoto,
         ));
 

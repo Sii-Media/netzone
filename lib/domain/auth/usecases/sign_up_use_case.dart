@@ -20,6 +20,7 @@ class SignUpUseCase extends UseCase<User, SignUpUseCaseParams> {
       firstMobile: params.firstMobile,
       isFreeZoon: params.isFreeZoon,
       profilePhoto: params.profilePhoto,
+      coverPhoto: params.coverPhoto,
       banerPhoto: params.banerPhoto,
     );
   }
@@ -33,6 +34,7 @@ class SignUpUseCaseParams {
   final String firstMobile;
   final bool isFreeZoon;
   final File? profilePhoto;
+  final File? coverPhoto;
   final File? banerPhoto;
 
   SignUpUseCaseParams({
@@ -43,6 +45,7 @@ class SignUpUseCaseParams {
     required this.firstMobile,
     required this.isFreeZoon,
     this.profilePhoto,
+    this.coverPhoto,
     this.banerPhoto,
   });
 }

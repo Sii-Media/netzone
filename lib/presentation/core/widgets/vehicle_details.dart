@@ -188,6 +188,9 @@ class VehicleDetailsScreen extends StatelessWidget {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 50.h,
+                  ),
                 ],
               ),
             ),

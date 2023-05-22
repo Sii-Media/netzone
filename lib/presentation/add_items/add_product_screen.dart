@@ -22,15 +22,15 @@ class AddProductScreen extends StatefulWidget {
 class _AddProductScreenState extends State<AddProductScreen>
     with ScreenLoader<AddProductScreen> {
   final items = [
-    'Elec',
-    'Devices',
-    'MenFashion',
-    'WomanFashion',
-    'Foods',
-    'Perfumes',
-    'Watches',
+    'الكترونيات',
+    'أجهزة المنزل والمكتب',
+    "موضة رجالية",
+    "موضة نسائية",
+    "منتجات غذائية",
+    "عطور",
+    'ساعات',
   ];
-  String selectedValue = 'Elec';
+  String selectedValue = 'الكترونيات';
 
   DepartmentsCategories? selectCat;
   File? _image;
@@ -75,7 +75,7 @@ class _AddProductScreenState extends State<AddProductScreen>
   List<String> item2 = [""];
   @override
   void initState() {
-    catBloc.add(const GetElcDevicesEvent(department: 'Elec'));
+    catBloc.add(const GetElcDevicesEvent(department: 'الكترونيات'));
     // selectCat = DepartmentsCategories(
     //     name: 'جوالات', department: '', imageUrl: '', products: []);
     super.initState();
@@ -88,7 +88,7 @@ class _AddProductScreenState extends State<AddProductScreen>
       child: Scaffold(
         body: RefreshIndicator(
           onRefresh: () async {
-            catBloc.add(const GetElcDevicesEvent(department: 'Elec'));
+            catBloc.add(const GetElcDevicesEvent(department: 'الكترونيات'));
           },
           color: AppColor.white,
           backgroundColor: AppColor.backgroundColor,

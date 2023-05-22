@@ -59,35 +59,35 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ],
                 ),
                 const Divider(),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 48,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'حول',
-                        style: TextStyle(
-                          fontSize: 22.sp,
-                          fontWeight: FontWeight.bold,
-                          color: AppColor.black,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Text(
-                        'مهندس برمجيات و مطور تطبيقات موبايل و مطور ويب',
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w400,
-                          color: AppColor.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // Container(
+                //   padding: const EdgeInsets.symmetric(
+                //     horizontal: 48,
+                //   ),
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Text(
+                //         'About',
+                //         style: TextStyle(
+                //           fontSize: 22.sp,
+                //           fontWeight: FontWeight.bold,
+                //           color: AppColor.black,
+                //         ),
+                //       ),
+                //       SizedBox(
+                //         height: 10.h,
+                //       ),
+                //       Text(
+                //         'مهندس برمجيات و مطور تطبيقات موبايل و مطور ويب',
+                //         style: TextStyle(
+                //           fontSize: 18.sp,
+                //           fontWeight: FontWeight.w400,
+                //           color: AppColor.black,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
             SizedBox(
@@ -129,15 +129,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       children: [
         buildSocialIcon(icon: FontAwesomeIcons.facebook),
         SizedBox(
-          width: 8.w,
+          width: 14.w,
         ),
         buildSocialIcon(icon: FontAwesomeIcons.instagram),
         SizedBox(
-          width: 8.w,
+          width: 14.w,
         ),
         buildSocialIcon(icon: FontAwesomeIcons.twitter),
         SizedBox(
-          width: 8.w,
+          width: 14.w,
         ),
         buildSocialIcon(icon: FontAwesomeIcons.linkedin),
       ],
@@ -172,8 +172,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         Container(
           margin: EdgeInsets.only(bottom: profileHeight / 2),
           child: CachedNetworkImage(
-            imageUrl:
-                'https://images.unsplash.com/photo-1504805572947-34fad45aed93?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y292ZXIlMjBwaG90b3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60',
+            imageUrl: widget.user.userInfo.coverPhoto ?? '',
             width: double.infinity,
             height: coverHeight,
             fit: BoxFit.cover,
@@ -184,8 +183,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           child: CircleAvatar(
             radius: profileHeight / 2,
             backgroundColor: Colors.grey.shade800,
-            backgroundImage:
-                NetworkImage(widget.user.userInfo.profilePhoto ?? ''),
+            backgroundImage: CachedNetworkImageProvider(
+                widget.user.userInfo.profilePhoto ?? ''),
           ),
         ),
       ],

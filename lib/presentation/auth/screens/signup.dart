@@ -30,6 +30,8 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
   final TextEditingController emailSignup = TextEditingController();
   final TextEditingController username = TextEditingController();
   final TextEditingController passwordSignup = TextEditingController();
+  final TextEditingController aboutSignup = TextEditingController();
+
   final TextEditingController numberPhoneOne = TextEditingController();
   final TextEditingController numberPhoneTow = TextEditingController();
   final TextEditingController numberPhoneThree = TextEditingController();
@@ -40,6 +42,7 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
   final TextEditingController sellType = TextEditingController();
   final TextEditingController toCountry = TextEditingController();
   File? profileImage;
+  File? coverImage;
   final GlobalKey<FormFieldState> _emailFormFieldKey =
       GlobalKey<FormFieldState>();
   final GlobalKey<FormFieldState> passwordFormFieldKey =
@@ -88,6 +91,7 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
         username: username,
         passwordSignup: passwordSignup,
         passwordFormFieldKey: passwordFormFieldKey,
+        aboutSignup: aboutSignup,
         numberPhoneOne: numberPhoneOne,
         numberPhoneTow: numberPhoneTow,
         numberPhoneThree: numberPhoneThree,
@@ -112,6 +116,7 @@ class SignUpWidget extends StatefulWidget {
     required this.emailSignup,
     required this.username,
     required this.passwordSignup,
+    required this.aboutSignup,
     required this.numberPhoneOne,
     required this.numberPhoneTow,
     required this.numberPhoneThree,
@@ -132,6 +137,7 @@ class SignUpWidget extends StatefulWidget {
   final TextEditingController emailSignup;
   final TextEditingController username;
   final TextEditingController passwordSignup;
+  final TextEditingController aboutSignup;
   final TextEditingController numberPhoneOne;
   final TextEditingController numberPhoneTow;
   final TextEditingController numberPhoneThree;
@@ -152,6 +158,7 @@ bool showPass = true;
 
 class _SignUpWidgetState extends State<SignUpWidget> {
   File? profileImage;
+  File? coverImage;
   File? banerImage;
   Future getProfileImage(ImageSource imageSource) async {
     final image = await ImagePicker().pickImage(source: imageSource);
@@ -161,6 +168,17 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
     setState(() {
       profileImage = imageTemporary;
+    });
+  }
+
+  Future getCoverImage(ImageSource imageSource) async {
+    final image = await ImagePicker().pickImage(source: imageSource);
+
+    if (image == null) return;
+    final imageTemporary = File(image.path);
+
+    setState(() {
+      coverImage = imageTemporary;
     });
   }
 
@@ -502,6 +520,51 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               //           image: AssetImage("assets/images/logo.png"),
               //           fit: BoxFit.cover)),
               // ),
+              SizedBox(
+                height: 10.h,
+              ),
+              const TextSignup(
+                text: "صورة الغلاف",
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  addPhotoButton(
+                      text: 'إضافة صورة من الكاميرا',
+                      onPressed: () {
+                        getCoverImage(ImageSource.camera);
+                      }),
+                  addPhotoButton(
+                      text: 'إضافة صورة من المعرض',
+                      onPressed: () {
+                        getCoverImage(ImageSource.gallery);
+                      }),
+                ],
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              coverImage != null
+                  ? Center(
+                      child: Image.file(
+                        coverImage!,
+                        width: 250.w,
+                        height: 250.h,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : Center(
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
+                        width: 250.w,
+                        height: 250.h,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
                   : const TextSignup(
@@ -586,6 +649,32 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     ),
                     child: RawMaterialButton(
                       onPressed: () {
+                        if (profileImage == null || coverImage == null) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text(
+                                  'No Image Selected',
+                                  style: TextStyle(color: AppColor.red),
+                                ),
+                                content: const Text(
+                                  'Please select an image before uploading.',
+                                  style: TextStyle(color: AppColor.red),
+                                ),
+                                actions: [
+                                  ElevatedButton(
+                                    child: const Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          return;
+                        }
                         final String userType = getUserType();
 
                         if (!widget.formKey!.currentState!.validate()) return;
@@ -597,6 +686,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           firstMobile: widget.numberPhoneOne.text,
                           isFreeZoon: true,
                           profilePhoto: profileImage,
+                          coverPhoto: coverImage,
                           banerPhoto: banerImage,
                         ));
                       },

@@ -29,6 +29,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required String firstMobile,
     required bool isFreeZoon,
     File? profilePhoto,
+    File? coverPhoto,
     File? banerPhoto,
   }) async {
     try {
@@ -39,7 +40,7 @@ class AuthRepositoryImpl implements AuthRepository {
         // SharedPreferences preferences = await SharedPreferences.getInstance();
         // await preferences.setBool('IsLoggedIn', true);
         Dio dio = Dio();
-        if (profilePhoto != null && banerPhoto != null) {
+        if (profilePhoto != null && coverPhoto != null && banerPhoto != null) {
           formData = FormData.fromMap({
             'username': username,
             'email': email,
@@ -48,11 +49,15 @@ class AuthRepositoryImpl implements AuthRepository {
             'firstMobile': firstMobile,
             'isFreeZoon': isFreeZoon,
             'profilePhoto': await MultipartFile.fromFile(profilePhoto.path,
+                filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
+            'coverPhoto': await MultipartFile.fromFile(coverPhoto.path,
                 filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
             'bannerPhoto': await MultipartFile.fromFile(banerPhoto.path,
                 filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
           });
-        } else if (profilePhoto != null && banerPhoto == null) {
+        } else if (profilePhoto != null &&
+            coverPhoto != null &&
+            banerPhoto == null) {
           formData = FormData.fromMap({
             'username': username,
             'email': email,
@@ -61,6 +66,8 @@ class AuthRepositoryImpl implements AuthRepository {
             'firstMobile': firstMobile,
             'isFreeZoon': isFreeZoon,
             'profilePhoto': await MultipartFile.fromFile(profilePhoto.path,
+                filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
+            'coverPhoto': await MultipartFile.fromFile(coverPhoto.path,
                 filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
           });
         } else {
