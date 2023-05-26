@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class BackgroundWidget extends StatelessWidget {
   final Widget widget;
@@ -43,6 +44,17 @@ class BackgroundWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Container(
+                    width: 130.w,
+                    height: 130.h,
+                    padding: const EdgeInsets.only(left: 0, right: 5),
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage("assets/images/logo.png"),
+                      ),
+                    ),
+                  ),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(right: 5.0, bottom: 5.0),
@@ -52,11 +64,12 @@ class BackgroundWidget extends StatelessWidget {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: AppColor.white,
-                          suffixIcon: InkWell(
+                          prefixIcon: InkWell(
                               child: const Icon(Icons.search), onTap: () {}),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30)),
-                          hintText: 'البحث في netzoon.com',
+                          hintText: AppLocalizations.of(context)
+                              .translate("search in netzoon"),
                           // alignLabelWithHint: true,
                           hintStyle: TextStyle(
                             fontSize: 8.sp,
@@ -64,17 +77,6 @@ class BackgroundWidget extends StatelessWidget {
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 0, horizontal: 30),
                         ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 130.w,
-                    height: 130.h,
-                    padding: const EdgeInsets.only(left: 0, right: 5),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage("assets/images/logo.png"),
                       ),
                     ),
                   ),

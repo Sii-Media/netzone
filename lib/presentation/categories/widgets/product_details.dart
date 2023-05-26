@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   const ProductDetailsScreen({super.key, required this.products});
@@ -11,22 +12,19 @@ class ProductDetailsScreen extends StatelessWidget {
   final List<String> products;
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        body: BackgroundWidget(
-          widget: Padding(
-            padding: EdgeInsets.only(bottom: 20.0.h),
-            child: ListView.builder(
-                itemCount: products.length,
-                shrinkWrap: true,
-                physics: const BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Product(
-                    img: products[index],
-                  );
-                }),
-          ),
+    return Scaffold(
+      body: BackgroundWidget(
+        widget: Padding(
+          padding: EdgeInsets.only(bottom: 20.0.h),
+          child: ListView.builder(
+              itemCount: products.length,
+              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Product(
+                  img: products[index],
+                );
+              }),
         ),
       ),
     );
@@ -85,7 +83,7 @@ class Product extends StatelessWidget {
                       ],
                     ),
                     Text(
-                      'السعر : 20000',
+                      '${AppLocalizations.of(context).translate('price')} : 20000',
                       style: TextStyle(
                           color: AppColor.colorOne,
                           fontSize: 17.sp,
@@ -103,7 +101,7 @@ class Product extends StatelessWidget {
           Row(
             children: [
               Text(
-                'تفاصيل المنتج: ',
+                '${AppLocalizations.of(context).translate('Product details')}: ',
                 style: TextStyle(color: Colors.grey[600], fontSize: 16.sp),
               ),
               SizedBox(
@@ -111,7 +109,8 @@ class Product extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  'لا يوجد تفاصيل الان',
+                  AppLocalizations.of(context)
+                      .translate('There are no details now'),
                   style: TextStyle(color: Colors.grey, fontSize: 14.sp),
                 ),
               ),

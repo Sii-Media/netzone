@@ -57,404 +57,399 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
 
   @override
   Widget screen(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        body: BackgroundWidget(
-          widget: Padding(
-              padding: const EdgeInsets.only(
-                top: 4.0,
-                bottom: 20,
-                right: 8.0,
-                left: 8.0,
-              ),
-              child: BlocListener<AddAdsBloc, AddAdsState>(
-                bloc: addAdsbloc,
-                listener: (context, state) {
-                  if (state is AddAdsInProgress) {
-                    startLoading();
-                  } else if (state is AddAdsFailure) {
-                    stopLoading();
+    return Scaffold(
+      body: BackgroundWidget(
+        widget: Padding(
+            padding: const EdgeInsets.only(
+              top: 4.0,
+              bottom: 20,
+              right: 8.0,
+              left: 8.0,
+            ),
+            child: BlocListener<AddAdsBloc, AddAdsState>(
+              bloc: addAdsbloc,
+              listener: (context, state) {
+                if (state is AddAdsInProgress) {
+                  startLoading();
+                } else if (state is AddAdsFailure) {
+                  stopLoading();
 
-                    final failure = state.message;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          failure,
-                          style: const TextStyle(
-                            color: AppColor.white,
-                          ),
+                  final failure = state.message;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        failure,
+                        style: const TextStyle(
+                          color: AppColor.white,
                         ),
-                        backgroundColor: AppColor.red,
                       ),
-                    );
-                  } else if (state is AddAdsSuccess) {
-                    stopLoading();
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: const Text(
-                        'success',
-                      ),
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
-                    ));
-                  }
-                },
-                child: SingleChildScrollView(
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: Text(
-                            'إضافة إعلان',
-                            style: TextStyle(
-                              color: AppColor.backgroundColor,
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        const Divider(
-                          color: AppColor.secondGrey,
-                          thickness: 0.2,
-                          endIndent: 30,
-                          indent: 30,
-                        ),
-                        Text(
-                          'القسم :',
-                          style: TextStyle(
-                            color: AppColor.backgroundColor,
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                        Container(
-                            width: MediaQuery.of(context).size.width,
-                            margin: const EdgeInsets.symmetric(
-                                    horizontal: 2, vertical: 10)
-                                .r,
-                            // Add some padding and a background color
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            decoration: BoxDecoration(
-                                color: Colors.green.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: AppColor.black,
-                                )),
-                            // Create the dropdown button
-                            child: DropdownButton<String>(
-                              // Set the selected value
-                              value: selectedValue,
-                              // Handle the value change
-                              onChanged: (String? newValue) {
-                                setState(() => selectedValue = newValue ?? '');
-                              },
-                              // Map each option to a widget
-                              items: items.map<DropdownMenuItem<String>>(
-                                  (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  // Use a colored box to show the option
-                                  child: Text(
-                                    value,
-                                    style: const TextStyle(color: Colors.black),
-                                  ),
-                                );
-                              }).toList(),
-                            )),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        addAdsFormFeild(
-                          context: context,
-                          controller: titleController,
-                          title: 'العنوان',
-                          isNumber: false,
-                          validator: (val) {
-                            if (val!.isEmpty) {
-                              return 'هذا الحقل مطلوب';
-                            }
-
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        addAdsFormFeild(
-                          context: context,
-                          controller: descController,
-                          title: 'الوصف',
-                          isNumber: false,
-                          maxLines: 3,
-                          validator: (val) {
-                            if (val!.isEmpty) {
-                              return 'هذا الحقل مطلوب';
-                            }
-
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Text(
-                          'تاريخ البدأ :',
-                          style: TextStyle(
-                            color: AppColor.backgroundColor,
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                        DateTimePicker(
-                          initialValue: '',
-                          decoration: InputDecoration(
-                            filled: true,
-                            //<-- SEE HERE
-                            fillColor: Colors.green.withOpacity(0.1),
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 30)
-                                .flipped,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                          ),
-                          type: DateTimePickerType.date,
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
-                          dateLabelText: 'Date',
-                          style: const TextStyle(
-                            color: AppColor.black,
-                          ),
-                          onChanged: (selectedDate) {
-                            setState(() {
-                              _selectedStartDate = selectedDate;
-                            });
-                          },
-                          validator: (value) {
-                            if (value == null) {
-                              return 'Please select a date';
-                            }
-                            return null;
-                          },
-                          // onSaved: (val) => print(val),
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Text(
-                          'تاريخ الانتهاء :',
-                          style: TextStyle(
-                            color: AppColor.backgroundColor,
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                        DateTimePicker(
-                          initialValue: '',
-                          decoration: InputDecoration(
-                            filled: true,
-                            //<-- SEE HERE
-                            fillColor: Colors.green.withOpacity(0.1),
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 30)
-                                .flipped,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                          ),
-                          type: DateTimePickerType.date,
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
-                          dateLabelText: 'Date',
-                          style: const TextStyle(
-                            color: AppColor.black,
-                          ),
-                          onChanged: (selectedDate) {
-                            setState(() {
-                              _selectedEndDate = selectedDate;
-                            });
-                          },
-                          validator: (value) {
-                            if (value == null) {
-                              return 'Please select a date';
-                            }
-                            return null;
-                          },
-                          // onSaved: (val) => print(val),
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        addPhotoButton(
-                            text: 'إضافة صورة من المعرض',
-                            onPressed: () {
-                              getImage(ImageSource.gallery);
-                            }),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        _image != null
-                            ? Center(
-                                child: Image.file(
-                                  _image!,
-                                  width: 250.w,
-                                  height: 250.h,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            : Center(
-                                child: CachedNetworkImage(
-                                  imageUrl:
-                                      'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
-                                  width: 250.w,
-                                  height: 250.h,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        addAdsFormFeild(
-                          context: context,
-                          controller: alphaController,
-                          title: 'CountryAlphaCode',
-                          isNumber: false,
-                          validator: (val) {
-                            if (val!.isEmpty) {
-                              return 'هذا الحقل مطلوب';
-                            }
-
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        addAdsFormFeild(
-                          context: context,
-                          controller: brandController,
-                          title: 'Brand',
-                          isNumber: false,
-                          validator: (val) {
-                            if (val!.isEmpty) {
-                              return 'هذا الحقل مطلوب';
-                            }
-
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        addAdsFormFeild(
-                          context: context,
-                          controller: locController,
-                          title: 'الموقع',
-                          isNumber: false,
-                          validator: (val) {
-                            if (val!.isEmpty) {
-                              return 'هذا الحقل مطلوب';
-                            }
-
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        addAdsFormFeild(
-                          context: context,
-                          controller: priceController,
-                          title: 'السعر',
-                          isNumber: true,
-                          validator: (val) {
-                            if (val!.isEmpty) {
-                              return 'هذا الحقل مطلوب';
-                            }
-
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        addAdsFormFeild(
-                          context: context,
-                          controller: yearController,
-                          title: 'السنة',
-                          isNumber: true,
-                          validator: (val) {
-                            if (val!.isEmpty) {
-                              return 'هذا الحقل مطلوب';
-                            }
-
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Center(
-                          child: addPhotoButton(
-                              text: 'إضافة الخبر',
-                              onPressed: () {
-                                if (!_formKey.currentState!.validate()) return;
-                                if (_image == null) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text(
-                                          'No Image Selected',
-                                          style: TextStyle(color: AppColor.red),
-                                        ),
-                                        content: const Text(
-                                          'Please select an image before uploading.',
-                                          style: TextStyle(color: AppColor.red),
-                                        ),
-                                        actions: [
-                                          ElevatedButton(
-                                            child: const Text('OK'),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                  return;
-                                }
-                                addAdsbloc.add(AddAdsRequestedEvent(
-                                  advertisingTitle: titleController.text,
-                                  advertisingStartDate:
-                                      _selectedStartDate ?? '',
-                                  advertisingEndDate: _selectedEndDate ?? '',
-                                  advertisingDescription: descController.text,
-                                  image: _image!,
-                                  advertisingCountryAlphaCode:
-                                      alphaController.text,
-                                  advertisingBrand: brandController.text,
-                                  advertisingYear: yearController.text,
-                                  advertisingLocation: locController.text,
-                                  advertisingPrice:
-                                      double.tryParse(priceController.text) ??
-                                          0,
-                                  advertisingType: selectedValue,
-                                ));
-                              }),
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                      ],
+                      backgroundColor: AppColor.red,
                     ),
+                  );
+                } else if (state is AddAdsSuccess) {
+                  stopLoading();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: const Text(
+                      'success',
+                    ),
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                  ));
+                }
+              },
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Text(
+                          'إضافة إعلان',
+                          style: TextStyle(
+                            color: AppColor.backgroundColor,
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const Divider(
+                        color: AppColor.secondGrey,
+                        thickness: 0.2,
+                        endIndent: 30,
+                        indent: 30,
+                      ),
+                      Text(
+                        'القسم :',
+                        style: TextStyle(
+                          color: AppColor.backgroundColor,
+                          fontSize: 16.sp,
+                        ),
+                      ),
+                      Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: const EdgeInsets.symmetric(
+                                  horizontal: 2, vertical: 10)
+                              .r,
+                          // Add some padding and a background color
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                              color: Colors.green.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: AppColor.black,
+                              )),
+                          // Create the dropdown button
+                          child: DropdownButton<String>(
+                            // Set the selected value
+                            value: selectedValue,
+                            // Handle the value change
+                            onChanged: (String? newValue) {
+                              setState(() => selectedValue = newValue ?? '');
+                            },
+                            // Map each option to a widget
+                            items: items
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                // Use a colored box to show the option
+                                child: Text(
+                                  value,
+                                  style: const TextStyle(color: Colors.black),
+                                ),
+                              );
+                            }).toList(),
+                          )),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      addAdsFormFeild(
+                        context: context,
+                        controller: titleController,
+                        title: 'العنوان',
+                        isNumber: false,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'هذا الحقل مطلوب';
+                          }
+
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      addAdsFormFeild(
+                        context: context,
+                        controller: descController,
+                        title: 'الوصف',
+                        isNumber: false,
+                        maxLines: 3,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'هذا الحقل مطلوب';
+                          }
+
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Text(
+                        'تاريخ البدأ :',
+                        style: TextStyle(
+                          color: AppColor.backgroundColor,
+                          fontSize: 16.sp,
+                        ),
+                      ),
+                      DateTimePicker(
+                        initialValue: '',
+                        decoration: InputDecoration(
+                          filled: true,
+                          //<-- SEE HERE
+                          fillColor: Colors.green.withOpacity(0.1),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 30)
+                              .flipped,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                        type: DateTimePickerType.date,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                        dateLabelText: 'Date',
+                        style: const TextStyle(
+                          color: AppColor.black,
+                        ),
+                        onChanged: (selectedDate) {
+                          setState(() {
+                            _selectedStartDate = selectedDate;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Please select a date';
+                          }
+                          return null;
+                        },
+                        // onSaved: (val) => print(val),
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Text(
+                        'تاريخ الانتهاء :',
+                        style: TextStyle(
+                          color: AppColor.backgroundColor,
+                          fontSize: 16.sp,
+                        ),
+                      ),
+                      DateTimePicker(
+                        initialValue: '',
+                        decoration: InputDecoration(
+                          filled: true,
+                          //<-- SEE HERE
+                          fillColor: Colors.green.withOpacity(0.1),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 30)
+                              .flipped,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                        type: DateTimePickerType.date,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                        dateLabelText: 'Date',
+                        style: const TextStyle(
+                          color: AppColor.black,
+                        ),
+                        onChanged: (selectedDate) {
+                          setState(() {
+                            _selectedEndDate = selectedDate;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Please select a date';
+                          }
+                          return null;
+                        },
+                        // onSaved: (val) => print(val),
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      addPhotoButton(
+                          text: 'إضافة صورة من المعرض',
+                          onPressed: () {
+                            getImage(ImageSource.gallery);
+                          }),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      _image != null
+                          ? Center(
+                              child: Image.file(
+                                _image!,
+                                width: 250.w,
+                                height: 250.h,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : Center(
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
+                                width: 250.w,
+                                height: 250.h,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      addAdsFormFeild(
+                        context: context,
+                        controller: alphaController,
+                        title: 'CountryAlphaCode',
+                        isNumber: false,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'هذا الحقل مطلوب';
+                          }
+
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      addAdsFormFeild(
+                        context: context,
+                        controller: brandController,
+                        title: 'Brand',
+                        isNumber: false,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'هذا الحقل مطلوب';
+                          }
+
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      addAdsFormFeild(
+                        context: context,
+                        controller: locController,
+                        title: 'الموقع',
+                        isNumber: false,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'هذا الحقل مطلوب';
+                          }
+
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      addAdsFormFeild(
+                        context: context,
+                        controller: priceController,
+                        title: 'السعر',
+                        isNumber: true,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'هذا الحقل مطلوب';
+                          }
+
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      addAdsFormFeild(
+                        context: context,
+                        controller: yearController,
+                        title: 'السنة',
+                        isNumber: true,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'هذا الحقل مطلوب';
+                          }
+
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Center(
+                        child: addPhotoButton(
+                            text: 'إضافة الخبر',
+                            onPressed: () {
+                              if (!_formKey.currentState!.validate()) return;
+                              if (_image == null) {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text(
+                                        'No Image Selected',
+                                        style: TextStyle(color: AppColor.red),
+                                      ),
+                                      content: const Text(
+                                        'Please select an image before uploading.',
+                                        style: TextStyle(color: AppColor.red),
+                                      ),
+                                      actions: [
+                                        ElevatedButton(
+                                          child: const Text('OK'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                                return;
+                              }
+                              addAdsbloc.add(AddAdsRequestedEvent(
+                                advertisingTitle: titleController.text,
+                                advertisingStartDate: _selectedStartDate ?? '',
+                                advertisingEndDate: _selectedEndDate ?? '',
+                                advertisingDescription: descController.text,
+                                image: _image!,
+                                advertisingCountryAlphaCode:
+                                    alphaController.text,
+                                advertisingBrand: brandController.text,
+                                advertisingYear: yearController.text,
+                                advertisingLocation: locController.text,
+                                advertisingPrice:
+                                    double.tryParse(priceController.text) ?? 0,
+                                advertisingType: selectedValue,
+                              ));
+                            }),
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                    ],
                   ),
                 ),
-              )),
-        ),
+              ),
+            )),
       ),
     );
   }

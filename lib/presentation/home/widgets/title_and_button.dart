@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class TitleAndButton extends StatelessWidget {
   final String title;
@@ -35,7 +36,7 @@ class TitleAndButton extends StatelessWidget {
               decoration:
                   BoxDecoration(border: Border.all(color: Colors.blueAccent)),
               child: Text(
-                'عرض الكل',
+                AppLocalizations.of(context).translate('show_all'),
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.blue, fontSize: 13.sp),
               ),

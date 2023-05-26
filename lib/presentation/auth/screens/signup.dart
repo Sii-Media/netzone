@@ -15,6 +15,7 @@ import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/injection_container.dart' as di;
 import 'package:netzoon/presentation/home/test.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key, required this.accountTitle});
@@ -73,8 +74,8 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
         } else if (state is SignUpSuccess) {
           stopLoading();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: const Text(
-              'success',
+            content: Text(
+              AppLocalizations.of(context).translate('success'),
             ),
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ));
@@ -214,19 +215,23 @@ class _SignUpWidgetState extends State<SignUpWidget> {
           color: Colors.grey.withOpacity(0.1),
           child: ListView(
             children: [
-              const TextSignup(text: "البريد الإلكتروني"),
+              TextSignup(text: AppLocalizations.of(context).translate('email')),
               TextFormField(
                 key: widget.emailFormFieldKey,
                 controller: widget.emailSignup,
                 style: const TextStyle(color: Colors.black),
                 validator: (text) {
                   if (text == null || text.isEmpty) {
-                    return 'يجب إدخال الإيميل أو رقم الهاتف';
+                    return AppLocalizations.of(context)
+                        .translate('email_condition');
                   }
 
-                  if (!EmailValidator(errorText: 'الرجاء ادخال ايميل صحيح')
+                  if (!EmailValidator(
+                          errorText: AppLocalizations.of(context)
+                              .translate('email_not_valid'))
                       .isValid(text.toLowerCase())) {
-                    return 'الرجاء ادخال ايميل صحيح';
+                    return AppLocalizations.of(context)
+                        .translate('input_valid_email');
                   }
 
                   return null;
@@ -248,16 +253,19 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   ),
                 ),
               ),
-              const TextSignup(text: "اسم المستخدم"),
+              TextSignup(
+                  text: AppLocalizations.of(context).translate('username')),
               TextFormField(
                 controller: widget.username,
                 style: const TextStyle(color: Colors.black),
                 validator: (val) {
                   if (val!.isEmpty) {
-                    return 'اسم المستخدم مطلوب';
+                    return AppLocalizations.of(context)
+                        .translate('username_required');
                   }
                   if (val.length < 5) {
-                    return 'يجب أن يحتوي اسم المستخدم على 5 أحرف على الأقل';
+                    return AppLocalizations.of(context)
+                        .translate('username_condition');
                   }
                   return null;
                 },
@@ -275,7 +283,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   ),
                 ),
               ),
-              const TextSignup(text: "كلمة المرور"),
+              TextSignup(
+                  text: AppLocalizations.of(context).translate('password')),
               TextFormField(
                 key: widget.passwordFormFieldKey,
                 controller: widget.passwordSignup,
@@ -306,16 +315,20 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 obscureText: showPass,
                 // textInputAction: widget.textInputAction ?? TextInputAction.done,
                 validator: MultiValidator([
-                  RequiredValidator(errorText: 'يجب إدخال كلمة المرور'),
+                  RequiredValidator(
+                      errorText: AppLocalizations.of(context)
+                          .translate('password_required')),
                   MinLengthValidator(8,
-                      errorText:
-                          'يجب أن تحتوي كلمة المرور على 9 أحرف على الأقل'),
+                      errorText: AppLocalizations.of(context)
+                          .translate('password_condition')),
                 ]),
                 onChanged: (text) {
                   widget.passwordFormFieldKey.currentState!.validate();
                 },
               ),
-              const TextSignup(text: "أرقام التواصل"),
+              TextSignup(
+                  text: AppLocalizations.of(context)
+                      .translate('contact_numbers')),
               Row(
                 children: [
                   Expanded(
@@ -324,7 +337,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       isNumber: false,
                       valid: (val) {
                         if (val!.isEmpty) {
-                          return 'مطلوب';
+                          return AppLocalizations.of(context)
+                              .translate('required');
                         }
 
                         return null;
@@ -360,7 +374,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
-                  : const TextSignup(text: "الفئة الفرعية"),
+                  : TextSignup(
+                      text: AppLocalizations.of(context)
+                          .translate('subcategory')),
               widget.accountTitle == 'المستهلك'
                   ? Container()
                   : TextFormSignupWidget(
@@ -375,7 +391,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
-                  : const TextSignup(text: "العنوان و الفروع الاخرى إن وجدت"),
+                  : TextSignup(
+                      text: AppLocalizations.of(context)
+                          .translate('address_and_other_branches')),
               widget.accountTitle == 'المستهلك'
                   ? Container()
                   : TextFormSignupWidget(
@@ -393,8 +411,10 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Expanded(
-                            child: TextSignup(text: "تابع لمنطقة حرة")),
+                        Expanded(
+                            child: TextSignup(
+                                text: AppLocalizations.of(context)
+                                    .translate('affiliated_to_a_free_zone'))),
                         SizedBox(
                           width: 20.w,
                           child: CheckboxListTile(
@@ -410,7 +430,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
-                  : const TextSignup(text: "نسخة من رخصة تجارية"),
+                  : TextSignup(
+                      text: AppLocalizations.of(context)
+                          .translate('copy_of_trade_license')),
               widget.accountTitle == 'المستهلك'
                   ? Container()
                   : Container(
@@ -423,7 +445,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
-                  : const TextSignup(text: "عدد منتجات الشركة"),
+                  : TextSignup(
+                      text: AppLocalizations.of(context)
+                          .translate('number_of_company_products')),
               widget.accountTitle == 'المستهلك'
                   ? Container()
                   : TextFormSignupWidget(
@@ -438,8 +462,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
-                  : const TextSignup(
-                      text: "طريقة البيع (البيع بالتجزئة أو بالجملة)",
+                  : TextSignup(
+                      text:
+                          AppLocalizations.of(context).translate('sell_method'),
                     ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
@@ -455,8 +480,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
-                  : const TextSignup(
-                      text: "أين تبيع (لأي بلد)",
+                  : TextSignup(
+                      text: AppLocalizations.of(context)
+                          .translate('where_to_sell'),
                     ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
@@ -470,8 +496,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       },
                       myController: widget.toCountry,
                     ),
-              const TextSignup(
-                text: "الصورة الشخصية",
+              TextSignup(
+                text: AppLocalizations.of(context).translate('profile_photo'),
               ),
               SizedBox(
                 height: 10.h,
@@ -480,12 +506,14 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   addPhotoButton(
-                      text: 'إضافة صورة من الكاميرا',
+                      text: AppLocalizations.of(context)
+                          .translate('add_from_camera'),
                       onPressed: () {
                         getProfileImage(ImageSource.camera);
                       }),
                   addPhotoButton(
-                      text: 'إضافة صورة من المعرض',
+                      text: AppLocalizations.of(context)
+                          .translate('add_from_gallery'),
                       onPressed: () {
                         getProfileImage(ImageSource.gallery);
                       }),
@@ -512,19 +540,11 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         fit: BoxFit.cover,
                       ),
                     ),
-              // Container(
-              //   height: MediaQuery.of(context).size.height * 0.5,
-              //   decoration: BoxDecoration(
-              //       color: Colors.green.withOpacity(0.1),
-              //       image: const DecorationImage(
-              //           image: AssetImage("assets/images/logo.png"),
-              //           fit: BoxFit.cover)),
-              // ),
               SizedBox(
                 height: 10.h,
               ),
-              const TextSignup(
-                text: "صورة الغلاف",
+              TextSignup(
+                text: AppLocalizations.of(context).translate('cover_photo'),
               ),
               SizedBox(
                 height: 10.h,
@@ -533,12 +553,14 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   addPhotoButton(
-                      text: 'إضافة صورة من الكاميرا',
+                      text: AppLocalizations.of(context)
+                          .translate('add_from_camera'),
                       onPressed: () {
                         getCoverImage(ImageSource.camera);
                       }),
                   addPhotoButton(
-                      text: 'إضافة صورة من المعرض',
+                      text: AppLocalizations.of(context)
+                          .translate('add_from_gallery'),
                       onPressed: () {
                         getCoverImage(ImageSource.gallery);
                       }),
@@ -567,8 +589,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
-                  : const TextSignup(
-                      text: "صورة البانر",
+                  : TextSignup(
+                      text: AppLocalizations.of(context)
+                          .translate('banner_photo'),
                     ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
@@ -581,12 +604,14 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             addPhotoButton(
-                                text: 'إضافة صورة من الكاميرا',
+                                text: AppLocalizations.of(context)
+                                    .translate('add_from_camera'),
                                 onPressed: () {
                                   getBanerImage(ImageSource.camera);
                                 }),
                             addPhotoButton(
-                                text: 'إضافة صورة من المعرض',
+                                text: AppLocalizations.of(context)
+                                    .translate('add_from_gallery'),
                                 onPressed: () {
                                   getBanerImage(ImageSource.gallery);
                                 }),
@@ -615,15 +640,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                               ),
                       ],
                     ),
-
-              // : Container(
-              //     height: MediaQuery.of(context).size.height * 0.5,
-              //     decoration: BoxDecoration(
-              //         color: Colors.green.withOpacity(0.1),
-              //         image: const DecorationImage(
-              //             image: AssetImage("assets/images/logo.png"),
-              //             fit: BoxFit.cover)),
-              //   ),
               SizedBox(
                 height: 10.h,
               ),
@@ -654,17 +670,20 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: const Text(
-                                  'No Image Selected',
-                                  style: TextStyle(color: AppColor.red),
+                                title: Text(
+                                  AppLocalizations.of(context)
+                                      .translate('no_image_selected'),
+                                  style: const TextStyle(color: AppColor.red),
                                 ),
-                                content: const Text(
-                                  'Please select an image before uploading.',
-                                  style: TextStyle(color: AppColor.red),
+                                content: Text(
+                                  AppLocalizations.of(context).translate(
+                                      'please_select_an_image_before_uploading'),
+                                  style: const TextStyle(color: AppColor.red),
                                 ),
                                 actions: [
                                   ElevatedButton(
-                                    child: const Text('OK'),
+                                    child: Text(AppLocalizations.of(context)
+                                        .translate('ok')),
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
@@ -690,9 +709,11 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           banerPhoto: banerImage,
                         ));
                       },
-                      child: const Text(
-                        "إنشاء حساب جديد",
-                        style: TextStyle(color: Colors.white, fontSize: 20.0),
+                      child: Text(
+                        AppLocalizations.of(context)
+                            .translate('create_new_account'),
+                        style: const TextStyle(
+                            color: Colors.white, fontSize: 20.0),
                       ),
                     ),
                   ),

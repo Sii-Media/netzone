@@ -9,3 +9,5 @@ class ServerFailure extends Failure {
 class EmptyCacheFailure extends Failure {}
 
 class CredintialFailure extends Failure {}
+
+class OTPValidFailure extends Failure {}

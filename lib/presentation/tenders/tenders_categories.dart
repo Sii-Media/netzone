@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/tenders/view_all_tenders_screen.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class TendersCategoriesScreen extends StatefulWidget {
   const TendersCategoriesScreen({
@@ -33,12 +34,13 @@ class _TendersCategoriesScreenState extends State<TendersCategoriesScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "فئات المناقصات",
+                    AppLocalizations.of(context).translate('tender_categories'),
                     style: TextStyle(fontSize: 18.sp, color: Colors.black),
                   ),
                 ),
                 tendersCategory(
-                  name: 'من الأقل سعراً',
+                  name: AppLocalizations.of(context)
+                      .translate('from_minimum_price'),
                   sort: 'min',
                   category: widget.category,
                 ),
@@ -46,7 +48,8 @@ class _TendersCategoriesScreenState extends State<TendersCategoriesScreen> {
                   height: 20.h,
                 ),
                 tendersCategory(
-                  name: 'من الأعلى سعراً',
+                  name: AppLocalizations.of(context)
+                      .translate('from_maximum_price'),
                   sort: 'max',
                   category: widget.category,
                 ),

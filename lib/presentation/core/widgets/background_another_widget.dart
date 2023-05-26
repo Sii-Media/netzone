@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class BackgroundAnotherWidget extends StatelessWidget {
   final Widget widget;
@@ -67,7 +68,8 @@ class BackgroundAnotherWidget extends StatelessWidget {
                               child: const Icon(Icons.search), onTap: () {}),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30)),
-                          hintText: 'netzoon.com البحث في ',
+                          hintText: AppLocalizations.of(context)
+                              .translate('search in netzoon'),
                           alignLabelWithHint: true,
                           hintStyle: TextStyle(
                             fontSize: 8.sp,

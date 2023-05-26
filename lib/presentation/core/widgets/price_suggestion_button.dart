@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_dialog.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class PriceSuggestionButton extends StatelessWidget {
   const PriceSuggestionButton({
@@ -24,10 +25,11 @@ class PriceSuggestionButton extends StatelessWidget {
             color: AppColor.backgroundColor,
             width: 2,
           ))),
-      child: const Text(
-        'عرض السعر',
-        style: TextStyle(
+      child: Text(
+        AppLocalizations.of(context).translate('price_sug'),
+        style: const TextStyle(
           color: AppColor.backgroundColor,
+          // fontSize: 10,
         ),
       ),
       onPressed: () {

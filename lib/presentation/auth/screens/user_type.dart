@@ -4,6 +4,7 @@ import 'package:netzoon/presentation/auth/screens/signup.dart';
 import 'package:netzoon/presentation/auth/widgets/background_auth_widget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class UserType extends StatefulWidget {
   const UserType({super.key});
@@ -34,14 +35,14 @@ class _UserTypeState extends State<UserType> {
       topWidget: 240,
       topTitle: 170,
       n: 0.35,
-      title: "إنشاء حساب جديد",
+      title: AppLocalizations.of(context).translate('create_new_account'),
       widget: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "من أنت ",
+              AppLocalizations.of(context).translate('who_are_you'),
               style: TextStyle(fontSize: 25.sp, color: Colors.black),
             ),
             SizedBox(
@@ -55,7 +56,9 @@ class _UserTypeState extends State<UserType> {
                     ),
                     Expanded(
                       child: Text(
-                        selectedValue ?? 'الرجاء اخيار نوع المستخدم',
+                        selectedValue ??
+                            AppLocalizations.of(context)
+                                .translate('choose_user_type'),
                         style: const TextStyle(
                           fontSize: 14,
                           color: AppColor.black,

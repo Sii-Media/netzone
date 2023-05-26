@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:netzoon/domain/auth/entities/otp_login_response.dart';
 import 'package:netzoon/domain/auth/entities/user.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 
@@ -28,4 +29,13 @@ abstract class AuthRepository {
 
   Future<Either<Failure, bool>> getIsFirstTimeLogged();
   Future<Either<Failure, void>> setFirstTimeLogged(bool firstTimeLogged);
+
+  Future<Either<Failure, OtpLoginResponse>> getOtpCode({
+    required String mobileNumber,
+  });
+  Future<Either<Failure, OtpLoginResponse>> verifyOtpCode({
+    required String phone,
+    required String otp,
+    required String hash,
+  });
 }

@@ -7,6 +7,7 @@ import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:dynamic_height_grid_view/dynamic_height_grid_view.dart';
 import 'package:netzoon/presentation/ecommerce/widgets/listsubsectionswidget.dart';
 import 'package:netzoon/presentation/home/blocs/elec_devices/elec_devices_bloc.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class SubSectionsScreen extends StatefulWidget {
   const SubSectionsScreen({
@@ -34,64 +35,61 @@ class _SubSectionsScreenState extends State<SubSectionsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        body: BackgroundWidget(
-            widget: BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
-          bloc: elcDeviceBloc,
-          builder: (context, state) {
-            if (state is ElecDevicesInProgress) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: AppColor.backgroundColor,
+    return Scaffold(
+      body: BackgroundWidget(
+          widget: BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+        bloc: elcDeviceBloc,
+        builder: (context, state) {
+          if (state is ElecDevicesInProgress) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: AppColor.backgroundColor,
+              ),
+            );
+          } else if (state is ElecDevicesFailure) {
+            final failure = state.message;
+            return Center(
+              child: Text(
+                failure,
+                style: const TextStyle(
+                  color: Colors.red,
                 ),
-              );
-            } else if (state is ElecDevicesFailure) {
-              final failure = state.message;
-              return Center(
-                child: Text(
-                  failure,
-                  style: const TextStyle(
-                    color: Colors.red,
-                  ),
-                ),
-              );
-            } else if (state is ElecCategoryProductSuccess) {
-              return state.categoryProducts.isEmpty
-                  ? Center(
-                      child: Text(
-                        'لا يوجد عناصر',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18.sp,
-                        ),
+              ),
+            );
+          } else if (state is ElecCategoryProductSuccess) {
+            return state.categoryProducts.isEmpty
+                ? Center(
+                    child: Text(
+                      AppLocalizations.of(context).translate('no_items'),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18.sp,
                       ),
-                    )
-                  : Container(
+                    ),
+                  )
+                : Container(
+                    height: MediaQuery.of(context).size.height,
+                    padding: const EdgeInsets.all(15),
+                    child: SizedBox(
                       height: MediaQuery.of(context).size.height,
-                      padding: const EdgeInsets.all(15),
-                      child: SizedBox(
-                        height: MediaQuery.of(context).size.height,
-                        child: DynamicHeightGridView(
-                            itemCount: state.categoryProducts.length,
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            builder: (ctx, index) {
-                              return ListSubSectionsWidget(
-                                deviceList: state.categoryProducts[index],
-                              );
+                      child: DynamicHeightGridView(
+                          itemCount: state.categoryProducts.length,
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          builder: (ctx, index) {
+                            return ListSubSectionsWidget(
+                              deviceList: state.categoryProducts[index],
+                            );
 
-                              /// return your widget here.
-                            }),
-                      ),
-                    );
-            }
-            return Container();
-          },
-        )),
-      ),
+                            /// return your widget here.
+                          }),
+                    ),
+                  );
+          }
+          return Container();
+        },
+      )),
     );
   }
 }

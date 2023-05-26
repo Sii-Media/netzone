@@ -8,6 +8,7 @@ import 'package:netzoon/presentation/auth/screens/user_type.dart';
 import 'package:netzoon/presentation/auth/widgets/button_auth_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/profile/screens/profile_screen.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -91,7 +92,8 @@ class _LogInScreenState extends State<LogInScreen> {
                             ButtonAuthWidget(
                               color: AppColor.white,
                               colorText: AppColor.backgroundColor,
-                              text: 'تسجيل الدخول',
+                              text: AppLocalizations.of(context)
+                                  .translate('login'),
                               onPressed: () {
                                 Navigator.of(context)
                                     .push(MaterialPageRoute(builder: (context) {
@@ -103,9 +105,9 @@ class _LogInScreenState extends State<LogInScreen> {
                             SizedBox(
                               height: 7.h,
                             ),
-                            const Text(
-                              "- أو -",
-                              style: TextStyle(color: Colors.white),
+                            Text(
+                              "- ${AppLocalizations.of(context).translate('or')} -",
+                              style: const TextStyle(color: Colors.white),
                             ),
                             SizedBox(
                               height: 7.h,
@@ -113,7 +115,8 @@ class _LogInScreenState extends State<LogInScreen> {
                             ButtonAuthWidget(
                               color: AppColor.backgroundColor.withOpacity(0.5),
                               colorText: AppColor.white,
-                              text: 'إنشاء حساب جديد',
+                              text: AppLocalizations.of(context)
+                                  .translate('create_new_account'),
                               onPressed: () {
                                 Navigator.of(context)
                                     .push(MaterialPageRoute(builder: (context) {
@@ -124,20 +127,6 @@ class _LogInScreenState extends State<LogInScreen> {
                             ),
                           ],
                         )
-                        // : ButtonAuthWidget(
-                        //     color: AppColor.backgroundColor.withOpacity(0.5),
-                        //     colorText: AppColor.white,
-                        //     text: 'تسجيل الخروج',
-                        //     onPressed: () async {
-                        //       final SharedPreferences prefs =
-                        //           await SharedPreferences.getInstance();
-                        //       // await prefs.remove('IsLoggedIn');
-                        //       prefs.setBool('IsLoggedIn', false);
-                        //       setState(() {
-                        //         isLoggedIn = false;
-                        //       });
-                        //     },
-                        //   ),
                       ],
                     ),
                   ),

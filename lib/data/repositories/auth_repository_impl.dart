@@ -5,7 +5,9 @@ import 'package:http_parser/http_parser.dart';
 import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/local/auth/auth_local_data_source.dart';
 import 'package:netzoon/data/datasource/remote/auth/auth_remote_datasource.dart';
+import 'package:netzoon/data/models/auth/otp_login/otp_login_response_model.dart';
 import 'package:netzoon/data/models/auth/user/user_model.dart';
+import 'package:netzoon/domain/auth/entities/otp_login_response.dart';
 import 'package:netzoon/domain/auth/entities/user.dart';
 import 'package:dartz/dartz.dart';
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
@@ -131,5 +133,37 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, void>> setFirstTimeLogged(bool firstTimeLogged) async {
     return right(local.setFirstTimeLogged(firstTimeLogged));
+  }
+
+  @override
+  Future<Either<Failure, OtpLoginResponse>> getOtpCode(
+      {required String mobileNumber}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final data = await authRemoteDataSource.getOtpCode(mobileNumber);
+        return Right(data.toDomain());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(CredintialFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, OtpLoginResponse>> verifyOtpCode(
+      {required String phone,
+      required String otp,
+      required String hash}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final data = await authRemoteDataSource.verifyOtpCode(phone, otp, hash);
+        return Right(data.toDomain());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(OTPValidFailure());
+    }
   }
 }

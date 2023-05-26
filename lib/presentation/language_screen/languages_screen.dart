@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
+import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
 import 'package:netzoon/presentation/language_screen/widgets/buttom_lang_widget.dart';
 
 class LanguagesScreen extends StatelessWidget {
@@ -28,14 +30,14 @@ class LanguagesScreen extends StatelessWidget {
                 ButtonLangWidget(
                     textButton: "Ar",
                     onPressed: () {
-                      // controller.changeLang("ar");
-                      // Get.toNamed(AppRoute.mainScreen);
+                      BlocProvider.of<LanguageBloc>(context)
+                          .add(const ChooseOnetherLang('ar'));
                     }),
                 ButtonLangWidget(
                     textButton: "En",
                     onPressed: () {
-                      // controller.changeLang("en");
-                      // Get.toNamed(AppRoute.mainScreen);
+                      BlocProvider.of<LanguageBloc>(context)
+                          .add(const ChooseOnetherLang('en'));
                     }),
               ],
             )),

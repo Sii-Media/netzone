@@ -7,13 +7,10 @@ class CategoriesMainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        body: BackgroundWidget(
-          widget: const SizedBox(
-            child: ListGridView(),
-          ),
+    return Scaffold(
+      body: BackgroundWidget(
+        widget: const SizedBox(
+          child: ListGridView(),
         ),
       ),
     );

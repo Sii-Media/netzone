@@ -8,6 +8,7 @@ import 'package:netzoon/presentation/data/deals_categories.dart';
 import 'package:netzoon/presentation/data/tenders_categories.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersCategory/tender_cat_bloc.dart';
 import 'package:netzoon/presentation/tenders/categories.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class TenderCategoriesScreen extends StatefulWidget {
   const TenderCategoriesScreen({super.key, required this.title});
@@ -72,7 +73,8 @@ class _TenderCategoriesScreenState extends State<TenderCategoriesScreen> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            widget.title,
+                            AppLocalizations.of(context)
+                                .translate(widget.title),
                             style:
                                 TextStyle(fontSize: 20.sp, color: Colors.black),
                           ),

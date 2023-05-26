@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class ListSubSectionsWidget extends StatelessWidget {
   const ListSubSectionsWidget({super.key, required this.deviceList});
@@ -57,7 +58,7 @@ class ListSubSectionsWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${deviceList.price} درهم',
+                        '${deviceList.price} : ${AppLocalizations.of(context).translate('price')}',
                         style: const TextStyle(
                           color: AppColor.backgroundColor,
                           fontWeight: FontWeight.w700,

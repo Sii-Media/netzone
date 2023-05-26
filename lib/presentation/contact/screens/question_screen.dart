@@ -7,6 +7,7 @@ import 'package:netzoon/presentation/contact/widgets/questionformfield.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class QuestionScreen extends StatefulWidget {
   const QuestionScreen({super.key});
@@ -25,132 +26,132 @@ class _QuestionScreenState extends State<QuestionScreen>
   final questionBloc = sl<AddQuestionBloc>();
   @override
   Widget screen(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: BackgroundWidget(
-        widget: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: BlocListener<AddQuestionBloc, AddQuestionState>(
-              bloc: questionBloc,
-              listener: (context, state) {
-                if (state is AddQuestionInProgress) {
-                  startLoading();
-                } else if (state is AddQuestionFailure) {
-                  stopLoading();
+    return BackgroundWidget(
+      widget: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: BlocListener<AddQuestionBloc, AddQuestionState>(
+            bloc: questionBloc,
+            listener: (context, state) {
+              if (state is AddQuestionInProgress) {
+                startLoading();
+              } else if (state is AddQuestionFailure) {
+                stopLoading();
 
-                  final failure = state.message;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        failure,
-                        style: const TextStyle(
-                          color: AppColor.white,
+                final failure = state.message;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      failure,
+                      style: const TextStyle(
+                        color: AppColor.white,
+                      ),
+                    ),
+                    backgroundColor: AppColor.red,
+                  ),
+                );
+              } else if (state is AddQuestionSuccess) {
+                stopLoading();
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                    AppLocalizations.of(context).translate('success'),
+                  ),
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                ));
+              }
+            },
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.circle,
+                        size: 13.sp,
+                        color: AppColor.backgroundColor,
+                      ),
+                      SizedBox(
+                        width: 5.w,
+                      ),
+                      Text(
+                        AppLocalizations.of(context)
+                            .translate('leave_your_question'),
+                        style: TextStyle(
+                          color: AppColor.backgroundColor,
+                          fontSize: 20.sp,
                         ),
                       ),
-                      backgroundColor: AppColor.red,
-                    ),
-                  );
-                } else if (state is AddQuestionSuccess) {
-                  stopLoading();
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: const Text(
-                      'success',
-                    ),
-                    backgroundColor: Theme.of(context).colorScheme.secondary,
-                  ));
-                }
-              },
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.circle,
-                          size: 13.sp,
-                          color: AppColor.backgroundColor,
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)
+                            .translate('what_is_your_question'),
+                        style: TextStyle(
+                          color: AppColor.black,
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w700,
                         ),
-                        SizedBox(
-                          width: 5.w,
-                        ),
-                        Text(
-                          'اترك سؤالك',
-                          style: TextStyle(
-                            color: AppColor.backgroundColor,
-                            fontSize: 20.sp,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'ما هو سؤالك',
-                          style: TextStyle(
-                            color: AppColor.black,
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        QuestionFormField(
-                          key: _textFormFieldKey,
-                          textController: textController,
-                          hintText: '',
-                          maxLines: 10,
-                          onChanged: (text) {
-                            _textFormFieldKey.currentState?.validate();
-                          },
-                          validator: (val) {
-                            if (val!.isEmpty) {
-                              return 'هذا الحقل مطلوب';
-                            }
+                      ),
+                      QuestionFormField(
+                        key: _textFormFieldKey,
+                        textController: textController,
+                        hintText: '',
+                        maxLines: 10,
+                        onChanged: (text) {
+                          _textFormFieldKey.currentState?.validate();
+                        },
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return AppLocalizations.of(context)
+                                .translate('required');
+                          }
 
-                            return null;
-                          },
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: InkWell(
-                          onTap: () {
-                            if (!_formKey.currentState!.validate()) return;
-                            questionBloc.add(
-                                PostQuestionEvent(text: textController.text));
-                          },
-                          child: Container(
-                            alignment: Alignment.centerRight,
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            height: 40.h,
-                            width: 200.w,
-                            color: AppColor.backgroundColor,
-                            child: Center(
-                              child: Text(
-                                'إرسال',
-                                style: TextStyle(
-                                    fontSize: 15.sp, color: AppColor.white),
-                              ),
+                          return null;
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: InkWell(
+                        onTap: () {
+                          if (!_formKey.currentState!.validate()) return;
+                          questionBloc.add(
+                              PostQuestionEvent(text: textController.text));
+                        },
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          height: 40.h,
+                          width: 200.w,
+                          color: AppColor.backgroundColor,
+                          child: Center(
+                            child: Text(
+                              AppLocalizations.of(context).translate('send'),
+                              style: TextStyle(
+                                  fontSize: 15.sp, color: AppColor.white),
                             ),
                           ),
                         ),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
-            )),
-      ),
+            ),
+          )),
     );
   }
 }

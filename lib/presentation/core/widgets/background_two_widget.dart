@@ -2,6 +2,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class BackgroundTwoWidget extends StatefulWidget {
   final Widget widget;
@@ -63,6 +64,17 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Container(
+                  width: 135.w,
+                  height: 130.h,
+                  padding: const EdgeInsets.only(left: 0, right: 5),
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: AssetImage("assets/images/logo.png"),
+                    ),
+                  ),
+                ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(right: 5.0, bottom: 5.0),
@@ -72,11 +84,12 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: AppColor.white,
-                        suffixIcon: InkWell(
+                        prefixIcon: InkWell(
                             child: const Icon(Icons.search), onTap: () {}),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30)),
-                        hintText: 'البحث في netzoon.com',
+                        hintText: AppLocalizations.of(context)
+                            .translate('search in netzoon'),
                         alignLabelWithHint: true,
                         hintStyle: TextStyle(
                           fontSize: 8.sp,
@@ -84,17 +97,6 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
                         contentPadding: const EdgeInsets.symmetric(
                             vertical: 0, horizontal: 30),
                       ),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 135.w,
-                  height: 130.h,
-                  padding: const EdgeInsets.only(left: 0, right: 5),
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage("assets/images/logo.png"),
                     ),
                   ),
                 ),
@@ -124,7 +126,7 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Text(
                     widget.title,
                     style: TextStyle(fontSize: 22.sp, color: Colors.white),

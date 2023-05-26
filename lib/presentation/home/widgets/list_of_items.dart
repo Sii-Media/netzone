@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/departments/entities/departments_categories/departments_categories.dart';
 import 'package:netzoon/presentation/ecommerce/screens/subsection_screen.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class ListofItems extends StatefulWidget {
   const ListofItems({
@@ -20,8 +21,6 @@ class ListofItems extends StatefulWidget {
 }
 
 class _ListofItemsState extends State<ListofItems> {
-  String backendHost = 'http://10.0.2.2:5000';
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -83,7 +82,8 @@ class _ListofItemsState extends State<ListofItems> {
                               color: const Color(0xFF5776a5).withOpacity(0.8),
                               alignment: Alignment.center,
                               child: Text(
-                                widget.elec[index].name,
+                                AppLocalizations.of(context)
+                                    .translate(widget.elec[index].name),
                                 style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.white,

@@ -6,6 +6,7 @@ import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/vehicle_details.dart';
 import 'package:netzoon/presentation/data/cars.dart';
 import 'package:netzoon/presentation/data/plans.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class VehicleListScreen extends StatelessWidget {
   const VehicleListScreen({super.key, required this.type});
@@ -15,27 +16,24 @@ class VehicleListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final planslist = plans;
     final carList = cars;
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        body: BackgroundWidget(
-          widget: Padding(
-            padding: const EdgeInsets.only(
-              top: 2.0,
-              bottom: 25,
-              left: 3.0,
-              right: 3.0,
-            ),
-            child: ListView.builder(
-              itemCount: type == 'plans' ? planslist.length : carList.length,
-              shrinkWrap: true,
-              physics: const BouncingScrollPhysics(),
-              itemBuilder: (context, index) {
-                return VehicleWidget(
-                  plan: type == 'plans' ? planslist[index] : carList[index],
-                );
-              },
-            ),
+    return Scaffold(
+      body: BackgroundWidget(
+        widget: Padding(
+          padding: const EdgeInsets.only(
+            top: 2.0,
+            bottom: 25,
+            left: 3.0,
+            right: 3.0,
+          ),
+          child: ListView.builder(
+            itemCount: type == 'plans' ? planslist.length : carList.length,
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (context, index) {
+              return VehicleWidget(
+                plan: type == 'plans' ? planslist[index] : carList[index],
+              );
+            },
           ),
         ),
       ),
@@ -96,11 +94,14 @@ class VehicleWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const [
                         Icon(
-                          Icons.share,
+                          Icons.favorite_border,
                           color: AppColor.backgroundColor,
                         ),
+                        SizedBox(
+                          width: 4,
+                        ),
                         Icon(
-                          Icons.favorite_border,
+                          Icons.share,
                           color: AppColor.backgroundColor,
                         ),
                       ],
@@ -133,7 +134,7 @@ class VehicleWidget extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          'كيلومترات :',
+                          '${AppLocalizations.of(context).translate('kilometers')} :',
                           style: TextStyle(
                             color: AppColor.black,
                             fontSize: 14.sp,
@@ -158,7 +159,7 @@ class VehicleWidget extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          'سنة :',
+                          '${AppLocalizations.of(context).translate('year')} :',
                           style: TextStyle(
                             color: AppColor.black,
                             fontSize: 14.sp,

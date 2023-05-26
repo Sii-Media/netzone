@@ -6,6 +6,7 @@ import 'package:netzoon/presentation/categories/widgets/free_zone_video_widget.d
 import 'package:netzoon/presentation/categories/widgets/image_free_zone_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:url_launcher/link.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class CompanyProfile extends StatelessWidget {
   const CompanyProfile({super.key, required this.companyCategory});
@@ -17,173 +18,172 @@ class CompanyProfile extends StatelessWidget {
     final TextEditingController search = TextEditingController();
 
     Size size = MediaQuery.of(context).size;
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        body: SizedBox(
-          height: size.height,
-          child: Stack(
-            children: [
-              Positioned(
-                top: 0,
-                right: 0,
-                left: 0,
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.30,
-                  decoration:
-                      const BoxDecoration(color: AppColor.backgroundColor),
+    return Scaffold(
+      body: SizedBox(
+        height: size.height,
+        child: Stack(
+          children: [
+            Positioned(
+              top: 0,
+              right: 0,
+              left: 0,
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.30,
+                decoration:
+                    const BoxDecoration(color: AppColor.backgroundColor),
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/00.png"),
+                  fit: BoxFit.cover,
                 ),
               ),
-              Container(
-                height: MediaQuery.of(context).size.height,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/00.png"),
-                    fit: BoxFit.cover,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.18,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 135.w,
+                    height: 130.h,
+                    padding: const EdgeInsets.only(left: 0, right: 5),
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage("assets/images/logo.png"),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.18,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 5.0, bottom: 5.0),
-                        child: TextFormField(
-                          style: const TextStyle(color: Colors.black),
-                          controller: search,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: AppColor.white,
-                            suffixIcon: InkWell(
-                                child: const Icon(Icons.search), onTap: () {}),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                            hintText: 'البحث في netzoon.com',
-                            alignLabelWithHint: true,
-                            hintStyle: TextStyle(
-                              fontSize: 8.sp,
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 0, horizontal: 30),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 5.0, bottom: 5.0),
+                      child: TextFormField(
+                        style: const TextStyle(color: Colors.black),
+                        controller: search,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: AppColor.white,
+                          prefixIcon: InkWell(
+                              child: const Icon(Icons.search), onTap: () {}),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30)),
+                          hintText: AppLocalizations.of(context)
+                              .translate('search in netzoon'),
+                          alignLabelWithHint: true,
+                          hintStyle: TextStyle(
+                            fontSize: 8.sp,
                           ),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 30),
                         ),
                       ),
                     ),
-                    Container(
-                      width: 135.w,
-                      height: 130.h,
-                      padding: const EdgeInsets.only(left: 0, right: 5),
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage("assets/images/logo.png"),
-                        ),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              top: 205.h,
+              right: 0,
+              left: 0,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 1, horizontal: 20),
+                height: MediaQuery.of(context).size.height - 191.h,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      countryInfo(context),
+                      SizedBox(
+                        height: 20.h,
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                top: 205.h,
-                right: 0,
-                left: 0,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 1, horizontal: 20),
-                  height: MediaQuery.of(context).size.height - 191.h,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        countryInfo(),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        cityInfo(),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        addressInfo(),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        companyCategory.phone != null
-                            ? phoneInfo()
-                            : Container(),
-                        companyCategory.mobile != null
-                            ? mobileInfo()
-                            : Container(),
-                        emialInfo(),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        companyCategory.info == ''
-                            ? Container()
-                            : freeZoonInfo(),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        companyCategory.link == '' ||
-                                companyCategory.link == null
-                            ? Container()
-                            : servicesInfo(url: companyCategory.link!),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        freeZoonCompanies(context),
-                        SizedBox(
-                          height: 25.h,
-                        ),
-                        companyCategory.companyimages.isEmpty
-                            ? SizedBox(
-                                height: 20.h,
-                              )
-                            : ImageFreeZoneWidget(
-                                companyimages: companyCategory.companyimages,
-                              ),
-                        SizedBox(
-                          height: 25.h,
-                        ),
-                        VideoFreeZoneWidget(
-                          title: "فيديو المنطقة الحرة : ",
-                          vediourl: companyCategory.videourl!,
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                      ],
-                    ),
+                      cityInfo(context),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      addressInfo(context),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      companyCategory.phone != null
+                          ? phoneInfo(context)
+                          : Container(),
+                      companyCategory.mobile != null
+                          ? mobileInfo(context)
+                          : Container(),
+                      emialInfo(context),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      companyCategory.info == ''
+                          ? Container()
+                          : freeZoonInfo(context),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      companyCategory.link == '' || companyCategory.link == null
+                          ? Container()
+                          : servicesInfo(
+                              url: companyCategory.link!, context: context),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      freeZoonCompanies(context),
+                      SizedBox(
+                        height: 25.h,
+                      ),
+                      companyCategory.companyimages.isEmpty
+                          ? SizedBox(
+                              height: 20.h,
+                            )
+                          : ImageFreeZoneWidget(
+                              companyimages: companyCategory.companyimages,
+                            ),
+                      SizedBox(
+                        height: 25.h,
+                      ),
+                      VideoFreeZoneWidget(
+                        title:
+                            "${AppLocalizations.of(context).translate('freezoon_vedio')} : ",
+                        vediourl: companyCategory.videourl!,
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                    ],
                   ),
                 ),
               ),
-              Positioned(
-                left: 0,
-                right: 0,
-                top: 150.h,
-                child: Center(
-                  child: Text(
-                    companyCategory.name,
-                    style: TextStyle(fontSize: 20.sp, color: Colors.white),
-                  ),
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              top: 150.h,
+              child: Center(
+                child: Text(
+                  AppLocalizations.of(context).translate(companyCategory.name),
+                  style: TextStyle(fontSize: 20.sp, color: Colors.white),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Column phoneInfo() {
+  Column phoneInfo(context) {
     return Column(
       children: [
         Row(
           children: [
             Text(
-              'الهاتف :',
+              '${AppLocalizations.of(context).translate('phone')} :',
               style: TextStyle(
                 color: AppColor.black,
                 fontSize: 15.sp,
@@ -208,13 +208,13 @@ class CompanyProfile extends StatelessWidget {
     );
   }
 
-  Column mobileInfo() {
+  Column mobileInfo(context) {
     return Column(
       children: [
         Row(
           children: [
             Text(
-              'موبايل :',
+              '${AppLocalizations.of(context).translate('mobile')} :',
               style: TextStyle(
                 color: AppColor.black,
                 fontSize: 15.sp,
@@ -239,11 +239,11 @@ class CompanyProfile extends StatelessWidget {
     );
   }
 
-  Row countryInfo() {
+  Row countryInfo(context) {
     return Row(
       children: [
         Text(
-          'اسم المنطقة الحرة :',
+          '${AppLocalizations.of(context).translate('freezone_name')} :',
           style: TextStyle(
             color: AppColor.black,
             fontSize: 15.sp,
@@ -263,11 +263,11 @@ class CompanyProfile extends StatelessWidget {
     );
   }
 
-  Row cityInfo() {
+  Row cityInfo(context) {
     return Row(
       children: [
         Text(
-          'المنطقة أو الإمارة :',
+          '${AppLocalizations.of(context).translate('region_or_emirate')} :',
           style: TextStyle(
             color: AppColor.black,
             fontSize: 15.sp,
@@ -287,12 +287,12 @@ class CompanyProfile extends StatelessWidget {
     );
   }
 
-  Row addressInfo() {
+  Row addressInfo(context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'العنوان :',
+          '${AppLocalizations.of(context).translate('address')} :',
           style: TextStyle(
             color: AppColor.black,
             fontSize: 15.sp,
@@ -314,11 +314,11 @@ class CompanyProfile extends StatelessWidget {
     );
   }
 
-  Row emialInfo() {
+  Row emialInfo(context) {
     return Row(
       children: [
         Text(
-          'البريد الإلكتروني: ',
+          '${AppLocalizations.of(context).translate('email')}: ',
           style: TextStyle(
             color: AppColor.black,
             fontSize: 15.sp,
@@ -361,7 +361,7 @@ class CompanyProfile extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'الشركات',
+                AppLocalizations.of(context).translate('companies'),
                 style: TextStyle(
                   color: AppColor.black,
                   fontSize: 15.sp,
@@ -409,12 +409,12 @@ class CompanyProfile extends StatelessWidget {
     );
   }
 
-  Column freeZoonInfo() {
+  Column freeZoonInfo(context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'تفاصيل المنطقة الحرة :',
+          '${AppLocalizations.of(context).translate('freezone_details')} :',
           style: TextStyle(
             color: AppColor.black,
             fontSize: 15.sp,
@@ -434,11 +434,11 @@ class CompanyProfile extends StatelessWidget {
     );
   }
 
-  Row servicesInfo({required String url}) {
+  Row servicesInfo({required String url, context}) {
     return Row(
       children: [
         Text(
-          'الخدمات :',
+          '${AppLocalizations.of(context).translate('services')} :',
           style: TextStyle(
             color: AppColor.black,
             fontSize: 15.sp,
@@ -454,7 +454,7 @@ class CompanyProfile extends StatelessWidget {
           builder: ((context, followLink) => GestureDetector(
                 onTap: followLink,
                 child: Text(
-                  'اضغط هنا',
+                  AppLocalizations.of(context).translate('click_here'),
                   style: TextStyle(
                     color: AppColor.backgroundColor,
                     fontSize: 15.sp,

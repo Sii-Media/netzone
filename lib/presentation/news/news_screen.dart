@@ -11,6 +11,7 @@ import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
 import 'package:netzoon/presentation/news/news_details.dart';
 import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
 import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({
@@ -266,18 +267,18 @@ class AllNewsWidget extends StatelessWidget {
                   SizedBox(
                     height: 5.h,
                   ),
-                  const Text(
-                    'لا يوجد تعليقات على هذا الخبر ..',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context).translate('no_comments'),
+                    style: const TextStyle(
                       color: AppColor.secondGrey,
                     ),
                   ),
                   SizedBox(
                     height: 5.h,
                   ),
-                  const Text(
-                    '12/04/2023',
-                    style: TextStyle(
+                  Text(
+                    convertDateToString(news[index].createdAt ?? ''),
+                    style: const TextStyle(
                       color: Colors.grey,
                     ),
                   ),

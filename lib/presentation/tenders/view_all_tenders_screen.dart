@@ -8,6 +8,7 @@ import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersItem/tenders_item_bloc.dart';
 import 'package:netzoon/presentation/tenders/tender_info_screen.dart';
 import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class ViewAllTendersScreen extends StatefulWidget {
   const ViewAllTendersScreen({
@@ -164,7 +165,7 @@ class _ViewAllTendersScreenState extends State<ViewAllTendersScreen> {
                                                                   height: 8.0.h,
                                                                 ),
                                                                 Text(
-                                                                  'اسم الشركة: ${state.tenderItems[index].companyName}',
+                                                                  '${AppLocalizations.of(context).translate('company_name')} : ${state.tenderItems[index].companyName}',
                                                                   style:
                                                                       TextStyle(
                                                                     color: Colors
@@ -180,7 +181,7 @@ class _ViewAllTendersScreenState extends State<ViewAllTendersScreen> {
                                                                   height: 4.0.h,
                                                                 ),
                                                                 Text(
-                                                                  'السعر يبدأ من ${state.tenderItems[index].price}',
+                                                                  '${AppLocalizations.of(context).translate('start_price')}: ${state.tenderItems[index].price}',
                                                                   style:
                                                                       TextStyle(
                                                                     color: AppColor
@@ -193,7 +194,7 @@ class _ViewAllTendersScreenState extends State<ViewAllTendersScreen> {
                                                                   height: 8.0.h,
                                                                 ),
                                                                 Text(
-                                                                  'تاريخ البدأ : ${convertDateToString(state.tenderItems[index].startDate)}',
+                                                                  '${AppLocalizations.of(context).translate('start_date')}: ${convertDateToString(state.tenderItems[index].startDate)}',
                                                                   style: TextStyle(
                                                                       color: Colors
                                                                           .orange,
@@ -204,7 +205,7 @@ class _ViewAllTendersScreenState extends State<ViewAllTendersScreen> {
                                                                   height: 4.h,
                                                                 ),
                                                                 Text(
-                                                                  'تاريخ الانتهاء : ${convertDateToString(state.tenderItems[index].endDate)}',
+                                                                  '${AppLocalizations.of(context).translate('end_date')}: ${convertDateToString(state.tenderItems[index].endDate)}',
                                                                   style: TextStyle(
                                                                       color: Colors
                                                                           .orange,
@@ -268,9 +269,12 @@ class _ViewAllTendersScreenState extends State<ViewAllTendersScreen> {
                                                                       const TextStyle(
                                                                           fontSize:
                                                                               15)),
-                                                          child: const Text(
-                                                            'بدء المناقصة',
-                                                            style: TextStyle(
+                                                          child: Text(
+                                                            AppLocalizations.of(
+                                                                    context)
+                                                                .translate(
+                                                                    'start_tender'),
+                                                            style: const TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold),
@@ -290,7 +294,7 @@ class _ViewAllTendersScreenState extends State<ViewAllTendersScreen> {
                         )
                       : Center(
                           child: Text(
-                            'لا يوجد بيانات الان...',
+                            AppLocalizations.of(context).translate('no_items'),
                             style: TextStyle(
                               color: AppColor.backgroundColor,
                               fontSize: 25.sp,

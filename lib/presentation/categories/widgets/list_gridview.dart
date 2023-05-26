@@ -8,6 +8,7 @@ import 'package:netzoon/presentation/categories/plans/plans_categories_screen.da
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/vehicle_list_screen.dart';
 import 'package:netzoon/presentation/data/categories.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class ListGridView extends StatelessWidget {
   const ListGridView({Key? key}) : super(key: key);
@@ -24,9 +25,9 @@ class ListGridView extends StatelessWidget {
             // height: 70.sp,
             child: Row(
               children: [
-                const Text(
-                  "الفئات",
-                  style: TextStyle(fontSize: 25, color: Colors.black),
+                Text(
+                  AppLocalizations.of(context).translate('category'),
+                  style: const TextStyle(fontSize: 25, color: Colors.black),
                 ),
                 SizedBox(
                   width: 10.w,
@@ -83,7 +84,7 @@ class GridCategory extends StatelessWidget {
       borderRadius: BorderRadius.circular(10.0),
       child: InkWell(
         onTap: () {
-          if (category.name == 'الشركات المحلية') {
+          if (category.name == 'local_companies') {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
@@ -91,7 +92,7 @@ class GridCategory extends StatelessWidget {
                 },
               ),
             );
-          } else if (category.name == 'شركات المناطق الحرة') {
+          } else if (category.name == 'free_zone_companies') {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
@@ -101,7 +102,7 @@ class GridCategory extends StatelessWidget {
                 },
               ),
             );
-          } else if (category.name == 'الجمارك') {
+          } else if (category.name == 'customs') {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
@@ -111,7 +112,7 @@ class GridCategory extends StatelessWidget {
                 },
               ),
             );
-          } else if (category.name == 'مؤسسات حكومية') {
+          } else if (category.name == 'government_institutions') {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
@@ -121,7 +122,7 @@ class GridCategory extends StatelessWidget {
                 },
               ),
             );
-          } else if (category.name == 'المصانع') {
+          } else if (category.name == 'factories') {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
@@ -129,7 +130,7 @@ class GridCategory extends StatelessWidget {
                 },
               ),
             );
-          } else if (category.name == 'طائرات مدنية') {
+          } else if (category.name == 'civil_aircraft') {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
@@ -137,7 +138,7 @@ class GridCategory extends StatelessWidget {
                 },
               ),
             );
-          } else if (category.name == 'سيارات') {
+          } else if (category.name == 'cars') {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
@@ -171,7 +172,7 @@ class GridCategory extends StatelessWidget {
               color: AppColor.backgroundColor.withOpacity(0.8),
               alignment: Alignment.center,
               child: Text(
-                category.name,
+                AppLocalizations.of(context).translate(category.name),
                 style: TextStyle(fontSize: 15.sp, color: AppColor.white),
               ),
             )

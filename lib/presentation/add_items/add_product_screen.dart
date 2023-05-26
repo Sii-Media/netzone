@@ -11,6 +11,7 @@ import 'package:netzoon/presentation/add_items/blocs/bloc/add_product_bloc.dart'
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/home/blocs/elec_devices/elec_devices_bloc.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
@@ -83,419 +84,430 @@ class _AddProductScreenState extends State<AddProductScreen>
 
   @override
   Widget screen(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        body: RefreshIndicator(
-          onRefresh: () async {
-            catBloc.add(const GetElcDevicesEvent(department: 'الكترونيات'));
-          },
-          color: AppColor.white,
-          backgroundColor: AppColor.backgroundColor,
-          child: Padding(
-              padding: const EdgeInsets.only(
-                  top: 4.0, bottom: 20, right: 8.0, left: 8.0),
-              child: BlocListener<AddProductBloc, AddProductState>(
-                  bloc: addBloc,
-                  listener: (context, state) {
-                    if (state is AddProductInProgress) {
-                      startLoading();
-                    } else if (state is AddProductFailure) {
-                      stopLoading();
+    return Scaffold(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          catBloc.add(const GetElcDevicesEvent(department: 'الكترونيات'));
+        },
+        color: AppColor.white,
+        backgroundColor: AppColor.backgroundColor,
+        child: Padding(
+            padding: const EdgeInsets.only(
+                top: 4.0, bottom: 20, right: 8.0, left: 8.0),
+            child: BlocListener<AddProductBloc, AddProductState>(
+                bloc: addBloc,
+                listener: (context, state) {
+                  if (state is AddProductInProgress) {
+                    startLoading();
+                  } else if (state is AddProductFailure) {
+                    stopLoading();
 
-                      final failure = state.message;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            failure,
-                            style: const TextStyle(
-                              color: AppColor.white,
-                            ),
+                    final failure = state.message;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          failure,
+                          style: const TextStyle(
+                            color: AppColor.white,
                           ),
-                          backgroundColor: AppColor.red,
+                        ),
+                        backgroundColor: AppColor.red,
+                      ),
+                    );
+                  } else if (state is AddProductSuccess) {
+                    stopLoading();
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        AppLocalizations.of(context).translate('success'),
+                      ),
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                    ));
+                  }
+                },
+                child: BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                  bloc: catBloc,
+                  builder: (context, state) {
+                    if (state is ElecDevicesInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
                         ),
                       );
-                    } else if (state is AddProductSuccess) {
-                      stopLoading();
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: const Text(
-                          'success',
+                    } else if (state is ElecDevicesFailure) {
+                      final failure = state.message;
+                      return Center(
+                        child: Text(
+                          failure,
+                          style: const TextStyle(
+                            color: Colors.red,
+                          ),
                         ),
-                        backgroundColor:
-                            Theme.of(context).colorScheme.secondary,
-                      ));
-                    }
-                  },
-                  child: BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
-                    bloc: catBloc,
-                    builder: (context, state) {
-                      if (state is ElecDevicesInProgress) {
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            color: AppColor.backgroundColor,
-                          ),
-                        );
-                      } else if (state is ElecDevicesFailure) {
-                        final failure = state.message;
-                        return Center(
-                          child: Text(
-                            failure,
-                            style: const TextStyle(
-                              color: Colors.red,
-                            ),
-                          ),
-                        );
-                      } else if (state is ElecDevicesSuccess) {
-                        for (var item in state.elecDevices) {
-                          item2.add(item.name);
-                        }
-                        return SingleChildScrollView(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Center(
-                                child: Text(
-                                  'إضافة منتج',
-                                  style: TextStyle(
-                                    color: AppColor.backgroundColor,
-                                    fontSize: 20.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              const Divider(
-                                color: AppColor.secondGrey,
-                                thickness: 0.2,
-                                endIndent: 30,
-                                indent: 30,
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'القسم',
-                                    style: TextStyle(
-                                      color: AppColor.backgroundColor,
-                                      fontSize: 15.sp,
-                                    ),
-                                  ),
-                                  Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      margin: const EdgeInsets.symmetric(
-                                              horizontal: 2, vertical: 10)
-                                          .r,
-                                      // Add some padding and a background color
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 5),
-                                      decoration: BoxDecoration(
-                                          color: Colors.green.withOpacity(0.1),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                            color: AppColor.black,
-                                          )),
-                                      // Create the dropdown button
-                                      child: DropdownButton<String>(
-                                        // Set the selected value
-                                        value: selectedValue,
-                                        // Handle the value change
-                                        onChanged: (String? newValue) {
-                                          setState(() =>
-                                              selectedValue = newValue ?? '');
-                                          catBloc.add(GetElcDevicesEvent(
-                                              department: selectedValue));
-                                        },
-                                        // Map each option to a widget
-                                        items: items
-                                            .map<DropdownMenuItem<String>>(
-                                                (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            // Use a colored box to show the option
-                                            child: Text(
-                                              value,
-                                              style: const TextStyle(
-                                                  color: Colors.black),
-                                            ),
-                                          );
-                                        }).toList(),
-                                      )),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'الفئة',
-                                    style: TextStyle(
-                                      color: AppColor.backgroundColor,
-                                      fontSize: 15.sp,
-                                    ),
-                                  ),
-                                  Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      margin: const EdgeInsets.symmetric(
-                                              horizontal: 2, vertical: 10)
-                                          .r,
-                                      // Add some padding and a background color
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 5),
-                                      decoration: BoxDecoration(
-                                          color: Colors.green.withOpacity(0.1),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                            color: AppColor.black,
-                                          )),
-                                      // Create the dropdown button
-                                      child:
-                                          DropdownButton<DepartmentsCategories>(
-                                        // Set the selected value
-                                        value: selectCat,
-                                        // // Handle the value change
-                                        onChanged:
-                                            (DepartmentsCategories? newValue) {
-                                          setState(() {
-                                            selectCat = newValue!;
-                                          });
-                                        },
-                                        // onChanged: (String? newValue) => setState(
-                                        //     () => selectedValue = newValue ?? ''),
-                                        // Map each option to a widget
-                                        items: state.elecDevices.map<
-                                                DropdownMenuItem<
-                                                    DepartmentsCategories>>(
-                                            (DepartmentsCategories value) {
-                                          return DropdownMenuItem<
-                                              DepartmentsCategories>(
-                                            value: value,
-                                            // Use a colored box to show the option
-                                            child: Text(
-                                              value.name,
-                                              style: const TextStyle(
-                                                  color: Colors.black),
-                                            ),
-                                          );
-                                        }).toList(),
-                                      )),
-                                ],
-                              ),
-                              // addProductTextField(
-                              //   context: context,
-                              //   controller: categoryName,
-                              //   title: 'الفئة :',
-                              //   isNumber: false,
-                              // ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              addProductTextField(
-                                context: context,
-                                controller: productName,
-                                title: 'اسم المنتج :',
-                                isNumber: false,
-                              ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              addProductTextField(
-                                context: context,
-                                controller: productDesc,
-                                title: 'الوصف :',
-                                isNumber: false,
-                                maxLine: 3,
-                              ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              addProductTextField(
-                                context: context,
-                                controller: productPrice,
-                                title: 'السعر :',
-                                isNumber: true,
-                              ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              addProductTextField(
-                                context: context,
-                                title: 'العنوان :',
-                                controller: productAddress,
-                                isNumber: false,
-                              ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              addProductTextField(
-                                context: context,
-                                title: 'رقم الهاتف :',
-                                controller: mobileController,
-                                isNumber: false,
-                              ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              addProductTextField(
-                                context: context,
-                                title: 'الخصائص :',
-                                controller: productProps,
-                                isNumber: false,
-                                maxLine: 2,
-                              ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              addProductTextField(
-                                context: context,
-                                title: 'بلد الصنع :',
-                                controller: madeInController,
-                                isNumber: false,
-                              ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              Text(
-                                'إضافة صورة للمنتح',
+                      );
+                    } else if (state is ElecDevicesSuccess) {
+                      for (var item in state.elecDevices) {
+                        item2.add(item.name);
+                      }
+                      return SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: Text(
+                                AppLocalizations.of(context)
+                                    .translate('add_product'),
                                 style: TextStyle(
                                   color: AppColor.backgroundColor,
-                                  fontSize: 15.sp,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  addPhotoButton(
-                                      text: 'إضافة صورة من الكاميرا',
-                                      onPressed: () {
-                                        getImage(ImageSource.camera);
-                                      }),
-                                  addPhotoButton(
-                                      text: 'إضافة صورة من المعرض',
-                                      onPressed: () {
-                                        getImage(ImageSource.gallery);
-                                      }),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              _image != null
-                                  ? Center(
-                                      child: Image.file(
-                                        _image!,
-                                        width: 250.w,
-                                        height: 250.h,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
-                                  : Center(
-                                      child: CachedNetworkImage(
-                                        imageUrl:
-                                            'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
-                                        width: 250.w,
-                                        height: 250.h,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              addPhotoButton(
-                                  text: 'إضافة GIF للمنتج',
-                                  onPressed: () {
-                                    getGif(ImageSource.gallery);
-                                  }),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              _gif != null
-                                  ? Center(
-                                      child: Image.file(
-                                        _gif!,
-                                        width: 250.w,
-                                        height: 250.h,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
-                                  : Center(
-                                      child: CachedNetworkImage(
-                                        imageUrl:
-                                            'https://www.shutterstock.com/image-vector/gif-circle-icon-vector-260nw-1169098342.jpg',
-                                        width: 250.w,
-                                        height: 250.h,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              Center(
-                                child: addPhotoButton(
-                                    text: 'إضافة المنتج',
-                                    onPressed: () {
-                                      if (_image == null) {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text(
-                                                'No Image Selected',
-                                                style: TextStyle(
-                                                    color: AppColor.red),
-                                              ),
-                                              content: const Text(
-                                                'Please select an image before uploading.',
-                                                style: TextStyle(
-                                                    color: AppColor.red),
-                                              ),
-                                              actions: [
-                                                ElevatedButton(
-                                                  child: const Text('OK'),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                              ],
-                                            );
-                                          },
+                            ),
+                            const Divider(
+                              color: AppColor.secondGrey,
+                              thickness: 0.2,
+                              endIndent: 30,
+                              indent: 30,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)
+                                      .translate('department'),
+                                  style: TextStyle(
+                                    color: AppColor.backgroundColor,
+                                    fontSize: 15.sp,
+                                  ),
+                                ),
+                                Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    margin: const EdgeInsets.symmetric(
+                                            horizontal: 2, vertical: 10)
+                                        .r,
+                                    // Add some padding and a background color
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    decoration: BoxDecoration(
+                                        color: Colors.green.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          color: AppColor.black,
+                                        )),
+                                    // Create the dropdown button
+                                    child: DropdownButton<String>(
+                                      // Set the selected value
+                                      value: selectedValue,
+                                      // Handle the value change
+                                      onChanged: (String? newValue) {
+                                        setState(() =>
+                                            selectedValue = newValue ?? '');
+                                        catBloc.add(GetElcDevicesEvent(
+                                            department: selectedValue));
+                                      },
+                                      // Map each option to a widget
+                                      items: items
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          // Use a colored box to show the option
+                                          child: Text(
+                                            AppLocalizations.of(context)
+                                                .translate(value),
+                                            style: const TextStyle(
+                                                color: Colors.black),
+                                          ),
                                         );
-                                        return;
-                                      }
-                                      addBloc.add(AddProductRequestedEvent(
-                                          departmentName: selectedValue,
-                                          categoryName: selectCat?.name ?? '',
-                                          name: productName.text,
-                                          description: productDesc.text,
-                                          price: int.parse(productPrice.text),
-                                          guarantee: '',
-                                          // images: [],
-                                          madeIn: madeInController.text,
-                                          property: productProps.text,
-                                          videoUrl: '',
-                                          image: _image!));
+                                      }).toList(),
+                                    )),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 7.h,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)
+                                      .translate('categ'),
+                                  style: TextStyle(
+                                    color: AppColor.backgroundColor,
+                                    fontSize: 15.sp,
+                                  ),
+                                ),
+                                Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    margin: const EdgeInsets.symmetric(
+                                            horizontal: 2, vertical: 10)
+                                        .r,
+                                    // Add some padding and a background color
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    decoration: BoxDecoration(
+                                        color: Colors.green.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          color: AppColor.black,
+                                        )),
+                                    // Create the dropdown button
+                                    child:
+                                        DropdownButton<DepartmentsCategories>(
+                                      // Set the selected value
+                                      value: selectCat,
+                                      // // Handle the value change
+                                      onChanged:
+                                          (DepartmentsCategories? newValue) {
+                                        setState(() {
+                                          selectCat = newValue!;
+                                        });
+                                      },
+                                      // onChanged: (String? newValue) => setState(
+                                      //     () => selectedValue = newValue ?? ''),
+                                      // Map each option to a widget
+                                      items: state.elecDevices.map<
+                                              DropdownMenuItem<
+                                                  DepartmentsCategories>>(
+                                          (DepartmentsCategories value) {
+                                        return DropdownMenuItem<
+                                            DepartmentsCategories>(
+                                          value: value,
+                                          // Use a colored box to show the option
+                                          child: Text(
+                                            AppLocalizations.of(context)
+                                                .translate(value.name),
+                                            style: const TextStyle(
+                                                color: Colors.black),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    )),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 7.h,
+                            ),
+                            addProductTextField(
+                              context: context,
+                              controller: productName,
+                              title:
+                                  '${AppLocalizations.of(context).translate('product_name')} :',
+                              isNumber: false,
+                            ),
+                            SizedBox(
+                              height: 7.h,
+                            ),
+                            addProductTextField(
+                              context: context,
+                              controller: productDesc,
+                              title:
+                                  '${AppLocalizations.of(context).translate('description')} :',
+                              isNumber: false,
+                              maxLine: 3,
+                            ),
+                            SizedBox(
+                              height: 7.h,
+                            ),
+                            addProductTextField(
+                              context: context,
+                              controller: productPrice,
+                              title:
+                                  '${AppLocalizations.of(context).translate('price')} :',
+                              isNumber: true,
+                            ),
+                            SizedBox(
+                              height: 7.h,
+                            ),
+                            addProductTextField(
+                              context: context,
+                              title:
+                                  '${AppLocalizations.of(context).translate('address')} :',
+                              controller: productAddress,
+                              isNumber: false,
+                            ),
+                            SizedBox(
+                              height: 7.h,
+                            ),
+                            addProductTextField(
+                              context: context,
+                              title:
+                                  '${AppLocalizations.of(context).translate('phone')} :',
+                              controller: mobileController,
+                              isNumber: false,
+                            ),
+                            SizedBox(
+                              height: 7.h,
+                            ),
+                            addProductTextField(
+                              context: context,
+                              title:
+                                  '${AppLocalizations.of(context).translate('props')} :',
+                              controller: productProps,
+                              isNumber: false,
+                              maxLine: 2,
+                            ),
+                            SizedBox(
+                              height: 7.h,
+                            ),
+                            addProductTextField(
+                              context: context,
+                              title:
+                                  '${AppLocalizations.of(context).translate('made_in')} :',
+                              controller: madeInController,
+                              isNumber: false,
+                            ),
+                            SizedBox(
+                              height: 7.h,
+                            ),
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('add_product_photo'),
+                              style: TextStyle(
+                                color: AppColor.backgroundColor,
+                                fontSize: 15.sp,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 7.h,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                addPhotoButton(
+                                    text: AppLocalizations.of(context)
+                                        .translate('add_from_camera'),
+                                    onPressed: () {
+                                      getImage(ImageSource.camera);
                                     }),
-                              ),
-                              SizedBox(
-                                height: 15.h,
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                      return Container();
-                    },
-                  ))),
-        ),
+                                addPhotoButton(
+                                    text: AppLocalizations.of(context)
+                                        .translate('add_from_gallery'),
+                                    onPressed: () {
+                                      getImage(ImageSource.gallery);
+                                    }),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            _image != null
+                                ? Center(
+                                    child: Image.file(
+                                      _image!,
+                                      width: 250.w,
+                                      height: 250.h,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : Center(
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
+                                      width: 250.w,
+                                      height: 250.h,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            addPhotoButton(
+                                text: AppLocalizations.of(context)
+                                    .translate('add_gif'),
+                                onPressed: () {
+                                  getGif(ImageSource.gallery);
+                                }),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            _gif != null
+                                ? Center(
+                                    child: Image.file(
+                                      _gif!,
+                                      width: 250.w,
+                                      height: 250.h,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : Center(
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          'https://www.shutterstock.com/image-vector/gif-circle-icon-vector-260nw-1169098342.jpg',
+                                      width: 250.w,
+                                      height: 250.h,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Center(
+                              child: addPhotoButton(
+                                  text: AppLocalizations.of(context)
+                                      .translate('add_the_product'),
+                                  onPressed: () {
+                                    if (_image == null) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text(
+                                              AppLocalizations.of(context)
+                                                  .translate(
+                                                      'no_image_selected'),
+                                              style: const TextStyle(
+                                                  color: AppColor.red),
+                                            ),
+                                            content: Text(
+                                              AppLocalizations.of(context)
+                                                  .translate(
+                                                      'please_select_an_image_before_uploading'),
+                                              style: const TextStyle(
+                                                  color: AppColor.red),
+                                            ),
+                                            actions: [
+                                              ElevatedButton(
+                                                child: Text(
+                                                  AppLocalizations.of(context)
+                                                      .translate('ok'),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                      return;
+                                    }
+                                    addBloc.add(AddProductRequestedEvent(
+                                        departmentName: selectedValue,
+                                        categoryName: selectCat?.name ?? '',
+                                        name: productName.text,
+                                        description: productDesc.text,
+                                        price: int.parse(productPrice.text),
+                                        guarantee: '',
+                                        // images: [],
+                                        madeIn: madeInController.text,
+                                        property: productProps.text,
+                                        videoUrl: '',
+                                        image: _image!));
+                                  }),
+                            ),
+                            SizedBox(
+                              height: 15.h,
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ))),
       ),
     );
   }

@@ -28,38 +28,35 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        body: BackgroundWidget(
-          widget: BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
-            bloc: elcDeviceBloc,
-            builder: (context, state) {
-              if (state is ElecDevicesInProgress) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColor.backgroundColor,
+    return Scaffold(
+      body: BackgroundWidget(
+        widget: BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+          bloc: elcDeviceBloc,
+          builder: (context, state) {
+            if (state is ElecDevicesInProgress) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: AppColor.backgroundColor,
+                ),
+              );
+            } else if (state is ElecDevicesFailure) {
+              final failure = state.message;
+              return Center(
+                child: Text(
+                  failure,
+                  style: const TextStyle(
+                    color: Colors.red,
                   ),
-                );
-              } else if (state is ElecDevicesFailure) {
-                final failure = state.message;
-                return Center(
-                  child: Text(
-                    failure,
-                    style: const TextStyle(
-                      color: Colors.red,
-                    ),
-                  ),
-                );
-              } else if (state is ElecDevicesSuccess) {
-                return ListCategoriesEcommerce(
-                  items: state.elecDevices,
-                  filter: widget.filter,
-                );
-              }
-              return Container();
-            },
-          ),
+                ),
+              );
+            } else if (state is ElecDevicesSuccess) {
+              return ListCategoriesEcommerce(
+                items: state.elecDevices,
+                filter: widget.filter,
+              );
+            }
+            return Container();
+          },
         ),
       ),
     );

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/categories/entities/customs_category.dart';
 import 'package:netzoon/presentation/categories/widgets/free_zone_video_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:url_launcher/link.dart';
 
 class CustomsScreen extends StatelessWidget {
@@ -55,11 +56,12 @@ class CustomsScreen extends StatelessWidget {
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: AppColor.white,
-                            suffixIcon: InkWell(
+                            prefixIcon: InkWell(
                                 child: const Icon(Icons.search), onTap: () {}),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30)),
-                            hintText: 'البحث في netzoon.com',
+                            hintText: AppLocalizations.of(context)
+                                .translate('search in netzoon'),
                             alignLabelWithHint: true,
                             hintStyle: TextStyle(
                               fontSize: 8.sp,

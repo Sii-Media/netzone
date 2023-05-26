@@ -7,6 +7,7 @@ import 'package:netzoon/presentation/categories/local_company/local_companies.da
 import 'package:netzoon/presentation/categories/plans/plans_categories_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/vehicle_list_screen.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class ListOfCategories extends StatelessWidget {
   const ListOfCategories({
@@ -37,13 +38,13 @@ class ListOfCategories extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30.0),
                   child: InkWell(
                     onTap: () {
-                      if (categories[index].name == 'الشركات المحلية') {
+                      if (categories[index].name == 'local_companies') {
                         Navigator.of(context)
                             .push(MaterialPageRoute(builder: (context) {
                           return const GovernmentalCompanies();
                         }));
                       } else if (categories[index].name ==
-                          'شركات المناطق الحرة') {
+                          'free_zone_companies') {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
@@ -53,7 +54,7 @@ class ListOfCategories extends StatelessWidget {
                             },
                           ),
                         );
-                      } else if (categories[index].name == 'الجمارك') {
+                      } else if (categories[index].name == 'customs') {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
@@ -63,7 +64,8 @@ class ListOfCategories extends StatelessWidget {
                             },
                           ),
                         );
-                      } else if (categories[index].name == 'مؤسسات حكومية') {
+                      } else if (categories[index].name ==
+                          'government_institutions') {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
@@ -73,7 +75,7 @@ class ListOfCategories extends StatelessWidget {
                             },
                           ),
                         );
-                      } else if (categories[index].name == 'المصانع') {
+                      } else if (categories[index].name == 'factories') {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
@@ -81,7 +83,7 @@ class ListOfCategories extends StatelessWidget {
                             },
                           ),
                         );
-                      } else if (categories[index].name == 'طائرات مدنية') {
+                      } else if (categories[index].name == 'civil_aircraft') {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
@@ -89,7 +91,7 @@ class ListOfCategories extends StatelessWidget {
                             },
                           ),
                         );
-                      } else if (categories[index].name == 'سيارات') {
+                      } else if (categories[index].name == 'cars') {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
@@ -135,7 +137,8 @@ class ListOfCategories extends StatelessWidget {
                               alignment: Alignment.center,
                               child: Text(
                                 textAlign: TextAlign.center,
-                                categories[index].name,
+                                AppLocalizations.of(context)
+                                    .translate(categories[index].name),
                                 style: TextStyle(
                                     fontSize: 10.sp,
                                     color: Colors.white,

@@ -108,6 +108,72 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
     return value;
   }
 
+  @override
+  Future<OtpLoginResponseModel> getOtpCode(phone) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'phone',
+      phone,
+    ));
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<OtpLoginResponseModel>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/user/otpLogin',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = OtpLoginResponseModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<OtpLoginResponseModel> verifyOtpCode(
+    phone,
+    otp,
+    hash,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'phone',
+      phone,
+    ));
+    _data.fields.add(MapEntry(
+      'otp',
+      otp,
+    ));
+    _data.fields.add(MapEntry(
+      'hash',
+      hash,
+    ));
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<OtpLoginResponseModel>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/user/verifyOtpLogin',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = OtpLoginResponseModel.fromJson(_result.data!);
+    return value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

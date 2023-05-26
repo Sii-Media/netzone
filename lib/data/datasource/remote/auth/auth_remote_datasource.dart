@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:netzoon/data/models/auth/otp_login/otp_login_response_model.dart';
 import 'package:netzoon/data/models/auth/user/user_model.dart';
 import 'package:retrofit/http.dart';
 import '../../../../injection_container.dart';
@@ -18,6 +19,16 @@ abstract class AuthRemoteDataSource {
   Future<UserModel> signIn(
     final String email,
     final String password,
+  );
+
+  Future<OtpLoginResponseModel> getOtpCode(
+    final String phone,
+  );
+
+  Future<OtpLoginResponseModel> verifyOtpCode(
+    final String phone,
+    final String otp,
+    final String hash,
   );
 }
 
@@ -49,5 +60,19 @@ abstract class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<UserModel> signIn(
     @Part() String email,
     @Part() String password,
+  );
+
+  @override
+  @POST('/user/otpLogin')
+  Future<OtpLoginResponseModel> getOtpCode(
+    @Part() String phone,
+  );
+
+  @override
+  @POST('/user/verifyOtpLogin')
+  Future<OtpLoginResponseModel> verifyOtpCode(
+    @Part() String phone,
+    @Part() String otp,
+    @Part() String hash,
   );
 }

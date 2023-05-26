@@ -10,6 +10,8 @@ String mapFailureToString(Failure failure) {
       return "Offline Failure";
     case CredintialFailure:
       return 'Credintial Failure';
+    case OTPValidFailure:
+      return 'InValid OTP';
     default:
       return "UnExpected Error, Please try again later.";
   }

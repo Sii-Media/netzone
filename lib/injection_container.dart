@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/local/auth/auth_local_data_source.dart';
+import 'package:netzoon/data/datasource/local/lang/lang_local_data_resource.dart';
 import 'package:netzoon/data/datasource/remote/advertisements/ads_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/auth/auth_remote_datasource.dart';
 import 'package:netzoon/data/datasource/remote/complaints/complaints_remote_data_source.dart';
@@ -19,6 +20,7 @@ import 'package:netzoon/data/repositories/auth_repository_impl.dart';
 import 'package:netzoon/data/repositories/complaints/complaints_repository_impl.dart';
 import 'package:netzoon/data/repositories/deals/deals_repository_impl.dart';
 import 'package:netzoon/data/repositories/departments/departments_repository_impl.dart';
+import 'package:netzoon/data/repositories/lang/lang_repository_impl.dart';
 import 'package:netzoon/data/repositories/legal_advice/legal_advice_repository_impl.dart';
 import 'package:netzoon/data/repositories/news/news_repositories_impl.dart';
 import 'package:netzoon/data/repositories/openions/openion_repository_impl.dart';
@@ -31,11 +33,13 @@ import 'package:netzoon/domain/advertisements/usercases/get_ads_by_type_use_case
 import 'package:netzoon/domain/advertisements/usercases/get_advertisements_usecase.dart';
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
 import 'package:netzoon/domain/auth/usecases/get_first_time_logged_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/get_otpcode_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/logout_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/set_first_time_logged_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/sign_in_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/sign_up_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/verify_otp_code_use_case.dart';
 import 'package:netzoon/domain/complaints/repositories/complaints_repository.dart';
 import 'package:netzoon/domain/complaints/usecases/add_complaints_usecase.dart';
 import 'package:netzoon/domain/complaints/usecases/get_complaints_usecase.dart';
@@ -47,6 +51,9 @@ import 'package:netzoon/domain/departments/repositories/departments_repository.d
 import 'package:netzoon/domain/departments/usecases/add_product_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_categories_by_departments_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_category_products_use_case.dart';
+import 'package:netzoon/domain/lang/repositories/lang_repository.dart';
+import 'package:netzoon/domain/lang/usecases/change_language.dart';
+import 'package:netzoon/domain/lang/usecases/get_init_language.dart';
 import 'package:netzoon/domain/legal_advice/repositories/legal_advice_repository.dart';
 import 'package:netzoon/domain/legal_advice/usecases/get_legal_advices_use_case.dart';
 import 'package:netzoon/domain/news/repositories/news_repository.dart';
@@ -67,6 +74,7 @@ import 'package:netzoon/presentation/add_items/blocs/bloc/add_product_bloc.dart'
 import 'package:netzoon/presentation/advertising/blocs/add_ads/add_ads_bloc.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
+import 'package:netzoon/presentation/auth/blocs/get_otp_code/get_otp_code_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_in/sign_in_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
 import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
@@ -78,6 +86,7 @@ import 'package:netzoon/presentation/contact/blocs/get_complaints/get_complaint_
 import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/deals_category/deals_categoty_bloc.dart';
 import 'package:netzoon/presentation/home/blocs/elec_devices/elec_devices_bloc.dart';
+import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
 import 'package:netzoon/presentation/legal_advice/blocs/legal_advice/legal_advice_bloc.dart';
 import 'package:netzoon/presentation/news/blocs/add_news/add_news_bloc.dart';
 import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
@@ -135,6 +144,12 @@ Future<void> init() async {
         logoutUseCase: sl(),
       ));
 
+  sl.registerFactory(() =>
+      GetOtpCodeBloc(getOtpCodeUseCase: sl(), verifyOtpCodeUseCase: sl()));
+
+  sl.registerFactory(() => LanguageBloc(
+      sharedPreferences: sl(), changeLanguage: sl(), getInitLanguage: sl()));
+
   //! UseCases
   sl.registerLazySingleton(() => GetSignedInUserUseCase(authRepository: sl()));
   sl.registerLazySingleton(
@@ -190,6 +205,12 @@ Future<void> init() async {
   sl.registerLazySingleton(
       () => AddAdvertisementUseCase(advertismentRepository: sl()));
 
+  sl.registerLazySingleton(() => GetOtpCodeUseCase(authRepository: sl()));
+  sl.registerLazySingleton(() => VerifyOtpCodeUseCase(authRepository: sl()));
+
+  sl.registerLazySingleton(() => ChangeLanguage(languageRepository: sl()));
+  sl.registerLazySingleton(() => GetInitLanguage(languageRepository: sl()));
+
   //! Repositories
 
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
@@ -226,6 +247,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton<ComplaintsRepository>(() => ComplaintsRepositoryImpl(
       networkInfo: sl(), complaintsRemoteDataSource: sl()));
+
+  sl.registerLazySingleton<LangRepository>(
+      () => LangRepositoryImpl(langLocalDataResource: sl()));
 
   //! DataSourses
 
@@ -264,6 +288,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton<AuthLocalDatasource>(
       () => AuthLocalDatasourceImpl(sharedPreferences: sl()));
+
+  sl.registerLazySingleton<LangLocalDataResource>(
+      () => LangLocalDataResourceImpl(sharedPreferences: sl()));
 
   //! Core
 

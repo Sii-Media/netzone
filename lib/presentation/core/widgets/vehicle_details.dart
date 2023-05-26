@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class VehicleDetailsScreen extends StatelessWidget {
   const VehicleDetailsScreen({super.key, required this.vehicle});
@@ -13,213 +14,213 @@ class VehicleDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController input = TextEditingController();
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        body: BackgroundWidget(
-          widget: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 30.0.h),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          width: 7,
-                          color: Colors.grey.withOpacity(0.4),
-                        ),
+    return Scaffold(
+      body: BackgroundWidget(
+        widget: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 30.0.h),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 7,
+                        color: Colors.grey.withOpacity(0.4),
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl: vehicle.imageUrl,
-                          width: 700.w,
-                          height: 200.h,
-                          fit: BoxFit.cover,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    vehicle.price,
-                                    style: TextStyle(
-                                        color: AppColor.colorOne,
-                                        fontSize: 17.sp,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: const [
-                                      Icon(
-                                        Icons.share,
-                                        color: AppColor.backgroundColor,
-                                      ),
-                                      Icon(
-                                        Icons.favorite_border,
-                                        color: AppColor.backgroundColor,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              Text(
-                                vehicle.name,
-                                style: TextStyle(
-                                  color: AppColor.black,
-                                  fontSize: 22.sp,
+                  ),
+                  child: Column(
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl: vehicle.imageUrl,
+                        width: 700.w,
+                        height: 200.h,
+                        fit: BoxFit.cover,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  vehicle.price,
+                                  style: TextStyle(
+                                      color: AppColor.colorOne,
+                                      fontSize: 17.sp,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          width: 7,
-                          color: Colors.grey.withOpacity(0.4),
-                        ),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'تفاصيل',
-                            style: TextStyle(
-                              color: AppColor.black,
-                              fontSize: 17.sp,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: const [
+                                    Icon(
+                                      Icons.share,
+                                      color: AppColor.backgroundColor,
+                                    ),
+                                    Icon(
+                                      Icons.favorite_border,
+                                      color: AppColor.backgroundColor,
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                          ),
-                          SizedBox(
-                            height: 7.h,
-                          ),
-                          titleAndInput(
-                            title: 'الفئة',
-                            input: 'S-line',
-                          ),
-                          SizedBox(
-                            height: 7.h,
-                          ),
-                          titleAndInput(
-                            title: 'السنة',
-                            input: vehicle.year,
-                          ),
-                          SizedBox(
-                            height: 7.h,
-                          ),
-                          titleAndInput(
-                            title: 'كيلومترات',
-                            input: vehicle.kilometers,
-                          ),
-                          SizedBox(
-                            height: 7.h,
-                          ),
-                          titleAndInput(
-                            title: 'المواصفات الاقليمية',
-                            input: 'مواصفات خليجية',
-                          ),
-                          SizedBox(
-                            height: 7.h,
-                          ),
-                          titleAndInput(
-                            title: 'الضمان',
-                            input: 'لا ينطبق',
-                          ),
-                          SizedBox(
-                            height: 7.h,
-                          ),
-                        ],
+                            SizedBox(
+                              height: 7.h,
+                            ),
+                            Text(
+                              vehicle.name,
+                              style: TextStyle(
+                                color: AppColor.black,
+                                fontSize: 22.sp,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 7,
+                        color: Colors.grey.withOpacity(0.4),
                       ),
                     ),
                   ),
-                  Container(
+                  child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          width: 7,
-                          color: Colors.grey.withOpacity(0.4),
-                        ),
-                      ),
-                    ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'وصف',
+                          AppLocalizations.of(context).translate('details'),
                           style: TextStyle(
                             color: AppColor.black,
                             fontSize: 17.sp,
                           ),
                         ),
-                        Text(
-                          vehicle.description,
-                          style: TextStyle(
-                            color: AppColor.mainGrey,
-                            fontSize: 15.sp,
-                          ),
+                        SizedBox(
+                          height: 7.h,
+                        ),
+                        titleAndInput(
+                          title:
+                              AppLocalizations.of(context).translate('categ'),
+                          input: 'S-line',
+                        ),
+                        SizedBox(
+                          height: 7.h,
+                        ),
+                        titleAndInput(
+                          title: AppLocalizations.of(context).translate('year'),
+                          input: vehicle.year,
+                        ),
+                        SizedBox(
+                          height: 7.h,
+                        ),
+                        titleAndInput(
+                          title: AppLocalizations.of(context)
+                              .translate('kilometers'),
+                          input: vehicle.kilometers,
+                        ),
+                        SizedBox(
+                          height: 7.h,
+                        ),
+                        titleAndInput(
+                          title: AppLocalizations.of(context)
+                              .translate('regional_specifications'),
+                          input: 'مواصفات خليجية',
+                        ),
+                        SizedBox(
+                          height: 7.h,
+                        ),
+                        titleAndInput(
+                          title: AppLocalizations.of(context)
+                              .translate('guarantee'),
+                          input: 'لا ينطبق',
+                        ),
+                        SizedBox(
+                          height: 7.h,
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 50.h,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 7,
+                        color: Colors.grey.withOpacity(0.4),
+                      ),
+                    ),
                   ),
-                ],
-              ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context).translate('desc'),
+                        style: TextStyle(
+                          color: AppColor.black,
+                          fontSize: 17.sp,
+                        ),
+                      ),
+                      Text(
+                        vehicle.description,
+                        style: TextStyle(
+                          color: AppColor.mainGrey,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 50.h,
+                ),
+              ],
             ),
           ),
         ),
-        bottomNavigationBar: BottomAppBar(
-          height: 60.h,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    AppColor.backgroundColor,
-                  ),
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                  )),
-                  fixedSize: const MaterialStatePropertyAll(
-                    Size.fromWidth(200),
-                  ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        height: 60.h,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  AppColor.backgroundColor,
                 ),
-                child: const Text('شراء'),
-                onPressed: () {},
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                )),
+                fixedSize: const MaterialStatePropertyAll(
+                  Size.fromWidth(200),
+                ),
               ),
-              PriceSuggestionButton(input: input),
-            ],
-          ),
+              child: Text(AppLocalizations.of(context).translate('buy')),
+              onPressed: () {},
+            ),
+            PriceSuggestionButton(input: input),
+          ],
         ),
       ),
     );

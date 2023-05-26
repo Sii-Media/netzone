@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/data/core/constants/constants.dart';
 import 'package:netzoon/injection_container.dart';
@@ -7,9 +8,10 @@ import 'package:netzoon/presentation/contact/screens/contact_us_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/home/test.dart';
-import 'package:netzoon/presentation/language_screen/languages_screen.dart';
+import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
 import 'package:netzoon/presentation/legal_advice/legal_advice_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class MoreScreen extends StatefulWidget {
   const MoreScreen({super.key});
@@ -19,6 +21,57 @@ class MoreScreen extends StatefulWidget {
 }
 
 class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
+  final List<Map<String, String>> languages = [
+    {'name': 'English', 'code': 'en'},
+    {'name': 'Arabic', 'code': 'ar'},
+  ];
+
+  // Define the current language and its code
+  String currentLanguage = 'English';
+  String currentCode = 'en';
+
+  void showLanguageDialog(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Container(
+              color: AppColor.backgroundColor,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Loop through the languages and create radio buttons
+                  for (var language in languages)
+                    RadioListTile<String>(
+                      activeColor: AppColor.white,
+                      title: Text(
+                        language['name']!,
+                        style: const TextStyle(color: AppColor.white),
+                      ),
+                      value: language['code'] ?? '',
+                      groupValue: currentCode,
+                      onChanged: (value) {
+                        // Update the state when a radio button is selected
+                        setState(() {
+                          currentCode = value!;
+                          currentLanguage = language['name']!;
+                        });
+                        BlocProvider.of<LanguageBloc>(context)
+                            .add(ChooseOnetherLang(currentCode));
+                        // Close the dialog after selection
+                        Navigator.pop(context);
+                      },
+                    ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   late String? isLoggedIn = '';
 
   void getIsLoggedIn() async {
@@ -31,105 +84,115 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
   @override
   void initState() {
     getIsLoggedIn();
+    final SharedPreferences preferences = sl<SharedPreferences>();
+    currentCode = preferences.getString(SharedPreferencesKeys.language) ?? 'en';
+    currentLanguage = currentCode == 'en' ? 'English' : 'Arabic';
     super.initState();
   }
 
   final authBloc = sl<AuthBloc>();
   @override
   Widget screen(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            SettingsCategory(
-              name: 'استشارات قانونية',
-              icon: Icons.gavel_rounded,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const LegalAdviceScreen();
-                    },
-                  ),
-                );
-              },
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            const SettingsCategory(
-              name: 'الشواغر',
-              icon: Icons.work,
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            SettingsCategory(
-              name: 'البلد',
-              icon: Icons.location_city,
-              onTap: () {
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) {
-                //       return const LanguagesScreen();
-                //     },
-                //   ),
-                // );
-              },
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            SettingsCategory(
-              name: 'اللغة',
-              icon: Icons.language,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const LanguagesScreen();
-                    },
-                  ),
-                );
-              },
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            SettingsCategory(
-              name: 'تواصل معنا',
-              icon: Icons.email,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const ContactUsScreen();
-                    },
-                  ),
-                );
-              },
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            isLoggedIn != null && isLoggedIn != ''
-                ? SettingsCategory(
-                    name: 'تسجيل الخروج',
-                    icon: Icons.logout,
-                    onTap: () {
-                      authBloc.add(AuthLogout());
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          SettingsCategory(
+            name: AppLocalizations.of(context).translate('legal_advices'),
+            icon: Icons.gavel_rounded,
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const LegalAdviceScreen();
+                  },
+                ),
+              );
+            },
+          ),
+          SizedBox(
+            height: 10.h,
+          ),
+          SettingsCategory(
+            name: AppLocalizations.of(context).translate('vacancies'),
+            icon: Icons.work,
+            onTap: () {
+              // Navigator.of(context).push(
+              //   MaterialPageRoute(
+              //     builder: (context) {
+              //       return const MobileLoginScreen();
+              //     },
+              //   ),
+              // );
+            },
+          ),
+          SizedBox(
+            height: 10.h,
+          ),
+          SettingsCategory(
+            name: AppLocalizations.of(context).translate('country'),
+            icon: Icons.location_city,
+            onTap: () {
+              // Navigator.of(context).push(
+              //   MaterialPageRoute(
+              //     builder: (context) {
+              //       return const LanguagesScreen();
+              //     },
+              //   ),
+              // );
+            },
+          ),
+          SizedBox(
+            height: 10.h,
+          ),
+          SettingsCategory(
+            name: AppLocalizations.of(context).translate('language'),
+            icon: Icons.language,
+            onTap: () {
+              showLanguageDialog(context);
+              // Navigator.of(context).push(
+              //   MaterialPageRoute(
+              //     builder: (context) {
+              //       return const LanguagesScreen();
+              //     },
+              //   ),
+              // );
+            },
+          ),
+          SizedBox(
+            height: 10.h,
+          ),
+          SettingsCategory(
+            name: AppLocalizations.of(context).translate('contact_us'),
+            icon: Icons.email,
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const ContactUsScreen();
+                  },
+                ),
+              );
+            },
+          ),
+          SizedBox(
+            height: 10.h,
+          ),
+          isLoggedIn != null && isLoggedIn != ''
+              ? SettingsCategory(
+                  name: AppLocalizations.of(context).translate('logout'),
+                  icon: Icons.logout,
+                  onTap: () {
+                    authBloc.add(AuthLogout());
 
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) {
-                        return const TestScreen();
-                      }), (route) => false);
-                    },
-                  )
-                : const SizedBox(),
-          ],
-        ),
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) {
+                      return const TestScreen();
+                    }), (route) => false);
+                  },
+                )
+              : const SizedBox(),
+        ],
       ),
     );
   }

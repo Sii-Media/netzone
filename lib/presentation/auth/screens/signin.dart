@@ -10,6 +10,7 @@ import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/home/test.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -28,16 +29,9 @@ class _SignInScreenState extends State<SignInScreen>
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  late MultiValidator _passwordValidator;
 
   @override
   void initState() {
-    _passwordValidator = MultiValidator([
-      RequiredValidator(errorText: 'يجب إدخال كلمة المرور'),
-      MinLengthValidator(8,
-          errorText: 'يجب أن تحتوي كلمة المرور على 9 أحرف على الأقل'),
-    ]);
-
     super.initState();
   }
 
@@ -66,8 +60,8 @@ class _SignInScreenState extends State<SignInScreen>
         } else if (state is SignInSuccess) {
           stopLoading();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: const Text(
-              'success',
+            content: Text(
+              AppLocalizations.of(context).translate('success'),
             ),
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ));
@@ -77,194 +71,207 @@ class _SignInScreenState extends State<SignInScreen>
           }), (route) => false);
         }
       },
-      child: Directionality(
-        textDirection: TextDirection.rtl,
-        child: Scaffold(
-          body: Form(
-            key: _formKey,
-            child: BackgroundWidget(
-              widget: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SingleChildScrollView(
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 20.h,
+      child: Scaffold(
+        body: Form(
+          key: _formKey,
+          child: BackgroundWidget(
+            widget: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      const Icon(
+                        Icons.lock,
+                        size: 100,
+                        color: AppColor.backgroundColor,
+                      ),
+                      SizedBox(
+                        height: 30.h,
+                      ),
+                      Text(
+                        AppLocalizations.of(context).translate('welcome'),
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: AppColor.mainGrey,
                         ),
-                        const Icon(
-                          Icons.lock,
-                          size: 100,
-                          color: AppColor.backgroundColor,
+                      ),
+                      SizedBox(
+                        height: 30.h,
+                      ),
+                      TextFormField(
+                        key: _emailFormFieldKey,
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          hintText: 'example@example.example',
+                          labelText: AppLocalizations.of(context)
+                              .translate('email_or_phone'),
                         ),
-                        SizedBox(
-                          height: 30.h,
-                        ),
-                        Text(
-                          'مرحبا بك مجدداً',
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            color: AppColor.mainGrey,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 30.h,
-                        ),
-                        TextFormField(
-                          key: _emailFormFieldKey,
-                          controller: _emailController,
-                          decoration: const InputDecoration(
-                            hintText: 'example@example.example',
-                            labelText: 'الإيميل أو رقم الهاتف',
-                          ),
-                          style: const TextStyle(color: AppColor.black),
-                          keyboardType: TextInputType.emailAddress,
-                          textInputAction: TextInputAction.next,
-                          onChanged: (text) {
-                            _emailFormFieldKey.currentState!.validate();
-                          },
-                          validator: (text) {
-                            if (text == null || text.isEmpty) {
-                              return 'يجب إدخال الإيميل أو رقم الهاتف';
-                            }
+                        style: const TextStyle(color: AppColor.black),
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        onChanged: (text) {
+                          _emailFormFieldKey.currentState!.validate();
+                        },
+                        validator: (text) {
+                          if (text == null || text.isEmpty) {
+                            return AppLocalizations.of(context)
+                                .translate('email_condition');
+                          }
 
-                            if (!EmailValidator(
-                                    errorText: 'الرجاء ادخال ايميل صحيح')
-                                .isValid(text.toLowerCase())) {
-                              return 'الرجاء ادخال ايميل صحيح';
-                            }
+                          if (!EmailValidator(
+                                  errorText: AppLocalizations.of(context)
+                                      .translate('email_not_valid'))
+                              .isValid(text.toLowerCase())) {
+                            return AppLocalizations.of(context)
+                                .translate('input_valid_email');
+                          }
 
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        PasswordControl(
-                          hintText: '* * * * * * * *',
-                          labelText: 'كلمة المرور',
-                          controller: _passwordController,
-                          validator: _passwordValidator,
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              'هل نسيت كلمة المرور ؟!',
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      PasswordControl(
+                        hintText: '* * * * * * * *',
+                        labelText:
+                            AppLocalizations.of(context).translate('password'),
+                        controller: _passwordController,
+                        validator: MultiValidator([
+                          RequiredValidator(
+                              errorText: AppLocalizations.of(context)
+                                  .translate('password_required')),
+                          MinLengthValidator(8,
+                              errorText: AppLocalizations.of(context)
+                                  .translate('password_condition')),
+                        ]),
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)
+                                .translate('password_forget'),
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontSize: 13.sp,
+                              color: AppColor.secondGrey,
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const UserType();
+                                  },
+                                ),
+                              );
+                            },
+                            child: Text(
+                              AppLocalizations.of(context)
+                                  .translate('create_new_account'),
                               style: TextStyle(
                                 decoration: TextDecoration.underline,
                                 fontSize: 13.sp,
+                                color: AppColor.backgroundColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                              AppColor.backgroundColor,
+                            ),
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            )),
+                          ),
+                          child: Text(
+                              AppLocalizations.of(context).translate('login')),
+                          onPressed: () async {
+                            if (!_formKey.currentState!.validate()) return;
+                            signInBloc.add(SignInRequestEvent(
+                                email: _emailController.text,
+                                password: _passwordController.text));
+                            // final SharedPreferences sharedPreferences =
+                            //     await SharedPreferences.getInstance();
+                            // sharedPreferences.setString(
+                            //     'email', _emailController.text);
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Row(
+                        children: [
+                          const Expanded(
+                            child: Divider(
+                              thickness: 0.5,
+                              color: AppColor.backgroundColor,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0,
+                            ),
+                            child: Text(
+                              AppLocalizations.of(context)
+                                  .translate('or_continue_with'),
+                              style: TextStyle(
+                                fontSize: 16.sp,
                                 color: AppColor.secondGrey,
                               ),
                             ),
-                            InkWell(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return const UserType();
-                                    },
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                'إنشاء حساب جديد!',
-                                style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  fontSize: 13.sp,
-                                  color: AppColor.backgroundColor,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                AppColor.backgroundColor,
-                              ),
-                              shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              )),
-                            ),
-                            child: const Text('تسجيل الدخول'),
-                            onPressed: () async {
-                              if (!_formKey.currentState!.validate()) return;
-                              signInBloc.add(SignInRequestEvent(
-                                  email: _emailController.text,
-                                  password: _passwordController.text));
-                              // final SharedPreferences sharedPreferences =
-                              //     await SharedPreferences.getInstance();
-                              // sharedPreferences.setString(
-                              //     'email', _emailController.text);
-                            },
                           ),
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Row(
-                          children: [
-                            const Expanded(
-                              child: Divider(
-                                thickness: 0.5,
-                                color: AppColor.backgroundColor,
-                              ),
+                          const Expanded(
+                            child: Divider(
+                              thickness: 0.5,
+                              color: AppColor.backgroundColor,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10.0,
-                              ),
-                              child: Text(
-                                'or continue with',
-                                style: TextStyle(
-                                  fontSize: 16.sp,
-                                  color: AppColor.secondGrey,
-                                ),
-                              ),
-                            ),
-                            const Expanded(
-                              child: Divider(
-                                thickness: 0.5,
-                                color: AppColor.backgroundColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const SocialIcon(
-                              imagePath: 'assets/images/google_icon.png',
-                            ),
-                            SizedBox(
-                              width: 7.w,
-                            ),
-                            const SocialIcon(
-                              imagePath: 'assets/images/facebook_icon.png',
-                            ),
-                            SizedBox(
-                              width: 7.w,
-                            ),
-                            const SocialIcon(
-                                imagePath: 'assets/images/mac_icon.png')
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SocialIcon(
+                            imagePath: 'assets/images/google_icon.png',
+                          ),
+                          SizedBox(
+                            width: 7.w,
+                          ),
+                          const SocialIcon(
+                            imagePath: 'assets/images/facebook_icon.png',
+                          ),
+                          SizedBox(
+                            width: 7.w,
+                          ),
+                          const SocialIcon(
+                              imagePath: 'assets/images/mac_icon.png')
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),

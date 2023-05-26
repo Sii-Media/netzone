@@ -80,104 +80,101 @@ class _TestScreenState extends State<TestScreen> {
       color: AppColor.backgroundColor,
       child: SafeArea(
         top: false,
-        child: Directionality(
-          textDirection: TextDirection.rtl,
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: ClipRRect(
-              child: Scaffold(
-                extendBody: true,
-                body: BackgroundWidget(
-                  widget: _children[_currentIndex],
-                ),
-                bottomNavigationBar: Theme(
-                  data: Theme.of(context).copyWith(
-                    iconTheme: const IconThemeData(
-                      color: AppColor.white,
-                    ),
-                  ),
-                  child: CurvedNavigationBar(
-                    items: _items,
-                    height: 60,
-                    index: _currentIndex,
-                    onTap: _onItemTapped,
-                    backgroundColor: Colors.transparent,
-                    color: AppColor.backgroundColor,
-                    buttonBackgroundColor: AppColor.backgroundColor,
-                    animationCurve: Curves.easeInOut,
-                    animationDuration: const Duration(milliseconds: 400),
-                  ),
-                ),
-                // bottomNavigationBar: SizedBox(
-                //   height: 65.h,
-                //   child: BottomNavigationBar(
-                //     currentIndex: _currentIndex,
-                //     type: BottomNavigationBarType.fixed,
-                //     backgroundColor: AppColor.backgroundColor,
-                //     selectedItemColor: AppColor.white,
-                //     unselectedItemColor: AppColor.white.withOpacity(0.5),
-                //     onTap: _onItemTapped,
-                //     items: const [
-                //       BottomNavigationBarItem(
-                //         icon: Icon(Icons.home),
-                //         label: 'الرئيسية',
-                //       ),
-                //       BottomNavigationBarItem(
-                //         icon: Icon(Icons.shopping_cart),
-                //         label: 'السلة',
-                //       ),
-                //       BottomNavigationBarItem(
-                //         icon: Icon(Icons.add),
-                //         label: 'إضافة',
-                //       ),
-                //       BottomNavigationBarItem(
-                //         icon: Icon(Icons.person),
-                //         label: 'حسابي',
-                //       ),
-                //       BottomNavigationBarItem(
-                //         icon: Icon(Icons.more_horiz),
-                //         label: 'المزيد',
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                // bottomNavigationBar: SizedBox(
-                //   height: 65.h,
-                //   width: MediaQuery.of(context).size.width,
-                //   child: GNav(
-                //     style: GnavStyle.google,
-                //     onTabChange: _onItemTapped,
-                //     backgroundColor: AppColor.backgroundColor,
-                //     iconSize: 22.sp,
-                //     textSize: 10.sp,
-                //     gap: 2,
-                //     color: Colors.white,
-                //     activeColor: Colors.white,
-                //     tabs: const [
-                //       GButton(
-                //         icon: Icons.home,
-                //         text: 'الرئيسية',
-                //       ),
-                //       GButton(
-                //         icon: Icons.shopping_cart,
-                //         text: 'السلة',
-                //       ),
-                //       GButton(
-                //         icon: Icons.add,
-                //         text: 'إضافة',
-                //       ),
-                //       GButton(
-                //         icon: Icons.person,
-                //         text: 'حسابي',
-                //       ),
-                //       GButton(
-                //         icon: Icons.list_rounded,
-                //         text: 'المزيد',
-                //       )
-                //     ],
-                //   ),
-                // ),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: ClipRRect(
+            child: Scaffold(
+              extendBody: true,
+              body: BackgroundWidget(
+                widget: _children[_currentIndex],
               ),
+              bottomNavigationBar: Theme(
+                data: Theme.of(context).copyWith(
+                  iconTheme: const IconThemeData(
+                    color: AppColor.white,
+                  ),
+                ),
+                child: CurvedNavigationBar(
+                  items: _items,
+                  height: 60,
+                  index: _currentIndex,
+                  onTap: _onItemTapped,
+                  backgroundColor: Colors.transparent,
+                  color: AppColor.backgroundColor,
+                  buttonBackgroundColor: AppColor.backgroundColor,
+                  animationCurve: Curves.easeInOut,
+                  animationDuration: const Duration(milliseconds: 400),
+                ),
+              ),
+              // bottomNavigationBar: SizedBox(
+              //   height: 65.h,
+              //   child: BottomNavigationBar(
+              //     currentIndex: _currentIndex,
+              //     type: BottomNavigationBarType.fixed,
+              //     backgroundColor: AppColor.backgroundColor,
+              //     selectedItemColor: AppColor.white,
+              //     unselectedItemColor: AppColor.white.withOpacity(0.5),
+              //     onTap: _onItemTapped,
+              //     items: const [
+              //       BottomNavigationBarItem(
+              //         icon: Icon(Icons.home),
+              //         label: 'الرئيسية',
+              //       ),
+              //       BottomNavigationBarItem(
+              //         icon: Icon(Icons.shopping_cart),
+              //         label: 'السلة',
+              //       ),
+              //       BottomNavigationBarItem(
+              //         icon: Icon(Icons.add),
+              //         label: 'إضافة',
+              //       ),
+              //       BottomNavigationBarItem(
+              //         icon: Icon(Icons.person),
+              //         label: 'حسابي',
+              //       ),
+              //       BottomNavigationBarItem(
+              //         icon: Icon(Icons.more_horiz),
+              //         label: 'المزيد',
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // bottomNavigationBar: SizedBox(
+              //   height: 65.h,
+              //   width: MediaQuery.of(context).size.width,
+              //   child: GNav(
+              //     style: GnavStyle.google,
+              //     onTabChange: _onItemTapped,
+              //     backgroundColor: AppColor.backgroundColor,
+              //     iconSize: 22.sp,
+              //     textSize: 10.sp,
+              //     gap: 2,
+              //     color: Colors.white,
+              //     activeColor: Colors.white,
+              //     tabs: const [
+              //       GButton(
+              //         icon: Icons.home,
+              //         text: 'الرئيسية',
+              //       ),
+              //       GButton(
+              //         icon: Icons.shopping_cart,
+              //         text: 'السلة',
+              //       ),
+              //       GButton(
+              //         icon: Icons.add,
+              //         text: 'إضافة',
+              //       ),
+              //       GButton(
+              //         icon: Icons.person,
+              //         text: 'حسابي',
+              //       ),
+              //       GButton(
+              //         icon: Icons.list_rounded,
+              //         text: 'المزيد',
+              //       )
+              //     ],
+              //   ),
+              // ),
             ),
           ),
         ),

@@ -31,6 +31,7 @@ import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
 import 'package:netzoon/presentation/news/news_screen.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersItem/tenders_item_bloc.dart';
 import 'package:netzoon/presentation/tenders/tender_categories_screen.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -112,7 +113,7 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               TitleAndButton(
-                title: 'الفئات',
+                title: AppLocalizations.of(context).translate('category'),
                 icon: true,
                 onPress: () {
                   Navigator.of(context).push(
@@ -131,15 +132,16 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(
                 height: 10.0,
               ),
-              const TitleAndButton(
-                title: 'التجارة الالكترونية',
+              TitleAndButton(
+                title: AppLocalizations.of(context).translate('ecommerce'),
                 icon: true,
+                onPress: () {},
               ),
               const SizedBox(
                 height: 10.0,
               ),
               TitleAndButton(
-                title: 'الالكترونيات',
+                title: AppLocalizations.of(context).translate('elec'),
                 icon: true,
                 onPress: () {
                   Navigator.of(context).push(
@@ -196,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                 height: 10.0,
               ),
               TitleAndButton(
-                title: 'أجهزة المنزل والمكتب',
+                title: AppLocalizations.of(context).translate('officeDevices'),
                 icon: true,
                 onPress: () {
                   Navigator.of(context).push(
@@ -253,7 +255,7 @@ class _HomePageState extends State<HomePage> {
                 height: 10.0,
               ),
               TitleAndButton(
-                title: 'موضة رجالية',
+                title: AppLocalizations.of(context).translate('menFashion'),
                 icon: true,
                 onPress: () {
                   Navigator.of(context).push(
@@ -310,7 +312,7 @@ class _HomePageState extends State<HomePage> {
                 height: 10.0,
               ),
               TitleAndButton(
-                title: 'موضة نسائية',
+                title: AppLocalizations.of(context).translate('womanFashion'),
                 icon: true,
                 onPress: () {
                   Navigator.of(context).push(
@@ -367,7 +369,7 @@ class _HomePageState extends State<HomePage> {
                 height: 10.0,
               ),
               TitleAndButton(
-                title: 'المنتجات الغذائية',
+                title: AppLocalizations.of(context).translate('foods'),
                 icon: true,
                 onPress: () {
                   Navigator.of(context).push(
@@ -424,7 +426,7 @@ class _HomePageState extends State<HomePage> {
                 height: 10.0,
               ),
               TitleAndButton(
-                title: 'العطور',
+                title: AppLocalizations.of(context).translate('perfumes'),
                 icon: true,
                 onPress: () {
                   Navigator.of(context).push(
@@ -481,7 +483,7 @@ class _HomePageState extends State<HomePage> {
                 height: 10.0,
               ),
               TitleAndButton(
-                title: 'ساعات',
+                title: AppLocalizations.of(context).translate('watches'),
                 icon: true,
                 onPress: () {
                   Navigator.of(context).push(
@@ -538,7 +540,7 @@ class _HomePageState extends State<HomePage> {
                 height: 10.0,
               ),
               TitleAndButton(
-                title: 'الإعلانات',
+                title: AppLocalizations.of(context).translate('advertiments'),
                 icon: true,
                 onPress: () {
                   Navigator.of(context).push(
@@ -560,7 +562,7 @@ class _HomePageState extends State<HomePage> {
                 height: 10.0,
               ),
               TitleAndButton(
-                title: 'المناقصات',
+                title: AppLocalizations.of(context).translate('tenders'),
                 icon: true,
                 onPress: () {
                   Navigator.of(context).push(
@@ -598,10 +600,14 @@ class _HomePageState extends State<HomePage> {
                       } else if (state is TendersItemSuccess) {
                         return TenderWidget(
                           tenders: state.tenderItems,
-                          buttonText: 'بدء المناقصة',
-                          subTitle: 'اسم الشركة',
-                          desTitle1: 'تاريخ البدأ',
-                          desTitle2: 'تاريخ الانتهاء',
+                          buttonText: AppLocalizations.of(context)
+                              .translate('start_tender'),
+                          subTitle: AppLocalizations.of(context)
+                              .translate('company_name'),
+                          desTitle1: AppLocalizations.of(context)
+                              .translate('start_date'),
+                          desTitle2: AppLocalizations.of(context)
+                              .translate('end_date'),
                         );
                       }
                       return Container();
@@ -611,7 +617,7 @@ class _HomePageState extends State<HomePage> {
                 height: 10.0,
               ),
               TitleAndButton(
-                title: 'الصفقات',
+                title: AppLocalizations.of(context).translate('deals'),
                 icon: true,
                 onPress: () {
                   Navigator.of(context).push(
@@ -649,10 +655,14 @@ class _HomePageState extends State<HomePage> {
                     } else if (state is DealsItemsSuccess) {
                       return DealsListWidget(
                         deals: state.dealsItems,
-                        buttonText: 'شراء الصفقة',
-                        subTitle: 'البائع:',
-                        desTitle1: 'السعر قبل',
-                        desTitle2: 'السعر بعد',
+                        buttonText:
+                            AppLocalizations.of(context).translate('buy_deal'),
+                        subTitle:
+                            AppLocalizations.of(context).translate('saller'),
+                        desTitle1: AppLocalizations.of(context)
+                            .translate('prev_price'),
+                        desTitle2: AppLocalizations.of(context)
+                            .translate('curr_price'),
                       );
                     }
                     return Container();
@@ -663,7 +673,7 @@ class _HomePageState extends State<HomePage> {
                 height: 10.0,
               ),
               TitleAndButton(
-                title: 'الأخبار',
+                title: AppLocalizations.of(context).translate('news'),
                 icon: true,
                 onPress: () {
                   Navigator.of(context).push(
