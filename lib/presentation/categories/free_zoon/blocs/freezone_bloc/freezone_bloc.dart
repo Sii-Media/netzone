@@ -37,8 +37,10 @@ class FreezoneBloc extends Bloc<FreezoneEvent, FreezoneState> {
       emit(
         failureOrcompanies.fold(
           (failure) => FreezoneFailure(message: mapFailureToString(failure)),
-          (freezonescompanies) => FreezoneByIdSuccess(
-              freezonescompanies: freezonescompanies.results),
+          (freezonescompanies) {
+            return FreezoneByIdSuccess(
+                freezonescompanies: freezonescompanies.results);
+          },
         ),
       );
     });

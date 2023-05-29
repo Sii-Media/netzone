@@ -25,7 +25,7 @@ class _DealsRemoteDataSourceImpl implements DealsRemoteDataSourceImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<DealsResponseModel>(Options(
       method: 'GET',
@@ -75,7 +75,7 @@ class _DealsRemoteDataSourceImpl implements DealsRemoteDataSourceImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<DealsItemsResponseModel>(Options(
       method: 'GET',

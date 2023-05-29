@@ -5,18 +5,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/categories/companies_categories.dart';
 import 'package:netzoon/presentation/categories/free_zoon/blocs/freezone_bloc/freezone_bloc.dart';
-import 'package:netzoon/presentation/categories/governmental/governmental.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
-import 'package:netzoon/presentation/data/customs.dart';
-import 'package:netzoon/presentation/data/freezone.dart';
-import 'package:netzoon/presentation/data/governmental.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class CategoriesFreeZone extends StatefulWidget {
-  const CategoriesFreeZone({super.key, this.type});
-
-  final String? type;
+  const CategoriesFreeZone({
+    super.key,
+  });
 
   @override
   State<CategoriesFreeZone> createState() => _CategoriesFreeZoneState();
@@ -33,9 +29,6 @@ class _CategoriesFreeZoneState extends State<CategoriesFreeZone> {
 
   @override
   Widget build(BuildContext context) {
-    final freezoonlist = freezoon;
-    final customsList = customs;
-    final governmentList = governmental;
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
@@ -51,9 +44,12 @@ class _CategoriesFreeZoneState extends State<CategoriesFreeZone> {
                   bloc: freezoneBloc,
                   builder: (context, state) {
                     if (state is FreezoneInProgress) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColor.backgroundColor,
+                      return SizedBox(
+                        height: MediaQuery.of(context).size.height,
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: AppColor.backgroundColor,
+                          ),
                         ),
                       );
                     } else if (state is FreezoneFailure) {
@@ -84,22 +80,16 @@ class _CategoriesFreeZoneState extends State<CategoriesFreeZone> {
                                 onTap: () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(builder: (context) {
-                                      if (widget.type == 'government') {
-                                        return GovernmentInstitutionScreen(
-                                          government: governmentList[index],
-                                        );
-                                      }
+                                      // if (widget.type == 'government') {
+                                      //   return GovernmentInstitutionScreen(
+                                      //     government: governmentList[index],
+                                      //   );
+                                      // }
                                       return CompaniesCategories(
-                                        companiesList: widget.type == ''
-                                            ? freezoonlist[index].freezoonplaces
-                                            : customsList[index].freezoonplaces,
-                                        type: widget.type,
+                                        id: state.freezones[index].id,
                                       );
                                     }),
                                   );
-                                  // controllerImp.goToFreeZone(
-                                  //     FreeZoneNames.fromJson(controller.freeZoneAreas[index])
-                                  //         .freeZoneNamesId);
                                 },
                                 child: Container(
                                   margin:

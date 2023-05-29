@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:netzoon/domain/categories/entities/govermental_details.dart';
+import 'package:netzoon/domain/categories/entities/govermental/govermental_details.dart';
 import 'package:netzoon/presentation/categories/widgets/free_zone_video_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:url_launcher/link.dart';
+
+import '../widgets/image_free_zone_widget.dart';
 
 class GovermentalDetailsScreen extends StatelessWidget {
   const GovermentalDetailsScreen({super.key, required this.govermentalDetails});
@@ -145,15 +147,41 @@ class GovermentalDetailsScreen extends StatelessWidget {
                               url: govermentalDetails.link!,
                               context: context,
                             ),
-                      Center(
-                        child: Text(
-                          AppLocalizations.of(context).translate('no_images'),
-                          style: TextStyle(
-                            color: AppColor.black,
-                            fontSize: 14.sp,
-                          ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Text(
+                        '${AppLocalizations.of(context).translate('images')} :',
+                        style: TextStyle(
+                          color: AppColor.black,
+                          fontSize: 17.sp,
                         ),
                       ),
+                      govermentalDetails.images.isNotEmpty
+                          ? GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: govermentalDetails.images.length,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      childAspectRatio: 0.94),
+                              itemBuilder: (BuildContext context, index) {
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  child: ListOfPictures(
+                                    img: govermentalDetails.images[index],
+                                  ),
+                                );
+                              })
+                          : Text(
+                              AppLocalizations.of(context)
+                                  .translate('no_images'),
+                              style: TextStyle(
+                                color: AppColor.mainGrey,
+                                fontSize: 15.sp,
+                              ),
+                            ),
                       SizedBox(
                         height: 20.h,
                       ),
@@ -172,7 +200,7 @@ class GovermentalDetailsScreen extends StatelessWidget {
               top: 150.h,
               child: Center(
                 child: Text(
-                  govermentalDetails.govname,
+                  govermentalDetails.name,
                   style: TextStyle(fontSize: 15.sp, color: Colors.white),
                 ),
               ),

@@ -4,6 +4,7 @@ import 'package:netzoon/domain/categories/entities/categories.dart';
 import 'package:netzoon/presentation/categories/customs_screen/customs_category.dart';
 import 'package:netzoon/presentation/categories/factories/factories_categories.dart';
 import 'package:netzoon/presentation/categories/free_zoon/category_free_zoon.dart';
+import 'package:netzoon/presentation/categories/governmental/govermental_category_screen.dart';
 import 'package:netzoon/presentation/categories/local_company/local_companies.dart';
 import 'package:netzoon/presentation/categories/plans/plans_categories_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
@@ -97,9 +98,7 @@ class GridCategory extends StatelessWidget {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
-                  return const CategoriesFreeZone(
-                    type: '',
-                  );
+                  return const CategoriesFreeZone();
                 },
               ),
             );
@@ -115,9 +114,7 @@ class GridCategory extends StatelessWidget {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
-                  return const CategoriesFreeZone(
-                    type: 'government',
-                  );
+                  return const GovermentalCategoryScreen();
                 },
               ),
             );

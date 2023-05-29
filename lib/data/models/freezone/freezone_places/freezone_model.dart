@@ -20,6 +20,7 @@ class FreeZoneModel {
 
 extension MapToDomain on FreeZoneModel {
   FreeZone toDomain() => FreeZone(
+        id: id ?? '',
         name: name,
         imageUrl: imageUrl,
       );

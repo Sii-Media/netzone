@@ -10,6 +10,8 @@ import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/vehicle_list_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../../categories/governmental/govermental_category_screen.dart';
+
 class ListOfCategories extends StatelessWidget {
   const ListOfCategories({
     super.key,
@@ -49,9 +51,7 @@ class ListOfCategories extends StatelessWidget {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
-                              return const CategoriesFreeZone(
-                                type: '',
-                              );
+                              return const CategoriesFreeZone();
                             },
                           ),
                         );
@@ -68,9 +68,7 @@ class ListOfCategories extends StatelessWidget {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
-                              return const CategoriesFreeZone(
-                                type: 'government',
-                              );
+                              return const GovermentalCategoryScreen();
                             },
                           ),
                         );

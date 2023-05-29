@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:netzoon/domain/categories/entities/company_category.dart';
+import 'package:netzoon/domain/categories/entities/freezone/freezone_places_by_id/freezone_company.dart';
 import 'package:netzoon/presentation/categories/widgets/free_zone_video_widget.dart';
 import 'package:netzoon/presentation/categories/widgets/image_free_zone_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
@@ -11,7 +11,7 @@ import 'package:netzoon/presentation/utils/app_localizations.dart';
 class CompanyProfile extends StatelessWidget {
   const CompanyProfile({super.key, required this.companyCategory});
 
-  final CompanyCategory companyCategory;
+  final FreeZoneCompany companyCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +133,15 @@ class CompanyProfile extends StatelessWidget {
                       SizedBox(
                         height: 20.h,
                       ),
-                      freeZoonCompanies(context),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: companyCategory.companies?.length,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          return freeZoonCompanies(
+                              companyCategory.companies![index], context);
+                        },
+                      ),
                       SizedBox(
                         height: 25.h,
                       ),
@@ -338,7 +346,7 @@ class CompanyProfile extends StatelessWidget {
     );
   }
 
-  ClipRRect freeZoonCompanies(BuildContext context) {
+  ClipRRect freeZoonCompanies(Companies companies, BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(25.0).w,
       child: Container(
@@ -371,30 +379,21 @@ class CompanyProfile extends StatelessWidget {
             ),
             Center(
               child: CachedNetworkImage(
-                imageUrl: companyCategory.imgurl,
+                imageUrl: companies.image,
                 fit: BoxFit.contain,
                 height: 80.h,
               ),
             ),
             GestureDetector(
-              onTap: () {
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //       builder: (context) {
-                //     return AdvertismentDetalsScreen(
-                //       ads: advertisment,
-                //     );
-                //   }),
-                // );
-              },
+              onTap: () {},
               child: Container(
                 color: AppColor.backgroundColor,
                 height: 35.h,
                 width: MediaQuery.of(context).size.width,
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(
-                    "اللطافة",
+                    companies.name,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 15.sp,

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'legal_advice_remote_data_source.dart';
+part of 'govermental_data_source.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,9 +8,9 @@ part of 'legal_advice_remote_data_source.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _LegalAdviceRemoteDataSourceImpl
-    implements LegalAdviceRemoteDataSourceImpl {
-  _LegalAdviceRemoteDataSourceImpl(
+class _GovermentalRemoteDataSourceImpl
+    implements GovermentalRemoteDataSourceImpl {
+  _GovermentalRemoteDataSourceImpl(
     this._dio, {
     this.baseUrl,
   }) {
@@ -22,25 +22,51 @@ class _LegalAdviceRemoteDataSourceImpl
   String? baseUrl;
 
   @override
-  Future<LegalAdviceResponseModel> getLegalAdvices() async {
+  Future<List<GovermentalModel>> getAllGovermental() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<LegalAdviceResponseModel>(Options(
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<GovermentalModel>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/legalAdvices',
+              '/categories/govermental',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = LegalAdviceResponseModel.fromJson(_result.data!);
+    var value = _result.data!
+        .map(
+            (dynamic i) => GovermentalModel.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<GovermentalCompaniesModel> getGovermentalCompanies(id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<GovermentalCompaniesModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/categories/govermental/${id}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = GovermentalCompaniesModel.fromJson(_result.data!);
     return value;
   }
 

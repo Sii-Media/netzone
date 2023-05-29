@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
 
-class FreeZone extends Equatable {
+class Govermental extends Equatable {
   final String id;
   final String name;
   final String imageUrl;
 
-  const FreeZone(
+  const Govermental(
       {required this.id, required this.name, required this.imageUrl});
 
   @override
-  List<Object?> get props => [name, imageUrl];
+  List<Object?> get props => [id, name, imageUrl];
 }

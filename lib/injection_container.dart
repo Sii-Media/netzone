@@ -12,6 +12,7 @@ import 'package:netzoon/data/datasource/remote/deals/deals_remote_data_source.da
 import 'package:netzoon/data/datasource/remote/departments/departments_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/factories/factories_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/freezones/freezone_remote_data_source.dart';
+import 'package:netzoon/data/datasource/remote/govermental/govermental_data_source.dart';
 import 'package:netzoon/data/datasource/remote/legal_advice/legal_advice_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/local_company/local_company_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/news/news_remote_data_source.dart';
@@ -28,6 +29,7 @@ import 'package:netzoon/data/repositories/deals/deals_repository_impl.dart';
 import 'package:netzoon/data/repositories/departments/departments_repository_impl.dart';
 import 'package:netzoon/data/repositories/factories/factories_repository_impl.dart';
 import 'package:netzoon/data/repositories/freezones/freezone_repository_impl.dart';
+import 'package:netzoon/data/repositories/govermental/govermental_repository_impl.dart';
 import 'package:netzoon/data/repositories/lang/lang_repository_impl.dart';
 import 'package:netzoon/data/repositories/legal_advice/legal_advice_repository_impl.dart';
 import 'package:netzoon/data/repositories/local_company/local_company_repository_impl.dart';
@@ -53,6 +55,7 @@ import 'package:netzoon/domain/auth/usecases/verify_otp_code_use_case.dart';
 import 'package:netzoon/domain/categories/repositories/customs_repository.dart';
 import 'package:netzoon/domain/categories/repositories/factories_repository.dart';
 import 'package:netzoon/domain/categories/repositories/freezone_repository.dart';
+import 'package:netzoon/domain/categories/repositories/govermental_repository.dart';
 import 'package:netzoon/domain/categories/repositories/local_company_reponsitory.dart';
 import 'package:netzoon/domain/categories/repositories/vehicle_repository.dart';
 import 'package:netzoon/domain/categories/usecases/customs/get_all_customs_use_case.dart';
@@ -61,6 +64,8 @@ import 'package:netzoon/domain/categories/usecases/factories/get_all_factories_u
 import 'package:netzoon/domain/categories/usecases/factories/get_factory_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/freezone/get_freezone_places_by_id_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/freezone/get_freezone_places_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/governmental/get_all_governmental_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/governmental/get_govermental_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_all_local_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_company_products_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_all_cars_use_case.dart';
@@ -109,6 +114,7 @@ import 'package:netzoon/presentation/categories/cars/blocs/cars_bloc/cars_bloc.d
 import 'package:netzoon/presentation/categories/customs_screen/customs_bloc/customs_bloc.dart';
 import 'package:netzoon/presentation/categories/factories/blocs/factories_bloc/factories_bloc.dart';
 import 'package:netzoon/presentation/categories/free_zoon/blocs/freezone_bloc/freezone_bloc.dart';
+import 'package:netzoon/presentation/categories/governmental/govermental_bloc/govermental_bloc.dart';
 import 'package:netzoon/presentation/categories/local_company/local_company_bloc/local_company_bloc.dart';
 import 'package:netzoon/presentation/categories/plans/blocs/planes/planes_bloc.dart';
 import 'package:netzoon/presentation/categories/vehicles/blocs/bloc/vehicle_bloc.dart';
@@ -204,6 +210,11 @@ Future<void> init() async {
         getCompanyProductsUseCase: sl(),
       ));
 
+  sl.registerFactory(() => GovermentalBloc(
+        getAllGovermentalUseCase: sl(),
+        getGovermentalCompaniesUseCase: sl(),
+      ));
+
   sl.registerFactory(() =>
       CustomsBloc(getAllCustomsUseCase: sl(), getCustomCompaniesUseCase: sl()));
 
@@ -296,6 +307,12 @@ Future<void> init() async {
   sl.registerLazySingleton(
       () => GetCustomCompaniesUseCase(customsRepository: sl()));
 
+  sl.registerLazySingleton(
+      () => GetAllGovermentalUseCase(govermentalRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => GetGovermentalCompaniesUseCase(govermentalRepository: sl()));
+
   //! Repositories
 
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
@@ -352,6 +369,10 @@ Future<void> init() async {
   sl.registerLazySingleton<CustomsRepository>(() =>
       CustomsRepositoryImpl(customsRemoteDataSource: sl(), networkInfo: sl()));
 
+  sl.registerLazySingleton<GovermentalRepository>(() =>
+      GovermentalRepositoryImpl(
+          networkInfo: sl(), govermentalRemoteDataSource: sl()));
+
   //! DataSourses
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
@@ -407,6 +428,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton<CustomsRemoteDataSource>(
       () => CustomsRemoteDataSourceImpl(sl(), baseUrl: baseUrl));
+
+  sl.registerLazySingleton<GovermentalRemoteDataSource>(
+      () => GovermentalRemoteDataSourceImpl(sl(), baseUrl: baseUrl));
   //! Core
 
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
