@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:netzoon/domain/categories/entities/local_company.dart';
+import 'package:netzoon/domain/categories/entities/local_company/local_company.dart';
+import 'package:netzoon/injection_container.dart';
+import 'package:netzoon/presentation/categories/local_company/local_company_bloc/local_company_bloc.dart';
 import 'package:netzoon/presentation/categories/widgets/product_details.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
@@ -17,6 +20,14 @@ class LocalCompanyProfileScreen extends StatefulWidget {
 
 class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
     with TickerProviderStateMixin {
+  final productsBloc = sl<LocalCompanyBloc>();
+
+  @override
+  void initState() {
+    productsBloc.add(GetLocalCompanyProductsEvent(id: widget.localCompany.id));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextEditingController search = TextEditingController();
@@ -355,45 +366,96 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                   height: size.height,
                                   child: TabBarView(
                                     children: [
-                                      GridView.builder(
-                                        gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
-                                                crossAxisCount: 2,
-                                                childAspectRatio: 0.95,
-                                                crossAxisSpacing: 10.w,
-                                                mainAxisSpacing: 10.h),
-                                        shrinkWrap: true,
-                                        physics: const BouncingScrollPhysics(),
-                                        itemCount:
-                                            widget.localCompany.images.length,
-                                        itemBuilder: (context, index) {
-                                          return ClipRRect(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(20)),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                    builder: (context) {
-                                                      return ProductDetailsScreen(
-                                                        products: widget
-                                                            .localCompany
-                                                            .images,
+                                      BlocBuilder<LocalCompanyBloc,
+                                          LocalCompanyState>(
+                                        bloc: productsBloc,
+                                        builder: (context, state) {
+                                          if (state is LocalCompanyInProgress) {
+                                            return const Center(
+                                              child: CircularProgressIndicator(
+                                                color: AppColor.backgroundColor,
+                                              ),
+                                            );
+                                          } else if (state
+                                              is LocalCompanyFailure) {
+                                            final failure = state.message;
+                                            return Center(
+                                              child: Text(
+                                                failure,
+                                                style: const TextStyle(
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                            );
+                                          } else if (state
+                                              is LocalCompanyProductsSuccess) {
+                                            return state
+                                                    .categoryProducts.isEmpty
+                                                ? Text(
+                                                    AppLocalizations.of(context)
+                                                        .translate('no_items'),
+                                                    style: TextStyle(
+                                                      color: AppColor
+                                                          .backgroundColor,
+                                                      fontSize: 22.sp,
+                                                    ),
+                                                  )
+                                                : GridView.builder(
+                                                    gridDelegate:
+                                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                                            crossAxisCount: 2,
+                                                            childAspectRatio:
+                                                                0.95,
+                                                            crossAxisSpacing:
+                                                                10.w,
+                                                            mainAxisSpacing:
+                                                                10.h),
+                                                    shrinkWrap: true,
+                                                    physics:
+                                                        const BouncingScrollPhysics(),
+                                                    itemCount: state
+                                                        .categoryProducts
+                                                        .length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return ClipRRect(
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                    .all(
+                                                                Radius.circular(
+                                                                    20)),
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .push(
+                                                              MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                                  return ProductDetailsScreen(
+                                                                    products: state
+                                                                        .categoryProducts,
+                                                                  );
+                                                                },
+                                                              ),
+                                                            );
+                                                          },
+                                                          child:
+                                                              CachedNetworkImage(
+                                                            imageUrl: state
+                                                                .categoryProducts[
+                                                                    index]
+                                                                .imageUrl,
+                                                            height: 60,
+                                                            width: 60,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
                                                       );
                                                     },
-                                                  ),
-                                                );
-                                              },
-                                              child: CachedNetworkImage(
-                                                imageUrl: widget
-                                                    .localCompany.images[index],
-                                                height: 60,
-                                                width: 60,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          );
+                                                  );
+                                          }
+                                          return Container();
                                         },
                                       ),
                                       Container(

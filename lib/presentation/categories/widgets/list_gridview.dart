@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/categories/entities/categories.dart';
+import 'package:netzoon/presentation/categories/customs_screen/customs_category.dart';
 import 'package:netzoon/presentation/categories/factories/factories_categories.dart';
 import 'package:netzoon/presentation/categories/free_zoon/category_free_zoon.dart';
 import 'package:netzoon/presentation/categories/local_company/local_companies.dart';
@@ -106,9 +107,7 @@ class GridCategory extends StatelessWidget {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
-                  return const CategoriesFreeZone(
-                    type: 'customs',
-                  );
+                  return const CustomsCategoryScreen();
                 },
               ),
             );
@@ -143,7 +142,7 @@ class GridCategory extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) {
                   return const VehicleListScreen(
-                    type: 'cars',
+                    category: 'cars',
                   );
                 },
               ),

@@ -161,7 +161,7 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'تفاصيل',
+                            AppLocalizations.of(context).translate('details'),
                             style: TextStyle(
                               color: AppColor.black,
                               fontSize: 17.sp,
@@ -171,35 +171,35 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
                             height: 7.h,
                           ),
                           titleAndInput(
-                            title: 'الفئة',
+                            title: 'categ',
                             input: widget.ads.advertisingType,
                           ),
                           SizedBox(
                             height: 7.h,
                           ),
                           titleAndInput(
-                            title: 'السنة',
+                            title: 'year',
                             input: widget.ads.advertisingYear,
                           ),
                           SizedBox(
                             height: 7.h,
                           ),
                           titleAndInput(
-                            title: 'كيلومترات',
+                            title: 'kilometers',
                             input: '123',
                           ),
                           SizedBox(
                             height: 7.h,
                           ),
                           titleAndInput(
-                            title: 'المواصفات الاقليمية',
+                            title: 'regional_specifications',
                             input: 'مواصفات خليجية',
                           ),
                           SizedBox(
                             height: 7.h,
                           ),
                           titleAndInput(
-                            title: 'الضمان',
+                            title: 'guarantee',
                             input: 'لا ينطبق',
                           ),
                           SizedBox(
@@ -232,7 +232,7 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'وصف',
+                          AppLocalizations.of(context).translate('desc'),
                           style: TextStyle(
                             color: AppColor.black,
                             fontSize: 17.sp,
@@ -264,7 +264,7 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'الصور :',
+                          '${AppLocalizations.of(context).translate('images')} :',
                           style: TextStyle(
                             color: AppColor.black,
                             fontSize: 17.sp,
@@ -292,7 +292,8 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
                             : GestureDetector(
                                 onTap: () {},
                                 child: Text(
-                                  'لا يوجد صور',
+                                  AppLocalizations.of(context)
+                                      .translate('no_images'),
                                   style: TextStyle(
                                     color: AppColor.mainGrey,
                                     fontSize: 15.sp,
@@ -316,11 +317,12 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
                     child: widget.ads.advertisingVedio != null &&
                             widget.ads.advertisingVedio != ''
                         ? VideoFreeZoneWidget(
-                            title: "فيديو  : ",
+                            title:
+                                "${AppLocalizations.of(context).translate('vedio')}  : ",
                             vediourl: widget.ads.advertisingVedio ?? '',
                           )
                         : Text(
-                            'لا يوجد فيديو',
+                            AppLocalizations.of(context).translate('no_vedio'),
                             style: TextStyle(
                               color: AppColor.mainGrey,
                               fontSize: 15.sp,
@@ -354,7 +356,8 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
                   Size.fromWidth(200),
                 ),
               ),
-              child: const Text('شراء المنتج'),
+              child:
+                  Text(AppLocalizations.of(context).translate('شراء المنتج')),
               onPressed: () {},
             ),
             PriceSuggestionButton(input: input),
@@ -384,7 +387,7 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              title,
+              AppLocalizations.of(context).translate(title),
               style: TextStyle(
                 color: AppColor.black,
                 fontSize: 15.sp,
@@ -403,152 +406,3 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
     );
   }
 }
- /*
- SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      child: CachedNetworkImage(
-                        imageUrl: ads.advertisingImage,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Row(
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Icon(
-                            Icons.share,
-                            color: AppColor.backgroundColor,
-                          ),
-                          SizedBox(
-                            width: 5.w,
-                          ),
-                          const Icon(
-                            Icons.favorite_border,
-                            color: AppColor.backgroundColor,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'العنوان :',
-                                  style: TextStyle(
-                                    color: AppColor.backgroundColor,
-                                    fontSize: 20.sp,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 8.w,
-                                ),
-                                Text(
-                                  ads.advertisingTitle,
-                                  style: TextStyle(
-                                    color: AppColor.black,
-                                    fontSize: 16.sp,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 12.h,
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'تاريخ البدأ :',
-                                  style: TextStyle(
-                                    color: AppColor.backgroundColor,
-                                    fontSize: 20.sp,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 8.w,
-                                ),
-                                Text(
-                                  ads.advertisingStartDate,
-                                  style: TextStyle(
-                                    color: AppColor.black,
-                                    fontSize: 16.sp,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 12.h,
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'تاريخ الانتهاء',
-                                  style: TextStyle(
-                                    color: AppColor.backgroundColor,
-                                    fontSize: 20.sp,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 8.w,
-                                ),
-                                Text(
-                                  ads.advertisingEndDate,
-                                  style: TextStyle(
-                                    color: AppColor.black,
-                                    fontSize: 16.sp,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 12.h,
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'الوصف :',
-                                  style: TextStyle(
-                                    color: AppColor.backgroundColor,
-                                    fontSize: 20.sp,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 8.w,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    ads.advertisingDescription,
-                                    style: TextStyle(
-                                      color: AppColor.black,
-                                      fontSize: 16.sp,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 12.h,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),*/

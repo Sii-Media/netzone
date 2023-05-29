@@ -71,7 +71,7 @@ class _UserTypeState extends State<UserType> {
                     .map((item) => DropdownMenuItem<String>(
                           value: item,
                           child: Text(
-                            item,
+                            AppLocalizations.of(context).translate(item),
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,

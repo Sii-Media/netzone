@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:netzoon/domain/categories/entities/factory.dart';
+import 'package:netzoon/domain/categories/entities/factories/factory_companies.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 
 class ViewFactoriesWidget extends StatelessWidget {
   const ViewFactoriesWidget({super.key, required this.factory});
-  final List<Factory> factory;
+  final List<FactoryCompanies> factory;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -33,7 +33,7 @@ class ViewFactoriesWidget extends StatelessWidget {
 
 class FactoriesCategories extends StatelessWidget {
   const FactoriesCategories({super.key, required this.factory});
-  final Factory factory;
+  final FactoryCompanies factory;
   @override
   Widget build(BuildContext context) {
     return InkWell(

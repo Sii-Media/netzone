@@ -198,7 +198,7 @@ class Advertising extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   child: Center(
                     child: Text(
-                      "تفاصيل الإعلان",
+                      AppLocalizations.of(context).translate('ads_desc'),
                       style: TextStyle(color: Colors.white, fontSize: 13.sp),
                     ),
                   ),

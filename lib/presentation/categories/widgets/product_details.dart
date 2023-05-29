@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
@@ -9,7 +10,7 @@ import 'package:netzoon/presentation/utils/app_localizations.dart';
 class ProductDetailsScreen extends StatelessWidget {
   const ProductDetailsScreen({super.key, required this.products});
 
-  final List<String> products;
+  final List<CategoryProducts> products;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +23,7 @@ class ProductDetailsScreen extends StatelessWidget {
               physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {
                 return Product(
-                  img: products[index],
+                  img: products[index].imageUrl,
                 );
               }),
         ),

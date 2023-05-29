@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class PriceSuggestionDialog extends StatelessWidget {
   const PriceSuggestionDialog({
@@ -14,9 +15,9 @@ class PriceSuggestionDialog extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: AlertDialog(
-        title: const Text(
-          'أدخل السعر المقترح',
-          style: TextStyle(
+        title: Text(
+          AppLocalizations.of(context).translate('add_suggestion_price'),
+          style: const TextStyle(
             color: AppColor.backgroundColor,
           ),
         ),
@@ -38,7 +39,7 @@ class PriceSuggestionDialog extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18.0),
               )),
             ),
-            child: const Text('إرسال'),
+            child: Text(AppLocalizations.of(context).translate('send')),
           ),
           ElevatedButton(
             onPressed: () {
@@ -52,7 +53,7 @@ class PriceSuggestionDialog extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18.0),
               )),
             ),
-            child: const Text('إلغاء'),
+            child: Text(AppLocalizations.of(context).translate('cancel')),
           ),
         ],
       ),

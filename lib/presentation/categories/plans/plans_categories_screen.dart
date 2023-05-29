@@ -25,14 +25,15 @@ class PlansCategoriesScreen extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) {
                           return const VehicleListScreen(
-                            type: 'plans',
+                            category: 'plans',
+                            type: 'new',
                           );
                         },
                       ),
                     );
                   },
                   child: Container(
-                    alignment: Alignment.centerRight,
+                    alignment: Alignment.centerLeft,
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     height: 60.h,
                     width: double.infinity,
@@ -55,14 +56,15 @@ class PlansCategoriesScreen extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) {
                           return const VehicleListScreen(
-                            type: 'plans',
+                            category: 'plans',
+                            type: 'used',
                           );
                         },
                       ),
                     );
                   },
                   child: Container(
-                    alignment: Alignment.centerRight,
+                    alignment: Alignment.centerLeft,
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     height: 60.h,
                     width: double.infinity,

@@ -135,14 +135,14 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
                 DropdownButton2(
                   isExpanded: true,
                   hint: Row(
-                    children: const [
-                      SizedBox(
+                    children: [
+                      const SizedBox(
                         width: 4,
                       ),
                       Expanded(
                         child: Text(
-                          'عرض الكل',
-                          style: TextStyle(
+                          AppLocalizations.of(context).translate('عرض الكل'),
+                          style: const TextStyle(
                             fontSize: 14,
                             color: Colors.black,
                           ),
@@ -154,7 +154,7 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
                       .map((item) => DropdownMenuItem<String>(
                             value: item,
                             child: Text(
-                              item,
+                              AppLocalizations.of(context).translate(item),
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,

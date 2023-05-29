@@ -13,6 +13,8 @@ import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 
+import '../utils/app_localizations.dart';
+
 class AddAdsPage extends StatefulWidget {
   const AddAdsPage({super.key});
 
@@ -89,8 +91,8 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                 } else if (state is AddAdsSuccess) {
                   stopLoading();
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: const Text(
-                      'success',
+                    content: Text(
+                      AppLocalizations.of(context).translate('success'),
                     ),
                     backgroundColor: Theme.of(context).colorScheme.secondary,
                   ));
@@ -105,7 +107,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                     children: [
                       Center(
                         child: Text(
-                          'إضافة إعلان',
+                          AppLocalizations.of(context).translate('add_ads'),
                           style: TextStyle(
                             color: AppColor.backgroundColor,
                             fontSize: 20.sp,
@@ -120,7 +122,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                         indent: 30,
                       ),
                       Text(
-                        'القسم :',
+                        '${AppLocalizations.of(context).translate('department')} :',
                         style: TextStyle(
                           color: AppColor.backgroundColor,
                           fontSize: 16.sp,
@@ -155,7 +157,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                                 value: value,
                                 // Use a colored box to show the option
                                 child: Text(
-                                  value,
+                                  AppLocalizations.of(context).translate(value),
                                   style: const TextStyle(color: Colors.black),
                                 ),
                               );
@@ -167,7 +169,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                       addAdsFormFeild(
                         context: context,
                         controller: titleController,
-                        title: 'العنوان',
+                        title: 'address',
                         isNumber: false,
                         validator: (val) {
                           if (val!.isEmpty) {
@@ -183,7 +185,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                       addAdsFormFeild(
                         context: context,
                         controller: descController,
-                        title: 'الوصف',
+                        title: 'description',
                         isNumber: false,
                         maxLines: 3,
                         validator: (val) {
@@ -198,7 +200,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                         height: 10.h,
                       ),
                       Text(
-                        'تاريخ البدأ :',
+                        '${AppLocalizations.of(context).translate('start_date')} :',
                         style: TextStyle(
                           color: AppColor.backgroundColor,
                           fontSize: 16.sp,
@@ -242,7 +244,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                         height: 10.h,
                       ),
                       Text(
-                        'تاريخ الانتهاء :',
+                        '${AppLocalizations.of(context).translate('end_date')} :',
                         style: TextStyle(
                           color: AppColor.backgroundColor,
                           fontSize: 16.sp,
@@ -286,7 +288,8 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                         height: 10.h,
                       ),
                       addPhotoButton(
-                          text: 'إضافة صورة من المعرض',
+                          text: AppLocalizations.of(context)
+                              .translate('add_from_gallery'),
                           onPressed: () {
                             getImage(ImageSource.gallery);
                           }),
@@ -365,7 +368,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                       addAdsFormFeild(
                         context: context,
                         controller: priceController,
-                        title: 'السعر',
+                        title: 'price',
                         isNumber: true,
                         validator: (val) {
                           if (val!.isEmpty) {
@@ -381,7 +384,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                       addAdsFormFeild(
                         context: context,
                         controller: yearController,
-                        title: 'السنة',
+                        title: 'year',
                         isNumber: true,
                         validator: (val) {
                           if (val!.isEmpty) {
@@ -396,7 +399,8 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                       ),
                       Center(
                         child: addPhotoButton(
-                            text: 'إضافة الخبر',
+                            text: AppLocalizations.of(context)
+                                .translate('add_ads'),
                             onPressed: () {
                               if (!_formKey.currentState!.validate()) return;
                               if (_image == null) {
@@ -466,7 +470,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          title,
+          AppLocalizations.of(context).translate(title),
           style: TextStyle(
             color: AppColor.backgroundColor,
             fontSize: 16.sp,

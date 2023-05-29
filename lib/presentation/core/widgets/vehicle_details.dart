@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/helpers/map_to_date.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
@@ -51,7 +52,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  vehicle.price,
+                                  vehicle.price.toString(),
                                   style: TextStyle(
                                       color: AppColor.colorOne,
                                       fontSize: 17.sp,
@@ -125,7 +126,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                         ),
                         titleAndInput(
                           title: AppLocalizations.of(context).translate('year'),
-                          input: vehicle.year,
+                          input: formatDate(vehicle.year),
                         ),
                         SizedBox(
                           height: 7.h,
@@ -133,7 +134,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                         titleAndInput(
                           title: AppLocalizations.of(context)
                               .translate('kilometers'),
-                          input: vehicle.kilometers,
+                          input: vehicle.kilometers.toString(),
                         ),
                         SizedBox(
                           height: 7.h,

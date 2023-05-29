@@ -1,21 +1,43 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/domain/categories/entities/vehicles/vehicle.dart';
+import 'package:netzoon/injection_container.dart';
+import 'package:netzoon/presentation/categories/vehicles/blocs/bloc/vehicle_bloc.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/helpers/map_to_date.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/vehicle_details.dart';
-import 'package:netzoon/presentation/data/cars.dart';
-import 'package:netzoon/presentation/data/plans.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
-class VehicleListScreen extends StatelessWidget {
-  const VehicleListScreen({super.key, required this.type});
+class VehicleListScreen extends StatefulWidget {
+  const VehicleListScreen({super.key, required this.category, this.type});
 
-  final String type;
+  final String category;
+  final String? type;
+
+  @override
+  State<VehicleListScreen> createState() => _VehicleListScreenState();
+}
+
+class _VehicleListScreenState extends State<VehicleListScreen> {
+  final vehilceBloc = sl<VehicleBloc>();
+
+  @override
+  void initState() {
+    if (widget.category == 'cars') {
+      vehilceBloc.add(GetAllCarsEvent());
+    } else if (widget.category == 'plans' && widget.type == 'new') {
+      vehilceBloc.add(GetAllNewPlanesEvent());
+    } else if (widget.category == 'plans' && widget.type == 'used') {
+      vehilceBloc.add(GetAllUsedPlanesEvent());
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final planslist = plans;
-    final carList = cars;
     return Scaffold(
       body: BackgroundWidget(
         widget: Padding(
@@ -25,15 +47,59 @@ class VehicleListScreen extends StatelessWidget {
             left: 3.0,
             right: 3.0,
           ),
-          child: ListView.builder(
-            itemCount: type == 'plans' ? planslist.length : carList.length,
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) {
-              return VehicleWidget(
-                plan: type == 'plans' ? planslist[index] : carList[index],
-              );
+          child: RefreshIndicator(
+            onRefresh: () async {
+              if (widget.category == 'cars') {
+                vehilceBloc.add(GetAllCarsEvent());
+              } else if (widget.category == 'plans' && widget.type == 'new') {
+                vehilceBloc.add(GetAllNewPlanesEvent());
+              } else if (widget.category == 'plans' && widget.type == 'used') {
+                vehilceBloc.add(GetAllUsedPlanesEvent());
+              }
             },
+            color: AppColor.white,
+            backgroundColor: AppColor.backgroundColor,
+            child: BlocBuilder<VehicleBloc, VehicleState>(
+              bloc: vehilceBloc,
+              builder: (context, state) {
+                if (state is VehicleInProgress) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColor.backgroundColor,
+                    ),
+                  );
+                } else if (state is VehicleFailure) {
+                  final failure = state.message;
+                  return Center(
+                    child: Text(
+                      failure,
+                      style: const TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
+                  );
+                }
+                if (state is VehicleSuccess) {
+                  return ListView.builder(
+                    // itemCount: widget.type == 'plans'
+                    //     ? planslist.length
+                    //     : carList.length,
+                    itemCount: state.vehilces.length,
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return VehicleWidget(
+                        plan: state.vehilces[index],
+                        // plan: widget.type == 'plans'
+                        //     ? planslist[index]
+                        //     : carList[index],
+                      );
+                    },
+                  );
+                }
+                return Container();
+              },
+            ),
           ),
         ),
       ),
@@ -47,7 +113,7 @@ class VehicleWidget extends StatelessWidget {
     required this.plan,
   });
 
-  final dynamic plan;
+  final Vehicle plan;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +150,7 @@ class VehicleWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      plan.price,
+                      plan.price.toString(),
                       style: TextStyle(
                           color: AppColor.colorOne,
                           fontSize: 17.sp,
@@ -145,7 +211,7 @@ class VehicleWidget extends StatelessWidget {
                           width: 5.w,
                         ),
                         Text(
-                          plan.kilometers,
+                          plan.kilometers.toString(),
                           style: TextStyle(
                             color: AppColor.secondGrey,
                             fontSize: 14.sp,
@@ -170,7 +236,7 @@ class VehicleWidget extends StatelessWidget {
                           width: 5.w,
                         ),
                         Text(
-                          plan.year,
+                          formatDate(plan.year),
                           style: TextStyle(
                             color: AppColor.secondGrey,
                             fontSize: 14.sp,
