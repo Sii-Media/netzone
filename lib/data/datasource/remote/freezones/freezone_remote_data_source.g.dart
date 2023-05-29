@@ -25,7 +25,7 @@ class _FreeZoneRemoteDataSourceImpl implements FreeZoneRemoteDataSourceImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<FreeZoneResponseModel>(Options(
       method: 'GET',
@@ -48,7 +48,7 @@ class _FreeZoneRemoteDataSourceImpl implements FreeZoneRemoteDataSourceImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<FreeZoneCompanyResponseModel>(Options(
       method: 'GET',
