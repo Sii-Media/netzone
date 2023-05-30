@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/tenders/entities/tendersItems/tender_item.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 
 class TenderInfoScreen extends StatelessWidget {
@@ -14,71 +15,85 @@ class TenderInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        body: BackgroundWidget(
-          widget: ListView(
-            children: [
-              Container(
-                margin: const EdgeInsets.all(8),
-                height: size.height * 0.30,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(25.0),
-                  child: CachedNetworkImage(
-                    imageUrl: tender.type,
-                    fit: BoxFit.cover,
-                  ),
+    return Scaffold(
+      body: BackgroundWidget(
+        widget: ListView(
+          children: [
+            Container(
+              margin: const EdgeInsets.all(8),
+              height: size.height * 0.30,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(25.0),
+                child: CachedNetworkImage(
+                  imageUrl: tender.type,
+                  fit: BoxFit.cover,
                 ),
               ),
-              myspec(context, "اسم المناقصة : ", tender.nameAr,
-                  AppColor.backgroundColor, Colors.black),
-              myspec(context, "اسم الشركة : ", tender.companyName,
-                  AppColor.backgroundColor, Colors.black),
-              myspec(
-                  context,
-                  "تاريخ بدء المناقصة : ",
-                  convertDateToString(tender.startDate),
-                  AppColor.backgroundColor,
-                  Colors.black),
-              myspec(
-                  context,
-                  "تاريخ انتهاء المناقصة: ",
-                  convertDateToString(tender.endDate),
-                  AppColor.backgroundColor,
-                  Colors.black),
-              SizedBox(
-                height: 5.h,
-              ),
-              myspec(context, 'قيمة المناقصة : ', tender.value.toString(),
-                  AppColor.backgroundColor, Colors.black),
-              SizedBox(
-                height: 5.h,
-              ),
-              myspec(context, "السعر يبدأ : ", tender.price.toString(),
-                  AppColor.backgroundColor, Colors.black),
-              SizedBox(
-                height: 20.h,
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 4.h),
-                width: MediaQuery.of(context).size.width,
-                child: ElevatedButton(
-                    onPressed: () {
-                      // Get.to(ViewDetailsDeals(dealsModel: dealsModel));
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.backgroundColor,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        //shadowColor: Colors.black,
-                        //  elevation: 5
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                        textStyle: const TextStyle(fontSize: 15)),
-                    child: const Text("شراء المناقصة")),
-              )
-            ],
-          ),
+            ),
+            myspec(
+                context,
+                "${AppLocalizations.of(context).translate("اسم المناقصة")} : ",
+                tender.nameAr,
+                AppColor.backgroundColor,
+                Colors.black),
+            myspec(
+                context,
+                "${AppLocalizations.of(context).translate('company_name')} : ",
+                tender.companyName,
+                AppColor.backgroundColor,
+                Colors.black),
+            myspec(
+                context,
+                "${AppLocalizations.of(context).translate('تاريخ بدء المناقصة')} : ",
+                convertDateToString(tender.startDate),
+                AppColor.backgroundColor,
+                Colors.black),
+            myspec(
+                context,
+                "${AppLocalizations.of(context).translate('تاريخ انتهاء المناقصة')}: ",
+                convertDateToString(tender.endDate),
+                AppColor.backgroundColor,
+                Colors.black),
+            SizedBox(
+              height: 5.h,
+            ),
+            myspec(
+                context,
+                '${AppLocalizations.of(context).translate('قيمة المناقصة')} : ',
+                tender.value.toString(),
+                AppColor.backgroundColor,
+                Colors.black),
+            SizedBox(
+              height: 5.h,
+            ),
+            myspec(
+                context,
+                "${AppLocalizations.of(context).translate('السعر يبدأ')} : ",
+                tender.price.toString(),
+                AppColor.backgroundColor,
+                Colors.black),
+            SizedBox(
+              height: 20.h,
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 4.h),
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                  onPressed: () {
+                    // Get.to(ViewDetailsDeals(dealsModel: dealsModel));
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColor.backgroundColor,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      //shadowColor: Colors.black,
+                      //  elevation: 5
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      textStyle: const TextStyle(fontSize: 15)),
+                  child: Text(
+                      AppLocalizations.of(context).translate('شراء المناقصة'))),
+            )
+          ],
         ),
       ),
     );

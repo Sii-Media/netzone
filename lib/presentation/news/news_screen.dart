@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/news/entities/news_info.dart';
 import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/helpers/share_image_function.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/news/add_new_page.dart';
 import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
@@ -33,67 +34,64 @@ class _NewsScreenState extends State<NewsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        body: BackgroundWidget(
-          widget: RefreshIndicator(
-            onRefresh: () async {
-              newsBloc.add(GetAllNewsEvent());
+    return Scaffold(
+      body: BackgroundWidget(
+        widget: RefreshIndicator(
+          onRefresh: () async {
+            newsBloc.add(GetAllNewsEvent());
+          },
+          color: AppColor.white,
+          backgroundColor: AppColor.backgroundColor,
+          child: BlocBuilder<NewsBloc, NewsState>(
+            bloc: newsBloc,
+            builder: (context, state) {
+              if (state is NewsInProgress) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: AppColor.backgroundColor,
+                  ),
+                );
+              } else if (state is NewsFailure) {
+                final failure = state.message;
+                return Center(
+                  child: Text(
+                    failure,
+                    style: const TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                );
+              } else if (state is NewsSuccess) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: AllNewsWidget(news: state.news),
+                  ),
+                );
+              }
+              return Container();
             },
-            color: AppColor.white,
-            backgroundColor: AppColor.backgroundColor,
-            child: BlocBuilder<NewsBloc, NewsState>(
-              bloc: newsBloc,
-              builder: (context, state) {
-                if (state is NewsInProgress) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColor.backgroundColor,
-                    ),
-                  );
-                } else if (state is NewsFailure) {
-                  final failure = state.message;
-                  return Center(
-                    child: Text(
-                      failure,
-                      style: const TextStyle(
-                        color: Colors.red,
-                      ),
-                    ),
-                  );
-                } else if (state is NewsSuccess) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: AllNewsWidget(news: state.news),
-                    ),
-                  );
-                }
-                return Container();
-              },
-            ),
           ),
         ),
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 10.0),
-          child: FloatingActionButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const AddNewScreen();
-                  },
-                ),
-              );
-            },
-            backgroundColor: AppColor.backgroundColor,
-            tooltip: 'إضافة خبر',
-            child: const Icon(
-              Icons.add,
-              size: 30,
-            ),
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return const AddNewScreen();
+                },
+              ),
+            );
+          },
+          backgroundColor: AppColor.backgroundColor,
+          tooltip: 'إضافة خبر',
+          child: const Icon(
+            Icons.add,
+            size: 30,
           ),
         ),
       ),
@@ -233,37 +231,19 @@ class AllNewsWidget extends StatelessWidget {
                         SizedBox(
                           width: 5.w,
                         ),
-                        const Icon(
-                          Feather.send,
+                        GestureDetector(
+                          onTap: () async {
+                            await shareImageWithDescription(
+                                imageUrl: news[index].imgUrl,
+                                description: news[index].description);
+                          },
+                          child: const Icon(
+                            Feather.send,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  // SizedBox(
-                  //   height: 5.h,
-                  // ),
-                  // // Row(
-                  // //   children: [
-                  // //     Text(
-                  // //       news[index].ownerName,
-                  // //       style: TextStyle(
-                  // //         color: AppColor.black,
-                  // //         fontWeight: FontWeight.bold,
-                  // //         fontSize: 16.sp,
-                  // //       ),
-                  // //     ),
-                  // //     SizedBox(
-                  // //       width: 5.w,
-                  // //     ),
-                  // //     Text(
-                  // //       'بعض التفاصيل',
-                  // //       style: TextStyle(
-                  // //         color: AppColor.black,
-                  // //         fontSize: 13.sp,
-                  // //       ),
-                  // //     ),
-                  // //   ],
-                  // // ),
                   SizedBox(
                     height: 5.h,
                   ),

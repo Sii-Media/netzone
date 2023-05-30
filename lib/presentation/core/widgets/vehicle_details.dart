@@ -7,6 +7,8 @@ import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../helpers/share_image_function.dart';
+
 class VehicleDetailsScreen extends StatelessWidget {
   const VehicleDetailsScreen({super.key, required this.vehicle});
 
@@ -61,12 +63,19 @@ class VehicleDetailsScreen extends StatelessWidget {
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children: const [
-                                    Icon(
-                                      Icons.share,
-                                      color: AppColor.backgroundColor,
+                                  children: [
+                                    IconButton(
+                                      onPressed: () async {
+                                        await shareImageWithDescription(
+                                            imageUrl: vehicle.imageUrl,
+                                            description: vehicle.description);
+                                      },
+                                      icon: const Icon(
+                                        Icons.share,
+                                        color: AppColor.backgroundColor,
+                                      ),
                                     ),
-                                    Icon(
+                                    const Icon(
                                       Icons.favorite_border,
                                       color: AppColor.backgroundColor,
                                     ),

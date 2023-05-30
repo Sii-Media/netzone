@@ -145,14 +145,6 @@ class GridCategory extends StatelessWidget {
               ),
             );
           }
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(builder: (context) {
-          //     if (category.name == 'الشركات المحلية') {
-          //       return const GovernmentalCompanies();
-          //     }
-          //     return const CategoriesFreeZone();
-          //   }),
-          // );
         },
         child: Stack(
           alignment: Alignment.bottomCenter,

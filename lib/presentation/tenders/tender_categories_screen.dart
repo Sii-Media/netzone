@@ -34,90 +34,84 @@ class _TenderCategoriesScreenState extends State<TenderCategoriesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final dealsCategoryList = dealsCategories;
-    // final tendersCategoryList = tendersCategrories;
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-          body: SingleChildScrollView(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: BackgroundWidget(
-            widget: RefreshIndicator(
-              onRefresh: () async {
-                tenderBloc.add(GetAllTendersCatEvent());
-              },
-              child: BlocBuilder<TenderCatBloc, TenderCatState>(
-                bloc: tenderBloc,
-                builder: (context, state) {
-                  if (state is TenderCatInProgress) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColor.backgroundColor,
+    return Scaffold(
+        body: SingleChildScrollView(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: BackgroundWidget(
+          widget: RefreshIndicator(
+            onRefresh: () async {
+              tenderBloc.add(GetAllTendersCatEvent());
+            },
+            child: BlocBuilder<TenderCatBloc, TenderCatState>(
+              bloc: tenderBloc,
+              builder: (context, state) {
+                if (state is TenderCatInProgress) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColor.backgroundColor,
+                    ),
+                  );
+                } else if (state is TenderCatFailure) {
+                  final failure = state.message;
+                  return Center(
+                    child: Text(
+                      failure,
+                      style: const TextStyle(
+                        color: Colors.red,
                       ),
-                    );
-                  } else if (state is TenderCatFailure) {
-                    final failure = state.message;
-                    return Center(
-                      child: Text(
-                        failure,
-                        style: const TextStyle(
-                          color: Colors.red,
+                    ),
+                  );
+                } else if (state is TenderCatSuccess) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          AppLocalizations.of(context).translate(widget.title),
+                          style:
+                              TextStyle(fontSize: 20.sp, color: Colors.black),
                         ),
                       ),
-                    );
-                  } else if (state is TenderCatSuccess) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .translate(widget.title),
-                            style:
-                                TextStyle(fontSize: 20.sp, color: Colors.black),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: 20.0.h),
-                            child: SizedBox(
-                              // height: MediaQuery.of(context).size.height,
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: state.tenderCat.length,
-                                scrollDirection: Axis.vertical,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5, vertical: 8),
-                                    child: widget.title == 'فئات الصفقات'
-                                        ? Categories(
-                                            dealsCategory: list[index],
-                                            category: widget.title,
-                                          )
-                                        : Categories(
-                                            tendersCategory:
-                                                state.tenderCat[index],
-                                            category: widget.title,
-                                          ),
-                                  );
-                                },
-                              ),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: 20.0.h),
+                          child: SizedBox(
+                            // height: MediaQuery.of(context).size.height,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: state.tenderCat.length,
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 5, vertical: 8),
+                                  child: widget.title == 'فئات الصفقات'
+                                      ? Categories(
+                                          dealsCategory: list[index],
+                                          category: widget.title,
+                                        )
+                                      : Categories(
+                                          tendersCategory:
+                                              state.tenderCat[index],
+                                          category: widget.title,
+                                        ),
+                                );
+                              },
                             ),
                           ),
                         ),
-                      ],
-                    );
-                  }
-                  return Container();
-                },
-              ),
+                      ),
+                    ],
+                  );
+                }
+                return Container();
+              },
             ),
           ),
         ),
-      )),
-    );
+      ),
+    ));
   }
 }

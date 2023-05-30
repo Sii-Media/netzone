@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 
+import '../../core/helpers/share_image_function.dart';
+
 class ImageFreeZoneWidget extends StatelessWidget {
   const ImageFreeZoneWidget({Key? key, required this.companyimages})
       : super(key: key);
@@ -65,14 +67,30 @@ class ListOfPictures extends StatelessWidget {
             padding: const EdgeInsets.all(4.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Icon(
-                  Icons.share,
+              children: [
+                IconButton(
+                  onPressed: () async {
+                    // final urlImage = img;
+                    // final url = Uri.parse(urlImage);
+                    // final response = await http.get(url);
+                    // final bytes = response.bodyBytes;
+
+                    // final temp = await getTemporaryDirectory();
+                    // final path = '${temp.path}/image.jpg';
+                    // File(path).writeAsBytesSync(bytes);
+                    // await Share.shareFiles([path], text: 'This is Amazing');
+                    await shareImageWithDescription(
+                        imageUrl: img, description: '');
+                  },
+                  icon: const Icon(Icons.share),
                   color: AppColor.backgroundColor,
                 ),
-                Icon(
-                  Icons.favorite_border,
-                  color: AppColor.backgroundColor,
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.favorite_border,
+                    color: AppColor.backgroundColor,
+                  ),
                 ),
               ],
             ),

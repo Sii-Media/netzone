@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,6 +8,9 @@ import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   const ProductDetailsScreen({super.key, required this.products});
@@ -72,15 +77,33 @@ class Product extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        const Icon(
-                          Icons.favorite_border,
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.favorite_border,
+                          ),
                         ),
                         SizedBox(
                           width: 10.w,
                         ),
-                        const Icon(
-                          Icons.share,
-                        ),
+                        IconButton(
+                          onPressed: () async {
+                            final urlImage = img;
+                            final url = Uri.parse(urlImage);
+                            final response = await http.get(url);
+                            final bytes = response.bodyBytes;
+
+                            final temp = await getTemporaryDirectory();
+                            final path = '${temp.path}/image.jpg';
+                            File(path).writeAsBytesSync(bytes);
+                            // ignore: deprecated_member_use
+                            await Share.shareFiles([path],
+                                text: 'This is Amazing');
+                          },
+                          icon: const Icon(
+                            Icons.share,
+                          ),
+                        )
                       ],
                     ),
                     Text(

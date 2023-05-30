@@ -21,44 +21,41 @@ class TendersCategoriesScreen extends StatefulWidget {
 class _TendersCategoriesScreenState extends State<TendersCategoriesScreen> {
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-          body: SingleChildScrollView(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: BackgroundWidget(
-            widget: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    AppLocalizations.of(context).translate('tender_categories'),
-                    style: TextStyle(fontSize: 18.sp, color: Colors.black),
-                  ),
+    return Scaffold(
+        body: SingleChildScrollView(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: BackgroundWidget(
+          widget: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  AppLocalizations.of(context).translate('tender_categories'),
+                  style: TextStyle(fontSize: 18.sp, color: Colors.black),
                 ),
-                tendersCategory(
-                  name: AppLocalizations.of(context)
-                      .translate('from_minimum_price'),
-                  sort: 'min',
-                  category: widget.category,
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                tendersCategory(
-                  name: AppLocalizations.of(context)
-                      .translate('from_maximum_price'),
-                  sort: 'max',
-                  category: widget.category,
-                ),
-              ],
-            ),
+              ),
+              tendersCategory(
+                name: AppLocalizations.of(context)
+                    .translate('from_minimum_price'),
+                sort: 'min',
+                category: widget.category,
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
+              tendersCategory(
+                name: AppLocalizations.of(context)
+                    .translate('from_maximum_price'),
+                sort: 'max',
+                category: widget.category,
+              ),
+            ],
           ),
         ),
-      )),
-    );
+      ),
+    ));
   }
 
   Center tendersCategory(

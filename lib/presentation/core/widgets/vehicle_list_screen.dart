@@ -11,6 +11,8 @@ import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/vehicle_details.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../helpers/share_image_function.dart';
+
 class VehicleListScreen extends StatefulWidget {
   const VehicleListScreen({super.key, required this.category, this.type});
 
@@ -158,17 +160,24 @@ class VehicleWidget extends StatelessWidget {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Icon(
+                      children: [
+                        const Icon(
                           Icons.favorite_border,
                           color: AppColor.backgroundColor,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 4,
                         ),
-                        Icon(
-                          Icons.share,
-                          color: AppColor.backgroundColor,
+                        GestureDetector(
+                          onTap: () async {
+                            await shareImageWithDescription(
+                                imageUrl: plan.imageUrl,
+                                description: plan.description);
+                          },
+                          child: const Icon(
+                            Icons.share,
+                            color: AppColor.backgroundColor,
+                          ),
                         ),
                       ],
                     ),

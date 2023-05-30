@@ -61,15 +61,7 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
                             return SizedBox(
                               height: MediaQuery.of(context).size.height * 0.40,
                               child: InkWell(
-                                onTap: () {
-                                  // Navigator.of(context).push(
-                                  //   MaterialPageRoute(builder: (context) {
-                                  //     return NewsDetails(
-                                  //       news: news[index],
-                                  //     );
-                                  //   }),
-                                  // );
-                                },
+                                onTap: () {},
                                 child: Container(
                                   margin:
                                       const EdgeInsets.symmetric(vertical: 10),

@@ -11,6 +11,8 @@ import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../helpers/share_image_function.dart';
+
 class ProductDetailScreen extends StatelessWidget {
   const ProductDetailScreen({super.key, required this.item});
   final CategoryProducts item;
@@ -64,12 +66,19 @@ class ProductDetailScreen extends StatelessWidget {
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children: const [
-                                    Icon(
-                                      Icons.share,
-                                      color: AppColor.backgroundColor,
+                                  children: [
+                                    IconButton(
+                                      onPressed: () async {
+                                        await shareImageWithDescription(
+                                            imageUrl: item.imageUrl,
+                                            description: item.name);
+                                      },
+                                      icon: const Icon(
+                                        Icons.share,
+                                        color: AppColor.backgroundColor,
+                                      ),
                                     ),
-                                    Icon(
+                                    const Icon(
                                       Icons.favorite_border,
                                       color: AppColor.backgroundColor,
                                     ),

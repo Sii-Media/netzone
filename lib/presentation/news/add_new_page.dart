@@ -11,6 +11,7 @@ import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/news/blocs/add_news/add_news_bloc.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class AddNewScreen extends StatefulWidget {
   const AddNewScreen({super.key});
@@ -45,177 +46,162 @@ class _AddNewScreenState extends State<AddNewScreen>
       });
     }
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        body: BackgroundWidget(
-          widget: Padding(
-            padding: const EdgeInsets.only(
-              top: 4.0,
-              bottom: 20,
-              right: 8.0,
-              left: 8.0,
-            ),
-            child: BlocListener<AddNewsBloc, AddNewsState>(
-              bloc: newsBloc,
-              listener: (context, state) {
-                if (state is AddNewsInProgress) {
-                  startLoading();
-                } else if (state is AddNewsFailure) {
-                  stopLoading();
+    return Scaffold(
+      body: BackgroundWidget(
+        widget: Padding(
+          padding: const EdgeInsets.only(
+            top: 4.0,
+            bottom: 20,
+            right: 8.0,
+            left: 8.0,
+          ),
+          child: BlocListener<AddNewsBloc, AddNewsState>(
+            bloc: newsBloc,
+            listener: (context, state) {
+              if (state is AddNewsInProgress) {
+                startLoading();
+              } else if (state is AddNewsFailure) {
+                stopLoading();
 
-                  final failure = state.message;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        failure,
-                        style: const TextStyle(
-                          color: AppColor.white,
-                        ),
-                      ),
-                      backgroundColor: AppColor.red,
-                    ),
-                  );
-                } else if (state is AddNewsSuccess) {
-                  stopLoading();
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: const Text(
-                      'success',
-                    ),
-                    backgroundColor: Theme.of(context).colorScheme.secondary,
-                  ));
-                }
-              },
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Text(
-                        'إضافة خبر',
-                        style: TextStyle(
-                          color: AppColor.backgroundColor,
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
+                final failure = state.message;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      failure,
+                      style: const TextStyle(
+                        color: AppColor.white,
                       ),
                     ),
-                    const Divider(
-                      color: AppColor.secondGrey,
-                      thickness: 0.2,
-                      endIndent: 30,
-                      indent: 30,
+                    backgroundColor: AppColor.red,
+                  ),
+                );
+              } else if (state is AddNewsSuccess) {
+                stopLoading();
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                    AppLocalizations.of(context).translate('success'),
+                  ),
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                ));
+              }
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Text(
+                      AppLocalizations.of(context).translate('add_news'),
+                      style: TextStyle(
+                        color: AppColor.backgroundColor,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                    addNewsTextField(
-                      context: context,
-                      controller: titleController,
-                      title: 'العنوان',
-                      isNumber: false,
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    addNewsTextField(
-                      context: context,
-                      controller: descController,
-                      title: 'موضوع الخبر',
-                      isNumber: false,
-                      maxLines: 5,
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    addPhotoButton(
-                        text: 'إضافة صورة من المعرض',
-                        onPressed: () {
-                          getImage(ImageSource.gallery);
-                        }),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    _image != null
-                        ? Center(
-                            child: Image.file(
-                              _image!,
-                              width: 250.w,
-                              height: 250.h,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : Center(
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
-                              width: 250.w,
-                              height: 250.h,
-                              fit: BoxFit.cover,
-                            ),
+                  ),
+                  const Divider(
+                    color: AppColor.secondGrey,
+                    thickness: 0.2,
+                    endIndent: 30,
+                    indent: 30,
+                  ),
+                  addNewsTextField(
+                    context: context,
+                    controller: titleController,
+                    title: 'address',
+                    isNumber: false,
+                  ),
+                  SizedBox(
+                    height: 5.h,
+                  ),
+                  addNewsTextField(
+                    context: context,
+                    controller: descController,
+                    title: 'news_subject',
+                    isNumber: false,
+                    maxLines: 5,
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  addPhotoButton(
+                      text: 'add_from_gallery',
+                      onPressed: () {
+                        getImage(ImageSource.gallery);
+                      }),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  _image != null
+                      ? Center(
+                          child: Image.file(
+                            _image!,
+                            width: 250.w,
+                            height: 250.h,
+                            fit: BoxFit.cover,
                           ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Center(
-                      child: addPhotoButton(
-                          text: 'إضافة الخبر',
-                          onPressed: () {
-                            if (_image == null) {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text(
-                                      'No Image Selected',
-                                      style: TextStyle(color: AppColor.red),
+                        )
+                      : Center(
+                          child: CachedNetworkImage(
+                            imageUrl:
+                                'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
+                            width: 250.w,
+                            height: 250.h,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Center(
+                    child: addPhotoButton(
+                        text: AppLocalizations.of(context)
+                            .translate('add_the_news'),
+                        onPressed: () {
+                          if (_image == null) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    AppLocalizations.of(context)
+                                        .translate('no_image_selected'),
+                                    style: const TextStyle(color: AppColor.red),
+                                  ),
+                                  content: Text(
+                                    AppLocalizations.of(context).translate(
+                                        'please_select_an_image_before_uploading'),
+                                    style: const TextStyle(color: AppColor.red),
+                                  ),
+                                  actions: [
+                                    ElevatedButton(
+                                      child: const Text('OK'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
                                     ),
-                                    content: const Text(
-                                      'Please select an image before uploading.',
-                                      style: TextStyle(color: AppColor.red),
-                                    ),
-                                    actions: [
-                                      ElevatedButton(
-                                        child: const Text('OK'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                              return;
-                            }
-                            newsBloc.add(AddNewsRequested(
-                              title: titleController.text,
-                              description: descController.text,
-                              image: _image!,
-                              ownerName: 'ownerName',
-                              ownerImage:
-                                  'https://is3-ssl.mzstatic.com/image/thumb/Purple112/v4/31/17/79/311779d6-bfe8-d8d5-4782-81bd4c5f01ea/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/1200x630wa.png',
-                              creator: '645506caac0f6323fa7b0d3f',
-                            ));
-                          }),
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    // TextFormField(
-                    //   style: const TextStyle(color: Colors.black),
-                    //   controller: descController,
-                    //   maxLines: 5,
-                    //   decoration: InputDecoration(
-                    //     hintStyle:
-                    //         const TextStyle(color: AppColor.backgroundColor),
-                    //     hintText: 'موضوع الخبر',
-                    //     border: const OutlineInputBorder(),
-                    //     floatingLabelBehavior: FloatingLabelBehavior.always,
-                    //     contentPadding: const EdgeInsets.symmetric(
-                    //             vertical: 5, horizontal: 10)
-                    //         .flipped,
-                    //   ),
-                    // )
-                  ],
-                ),
+                                  ],
+                                );
+                              },
+                            );
+                            return;
+                          }
+                          newsBloc.add(AddNewsRequested(
+                            title: titleController.text,
+                            description: descController.text,
+                            image: _image!,
+                            ownerName: 'ownerName',
+                            ownerImage:
+                                'https://is3-ssl.mzstatic.com/image/thumb/Purple112/v4/31/17/79/311779d6-bfe8-d8d5-4782-81bd4c5f01ea/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/1200x630wa.png',
+                            creator: '645506caac0f6323fa7b0d3f',
+                          ));
+                        }),
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                ],
               ),
             ),
           ),
@@ -223,11 +209,6 @@ class _AddNewScreenState extends State<AddNewScreen>
       ),
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-
-  // }
 
   Column addNewsTextField({
     required BuildContext context,
@@ -241,7 +222,7 @@ class _AddNewScreenState extends State<AddNewScreen>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          title,
+          AppLocalizations.of(context).translate(title),
           style: TextStyle(
             color: AppColor.backgroundColor,
             fontSize: 16.sp,

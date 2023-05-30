@@ -80,11 +80,6 @@ class _CategoriesFreeZoneState extends State<CategoriesFreeZone> {
                                 onTap: () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(builder: (context) {
-                                      // if (widget.type == 'government') {
-                                      //   return GovernmentInstitutionScreen(
-                                      //     government: governmentList[index],
-                                      //   );
-                                      // }
                                       return CompaniesCategories(
                                         id: state.freezones[index].id,
                                       );

@@ -6,6 +6,8 @@ import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../../core/helpers/share_image_function.dart';
+
 class ListSubSectionsWidget extends StatelessWidget {
   const ListSubSectionsWidget({super.key, required this.deviceList});
   final CategoryProducts deviceList;
@@ -64,9 +66,16 @@ class ListSubSectionsWidget extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const Icon(
-                        Icons.share,
-                        color: AppColor.backgroundColor,
+                      GestureDetector(
+                        onTap: () async {
+                          await shareImageWithDescription(
+                              imageUrl: deviceList.imageUrl,
+                              description: deviceList.name);
+                        },
+                        child: const Icon(
+                          Icons.share,
+                          color: AppColor.backgroundColor,
+                        ),
                       ),
                     ],
                   ),

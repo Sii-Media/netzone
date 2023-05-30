@@ -9,6 +9,8 @@ import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../core/helpers/share_image_function.dart';
+
 class AdvertismentDetalsScreen extends StatefulWidget {
   const AdvertismentDetalsScreen({super.key, required this.ads});
 
@@ -78,12 +80,21 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: const [
-                                      Icon(
-                                        Icons.share,
-                                        color: AppColor.backgroundColor,
+                                    children: [
+                                      IconButton(
+                                        onPressed: () async {
+                                          await shareImageWithDescription(
+                                              imageUrl:
+                                                  widget.ads.advertisingImage,
+                                              description:
+                                                  widget.ads.advertisingTitle);
+                                        },
+                                        icon: const Icon(
+                                          Icons.share,
+                                          color: AppColor.backgroundColor,
+                                        ),
                                       ),
-                                      Icon(
+                                      const Icon(
                                         Icons.favorite_border,
                                         color: AppColor.backgroundColor,
                                       ),

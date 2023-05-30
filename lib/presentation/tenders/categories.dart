@@ -6,6 +6,7 @@ import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/deals/view_all_deals.dart';
 import 'package:netzoon/presentation/tenders/tenders_categories.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class Categories extends StatefulWidget {
   const Categories({
@@ -56,15 +57,17 @@ class _CategoriesState extends State<Categories> {
             );
           },
           child: Container(
-            alignment: Alignment.centerRight,
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            // alignment: Alignment.centerRight,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14.0),
             height: 60.h,
             width: double.infinity,
             color: AppColor.backgroundColor,
             child: Text(
               widget.dealsCategory != null
-                  ? widget.dealsCategory!.name
-                  : widget.tendersCategory!.name,
+                  ? AppLocalizations.of(context)
+                      .translate(widget.dealsCategory!.name)
+                  : AppLocalizations.of(context)
+                      .translate(widget.tendersCategory!.name),
               style: TextStyle(fontSize: 15.sp, color: AppColor.white),
             ),
           )),
