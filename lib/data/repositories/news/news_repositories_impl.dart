@@ -51,6 +51,7 @@ class NewsRepositoryImpl implements NewsRepository {
               filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
           'ownerName': ownerName,
           'ownerImage': ownerImage,
+          'creator': creator,
         });
 
         Response response = await dio.post(

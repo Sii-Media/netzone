@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class CategoryProducts extends Equatable {
-  final String? id;
+  final String id;
   final String owner;
   final String name;
   final String imageUrl;
@@ -17,7 +17,7 @@ class CategoryProducts extends Equatable {
   final num? quantity;
 
   const CategoryProducts({
-    this.id,
+    required this.id,
     required this.owner,
     required this.name,
     required this.imageUrl,

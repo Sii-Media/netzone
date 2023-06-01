@@ -13,7 +13,6 @@ class AddNewsRequested extends AddNewsEvent {
   final File image;
   final String ownerName;
   final String ownerImage;
-  final String creator;
 
   const AddNewsRequested({
     required this.title,
@@ -21,6 +20,5 @@ class AddNewsRequested extends AddNewsEvent {
     required this.image,
     required this.ownerName,
     required this.ownerImage,
-    required this.creator,
   });
 }

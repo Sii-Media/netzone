@@ -506,12 +506,14 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   addPhotoButton(
+                      context: context,
                       text: AppLocalizations.of(context)
                           .translate('add_from_camera'),
                       onPressed: () {
                         getProfileImage(ImageSource.camera);
                       }),
                   addPhotoButton(
+                      context: context,
                       text: AppLocalizations.of(context)
                           .translate('add_from_gallery'),
                       onPressed: () {
@@ -553,12 +555,14 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   addPhotoButton(
+                      context: context,
                       text: AppLocalizations.of(context)
                           .translate('add_from_camera'),
                       onPressed: () {
                         getCoverImage(ImageSource.camera);
                       }),
                   addPhotoButton(
+                      context: context,
                       text: AppLocalizations.of(context)
                           .translate('add_from_gallery'),
                       onPressed: () {
@@ -604,12 +608,14 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             addPhotoButton(
+                                context: context,
                                 text: AppLocalizations.of(context)
                                     .translate('add_from_camera'),
                                 onPressed: () {
                                   getBanerImage(ImageSource.camera);
                                 }),
                             addPhotoButton(
+                                context: context,
                                 text: AppLocalizations.of(context)
                                     .translate('add_from_gallery'),
                                 onPressed: () {

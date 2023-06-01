@@ -11,7 +11,6 @@ import 'package:netzoon/presentation/data/devices.dart';
 import 'package:netzoon/presentation/data/electronic_devices.dart';
 import 'package:netzoon/presentation/data/food_products.dart';
 import 'package:netzoon/presentation/data/men_fashion.dart';
-import 'package:netzoon/presentation/data/news.dart';
 import 'package:netzoon/presentation/data/perfumes.dart';
 import 'package:netzoon/presentation/data/tenders.dart';
 import 'package:netzoon/presentation/data/watches.dart';
@@ -33,6 +32,10 @@ import 'package:netzoon/presentation/tenders/blocs/tendersItem/tenders_item_bloc
 import 'package:netzoon/presentation/tenders/tender_categories_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../../chat/screens/chat_home_screen.dart';
+import '../../core/widgets/no_data_widget.dart';
+import '../../core/widgets/on_failure_widget.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -50,7 +53,7 @@ class _HomePageState extends State<HomePage> {
   final perfumeslist = perfumes;
   final tendersList = tenders;
   final dealslist = deals;
-  final newsList = news;
+  // final newsList = news;
   final watchesList = watches;
   final advertismentList = advertisments;
   final List<String> images = [
@@ -135,7 +138,13 @@ class _HomePageState extends State<HomePage> {
               TitleAndButton(
                 title: AppLocalizations.of(context).translate('ecommerce'),
                 icon: true,
-                onPress: () {},
+                onPress: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) {
+                      return const ChatHomeScreen();
+                    }),
+                  );
+                },
               ),
               const SizedBox(
                 height: 10.0,
@@ -697,15 +706,20 @@ class _HomePageState extends State<HomePage> {
                     );
                   } else if (state is NewsFailure) {
                     final failure = state.message;
-                    return Center(
-                      child: Text(
-                        failure,
-                        style: const TextStyle(
-                          color: Colors.red,
-                        ),
-                      ),
+                    return FailureWidget(
+                      failure: failure,
+                      onPressed: () {
+                        newsBloc.add(GetAllNewsEvent());
+                      },
                     );
                   } else if (state is NewsSuccess) {
+                    if (state.news.isEmpty) {
+                      return NoDataWidget(
+                        onPressed: () {
+                          newsBloc.add(GetAllNewsEvent());
+                        },
+                      );
+                    }
                     return SizedBox(
                       height: MediaQuery.of(context).size.height * 0.35,
                       child: SliderNewsWidget(

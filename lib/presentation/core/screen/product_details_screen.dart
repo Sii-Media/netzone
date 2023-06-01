@@ -9,13 +9,29 @@ import 'package:netzoon/presentation/categories/widgets/image_free_zone_widget.d
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
+import 'package:netzoon/presentation/favorites/favorite_blocs/favorites_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../helpers/share_image_function.dart';
 
-class ProductDetailScreen extends StatelessWidget {
+class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({super.key, required this.item});
   final CategoryProducts item;
+
+  @override
+  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
+}
+
+class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  bool isFavorite = false;
+  late FavoritesBloc favBloc;
+  @override
+  void initState() {
+    favBloc = BlocProvider.of<FavoritesBloc>(context);
+    favBloc.add(IsFavoriteEvent(productId: widget.item.id));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextEditingController input = TextEditingController();
@@ -42,7 +58,7 @@ class ProductDetailScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       CachedNetworkImage(
-                        imageUrl: item.imageUrl,
+                        imageUrl: widget.item.imageUrl,
                         width: 700.w,
                         height: 200.h,
                         fit: BoxFit.contain,
@@ -57,7 +73,7 @@ class ProductDetailScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '${AppLocalizations.of(context).translate('price')} : ${item.price}',
+                                  '${AppLocalizations.of(context).translate('price')} : ${widget.item.price}',
                                   style: TextStyle(
                                       color: AppColor.colorOne,
                                       fontSize: 17.sp,
@@ -70,17 +86,50 @@ class ProductDetailScreen extends StatelessWidget {
                                     IconButton(
                                       onPressed: () async {
                                         await shareImageWithDescription(
-                                            imageUrl: item.imageUrl,
-                                            description: item.name);
+                                            imageUrl: widget.item.imageUrl,
+                                            description: widget.item.name);
                                       },
                                       icon: const Icon(
                                         Icons.share,
                                         color: AppColor.backgroundColor,
                                       ),
                                     ),
-                                    const Icon(
-                                      Icons.favorite_border,
-                                      color: AppColor.backgroundColor,
+                                    BlocBuilder<FavoritesBloc, FavoritesState>(
+                                      builder: (context, state) {
+                                        if (state is IsFavoriteState) {
+                                          isFavorite = state.isFavorite;
+                                        }
+                                        return IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              if (isFavorite) {
+                                                context
+                                                    .read<FavoritesBloc>()
+                                                    .add(
+                                                      RemoveItemEvent(
+                                                          productId:
+                                                              widget.item.id),
+                                                    );
+                                              } else {
+                                                context
+                                                    .read<FavoritesBloc>()
+                                                    .add(
+                                                      AddItemToFavoritesEvent(
+                                                        productId:
+                                                            widget.item.id,
+                                                      ),
+                                                    );
+                                              }
+                                            });
+                                          },
+                                          icon: Icon(
+                                            isFavorite
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color: AppColor.backgroundColor,
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),
@@ -90,7 +139,7 @@ class ProductDetailScreen extends StatelessWidget {
                               height: 7.h,
                             ),
                             Text(
-                              item.name,
+                              widget.item.name,
                               style: TextStyle(
                                 color: AppColor.black,
                                 fontSize: 22.sp,
@@ -131,26 +180,26 @@ class ProductDetailScreen extends StatelessWidget {
                         titleAndInput(
                           title:
                               AppLocalizations.of(context).translate('categ'),
-                          input: item.name,
+                          input: widget.item.name,
                         ),
                         SizedBox(
                           height: 7.h,
                         ),
-                        item.year != null
+                        widget.item.year != null
                             ? titleAndInput(
                                 title: AppLocalizations.of(context)
                                     .translate('year'),
-                                input: item.year ?? '',
+                                input: widget.item.year ?? '',
                               )
                             : Container(),
                         SizedBox(
                           height: 7.h,
                         ),
-                        item.propert != null
+                        widget.item.propert != null
                             ? titleAndInput(
                                 title: AppLocalizations.of(context)
                                     .translate('regional_specifications'),
-                                input: item.propert ?? '',
+                                input: widget.item.propert ?? '',
                               )
                             : Container(),
                         SizedBox(
@@ -191,7 +240,7 @@ class ProductDetailScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        item.description,
+                        widget.item.description,
                         style: TextStyle(
                           color: AppColor.mainGrey,
                           fontSize: 15.sp,
@@ -222,11 +271,11 @@ class ProductDetailScreen extends StatelessWidget {
                           fontSize: 17.sp,
                         ),
                       ),
-                      item.images?.isNotEmpty == true
+                      widget.item.images?.isNotEmpty == true
                           ? GridView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemCount: item.images!.length,
+                              itemCount: widget.item.images!.length,
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 2,
@@ -235,7 +284,7 @@ class ProductDetailScreen extends StatelessWidget {
                                 return ClipRRect(
                                   borderRadius: BorderRadius.circular(25.0),
                                   child: ListOfPictures(
-                                    img: item.images![index],
+                                    img: widget.item.images![index],
                                   ),
                                 );
                               })
@@ -261,11 +310,12 @@ class ProductDetailScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  child: item.vedioUrl != null && item.vedioUrl != ''
+                  child: widget.item.vedioUrl != null &&
+                          widget.item.vedioUrl != ''
                       ? VideoFreeZoneWidget(
                           title:
                               "${AppLocalizations.of(context).translate('vedio')}  : ",
-                          vediourl: item.vedioUrl ?? '',
+                          vediourl: widget.item.vedioUrl ?? '',
                         )
                       : Text(
                           AppLocalizations.of(context).translate('no_vedio'),
@@ -307,7 +357,7 @@ class ProductDetailScreen extends StatelessWidget {
                 // final cartBloc = sl<CartBlocBloc>();
                 final cartBloc = context.read<CartBlocBloc>();
                 final cartItems = cartBloc.state.props;
-                if (cartItems.any((elm) => elm.id == item.id)) {
+                if (cartItems.any((elm) => elm.id == widget.item.id)) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
                       AppLocalizations.of(context)
@@ -318,7 +368,7 @@ class ProductDetailScreen extends StatelessWidget {
                     duration: const Duration(seconds: 2),
                   ));
                 } else {
-                  cartBloc.add(AddToCart(product: item));
+                  cartBloc.add(AddToCart(product: widget.item));
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(AppLocalizations.of(context)
                         .translate('Product_added_to_cart')),

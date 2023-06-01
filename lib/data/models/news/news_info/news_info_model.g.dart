@@ -14,6 +14,7 @@ NewsInfoModel _$NewsInfoModelFromJson(Map<String, dynamic> json) =>
       imgUrl: json['imgUrl'] as String,
       ownerName: json['ownerName'] as String,
       ownerImage: json['ownerImage'] as String,
+      creator: UserInfoModel.fromJson(json['creator'] as Map<String, dynamic>),
       createdAt: json['createdAt'] as String,
     );
 
@@ -25,5 +26,6 @@ Map<String, dynamic> _$NewsInfoModelToJson(NewsInfoModel instance) =>
       'imgUrl': instance.imgUrl,
       'ownerName': instance.ownerName,
       'ownerImage': instance.ownerImage,
+      'creator': instance.creator,
       'createdAt': instance.createdAt,
     };

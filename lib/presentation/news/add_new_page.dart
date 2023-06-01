@@ -126,6 +126,7 @@ class _AddNewScreenState extends State<AddNewScreen>
                     height: 10.h,
                   ),
                   addPhotoButton(
+                      context: context,
                       text: 'add_from_gallery',
                       onPressed: () {
                         getImage(ImageSource.gallery);
@@ -156,8 +157,8 @@ class _AddNewScreenState extends State<AddNewScreen>
                   ),
                   Center(
                     child: addPhotoButton(
-                        text: AppLocalizations.of(context)
-                            .translate('add_the_news'),
+                        context: context,
+                        text: 'add_the_news',
                         onPressed: () {
                           if (_image == null) {
                             showDialog(
@@ -194,7 +195,6 @@ class _AddNewScreenState extends State<AddNewScreen>
                             ownerName: 'ownerName',
                             ownerImage:
                                 'https://is3-ssl.mzstatic.com/image/thumb/Purple112/v4/31/17/79/311779d6-bfe8-d8d5-4782-81bd4c5f01ea/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/1200x630wa.png',
-                            creator: '645506caac0f6323fa7b0d3f',
                           ));
                         }),
                   ),

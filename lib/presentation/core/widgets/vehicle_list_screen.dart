@@ -161,12 +161,12 @@ class VehicleWidget extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Icon(
-                          Icons.favorite_border,
-                          color: AppColor.backgroundColor,
-                        ),
+                        // const Icon(
+                        //   Icons.favorite_border,
+                        //   color: AppColor.backgroundColor,
+                        // ),
                         const SizedBox(
-                          width: 4,
+                          width: 8,
                         ),
                         GestureDetector(
                           onTap: () async {

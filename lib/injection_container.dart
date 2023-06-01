@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/local/auth/auth_local_data_source.dart';
+import 'package:netzoon/data/datasource/local/favorite/favorite_local_data_source.dart';
 import 'package:netzoon/data/datasource/local/lang/lang_local_data_resource.dart';
 import 'package:netzoon/data/datasource/remote/advertisements/ads_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/auth/auth_remote_datasource.dart';
@@ -11,6 +12,7 @@ import 'package:netzoon/data/datasource/remote/customs/customs_remote_data_sourc
 import 'package:netzoon/data/datasource/remote/deals/deals_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/departments/departments_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/factories/factories_remote_data_source.dart';
+import 'package:netzoon/data/datasource/remote/favorites/favorite_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/freezones/freezone_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/govermental/govermental_data_source.dart';
 import 'package:netzoon/data/datasource/remote/legal_advice/legal_advice_remote_data_source.dart';
@@ -19,6 +21,7 @@ import 'package:netzoon/data/datasource/remote/news/news_remote_data_source.dart
 import 'package:netzoon/data/datasource/remote/openions/openion_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/questions/question_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/requests/requests_remote_data_source.dart';
+import 'package:netzoon/data/datasource/remote/send_email/send_email_remote_data_sourse.dart';
 import 'package:netzoon/data/datasource/remote/tenders/tenders_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/vehicles/vehicle_remote_data_source.dart';
 import 'package:netzoon/data/repositories/advertisments/advertisment_repository_impl.dart';
@@ -28,6 +31,7 @@ import 'package:netzoon/data/repositories/customs/customs_repository_impl.dart';
 import 'package:netzoon/data/repositories/deals/deals_repository_impl.dart';
 import 'package:netzoon/data/repositories/departments/departments_repository_impl.dart';
 import 'package:netzoon/data/repositories/factories/factories_repository_impl.dart';
+import 'package:netzoon/data/repositories/favorites/favorite_repository_impl.dart';
 import 'package:netzoon/data/repositories/freezones/freezone_repository_impl.dart';
 import 'package:netzoon/data/repositories/govermental/govermental_repository_impl.dart';
 import 'package:netzoon/data/repositories/lang/lang_repository_impl.dart';
@@ -37,6 +41,7 @@ import 'package:netzoon/data/repositories/news/news_repositories_impl.dart';
 import 'package:netzoon/data/repositories/openions/openion_repository_impl.dart';
 import 'package:netzoon/data/repositories/questions/question_repository_impl.dart';
 import 'package:netzoon/data/repositories/requests/requests_repository_impl.dart';
+import 'package:netzoon/data/repositories/send_emails/send_email_repository_impl.dart';
 import 'package:netzoon/data/repositories/tenders/tenders_repository_impl.dart';
 import 'package:netzoon/data/repositories/vehicles/vehicle_repository_impl.dart';
 import 'package:netzoon/domain/advertisements/repositories/advertisment_repository.dart';
@@ -83,6 +88,10 @@ import 'package:netzoon/domain/departments/repositories/departments_repository.d
 import 'package:netzoon/domain/departments/usecases/add_product_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_categories_by_departments_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_category_products_use_case.dart';
+import 'package:netzoon/domain/favorites/repositories/favorite_repository.dart';
+import 'package:netzoon/domain/favorites/usecases/clear_favorite_use_case.dart';
+import 'package:netzoon/domain/favorites/usecases/get_favorite_items_use_case.dart';
+import 'package:netzoon/domain/favorites/usecases/remove_from_favorite_use_case.dart';
 import 'package:netzoon/domain/lang/repositories/lang_repository.dart';
 import 'package:netzoon/domain/lang/usecases/change_language.dart';
 import 'package:netzoon/domain/lang/usecases/get_init_language.dart';
@@ -97,6 +106,7 @@ import 'package:netzoon/domain/questions/repositories/question_repository.dart';
 import 'package:netzoon/domain/questions/usecases/add_question_use_case.dart';
 import 'package:netzoon/domain/requests/repositories/requests_repository.dart';
 import 'package:netzoon/domain/requests/usecases/add_request_use_case.dart';
+import 'package:netzoon/domain/send_emails/repositories/send_email_repository.dart';
 import 'package:netzoon/domain/tenders/repositories/tenders_repository.dart';
 import 'package:netzoon/domain/tenders/usecases/get_all_tenders_items.dart';
 import 'package:netzoon/domain/tenders/usecases/get_tenders_cat_use_case.dart';
@@ -123,8 +133,10 @@ import 'package:netzoon/presentation/contact/blocs/add_openion/add_openion_bloc.
 import 'package:netzoon/presentation/contact/blocs/add_question/add_question_bloc.dart';
 import 'package:netzoon/presentation/contact/blocs/add_request/add_request_bloc.dart';
 import 'package:netzoon/presentation/contact/blocs/get_complaints/get_complaint_bloc.dart';
+import 'package:netzoon/presentation/contact/blocs/send_email/send_email_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/deals_category/deals_categoty_bloc.dart';
+import 'package:netzoon/presentation/favorites/favorite_blocs/favorites_bloc.dart';
 import 'package:netzoon/presentation/home/blocs/elec_devices/elec_devices_bloc.dart';
 import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
 import 'package:netzoon/presentation/legal_advice/blocs/legal_advice/legal_advice_bloc.dart';
@@ -133,6 +145,9 @@ import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersCategory/tender_cat_bloc.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersItem/tenders_item_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'domain/favorites/usecases/add_item_to_favorite_use_case.dart';
+import 'domain/send_emails/use_cases/send_email_use_case.dart';
 
 const String baseUrl = 'https://net-zoon.onrender.com';
 final sl = GetIt.instance;
@@ -146,7 +161,8 @@ Future<void> init() async {
         getAdsByTypeUseCase: sl(),
       ));
   sl.registerFactory(() => NewsBloc(getAllNewsUseCase: sl()));
-  sl.registerFactory(() => AddNewsBloc(addNewsUseCase: sl()));
+  sl.registerFactory(
+      () => AddNewsBloc(addNewsUseCase: sl(), getSignedInUser: sl()));
   sl.registerFactory(() => TenderCatBloc(getTendersCategoriesUseCase: sl()));
   sl.registerFactory(() => TendersItemBloc(
       getTendersItemByMin: sl(),
@@ -217,6 +233,16 @@ Future<void> init() async {
 
   sl.registerFactory(() =>
       CustomsBloc(getAllCustomsUseCase: sl(), getCustomCompaniesUseCase: sl()));
+
+  sl.registerFactory(() => FavoritesBloc(
+      getFavoriteItemsUseCase: sl(),
+      additemToFavoriteUseCase: sl(),
+      removeItemFromFavoriteUseCase: sl(),
+      clearFavoritesUseCase: sl(),
+      getSignedInUser: sl(),
+      favoritesLocalDataSource: sl()));
+
+  sl.registerFactory(() => SendEmailBloc(sendEmailUseCase: sl()));
 
   //! UseCases
   sl.registerLazySingleton(() => GetSignedInUserUseCase(authRepository: sl()));
@@ -313,6 +339,20 @@ Future<void> init() async {
   sl.registerLazySingleton(
       () => GetGovermentalCompaniesUseCase(govermentalRepository: sl()));
 
+  sl.registerLazySingleton(
+      () => GetFavoriteItemsUseCase(favoriteRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => AdditemToFavoriteUseCase(favoriteRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => RemoveItemFromFavoriteUseCase(favoriteRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => ClearFavoritesUseCase(favoriteRepository: sl()));
+
+  sl.registerLazySingleton(() => SendEmailUseCase(sendEmailRepository: sl()));
+
   //! Repositories
 
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
@@ -373,6 +413,12 @@ Future<void> init() async {
       GovermentalRepositoryImpl(
           networkInfo: sl(), govermentalRemoteDataSource: sl()));
 
+  sl.registerLazySingleton<FavoriteRepository>(() => FavoriteRepositoryImpl(
+      networkInfo: sl(), favoriteremoteDataSource: sl()));
+
+  sl.registerLazySingleton<SendEmailRepository>(() => SendEmailRepositoryImpl(
+      networkInfo: sl(), sendEmailRemoteDataSource: sl()));
+
   //! DataSourses
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
@@ -431,6 +477,14 @@ Future<void> init() async {
 
   sl.registerLazySingleton<GovermentalRemoteDataSource>(
       () => GovermentalRemoteDataSourceImpl(sl(), baseUrl: baseUrl));
+
+  sl.registerLazySingleton<FavoriteremoteDataSource>(
+      () => FavoriteremoteDataSourceImpl(sl(), baseUrl: baseUrl));
+
+  sl.registerLazySingleton(() => FavoritesLocalDataSource());
+
+  sl.registerLazySingleton<SendEmailRemoteDataSource>(
+      () => SendEmailRemoteDataSourceImpl());
   //! Core
 
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));

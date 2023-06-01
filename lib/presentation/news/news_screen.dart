@@ -14,6 +14,9 @@ import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
 import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../core/widgets/no_data_widget.dart';
+import '../core/widgets/on_failure_widget.dart';
+
 class NewsScreen extends StatefulWidget {
   const NewsScreen({
     super.key,
@@ -53,15 +56,20 @@ class _NewsScreenState extends State<NewsScreen> {
                 );
               } else if (state is NewsFailure) {
                 final failure = state.message;
-                return Center(
-                  child: Text(
-                    failure,
-                    style: const TextStyle(
-                      color: Colors.red,
-                    ),
-                  ),
+                return FailureWidget(
+                  failure: failure,
+                  onPressed: () {
+                    newsBloc.add(GetAllNewsEvent());
+                  },
                 );
               } else if (state is NewsSuccess) {
+                if (state.news.isEmpty) {
+                  return NoDataWidget(
+                    onPressed: () {
+                      newsBloc.add(GetAllNewsEvent());
+                    },
+                  );
+                }
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
@@ -124,18 +132,19 @@ class AllNewsWidget extends StatelessWidget {
                           width: 35.w,
                           height: 35.h,
                           fit: BoxFit.cover,
-                          imageUrl: news[index].ownerImage,
+                          imageUrl: news[index].creator.profilePhoto ??
+                              'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                         ),
                       ),
                       SizedBox(
                         width: 6.w,
                       ),
                       Text(
-                        news[index].ownerName,
+                        news[index].creator.username,
                         style: TextStyle(
-                          color: AppColor.backgroundColor,
-                          fontSize: 16.sp,
-                        ),
+                            color: AppColor.backgroundColor,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),

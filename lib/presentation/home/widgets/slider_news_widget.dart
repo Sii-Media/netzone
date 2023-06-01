@@ -49,14 +49,17 @@ class SliderNewsWidget extends StatelessWidget {
                                     width: 35.w,
                                     height: 35.h,
                                     fit: BoxFit.cover,
-                                    imageUrl: news[index].ownerImage,
+                                    imageUrl: news[index]
+                                            .creator
+                                            .profilePhoto ??
+                                        'https://www.emaratalyoum.com/polopoly_fs/1.1739617.1681807932!/image/image.jpg',
                                   ),
                                 ),
                                 SizedBox(
                                   width: 6.w,
                                 ),
                                 Text(
-                                  news[index].ownerName,
+                                  news[index].creator.username,
                                   style: TextStyle(
                                     color: AppColor.backgroundColor,
                                     fontSize: 16.sp,

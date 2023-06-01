@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
 import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
+import 'package:netzoon/presentation/favorites/favorite_blocs/favorites_bloc.dart';
 import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
 import 'package:netzoon/presentation/start_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
@@ -28,6 +29,9 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.sl<CartBlocBloc>()..add(LoadCart())),
           BlocProvider(
               create: (_) => di.sl<LanguageBloc>()..add(GetLanguage())),
+          BlocProvider(
+            create: (_) => di.sl<FavoritesBloc>(),
+          )
         ],
         child: BlocBuilder<LanguageBloc, LanguageState>(
           builder: (context, state) {

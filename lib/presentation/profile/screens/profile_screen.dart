@@ -5,6 +5,8 @@ import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../favorites/favorite_screen.dart';
+
 class UserProfileScreen extends StatefulWidget {
   final User user;
   const UserProfileScreen({super.key, required this.user});
@@ -56,6 +58,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       width: 15.w,
                     ),
                     buildInfo(value: '50', title: 'Views'),
+                    SizedBox(
+                      width: 15.w,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return FavoriteScreen(
+                            userId: widget.user.userInfo.id,
+                          );
+                        }));
+                      },
+                      icon: const Icon(Icons.favorite),
+                    )
                   ],
                 ),
                 const Divider(),

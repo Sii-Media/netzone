@@ -288,11 +288,13 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                         height: 10.h,
                       ),
                       addPhotoButton(
-                          text: AppLocalizations.of(context)
-                              .translate('add_from_gallery'),
-                          onPressed: () {
-                            getImage(ImageSource.gallery);
-                          }),
+                        context: context,
+                        text: AppLocalizations.of(context)
+                            .translate('add_from_gallery'),
+                        onPressed: () {
+                          getImage(ImageSource.gallery);
+                        },
+                      ),
                       SizedBox(
                         height: 10.h,
                       ),
@@ -399,6 +401,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                       ),
                       Center(
                         child: addPhotoButton(
+                            context: context,
                             text: AppLocalizations.of(context)
                                 .translate('add_ads'),
                             onPressed: () {

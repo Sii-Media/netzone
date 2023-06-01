@@ -75,10 +75,10 @@ class VehicleDetailsScreen extends StatelessWidget {
                                         color: AppColor.backgroundColor,
                                       ),
                                     ),
-                                    const Icon(
-                                      Icons.favorite_border,
-                                      color: AppColor.backgroundColor,
-                                    ),
+                                    // const Icon(
+                                    //   Icons.favorite_border,
+                                    //   color: AppColor.backgroundColor,
+                                    // ),
                                   ],
                                 ),
                               ],

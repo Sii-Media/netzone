@@ -58,7 +58,7 @@ class ListOfPictures extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CachedNetworkImage(
-            height: 105.h,
+            height: 125.h,
             width: MediaQuery.of(context).size.width,
             imageUrl: img,
             fit: BoxFit.cover,
@@ -70,28 +70,19 @@ class ListOfPictures extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () async {
-                    // final urlImage = img;
-                    // final url = Uri.parse(urlImage);
-                    // final response = await http.get(url);
-                    // final bytes = response.bodyBytes;
-
-                    // final temp = await getTemporaryDirectory();
-                    // final path = '${temp.path}/image.jpg';
-                    // File(path).writeAsBytesSync(bytes);
-                    // await Share.shareFiles([path], text: 'This is Amazing');
                     await shareImageWithDescription(
                         imageUrl: img, description: '');
                   },
                   icon: const Icon(Icons.share),
                   color: AppColor.backgroundColor,
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.favorite_border,
-                    color: AppColor.backgroundColor,
-                  ),
-                ),
+                // IconButton(
+                //   onPressed: () {},
+                //   icon: const Icon(
+                //     Icons.favorite_border,
+                //     color: AppColor.backgroundColor,
+                //   ),
+                // ),
               ],
             ),
           ),

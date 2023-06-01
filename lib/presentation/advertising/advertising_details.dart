@@ -81,6 +81,10 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
+                                      // const Icon(
+                                      //   Icons.favorite_border,
+                                      //   color: AppColor.backgroundColor,
+                                      // ),
                                       IconButton(
                                         onPressed: () async {
                                           await shareImageWithDescription(
@@ -93,10 +97,6 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
                                           Icons.share,
                                           color: AppColor.backgroundColor,
                                         ),
-                                      ),
-                                      const Icon(
-                                        Icons.favorite_border,
-                                        color: AppColor.backgroundColor,
                                       ),
                                     ],
                                   ),

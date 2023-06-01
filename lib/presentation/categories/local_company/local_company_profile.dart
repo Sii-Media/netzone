@@ -9,6 +9,8 @@ import 'package:netzoon/presentation/categories/widgets/product_details.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../../chat/screens/chat_page_screen.dart';
+
 class LocalCompanyProfileScreen extends StatefulWidget {
   final LocalCompany localCompany;
   const LocalCompanyProfileScreen({super.key, required this.localCompany});
@@ -290,33 +292,42 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                   ),
                                 ),
                               ),
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: Container(
-                                  height: 50,
-                                  width: 170,
-                                  decoration: const BoxDecoration(
-                                    color: AppColor.backgroundColor,
-                                    // borderRadius: BorderRadius.circular(100),
-                                  ),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Icon(
-                                          Icons.chat,
-                                          color: Colors.white,
-                                        ),
-                                        Text(
-                                          AppLocalizations.of(context)
-                                              .translate('customers service'),
-                                          style: TextStyle(
-                                            // color: Colors.black,
-                                            fontSize: 15.sp,
+                              InkWell(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (context) {
+                                      return const ChatPageScreen();
+                                    }),
+                                  );
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: Container(
+                                    height: 50,
+                                    width: 170,
+                                    decoration: const BoxDecoration(
+                                      color: AppColor.backgroundColor,
+                                      // borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.chat,
+                                            color: Colors.white,
                                           ),
-                                        ),
-                                      ],
+                                          Text(
+                                            AppLocalizations.of(context)
+                                                .translate('customers service'),
+                                            style: TextStyle(
+                                              // color: Colors.black,
+                                              fontSize: 15.sp,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),

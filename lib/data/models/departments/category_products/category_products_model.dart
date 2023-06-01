@@ -6,7 +6,7 @@ part 'category_products_model.g.dart';
 @JsonSerializable()
 class CategoryProductsModel {
   @JsonKey(name: '_id')
-  final String? id;
+  final String id;
   final String owner;
   final String name;
   final String imageUrl;
@@ -21,7 +21,7 @@ class CategoryProductsModel {
   final String? year;
 
   CategoryProductsModel({
-    this.id,
+    required this.id,
     required this.owner,
     required this.name,
     required this.imageUrl,

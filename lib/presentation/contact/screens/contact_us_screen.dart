@@ -4,6 +4,7 @@ import 'package:netzoon/presentation/contact/screens/add_complaint_screen.dart';
 import 'package:netzoon/presentation/contact/screens/complaints_screen.dart';
 import 'package:netzoon/presentation/contact/screens/opinion_screen.dart';
 import 'package:netzoon/presentation/contact/screens/question_screen.dart';
+import 'package:netzoon/presentation/contact/screens/send_email_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
@@ -113,7 +114,12 @@ class ContactUsScreen extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      return const SendEmailScreen();
+                    }));
+                  },
                   child: Container(
                     alignment: Alignment.centerRight,
                     padding: const EdgeInsets.symmetric(horizontal: 10),
