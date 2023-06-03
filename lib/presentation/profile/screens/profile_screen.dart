@@ -4,6 +4,7 @@ import 'package:netzoon/domain/auth/entities/user.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../favorites/favorite_screen.dart';
 
@@ -33,7 +34,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               children: [
                 Center(
                   child: Text(
-                    widget.user.userInfo.username,
+                    widget.user.userInfo.username ?? '',
                     style: TextStyle(
                       fontSize: 22.sp,
                       fontWeight: FontWeight.bold,
@@ -61,20 +62,31 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     SizedBox(
                       width: 15.w,
                     ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return FavoriteScreen(
-                            userId: widget.user.userInfo.id,
-                          );
-                        }));
-                      },
-                      icon: const Icon(Icons.favorite),
-                    )
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return FavoriteScreen(
+                              userId: widget.user.userInfo.id,
+                            );
+                          }));
+                        },
+                        child: buildInfo(value: '0', title: 'Favorites')),
+                    // IconButton(
+                    //   onPressed: () {
+                    //     Navigator.of(context)
+                    //         .push(MaterialPageRoute(builder: (context) {
+                    //       return FavoriteScreen(
+                    //         userId: widget.user.userInfo.id,
+                    //       );
+                    //     }));
+                    //   },
+                    //   icon: const Icon(Icons.favorite),
+                    // ),
                   ],
                 ),
                 const Divider(),
+
                 // Container(
                 //   padding: const EdgeInsets.symmetric(
                 //     horizontal: 48,
@@ -129,7 +141,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
         ),
         Text(
-          title,
+          AppLocalizations.of(context).translate(title),
           style: const TextStyle(
             color: AppColor.black,
             fontSize: 16,

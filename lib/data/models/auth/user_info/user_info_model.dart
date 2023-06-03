@@ -4,12 +4,12 @@ part 'user_info_model.g.dart';
 
 @JsonSerializable()
 class UserInfoModel {
-  final String username;
-  final String email;
-  final String password;
-  final String userType;
-  final String firstMobile;
-  final bool isFreeZoon;
+  final String? username;
+  final String? email;
+  final String? password;
+  final String? userType;
+  final String? firstMobile;
+  final bool? isFreeZoon;
   final String? secondeMobile;
 
   final String? thirdMobile;

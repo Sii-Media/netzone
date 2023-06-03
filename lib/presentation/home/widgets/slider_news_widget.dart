@@ -59,7 +59,7 @@ class SliderNewsWidget extends StatelessWidget {
                                   width: 6.w,
                                 ),
                                 Text(
-                                  news[index].creator.username,
+                                  news[index].creator.username ?? '',
                                   style: TextStyle(
                                     color: AppColor.backgroundColor,
                                     fontSize: 16.sp,

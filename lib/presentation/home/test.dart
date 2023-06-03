@@ -8,8 +8,6 @@ import 'package:netzoon/presentation/home/pages/home_page.dart';
 import 'package:netzoon/presentation/more/more_screen.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
-import '../chat/screens/chat_home_screen.dart';
-
 class TestScreen extends StatefulWidget {
   const TestScreen({super.key});
 
@@ -90,19 +88,19 @@ class _TestScreenState extends State<TestScreen> {
               body: BackgroundWidget(
                 widget: _children[_currentIndex],
               ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return const ChatHomeScreen();
-                    }),
-                  );
-                },
-                backgroundColor: AppColor.backgroundColor,
-                child: const Icon(
-                  Icons.message,
-                ),
-              ),
+              // floatingActionButton: FloatingActionButton(
+              //   onPressed: () {
+              //     Navigator.of(context).push(
+              //       MaterialPageRoute(builder: (context) {
+              //         return const ChatHomeScreen();
+              //       }),
+              //     );
+              //   },
+              //   backgroundColor: AppColor.backgroundColor,
+              //   child: const Icon(
+              //     Icons.message,
+              //   ),
+              // ),
               bottomNavigationBar: Theme(
                 data: Theme.of(context).copyWith(
                   iconTheme: const IconThemeData(

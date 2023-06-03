@@ -98,8 +98,11 @@ import 'package:netzoon/domain/lang/usecases/get_init_language.dart';
 import 'package:netzoon/domain/legal_advice/repositories/legal_advice_repository.dart';
 import 'package:netzoon/domain/legal_advice/usecases/get_legal_advices_use_case.dart';
 import 'package:netzoon/domain/news/repositories/news_repository.dart';
+import 'package:netzoon/domain/news/usecases/add_comment_use_case.dart';
+import 'package:netzoon/domain/news/usecases/add_like_use_case.dart';
 import 'package:netzoon/domain/news/usecases/add_news_use_case.dart';
 import 'package:netzoon/domain/news/usecases/get_all_news_usecase.dart';
+import 'package:netzoon/domain/news/usecases/get_comments_use_case.dart';
 import 'package:netzoon/domain/openions/repositories/openion_repository.dart';
 import 'package:netzoon/domain/openions/usecases/add_openion_use_case.dart';
 import 'package:netzoon/domain/questions/repositories/question_repository.dart';
@@ -141,6 +144,7 @@ import 'package:netzoon/presentation/home/blocs/elec_devices/elec_devices_bloc.d
 import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
 import 'package:netzoon/presentation/legal_advice/blocs/legal_advice/legal_advice_bloc.dart';
 import 'package:netzoon/presentation/news/blocs/add_news/add_news_bloc.dart';
+import 'package:netzoon/presentation/news/blocs/comments/comments_bloc.dart';
 import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersCategory/tender_cat_bloc.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersItem/tenders_item_bloc.dart';
@@ -160,7 +164,10 @@ Future<void> init() async {
         getAdvertismentsUseCase: sl(),
         getAdsByTypeUseCase: sl(),
       ));
-  sl.registerFactory(() => NewsBloc(getAllNewsUseCase: sl()));
+  sl.registerFactory(() => NewsBloc(
+      getAllNewsUseCase: sl(),
+      getSignedInUser: sl(),
+      toggleOnLikeUseCase: sl()));
   sl.registerFactory(
       () => AddNewsBloc(addNewsUseCase: sl(), getSignedInUser: sl()));
   sl.registerFactory(() => TenderCatBloc(getTendersCategoriesUseCase: sl()));
@@ -243,6 +250,9 @@ Future<void> init() async {
       favoritesLocalDataSource: sl()));
 
   sl.registerFactory(() => SendEmailBloc(sendEmailUseCase: sl()));
+
+  sl.registerFactory(() =>
+      CommentsBloc(sl(), getCommentsUseCase: sl(), addCommentUseCase: sl()));
 
   //! UseCases
   sl.registerLazySingleton(() => GetSignedInUserUseCase(authRepository: sl()));
@@ -352,6 +362,12 @@ Future<void> init() async {
       () => ClearFavoritesUseCase(favoriteRepository: sl()));
 
   sl.registerLazySingleton(() => SendEmailUseCase(sendEmailRepository: sl()));
+
+  sl.registerLazySingleton(() => GetCommentsUseCase(newsRepository: sl()));
+
+  sl.registerLazySingleton(() => AddCommentUseCase(newsRepository: sl()));
+
+  sl.registerLazySingleton(() => ToggleOnLikeUseCase(newsRepository: sl()));
 
   //! Repositories
 

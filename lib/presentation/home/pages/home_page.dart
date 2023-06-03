@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/advertising/advertising.dart';
 import 'package:netzoon/presentation/categories/main_categories.dart';
@@ -43,7 +44,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   final categories = cat;
   final electronicDevices = elecDevices;
   final homeDevices = devices;
@@ -73,6 +75,7 @@ class _HomePageState extends State<HomePage> {
   final foodsBloc = sl<ElecDevicesBloc>();
   final perfumesBloc = sl<ElecDevicesBloc>();
   final watchesBloc = sl<ElecDevicesBloc>();
+  late AnimationController _animationController;
 
   @override
   void initState() {
@@ -87,7 +90,17 @@ class _HomePageState extends State<HomePage> {
     foodsBloc.add(const GetElcDevicesEvent(department: 'منتجات غذائية'));
     perfumesBloc.add(const GetElcDevicesEvent(department: 'عطور'));
     watchesBloc.add(const GetElcDevicesEvent(department: 'ساعات'));
+
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 750));
+    _animationController.repeat(reverse: true);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -728,7 +741,107 @@ class _HomePageState extends State<HomePage> {
                   }
                   return Container();
                 },
-              )
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
+
+              // TitleAndButton(
+              //   title: AppLocalizations.of(context).translate('chat'),
+              //   icon: true,
+              //   onPress: () {
+              //     Navigator.of(context).push(
+              //       MaterialPageRoute(builder: (context) {
+              //         return const ChatHomeScreen();
+              //       }),
+              //     );
+              //   },
+              // ),
+              // Center(
+              //   child: Text(
+              //     AppLocalizations.of(context).translate('chat'),
+              //     style: TextStyle(fontSize: 22.sp, color: Colors.black),
+              //   ),
+              // ),
+              // const SizedBox(
+              //   height: 7.0,
+              // ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) {
+                      return const ChatHomeScreen();
+                    }),
+                  );
+                },
+                child: Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.12,
+                      transform: Matrix4.identity(),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AppColor.backgroundColor,
+                            width: 2,
+                          ),
+                          borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(30),
+                            bottomRight: Radius.circular(30),
+                          )),
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.only(left: 3),
+                              child: Text(
+                                AppLocalizations.of(context)
+                                    .translate('chat_home'),
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    color: AppColor.backgroundColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(25),
+                            child: FadeTransition(
+                              opacity: _animationController,
+                              child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.12,
+                                width: 80.w,
+                                decoration: const BoxDecoration(
+                                  color: AppColor.backgroundColor,
+                                ),
+                                child: Image.asset(
+                                  'assets/images/vedio call2.png',
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                // child: SizedBox(
+                //   height: MediaQuery.of(context).size.height * 0.16,
+                //   width: double.infinity,
+                //   child: Image.asset(
+                //     'assets/images/chat.png',
+                //     fit: BoxFit.cover,
+                //   ),
+                // ),
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
             ],
           ),
         ),

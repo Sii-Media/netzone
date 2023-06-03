@@ -13,58 +13,55 @@ class NewsDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        body: BackgroundWidget(
-          widget: Container(
-            height: MediaQuery.of(context).size.height,
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: ListView(
-              children: [
-                SizedBox(
-                  height: size.height * 0.4,
-                  child: CachedNetworkImage(
-                    imageUrl: news.imgUrl,
-                    fit: BoxFit.fill,
-                  ),
+    return Scaffold(
+      body: BackgroundWidget(
+        widget: Container(
+          height: MediaQuery.of(context).size.height,
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          child: ListView(
+            children: [
+              SizedBox(
+                height: size.height * 0.4,
+                child: CachedNetworkImage(
+                  imageUrl: news.imgUrl,
+                  fit: BoxFit.fill,
                 ),
-                Container(
-                  alignment: Alignment.topCenter,
-                  // height: size.height * 0.05,
-                  child: Text(
-                    convertDateToString(news.createdAt ?? ''),
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13.sp,
-                        color: Colors.black),
-                  ),
+              ),
+              Container(
+                alignment: Alignment.topCenter,
+                // height: size.height * 0.05,
+                child: Text(
+                  convertDateToString(news.createdAt ?? ''),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13.sp,
+                      color: Colors.black),
                 ),
-                Container(
-                  alignment: Alignment.topCenter,
-                  child: Text(
-                    news.title,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.sp,
-                        color: Colors.black),
-                    textAlign: TextAlign.center,
-                  ),
+              ),
+              Container(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  news.title,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.sp,
+                      color: Colors.black),
+                  textAlign: TextAlign.center,
                 ),
-                SizedBox(
-                  height: 15.h,
+              ),
+              SizedBox(
+                height: 15.h,
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 20),
+                alignment: Alignment.topCenter,
+                child: Text(
+                  news.description,
+                  style: TextStyle(fontSize: 13.sp, color: Colors.black),
+                  textAlign: TextAlign.center,
                 ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 20),
-                  alignment: Alignment.topCenter,
-                  child: Text(
-                    news.description,
-                    style: TextStyle(fontSize: 13.sp, color: Colors.black),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

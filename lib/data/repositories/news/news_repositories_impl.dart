@@ -5,9 +5,11 @@ import 'package:http_parser/http_parser.dart';
 import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/remote/news/news_remote_data_source.dart';
 import 'package:netzoon/data/models/news/news/news_model.dart';
+import 'package:netzoon/data/models/news/news_comment/news_comment_model.dart';
 import 'package:netzoon/domain/news/entities/news.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:dartz/dartz.dart';
+import 'package:netzoon/domain/news/entities/news_comment.dart';
 import 'package:netzoon/domain/news/repositories/news_repository.dart';
 
 class NewsRepositoryImpl implements NewsRepository {
@@ -63,6 +65,55 @@ class NewsRepositoryImpl implements NewsRepository {
         } else {
           return Left(ServerFailure());
         }
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<NewsComment>>> getComments(
+      {required String newsId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final comments = await newsRemoteDataSourse.getComments(newsId);
+        return Right(comments.map((e) => e.toDomain()).toList());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> addComment(
+      {required String newsId,
+      required String userId,
+      required String text}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final response =
+            await newsRemoteDataSourse.addComment(newsId, userId, text);
+        return Right(response);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> toggleOnLike(
+      {required String newsId, required String userId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final response =
+            await newsRemoteDataSourse.toggleOnLike(newsId, userId);
+        return Right(response);
       } else {
         return Left(OfflineFailure());
       }

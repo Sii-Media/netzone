@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:netzoon/data/models/news/add_news/add_news_model.dart';
 import 'package:netzoon/data/models/news/news/news_model.dart';
+import 'package:netzoon/data/models/news/news_comment/news_comment_model.dart';
 import 'package:retrofit/http.dart';
 import '../../../../injection_container.dart';
 
@@ -15,6 +16,21 @@ abstract class NewsRemoteDataSourse {
     final String ownerName,
     final String ownerImage,
     final String creator,
+  );
+
+  Future<List<NewsCommentModel>> getComments(
+    final String newsId,
+  );
+
+  Future<String> addComment(
+    final String newsId,
+    final String userId,
+    final String text,
+  );
+
+  Future<String> toggleOnLike(
+    final String newsId,
+    final String userId,
   );
 }
 
@@ -43,5 +59,26 @@ abstract class NewsRemoteDataSourseImpl implements NewsRemoteDataSourse {
     @Part() String ownerName,
     @Part() String ownerImage,
     @Part() String creator,
+  );
+
+  @override
+  @GET('/news/{newsId}/comments')
+  Future<List<NewsCommentModel>> getComments(
+    @Path() String newsId,
+  );
+
+  @override
+  @POST('/news/{newsId}/comment')
+  Future<String> addComment(
+    @Path() String newsId,
+    @Part() String userId,
+    @Part() String text,
+  );
+
+  @override
+  @POST('/news/{newsId}/toggleonlike')
+  Future<String> toggleOnLike(
+    @Path() String newsId,
+    @Part() String userId,
   );
 }

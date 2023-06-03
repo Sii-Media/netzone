@@ -8,3 +8,11 @@ abstract class NewsEvent extends Equatable {
 }
 
 class GetAllNewsEvent extends NewsEvent {}
+
+class ToggleonlikeEvent extends NewsEvent {
+  final String newsId;
+
+  const ToggleonlikeEvent({required this.newsId});
+}
+
+class UserLikedNewsEvent extends NewsEvent {}

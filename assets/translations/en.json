@@ -273,5 +273,21 @@
     "تاريخ بدء الصفقة": "Deal start date",
     "تاريخ انتهاء الصفقة": "Deal end date",
     "news_subject": "News Subject",
-    "add_the_news": "Add the News"
+    "add_the_news": "Add the News",
+    "chat": "Chat",
+    "View All Comments": "View All Comments",
+    "You and 1 other person like this": "You and 1 other person like this",
+    "You and": "You and",
+    "others like this": "others like this",
+    "1 person likes this": "1 person likes this",
+    "people like this": "people like this",
+    "No likes": "No likes",
+    "No comments": "No comments",
+    "1 comment": "1 comment",
+    "comments": "comments",
+    "chat_home": "You can start chatting and making voice and video calls with companies and users registered with the netzoon application.",
+    "Type Something":"Type Something",
+    "Following":"Following",
+    "Followers":"Followers",
+    "Favorites":"Favorites"
 }
