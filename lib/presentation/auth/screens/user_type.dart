@@ -85,6 +85,7 @@ class _UserTypeState extends State<UserType> {
                 onChanged: (value) {
                   setState(() {
                     selectedValue = value as String;
+
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) {
                       return SignUpPage(

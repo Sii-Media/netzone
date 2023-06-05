@@ -121,7 +121,7 @@ class AllNewsWidget extends StatefulWidget {
       : super(key: key);
 
   final List<News> news;
-  final User currentUser;
+  final User? currentUser;
   final NewsBloc newsBloc;
   @override
   State<AllNewsWidget> createState() => _AllNewsWidgetState();
@@ -136,7 +136,7 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
     isLikedList = List<bool>.generate(
       widget.news.length,
       (index) =>
-          widget.news[index].likes?.contains(widget.currentUser.userInfo.id) ??
+          widget.news[index].likes?.contains(widget.currentUser?.userInfo.id) ??
           false,
     );
   }

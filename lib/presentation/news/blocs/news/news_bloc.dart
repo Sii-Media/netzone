@@ -26,17 +26,14 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         emit(NewsInProgress());
         final news = await getAllNewsUseCase(NoParams());
         final result = await getSignedInUser.call(NoParams());
-        late User user;
-        result.fold((l) => null, (r) => user = r!);
+        late User? user;
+        result.fold((l) => null, (r) => user = r);
         emit(
           news.fold(
             (failure) => NewsFailure(
               message: mapFailureToString(failure),
             ),
-            (news) => NewsSuccess(
-              news: news.news,
-              currentUser: user,
-            ),
+            (news) => NewsSuccess(news: news.news, currentUser: user),
           ),
         );
       },

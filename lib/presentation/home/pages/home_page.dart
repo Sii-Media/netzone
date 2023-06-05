@@ -44,8 +44,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage> {
   final categories = cat;
   final electronicDevices = elecDevices;
   final homeDevices = devices;
@@ -75,7 +74,7 @@ class _HomePageState extends State<HomePage>
   final foodsBloc = sl<ElecDevicesBloc>();
   final perfumesBloc = sl<ElecDevicesBloc>();
   final watchesBloc = sl<ElecDevicesBloc>();
-  late AnimationController _animationController;
+  // late AnimationController _animationController;
 
   @override
   void initState() {
@@ -91,17 +90,17 @@ class _HomePageState extends State<HomePage>
     perfumesBloc.add(const GetElcDevicesEvent(department: 'عطور'));
     watchesBloc.add(const GetElcDevicesEvent(department: 'ساعات'));
 
-    _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 750));
-    _animationController.repeat(reverse: true);
+    // _animationController = AnimationController(
+    //     vsync: this, duration: const Duration(milliseconds: 750));
+    // _animationController.repeat(reverse: true);
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _animationController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -810,18 +809,14 @@ class _HomePageState extends State<HomePage>
                           ),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(25),
-                            child: FadeTransition(
-                              opacity: _animationController,
-                              child: Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.12,
-                                width: 80.w,
-                                decoration: const BoxDecoration(
-                                  color: AppColor.backgroundColor,
-                                ),
-                                child: Image.asset(
-                                  'assets/images/vedio call2.png',
-                                ),
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * 0.12,
+                              width: 80.w,
+                              decoration: const BoxDecoration(
+                                color: AppColor.backgroundColor,
+                              ),
+                              child: Image.asset(
+                                'assets/images/vedio call2.png',
                               ),
                             ),
                           ),

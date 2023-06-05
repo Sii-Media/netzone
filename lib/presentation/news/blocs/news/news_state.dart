@@ -13,14 +13,14 @@ class NewsInProgress extends NewsState {}
 
 class NewsSuccess extends NewsState {
   final List<News> news;
-  final User currentUser;
+  final User? currentUser;
   const NewsSuccess({
     required this.news,
-    required this.currentUser,
+    this.currentUser,
   });
 
   @override
-  List<Object> get props => [news, currentUser];
+  List<Object> get props => [news, currentUser!];
 }
 
 class NewsFailure extends NewsState {

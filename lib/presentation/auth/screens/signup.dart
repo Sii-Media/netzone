@@ -27,7 +27,7 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
   final SignUpBloc bloc = di.sl<SignUpBloc>();
-  final GlobalKey<FormState>? formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController emailSignup = TextEditingController();
   final TextEditingController username = TextEditingController();
   final TextEditingController passwordSignup = TextEditingController();
@@ -48,6 +48,10 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
       GlobalKey<FormFieldState>();
   final GlobalKey<FormFieldState> passwordFormFieldKey =
       GlobalKey<FormFieldState>();
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget screen(BuildContext context) {
@@ -112,7 +116,7 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
 class SignUpWidget extends StatefulWidget {
   const SignUpWidget({
     super.key,
-    this.formKey,
+    required this.formKey,
     required this.accountTitle,
     required this.emailSignup,
     required this.username,
@@ -131,7 +135,7 @@ class SignUpWidget extends StatefulWidget {
     required this.sellType,
     required this.toCountry,
   });
-  final GlobalKey<FormState>? formKey;
+  final GlobalKey<FormState> formKey;
   final GlobalKey<FormFieldState> emailFormFieldKey;
   final GlobalKey<FormFieldState> passwordFormFieldKey;
   final String accountTitle;
@@ -507,15 +511,13 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 children: [
                   addPhotoButton(
                       context: context,
-                      text: AppLocalizations.of(context)
-                          .translate('add_from_camera'),
+                      text: 'add_from_camera',
                       onPressed: () {
                         getProfileImage(ImageSource.camera);
                       }),
                   addPhotoButton(
                       context: context,
-                      text: AppLocalizations.of(context)
-                          .translate('add_from_gallery'),
+                      text: 'add_from_gallery',
                       onPressed: () {
                         getProfileImage(ImageSource.gallery);
                       }),
@@ -556,15 +558,13 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 children: [
                   addPhotoButton(
                       context: context,
-                      text: AppLocalizations.of(context)
-                          .translate('add_from_camera'),
+                      text: 'add_from_camera',
                       onPressed: () {
                         getCoverImage(ImageSource.camera);
                       }),
                   addPhotoButton(
                       context: context,
-                      text: AppLocalizations.of(context)
-                          .translate('add_from_gallery'),
+                      text: 'add_from_gallery',
                       onPressed: () {
                         getCoverImage(ImageSource.gallery);
                       }),
@@ -609,15 +609,13 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           children: [
                             addPhotoButton(
                                 context: context,
-                                text: AppLocalizations.of(context)
-                                    .translate('add_from_camera'),
+                                text: 'add_from_camera',
                                 onPressed: () {
                                   getBanerImage(ImageSource.camera);
                                 }),
                             addPhotoButton(
                                 context: context,
-                                text: AppLocalizations.of(context)
-                                    .translate('add_from_gallery'),
+                                text: 'add_from_gallery',
                                 onPressed: () {
                                   getBanerImage(ImageSource.gallery);
                                 }),
@@ -702,7 +700,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         }
                         final String userType = getUserType();
 
-                        if (!widget.formKey!.currentState!.validate()) return;
+                        if (!widget.formKey.currentState!.validate()) return;
                         widget.bloc.add(SignUpRequested(
                           username: widget.username.text,
                           email: widget.emailSignup.text,
