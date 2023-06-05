@@ -727,7 +727,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
                     return SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.35,
+                      height: MediaQuery.of(context).size.height * 0.34,
                       child: SliderNewsWidget(
                           controller: controller, news: state.news),
                     );
@@ -736,29 +736,9 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               const SizedBox(
-                height: 10.0,
+                height: 3.0,
               ),
 
-              // TitleAndButton(
-              //   title: AppLocalizations.of(context).translate('chat'),
-              //   icon: true,
-              //   onPress: () {
-              //     Navigator.of(context).push(
-              //       MaterialPageRoute(builder: (context) {
-              //         return const ChatHomeScreen();
-              //       }),
-              //     );
-              //   },
-              // ),
-              // Center(
-              //   child: Text(
-              //     AppLocalizations.of(context).translate('chat'),
-              //     style: TextStyle(fontSize: 22.sp, color: Colors.black),
-              //   ),
-              // ),
-              // const SizedBox(
-              //   height: 7.0,
-              // ),
               GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
@@ -829,7 +809,7 @@ class _HomePageState extends State<HomePage> {
                 // ),
               ),
               const SizedBox(
-                height: 20.0,
+                height: 30.0,
               ),
             ],
           ),
