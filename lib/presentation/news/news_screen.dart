@@ -285,6 +285,9 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
                               isLikedList[index]
                                   ? Icons.favorite
                                   : Icons.favorite_border,
+                              color: isLikedList[index]
+                                  ? AppColor.red
+                                  : AppColor.black,
                             ),
                           ),
                           // IconButton(

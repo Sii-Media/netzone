@@ -144,20 +144,14 @@ class _HomePageState extends State<HomePage> {
                   categories: categories,
                 ),
               ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              TitleAndButton(
-                title: AppLocalizations.of(context).translate('ecommerce'),
-                icon: true,
-                onPress: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return const ChatHomeScreen();
-                    }),
-                  );
-                },
-              ),
+              // const SizedBox(
+              //   height: 10.0,
+              // ),
+              // TitleAndButton(
+              //   title: AppLocalizations.of(context).translate('ecommerce'),
+              //   icon: true,
+              //   onPress: () {},
+              // ),
               const SizedBox(
                 height: 10.0,
               ),
@@ -204,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                         color: const Color.fromARGB(255, 209, 219, 235)
                             .withOpacity(0.8),
                       ),
-                      height: MediaQuery.of(context).size.height * 0.20,
+                      height: 110.h,
                       child: ListofItems(
                         filter: 'الكترونيات',
                         // devices: elecDevices,
@@ -261,7 +255,7 @@ class _HomePageState extends State<HomePage> {
                         color: const Color.fromARGB(255, 209, 219, 235)
                             .withOpacity(0.8),
                       ),
-                      height: MediaQuery.of(context).size.height * 0.20,
+                      height: 110.h,
                       child: ListofItems(
                         filter: 'أجهزة المنزل والمكتب',
                         // devices: elecDevices,
@@ -318,7 +312,7 @@ class _HomePageState extends State<HomePage> {
                         color: const Color.fromARGB(255, 209, 219, 235)
                             .withOpacity(0.8),
                       ),
-                      height: MediaQuery.of(context).size.height * 0.20,
+                      height: 110.h,
                       child: ListofItems(
                         filter: 'موضة رجالية',
                         // devices: elecDevices,
@@ -375,7 +369,7 @@ class _HomePageState extends State<HomePage> {
                         color: const Color.fromARGB(255, 209, 219, 235)
                             .withOpacity(0.8),
                       ),
-                      height: MediaQuery.of(context).size.height * 0.20,
+                      height: 110.h,
                       child: ListofItems(
                         filter: 'موضة نسائية',
                         // devices: elecDevices,
@@ -432,7 +426,7 @@ class _HomePageState extends State<HomePage> {
                         color: const Color.fromARGB(255, 209, 219, 235)
                             .withOpacity(0.8),
                       ),
-                      height: MediaQuery.of(context).size.height * 0.20,
+                      height: 110.h,
                       child: ListofItems(
                         filter: 'منتجات غذائية',
                         // devices: elecDevices,
@@ -489,7 +483,7 @@ class _HomePageState extends State<HomePage> {
                         color: const Color.fromARGB(255, 209, 219, 235)
                             .withOpacity(0.8),
                       ),
-                      height: MediaQuery.of(context).size.height * 0.20,
+                      height: 110.h,
                       child: ListofItems(
                         filter: 'عطور',
                         // devices: elecDevices,
@@ -546,7 +540,7 @@ class _HomePageState extends State<HomePage> {
                         color: const Color.fromARGB(255, 209, 219, 235)
                             .withOpacity(0.8),
                       ),
-                      height: MediaQuery.of(context).size.height * 0.20,
+                      height: 110.h,
                       child: ListofItems(
                         filter: 'ساعات',
                         // devices: elecDevices,

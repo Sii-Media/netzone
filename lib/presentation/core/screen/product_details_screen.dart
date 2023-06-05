@@ -126,7 +126,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                             isFavorite
                                                 ? Icons.favorite
                                                 : Icons.favorite_border,
-                                            color: AppColor.backgroundColor,
+                                            color: isFavorite
+                                                ? AppColor.red
+                                                : AppColor.backgroundColor,
                                           ),
                                         );
                                       },

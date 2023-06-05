@@ -61,7 +61,7 @@ class _ListofItemsState extends State<ListofItems> {
                             spreadRadius: 300,
                             offset: Offset(10, 30))
                       ]),
-                      height: 300.h,
+                      // height: 300.h,
                       child: Stack(
                         children: [
                           CachedNetworkImage(

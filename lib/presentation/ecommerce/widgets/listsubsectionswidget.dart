@@ -37,7 +37,7 @@ class ListSubSectionsWidget extends StatelessWidget {
                 imageUrl: deviceList.imageUrl,
                 height: 120.h,
                 width: MediaQuery.of(context).size.width,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
               const SizedBox(
                 height: 15,
