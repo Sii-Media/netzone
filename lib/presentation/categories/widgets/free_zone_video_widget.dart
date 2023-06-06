@@ -26,7 +26,7 @@ class VideoFreeZoneWidget extends StatelessWidget {
           YoutubePlayerBuilder(
             player: YoutubePlayer(
               controller: YoutubePlayerController(
-                initialVideoId: vediourl,
+                initialVideoId: YoutubePlayer.convertUrlToId(vediourl) ?? '',
                 flags: const YoutubePlayerFlags(
                   mute: false,
                   autoPlay: false,

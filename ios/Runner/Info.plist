@@ -63,6 +63,11 @@
 	<string>Take photo from camera</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Used to capture audio for image picker plugen</string>
-</array>
+	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+	  <key>NSAllowsArbitraryLoads</key>
+      <true/>
+	</dict>
 </dict>
 </plist>

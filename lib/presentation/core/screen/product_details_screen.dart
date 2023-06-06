@@ -11,7 +11,6 @@ import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
 import 'package:netzoon/presentation/favorites/favorite_blocs/favorites_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
-
 import '../helpers/share_image_function.dart';
 
 class ProductDetailScreen extends StatefulWidget {
@@ -23,13 +22,33 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  // late VideoPlayerController _videoPlayerController;
+  // late ChewieController _chewieController;
   bool isFavorite = false;
   late FavoritesBloc favBloc;
   @override
   void initState() {
     favBloc = BlocProvider.of<FavoritesBloc>(context);
     favBloc.add(IsFavoriteEvent(productId: widget.item.id));
+    // _videoPlayerController =
+    //     VideoPlayerController.network(widget.item.vedioUrl ?? '')
+    //       ..initialize().then((_) {
+    //         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+    //         setState(() {});
+    //       });
+    // _chewieController = ChewieController(
+    //   videoPlayerController: _videoPlayerController,
+    //   aspectRatio: 16 / 9,
+    // );
+    // _videoPlayerController.setLooping(true);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // _videoPlayerController.dispose();
+    // _chewieController.dispose();
+    super.dispose();
   }
 
   @override
@@ -314,6 +333,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                   child: widget.item.vedioUrl != null &&
                           widget.item.vedioUrl != ''
+                      // ? AspectRatio(
+                      //     aspectRatio: 16 / 9,
+                      //     child: Chewie(
+                      //       controller: _chewieController,
+                      //     ),
+                      //   )
                       ? VideoFreeZoneWidget(
                           title:
                               "${AppLocalizations.of(context).translate('vedio')}  : ",
