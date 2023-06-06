@@ -15,6 +15,7 @@ class LocalCompanyModel {
   final String mail;
   final String website;
   final List<String> docs;
+  final String? coverUrl;
 
   LocalCompanyModel({
     required this.id,
@@ -26,6 +27,7 @@ class LocalCompanyModel {
     required this.mail,
     required this.website,
     required this.docs,
+    this.coverUrl,
   });
 
   factory LocalCompanyModel.fromJson(Map<String, dynamic> json) =>
@@ -45,5 +47,6 @@ extension MapToDomain on LocalCompanyModel {
         mail: mail,
         website: website,
         docs: docs,
+        coverUrl: coverUrl,
       );
 }

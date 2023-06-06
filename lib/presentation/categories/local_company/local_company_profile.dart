@@ -48,7 +48,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                 right: 0,
                 left: 0,
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 0.30,
+                  height: MediaQuery.of(context).size.height * 0.14,
                   decoration:
                       const BoxDecoration(color: AppColor.backgroundColor),
                 ),
@@ -109,7 +109,21 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
               Positioned(
                 left: 0,
                 right: 0,
-                top: 144.h,
+                top: 92.h,
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 140.h,
+                  child: CachedNetworkImage(
+                    imageUrl: widget.localCompany.coverUrl ??
+                        'https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 0,
+                right: 0,
+                top: 164.h,
                 child: Center(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
@@ -143,7 +157,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              widget.localCompany.description,
+                              widget.localCompany.desc2,
                               style: TextStyle(
                                 color: AppColor.black,
                                 fontSize: 16.sp,
@@ -351,7 +365,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                           .translate('Products'),
                                       style: TextStyle(
                                         color: AppColor.black,
-                                        fontSize: 17.sp,
+                                        fontSize: 15.sp,
                                       ),
                                     ),
                                     Text(
@@ -359,7 +373,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                           .translate('the documents'),
                                       style: TextStyle(
                                         color: AppColor.black,
-                                        fontSize: 17.sp,
+                                        fontSize: 15.sp,
                                       ),
                                     ),
                                     Text(
@@ -367,7 +381,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                           .translate('who are we'),
                                       style: TextStyle(
                                         color: AppColor.black,
-                                        fontSize: 17.sp,
+                                        fontSize: 15.sp,
                                       ),
                                     ),
                                   ],
@@ -459,7 +473,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                                 .imageUrl,
                                                             height: 60,
                                                             width: 60,
-                                                            fit: BoxFit.cover,
+                                                            fit: BoxFit.contain,
                                                           ),
                                                         ),
                                                       );
@@ -486,7 +500,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            widget.localCompany.desc2,
+                                            widget.localCompany.description,
                                             style: TextStyle(
                                               color: AppColor.black,
                                               fontSize: 14.sp,
@@ -496,6 +510,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                             height: 10.h,
                                           ),
                                           Text(
+                                            textAlign: TextAlign.center,
                                             widget.localCompany.mobile,
                                             style: TextStyle(
                                               color: AppColor.black,

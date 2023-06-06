@@ -26,7 +26,7 @@ class _LegalAdviceRemoteDataSourceImpl
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<LegalAdviceResponseModel>(Options(
       method: 'GET',

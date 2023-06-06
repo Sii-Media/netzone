@@ -91,7 +91,7 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
                                                   imageUrl: state
                                                       .localCompanies[index]
                                                       .imgUrl,
-                                                  fit: BoxFit.cover,
+                                                  fit: BoxFit.contain,
                                                 ),
                                               ),
                                               Positioned(

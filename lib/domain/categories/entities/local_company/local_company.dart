@@ -10,6 +10,7 @@ class LocalCompany extends Equatable {
   final String mail;
   final String website;
   final List<String> docs;
+  final String? coverUrl;
 
   const LocalCompany({
     required this.id,
@@ -21,9 +22,20 @@ class LocalCompany extends Equatable {
     required this.mail,
     required this.website,
     required this.docs,
+    this.coverUrl,
   });
 
   @override
-  List<Object?> get props =>
-      [id, name, imgUrl, description, desc2, mobile, mail, website, docs];
+  List<Object?> get props => [
+        id,
+        name,
+        imgUrl,
+        description,
+        desc2,
+        mobile,
+        mail,
+        website,
+        docs,
+        coverUrl
+      ];
 }

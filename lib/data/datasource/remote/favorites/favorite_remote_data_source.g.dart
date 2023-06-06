@@ -25,7 +25,7 @@ class _FavoriteremoteDataSourceImpl implements FavoriteremoteDataSourceImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<FavoriteItemsModel>>(Options(
       method: 'GET',

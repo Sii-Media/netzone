@@ -17,6 +17,7 @@ LocalCompanyModel _$LocalCompanyModelFromJson(Map<String, dynamic> json) =>
       mail: json['mail'] as String,
       website: json['website'] as String,
       docs: (json['docs'] as List<dynamic>).map((e) => e as String).toList(),
+      coverUrl: json['coverUrl'] as String?,
     );
 
 Map<String, dynamic> _$LocalCompanyModelToJson(LocalCompanyModel instance) =>
@@ -30,4 +31,5 @@ Map<String, dynamic> _$LocalCompanyModelToJson(LocalCompanyModel instance) =>
       'mail': instance.mail,
       'website': instance.website,
       'docs': instance.docs,
+      'coverUrl': instance.coverUrl,
     };
