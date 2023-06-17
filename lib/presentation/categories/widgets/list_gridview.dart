@@ -6,11 +6,11 @@ import 'package:netzoon/presentation/categories/factories/factories_categories.d
 import 'package:netzoon/presentation/categories/free_zoon/category_free_zoon.dart';
 import 'package:netzoon/presentation/categories/governmental/govermental_category_screen.dart';
 import 'package:netzoon/presentation/categories/local_company/local_companies.dart';
-import 'package:netzoon/presentation/categories/plans/plans_categories_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
-import 'package:netzoon/presentation/core/widgets/vehicle_list_screen.dart';
 import 'package:netzoon/presentation/data/categories.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
+
+import '../vehicles/screens/vehicles_companies_screen.dart';
 
 class ListGridView extends StatelessWidget {
   const ListGridView({Key? key}) : super(key: key);
@@ -68,7 +68,7 @@ class ListGridView extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 23.h,
+          height: 90.h,
         ),
       ],
     );
@@ -130,20 +130,38 @@ class GridCategory extends StatelessWidget {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
-                  return const PlansCategoriesScreen();
-                },
-              ),
-            );
-          } else if (category.name == 'cars') {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) {
-                  return const VehicleListScreen(
-                    category: 'cars',
+                  return const VehiclesCompaniesScreen(
+                    type: 'planes',
                   );
                 },
               ),
             );
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (context) {
+            //       return const PlansCategoriesScreen();
+            //     },
+            //   ),
+            // );
+          } else if (category.name == 'cars') {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return const VehiclesCompaniesScreen(
+                    type: 'cars',
+                  );
+                },
+              ),
+            );
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (context) {
+            //       return const VehicleListScreen(
+            //         category: 'cars',
+            //       );
+            //     },
+            //   ),
+            // );
           }
         },
         child: Stack(

@@ -4,9 +4,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
 import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
+import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/favorites/favorite_blocs/favorites_bloc.dart';
 import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
-import 'package:netzoon/presentation/start_screen.dart';
+import 'package:netzoon/presentation/splash/splash_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:netzoon/presentation/utils/constants.dart';
 import 'injection_container.dart' as di;
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
                         textTheme: Typography.englishLike2018.apply(
                           fontSizeFactor: 1.sp,
                           fontFamily: "Cairo",
+                          bodyColor: AppColor.black,
                         ),
                       ),
                       localizationsDelegates: const [
@@ -78,7 +80,7 @@ class MyApp extends StatelessWidget {
                       home: child ?? Container(),
                     );
                   },
-                  child: const StartScreen(),
+                  child: const SplashScreen(),
                 );
               },
             );

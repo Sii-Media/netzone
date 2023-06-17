@@ -130,6 +130,9 @@ class _CustomsCategoryScreenState extends State<CustomsCategoryScreen> {
                             );
                           },
                         ),
+                        SizedBox(
+                          height: 60.h,
+                        ),
                       ],
                     );
                   }

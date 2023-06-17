@@ -12,6 +12,7 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
         const CartLoaded(
           items: [],
           totalPrice: 0,
+          totalQuantity: 0,
         ),
       ),
     );
@@ -20,11 +21,12 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
         final updatedCart = List<CategoryProducts>.from(state.props)
           ..add(event.product);
         final totalPrice = calculateTotalPrice(updatedCart);
-
+        final totalQuantity = calculateTotalQuantity(updatedCart);
         emit(
           CartLoaded(
             items: updatedCart,
             totalPrice: totalPrice,
+            totalQuantity: totalQuantity,
           ),
         );
       },
@@ -33,10 +35,12 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
       final updatedCart = List<CategoryProducts>.from(state.props)
         ..remove(event.product);
       final totalPrice = calculateTotalPrice(updatedCart);
+      final totalQuantity = calculateTotalQuantity(updatedCart);
       emit(
         CartLoaded(
           items: updatedCart,
           totalPrice: totalPrice,
+          totalQuantity: totalQuantity,
         ),
       );
     });
@@ -67,11 +71,12 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
         }
 
         final totalPrice = calculateTotalPrice(updatedCart);
+        final totalQuantity = calculateTotalQuantity(updatedCart);
         emit(
           CartLoaded(
-            items: updatedCart,
-            totalPrice: totalPrice,
-          ),
+              items: updatedCart,
+              totalPrice: totalPrice,
+              totalQuantity: totalQuantity),
         );
       },
     );
@@ -86,5 +91,13 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
       }
     }
     return totalPrice;
+  }
+
+  num calculateTotalQuantity(List<CategoryProducts> cartItems) {
+    num totalQuantity = 0;
+    for (var item in cartItems) {
+      totalQuantity += item.quantity ?? 1;
+    }
+    return totalQuantity;
   }
 }

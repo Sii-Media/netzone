@@ -54,83 +54,90 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
                         ),
                       );
                     } else if (state is LocalCompanySuccess) {
-                      return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: state.localCompanies.length,
-                          itemBuilder: (BuildContext context, index) {
-                            return SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.40,
-                              child: InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) {
-                                          return LocalCompanyProfileScreen(
-                                            localCompany:
-                                                state.localCompanies[index],
-                                          );
-                                        }),
-                                      );
-                                    },
-                                    child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(25.0),
-                                        child: Card(
-                                          child: Stack(
-                                            children: [
-                                              Positioned(
-                                                left: 0,
-                                                bottom: 0,
-                                                top: 0,
-                                                right: 0,
-                                                child: CachedNetworkImage(
-                                                  imageUrl: state
-                                                      .localCompanies[index]
-                                                      .imgUrl,
-                                                  fit: BoxFit.contain,
-                                                ),
-                                              ),
-                                              Positioned(
-                                                bottom: 0,
-                                                left: 0,
-                                                right: 0,
-                                                child: Container(
-                                                  alignment: Alignment.center,
-                                                  height: 50.h,
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
-                                                  color: AppColor
-                                                      .backgroundColor
-                                                      .withOpacity(0.8),
-                                                  child: Center(
-                                                    child: Text(
-                                                      state
-                                                          .localCompanies[index]
-                                                          .name,
-                                                      style: TextStyle(
-                                                          fontSize: 18.sp,
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 60.0),
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: state.localCompanies.length,
+                            itemBuilder: (BuildContext context, index) {
+                              return SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.40,
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (context) {
+                                            return LocalCompanyProfileScreen(
+                                              localCompany:
+                                                  state.localCompanies[index],
+                                            );
+                                          }),
+                                        );
+                                      },
+                                      child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(25.0),
+                                          child: Card(
+                                            child: Stack(
+                                              children: [
+                                                Positioned(
+                                                  left: 0,
+                                                  bottom: 0,
+                                                  top: 0,
+                                                  right: 0,
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: state
+                                                        .localCompanies[index]
+                                                        .imgUrl,
+                                                    fit: BoxFit.contain,
                                                   ),
                                                 ),
-                                              )
-                                            ],
-                                          ),
-                                        )),
+                                                Positioned(
+                                                  bottom: 0,
+                                                  left: 0,
+                                                  right: 0,
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    height: 50.h,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    color: AppColor
+                                                        .backgroundColor
+                                                        .withOpacity(0.8),
+                                                    child: Center(
+                                                      child: Text(
+                                                        state
+                                                            .localCompanies[
+                                                                index]
+                                                            .name,
+                                                        style: TextStyle(
+                                                            fontSize: 18.sp,
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          });
+                              );
+                            }),
+                      );
                     }
                     return Container();
                   },

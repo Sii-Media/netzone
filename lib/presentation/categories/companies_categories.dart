@@ -57,11 +57,12 @@ class _CompaniesCategoriesState extends State<CompaniesCategories> {
                 );
               } else if (state is FreezoneByIdSuccess) {
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height,
+                  padding: const EdgeInsets.only(
+                      right: 8.0, left: 8.0, top: 8.0, bottom: 60.0),
+                  child: SizedBox(
+                    // height: MediaQuery.of(context).size.height,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
                       child: ListView.builder(
                         shrinkWrap: true,
                         itemCount:
@@ -79,10 +80,6 @@ class _CompaniesCategoriesState extends State<CompaniesCategories> {
                                       companyCategory: state.freezonescompanies
                                           .freezoonplaces[index],
                                     );
-                                    // : CustomsScreen(
-                                    //     customsCategory:
-                                    //         widget.companiesList[index],
-                                    //   );
                                   }),
                                 );
                               },

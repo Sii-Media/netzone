@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class TitleAndButton extends StatelessWidget {
@@ -33,12 +34,13 @@ class TitleAndButton extends StatelessWidget {
             height: 30.h,
             child: Container(
               alignment: Alignment.center,
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+              decoration: BoxDecoration(
+                  border: Border.all(color: AppColor.backgroundColor)),
               child: Text(
                 AppLocalizations.of(context).translate('show_all'),
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.blue, fontSize: 13.sp),
+                style:
+                    TextStyle(color: AppColor.backgroundColor, fontSize: 13.sp),
               ),
             ),
           ),

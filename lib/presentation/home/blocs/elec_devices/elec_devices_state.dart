@@ -24,7 +24,10 @@ class ElecDevicesFailure extends ElecDevicesState {
 }
 
 class ElecCategoryProductSuccess extends ElecDevicesState {
+  final String? department;
+  final String? category;
   final List<CategoryProducts> categoryProducts;
 
-  const ElecCategoryProductSuccess({required this.categoryProducts});
+  const ElecCategoryProductSuccess(
+      {this.department, this.category, required this.categoryProducts});
 }

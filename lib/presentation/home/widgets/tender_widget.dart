@@ -137,7 +137,7 @@ class TenderWidget extends StatelessWidget {
                                     onPressed: () {},
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor:
-                                            const Color(0xFF5776a5),
+                                            const Color(0xFF0b59ae),
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 20),
                                         //shadowColor: Colors.black,

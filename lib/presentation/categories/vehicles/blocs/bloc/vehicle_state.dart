@@ -22,3 +22,15 @@ class VehicleFailure extends VehicleState {
 
   const VehicleFailure({required this.message});
 }
+
+class VehiclesCompaniesSuccess extends VehicleState {
+  final List<VehiclesCompanies> vehiclesCompanies;
+
+  const VehiclesCompaniesSuccess({required this.vehiclesCompanies});
+}
+
+class GetCompanyVehiclesSuccess extends VehicleState {
+  final List<Vehicle> companyVehicles;
+
+  const GetCompanyVehiclesSuccess({required this.companyVehicles});
+}

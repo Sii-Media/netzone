@@ -214,15 +214,6 @@ class _StartScreenState extends State<StartScreen> {
           decoration: const BoxDecoration(color: AppColor.backgroundColor),
         ),
         Container(
-          //   height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/Artboard.png"),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/images/logo.png"),

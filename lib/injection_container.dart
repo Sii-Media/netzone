@@ -49,6 +49,8 @@ import 'package:netzoon/domain/advertisements/usercases/add_ads_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_ads_by_type_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_advertisements_usecase.dart';
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
+import 'package:netzoon/domain/auth/usecases/change_password_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/edit_profile_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_first_time_logged_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_otpcode_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
@@ -76,11 +78,15 @@ import 'package:netzoon/domain/categories/usecases/local_company/get_company_pro
 import 'package:netzoon/domain/categories/usecases/vehicles/get_all_cars_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_all_new_planes_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_all_used_planes_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/vehicles/get_cars_companies_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/vehicles/get_company_vehicles_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/vehicles/get_planes_companies_use_case.dart';
 
 import 'package:netzoon/domain/complaints/repositories/complaints_repository.dart';
 import 'package:netzoon/domain/complaints/usecases/add_complaints_usecase.dart';
 import 'package:netzoon/domain/complaints/usecases/get_complaints_usecase.dart';
 import 'package:netzoon/domain/deals/repositories/deals_repository.dart';
+import 'package:netzoon/domain/deals/usecases/add_deal_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_all_deals_items_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_deals_cat_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_deals_items_by_cat_use_case.dart';
@@ -88,6 +94,7 @@ import 'package:netzoon/domain/departments/repositories/departments_repository.d
 import 'package:netzoon/domain/departments/usecases/add_product_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_categories_by_departments_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_category_products_use_case.dart';
+import 'package:netzoon/domain/departments/usecases/get_user_products_use_case.dart';
 import 'package:netzoon/domain/favorites/repositories/favorite_repository.dart';
 import 'package:netzoon/domain/favorites/usecases/clear_favorite_use_case.dart';
 import 'package:netzoon/domain/favorites/usecases/get_favorite_items_use_case.dart';
@@ -119,6 +126,7 @@ import 'package:netzoon/presentation/add_items/blocs/bloc/add_product_bloc.dart'
 import 'package:netzoon/presentation/advertising/blocs/add_ads/add_ads_bloc.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
+import 'package:netzoon/presentation/auth/blocs/change_password/change_password_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/get_otp_code/get_otp_code_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_in/sign_in_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
@@ -146,10 +154,14 @@ import 'package:netzoon/presentation/legal_advice/blocs/legal_advice/legal_advic
 import 'package:netzoon/presentation/news/blocs/add_news/add_news_bloc.dart';
 import 'package:netzoon/presentation/news/blocs/comments/comments_bloc.dart';
 import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
+import 'package:netzoon/presentation/profile/blocs/edit_profile/edit_profile_bloc.dart';
+import 'package:netzoon/presentation/profile/blocs/get_user/get_user_bloc.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersCategory/tender_cat_bloc.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersItem/tenders_item_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'domain/auth/usecases/get_user_by_id_use_case.dart';
+import 'domain/departments/usecases/get_all_products_use_case.dart';
 import 'domain/favorites/usecases/add_item_to_favorite_use_case.dart';
 import 'domain/send_emails/use_cases/send_email_use_case.dart';
 
@@ -177,14 +189,21 @@ Future<void> init() async {
       getTendersItem: sl()));
 
   sl.registerFactory(() => DealsCategotyBloc(getDealsCategoriesUseCase: sl()));
-  sl.registerFactory(() =>
-      DealsItemsBloc(getDealsItemsByCat: sl(), getDealsItemUsecase: sl()));
+  sl.registerFactory(() => DealsItemsBloc(
+      getDealsItemsByCat: sl(),
+      getDealsItemUsecase: sl(),
+      addDealUseCase: sl()));
 
   sl.registerFactory(() => ElecDevicesBloc(
-      getCategoriesByDepartmentUsecase: sl(),
-      getCategoryProductsUseCase: sl()));
+        getCategoriesByDepartmentUsecase: sl(),
+        getCategoryProductsUseCase: sl(),
+        getAllProductsUseCase: sl(),
+      ));
 
-  sl.registerFactory(() => AddProductBloc(addProductUseCase: sl()));
+  sl.registerFactory(() => AddProductBloc(
+        addProductUseCase: sl(),
+        getSignedInUser: sl(),
+      ));
   sl.registerFactory(() => CartBlocBloc());
 
   sl.registerFactory(() => LegalAdviceBloc(getLegalAdvicesUseCase: sl()));
@@ -218,9 +237,13 @@ Future<void> init() async {
       PlanesBloc(getAllUsedPlanesUseCase: sl(), getAllNewPlanesUseCase: sl()));
 
   sl.registerFactory(() => VehicleBloc(
-      getAllCarsUseCase: sl(),
-      getAllUsedPlanesUseCase: sl(),
-      getAllNewPlanesUseCase: sl()));
+        getAllCarsUseCase: sl(),
+        getAllUsedPlanesUseCase: sl(),
+        getAllNewPlanesUseCase: sl(),
+        getCarsCompaniesUseCase: sl(),
+        getPlanesCompaniesUseCase: sl(),
+        getCompanyVehiclesUseCase: sl(),
+      ));
 
   sl.registerFactory(() => FreezoneBloc(
       getFreeZonePlacesUseCase: sl(), getFreeZonePlacesByIdUseCase: sl()));
@@ -253,6 +276,18 @@ Future<void> init() async {
 
   sl.registerFactory(() =>
       CommentsBloc(sl(), getCommentsUseCase: sl(), addCommentUseCase: sl()));
+
+  sl.registerFactory(
+      () => EditProfileBloc(editProfileUseCase: sl(), getSignedInUser: sl()));
+
+  sl.registerFactory(() => GetUserBloc(
+        getUserByIdUseCase: sl(),
+        getSignedInUserUseCase: sl(),
+        getUserProductsUseCase: sl(),
+      ));
+
+  sl.registerFactory(() => ChangePasswordBloc(
+      changePasswordUseCase: sl(), getSignedInUserUseCase: sl()));
 
   //! UseCases
   sl.registerLazySingleton(() => GetSignedInUserUseCase(authRepository: sl()));
@@ -368,6 +403,28 @@ Future<void> init() async {
   sl.registerLazySingleton(() => AddCommentUseCase(newsRepository: sl()));
 
   sl.registerLazySingleton(() => ToggleOnLikeUseCase(newsRepository: sl()));
+
+  sl.registerLazySingleton(() => EditProfileUseCase(authRepository: sl()));
+
+  sl.registerLazySingleton(() => GetUserByIdUseCase(authRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => GetAllProductsUseCase(departmentRepository: sl()));
+
+  sl.registerLazySingleton(() => AddDealUseCase(dealsRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => GetCarsCompaniesUseCase(vehicleRepository: sl()));
+  sl.registerLazySingleton(
+      () => GetPlanesCompaniesUseCase(vehicleRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => GetCompanyVehiclesUseCase(vehicleRepository: sl()));
+
+  sl.registerLazySingleton(() => ChangePasswordUseCase(authRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => GetUserProductsUseCase(departmentRepository: sl()));
 
   //! Repositories
 

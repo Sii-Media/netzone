@@ -48,7 +48,7 @@ class AdvertisemenetModel {
 
 extension MapToDomain on AdvertisemenetModel {
   Advertisement toDomain() => Advertisement(
-        advertisingTitle: advertisingTitle,
+        name: advertisingTitle,
         advertisingStartDate: advertisingStartDate,
         advertisingEndDate: advertisingEndDate,
         advertisingDescription: advertisingDescription,

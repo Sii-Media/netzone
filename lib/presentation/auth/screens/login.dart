@@ -10,6 +10,8 @@ import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/profile/screens/profile_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../../profile/screens/local_company_profile_screen.dart';
+
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
 
@@ -135,9 +137,15 @@ class _LogInScreenState extends State<LogInScreen> {
             ],
           );
         } else if (state is Authenticated) {
-          return UserProfileScreen(
-            user: state.user,
-          );
+          if (state.user.userInfo.userType == 'user') {
+            return UserProfileScreen(
+              userId: state.user.userInfo.id,
+            );
+          } else if (state.user.userInfo.userType == 'local_company') {
+            return MyLocalCompanyProfileScreen(
+              userId: state.user.userInfo.id,
+            );
+          }
         }
         return Container();
       },

@@ -64,7 +64,7 @@ class _CartScreenState extends State<CartScreen> {
         },
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(bottom: 22.0),
+        padding: const EdgeInsets.only(bottom: 80.0),
         child: BottomAppBar(
           // elevation: 1,
           // color: Colors.red,

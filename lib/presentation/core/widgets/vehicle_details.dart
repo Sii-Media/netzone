@@ -54,7 +54,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  vehicle.price.toString(),
+                                  '${vehicle.price.toString()} \$',
                                   style: TextStyle(
                                       color: AppColor.colorOne,
                                       fontSize: 17.sp,
@@ -115,13 +115,13 @@ class VehicleDetailsScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          AppLocalizations.of(context).translate('details'),
-                          style: TextStyle(
-                            color: AppColor.black,
-                            fontSize: 17.sp,
-                          ),
-                        ),
+                        // Text(
+                        //   AppLocalizations.of(context).translate('details'),
+                        //   style: TextStyle(
+                        //     color: AppColor.black,
+                        //     fontSize: 17.sp,
+                        //   ),
+                        // ),
                         SizedBox(
                           height: 7.h,
                         ),
@@ -201,7 +201,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 50.h,
+                  height: 110.h,
                 ),
               ],
             ),

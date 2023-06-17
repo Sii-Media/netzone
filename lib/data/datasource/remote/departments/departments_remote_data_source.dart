@@ -5,6 +5,7 @@ import 'package:netzoon/data/models/departments/category_products/category_produ
 import 'package:netzoon/data/models/departments/departments_categories/departments_categories_response_model.dart';
 import 'package:retrofit/http.dart';
 import '../../../../injection_container.dart';
+import '../../../models/departments/category_products/category_products_model.dart';
 
 part 'departments_remote_data_source.g.dart';
 
@@ -30,6 +31,9 @@ abstract class DepartmentsRemoteDataSource {
     final String? madeIn,
     final File image,
   );
+
+  Future<List<CategoryProductsModel>> getAllProducts();
+  Future<List<CategoryProductsModel>> getUserProducts(String username);
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -73,4 +77,14 @@ abstract class DepartmentsRemoteDataSourceImpl
       @Part() String? property,
       @Part() String? madeIn,
       @Part(name: "image") File image);
+
+  @override
+  @GET('/departments/allProducts')
+  Future<List<CategoryProductsModel>> getAllProducts();
+
+  @override
+  @GET('/departments/getUserProducts')
+  Future<List<CategoryProductsModel>> getUserProducts(
+    @Part() String username,
+  );
 }

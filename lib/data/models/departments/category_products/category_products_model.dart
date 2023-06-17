@@ -17,8 +17,11 @@ class CategoryProductsModel {
   final String? vedioUrl;
   final bool? guarantee;
   final String? propert;
+  final String? address;
+
   final String? madeIn;
   final String? year;
+  final String? gifUrl;
 
   CategoryProductsModel({
     required this.id,
@@ -32,8 +35,10 @@ class CategoryProductsModel {
     this.vedioUrl,
     this.guarantee,
     this.propert,
+    this.address,
     this.madeIn,
     this.year,
+    this.gifUrl,
   });
 
   factory CategoryProductsModel.fromJson(Map<String, dynamic> json) =>
@@ -55,7 +60,9 @@ extension MapToDomain on CategoryProductsModel {
         vedioUrl: vedioUrl,
         guarantee: guarantee,
         propert: propert,
+        address: address,
         madeIn: madeIn,
         year: year,
+        gifUrl: gifUrl,
       );
 }

@@ -28,7 +28,7 @@ class ChatPageScreen extends StatelessWidget {
                 ),
               ),
               const Padding(
-                padding: EdgeInsets.only(left: 5),
+                padding: EdgeInsets.only(left: 10),
                 child: Text(
                   'Programmer',
                   style: TextStyle(

@@ -79,7 +79,7 @@ class _ListofItemsState extends State<ListofItems> {
                             right: 0,
                             child: Container(
                               height: 35.h,
-                              color: const Color(0xFF5776a5).withOpacity(0.8),
+                              color: const Color(0xFF0b59ae).withOpacity(0.8),
                               alignment: Alignment.center,
                               child: Text(
                                 AppLocalizations.of(context)

@@ -39,61 +39,71 @@ class _ViewAllDealsScreenState extends State<ViewAllDealsScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         body: SingleChildScrollView(
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        child: BackgroundWidget(
-          // title: "المناقصات",
-          widget: BlocBuilder<DealsItemsBloc, DealsItemsState>(
-            bloc: dealsItemBloc,
-            builder: (context, state) {
-              if (state is DealsItemsInProgress) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColor.backgroundColor,
-                  ),
-                );
-              } else if (state is DealsItemsFailure) {
-                final failure = state.message;
-                return Center(
-                  child: Text(
-                    failure,
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 25.sp,
+      child: RefreshIndicator(
+        onRefresh: () async {
+          dealsItemBloc.add(DealsItemsByCatEvent(category: widget.category));
+        },
+        color: AppColor.white,
+        backgroundColor: AppColor.backgroundColor,
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: BackgroundWidget(
+            // title: "المناقصات",
+            widget: BlocBuilder<DealsItemsBloc, DealsItemsState>(
+              bloc: dealsItemBloc,
+              builder: (context, state) {
+                if (state is DealsItemsInProgress) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColor.backgroundColor,
                     ),
-                  ),
-                );
-              } else if (state is DealsItemsSuccess) {
-                return SizedBox(
-                  height: size.height,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: state.dealsItems.length,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              width: MediaQuery.of(context).size.width,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 5),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Deals(
-                                dealsInfo: state.dealsItems[index],
-                              ),
-                            );
-                          },
+                  );
+                } else if (state is DealsItemsFailure) {
+                  final failure = state.message;
+                  return Center(
+                    child: Text(
+                      failure,
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 25.sp,
+                      ),
+                    ),
+                  );
+                } else if (state is DealsItemsSuccess) {
+                  return SizedBox(
+                    height: size.height,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: state.dealsItems.length,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                width: MediaQuery.of(context).size.width,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Deals(
+                                  dealsInfo: state.dealsItems[index],
+                                ),
+                              );
+                            },
+                          ),
                         ),
-                      )
-                    ],
-                  ),
-                );
-              }
-              return Container();
-            },
+                        SizedBox(
+                          height: 80.h,
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                return Container();
+              },
+            ),
           ),
         ),
       ),

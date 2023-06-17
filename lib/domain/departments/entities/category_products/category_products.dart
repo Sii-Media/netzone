@@ -12,9 +12,11 @@ class CategoryProducts extends Equatable {
   final String? vedioUrl;
   final bool? guarantee;
   final String? propert;
+  final String? address;
   final String? madeIn;
   final String? year;
   final num? quantity;
+  final String? gifUrl;
 
   const CategoryProducts({
     required this.id,
@@ -28,9 +30,11 @@ class CategoryProducts extends Equatable {
     this.vedioUrl,
     this.guarantee,
     this.propert,
+    this.address,
     this.madeIn,
     this.year,
     this.quantity,
+    this.gifUrl,
   });
   @override
   List<Object?> get props => [
@@ -48,5 +52,6 @@ class CategoryProducts extends Equatable {
         madeIn,
         year,
         quantity,
+        gifUrl,
       ];
 }

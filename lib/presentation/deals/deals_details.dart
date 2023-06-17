@@ -32,54 +32,41 @@ class DealDetails extends StatelessWidget {
                   ),
                 ),
               ),
-              myspec(
-                  context,
-                  "${AppLocalizations.of(context).translate('اسم الصفقة')} : ",
-                  dealsInfo.name,
-                  AppColor.backgroundColor,
-                  Colors.black),
-              myspec(
-                  context,
-                  "${AppLocalizations.of(context).translate('اسم البائع')} : ",
-                  dealsInfo.companyName,
-                  AppColor.backgroundColor,
-                  Colors.black),
-              myspec(
-                  context,
-                  "${AppLocalizations.of(context).translate('منتجات الصفقة')} : ",
-                  '',
-                  AppColor.backgroundColor,
-                  Colors.black),
-              myspec(
-                  context,
-                  "${AppLocalizations.of(context).translate('تاريخ بدء الصفقة')} : ",
-                  convertDateToString(dealsInfo.startDate),
-                  AppColor.backgroundColor,
-                  Colors.black),
-              myspec(
-                  context,
-                  "${AppLocalizations.of(context).translate('تاريخ انتهاء الصفقة')}: ",
-                  convertDateToString(dealsInfo.endDate),
-                  AppColor.backgroundColor,
-                  Colors.black),
-              SizedBox(
-                height: 5.h,
+              titleAndInput(
+                title:
+                    "${AppLocalizations.of(context).translate('اسم الصفقة')} : ",
+                input: dealsInfo.name,
               ),
-              myspec(
-                  context,
-                  "${AppLocalizations.of(context).translate('السعر قبل')}:",
-                  dealsInfo.prevPrice.toString(),
-                  AppColor.backgroundColor,
-                  Colors.black),
-              SizedBox(
-                height: 5.h,
+              titleAndInput(
+                title:
+                    "${AppLocalizations.of(context).translate('اسم البائع')} : ",
+                input: dealsInfo.companyName,
               ),
-              myspec(
-                  context,
-                  "${AppLocalizations.of(context).translate('السعر بعد')} : ",
-                  dealsInfo.currentPrice.toString(),
-                  AppColor.backgroundColor,
-                  Colors.black),
+              titleAndInput(
+                title:
+                    "${AppLocalizations.of(context).translate('منتجات الصفقة')} : ",
+                input: '',
+              ),
+              titleAndInput(
+                title:
+                    "${AppLocalizations.of(context).translate('تاريخ بدء الصفقة')} : ",
+                input: convertDateToString(dealsInfo.startDate),
+              ),
+              titleAndInput(
+                title:
+                    "${AppLocalizations.of(context).translate('تاريخ انتهاء الصفقة')}: ",
+                input: convertDateToString(dealsInfo.endDate),
+              ),
+              titleAndInput(
+                title:
+                    "${AppLocalizations.of(context).translate('السعر قبل')}:",
+                input: dealsInfo.prevPrice.toString(),
+              ),
+              titleAndInput(
+                title:
+                    "${AppLocalizations.of(context).translate('السعر بعد')} : ",
+                input: dealsInfo.currentPrice.toString(),
+              ),
               SizedBox(
                 height: 20.h,
               ),
@@ -100,13 +87,58 @@ class DealDetails extends StatelessWidget {
                         textStyle: const TextStyle(fontSize: 15)),
                     child: Text(
                         AppLocalizations.of(context).translate('اشتري الان'))),
-              )
+              ),
+              SizedBox(
+                height: 100.h,
+              ),
             ],
           )),
         ),
       ),
     );
   }
+}
+
+Padding titleAndInput({required String title, required String input}) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Container(
+      // height: 40.h,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey.withOpacity(0.4),
+            width: 1.0,
+          ),
+        ),
+      ),
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                  color: AppColor.backgroundColor,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600),
+            ),
+            SizedBox(
+              width: 190,
+              child: Text(
+                input,
+                style: TextStyle(
+                  color: AppColor.mainGrey,
+                  fontSize: 15.sp,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }
 
 myspec(context, String feature, String details, Color colorbackground,

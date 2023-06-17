@@ -115,6 +115,9 @@ class RecentChats extends StatelessWidget {
                 ),
               ),
             ),
+          SizedBox(
+            height: 80.h,
+          ),
         ],
       ),
     );

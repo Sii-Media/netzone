@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
+import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products_response.dart';
 import 'package:netzoon/domain/departments/entities/departments_categories/departments_categories_response.dart';
 
@@ -28,5 +29,11 @@ abstract class DepartmentRepository {
     String? property,
     String? madeIn,
     required File image,
+  });
+
+  Future<Either<Failure, List<CategoryProducts>>> getAllProducts();
+
+  Future<Either<Failure, List<CategoryProducts>>> getUserProducts({
+    required String username,
   });
 }

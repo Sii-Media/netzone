@@ -82,21 +82,24 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
                   );
                 }
                 if (state is VehicleSuccess) {
-                  return ListView.builder(
-                    // itemCount: widget.type == 'plans'
-                    //     ? planslist.length
-                    //     : carList.length,
-                    itemCount: state.vehilces.length,
-                    shrinkWrap: true,
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return VehicleWidget(
-                        plan: state.vehilces[index],
-                        // plan: widget.type == 'plans'
-                        //     ? planslist[index]
-                        //     : carList[index],
-                      );
-                    },
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 60.0),
+                    child: ListView.builder(
+                      // itemCount: widget.type == 'plans'
+                      //     ? planslist.length
+                      //     : carList.length,
+                      itemCount: state.vehilces.length,
+                      shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return VehicleWidget(
+                          plan: state.vehilces[index],
+                          // plan: widget.type == 'plans'
+                          //     ? planslist[index]
+                          //     : carList[index],
+                        );
+                      },
+                    ),
                   );
                 }
                 return Container();

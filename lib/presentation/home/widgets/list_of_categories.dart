@@ -5,12 +5,11 @@ import 'package:netzoon/presentation/categories/customs_screen/customs_category.
 import 'package:netzoon/presentation/categories/factories/factories_categories.dart';
 import 'package:netzoon/presentation/categories/free_zoon/category_free_zoon.dart';
 import 'package:netzoon/presentation/categories/local_company/local_companies.dart';
-import 'package:netzoon/presentation/categories/plans/plans_categories_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
-import 'package:netzoon/presentation/core/widgets/vehicle_list_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../categories/governmental/govermental_category_screen.dart';
+import '../../categories/vehicles/screens/vehicles_companies_screen.dart';
 
 class ListOfCategories extends StatelessWidget {
   const ListOfCategories({
@@ -84,7 +83,9 @@ class ListOfCategories extends StatelessWidget {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
-                              return const PlansCategoriesScreen();
+                              return const VehiclesCompaniesScreen(
+                                type: 'planes',
+                              );
                             },
                           ),
                         );
@@ -92,8 +93,8 @@ class ListOfCategories extends StatelessWidget {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
-                              return const VehicleListScreen(
-                                category: 'cars',
+                              return const VehiclesCompaniesScreen(
+                                type: 'cars',
                               );
                             },
                           ),

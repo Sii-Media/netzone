@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/categories/entities/govermental/govermental_details.dart';
 import 'package:netzoon/presentation/categories/widgets/free_zone_video_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/widgets/custom_appbar.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:url_launcher/link.dart';
 
@@ -15,7 +16,7 @@ class GovermentalDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController search = TextEditingController();
+    // final TextEditingController search = TextEditingController();
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SizedBox(
@@ -32,59 +33,7 @@ class GovermentalDetailsScreen extends StatelessWidget {
                     const BoxDecoration(color: AppColor.backgroundColor),
               ),
             ),
-            Container(
-              height: MediaQuery.of(context).size.height,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/00.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.18,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 135.w,
-                    height: 130.h,
-                    padding: const EdgeInsets.only(left: 0, right: 5),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage("assets/images/logo.png"),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 5.0, bottom: 5.0),
-                      child: TextFormField(
-                        style: const TextStyle(color: Colors.black),
-                        controller: search,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: AppColor.white,
-                          prefixIcon: InkWell(
-                              child: const Icon(Icons.search), onTap: () {}),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30)),
-                          hintText: AppLocalizations.of(context)
-                              .translate('search in netzoon'),
-                          alignLabelWithHint: true,
-                          hintStyle: TextStyle(
-                            fontSize: 8.sp,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 0, horizontal: 30),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            customAppBar(context),
             Positioned(
               top: 202.h,
               right: 0,
@@ -189,6 +138,9 @@ class GovermentalDetailsScreen extends StatelessWidget {
                           title:
                               '${AppLocalizations.of(context).translate('vedio')} :',
                           vediourl: govermentalDetails.videourl!),
+                      SizedBox(
+                        height: 60.h,
+                      ),
                     ],
                   ),
                 ),

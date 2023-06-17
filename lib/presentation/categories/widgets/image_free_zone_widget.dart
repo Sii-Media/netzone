@@ -53,40 +53,43 @@ class ListOfPictures extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          CachedNetworkImage(
-            height: 125.h,
-            width: MediaQuery.of(context).size.width,
-            imageUrl: img,
-            fit: BoxFit.cover,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () async {
-                    await shareImageWithDescription(
-                        imageUrl: img, description: '');
-                  },
-                  icon: const Icon(Icons.share),
-                  color: AppColor.backgroundColor,
-                ),
-                // IconButton(
-                //   onPressed: () {},
-                //   icon: const Icon(
-                //     Icons.favorite_border,
-                //     color: AppColor.backgroundColor,
-                //   ),
-                // ),
-              ],
+    return SizedBox(
+      width: 160.w,
+      child: Card(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CachedNetworkImage(
+              height: 125.h,
+              width: MediaQuery.of(context).size.width,
+              imageUrl: img,
+              fit: BoxFit.cover,
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () async {
+                      await shareImageWithDescription(
+                          imageUrl: img, description: '');
+                    },
+                    icon: const Icon(Icons.share),
+                    color: AppColor.backgroundColor,
+                  ),
+                  // IconButton(
+                  //   onPressed: () {},
+                  //   icon: const Icon(
+                  //     Icons.favorite_border,
+                  //     color: AppColor.backgroundColor,
+                  //   ),
+                  // ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

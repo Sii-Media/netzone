@@ -14,11 +14,12 @@ class AddProductRequestedEvent extends AddProductEvent {
   final String description;
   final int price;
   final List<String>? images;
-  final String? videoUrl;
-  final String? guarantee;
-  final String? property;
+  final File? video;
+  final bool? guarantee;
+  final String? address;
   final String? madeIn;
   final File image;
+  final DateTime? year;
 
   const AddProductRequestedEvent({
     required this.departmentName,
@@ -27,10 +28,11 @@ class AddProductRequestedEvent extends AddProductEvent {
     required this.description,
     required this.price,
     this.images,
-    this.videoUrl,
+    this.video,
     this.guarantee,
-    this.property,
+    this.address,
     this.madeIn,
     required this.image,
+    this.year,
   });
 }

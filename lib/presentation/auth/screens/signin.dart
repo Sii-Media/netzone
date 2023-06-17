@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -65,8 +66,9 @@ class _SignInScreenState extends State<SignInScreen>
             ),
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ));
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) {
+
+          Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+              CupertinoPageRoute(builder: (context) {
             return const TestScreen();
           }), (route) => false);
         }

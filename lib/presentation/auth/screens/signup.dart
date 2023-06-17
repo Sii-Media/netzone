@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -83,8 +84,8 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
             ),
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ));
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) {
+          Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+              CupertinoPageRoute(builder: (context) {
             return const TestScreen();
           }), (route) => false);
         }
@@ -209,7 +210,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
       topWidget: 160.h,
       topTitle: 110.h,
       n: 0.25.h,
-      title: widget.accountTitle,
+      title: AppLocalizations.of(context).translate(widget.accountTitle),
       widget: Form(
         key: widget.formKey,
         child: Container(
@@ -376,12 +377,14 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   )
                 ],
               ),
-              widget.accountTitle == 'المستهلك'
+              widget.accountTitle == 'المستهلك' ||
+                      widget.accountTitle == 'جهة إخبارية'
                   ? Container()
                   : TextSignup(
                       text: AppLocalizations.of(context)
                           .translate('subcategory')),
-              widget.accountTitle == 'المستهلك'
+              widget.accountTitle == 'المستهلك' ||
+                      widget.accountTitle == 'جهة إخبارية'
                   ? Container()
                   : TextFormSignupWidget(
                       password: false,
@@ -447,12 +450,14 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                               image: AssetImage("assets/images/logo.png"),
                               fit: BoxFit.cover)),
                     ),
-              widget.accountTitle == 'المستهلك'
+              widget.accountTitle == 'المستهلك' ||
+                      widget.accountTitle == 'جهة إخبارية'
                   ? Container()
                   : TextSignup(
                       text: AppLocalizations.of(context)
                           .translate('number_of_company_products')),
-              widget.accountTitle == 'المستهلك'
+              widget.accountTitle == 'المستهلك' ||
+                      widget.accountTitle == 'جهة إخبارية'
                   ? Container()
                   : TextFormSignupWidget(
                       password: false,
@@ -464,13 +469,15 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       },
                       myController: widget.companyProductsNumber,
                     ),
-              widget.accountTitle == 'المستهلك'
+              widget.accountTitle == 'المستهلك' ||
+                      widget.accountTitle == 'جهة إخبارية'
                   ? Container()
                   : TextSignup(
                       text:
                           AppLocalizations.of(context).translate('sell_method'),
                     ),
-              widget.accountTitle == 'المستهلك'
+              widget.accountTitle == 'المستهلك' ||
+                      widget.accountTitle == 'جهة إخبارية'
                   ? Container()
                   : TextFormSignupWidget(
                       password: false,
@@ -482,13 +489,15 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       },
                       myController: widget.sellType,
                     ),
-              widget.accountTitle == 'المستهلك'
+              widget.accountTitle == 'المستهلك' ||
+                      widget.accountTitle == 'جهة إخبارية'
                   ? Container()
                   : TextSignup(
                       text: AppLocalizations.of(context)
                           .translate('where_to_sell'),
                     ),
-              widget.accountTitle == 'المستهلك'
+              widget.accountTitle == 'المستهلك' ||
+                      widget.accountTitle == 'جهة إخبارية'
                   ? Container()
                   : TextFormSignupWidget(
                       password: false,
@@ -591,13 +600,15 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         fit: BoxFit.cover,
                       ),
                     ),
-              widget.accountTitle == 'المستهلك'
+              widget.accountTitle == 'المستهلك' ||
+                      widget.accountTitle == 'جهة إخبارية'
                   ? Container()
                   : TextSignup(
                       text: AppLocalizations.of(context)
                           .translate('banner_photo'),
                     ),
-              widget.accountTitle == 'المستهلك'
+              widget.accountTitle == 'المستهلك' ||
+                      widget.accountTitle == 'جهة إخبارية'
                   ? Container()
                   : Column(
                       children: [
@@ -724,7 +735,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 ),
               ),
               SizedBox(
-                height: 20.h,
+                height: 80.h,
               ),
             ],
           ),
@@ -747,6 +758,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
         return 'freezoon';
       case 'المصانع':
         return 'factory';
+
+      case 'جهة إخبارية':
+        return 'news_agency';
 
       default:
         return 'user';

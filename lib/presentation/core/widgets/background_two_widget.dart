@@ -2,6 +2,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/widgets/custom_appbar.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class BackgroundTwoWidget extends StatefulWidget {
@@ -59,50 +60,7 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
               ),
             ),
           ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.18,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: 135.w,
-                  height: 130.h,
-                  padding: const EdgeInsets.only(left: 0, right: 5),
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage("assets/images/logo.png"),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 5.0, bottom: 5.0),
-                    child: TextFormField(
-                      style: const TextStyle(color: Colors.black),
-                      controller: search,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: AppColor.white,
-                        prefixIcon: InkWell(
-                            child: const Icon(Icons.search), onTap: () {}),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                        hintText: AppLocalizations.of(context)
-                            .translate('search in netzoon'),
-                        alignLabelWithHint: true,
-                        hintStyle: TextStyle(
-                          fontSize: 8.sp,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 30),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          customAppBar(context),
           Positioned(
             top: 147.h,
             right: 0,
@@ -114,7 +72,7 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
                 children: [
                   Expanded(child: widget.widget),
                   SizedBox(
-                    height: 80.h,
+                    height: 140.h,
                   ),
                 ],
               ),

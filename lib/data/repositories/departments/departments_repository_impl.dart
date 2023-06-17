@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/remote/departments/departments_remote_data_source.dart';
+import 'package:netzoon/data/models/departments/category_products/category_products_model.dart';
 import 'package:netzoon/data/models/departments/category_products/category_products_response_model.dart';
 import 'package:netzoon/data/models/departments/departments_categories/departments_categories_response_model.dart';
+import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products_response.dart';
 import 'package:netzoon/domain/departments/entities/departments_categories/departments_categories_response.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
@@ -80,6 +82,36 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
         //   image,
         // );
         return const Right('success');
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<CategoryProducts>>> getAllProducts() async {
+    try {
+      if (await networkInfo.isConnected) {
+        final products = await departmentsRemoteDataSource.getAllProducts();
+        return Right(products.map((e) => e.toDomain()).toList());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<CategoryProducts>>> getUserProducts(
+      {required String username}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final products =
+            await departmentsRemoteDataSource.getUserProducts(username);
+        return Right(products.map((e) => e.toDomain()).toList());
       } else {
         return Left(OfflineFailure());
       }

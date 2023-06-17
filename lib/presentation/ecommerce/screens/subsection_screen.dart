@@ -72,18 +72,23 @@ class _SubSectionsScreenState extends State<SubSectionsScreen> {
                     padding: const EdgeInsets.all(15),
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height,
-                      child: DynamicHeightGridView(
-                          itemCount: state.categoryProducts.length,
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          builder: (ctx, index) {
-                            return ListSubSectionsWidget(
-                              deviceList: state.categoryProducts[index],
-                            );
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 70.0),
+                        child: DynamicHeightGridView(
+                            itemCount: state.categoryProducts.length,
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            builder: (ctx, index) {
+                              return ListSubSectionsWidget(
+                                deviceList: state.categoryProducts[index],
+                                department: state.department,
+                                category: state.category,
+                              );
 
-                            /// return your widget here.
-                          }),
+                              /// return your widget here.
+                            }),
+                      ),
                     ),
                   );
           }

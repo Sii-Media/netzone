@@ -23,6 +23,7 @@ class _UserTypeState extends State<UserType> {
       'المستهلك',
       'منطقة حرة',
       'المصانع',
+      'جهة إخبارية',
     ];
     String? selectedValue;
 

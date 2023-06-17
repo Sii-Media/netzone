@@ -7,11 +7,14 @@ part 'category_products_response_model.g.dart';
 @JsonSerializable()
 class CategoryProductsResponseModel {
   final String message;
-
+  final String department;
+  final String category;
   @JsonKey(name: 'results')
   final List<CategoryProductsModel> categoryProducts;
 
   CategoryProductsResponseModel({
+    required this.department,
+    required this.category,
     required this.message,
     required this.categoryProducts,
   });
@@ -25,6 +28,8 @@ class CategoryProductsResponseModel {
 extension MapToDomain on CategoryProductsResponseModel {
   CategoryProductsResponse toDomain() => CategoryProductsResponse(
         message: message,
+        department: department,
+        category: category,
         products: categoryProducts.map((e) => e.toDomain()).toList(),
       );
 }

@@ -2,7 +2,7 @@ import 'package:netzoon/domain/advertisements/entities/advertisement.dart';
 
 List<Advertisement> advertisments = [
   const Advertisement(
-    advertisingTitle: 'نيسان للبيع في إمارة عجمان',
+    name: 'نيسان للبيع في إمارة عجمان',
     advertisingStartDate: '16/03/2023',
     advertisingEndDate: '31/03/2023',
     advertisingDescription:
@@ -24,7 +24,7 @@ List<Advertisement> advertisments = [
     advertisingType: '',
   ),
   const Advertisement(
-    advertisingTitle: 'أرض للبيع في دبي ',
+    name: 'أرض للبيع في دبي ',
     advertisingStartDate: '16/03/2023',
     advertisingEndDate: '31/03/2023',
     advertisingDescription: 'أرض للبيع في دبي ',
@@ -42,7 +42,7 @@ List<Advertisement> advertisments = [
     advertisingType: '',
   ),
   const Advertisement(
-    advertisingTitle: 'نيسان للبيع في إمارة عجمان',
+    name: 'نيسان للبيع في إمارة عجمان',
     advertisingStartDate: '16/03/2023',
     advertisingEndDate: '31/03/2023',
     advertisingDescription: 'تفاصيل الاعلان',
@@ -61,7 +61,7 @@ List<Advertisement> advertisments = [
     advertisingType: '',
   ),
   const Advertisement(
-    advertisingTitle: 'نيسان للبيع في إمارة عجمان',
+    name: 'نيسان للبيع في إمارة عجمان',
     advertisingStartDate: '16/03/2023',
     advertisingEndDate: '31/03/2023',
     advertisingDescription: 'تفاصيل الاعلان',

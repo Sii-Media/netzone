@@ -72,8 +72,8 @@ class _GovermentalCategoryScreenState extends State<GovermentalCategoryScreen> {
                               const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
                                   childAspectRatio: 0.85,
-                                  crossAxisSpacing: 20,
-                                  mainAxisSpacing: 20),
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10),
                           itemBuilder: (BuildContext context, index) {
                             return InkWell(
                               onTap: () {
@@ -130,6 +130,9 @@ class _GovermentalCategoryScreenState extends State<GovermentalCategoryScreen> {
                             );
                           },
                         ),
+                        SizedBox(
+                          height: 60.h,
+                        )
                       ],
                     );
                   }

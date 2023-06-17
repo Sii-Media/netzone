@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
-import 'package:netzoon/presentation/utils/app_localizations.dart';
+
+import 'custom_appbar.dart';
 
 class BackgroundWidget extends StatelessWidget {
   final Widget widget;
@@ -30,59 +31,16 @@ class BackgroundWidget extends StatelessWidget {
                     const BoxDecoration(color: AppColor.backgroundColor),
               ),
             ),
-            Container(
-              height: MediaQuery.of(context).size.height,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/00.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.16,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 130.w,
-                    height: 130.h,
-                    padding: const EdgeInsets.only(left: 0, right: 5),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage("assets/images/logo.png"),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 5.0, bottom: 5.0),
-                      child: TextFormField(
-                        style: const TextStyle(color: Colors.black),
-                        controller: search,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: AppColor.white,
-                          prefixIcon: InkWell(
-                              child: const Icon(Icons.search), onTap: () {}),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30)),
-                          hintText: AppLocalizations.of(context)
-                              .translate("search in netzoon"),
-                          // alignLabelWithHint: true,
-                          hintStyle: TextStyle(
-                            fontSize: 8.sp,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 0, horizontal: 30),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // Container(
+            //   height: MediaQuery.of(context).size.height,
+            //   decoration: const BoxDecoration(
+            //     image: DecorationImage(
+            //       image: AssetImage("assets/images/00.png"),
+            //       fit: BoxFit.cover,
+            //     ),
+            //   ),
+            // ),
+            customAppBar(context),
             Positioned(
               top: 57.h,
               right: 0,

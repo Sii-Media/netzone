@@ -21,8 +21,10 @@ CategoryProductsModel _$CategoryProductsModelFromJson(
       vedioUrl: json['vedioUrl'] as String?,
       guarantee: json['guarantee'] as bool?,
       propert: json['propert'] as String?,
+      address: json['address'] as String?,
       madeIn: json['madeIn'] as String?,
       year: json['year'] as String?,
+      gifUrl: json['gifUrl'] as String?,
     );
 
 Map<String, dynamic> _$CategoryProductsModelToJson(
@@ -39,6 +41,8 @@ Map<String, dynamic> _$CategoryProductsModelToJson(
       'vedioUrl': instance.vedioUrl,
       'guarantee': instance.guarantee,
       'propert': instance.propert,
+      'address': instance.address,
       'madeIn': instance.madeIn,
       'year': instance.year,
+      'gifUrl': instance.gifUrl,
     };

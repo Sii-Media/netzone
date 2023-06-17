@@ -22,3 +22,9 @@ class DealsItemsFailure extends DealsItemsState {
 
   const DealsItemsFailure({required this.message});
 }
+
+class AddDealSuccess extends DealsItemsState {
+  final String message;
+
+  const AddDealSuccess({required this.message});
+}

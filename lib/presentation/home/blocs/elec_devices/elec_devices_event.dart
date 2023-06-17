@@ -20,3 +20,5 @@ class GetElcCategoryProductsEvent extends ElecDevicesEvent {
   const GetElcCategoryProductsEvent(
       {required this.department, required this.category});
 }
+
+class GetAllProductsEvent extends ElecDevicesEvent {}

@@ -6,13 +6,18 @@ import 'package:netzoon/domain/departments/usecases/get_categories_by_department
 import 'package:netzoon/domain/departments/usecases/get_category_products_use_case.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 
+import '../../../../domain/core/usecase/usecase.dart';
+import '../../../../domain/departments/usecases/get_all_products_use_case.dart';
+
 part 'elec_devices_event.dart';
 part 'elec_devices_state.dart';
 
 class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
   final GetCategoriesByDepartmentUsecase getCategoriesByDepartmentUsecase;
   final GetCategoryProductsUseCase getCategoryProductsUseCase;
+  final GetAllProductsUseCase getAllProductsUseCase;
   ElecDevicesBloc({
+    required this.getAllProductsUseCase,
     required this.getCategoriesByDepartmentUsecase,
     required this.getCategoryProductsUseCase,
   }) : super(ElecDevicesInitial()) {
@@ -43,9 +48,24 @@ class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
           },
           (categoryProducts) {
             return ElecCategoryProductSuccess(
+                department: categoryProducts.department,
+                category: categoryProducts.category,
                 categoryProducts: categoryProducts.products);
           },
         ),
+      );
+    });
+    on<GetAllProductsEvent>((event, emit) async {
+      emit(ElecDevicesInProgress());
+      final products = await getAllProductsUseCase(NoParams());
+
+      emit(
+        products.fold(
+            (failure) =>
+                ElecDevicesFailure(message: mapFailureToString(failure)),
+            (categoryProducts) {
+          return ElecCategoryProductSuccess(categoryProducts: categoryProducts);
+        }),
       );
     });
   }

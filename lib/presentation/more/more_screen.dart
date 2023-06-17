@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,11 +8,12 @@ import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
 import 'package:netzoon/presentation/contact/screens/contact_us_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
-import 'package:netzoon/presentation/home/test.dart';
 import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
 import 'package:netzoon/presentation/legal_advice/legal_advice_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
+
+import '../start_screen.dart';
 
 class MoreScreen extends StatefulWidget {
   const MoreScreen({super.key});
@@ -27,8 +29,8 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
   ];
 
   // Define the current language and its code
-  String currentLanguage = 'English';
-  String currentCode = 'en';
+  String currentLanguage = 'Arabic';
+  String currentCode = 'ar';
 
   void showLanguageDialog(BuildContext context) {
     showModalBottomSheet(
@@ -37,17 +39,18 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return Container(
-              color: AppColor.backgroundColor,
+              // margin: const EdgeInsets.only(bottom: 60),
+              color: AppColor.white,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // Loop through the languages and create radio buttons
                   for (var language in languages)
                     RadioListTile<String>(
-                      activeColor: AppColor.white,
+                      activeColor: AppColor.backgroundColor,
                       title: Text(
                         language['name']!,
-                        style: const TextStyle(color: AppColor.white),
+                        style: const TextStyle(color: AppColor.backgroundColor),
                       ),
                       value: language['code'] ?? '',
                       groupValue: currentCode,
@@ -85,7 +88,7 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
   void initState() {
     getIsLoggedIn();
     final SharedPreferences preferences = sl<SharedPreferences>();
-    currentCode = preferences.getString(SharedPreferencesKeys.language) ?? 'en';
+    currentCode = preferences.getString(SharedPreferencesKeys.language) ?? 'ar';
     currentLanguage = currentCode == 'en' ? 'English' : 'Arabic';
     super.initState();
   }
@@ -185,9 +188,10 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
                   onTap: () {
                     authBloc.add(AuthLogout());
 
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) {
-                      return const TestScreen();
+                    Navigator.of(context, rootNavigator: true)
+                        .pushAndRemoveUntil(
+                            CupertinoPageRoute(builder: (context) {
+                      return const StartScreen();
                     }), (route) => false);
                   },
                 )

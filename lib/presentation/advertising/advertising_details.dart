@@ -90,8 +90,7 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
                                           await shareImageWithDescription(
                                               imageUrl:
                                                   widget.ads.advertisingImage,
-                                              description:
-                                                  widget.ads.advertisingTitle);
+                                              description: widget.ads.name);
                                         },
                                         icon: const Icon(
                                           Icons.share,
@@ -106,7 +105,7 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
                                 height: 7.h,
                               ),
                               Text(
-                                widget.ads.advertisingTitle,
+                                widget.ads.name,
                                 style: TextStyle(
                                   color: AppColor.black,
                                   fontSize: 20.sp,
@@ -341,7 +340,7 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
                           ),
                   ),
                   SizedBox(
-                    height: 60.h,
+                    height: 120.h,
                   ),
                 ],
               ),

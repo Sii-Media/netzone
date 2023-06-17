@@ -68,5 +68,5 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    
+    implementation('com.revesoft.revechatsdk:revechatsdk:1.0.14.3.2')
 }

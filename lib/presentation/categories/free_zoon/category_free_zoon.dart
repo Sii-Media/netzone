@@ -134,6 +134,9 @@ class _CategoriesFreeZoneState extends State<CategoriesFreeZone> {
                               );
                             },
                           ),
+                          SizedBox(
+                            height: 60.h,
+                          ),
                         ],
                       );
                     }

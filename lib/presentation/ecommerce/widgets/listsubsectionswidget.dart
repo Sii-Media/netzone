@@ -9,8 +9,11 @@ import 'package:netzoon/presentation/utils/app_localizations.dart';
 import '../../core/helpers/share_image_function.dart';
 
 class ListSubSectionsWidget extends StatelessWidget {
-  const ListSubSectionsWidget({super.key, required this.deviceList});
+  const ListSubSectionsWidget(
+      {super.key, required this.deviceList, this.department, this.category});
   final CategoryProducts deviceList;
+  final String? department;
+  final String? category;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -21,6 +24,8 @@ class ListSubSectionsWidget extends StatelessWidget {
             builder: (context) {
               return ProductDetailScreen(
                 item: deviceList,
+                department: department,
+                category: category,
               );
             },
           ),

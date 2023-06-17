@@ -15,8 +15,9 @@ class CartLoaded extends CartBlocState {
   final List<CategoryProducts> items;
 
   final double totalPrice;
-
+  final num totalQuantity;
   const CartLoaded({
+    required this.totalQuantity,
     required this.items,
     required this.totalPrice,
   });

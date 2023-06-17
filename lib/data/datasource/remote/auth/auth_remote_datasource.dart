@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:netzoon/data/models/auth/otp_login/otp_login_response_model.dart';
 import 'package:netzoon/data/models/auth/user/user_model.dart';
+import 'package:netzoon/data/models/auth/user_info/user_info_model.dart';
 import 'package:retrofit/http.dart';
 import '../../../../injection_container.dart';
 
@@ -21,6 +22,12 @@ abstract class AuthRemoteDataSource {
     final String password,
   );
 
+  Future<String> changePassword(
+    final String userId,
+    final String currentPassword,
+    final String newPassword,
+  );
+
   Future<OtpLoginResponseModel> getOtpCode(
     final String phone,
   );
@@ -30,6 +37,17 @@ abstract class AuthRemoteDataSource {
     final String otp,
     final String hash,
   );
+
+  Future<UserInfoModel> getUserById(final String userId);
+
+  // Future<UserInfoModel> editProfile(
+  //     String userId,
+  //     String username,
+  //     String email,
+  //     String firstMobile,
+  //     String secondeMobile,
+  //     String thirdMobile,
+  //     File? profilePhoto);
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -75,4 +93,31 @@ abstract class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     @Part() String otp,
     @Part() String hash,
   );
+
+  @override
+  @GET('/user/getUser/{userId}')
+  Future<UserInfoModel> getUserById(
+    @Path('userId') String userId,
+  );
+
+  @override
+  @PUT('/user/password/{userId}')
+  Future<String> changePassword(
+    @Path('userId') String userId,
+    @Part() String currentPassword,
+    @Part() String newPassword,
+  );
+
+  // @override
+  // @PUT('/user/editUser/{userId}')
+  // @MultiPart()
+  // Future<UserInfoModel> editProfile(
+  //   @Path('userId') String userId,
+  //   @Part(name: 'username') String username,
+  //   @Part(name: 'email') String email,
+  //   @Part(name: 'firstMobile') String firstMobile,
+  //   @Part(name: 'secondMobile') String secondMobile,
+  //   @Part(name: 'thirdMobile') String thirdMobile,
+  //   @Part(name: 'profilePhoto') File? profilePhoto,
+  // );
 }

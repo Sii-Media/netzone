@@ -199,7 +199,7 @@ class _AddNewScreenState extends State<AddNewScreen>
                         }),
                   ),
                   SizedBox(
-                    height: 10.h,
+                    height: 80.h,
                   ),
                 ],
               ),

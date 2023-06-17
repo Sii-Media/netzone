@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -104,551 +105,468 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        newsBloc.add(GetAllNewsEvent());
-        tenderItemBloc.add(const GetTendersItemEvent());
-        dealsItemBloc.add(GetDealsItemEvent());
-        elcDeviceBloc.add(const GetElcDevicesEvent(department: 'الكترونيات'));
-        deviceBloc
-            .add(const GetElcDevicesEvent(department: 'أجهزة المنزل والمكتب'));
-        manFashionBloc.add(const GetElcDevicesEvent(department: 'موضة رجالية'));
-        womanFashionBloc
-            .add(const GetElcDevicesEvent(department: 'موضة نسائية'));
-        foodsBloc.add(const GetElcDevicesEvent(department: 'منتجات غذائية'));
-        perfumesBloc.add(const GetElcDevicesEvent(department: 'عطور'));
-        watchesBloc.add(const GetElcDevicesEvent(department: 'ساعات'));
-      },
-      color: AppColor.white,
-      backgroundColor: AppColor.backgroundColor,
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 15.0, bottom: 12),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              TitleAndButton(
-                title: AppLocalizations.of(context).translate('category'),
-                icon: true,
-                onPress: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return const CategoriesMainScreen();
-                    }),
-                  );
-                },
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.20,
-                child: ListOfCategories(
-                  categories: categories,
+    return CupertinoPageScaffold(
+      child: RefreshIndicator(
+        onRefresh: () async {
+          newsBloc.add(GetAllNewsEvent());
+          tenderItemBloc.add(const GetTendersItemEvent());
+          dealsItemBloc.add(GetDealsItemEvent());
+          elcDeviceBloc.add(const GetElcDevicesEvent(department: 'الكترونيات'));
+          deviceBloc.add(
+              const GetElcDevicesEvent(department: 'أجهزة المنزل والمكتب'));
+          manFashionBloc
+              .add(const GetElcDevicesEvent(department: 'موضة رجالية'));
+          womanFashionBloc
+              .add(const GetElcDevicesEvent(department: 'موضة نسائية'));
+          foodsBloc.add(const GetElcDevicesEvent(department: 'منتجات غذائية'));
+          perfumesBloc.add(const GetElcDevicesEvent(department: 'عطور'));
+          watchesBloc.add(const GetElcDevicesEvent(department: 'ساعات'));
+        },
+        color: AppColor.white,
+        backgroundColor: AppColor.backgroundColor,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 15.0, bottom: 12),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('category'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      CupertinoPageRoute(builder: (context) {
+                        return const CategoriesMainScreen();
+                      }),
+                    );
+                  },
                 ),
-              ),
-              // const SizedBox(
-              //   height: 10.0,
-              // ),
-              // TitleAndButton(
-              //   title: AppLocalizations.of(context).translate('ecommerce'),
-              //   icon: true,
-              //   onPress: () {},
-              // ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              TitleAndButton(
-                title: AppLocalizations.of(context).translate('elec'),
-                icon: true,
-                onPress: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return CategoriesScreen(
-                        items: elecDevices,
-                        filter: 'الكترونيات',
-                      );
-                    }),
-                  );
-                },
-              ),
-              BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
-                bloc: elcDeviceBloc,
-                builder: (context, state) {
-                  if (state is ElecDevicesInProgress) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColor.backgroundColor,
-                      ),
-                    );
-                  } else if (state is ElecDevicesFailure) {
-                    final failure = state.message;
-                    return Center(
-                      child: Text(
-                        failure,
-                        style: const TextStyle(
-                          color: Colors.red,
-                        ),
-                      ),
-                    );
-                  } else if (state is ElecDevicesSuccess) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 3.0,
-                      ),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 209, 219, 235)
-                            .withOpacity(0.8),
-                      ),
-                      height: 110.h,
-                      child: ListofItems(
-                        filter: 'الكترونيات',
-                        // devices: elecDevices,
-                        elec: state.elecDevices,
-                      ),
-                    );
-                  }
-                  return Container();
-                },
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              TitleAndButton(
-                title: AppLocalizations.of(context).translate('officeDevices'),
-                icon: true,
-                onPress: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return CategoriesScreen(
-                        filter: 'أجهزة المنزل والمكتب',
-                        items: devices,
-                      );
-                    }),
-                  );
-                },
-              ),
-              BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
-                bloc: deviceBloc,
-                builder: (context, state) {
-                  if (state is ElecDevicesInProgress) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColor.backgroundColor,
-                      ),
-                    );
-                  } else if (state is ElecDevicesFailure) {
-                    final failure = state.message;
-                    return Center(
-                      child: Text(
-                        failure,
-                        style: const TextStyle(
-                          color: Colors.red,
-                        ),
-                      ),
-                    );
-                  } else if (state is ElecDevicesSuccess) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 3.0,
-                      ),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 209, 219, 235)
-                            .withOpacity(0.8),
-                      ),
-                      height: 110.h,
-                      child: ListofItems(
-                        filter: 'أجهزة المنزل والمكتب',
-                        // devices: elecDevices,
-                        elec: state.elecDevices,
-                      ),
-                    );
-                  }
-                  return Container();
-                },
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              TitleAndButton(
-                title: AppLocalizations.of(context).translate('menFashion'),
-                icon: true,
-                onPress: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return CategoriesScreen(
-                        filter: 'موضة رجالية',
-                        items: menfasion,
-                      );
-                    }),
-                  );
-                },
-              ),
-              BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
-                bloc: manFashionBloc,
-                builder: (context, state) {
-                  if (state is ElecDevicesInProgress) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColor.backgroundColor,
-                      ),
-                    );
-                  } else if (state is ElecDevicesFailure) {
-                    final failure = state.message;
-                    return Center(
-                      child: Text(
-                        failure,
-                        style: const TextStyle(
-                          color: Colors.red,
-                        ),
-                      ),
-                    );
-                  } else if (state is ElecDevicesSuccess) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 3.0,
-                      ),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 209, 219, 235)
-                            .withOpacity(0.8),
-                      ),
-                      height: 110.h,
-                      child: ListofItems(
-                        filter: 'موضة رجالية',
-                        // devices: elecDevices,
-                        elec: state.elecDevices,
-                      ),
-                    );
-                  }
-                  return Container();
-                },
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              TitleAndButton(
-                title: AppLocalizations.of(context).translate('womanFashion'),
-                icon: true,
-                onPress: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return CategoriesScreen(
-                        filter: 'موضة نسائية',
-                        items: womanFashion,
-                      );
-                    }),
-                  );
-                },
-              ),
-              BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
-                bloc: womanFashionBloc,
-                builder: (context, state) {
-                  if (state is ElecDevicesInProgress) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColor.backgroundColor,
-                      ),
-                    );
-                  } else if (state is ElecDevicesFailure) {
-                    final failure = state.message;
-                    return Center(
-                      child: Text(
-                        failure,
-                        style: const TextStyle(
-                          color: Colors.red,
-                        ),
-                      ),
-                    );
-                  } else if (state is ElecDevicesSuccess) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 3.0,
-                      ),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 209, 219, 235)
-                            .withOpacity(0.8),
-                      ),
-                      height: 110.h,
-                      child: ListofItems(
-                        filter: 'موضة نسائية',
-                        // devices: elecDevices,
-                        elec: state.elecDevices,
-                      ),
-                    );
-                  }
-                  return Container();
-                },
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              TitleAndButton(
-                title: AppLocalizations.of(context).translate('foods'),
-                icon: true,
-                onPress: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return CategoriesScreen(
-                        filter: 'منتجات غذائية',
-                        items: foodProducts,
-                      );
-                    }),
-                  );
-                },
-              ),
-              BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
-                bloc: foodsBloc,
-                builder: (context, state) {
-                  if (state is ElecDevicesInProgress) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColor.backgroundColor,
-                      ),
-                    );
-                  } else if (state is ElecDevicesFailure) {
-                    final failure = state.message;
-                    return Center(
-                      child: Text(
-                        failure,
-                        style: const TextStyle(
-                          color: Colors.red,
-                        ),
-                      ),
-                    );
-                  } else if (state is ElecDevicesSuccess) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 3.0,
-                      ),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 209, 219, 235)
-                            .withOpacity(0.8),
-                      ),
-                      height: 110.h,
-                      child: ListofItems(
-                        filter: 'منتجات غذائية',
-                        // devices: elecDevices,
-                        elec: state.elecDevices,
-                      ),
-                    );
-                  }
-                  return Container();
-                },
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              TitleAndButton(
-                title: AppLocalizations.of(context).translate('perfumes'),
-                icon: true,
-                onPress: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return CategoriesScreen(
-                        filter: 'عطور',
-                        items: perfumeslist,
-                      );
-                    }),
-                  );
-                },
-              ),
-              BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
-                bloc: perfumesBloc,
-                builder: (context, state) {
-                  if (state is ElecDevicesInProgress) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColor.backgroundColor,
-                      ),
-                    );
-                  } else if (state is ElecDevicesFailure) {
-                    final failure = state.message;
-                    return Center(
-                      child: Text(
-                        failure,
-                        style: const TextStyle(
-                          color: Colors.red,
-                        ),
-                      ),
-                    );
-                  } else if (state is ElecDevicesSuccess) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 3.0,
-                      ),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 209, 219, 235)
-                            .withOpacity(0.8),
-                      ),
-                      height: 110.h,
-                      child: ListofItems(
-                        filter: 'عطور',
-                        // devices: elecDevices,
-                        elec: state.elecDevices,
-                      ),
-                    );
-                  }
-                  return Container();
-                },
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              TitleAndButton(
-                title: AppLocalizations.of(context).translate('watches'),
-                icon: true,
-                onPress: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return CategoriesScreen(
-                        filter: 'ساعات',
-                        items: watches,
-                      );
-                    }),
-                  );
-                },
-              ),
-              BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
-                bloc: watchesBloc,
-                builder: (context, state) {
-                  if (state is ElecDevicesInProgress) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColor.backgroundColor,
-                      ),
-                    );
-                  } else if (state is ElecDevicesFailure) {
-                    final failure = state.message;
-                    return Center(
-                      child: Text(
-                        failure,
-                        style: const TextStyle(
-                          color: Colors.red,
-                        ),
-                      ),
-                    );
-                  } else if (state is ElecDevicesSuccess) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 3.0,
-                      ),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 209, 219, 235)
-                            .withOpacity(0.8),
-                      ),
-                      height: 110.h,
-                      child: ListofItems(
-                        filter: 'ساعات',
-                        // devices: elecDevices,
-                        elec: state.elecDevices,
-                      ),
-                    );
-                  }
-                  return Container();
-                },
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              TitleAndButton(
-                title: AppLocalizations.of(context).translate('advertiments'),
-                icon: true,
-                onPress: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return AdvertisingScreen(
-                          advertisment: advertismentList,
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.20,
+                  child: ListOfCategories(
+                    categories: categories,
+                  ),
+                ),
+                // const SizedBox(
+                //   height: 10.0,
+                // ),
+                // TitleAndButton(
+                //   title: AppLocalizations.of(context).translate('ecommerce'),
+                //   icon: true,
+                //   onPress: () {},
+                // ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('elec'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return CategoriesScreen(
+                          items: elecDevices,
+                          filter: 'الكترونيات',
                         );
-                      },
-                    ),
-                  );
-                },
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.25,
-                child: SliderImages(advertisments: advertismentList),
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              TitleAndButton(
-                title: AppLocalizations.of(context).translate('tenders'),
-                icon: true,
-                onPress: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return const TenderCategoriesScreen(
-                          title: 'فئات المناقصات',
+                      }),
+                    );
+                  },
+                ),
+                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                  bloc: elcDeviceBloc,
+                  builder: (context, state) {
+                    if (state is ElecDevicesInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (state is ElecDevicesFailure) {
+                      final failure = state.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          elcDeviceBloc.add(const GetElcDevicesEvent(
+                              department: 'الكترونيات'));
+                        },
+                      );
+                    } else if (state is ElecDevicesSuccess) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3.0,
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 209, 219, 235)
+                              .withOpacity(0.8),
+                        ),
+                        height: 110.h,
+                        child: ListofItems(
+                          filter: 'الكترونيات',
+                          // devices: elecDevices,
+                          elec: state.elecDevices,
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title:
+                      AppLocalizations.of(context).translate('officeDevices'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return CategoriesScreen(
+                          filter: 'أجهزة المنزل والمكتب',
+                          items: devices,
                         );
-                      },
-                    ),
-                  );
-                },
-              ),
-              SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.38,
-                  child: BlocBuilder<TendersItemBloc, TendersItemState>(
-                    bloc: tenderItemBloc,
-                    builder: (context, state) {
-                      if (state is TendersItemInProgress) {
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            color: AppColor.backgroundColor,
-                          ),
+                      }),
+                    );
+                  },
+                ),
+                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                  bloc: deviceBloc,
+                  builder: (context, state) {
+                    if (state is ElecDevicesInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (state is ElecDevicesFailure) {
+                      final failure = state.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          deviceBloc.add(const GetElcDevicesEvent(
+                              department: 'أجهزة المنزل والمكتب'));
+                        },
+                      );
+                    } else if (state is ElecDevicesSuccess) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3.0,
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 209, 219, 235)
+                              .withOpacity(0.8),
+                        ),
+                        height: 110.h,
+                        child: ListofItems(
+                          filter: 'أجهزة المنزل والمكتب',
+                          // devices: elecDevices,
+                          elec: state.elecDevices,
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('menFashion'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return CategoriesScreen(
+                          filter: 'موضة رجالية',
+                          items: menfasion,
                         );
-                      } else if (state is TendersItemFailure) {
-                        final failure = state.message;
-                        return Center(
-                          child: Text(
-                            failure,
-                            style: const TextStyle(
-                              color: Colors.red,
-                            ),
-                          ),
+                      }),
+                    );
+                  },
+                ),
+                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                  bloc: manFashionBloc,
+                  builder: (context, state) {
+                    if (state is ElecDevicesInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (state is ElecDevicesFailure) {
+                      final failure = state.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          manFashionBloc.add(const GetElcDevicesEvent(
+                              department: 'موضة رجالية'));
+                        },
+                      );
+                    } else if (state is ElecDevicesSuccess) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3.0,
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 209, 219, 235)
+                              .withOpacity(0.8),
+                        ),
+                        height: 110.h,
+                        child: ListofItems(
+                          filter: 'موضة رجالية',
+                          // devices: elecDevices,
+                          elec: state.elecDevices,
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('womanFashion'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return CategoriesScreen(
+                          filter: 'موضة نسائية',
+                          items: womanFashion,
                         );
-                      } else if (state is TendersItemSuccess) {
-                        return TenderWidget(
-                          tenders: state.tenderItems,
-                          buttonText: AppLocalizations.of(context)
-                              .translate('start_tender'),
-                          subTitle: AppLocalizations.of(context)
-                              .translate('company_name'),
-                          desTitle1: AppLocalizations.of(context)
-                              .translate('start_date'),
-                          desTitle2: AppLocalizations.of(context)
-                              .translate('end_date'),
+                      }),
+                    );
+                  },
+                ),
+                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                  bloc: womanFashionBloc,
+                  builder: (context, state) {
+                    if (state is ElecDevicesInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (state is ElecDevicesFailure) {
+                      final failure = state.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          womanFashionBloc.add(const GetElcDevicesEvent(
+                              department: 'موضة نسائية'));
+                        },
+                      );
+                    } else if (state is ElecDevicesSuccess) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3.0,
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 209, 219, 235)
+                              .withOpacity(0.8),
+                        ),
+                        height: 110.h,
+                        child: ListofItems(
+                          filter: 'موضة نسائية',
+                          // devices: elecDevices,
+                          elec: state.elecDevices,
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('foods'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return CategoriesScreen(
+                          filter: 'منتجات غذائية',
+                          items: foodProducts,
                         );
-                      }
-                      return Container();
-                    },
-                  )),
-              const SizedBox(
-                height: 10.0,
-              ),
-              TitleAndButton(
-                title: AppLocalizations.of(context).translate('deals'),
-                icon: true,
-                onPress: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return const DealsCategoriesScreen(
-                          title: 'فئات الصفقات',
+                      }),
+                    );
+                  },
+                ),
+                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                  bloc: foodsBloc,
+                  builder: (context, state) {
+                    if (state is ElecDevicesInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (state is ElecDevicesFailure) {
+                      final failure = state.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          foodsBloc.add(const GetElcDevicesEvent(
+                              department: 'منتجات غذائية'));
+                        },
+                      );
+                    } else if (state is ElecDevicesSuccess) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3.0,
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 209, 219, 235)
+                              .withOpacity(0.8),
+                        ),
+                        height: 110.h,
+                        child: ListofItems(
+                          filter: 'منتجات غذائية',
+                          // devices: elecDevices,
+                          elec: state.elecDevices,
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('perfumes'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return CategoriesScreen(
+                          filter: 'عطور',
+                          items: perfumeslist,
                         );
-                      },
-                    ),
-                  );
-                },
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.38,
-                child: BlocBuilder<DealsItemsBloc, DealsItemsState>(
+                      }),
+                    );
+                  },
+                ),
+                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                  bloc: perfumesBloc,
+                  builder: (context, state) {
+                    if (state is ElecDevicesInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (state is ElecDevicesFailure) {
+                      final failure = state.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          perfumesBloc.add(
+                              const GetElcDevicesEvent(department: 'عطور'));
+                        },
+                      );
+                    } else if (state is ElecDevicesSuccess) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3.0,
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 209, 219, 235)
+                              .withOpacity(0.8),
+                        ),
+                        height: 110.h,
+                        child: ListofItems(
+                          filter: 'عطور',
+                          // devices: elecDevices,
+                          elec: state.elecDevices,
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('watches'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return CategoriesScreen(
+                          filter: 'ساعات',
+                          items: watches,
+                        );
+                      }),
+                    );
+                  },
+                ),
+                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                  bloc: watchesBloc,
+                  builder: (context, state) {
+                    if (state is ElecDevicesInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (state is ElecDevicesFailure) {
+                      final failure = state.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          watchesBloc.add(
+                              const GetElcDevicesEvent(department: 'ساعات'));
+                        },
+                      );
+                    } else if (state is ElecDevicesSuccess) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3.0,
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 209, 219, 235)
+                              .withOpacity(0.8),
+                        ),
+                        height: 110.h,
+                        child: ListofItems(
+                          filter: 'ساعات',
+                          // devices: elecDevices,
+                          elec: state.elecDevices,
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('deals'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const DealsCategoriesScreen(
+                            title: 'فئات الصفقات',
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+                BlocBuilder<DealsItemsBloc, DealsItemsState>(
                   bloc: dealsItemBloc,
                   builder: (context, state) {
                     if (state is DealsItemsInProgress) {
@@ -659,159 +577,294 @@ class _HomePageState extends State<HomePage> {
                       );
                     } else if (state is DealsItemsFailure) {
                       final failure = state.message;
-                      return Center(
-                        child: Text(
-                          failure,
-                          style: const TextStyle(
-                            color: Colors.red,
-                          ),
-                        ),
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          dealsItemBloc.add(GetDealsItemEvent());
+                        },
                       );
                     } else if (state is DealsItemsSuccess) {
-                      return DealsListWidget(
-                        deals: state.dealsItems,
-                        buttonText:
-                            AppLocalizations.of(context).translate('buy_deal'),
-                        subTitle:
-                            AppLocalizations.of(context).translate('saller'),
-                        desTitle1: AppLocalizations.of(context)
-                            .translate('prev_price'),
-                        desTitle2: AppLocalizations.of(context)
-                            .translate('curr_price'),
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3.0,
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 209, 219, 235)
+                              .withOpacity(0.8),
+                        ),
+                        height: MediaQuery.of(context).size.height * 0.38,
+                        child: DealsListWidget(
+                          deals: state.dealsItems,
+                          buttonText: AppLocalizations.of(context)
+                              .translate('buy_deal'),
+                          subTitle:
+                              AppLocalizations.of(context).translate('saller'),
+                          desTitle1: AppLocalizations.of(context)
+                              .translate('prev_price'),
+                          desTitle2: AppLocalizations.of(context)
+                              .translate('curr_price'),
+                        ),
+                      );
+                      // return DealsListWidget(
+                      //   deals: state.dealsItems,
+                      //   buttonText:
+                      //       AppLocalizations.of(context).translate('buy_deal'),
+                      //   subTitle:
+                      //       AppLocalizations.of(context).translate('saller'),
+                      //   desTitle1: AppLocalizations.of(context)
+                      //       .translate('prev_price'),
+                      //   desTitle2: AppLocalizations.of(context)
+                      //       .translate('curr_price'),
+                      // );
+                    }
+                    return Container();
+                  },
+                ),
+                // SizedBox(
+                //   height: MediaQuery.of(context).size.height * 0.38,
+                //   child: BlocBuilder<DealsItemsBloc, DealsItemsState>(
+                //     bloc: dealsItemBloc,
+                //     builder: (context, state) {
+                //       if (state is DealsItemsInProgress) {
+                //         return const Center(
+                //           child: CircularProgressIndicator(
+                //             color: AppColor.backgroundColor,
+                //           ),
+                //         );
+                //       } else if (state is DealsItemsFailure) {
+                //         final failure = state.message;
+                //         return Center(
+                //           child: Text(
+                //             failure,
+                //             style: const TextStyle(
+                //               color: Colors.red,
+                //             ),
+                //           ),
+                //         );
+                //       } else if (state is DealsItemsSuccess) {
+                //         return DealsListWidget(
+                //           deals: state.dealsItems,
+                //           buttonText: AppLocalizations.of(context)
+                //               .translate('buy_deal'),
+                //           subTitle:
+                //               AppLocalizations.of(context).translate('saller'),
+                //           desTitle1: AppLocalizations.of(context)
+                //               .translate('prev_price'),
+                //           desTitle2: AppLocalizations.of(context)
+                //               .translate('curr_price'),
+                //         );
+                //       }
+                //       return Container();
+                //     },
+                //   ),
+                // ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('advertiments'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return AdvertisingScreen(
+                            advertisment: advertismentList,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.25,
+                  child: SliderImages(advertisments: advertismentList),
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('tenders'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const TenderCategoriesScreen(
+                            title: 'فئات المناقصات',
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.38,
+                    child: BlocBuilder<TendersItemBloc, TendersItemState>(
+                      bloc: tenderItemBloc,
+                      builder: (context, state) {
+                        if (state is TendersItemInProgress) {
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColor.backgroundColor,
+                            ),
+                          );
+                        } else if (state is TendersItemFailure) {
+                          final failure = state.message;
+                          return FailureWidget(
+                            failure: failure,
+                            onPressed: () {
+                              tenderItemBloc.add(const GetTendersItemEvent());
+                            },
+                          );
+                        } else if (state is TendersItemSuccess) {
+                          return TenderWidget(
+                            tenders: state.tenderItems,
+                            buttonText: AppLocalizations.of(context)
+                                .translate('start_tender'),
+                            subTitle: AppLocalizations.of(context)
+                                .translate('company_name'),
+                            desTitle1: AppLocalizations.of(context)
+                                .translate('start_date'),
+                            desTitle2: AppLocalizations.of(context)
+                                .translate('end_date'),
+                          );
+                        }
+                        return Container();
+                      },
+                    )),
+
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('news'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return const NewsScreen();
+                      }),
+                    );
+                  },
+                ),
+                const SizedBox(
+                  height: 7.0,
+                ),
+                BlocBuilder<NewsBloc, NewsState>(
+                  bloc: newsBloc,
+                  builder: (context, state) {
+                    if (state is NewsInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (state is NewsFailure) {
+                      final failure = state.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          newsBloc.add(GetAllNewsEvent());
+                        },
+                      );
+                    } else if (state is NewsSuccess) {
+                      if (state.news.isEmpty) {
+                        return NoDataWidget(
+                          onPressed: () {
+                            newsBloc.add(GetAllNewsEvent());
+                          },
+                        );
+                      }
+                      return SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.34,
+                        child: SliderNewsWidget(
+                            controller: controller, news: state.news),
                       );
                     }
                     return Container();
                   },
                 ),
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              TitleAndButton(
-                title: AppLocalizations.of(context).translate('news'),
-                icon: true,
-                onPress: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return const NewsScreen();
-                    }),
-                  );
-                },
-              ),
-              const SizedBox(
-                height: 7.0,
-              ),
-              BlocBuilder<NewsBloc, NewsState>(
-                bloc: newsBloc,
-                builder: (context, state) {
-                  if (state is NewsInProgress) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColor.backgroundColor,
-                      ),
-                    );
-                  } else if (state is NewsFailure) {
-                    final failure = state.message;
-                    return FailureWidget(
-                      failure: failure,
-                      onPressed: () {
-                        newsBloc.add(GetAllNewsEvent());
-                      },
-                    );
-                  } else if (state is NewsSuccess) {
-                    if (state.news.isEmpty) {
-                      return NoDataWidget(
-                        onPressed: () {
-                          newsBloc.add(GetAllNewsEvent());
-                        },
-                      );
-                    }
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.34,
-                      child: SliderNewsWidget(
-                          controller: controller, news: state.news),
-                    );
-                  }
-                  return Container();
-                },
-              ),
-              const SizedBox(
-                height: 3.0,
-              ),
+                const SizedBox(
+                  height: 3.0,
+                ),
 
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return const ChatHomeScreen();
-                    }),
-                  );
-                },
-                child: Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3.0),
-                    child: Container(
-                      width: double.infinity,
-                      height: MediaQuery.of(context).size.height * 0.12,
-                      transform: Matrix4.identity(),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: AppColor.backgroundColor,
-                            width: 2,
-                          ),
-                          borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(30),
-                            bottomRight: Radius.circular(30),
-                          )),
-                      child: Row(
-                        // mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              padding: const EdgeInsets.only(left: 3),
-                              child: Text(
-                                AppLocalizations.of(context)
-                                    .translate('chat_home'),
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                    color: AppColor.backgroundColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return const ChatHomeScreen();
+                      }),
+                    );
+                  },
+                  child: Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                      child: Container(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height * 0.12,
+                        transform: Matrix4.identity(),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                              color: AppColor.backgroundColor,
+                              width: 2,
+                            ),
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(30),
+                              bottomRight: Radius.circular(30),
+                            )),
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.only(left: 3),
+                                child: Text(
+                                  AppLocalizations.of(context)
+                                      .translate('chat_home'),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                      color: AppColor.backgroundColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
+                                ),
                               ),
                             ),
-                          ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(25),
-                            child: Container(
-                              height: MediaQuery.of(context).size.height * 0.12,
-                              width: 80.w,
-                              decoration: const BoxDecoration(
-                                color: AppColor.backgroundColor,
-                              ),
-                              child: Image.asset(
-                                'assets/images/vedio call2.png',
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(25),
+                              child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.12,
+                                width: 80.w,
+                                decoration: const BoxDecoration(
+                                  color: AppColor.backgroundColor,
+                                ),
+                                child: Image.asset(
+                                  'assets/images/vedio call2.png',
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
+                  // child: SizedBox(
+                  //   height: MediaQuery.of(context).size.height * 0.16,
+                  //   width: double.infinity,
+                  //   child: Image.asset(
+                  //     'assets/images/chat.png',
+                  //     fit: BoxFit.cover,
+                  //   ),
+                  // ),
                 ),
-                // child: SizedBox(
-                //   height: MediaQuery.of(context).size.height * 0.16,
-                //   width: double.infinity,
-                //   child: Image.asset(
-                //     'assets/images/chat.png',
-                //     fit: BoxFit.cover,
-                //   ),
-                // ),
-              ),
-              const SizedBox(
-                height: 30.0,
-              ),
-            ],
+                const SizedBox(
+                  height: 80.0,
+                ),
+              ],
+            ),
           ),
         ),
       ),

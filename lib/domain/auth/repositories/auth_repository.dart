@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:netzoon/domain/auth/entities/otp_login_response.dart';
 import 'package:netzoon/domain/auth/entities/user.dart';
+import 'package:netzoon/domain/auth/entities/user_info.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 
 abstract class AuthRepository {
@@ -23,9 +24,19 @@ abstract class AuthRepository {
     required String password,
   });
 
+  Future<Either<Failure, UserInfo>> getUserById({
+    required String userId,
+  });
+
   Future<Either<Failure, User?>> getSignedInUser();
 
   Future<Either<Failure, Unit>> logout();
+
+  Future<Either<Failure, String>> changePassword({
+    required String userId,
+    required String currentPassword,
+    required String newPassword,
+  });
 
   Future<Either<Failure, bool>> getIsFirstTimeLogged();
   Future<Either<Failure, void>> setFirstTimeLogged(bool firstTimeLogged);
@@ -37,5 +48,15 @@ abstract class AuthRepository {
     required String phone,
     required String otp,
     required String hash,
+  });
+
+  Future<Either<Failure, String>> editProfile({
+    required String userId,
+    required String username,
+    required String email,
+    required String firstMobile,
+    required String secondeMobile,
+    required String thirdMobile,
+    required File? profilePhoto,
   });
 }

@@ -93,6 +93,9 @@ class _DealsCategoriesScreenState extends State<DealsCategoriesScreen> {
                           ),
                         ),
                       ),
+                      SizedBox(
+                        height: 60.h,
+                      ),
                     ],
                   );
                 }

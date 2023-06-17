@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/advertisements/entities/advertisement.dart';
 import 'package:netzoon/injection_container.dart';
-import 'package:netzoon/presentation/advertising/add_ads_page.dart';
 import 'package:netzoon/presentation/advertising/advertising_details.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/core/widgets/background_two_widget.dart';
@@ -108,26 +107,26 @@ class _AdvertisingScreenState extends State<AdvertisingScreen> {
           ),
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 10.0),
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) {
-                  return const AddAdsPage();
-                },
-              ),
-            );
-          },
-          backgroundColor: AppColor.backgroundColor,
-          tooltip: 'إضافة إعلان',
-          child: const Icon(
-            Icons.add,
-            size: 30,
-          ),
-        ),
-      ),
+      // floatingActionButton: Padding(
+      //   padding: const EdgeInsets.only(bottom: 10.0),
+      //   child: FloatingActionButton(
+      //     onPressed: () {
+      //       Navigator.of(context).push(
+      //         MaterialPageRoute(
+      //           builder: (context) {
+      //             return const AddAdsPage();
+      //           },
+      //         ),
+      //       );
+      //     },
+      //     backgroundColor: AppColor.backgroundColor,
+      //     tooltip: 'إضافة إعلان',
+      //     child: const Icon(
+      //       Icons.add,
+      //       size: 30,
+      //     ),
+      //   ),
+      // ),
     );
   }
 }
@@ -164,7 +163,7 @@ class Advertising extends StatelessWidget {
                 ),
               ),
               Text(
-                advertisment.advertisingTitle,
+                advertisment.name,
                 style: TextStyle(
                     color: AppColor.backgroundColor,
                     fontWeight: FontWeight.bold,

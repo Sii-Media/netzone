@@ -7,9 +7,11 @@ import 'package:netzoon/data/datasource/local/auth/auth_local_data_source.dart';
 import 'package:netzoon/data/datasource/remote/auth/auth_remote_datasource.dart';
 import 'package:netzoon/data/models/auth/otp_login/otp_login_response_model.dart';
 import 'package:netzoon/data/models/auth/user/user_model.dart';
+import 'package:netzoon/data/models/auth/user_info/user_info_model.dart';
 import 'package:netzoon/domain/auth/entities/otp_login_response.dart';
 import 'package:netzoon/domain/auth/entities/user.dart';
 import 'package:dartz/dartz.dart';
+import 'package:netzoon/domain/auth/entities/user_info.dart';
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 
@@ -79,6 +81,7 @@ class AuthRepositoryImpl implements AuthRepository {
         Response response = await dio.post(
             'https://net-zoon.onrender.com/user/register',
             data: formData);
+
         if (response.statusCode == 201) {
           final UserModel user = UserModel.fromJson(response.data!);
 
@@ -164,6 +167,112 @@ class AuthRepositoryImpl implements AuthRepository {
       }
     } catch (e) {
       return Left(OTPValidFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> editProfile(
+      {required String userId,
+      required String username,
+      required String email,
+      required String firstMobile,
+      required String secondeMobile,
+      required String thirdMobile,
+      required File? profilePhoto}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        Dio dio = Dio();
+        FormData formData = FormData.fromMap({
+          'username': username,
+          'email': email,
+          'firstMobile': firstMobile,
+          'secondMobile': secondeMobile,
+          'thirdMobile': thirdMobile,
+        });
+        if (profilePhoto != null) {
+          String fileName = profilePhoto.path.split('/').last;
+          formData.files.add(
+            MapEntry(
+              'profilePhoto',
+              await MultipartFile.fromFile(
+                profilePhoto.path,
+                filename: fileName,
+                contentType: MediaType('image', 'jpeg'),
+              ),
+            ),
+          );
+        }
+
+        Response response = await dio.put(
+            'https://net-zoon.onrender.com/user/editUser/$userId',
+            data: formData);
+
+        if (response.statusCode == 200) {
+          final user = local.getSignedInUser();
+          late UserModel updatedUser;
+          if (user != null) {
+            updatedUser = UserModel(
+                token: user.token,
+                message: user.message,
+                userInfo: UserInfoModel(
+                  username: username,
+                  email: email,
+                  password: user.userInfo.password,
+                  userType: user.userInfo.userType,
+                  firstMobile: firstMobile,
+                  secondeMobile: secondeMobile,
+                  thirdMobile: thirdMobile,
+                  profilePhoto: profilePhoto != null
+                      ? profilePhoto.path
+                      : user.userInfo.profilePhoto,
+                  isFreeZoon: user.userInfo.isFreeZoon,
+                  id: user.userInfo.id,
+                ));
+          }
+          await local.signInUser(updatedUser);
+
+          return Right(response.data);
+        } else {
+          return Left(ServerFailure());
+        }
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(CredintialFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserInfo>> getUserById(
+      {required String userId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final user = await authRemoteDataSource.getUserById(userId);
+        return Right(user.toDomain());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(CredintialFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> changePassword(
+      {required String userId,
+      required String currentPassword,
+      required String newPassword}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final result = await authRemoteDataSource.changePassword(
+            userId, currentPassword, newPassword);
+        return Right(result);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(CredintialFailure());
     }
   }
 }

@@ -30,48 +30,39 @@ class TenderInfoScreen extends StatelessWidget {
                 ),
               ),
             ),
-            myspec(
-                context,
-                "${AppLocalizations.of(context).translate("اسم المناقصة")} : ",
-                tender.nameAr,
-                AppColor.backgroundColor,
-                Colors.black),
-            myspec(
-                context,
-                "${AppLocalizations.of(context).translate('company_name')} : ",
-                tender.companyName,
-                AppColor.backgroundColor,
-                Colors.black),
-            myspec(
-                context,
-                "${AppLocalizations.of(context).translate('تاريخ بدء المناقصة')} : ",
-                convertDateToString(tender.startDate),
-                AppColor.backgroundColor,
-                Colors.black),
-            myspec(
-                context,
-                "${AppLocalizations.of(context).translate('تاريخ انتهاء المناقصة')}: ",
-                convertDateToString(tender.endDate),
-                AppColor.backgroundColor,
-                Colors.black),
             SizedBox(
-              height: 5.h,
+              height: 20.h,
             ),
-            myspec(
-                context,
-                '${AppLocalizations.of(context).translate('قيمة المناقصة')} : ',
-                tender.value.toString(),
-                AppColor.backgroundColor,
-                Colors.black),
-            SizedBox(
-              height: 5.h,
+            titleAndInput(
+              title:
+                  "${AppLocalizations.of(context).translate("اسم المناقصة")} : ",
+              input: tender.nameAr,
             ),
-            myspec(
-                context,
-                "${AppLocalizations.of(context).translate('السعر يبدأ')} : ",
-                tender.price.toString(),
-                AppColor.backgroundColor,
-                Colors.black),
+            titleAndInput(
+              title:
+                  "${AppLocalizations.of(context).translate('company_name')} : ",
+              input: tender.companyName,
+            ),
+            titleAndInput(
+              title:
+                  "${AppLocalizations.of(context).translate('تاريخ بدء المناقصة')} : ",
+              input: convertDateToString(tender.startDate),
+            ),
+            titleAndInput(
+              title:
+                  "${AppLocalizations.of(context).translate('تاريخ انتهاء المناقصة')}: ",
+              input: convertDateToString(tender.endDate),
+            ),
+            titleAndInput(
+              title:
+                  '${AppLocalizations.of(context).translate('قيمة المناقصة')} : ',
+              input: tender.value.toString(),
+            ),
+            titleAndInput(
+              title:
+                  "${AppLocalizations.of(context).translate('السعر يبدأ')} : ",
+              input: tender.price.toString(),
+            ),
             SizedBox(
               height: 20.h,
             ),
@@ -92,8 +83,53 @@ class TenderInfoScreen extends StatelessWidget {
                       textStyle: const TextStyle(fontSize: 15)),
                   child: Text(
                       AppLocalizations.of(context).translate('شراء المناقصة'))),
-            )
+            ),
+            SizedBox(
+              height: 80.h,
+            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Padding titleAndInput({required String title, required String input}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        // height: 40.h,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: Colors.grey.withOpacity(0.4),
+              width: 1.0,
+            ),
+          ),
+        ),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                    color: AppColor.backgroundColor,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600),
+              ),
+              SizedBox(
+                width: 190,
+                child: Text(
+                  input,
+                  style: TextStyle(
+                    color: AppColor.mainGrey,
+                    fontSize: 15.sp,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

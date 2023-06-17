@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class Advertisement extends Equatable {
-  final String advertisingTitle;
+  final String name;
   final String advertisingStartDate;
   final String advertisingEndDate;
   final String advertisingDescription;
@@ -16,7 +16,7 @@ class Advertisement extends Equatable {
   final String? advertisingVedio;
   final String advertisingType;
   const Advertisement({
-    required this.advertisingTitle,
+    required this.name,
     required this.advertisingStartDate,
     required this.advertisingEndDate,
     required this.advertisingDescription,
@@ -34,7 +34,7 @@ class Advertisement extends Equatable {
 
   @override
   List<Object?> get props => [
-        advertisingTitle,
+        name,
         advertisingStartDate,
         advertisingEndDate,
         advertisingDescription,

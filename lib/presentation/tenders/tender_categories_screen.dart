@@ -103,6 +103,9 @@ class _TenderCategoriesScreenState extends State<TenderCategoriesScreen> {
                           ),
                         ),
                       ),
+                      SizedBox(
+                        height: 60.h,
+                      ),
                     ],
                   );
                 }

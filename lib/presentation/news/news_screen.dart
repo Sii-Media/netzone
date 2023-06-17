@@ -8,7 +8,6 @@ import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/helpers/share_image_function.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
-import 'package:netzoon/presentation/news/add_new_page.dart';
 import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
 import 'package:netzoon/presentation/news/news_details.dart';
 import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
@@ -88,26 +87,26 @@ class _NewsScreenState extends State<NewsScreen> {
           ),
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 10.0),
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) {
-                  return const AddNewScreen();
-                },
-              ),
-            );
-          },
-          backgroundColor: AppColor.backgroundColor,
-          tooltip: 'إضافة خبر',
-          child: const Icon(
-            Icons.add,
-            size: 30,
-          ),
-        ),
-      ),
+      // floatingActionButton: Padding(
+      //   padding: const EdgeInsets.only(bottom: 10.0),
+      //   child: FloatingActionButton(
+      //     onPressed: () {
+      //       Navigator.of(context).push(
+      //         MaterialPageRoute(
+      //           builder: (context) {
+      //             return const AddNewScreen();
+      //           },
+      //         ),
+      //       );
+      //     },
+      //     backgroundColor: AppColor.backgroundColor,
+      //     tooltip: 'إضافة خبر',
+      //     child: const Icon(
+      //       Icons.add,
+      //       size: 30,
+      //     ),
+      //   ),
+      // ),
     );
   }
 }
