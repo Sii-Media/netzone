@@ -27,8 +27,11 @@ class ImageFreeZoneWidget extends StatelessWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: companyimages?.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, childAspectRatio: 0.94),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.94,
+                mainAxisSpacing: 12.h,
+              ),
               itemBuilder: (BuildContext context, index) {
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(25.0),
@@ -60,7 +63,7 @@ class ListOfPictures extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CachedNetworkImage(
-              height: 125.h,
+              height: 115.h,
               width: MediaQuery.of(context).size.width,
               imageUrl: img,
               fit: BoxFit.cover,

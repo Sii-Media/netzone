@@ -13,6 +13,7 @@ import '../categories/vehicles/blocs/bloc/vehicle_bloc.dart';
 import '../core/constant/colors.dart';
 import '../core/widgets/vehicle_details.dart';
 import '../home/blocs/elec_devices/elec_devices_bloc.dart';
+import '../utils/app_localizations.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -97,7 +98,7 @@ class _SearchPageState extends State<SearchPage> {
                   bool isSelected = selectedCategory == cat;
 
                   return SizedBox(
-                    width: 105,
+                    width: 105.w,
                     // margin: EdgeInsets.symmetric(horizontal: 1),
                     child: GestureDetector(
                       onTap: () {
@@ -121,7 +122,7 @@ class _SearchPageState extends State<SearchPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            cat,
+                            AppLocalizations.of(context).translate(cat),
                             style: TextStyle(
                               fontSize: isSelected ? 13.sp : 12.sp,
                               color: isSelected

@@ -221,7 +221,7 @@ class _MyLocalCompanyProfileScreenState
                                               child: GridView.builder(
                                                 gridDelegate:
                                                     SliverGridDelegateWithFixedCrossAxisCount(
-                                                        crossAxisCount: 2,
+                                                        crossAxisCount: 3,
                                                         childAspectRatio: 0.95,
                                                         crossAxisSpacing: 10.w,
                                                         mainAxisSpacing: 10.h),
@@ -283,8 +283,8 @@ class _MyLocalCompanyProfileScreenState
                                                                   .products[
                                                                       index]
                                                                   .imageUrl,
-                                                              height: 140.h,
-                                                              width: 200.w,
+                                                              height: 65.h,
+                                                              width: 160.w,
                                                               fit: BoxFit
                                                                   .contain,
                                                             ),

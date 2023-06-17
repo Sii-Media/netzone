@@ -17,8 +17,8 @@ Padding roundedIconText(
         GestureDetector(
           onTap: onTap,
           child: Container(
-            height: 55.h,
-            width: 45.w,
+            height: 35.h,
+            width: 35.w,
             padding: const EdgeInsets.all(0.5),
             decoration: const BoxDecoration(
               color: AppColor.backgroundColor,
@@ -30,7 +30,7 @@ Padding roundedIconText(
               child: Icon(
                 icon,
                 color: AppColor.white,
-                size: 25,
+                size: 20,
               ),
             ),
           ),
@@ -42,7 +42,7 @@ Padding roundedIconText(
           AppLocalizations.of(context).translate(text),
           style: TextStyle(
               color: AppColor.backgroundColor,
-              fontSize: 13.sp,
+              fontSize: 11.sp,
               fontWeight: FontWeight.bold),
         ),
       ],
