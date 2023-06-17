@@ -148,7 +148,7 @@ class SliderNewsWidget extends StatelessWidget {
                   child: Container(
                     width: 25,
                     height: 25,
-                    color: const Color(0xFF0b59ae).withOpacity(0.6),
+                    color: AppColor.backgroundColor.withOpacity(0.6),
                     child: IconButton(
                       onPressed: () {
                         if (controller.page?.round() == 0) {

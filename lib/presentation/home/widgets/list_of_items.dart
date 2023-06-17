@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/departments/entities/departments_categories/departments_categories.dart';
+import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/ecommerce/screens/subsection_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
@@ -79,7 +80,7 @@ class _ListofItemsState extends State<ListofItems> {
                             right: 0,
                             child: Container(
                               height: 35.h,
-                              color: const Color(0xFF0b59ae).withOpacity(0.8),
+                              color: AppColor.backgroundColor.withOpacity(0.8),
                               alignment: Alignment.center,
                               child: Text(
                                 AppLocalizations.of(context)

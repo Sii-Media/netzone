@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/deals/entities/dealsItems/deals_items.dart';
 import 'package:netzoon/presentation/deals/deals_details.dart';
 
+import '../../core/constant/colors.dart';
+
 class DealsListWidget extends StatelessWidget {
   const DealsListWidget(
       {super.key,
@@ -127,7 +129,7 @@ class DealsListWidget extends StatelessWidget {
                                     onPressed: () {},
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor:
-                                            const Color(0xFF0b59ae),
+                                            AppColor.backgroundColor,
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 20),
                                         //shadowColor: Colors.black,

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/tenders/entities/tendersItems/tender_item.dart';
+import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/tenders/tender_info_screen.dart';
 import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 
@@ -137,7 +138,7 @@ class TenderWidget extends StatelessWidget {
                                     onPressed: () {},
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor:
-                                            const Color(0xFF0b59ae),
+                                            AppColor.backgroundColor,
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 20),
                                         //shadowColor: Colors.black,
