@@ -25,15 +25,17 @@ class SplashScreen extends StatelessWidget {
       splash: Chewie(
         controller: ChewieController(
             videoPlayerController: videoPlayerController,
+            aspectRatio: 16 / 9,
             autoPlay: true,
             looping: false,
             showControlsOnInitialize: false,
             showControls: false),
       ),
-      backgroundColor: Color.fromARGB(255, 92, 121, 164),
+      backgroundColor: Color.fromARGB(255, 87, 121, 165),
       // splashTransition: SplashTransition.fadeTransition,
       animationDuration: const Duration(seconds: 3),
-      splashIconSize: 500.h,
+      splashIconSize: 800,
+      centered: true,
       // duration: 1000,
       nextScreen: const StartScreen(),
     );
