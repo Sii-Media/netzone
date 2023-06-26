@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     newsBloc.add(GetAllNewsEvent());
-    tenderItemBloc.add(const GetTendersItemEvent());
+    // tenderItemBloc.add(const GetTendersItemEvent());
     dealsItemBloc.add(GetDealsItemEvent());
     elcDeviceBloc.add(const GetElcDevicesEvent(department: 'الكترونيات'));
     deviceBloc
@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
       child: RefreshIndicator(
         onRefresh: () async {
           newsBloc.add(GetAllNewsEvent());
-          tenderItemBloc.add(const GetTendersItemEvent());
+          // tenderItemBloc.add(const GetTendersItemEvent());
           dealsItemBloc.add(GetDealsItemEvent());
           elcDeviceBloc.add(const GetElcDevicesEvent(department: 'الكترونيات'));
           deviceBloc.add(
@@ -921,56 +921,56 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 10.0,
                 ),
-                TitleAndButton(
-                  title: AppLocalizations.of(context).translate('tenders'),
-                  icon: true,
-                  onPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return const TenderCategoriesScreen(
-                            title: 'فئات المناقصات',
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
-                SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.38,
-                    child: BlocBuilder<TendersItemBloc, TendersItemState>(
-                      bloc: tenderItemBloc,
-                      builder: (context, state) {
-                        if (state is TendersItemInProgress) {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              color: AppColor.backgroundColor,
-                            ),
-                          );
-                        } else if (state is TendersItemFailure) {
-                          final failure = state.message;
-                          return FailureWidget(
-                            failure: failure,
-                            onPressed: () {
-                              tenderItemBloc.add(const GetTendersItemEvent());
-                            },
-                          );
-                        } else if (state is TendersItemSuccess) {
-                          return TenderWidget(
-                            tenders: state.tenderItems,
-                            buttonText: AppLocalizations.of(context)
-                                .translate('start_tender'),
-                            subTitle: AppLocalizations.of(context)
-                                .translate('company_name'),
-                            desTitle1: AppLocalizations.of(context)
-                                .translate('start_date'),
-                            desTitle2: AppLocalizations.of(context)
-                                .translate('end_date'),
-                          );
-                        }
-                        return Container();
-                      },
-                    )),
+                // TitleAndButton(
+                //   title: AppLocalizations.of(context).translate('tenders'),
+                //   icon: true,
+                //   onPress: () {
+                //     Navigator.of(context).push(
+                //       MaterialPageRoute(
+                //         builder: (context) {
+                //           return const TenderCategoriesScreen(
+                //             title: 'فئات المناقصات',
+                //           );
+                //         },
+                //       ),
+                //     );
+                //   },
+                // ),
+                // SizedBox(
+                //     height: MediaQuery.of(context).size.height * 0.38,
+                //     child: BlocBuilder<TendersItemBloc, TendersItemState>(
+                //       bloc: tenderItemBloc,
+                //       builder: (context, state) {
+                //         if (state is TendersItemInProgress) {
+                //           return const Center(
+                //             child: CircularProgressIndicator(
+                //               color: AppColor.backgroundColor,
+                //             ),
+                //           );
+                //         } else if (state is TendersItemFailure) {
+                //           final failure = state.message;
+                //           return FailureWidget(
+                //             failure: failure,
+                //             onPressed: () {
+                //               tenderItemBloc.add(const GetTendersItemEvent());
+                //             },
+                //           );
+                //         } else if (state is TendersItemSuccess) {
+                //           return TenderWidget(
+                //             tenders: state.tenderItems,
+                //             buttonText: AppLocalizations.of(context)
+                //                 .translate('start_tender'),
+                //             subTitle: AppLocalizations.of(context)
+                //                 .translate('company_name'),
+                //             desTitle1: AppLocalizations.of(context)
+                //                 .translate('start_date'),
+                //             desTitle2: AppLocalizations.of(context)
+                //                 .translate('end_date'),
+                //           );
+                //         }
+                //         return Container();
+                //       },
+                //     )),
 
                 const SizedBox(
                   height: 10.0,
