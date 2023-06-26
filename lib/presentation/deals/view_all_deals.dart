@@ -11,6 +11,8 @@ import 'package:netzoon/presentation/deals/deals_details.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 
+import '../utils/remaining_date.dart';
+
 class ViewAllDealsScreen extends StatefulWidget {
   const ViewAllDealsScreen({
     super.key,
@@ -125,7 +127,7 @@ class Deals extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) {
               return DealDetails(
-                dealsInfo: dealsInfo,
+                dealsInfoId: dealsInfo.id ?? '',
               );
             }),
           );
@@ -223,14 +225,13 @@ class Deals extends StatelessWidget {
                               ],
                             ),
                             Text(
-                              '${convertDateToString(dealsInfo.endDate)} ${AppLocalizations.of(context).translate('الصفقة صالحة لغاية')} ',
+                              '${AppLocalizations.of(context).translate('الصفقة صالحة لغاية')} ${convertDateToString(dealsInfo.endDate)}',
                               style: TextStyle(
                                   color: Colors.grey, fontSize: 13.sp),
                               textAlign: TextAlign.start,
                             ),
                             Text(
-                              AppLocalizations.of(context).translate(
-                                  "متبقي : 13 يوم 10 ساعات 48 دقيقة"),
+                              '${AppLocalizations.of(context).translate('remaining')} : ${calculateRemainingDays(dealsInfo.endDate).toString()}',
                               style: TextStyle(
                                   color: AppColor.backgroundColor,
                                   fontSize: 13.sp,

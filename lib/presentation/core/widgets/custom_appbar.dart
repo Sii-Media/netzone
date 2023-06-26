@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/search/search_screen.dart';
 
+import '../../notifications/screens/notification_screen.dart';
 import '../constant/colors.dart';
 
 SizedBox customAppBar(BuildContext context) {
@@ -91,9 +92,17 @@ SizedBox customAppBar(BuildContext context) {
             //     color: AppColor.white,
             //   ),
             // ),
-            const Icon(
-              Icons.notifications,
-              color: AppColor.white,
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return const NotificatiionScreen();
+                }));
+              },
+              child: const Icon(
+                Icons.notifications,
+                color: AppColor.white,
+              ),
             ),
             SizedBox(
               width: 10.w,

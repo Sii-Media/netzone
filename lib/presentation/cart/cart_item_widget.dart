@@ -47,7 +47,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return ProductDetailScreen(item: widget.cart);
+          return ProductDetailScreen(item: widget.cart.id);
         }));
       },
       child: Card(

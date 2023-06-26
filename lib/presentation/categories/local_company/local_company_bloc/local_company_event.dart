@@ -14,3 +14,15 @@ class GetLocalCompanyProductsEvent extends GetAllLocalCompaniesEvent {
 
   GetLocalCompanyProductsEvent({required this.id});
 }
+
+class GetLocalCompaniesEvent extends GetAllLocalCompaniesEvent {
+  final String userType;
+
+  GetLocalCompaniesEvent({required this.userType});
+}
+
+class GetLocalProductsEvent extends GetAllLocalCompaniesEvent {
+  final String username;
+
+  GetLocalProductsEvent({required this.username});
+}

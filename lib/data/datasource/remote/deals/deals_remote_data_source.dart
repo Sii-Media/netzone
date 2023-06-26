@@ -3,6 +3,7 @@ import 'package:netzoon/data/models/deals/deals_items/deals_items_response_model
 import 'package:netzoon/data/models/deals/deals_response/deals_response_model.dart';
 import 'package:retrofit/http.dart';
 import '../../../../injection_container.dart';
+import '../../../models/deals/deals_items/deals_item_model.dart';
 
 part 'deals_remote_data_source.g.dart';
 
@@ -12,6 +13,8 @@ abstract class DealsRemoteDataSource {
     final String category,
   );
   Future<DealsItemsResponseModel> getDealsItems();
+
+  Future<DealsItemsModel> getDealById(String id);
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -39,4 +42,10 @@ abstract class DealsRemoteDataSourceImpl implements DealsRemoteDataSource {
   @override
   @GET('/deals/alldealsItems')
   Future<DealsItemsResponseModel> getDealsItems();
+
+  @override
+  @GET('/deals/{id}')
+  Future<DealsItemsModel> getDealById(
+    @Path() String id,
+  );
 }

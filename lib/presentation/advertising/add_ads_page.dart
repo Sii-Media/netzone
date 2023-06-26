@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,6 +14,7 @@ import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 
+import '../notifications/blocs/notifications/notifications_bloc.dart';
 import '../utils/app_localizations.dart';
 
 class AddAdsPage extends StatefulWidget {
@@ -56,6 +58,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
   String selectedValue = 'مناطق حرة';
 
   final addAdsbloc = sl<AddAdsBloc>();
+  final notifiBloc = sl<NotificationsBloc>();
 
   @override
   Widget screen(BuildContext context) {
@@ -96,6 +99,14 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                     ),
                     backgroundColor: Theme.of(context).colorScheme.secondary,
                   ));
+                  Navigator.of(context).pop();
+                  FirebaseMessaging.instance.getToken().then((value) {
+                    notifiBloc.add(SendNotificationEvent(
+                        fcmtoken: value ?? '',
+                        text: titleController.text,
+                        category: 'advertiments',
+                        itemId: state.msg));
+                  });
                 }
               },
               child: SingleChildScrollView(

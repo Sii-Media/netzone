@@ -13,7 +13,8 @@ CategoryProductsModel _$CategoryProductsModelFromJson(
       owner: json['owner'] as String,
       name: json['name'] as String,
       imageUrl: json['imageUrl'] as String,
-      category: json['category'] as String,
+      category: DepartmentsCategoryModel.fromJson(
+          json['category'] as Map<String, dynamic>),
       description: json['description'] as String,
       price: json['price'] as int,
       images:

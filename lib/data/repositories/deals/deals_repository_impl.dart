@@ -4,11 +4,13 @@ import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/remote/deals/deals_remote_data_source.dart';
+import 'package:netzoon/data/models/deals/deals_items/deals_item_model.dart';
 import 'package:netzoon/data/models/deals/deals_items/deals_items_response_model.dart';
 import 'package:netzoon/data/models/deals/deals_response/deals_response_model.dart';
 import 'package:netzoon/domain/deals/entities/deals/deals_response.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:dartz/dartz.dart';
+import 'package:netzoon/domain/deals/entities/dealsItems/deals_items.dart';
 import 'package:netzoon/domain/deals/entities/dealsItems/deals_items_response.dart';
 import 'package:netzoon/domain/deals/repositories/deals_repository.dart';
 
@@ -108,6 +110,21 @@ class DealsRepositoryImpl implements DealsRepository {
         } else {
           return Left(ServerFailure());
         }
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, DealsItems>> getDealById({required String id}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final deal = await dealsRemoteDataSource.getDealById(id);
+
+        return Right(deal.toDomain());
       } else {
         return Left(OfflineFailure());
       }

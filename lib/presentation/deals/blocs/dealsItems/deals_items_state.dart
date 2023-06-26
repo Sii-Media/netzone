@@ -28,3 +28,9 @@ class AddDealSuccess extends DealsItemsState {
 
   const AddDealSuccess({required this.message});
 }
+
+class GetDealByIdSuccess extends DealsItemsState {
+  final DealsItems deal;
+
+  const GetDealByIdSuccess({required this.deal});
+}

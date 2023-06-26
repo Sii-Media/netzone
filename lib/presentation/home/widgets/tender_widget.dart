@@ -122,7 +122,7 @@ class TenderWidget extends StatelessWidget {
                                       //   height: 150.h,
                                       // ),
                                       child: CachedNetworkImage(
-                                        imageUrl: tenders[index].type,
+                                        imageUrl: tenders[index].imageUrl,
                                         fit: BoxFit.fitHeight,
                                         width: 170.w,
                                         height: 150.h,

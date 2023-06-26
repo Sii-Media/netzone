@@ -31,7 +31,7 @@ class DealsListWidget extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) {
-                  return DealDetails(dealsInfo: deals[index]);
+                  return DealDetails(dealsInfoId: deals[index].id ?? '');
                 }),
               );
             },
@@ -75,7 +75,7 @@ class DealsListWidget extends StatelessWidget {
                                             deals[index].name,
                                             style: TextStyle(
                                                 color: Colors.black,
-                                                fontSize: 20.sp),
+                                                fontSize: 16.sp),
                                           ),
                                           SizedBox(
                                             height: 8.0.h,
@@ -84,7 +84,7 @@ class DealsListWidget extends StatelessWidget {
                                             '$subTitle : ${deals[index].companyName}',
                                             style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 15.sp,
+                                              fontSize: 13.sp,
                                               decoration:
                                                   TextDecoration.underline,
                                             ),
@@ -96,7 +96,7 @@ class DealsListWidget extends StatelessWidget {
                                             '$desTitle1: ${deals[index].prevPrice}',
                                             style: TextStyle(
                                                 color: Colors.orange,
-                                                fontSize: 13.sp),
+                                                fontSize: 12.sp),
                                           ),
                                           SizedBox(
                                             height: 4.h,
@@ -105,7 +105,7 @@ class DealsListWidget extends StatelessWidget {
                                             '$desTitle2 : ${deals[index].currentPrice}',
                                             style: TextStyle(
                                                 color: Colors.orange,
-                                                fontSize: 13.sp),
+                                                fontSize: 12.sp),
                                           ),
                                         ],
                                       ),
@@ -126,7 +126,15 @@ class DealsListWidget extends StatelessWidget {
                                 padding: EdgeInsets.only(top: 4.h),
                                 width: MediaQuery.of(context).size.width,
                                 child: ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                          return DealDetails(
+                                              dealsInfoId:
+                                                  deals[index].id ?? '');
+                                        }),
+                                      );
+                                    },
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor:
                                             AppColor.backgroundColor,

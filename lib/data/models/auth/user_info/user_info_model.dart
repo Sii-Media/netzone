@@ -24,7 +24,9 @@ class UserInfoModel {
   final String? sellType;
 
   final String? toCountry;
-
+  final String? bio;
+  final String? description;
+  final String? website;
   final String? profilePhoto;
   final String? coverPhoto;
   final String? banerPhoto;
@@ -50,6 +52,9 @@ class UserInfoModel {
     this.companyProductsNumber,
     this.sellType,
     this.toCountry,
+    this.bio,
+    this.description,
+    this.website,
     this.profilePhoto,
     this.coverPhoto,
     this.banerPhoto,
@@ -80,6 +85,9 @@ extension MapToDomain on UserInfoModel {
       companyProductsNumber: companyProductsNumber,
       sellType: sellType,
       toCountry: toCountry,
+      bio: bio,
+      description: description,
+      website: website,
       profilePhoto: profilePhoto,
       coverPhoto: coverPhoto,
       banerPhoto: banerPhoto,

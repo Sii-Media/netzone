@@ -24,6 +24,11 @@ abstract class AuthRepository {
     required String password,
   });
 
+  Future<Either<Failure, User>> changeAccount({
+    required String email,
+    required String password,
+  });
+
   Future<Either<Failure, UserInfo>> getUserById({
     required String userId,
   });
@@ -58,5 +63,15 @@ abstract class AuthRepository {
     required String secondeMobile,
     required String thirdMobile,
     required File? profilePhoto,
+  });
+
+  Future<Either<Failure, UserInfo>> addAcccess({
+    required String email,
+    required String username,
+    required String password,
+  });
+
+  Future<Either<Failure, List<UserInfo>>> getUserAccounts({
+    required String email,
   });
 }

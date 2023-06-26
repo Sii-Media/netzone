@@ -75,6 +75,11 @@ class _HomePageState extends State<HomePage> {
   final foodsBloc = sl<ElecDevicesBloc>();
   final perfumesBloc = sl<ElecDevicesBloc>();
   final watchesBloc = sl<ElecDevicesBloc>();
+  final animalBloc = sl<ElecDevicesBloc>();
+  final musicBloc = sl<ElecDevicesBloc>();
+  final sportBloc = sl<ElecDevicesBloc>();
+  final agricultureBloc = sl<ElecDevicesBloc>();
+
   // late AnimationController _animationController;
 
   @override
@@ -90,6 +95,10 @@ class _HomePageState extends State<HomePage> {
     foodsBloc.add(const GetElcDevicesEvent(department: 'منتجات غذائية'));
     perfumesBloc.add(const GetElcDevicesEvent(department: 'عطور'));
     watchesBloc.add(const GetElcDevicesEvent(department: 'ساعات'));
+    animalBloc.add(const GetElcDevicesEvent(department: 'حيوانات'));
+    musicBloc.add(const GetElcDevicesEvent(department: 'آلات موسيقية'));
+    sportBloc.add(const GetElcDevicesEvent(department: 'أجهزة رياضية'));
+    agricultureBloc.add(const GetElcDevicesEvent(department: 'الزراعة'));
 
     // _animationController = AnimationController(
     //     vsync: this, duration: const Duration(milliseconds: 750));
@@ -121,6 +130,10 @@ class _HomePageState extends State<HomePage> {
           foodsBloc.add(const GetElcDevicesEvent(department: 'منتجات غذائية'));
           perfumesBloc.add(const GetElcDevicesEvent(department: 'عطور'));
           watchesBloc.add(const GetElcDevicesEvent(department: 'ساعات'));
+          animalBloc.add(const GetElcDevicesEvent(department: 'حيوانات'));
+          musicBloc.add(const GetElcDevicesEvent(department: 'آلات موسيقية'));
+          sportBloc.add(const GetElcDevicesEvent(department: 'أجهزة رياضية'));
+          agricultureBloc.add(const GetElcDevicesEvent(department: 'الزراعة'));
         },
         color: AppColor.white,
         backgroundColor: AppColor.backgroundColor,
@@ -540,6 +553,230 @@ class _HomePageState extends State<HomePage> {
                         height: 110.h,
                         child: ListofItems(
                           filter: 'ساعات',
+                          // devices: elecDevices,
+                          elec: state.elecDevices,
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('حيوانات'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return CategoriesScreen(
+                          filter: 'حيوانات',
+                          items: watches,
+                        );
+                      }),
+                    );
+                  },
+                ),
+                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                  bloc: animalBloc,
+                  builder: (context, state) {
+                    if (state is ElecDevicesInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (state is ElecDevicesFailure) {
+                      final failure = state.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          animalBloc.add(
+                              const GetElcDevicesEvent(department: 'حيوانات'));
+                        },
+                      );
+                    } else if (state is ElecDevicesSuccess) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3.0,
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 209, 219, 235)
+                              .withOpacity(0.8),
+                        ),
+                        height: 110.h,
+                        child: ListofItems(
+                          filter: 'حيوانات',
+                          // devices: elecDevices,
+                          elec: state.elecDevices,
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('آلات موسيقية'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return CategoriesScreen(
+                          filter: 'آلات موسيقية',
+                          items: watches,
+                        );
+                      }),
+                    );
+                  },
+                ),
+                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                  bloc: musicBloc,
+                  builder: (context, state) {
+                    if (state is ElecDevicesInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (state is ElecDevicesFailure) {
+                      final failure = state.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          musicBloc.add(const GetElcDevicesEvent(
+                              department: 'آلات موسيقية'));
+                        },
+                      );
+                    } else if (state is ElecDevicesSuccess) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3.0,
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 209, 219, 235)
+                              .withOpacity(0.8),
+                        ),
+                        height: 110.h,
+                        child: ListofItems(
+                          filter: 'آلات موسيقية',
+                          // devices: elecDevices,
+                          elec: state.elecDevices,
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('أجهزة رياضية'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return CategoriesScreen(
+                          filter: 'أجهزة رياضية',
+                          items: watches,
+                        );
+                      }),
+                    );
+                  },
+                ),
+                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                  bloc: sportBloc,
+                  builder: (context, state) {
+                    if (state is ElecDevicesInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (state is ElecDevicesFailure) {
+                      final failure = state.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          sportBloc.add(const GetElcDevicesEvent(
+                              department: 'أجهزة رياضية'));
+                        },
+                      );
+                    } else if (state is ElecDevicesSuccess) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3.0,
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 209, 219, 235)
+                              .withOpacity(0.8),
+                        ),
+                        height: 110.h,
+                        child: ListofItems(
+                          filter: 'أجهزة رياضية',
+                          // devices: elecDevices,
+                          elec: state.elecDevices,
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('الزراعة'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return CategoriesScreen(
+                          filter: 'الزراعة',
+                          items: watches,
+                        );
+                      }),
+                    );
+                  },
+                ),
+                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                  bloc: agricultureBloc,
+                  builder: (context, state) {
+                    if (state is ElecDevicesInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (state is ElecDevicesFailure) {
+                      final failure = state.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          agricultureBloc.add(
+                              const GetElcDevicesEvent(department: 'الزراعة'));
+                        },
+                      );
+                    } else if (state is ElecDevicesSuccess) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3.0,
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 209, 219, 235)
+                              .withOpacity(0.8),
+                        ),
+                        height: 110.h,
+                        child: ListofItems(
+                          filter: 'الزراعة',
                           // devices: elecDevices,
                           elec: state.elecDevices,
                         ),

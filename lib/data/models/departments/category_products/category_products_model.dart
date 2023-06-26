@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:netzoon/data/models/departments/departments_categories/departments_categories_model.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 
 part 'category_products_model.g.dart';
@@ -10,7 +11,7 @@ class CategoryProductsModel {
   final String owner;
   final String name;
   final String imageUrl;
-  final String category;
+  final DepartmentsCategoryModel category;
   final String description;
   final int price;
   final List<String>? images;
@@ -53,7 +54,7 @@ extension MapToDomain on CategoryProductsModel {
         owner: owner,
         name: name,
         imageUrl: imageUrl,
-        category: category,
+        category: category.toDomain(),
         description: description,
         price: price,
         images: images,

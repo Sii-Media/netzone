@@ -10,6 +10,7 @@ import '../auth/blocs/auth_bloc/auth_bloc.dart';
 import '../core/constant/colors.dart';
 import '../deals/add_deals_screen.dart';
 import '../news/add_new_page.dart';
+import '../tenders/add_tender_screen.dart';
 import '../utils/app_localizations.dart';
 
 class AddItemScreen extends StatefulWidget {
@@ -96,6 +97,18 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               },
                             ),
                           );
+                        }),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    addWidget(
+                        title: AppLocalizations.of(context)
+                            .translate('add_tender'),
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return const AddTenderScreen();
+                          }));
                         }),
                     SizedBox(
                       height: 10.h,

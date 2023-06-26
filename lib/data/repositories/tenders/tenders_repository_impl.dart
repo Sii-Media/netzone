@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/remote/tenders/tenders_remote_data_source.dart';
 import 'package:netzoon/data/models/tenders/tenders_items/tendres_item_response_model.dart';
@@ -67,6 +71,57 @@ class TendersRepositoryImpl implements TenderRepository {
       if (await networkInfo.isConnected) {
         final tenderItem = await tendersRemoteDataSource.getTendersItems();
         return Right(tenderItem.toDomain());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> addTender({
+    required String nameAr,
+    required String nameEn,
+    required String companyName,
+    required DateTime startDate,
+    required DateTime endDate,
+    required int price,
+    required File tenderImage,
+    required String category,
+  }) async {
+    try {
+      if (await networkInfo.isConnected) {
+        Dio dio = Dio();
+        FormData formData = FormData();
+
+        formData.fields.addAll([
+          MapEntry('nameAr', nameAr),
+          MapEntry('nameEn', nameEn),
+          MapEntry('companyName', companyName),
+          MapEntry('startDate', startDate.toString()),
+          MapEntry('endDate', endDate.toString()),
+          MapEntry('price', price.toString()),
+          MapEntry('category', category),
+        ]);
+        String fileName = 'image.jpg';
+        formData.files.add(MapEntry(
+          'tenderImage',
+          await MultipartFile.fromFile(
+            tenderImage.path,
+            filename: fileName,
+            contentType: MediaType('image', 'jpeg'),
+          ),
+        ));
+        Response response = await dio.post(
+          'https://net-zoon.onrender.com/tenders/add-tender',
+          data: formData,
+        );
+        if (response.statusCode == 200) {
+          return Right(response.data);
+        } else {
+          return Left(ServerFailure());
+        }
       } else {
         return Left(OfflineFailure());
       }

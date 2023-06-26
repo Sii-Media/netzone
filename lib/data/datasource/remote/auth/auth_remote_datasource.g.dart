@@ -109,6 +109,40 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
   }
 
   @override
+  Future<UserModel> changeAccount(
+    email,
+    password,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'email',
+      email,
+    ));
+    _data.fields.add(MapEntry(
+      'password',
+      password,
+    ));
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<UserModel>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/user/changeAccount',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = UserModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<OtpLoginResponseModel> getOtpCode(phone) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -228,6 +262,74 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
         )
         .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data!;
+    return value;
+  }
+
+  @override
+  Future<UserInfoModel> addAccount(
+    email,
+    username,
+    password,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'email',
+      email,
+    ));
+    _data.fields.add(MapEntry(
+      'username',
+      username,
+    ));
+    _data.fields.add(MapEntry(
+      'password',
+      password,
+    ));
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<UserInfoModel>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/user/addaccount',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = UserInfoModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<List<UserInfoModel>> getUserAccounts(email) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'email',
+      email,
+    ));
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<UserInfoModel>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/user/getuseraccounts',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!
+        .map((dynamic i) => UserInfoModel.fromJson(i as Map<String, dynamic>))
+        .toList();
     return value;
   }
 

@@ -211,28 +211,28 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       },
                     ),
                     const SizedBox(height: 25),
-                    TextFormField(
-                      controller: _userNameController,
-                      style: const TextStyle(
-                        color: AppColor.backgroundColor,
-                      ),
-                      decoration: const InputDecoration(
-                        hintText: 'first_name',
-                        prefixIcon: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(Icons.person)),
-                      ),
-                      keyboardType: TextInputType.phone,
-                      textInputAction: TextInputAction.next,
-                      validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'field_required_message';
-                        }
+                    // TextFormField(
+                    //   controller: _userNameController,
+                    //   style: const TextStyle(
+                    //     color: AppColor.backgroundColor,
+                    //   ),
+                    //   decoration: const InputDecoration(
+                    //     hintText: 'first_name',
+                    //     prefixIcon: Padding(
+                    //         padding: EdgeInsets.all(8.0),
+                    //         child: Icon(Icons.person)),
+                    //   ),
+                    //   keyboardType: TextInputType.text,
+                    //   textInputAction: TextInputAction.next,
+                    //   validator: (text) {
+                    //     if (text == null || text.isEmpty) {
+                    //       return 'field_required_message';
+                    //     }
 
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 25),
+                    //     return null;
+                    //   },
+                    // ),
+                    // const SizedBox(height: 25),
                     TextFormField(
                       controller: _firstMobileController,
                       style: const TextStyle(
@@ -339,7 +339,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                         onPressed: () {
                           if (!_formKey.currentState!.validate()) return;
                           editBloc.add(OnEditProfileEvent(
-                              username: _userNameController.text,
+                              username: widget.userInfo.username ?? '',
                               email: _emailController.text,
                               firstMobile: _firstMobileController.text,
                               secondeMobile: _secondeMobileController.text,

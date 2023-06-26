@@ -22,3 +22,25 @@ class GetTendersItemByMaxEvent extends TendersItemEvent {
 
   const GetTendersItemByMaxEvent({required this.category});
 }
+
+class AddTenderEvent extends TendersItemEvent {
+  final String nameAr;
+  final String nameEn;
+  final String companyName;
+  final DateTime startDate;
+  final DateTime endDate;
+  final int price;
+  final File tenderImage;
+  final String category;
+
+  const AddTenderEvent({
+    required this.nameAr,
+    required this.nameEn,
+    required this.companyName,
+    required this.startDate,
+    required this.endDate,
+    required this.price,
+    required this.tenderImage,
+    required this.category,
+  });
+}

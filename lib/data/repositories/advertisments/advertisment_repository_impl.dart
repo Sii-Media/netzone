@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/remote/advertisements/ads_remote_data_source.dart';
+import 'package:netzoon/data/models/advertisements/advertisements/advertiement_model.dart';
 import 'package:netzoon/data/models/advertisements/advertising/advertising_model.dart';
+import 'package:netzoon/domain/advertisements/entities/advertisement.dart';
 import 'package:netzoon/domain/advertisements/entities/advertising.dart';
 import 'package:dartz/dartz.dart';
 import 'package:netzoon/domain/advertisements/repositories/advertisment_repository.dart';
@@ -92,6 +94,22 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
         } else {
           return Left(ServerFailure());
         }
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, Advertisement>> getAdsById(
+      {required String id}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final ads = await advertismentRemotDataSource.getAdsById(id);
+
+        return Right(ads.toDomain());
       } else {
         return Left(OfflineFailure());
       }

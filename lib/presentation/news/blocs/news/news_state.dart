@@ -30,3 +30,9 @@ class NewsFailure extends NewsState {
 }
 
 class ToggleonlikeSuccess extends NewsState {}
+
+class GetNewsByIdSuccess extends NewsState {
+  final News news;
+
+  const GetNewsByIdSuccess({required this.news});
+}

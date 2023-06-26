@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/domain/tenders/entities/tendersItems/tender_item.dart';
+import 'package:netzoon/domain/tenders/usecases/add_tender_use_case.dart';
 import 'package:netzoon/domain/tenders/usecases/get_all_tenders_items.dart';
 import 'package:netzoon/domain/tenders/usecases/get_tenders_items_by_min.dart';
 import 'package:netzoon/domain/tenders/usecases/get_tenders_items_by_max.dart';
@@ -14,10 +17,12 @@ class TendersItemBloc extends Bloc<TendersItemEvent, TendersItemState> {
   final GetTendersItemByMin getTendersItemByMin;
   final GetTendersItemByMax getTendersItemByMax;
   final GetTendersItem getTendersItem;
+  final AddTenderUseCase addTenderUseCase;
   TendersItemBloc({
     required this.getTendersItemByMin,
     required this.getTendersItemByMax,
     required this.getTendersItem,
+    required this.addTenderUseCase,
   }) : super(TendersItemInitial()) {
     on<GetTendersItemByMinEvent>(
       (event, emit) async {
@@ -60,6 +65,26 @@ class TendersItemBloc extends Bloc<TendersItemEvent, TendersItemState> {
             (tenderItem) {
           return TendersItemSuccess(tenderItems: tenderItem.tenderItems);
         }),
+      );
+    });
+    on<AddTenderEvent>((event, emit) async {
+      emit(TendersItemInProgress());
+      final failureOrSuccess = await addTenderUseCase(AddTenderParams(
+        nameAr: event.nameAr,
+        nameEn: event.nameEn,
+        companyName: event.companyName,
+        startDate: event.startDate,
+        endDate: event.endDate,
+        price: event.price,
+        tenderImage: event.tenderImage,
+        category: event.category,
+      ));
+
+      emit(
+        failureOrSuccess.fold(
+          (failure) => TendersItemFailure(message: mapFailureToString(failure)),
+          (message) => AddTenderSuccess(message: message),
+        ),
       );
     });
   }

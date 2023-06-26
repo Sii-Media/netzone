@@ -1,11 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:netzoon/presentation/home/test.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../data/core/constants/constants.dart';
+import '../injection_container.dart';
+import 'language_screen/blocs/language_bloc/language_bloc.dart';
 
 class StartScreen extends StatefulWidget {
   const StartScreen({super.key});
@@ -203,9 +210,13 @@ class _StartScreenState extends State<StartScreen> {
             isGetLocation = true;
           }),
         });
+    final SharedPreferences preferences = sl<SharedPreferences>();
+    currentCode = preferences.getString(SharedPreferencesKeys.language) ?? 'ar';
+    currentLanguage = currentCode == 'en' ? 'English' : 'Arabic';
     super.initState();
   }
 
+  bool choosedLanguage = false;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -237,6 +248,33 @@ class _StartScreenState extends State<StartScreen> {
                           bottom: BorderSide(width: 2.0, color: AppColor.white),
                         ),
                       ),
+                      child: TextButton(
+                        onPressed: () {
+                          showLanguageDialog(context);
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)
+                              .translate('choose_language'),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: AppColor.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          top: BorderSide(width: 2.0, color: AppColor.white),
+                          bottom: BorderSide(width: 2.0, color: AppColor.white),
+                        ),
+                      ),
                       child: CountryCodePicker(
                         searchStyle: const TextStyle(color: AppColor.black),
                         dialogTextStyle: const TextStyle(
@@ -259,6 +297,7 @@ class _StartScreenState extends State<StartScreen> {
                             }),
                           );
                         },
+
                         // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
                         initialSelection: 'AE',
                         favorite: const ['+971', 'AE'],
@@ -281,6 +320,61 @@ class _StartScreenState extends State<StartScreen> {
                 ),
         ),
       ],
+    );
+  }
+
+  final List<Map<String, String>> languages = [
+    {'name': 'English', 'code': 'en'},
+    {'name': 'Arabic', 'code': 'ar'},
+  ];
+
+  // Define the current language and its code
+  String currentLanguage = 'Arabic';
+  String currentCode = 'ar';
+
+  void showLanguageDialog(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Container(
+              // margin: const EdgeInsets.only(bottom: 60),
+              color: AppColor.white,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Loop through the languages and create radio buttons
+                  for (var language in languages)
+                    RadioListTile<String>(
+                      activeColor: AppColor.backgroundColor,
+                      title: Text(
+                        language['name']!,
+                        style: const TextStyle(color: AppColor.backgroundColor),
+                      ),
+                      value: language['code'] ?? '',
+                      groupValue: currentCode,
+                      onChanged: (value) {
+                        // Update the state when a radio button is selected
+                        setState(() {
+                          currentCode = value!;
+                          currentLanguage = language['name']!;
+                        });
+                        BlocProvider.of<LanguageBloc>(context)
+                            .add(ChooseOnetherLang(currentCode));
+                        // Close the dialog after selection
+                        Navigator.pop(context);
+                        setState(() {
+                          choosedLanguage = true;
+                        });
+                      },
+                    ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

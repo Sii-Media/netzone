@@ -31,3 +31,33 @@ class ElecCategoryProductSuccess extends ElecDevicesState {
   const ElecCategoryProductSuccess(
       {this.department, this.category, required this.categoryProducts});
 }
+
+class DeleteProductInProgress extends ElecDevicesState {}
+
+class DeleteProductSuccess extends ElecDevicesState {}
+
+class DeleteProductFailure extends ElecDevicesState {
+  final String message;
+
+  const DeleteProductFailure({required this.message});
+}
+
+class EditProductInProgress extends ElecDevicesState {}
+
+class EditProductFailure extends ElecDevicesState {
+  final String message;
+
+  const EditProductFailure({required this.message});
+}
+
+class EditProductSuccess extends ElecDevicesState {
+  final String message;
+
+  const EditProductSuccess({required this.message});
+}
+
+class GetProductByIdSuccess extends ElecDevicesState {
+  final CategoryProducts product;
+
+  const GetProductByIdSuccess({required this.product});
+}

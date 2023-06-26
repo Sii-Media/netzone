@@ -103,7 +103,8 @@ class _SendEmailScreenState extends State<SendEmailScreen>
                   ),
                   QuestionFormField(
                     textController: nameController,
-                    hintText: 'your name',
+                    hintText:
+                        AppLocalizations.of(context).translate('your name'),
                     // maxLines: 5,
                     onChanged: (text) {
                       _nameFormFieldKey.currentState?.validate();
@@ -122,7 +123,8 @@ class _SendEmailScreenState extends State<SendEmailScreen>
                   ),
                   QuestionFormField(
                     textController: emailController,
-                    hintText: 'your email',
+                    hintText:
+                        AppLocalizations.of(context).translate('your email'),
                     // maxLines: 5,
                     onChanged: (text) {
                       _emailFormFieldKey.currentState?.validate();
@@ -141,7 +143,8 @@ class _SendEmailScreenState extends State<SendEmailScreen>
                   ),
                   QuestionFormField(
                     textController: subjectController,
-                    hintText: 'your subject',
+                    hintText:
+                        AppLocalizations.of(context).translate('your subject'),
                     // maxLines: 5,
                     onChanged: (text) {
                       _subjectFormFieldKey.currentState?.validate();
@@ -160,7 +163,8 @@ class _SendEmailScreenState extends State<SendEmailScreen>
                   ),
                   QuestionFormField(
                     textController: messageController,
-                    hintText: 'your message',
+                    hintText:
+                        AppLocalizations.of(context).translate('your message'),
                     maxLines: 5,
                     onChanged: (text) {
                       _messageFormFieldKey.currentState?.validate();

@@ -6,6 +6,7 @@ import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/domain/deals/entities/dealsItems/deals_items.dart';
 import 'package:netzoon/domain/deals/usecases/add_deal_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_all_deals_items_use_case.dart';
+import 'package:netzoon/domain/deals/usecases/get_deal_by_id_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_deals_items_by_cat_use_case.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 
@@ -16,10 +17,12 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
   final GetDealsItemsByCatUseCase getDealsItemsByCat;
   final GetDealsItemUsecase getDealsItemUsecase;
   final AddDealUseCase addDealUseCase;
+  final GetDealByIdUseCase getDealByIdUseCase;
   DealsItemsBloc({
     required this.addDealUseCase,
     required this.getDealsItemsByCat,
     required this.getDealsItemUsecase,
+    required this.getDealByIdUseCase,
   }) : super(DealsItemsInitial()) {
     on<DealsItemsByCatEvent>((event, emit) async {
       emit(DealsItemsInProgress());
@@ -66,6 +69,18 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
         failureOrDealsItems.fold(
           (failure) => DealsItemsFailure(message: mapFailureToString(failure)),
           (message) => AddDealSuccess(message: message),
+        ),
+      );
+    });
+    on<GetDealByIdEvent>((event, emit) async {
+      emit(DealsItemsInProgress());
+
+      final deal = await getDealByIdUseCase(event.id);
+
+      emit(
+        deal.fold(
+          (failure) => DealsItemsFailure(message: mapFailureToString(failure)),
+          (deal) => GetDealByIdSuccess(deal: deal),
         ),
       );
     });

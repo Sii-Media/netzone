@@ -25,7 +25,7 @@ class TenderInfoScreen extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(25.0),
                 child: CachedNetworkImage(
-                  imageUrl: tender.type,
+                  imageUrl: tender.imageUrl,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -55,11 +55,6 @@ class TenderInfoScreen extends StatelessWidget {
             ),
             titleAndInput(
               title:
-                  '${AppLocalizations.of(context).translate('قيمة المناقصة')} : ',
-              input: tender.value.toString(),
-            ),
-            titleAndInput(
-              title:
                   "${AppLocalizations.of(context).translate('السعر يبدأ')} : ",
               input: tender.price.toString(),
             ),
@@ -85,7 +80,7 @@ class TenderInfoScreen extends StatelessWidget {
                       AppLocalizations.of(context).translate('شراء المناقصة'))),
             ),
             SizedBox(
-              height: 80.h,
+              height: 100.h,
             ),
           ],
         ),

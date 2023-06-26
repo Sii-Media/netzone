@@ -8,8 +8,8 @@ class TenderItem extends Equatable {
   final String startDate;
   final String endDate;
   final int price;
-  final String type;
-  final int value;
+  final String imageUrl;
+  final int? value;
   final String category;
 
   const TenderItem({
@@ -20,8 +20,8 @@ class TenderItem extends Equatable {
     required this.startDate,
     required this.endDate,
     required this.price,
-    required this.type,
-    required this.value,
+    required this.imageUrl,
+    this.value,
     required this.category,
   });
   @override
@@ -33,7 +33,7 @@ class TenderItem extends Equatable {
         startDate,
         endDate,
         price,
-        type,
+        imageUrl,
         value,
         category
       ];

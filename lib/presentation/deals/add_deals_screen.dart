@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,6 +14,7 @@ import '../../injection_container.dart';
 import '../core/constant/colors.dart';
 import '../core/widgets/add_photo_button.dart';
 import '../core/widgets/screen_loader.dart';
+import '../notifications/blocs/notifications/notifications_bloc.dart';
 import '../utils/app_localizations.dart';
 import 'blocs/dealsItems/deals_items_bloc.dart';
 import 'blocs/deals_category/deals_categoty_bloc.dart';
@@ -60,6 +62,8 @@ class _AddDealScreenState extends State<AddDealScreen>
     });
   }
 
+  final notifiBloc = sl<NotificationsBloc>();
+
   @override
   Widget screen(BuildContext context) {
     return Scaffold(
@@ -103,6 +107,14 @@ class _AddDealScreenState extends State<AddDealScreen>
                     ),
                     backgroundColor: Theme.of(context).colorScheme.secondary,
                   ));
+                  Navigator.of(context).pop();
+                  FirebaseMessaging.instance.getToken().then((value) {
+                    notifiBloc.add(SendNotificationEvent(
+                        fcmtoken: value ?? '',
+                        text: nameController.text,
+                        category: 'deals',
+                        itemId: state.message));
+                  });
                 }
               },
               child: BlocBuilder<DealsCategotyBloc, DealsCategotyState>(

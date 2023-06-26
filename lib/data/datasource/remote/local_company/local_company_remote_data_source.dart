@@ -4,12 +4,14 @@ import 'package:netzoon/data/models/local_company/local_company_model.dart';
 import 'package:retrofit/http.dart';
 
 import '../../../../injection_container.dart';
+import '../../../models/auth/user_info/user_info_model.dart';
 
 part 'local_company_remote_data_source.g.dart';
 
 abstract class LocalCompanyRemoteDataSource {
   Future<List<LocalCompanyModel>> getAllLocalCompanies();
   Future<List<CategoryProductsModel>> getCompanyProducts(String id);
+  Future<List<UserInfoModel>> getLocalCompanies(String userType);
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -33,5 +35,11 @@ abstract class LocalCompanyRemoteDataSourceImpl
   @GET('/categories/local-company/get-products/{id}')
   Future<List<CategoryProductsModel>> getCompanyProducts(
     @Path('id') String id,
+  );
+
+  @override
+  @GET('/user/getUserByType')
+  Future<List<UserInfoModel>> getLocalCompanies(
+    @Part() String userType,
   );
 }

@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/remote/departments/departments_remote_data_source.dart';
 import 'package:netzoon/data/models/departments/category_products/category_products_model.dart';
@@ -112,6 +114,99 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
         final products =
             await departmentsRemoteDataSource.getUserProducts(username);
         return Right(products.map((e) => e.toDomain()).toList());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> deleteProduct(
+      {required String productId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final result =
+            await departmentsRemoteDataSource.deleteProduct(productId);
+        return Right(result);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> editProduct(
+      {required String productId,
+      required String name,
+      required String description,
+      required File? image,
+      File? video,
+      required int price,
+      bool? guarantee,
+      String? address,
+      String? madeIn}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        Dio dio = Dio();
+        FormData formData = FormData();
+
+        formData.fields.addAll([
+          MapEntry('name', name),
+          MapEntry('description', description),
+          MapEntry('price', price.toString()),
+          MapEntry('guarantee', guarantee.toString()),
+          MapEntry('madeIn', madeIn ?? ''),
+          MapEntry('address', address ?? ''),
+        ]);
+
+        if (image != null) {
+          String fileName = 'image.jpg';
+          formData.files.add(MapEntry(
+            'image',
+            await MultipartFile.fromFile(
+              image.path,
+              filename: fileName,
+              contentType: MediaType('image', 'jpeg'),
+            ),
+          ));
+        }
+        if (video != null) {
+          String fileName = 'video.mp4';
+          formData.files.add(MapEntry(
+            'video',
+            await MultipartFile.fromFile(
+              video.path,
+              filename: fileName,
+              contentType: MediaType('video', 'mp4'),
+            ),
+          ));
+        }
+        Response response = await dio.put(
+          'https://net-zoon.onrender.com/departments/editProduct/$productId',
+          data: formData,
+        );
+        return Right(response.data);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, CategoryProducts>> getProductById(
+      {required String productId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final product =
+            await departmentsRemoteDataSource.getProductById(productId);
+
+        return Right(product.toDomain());
       } else {
         return Left(OfflineFailure());
       }

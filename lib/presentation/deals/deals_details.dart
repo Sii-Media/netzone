@@ -1,98 +1,144 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:netzoon/domain/deals/entities/dealsItems/deals_items.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
+import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 
-class DealDetails extends StatelessWidget {
-  const DealDetails({super.key, required this.dealsInfo});
+import '../../injection_container.dart';
+import 'blocs/dealsItems/deals_items_bloc.dart';
 
-  final DealsItems dealsInfo;
+class DealDetails extends StatefulWidget {
+  const DealDetails({super.key, required this.dealsInfoId});
+
+  final String dealsInfoId;
+
+  @override
+  State<DealDetails> createState() => _DealDetailsState();
+}
+
+class _DealDetailsState extends State<DealDetails> {
+  final dealBloc = sl<DealsItemsBloc>();
+  @override
+  void initState() {
+    dealBloc.add(GetDealByIdEvent(id: widget.dealsInfoId));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: BackgroundWidget(
-              widget: ListView(
-            children: [
-              Container(
-                margin: const EdgeInsets.all(8),
-                height: size.height * 0.30,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(25.0),
-                  child: CachedNetworkImage(
-                    imageUrl: dealsInfo.imgUrl,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          dealBloc.add(GetDealByIdEvent(id: widget.dealsInfoId));
+        },
+        color: AppColor.white,
+        backgroundColor: AppColor.backgroundColor,
+        child: SingleChildScrollView(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: BackgroundWidget(
+              widget: BlocBuilder<DealsItemsBloc, DealsItemsState>(
+                bloc: dealBloc,
+                builder: (context, state) {
+                  if (state is DealsItemsInProgress) {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      ),
+                    );
+                  } else if (state is DealsItemsFailure) {
+                    final failure = state.message;
+                    return FailureWidget(
+                      failure: failure,
+                      onPressed: () {
+                        dealBloc.add(GetDealByIdEvent(id: widget.dealsInfoId));
+                      },
+                    );
+                  } else if (state is GetDealByIdSuccess) {
+                    return ListView(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.all(8),
+                          height: size.height * 0.30,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(25.0),
+                            child: CachedNetworkImage(
+                              imageUrl: state.deal.imgUrl,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        titleAndInput(
+                          title:
+                              "${AppLocalizations.of(context).translate('اسم الصفقة')} : ",
+                          input: state.deal.name,
+                        ),
+                        titleAndInput(
+                          title:
+                              "${AppLocalizations.of(context).translate('اسم البائع')} : ",
+                          input: state.deal.companyName,
+                        ),
+                        titleAndInput(
+                          title:
+                              "${AppLocalizations.of(context).translate('تاريخ بدء الصفقة')} : ",
+                          input: convertDateToString(state.deal.startDate),
+                        ),
+                        titleAndInput(
+                          title:
+                              "${AppLocalizations.of(context).translate('تاريخ انتهاء الصفقة')}: ",
+                          input: convertDateToString(state.deal.endDate),
+                        ),
+                        titleAndInput(
+                          title:
+                              "${AppLocalizations.of(context).translate('السعر قبل')}:",
+                          input: state.deal.prevPrice.toString(),
+                        ),
+                        titleAndInput(
+                          title:
+                              "${AppLocalizations.of(context).translate('السعر بعد')} : ",
+                          input: state.deal.currentPrice.toString(),
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 4.h),
+                          width: MediaQuery.of(context).size.width,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                // Get.to(ViewDetailsDeals(dealsModel: dealsModel));
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColor.backgroundColor,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  //shadowColor: Colors.black,
+                                  //  elevation: 5
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  textStyle: const TextStyle(fontSize: 15)),
+                              child: Text(AppLocalizations.of(context)
+                                  .translate('اشتري الان'))),
+                        ),
+                        SizedBox(
+                          height: 100.h,
+                        ),
+                      ],
+                    );
+                  }
+                  return Container();
+                },
               ),
-              titleAndInput(
-                title:
-                    "${AppLocalizations.of(context).translate('اسم الصفقة')} : ",
-                input: dealsInfo.name,
-              ),
-              titleAndInput(
-                title:
-                    "${AppLocalizations.of(context).translate('اسم البائع')} : ",
-                input: dealsInfo.companyName,
-              ),
-              titleAndInput(
-                title:
-                    "${AppLocalizations.of(context).translate('منتجات الصفقة')} : ",
-                input: '',
-              ),
-              titleAndInput(
-                title:
-                    "${AppLocalizations.of(context).translate('تاريخ بدء الصفقة')} : ",
-                input: convertDateToString(dealsInfo.startDate),
-              ),
-              titleAndInput(
-                title:
-                    "${AppLocalizations.of(context).translate('تاريخ انتهاء الصفقة')}: ",
-                input: convertDateToString(dealsInfo.endDate),
-              ),
-              titleAndInput(
-                title:
-                    "${AppLocalizations.of(context).translate('السعر قبل')}:",
-                input: dealsInfo.prevPrice.toString(),
-              ),
-              titleAndInput(
-                title:
-                    "${AppLocalizations.of(context).translate('السعر بعد')} : ",
-                input: dealsInfo.currentPrice.toString(),
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 4.h),
-                width: MediaQuery.of(context).size.width,
-                child: ElevatedButton(
-                    onPressed: () {
-                      // Get.to(ViewDetailsDeals(dealsModel: dealsModel));
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.backgroundColor,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        //shadowColor: Colors.black,
-                        //  elevation: 5
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                        textStyle: const TextStyle(fontSize: 15)),
-                    child: Text(
-                        AppLocalizations.of(context).translate('اشتري الان'))),
-              ),
-              SizedBox(
-                height: 100.h,
-              ),
-            ],
-          )),
+            ),
+          ),
         ),
       ),
     );

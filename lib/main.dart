@@ -1,5 +1,11 @@
+import 'dart:convert';
+
+import 'package:country_code_picker/country_code_picker.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
@@ -7,6 +13,7 @@ import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/favorites/favorite_blocs/favorites_bloc.dart';
 import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
+import 'package:netzoon/presentation/notifications/screens/notification_screen.dart';
 import 'package:netzoon/presentation/splash/splash_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:netzoon/presentation/utils/constants.dart';
@@ -14,10 +21,85 @@ import 'injection_container.dart' as di;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FirebaseMessaging.instance
+      .getToken()
+      // ignore: avoid_print
+      .then((value) => {print('getToken : $value')});
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+    handleMessage(message);
+  });
 
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+    if (message != null) {
+      handleMessage(message);
+    }
+  });
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await di.init();
   runApp(const MyApp());
+
+  FirebaseMessaging.onMessage.listen((message) {
+    final notification = message.notification;
+    if (notification == null) return;
+    _localNotifications.show(
+      notification.hashCode,
+      notification.title,
+      notification.body,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+            _androidChannel.id, _androidChannel.name,
+            channelDescription: _androidChannel.description,
+            icon: '@drawable/ic_launcher'),
+      ),
+      payload: jsonEncode(message.toMap()),
+    );
+  });
+  initLocalNotifications();
 }
+
+Future initLocalNotifications() async {
+  const iOS = DarwinInitializationSettings();
+  const android = AndroidInitializationSettings('@drawable/ic_launcher');
+  const settings = InitializationSettings(android: android, iOS: iOS);
+  await _localNotifications.initialize(settings,
+      onDidReceiveNotificationResponse: (payload) {
+    final message = RemoteMessage.fromMap(jsonDecode(payload.payload!));
+    handleMessage(message);
+  });
+  final platform = _localNotifications.resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>();
+  await platform?.createNotificationChannel(_androidChannel);
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+}
+
+final navigatorKey = GlobalKey<NavigatorState>();
+
+void handleMessage(RemoteMessage? message) {
+  if (message == null) return;
+  navigatorKey.currentState?.push(MaterialPageRoute(builder: (context) {
+    return const NotificatiionScreen();
+  }));
+}
+
+const _androidChannel = AndroidNotificationChannel(
+  'high_importance_channel',
+  'High Importance Notifications',
+  description: 'This Channel Used for important notifications',
+  importance: Importance.defaultImportance,
+);
+
+final _localNotifications = FlutterLocalNotificationsPlugin();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -72,6 +154,7 @@ class MyApp extends StatelessWidget {
                         GlobalWidgetsLocalizations.delegate,
                         // Add the following delegate to support Arabic localization
                         GlobalCupertinoLocalizations.delegate,
+                        CountryLocalizations.delegate,
                       ],
                       supportedLocales: const [
                         Locale('en', ""),

@@ -2,6 +2,7 @@ import 'package:netzoon/domain/advertisements/entities/advertisement.dart';
 
 List<Advertisement> advertisments = [
   const Advertisement(
+    id: '',
     name: 'نيسان للبيع في إمارة عجمان',
     advertisingStartDate: '16/03/2023',
     advertisingEndDate: '31/03/2023',
@@ -24,6 +25,7 @@ List<Advertisement> advertisments = [
     advertisingType: '',
   ),
   const Advertisement(
+    id: '',
     name: 'أرض للبيع في دبي ',
     advertisingStartDate: '16/03/2023',
     advertisingEndDate: '31/03/2023',
@@ -42,6 +44,7 @@ List<Advertisement> advertisments = [
     advertisingType: '',
   ),
   const Advertisement(
+    id: '',
     name: 'نيسان للبيع في إمارة عجمان',
     advertisingStartDate: '16/03/2023',
     advertisingEndDate: '31/03/2023',
@@ -61,6 +64,7 @@ List<Advertisement> advertisments = [
     advertisingType: '',
   ),
   const Advertisement(
+    id: '',
     name: 'نيسان للبيع في إمارة عجمان',
     advertisingStartDate: '16/03/2023',
     advertisingEndDate: '31/03/2023',

@@ -16,3 +16,9 @@ class ToggleonlikeEvent extends NewsEvent {
 }
 
 class UserLikedNewsEvent extends NewsEvent {}
+
+class GetNewsByIdEvent extends NewsEvent {
+  final String id;
+
+  const GetNewsByIdEvent({required this.id});
+}

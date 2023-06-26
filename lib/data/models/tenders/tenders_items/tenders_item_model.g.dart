@@ -15,8 +15,8 @@ TendersItemModel _$TendersItemModelFromJson(Map<String, dynamic> json) =>
       startDate: json['startDate'] as String,
       endDate: json['endDate'] as String,
       price: json['price'] as int,
-      type: json['type'] as String,
-      value: json['value'] as int,
+      imageUrl: json['imageUrl'] as String,
+      value: json['value'] as int?,
       category: json['category'] as String,
     );
 
@@ -29,7 +29,7 @@ Map<String, dynamic> _$TendersItemModelToJson(TendersItemModel instance) =>
       'startDate': instance.startDate,
       'endDate': instance.endDate,
       'price': instance.price,
-      'type': instance.type,
+      'imageUrl': instance.imageUrl,
       'value': instance.value,
       'category': instance.category,
     };

@@ -11,10 +11,11 @@ DepartmentsCategoryModel _$DepartmentsCategoryModelFromJson(
     DepartmentsCategoryModel(
       id: json['_id'] as String?,
       name: json['name'] as String,
-      department: json['department'] as String,
-      imageUrl: json['imageUrl'] as String,
-      products:
-          (json['products'] as List<dynamic>).map((e) => e as String).toList(),
+      department: json['department'] as String?,
+      imageUrl: json['imageUrl'] as String?,
+      products: (json['products'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$DepartmentsCategoryModelToJson(

@@ -23,9 +23,7 @@ class ListSubSectionsWidget extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) {
               return ProductDetailScreen(
-                item: deviceList,
-                department: department,
-                category: category,
+                item: deviceList.id,
               );
             },
           ),

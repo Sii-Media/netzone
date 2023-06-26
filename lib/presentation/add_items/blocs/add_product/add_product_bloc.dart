@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:netzoon/domain/departments/usecases/add_product_use_case.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../domain/auth/entities/user.dart';
 import '../../../../domain/auth/usecases/get_signed_in_user_use_case.dart';
@@ -33,6 +34,7 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
         description: event.description,
         price: event.price,
         image: event.image,
+        productimages: event.productimages,
         video: event.video,
         guarantee: event.guarantee,
         madeIn: event.madeIn,
@@ -123,6 +125,7 @@ Future<Response<dynamic>> _uploadFile({
   required String description,
   required int price,
   required File image,
+  List<XFile>? productimages,
   File? video,
   File? gif,
   bool? guarantee,
@@ -147,6 +150,7 @@ Future<Response<dynamic>> _uploadFile({
       MapEntry('address', address ?? ''),
     ]);
 
+    // ignore: unnecessary_null_comparison
     if (image != null) {
       String fileName = 'image.jpg';
       formData.files.add(MapEntry(
@@ -157,6 +161,20 @@ Future<Response<dynamic>> _uploadFile({
           contentType: MediaType('image', 'jpeg'),
         ),
       ));
+    }
+    if (productimages != null && productimages.isNotEmpty) {
+      for (int i = 0; i < productimages.length; i++) {
+        String fileName = 'image$i.jpg';
+        File file = File(productimages[i].path);
+        formData.files.add(MapEntry(
+          'productimages',
+          await MultipartFile.fromFile(
+            file.path,
+            filename: fileName,
+            contentType: MediaType('image', 'jpeg'),
+          ),
+        ));
+      }
     }
 
     if (video != null) {

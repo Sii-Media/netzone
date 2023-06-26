@@ -206,7 +206,7 @@ class _SearchPageState extends State<SearchPage> {
                         Navigator.of(context)
                             .push(MaterialPageRoute(builder: (context) {
                           return ProductDetailScreen(
-                              item: filteredItems[index]);
+                              item: filteredItems[index].id);
                         }));
                       } else if (selectedCategory == 'local_companies') {
                         Navigator.of(context)
@@ -218,7 +218,7 @@ class _SearchPageState extends State<SearchPage> {
                         Navigator.of(context)
                             .push(MaterialPageRoute(builder: (context) {
                           return AdvertismentDetalsScreen(
-                              ads: filteredItems[index]);
+                              adsId: filteredItems[index].id);
                         }));
                       } else if (selectedCategory == 'cars') {
                         Navigator.of(context)

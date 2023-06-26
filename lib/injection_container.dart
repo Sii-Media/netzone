@@ -18,6 +18,7 @@ import 'package:netzoon/data/datasource/remote/govermental/govermental_data_sour
 import 'package:netzoon/data/datasource/remote/legal_advice/legal_advice_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/local_company/local_company_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/news/news_remote_data_source.dart';
+import 'package:netzoon/data/datasource/remote/notifications/notification_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/openions/openion_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/questions/question_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/requests/requests_remote_data_source.dart';
@@ -38,6 +39,7 @@ import 'package:netzoon/data/repositories/lang/lang_repository_impl.dart';
 import 'package:netzoon/data/repositories/legal_advice/legal_advice_repository_impl.dart';
 import 'package:netzoon/data/repositories/local_company/local_company_repository_impl.dart';
 import 'package:netzoon/data/repositories/news/news_repositories_impl.dart';
+import 'package:netzoon/data/repositories/notifications/notifications_repo_impl.dart';
 import 'package:netzoon/data/repositories/openions/openion_repository_impl.dart';
 import 'package:netzoon/data/repositories/questions/question_repository_impl.dart';
 import 'package:netzoon/data/repositories/requests/requests_repository_impl.dart';
@@ -49,11 +51,14 @@ import 'package:netzoon/domain/advertisements/usercases/add_ads_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_ads_by_type_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_advertisements_usecase.dart';
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
+import 'package:netzoon/domain/auth/usecases/add_account_to_user_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/change_account_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/change_password_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/edit_profile_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_first_time_logged_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_otpcode_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/get_user_accounts_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/logout_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/set_first_time_logged_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/sign_in_use_case.dart';
@@ -75,6 +80,7 @@ import 'package:netzoon/domain/categories/usecases/governmental/get_all_governme
 import 'package:netzoon/domain/categories/usecases/governmental/get_govermental_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_all_local_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_company_products_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/local_company/get_local_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_all_cars_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_all_new_planes_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_all_used_planes_use_case.dart';
@@ -92,6 +98,8 @@ import 'package:netzoon/domain/deals/usecases/get_deals_cat_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_deals_items_by_cat_use_case.dart';
 import 'package:netzoon/domain/departments/repositories/departments_repository.dart';
 import 'package:netzoon/domain/departments/usecases/add_product_use_case.dart';
+import 'package:netzoon/domain/departments/usecases/delete_product_use_case.dart';
+import 'package:netzoon/domain/departments/usecases/edit_product_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_categories_by_departments_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_category_products_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_user_products_use_case.dart';
@@ -110,6 +118,8 @@ import 'package:netzoon/domain/news/usecases/add_like_use_case.dart';
 import 'package:netzoon/domain/news/usecases/add_news_use_case.dart';
 import 'package:netzoon/domain/news/usecases/get_all_news_usecase.dart';
 import 'package:netzoon/domain/news/usecases/get_comments_use_case.dart';
+import 'package:netzoon/domain/notifications/repositories/notification_repository.dart';
+import 'package:netzoon/domain/notifications/use_cases/get_all_notifications_use_case.dart';
 import 'package:netzoon/domain/openions/repositories/openion_repository.dart';
 import 'package:netzoon/domain/openions/usecases/add_openion_use_case.dart';
 import 'package:netzoon/domain/questions/repositories/question_repository.dart';
@@ -122,7 +132,7 @@ import 'package:netzoon/domain/tenders/usecases/get_all_tenders_items.dart';
 import 'package:netzoon/domain/tenders/usecases/get_tenders_cat_use_case.dart';
 import 'package:netzoon/domain/tenders/usecases/get_tenders_items_by_min.dart';
 import 'package:netzoon/domain/tenders/usecases/get_tenders_items_by_max.dart';
-import 'package:netzoon/presentation/add_items/blocs/bloc/add_product_bloc.dart';
+import 'package:netzoon/presentation/add_items/blocs/add_product/add_product_bloc.dart';
 import 'package:netzoon/presentation/advertising/blocs/add_ads/add_ads_bloc.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
@@ -154,16 +164,24 @@ import 'package:netzoon/presentation/legal_advice/blocs/legal_advice/legal_advic
 import 'package:netzoon/presentation/news/blocs/add_news/add_news_bloc.dart';
 import 'package:netzoon/presentation/news/blocs/comments/comments_bloc.dart';
 import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
+import 'package:netzoon/presentation/notifications/blocs/notifications/notifications_bloc.dart';
+import 'package:netzoon/presentation/profile/blocs/add_account/add_account_bloc.dart';
 import 'package:netzoon/presentation/profile/blocs/edit_profile/edit_profile_bloc.dart';
 import 'package:netzoon/presentation/profile/blocs/get_user/get_user_bloc.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersCategory/tender_cat_bloc.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersItem/tenders_item_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'domain/advertisements/usercases/get_ads_by_id_use_case.dart';
 import 'domain/auth/usecases/get_user_by_id_use_case.dart';
+import 'domain/deals/usecases/get_deal_by_id_use_case.dart';
 import 'domain/departments/usecases/get_all_products_use_case.dart';
+import 'domain/departments/usecases/get_product_by_id_use_case.dart';
 import 'domain/favorites/usecases/add_item_to_favorite_use_case.dart';
+import 'domain/news/usecases/get_news_by_id_use_case.dart';
+import 'domain/notifications/use_cases/send_notification_use_case.dart';
 import 'domain/send_emails/use_cases/send_email_use_case.dart';
+import 'domain/tenders/usecases/add_tender_use_case.dart';
 
 const String baseUrl = 'https://net-zoon.onrender.com';
 final sl = GetIt.instance;
@@ -173,31 +191,40 @@ Future<void> init() async {
   sl.registerFactory(() => SignUpBloc(signUpUseCase: sl()));
   sl.registerFactory(() => SignInBloc(signInUseCase: sl()));
   sl.registerFactory(() => AdsBlocBloc(
-        getAdvertismentsUseCase: sl(),
-        getAdsByTypeUseCase: sl(),
-      ));
+      getAdvertismentsUseCase: sl(),
+      getAdsByTypeUseCase: sl(),
+      getAdsByIdUseCase: sl()));
   sl.registerFactory(() => NewsBloc(
-      getAllNewsUseCase: sl(),
-      getSignedInUser: sl(),
-      toggleOnLikeUseCase: sl()));
+        getAllNewsUseCase: sl(),
+        getSignedInUser: sl(),
+        toggleOnLikeUseCase: sl(),
+        getNewsByIdUseCase: sl(),
+      ));
   sl.registerFactory(
       () => AddNewsBloc(addNewsUseCase: sl(), getSignedInUser: sl()));
   sl.registerFactory(() => TenderCatBloc(getTendersCategoriesUseCase: sl()));
   sl.registerFactory(() => TendersItemBloc(
-      getTendersItemByMin: sl(),
-      getTendersItemByMax: sl(),
-      getTendersItem: sl()));
+        getTendersItemByMin: sl(),
+        getTendersItemByMax: sl(),
+        getTendersItem: sl(),
+        addTenderUseCase: sl(),
+      ));
 
   sl.registerFactory(() => DealsCategotyBloc(getDealsCategoriesUseCase: sl()));
   sl.registerFactory(() => DealsItemsBloc(
-      getDealsItemsByCat: sl(),
-      getDealsItemUsecase: sl(),
-      addDealUseCase: sl()));
+        getDealsItemsByCat: sl(),
+        getDealsItemUsecase: sl(),
+        addDealUseCase: sl(),
+        getDealByIdUseCase: sl(),
+      ));
 
   sl.registerFactory(() => ElecDevicesBloc(
         getCategoriesByDepartmentUsecase: sl(),
         getCategoryProductsUseCase: sl(),
         getAllProductsUseCase: sl(),
+        deleteProductUseCase: sl(),
+        editProductUseCase: sl(),
+        getProductByIdUseCase: sl(),
       ));
 
   sl.registerFactory(() => AddProductBloc(
@@ -254,6 +281,9 @@ Future<void> init() async {
   sl.registerFactory(() => LocalCompanyBloc(
         getAllLocalCompaniesUseCase: sl(),
         getCompanyProductsUseCase: sl(),
+        getLocalCompaniesUseCase: sl(),
+        getSignedInUser: sl(),
+        getUserProductsUseCase: sl(),
       ));
 
   sl.registerFactory(() => GovermentalBloc(
@@ -288,6 +318,19 @@ Future<void> init() async {
 
   sl.registerFactory(() => ChangePasswordBloc(
       changePasswordUseCase: sl(), getSignedInUserUseCase: sl()));
+
+  sl.registerFactory(() => AddAccountBloc(
+        addAccountUseCase: sl(),
+        getSignedInUserUseCase: sl(),
+        getUserAccountsUseCase: sl(),
+        logoutUseCase: sl(),
+        changeAccountUseCase: sl(),
+      ));
+
+  sl.registerFactory(() => NotificationsBloc(
+      getAllNotificationsUseCase: sl(),
+      sendNotificationUseCase: sl(),
+      getSignedInUser: sl()));
 
   //! UseCases
   sl.registerLazySingleton(() => GetSignedInUserUseCase(authRepository: sl()));
@@ -426,6 +469,39 @@ Future<void> init() async {
   sl.registerLazySingleton(
       () => GetUserProductsUseCase(departmentRepository: sl()));
 
+  sl.registerLazySingleton(() => AddTenderUseCase(tenderRepository: sl()));
+
+  sl.registerLazySingleton(() => AddAccountUseCase(authRepository: sl()));
+
+  sl.registerLazySingleton(() => GetUserAccountsUseCase(authRepository: sl()));
+
+  sl.registerLazySingleton(() => ChangeAccountUseCase(authRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => DeleteProductUseCase(departmentRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => EditProductUseCase(departmentRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => GetAllNotificationsUseCase(notificationRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => GetProductByIdUseCase(departmentRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => GetAdsByIdUseCase(advertismentRepository: sl()));
+
+  sl.registerLazySingleton(() => GetDealByIdUseCase(dealsRepository: sl()));
+
+  sl.registerLazySingleton(() => GetNewsByIdUseCase(newsRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => SendNotificationUseCase(notificationRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => GetLocalCompaniesUseCase(localCompanyRepository: sl()));
+
   //! Repositories
 
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
@@ -491,6 +567,12 @@ Future<void> init() async {
 
   sl.registerLazySingleton<SendEmailRepository>(() => SendEmailRepositoryImpl(
       networkInfo: sl(), sendEmailRemoteDataSource: sl()));
+
+  sl.registerLazySingleton<NotificationRepository>(
+      () => NotificationRepositoryImpl(
+            notificationRemoteDataSource: sl(),
+            networkInfo: sl(),
+          ));
 
   //! DataSourses
 
@@ -558,6 +640,10 @@ Future<void> init() async {
 
   sl.registerLazySingleton<SendEmailRemoteDataSource>(
       () => SendEmailRemoteDataSourceImpl());
+
+  sl.registerLazySingleton<NotificationRemoteDataSource>(
+      () => NotificationRemoteDataSourceImpl(sl(), baseUrl: baseUrl));
+
   //! Core
 
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));

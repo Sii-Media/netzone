@@ -10,6 +10,7 @@ import '../../../injection_container.dart';
 import '../../utils/app_localizations.dart';
 import '../blocs/get_user/get_user_bloc.dart';
 import '../widgets/rounded_icon_text.dart';
+import 'edit_local_company_profile_screen.dart';
 
 class MyLocalCompanyProfileScreen extends StatefulWidget {
   final String userId;
@@ -99,11 +100,6 @@ class _MyLocalCompanyProfileScreenState
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
                                         roundedIconText(
-                                            context: context,
-                                            text: 'my_products',
-                                            icon: Icons.shopping_bag_outlined,
-                                            onTap: () {}),
-                                        roundedIconText(
                                           context: context,
                                           text: 'Products sold',
                                           icon:
@@ -123,6 +119,18 @@ class _MyLocalCompanyProfileScreenState
                                                   MaterialPageRoute(
                                                       builder: (context) {
                                                 return const ChatHomeScreen();
+                                              }));
+                                            }),
+                                        roundedIconText(
+                                            context: context,
+                                            text: 'edit_profile',
+                                            icon: Icons.edit,
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) {
+                                                return EditLocalCompanyprofileScreen(
+                                                    userInfo: state.userInfo);
                                               }));
                                             }),
                                       ],
@@ -165,26 +173,36 @@ class _MyLocalCompanyProfileScreenState
                           child: TabBarView(
                             controller: tabController,
                             children: [
-                              ListView(
-                                children: [
-                                  Column(
-                                    children: [
-                                      titleAndInput(
-                                          title: AppLocalizations.of(context)
-                                              .translate('company_name'),
-                                          input: state.userInfo.username ?? ''),
-                                      titleAndInput(
-                                          title: AppLocalizations.of(context)
-                                              .translate('email'),
-                                          input: state.userInfo.email ?? ''),
-                                      titleAndInput(
-                                          title: AppLocalizations.of(context)
-                                              .translate('mobile'),
-                                          input:
-                                              state.userInfo.firstMobile ?? ''),
-                                    ],
-                                  ),
-                                ],
+                              RefreshIndicator(
+                                onRefresh: () async {
+                                  userBloc.add(
+                                      GetUserByIdEvent(userId: widget.userId));
+                                  productBloc.add(GetUserProductsEvent());
+                                },
+                                color: AppColor.white,
+                                backgroundColor: AppColor.backgroundColor,
+                                child: ListView(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('company_name'),
+                                            input:
+                                                state.userInfo.username ?? ''),
+                                        titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('email'),
+                                            input: state.userInfo.email ?? ''),
+                                        titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('mobile'),
+                                            input: state.userInfo.firstMobile ??
+                                                ''),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                               RefreshIndicator(
                                 onRefresh: () async {
@@ -218,118 +236,142 @@ class _MyLocalCompanyProfileScreenState
                                           ? Padding(
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: GridView.builder(
-                                                gridDelegate:
-                                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                                        crossAxisCount: 3,
-                                                        childAspectRatio: 0.95,
-                                                        crossAxisSpacing: 10.w,
-                                                        mainAxisSpacing: 10.h),
-                                                shrinkWrap: true,
-                                                physics:
-                                                    const BouncingScrollPhysics(),
-                                                itemCount:
-                                                    state.products.length,
-                                                itemBuilder: (context, index) {
-                                                  return Container(
-                                                    margin: const EdgeInsets
-                                                        .symmetric(vertical: 8),
-                                                    decoration: BoxDecoration(
-                                                        color: AppColor.white,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20),
-                                                        boxShadow: [
-                                                          BoxShadow(
-                                                            color: AppColor
-                                                                .secondGrey
-                                                                .withOpacity(
-                                                                    0.5),
-                                                            blurRadius: 10,
-                                                            spreadRadius: 2,
-                                                            offset:
-                                                                const Offset(
-                                                                    0, 3),
-                                                          ),
-                                                        ]),
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          const BorderRadius
-                                                                  .all(
-                                                              Radius.circular(
-                                                                  20)),
-                                                      child: GestureDetector(
-                                                        onTap: () {
-                                                          Navigator.of(context).push(
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) {
-                                                            return ProductDetailScreen(
-                                                                item: state
-                                                                        .products[
-                                                                    index]);
-                                                          }));
-                                                        },
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            CachedNetworkImage(
-                                                              imageUrl: state
-                                                                  .products[
-                                                                      index]
-                                                                  .imageUrl,
-                                                              height: 65.h,
-                                                              width: 160.w,
-                                                              fit: BoxFit
-                                                                  .contain,
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      right:
-                                                                          9.0,
-                                                                      left: 9.0,
-                                                                      bottom:
-                                                                          8.0),
-                                                              child: Row(
+                                              child: Column(
+                                                children: [
+                                                  Expanded(
+                                                    child: GridView.builder(
+                                                      gridDelegate:
+                                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                                              crossAxisCount: 3,
+                                                              childAspectRatio:
+                                                                  0.95,
+                                                              crossAxisSpacing:
+                                                                  10.w,
+                                                              mainAxisSpacing:
+                                                                  10.h),
+                                                      shrinkWrap: true,
+                                                      physics:
+                                                          const BouncingScrollPhysics(),
+                                                      itemCount:
+                                                          state.products.length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 8),
+                                                          decoration: BoxDecoration(
+                                                              color: AppColor
+                                                                  .white,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20),
+                                                              boxShadow: [
+                                                                BoxShadow(
+                                                                  color: AppColor
+                                                                      .secondGrey
+                                                                      .withOpacity(
+                                                                          0.5),
+                                                                  blurRadius:
+                                                                      10,
+                                                                  spreadRadius:
+                                                                      2,
+                                                                  offset:
+                                                                      const Offset(
+                                                                          0, 3),
+                                                                ),
+                                                              ]),
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                const BorderRadius
+                                                                        .all(
+                                                                    Radius
+                                                                        .circular(
+                                                                            20)),
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .push(MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) {
+                                                                  return ProductDetailScreen(
+                                                                      item: state
+                                                                          .products[
+                                                                              index]
+                                                                          .id);
+                                                                }));
+                                                              },
+                                                              child: Column(
                                                                 mainAxisAlignment:
                                                                     MainAxisAlignment
                                                                         .spaceBetween,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
                                                                 children: [
-                                                                  Text(
-                                                                    state
+                                                                  CachedNetworkImage(
+                                                                    imageUrl: state
                                                                         .products[
                                                                             index]
-                                                                        .name,
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      color: AppColor
-                                                                          .backgroundColor,
-                                                                    ),
+                                                                        .imageUrl,
+                                                                    height:
+                                                                        65.h,
+                                                                    width:
+                                                                        160.w,
+                                                                    fit: BoxFit
+                                                                        .contain,
                                                                   ),
-                                                                  Text(
-                                                                    '${state.products[index].price} \$',
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      color: AppColor
-                                                                          .colorTwo,
+                                                                  Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        right:
+                                                                            9.0,
+                                                                        left:
+                                                                            9.0,
+                                                                        bottom:
+                                                                            8.0),
+                                                                    child: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      children: [
+                                                                        Text(
+                                                                          state
+                                                                              .products[index]
+                                                                              .name,
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            color:
+                                                                                AppColor.backgroundColor,
+                                                                          ),
+                                                                        ),
+                                                                        Text(
+                                                                          '${state.products[index].price} \$',
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            color:
+                                                                                AppColor.colorTwo,
+                                                                          ),
+                                                                        ),
+                                                                      ],
                                                                     ),
                                                                   ),
                                                                 ],
                                                               ),
                                                             ),
-                                                          ],
-                                                        ),
-                                                      ),
+                                                          ),
+                                                        );
+                                                      },
                                                     ),
-                                                  );
-                                                },
+                                                  ),
+                                                  SizedBox(
+                                                    height: 70.h,
+                                                  ),
+                                                ],
                                               ),
                                             )
                                           : Center(

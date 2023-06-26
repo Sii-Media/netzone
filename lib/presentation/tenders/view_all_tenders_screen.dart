@@ -229,7 +229,7 @@ class _ViewAllTendersScreenState extends State<ViewAllTendersScreen> {
                                                             imageUrl: state
                                                                 .tenderItems[
                                                                     index]
-                                                                .type,
+                                                                .imageUrl,
                                                             fit: BoxFit
                                                                 .fitHeight,
                                                             width: 170.w,

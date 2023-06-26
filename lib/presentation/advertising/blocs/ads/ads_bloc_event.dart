@@ -14,3 +14,9 @@ class GetAdsByType extends AdsBlocEvent {
 
   const GetAdsByType({required this.userAdvertisingType});
 }
+
+class GetAdsByIdEvent extends AdsBlocEvent {
+  final String id;
+
+  const GetAdsByIdEvent({required this.id});
+}

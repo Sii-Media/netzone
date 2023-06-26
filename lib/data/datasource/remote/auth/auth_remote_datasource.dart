@@ -22,6 +22,11 @@ abstract class AuthRemoteDataSource {
     final String password,
   );
 
+  Future<UserModel> changeAccount(
+    final String email,
+    final String password,
+  );
+
   Future<String> changePassword(
     final String userId,
     final String currentPassword,
@@ -39,6 +44,11 @@ abstract class AuthRemoteDataSource {
   );
 
   Future<UserInfoModel> getUserById(final String userId);
+
+  Future<UserInfoModel> addAccount(
+      final String email, final String username, final String password);
+
+  Future<List<UserInfoModel>> getUserAccounts(final String email);
 
   // Future<UserInfoModel> editProfile(
   //     String userId,
@@ -81,6 +91,13 @@ abstract class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   );
 
   @override
+  @POST('/user/changeAccount')
+  Future<UserModel> changeAccount(
+    @Part() String email,
+    @Part() String password,
+  );
+
+  @override
   @POST('/user/otpLogin')
   Future<OtpLoginResponseModel> getOtpCode(
     @Part() String phone,
@@ -106,6 +123,20 @@ abstract class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     @Path('userId') String userId,
     @Part() String currentPassword,
     @Part() String newPassword,
+  );
+
+  @override
+  @POST('/user/addaccount')
+  Future<UserInfoModel> addAccount(
+    @Part() String email,
+    @Part() String username,
+    @Part() String password,
+  );
+
+  @override
+  @GET('/user/getuseraccounts')
+  Future<List<UserInfoModel>> getUserAccounts(
+    @Part() String email,
   );
 
   // @override

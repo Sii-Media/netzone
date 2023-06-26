@@ -38,6 +38,7 @@ class DealsItemsModel {
 
 extension MapToDomain on DealsItemsModel {
   DealsItems toDomain() => DealsItems(
+        id: id,
         name: name,
         imgUrl: imgUrl,
         companyName: companyName,

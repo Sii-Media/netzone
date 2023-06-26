@@ -118,6 +118,24 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<Either<Failure, User>> changeAccount(
+      {required String email, required String password}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final user = await authRemoteDataSource.changeAccount(email, password);
+        // SharedPreferences preferences = await SharedPreferences.getInstance();
+        // await preferences.setBool('IsLoggedIn', true);
+        local.signInUser(user);
+        return Right(user.toDomain());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(CredintialFailure());
+    }
+  }
+
+  @override
   Future<Either<Failure, User?>> getSignedInUser() async {
     return right(local.getSignedInUser()?.toDomain());
   }
@@ -268,6 +286,40 @@ class AuthRepositoryImpl implements AuthRepository {
         final result = await authRemoteDataSource.changePassword(
             userId, currentPassword, newPassword);
         return Right(result);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(CredintialFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserInfo>> addAcccess(
+      {required String email,
+      required String username,
+      required String password}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final user =
+            await authRemoteDataSource.addAccount(email, username, password);
+
+        return Right(user.toDomain());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(CredintialFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<UserInfo>>> getUserAccounts(
+      {required String email}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final accounts = await authRemoteDataSource.getUserAccounts(email);
+        return Right(accounts.map((e) => e.toDomain()).toList());
       } else {
         return Left(OfflineFailure());
       }

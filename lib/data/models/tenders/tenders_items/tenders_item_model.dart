@@ -13,8 +13,8 @@ class TendersItemModel {
   final String startDate;
   final String endDate;
   final int price;
-  final String type;
-  final int value;
+  final String imageUrl;
+  final int? value;
   final String category;
 
   TendersItemModel({
@@ -25,8 +25,8 @@ class TendersItemModel {
     required this.startDate,
     required this.endDate,
     required this.price,
-    required this.type,
-    required this.value,
+    required this.imageUrl,
+    this.value,
     required this.category,
   });
 
@@ -45,7 +45,7 @@ extension MapToDomain on TendersItemModel {
         startDate: startDate,
         endDate: endDate,
         price: price,
-        type: type,
+        imageUrl: imageUrl,
         value: value,
         category: category,
       );

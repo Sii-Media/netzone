@@ -6,10 +6,12 @@ import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/remote/news/news_remote_data_source.dart';
 import 'package:netzoon/data/models/news/news/news_model.dart';
 import 'package:netzoon/data/models/news/news_comment/news_comment_model.dart';
+import 'package:netzoon/data/models/news/news_info/news_info_model.dart';
 import 'package:netzoon/domain/news/entities/news.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:dartz/dartz.dart';
 import 'package:netzoon/domain/news/entities/news_comment.dart';
+import 'package:netzoon/domain/news/entities/news_info.dart';
 import 'package:netzoon/domain/news/repositories/news_repository.dart';
 
 class NewsRepositoryImpl implements NewsRepository {
@@ -114,6 +116,20 @@ class NewsRepositoryImpl implements NewsRepository {
         final response =
             await newsRemoteDataSourse.toggleOnLike(newsId, userId);
         return Right(response);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, News>> getNewsById({required String id}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final news = await newsRemoteDataSourse.getNewsById(id);
+        return Right(news.toDomain());
       } else {
         return Left(OfflineFailure());
       }

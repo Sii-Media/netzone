@@ -22,3 +22,9 @@ class TendersItemFailure extends TendersItemState {
 
   const TendersItemFailure({required this.message});
 }
+
+class AddTenderSuccess extends TendersItemState {
+  final String message;
+
+  const AddTenderSuccess({required this.message});
+}

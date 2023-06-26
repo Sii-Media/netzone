@@ -13,7 +13,7 @@ class AddProductRequestedEvent extends AddProductEvent {
   final String name;
   final String description;
   final int price;
-  final List<String>? images;
+  final List<XFile>? productimages;
   final File? video;
   final bool? guarantee;
   final String? address;
@@ -27,7 +27,7 @@ class AddProductRequestedEvent extends AddProductEvent {
     required this.name,
     required this.description,
     required this.price,
-    this.images,
+    this.productimages,
     this.video,
     this.guarantee,
     this.address,

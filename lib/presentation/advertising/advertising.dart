@@ -186,7 +186,7 @@ class Advertising extends StatelessWidget {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return AdvertismentDetalsScreen(
-                        ads: advertisment,
+                        adsId: advertisment.id,
                       );
                     }),
                   );

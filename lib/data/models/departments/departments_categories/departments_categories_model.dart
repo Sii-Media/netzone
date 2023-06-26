@@ -8,16 +8,16 @@ class DepartmentsCategoryModel {
   @JsonKey(name: '_id')
   final String? id;
   final String name;
-  final String department;
-  final String imageUrl;
-  final List<String> products;
+  final String? department;
+  final String? imageUrl;
+  final List<String>? products;
 
   DepartmentsCategoryModel({
     this.id,
     required this.name,
-    required this.department,
-    required this.imageUrl,
-    required this.products,
+    this.department,
+    this.imageUrl,
+    this.products,
   });
 
   factory DepartmentsCategoryModel.fromJson(Map<String, dynamic> json) =>

@@ -19,7 +19,9 @@ class UserInfo {
   final String? sellType;
 
   final String? toCountry;
-
+  final String? bio;
+  final String? description;
+  final String? website;
   final String? profilePhoto;
   final String? coverPhoto;
   final String? banerPhoto;
@@ -44,6 +46,9 @@ class UserInfo {
     this.companyProductsNumber,
     this.sellType,
     this.toCountry,
+    this.bio,
+    this.description,
+    this.website,
     this.profilePhoto,
     this.coverPhoto,
     this.banerPhoto,

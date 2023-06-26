@@ -66,8 +66,8 @@ class _ListofItemsState extends State<ListofItems> {
                       child: Stack(
                         children: [
                           CachedNetworkImage(
-                            imageUrl: widget.elec[index].imageUrl,
-                            fit: BoxFit.contain,
+                            imageUrl: widget.elec[index].imageUrl ?? '',
+                            fit: BoxFit.cover,
                             height: MediaQuery.of(context).size.height,
                             // placeholder: (context, url) =>
                             //     CircularProgressIndicator(),
@@ -82,13 +82,19 @@ class _ListofItemsState extends State<ListofItems> {
                               height: 35.h,
                               color: AppColor.backgroundColor.withOpacity(0.8),
                               alignment: Alignment.center,
-                              child: Text(
-                                AppLocalizations.of(context)
-                                    .translate(widget.elec[index].name),
-                                style: const TextStyle(
-                                    fontSize: 12,
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: Text(
+                                  AppLocalizations.of(context)
+                                      .translate(widget.elec[index].name),
+                                  style: const TextStyle(
+                                    fontSize: 10,
                                     color: Colors.white,
-                                    fontWeight: FontWeight.w800),
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ),
                           )

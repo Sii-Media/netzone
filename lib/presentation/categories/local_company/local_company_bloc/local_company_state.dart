@@ -18,13 +18,19 @@ class LocalCompanySuccess extends LocalCompanyState {
 }
 
 class LocalCompanyProductsSuccess extends LocalCompanyState {
-  final List<CategoryProducts> categoryProducts;
+  final List<CategoryProducts> products;
 
-  const LocalCompanyProductsSuccess({required this.categoryProducts});
+  const LocalCompanyProductsSuccess({required this.products});
 }
 
 class LocalCompanyFailure extends LocalCompanyState {
   final String message;
 
   const LocalCompanyFailure({required this.message});
+}
+
+class GetLocalCompaniesSuccess extends LocalCompanyState {
+  final List<UserInfo> companies;
+
+  const GetLocalCompaniesSuccess({required this.companies});
 }

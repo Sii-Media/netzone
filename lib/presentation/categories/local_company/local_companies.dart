@@ -20,7 +20,8 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
 
   @override
   void initState() {
-    localCompanyBloc.add(GetAllLocalCompaniesEvent());
+    // localCompanyBloc.add(GetAllLocalCompaniesEvent());
+    localCompanyBloc.add(GetLocalCompaniesEvent(userType: 'local_company'));
     super.initState();
   }
 
@@ -53,12 +54,12 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
                           ),
                         ),
                       );
-                    } else if (state is LocalCompanySuccess) {
+                    } else if (state is GetLocalCompaniesSuccess) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 60.0),
                         child: ListView.builder(
                             shrinkWrap: true,
-                            itemCount: state.localCompanies.length,
+                            itemCount: state.companies.length,
                             itemBuilder: (BuildContext context, index) {
                               return SizedBox(
                                 height:
@@ -74,7 +75,7 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
                                           MaterialPageRoute(builder: (context) {
                                             return LocalCompanyProfileScreen(
                                               localCompany:
-                                                  state.localCompanies[index],
+                                                  state.companies[index],
                                             );
                                           }),
                                         );
@@ -92,8 +93,9 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
                                                   right: 0,
                                                   child: CachedNetworkImage(
                                                     imageUrl: state
-                                                        .localCompanies[index]
-                                                        .imgUrl,
+                                                            .companies[index]
+                                                            .profilePhoto ??
+                                                        '',
                                                     fit: BoxFit.contain,
                                                   ),
                                                 ),
@@ -113,10 +115,9 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
                                                         .withOpacity(0.8),
                                                     child: Center(
                                                       child: Text(
-                                                        state
-                                                            .localCompanies[
-                                                                index]
-                                                            .name,
+                                                        state.companies[index]
+                                                                .username ??
+                                                            '',
                                                         style: TextStyle(
                                                             fontSize: 18.sp,
                                                             color: Colors.white,
@@ -139,7 +140,7 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
                             }),
                       );
                     }
-                    return Container();
+                    return const SizedBox();
                   },
                 )),
           ),

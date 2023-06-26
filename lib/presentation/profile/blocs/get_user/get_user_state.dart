@@ -4,7 +4,7 @@ abstract class GetUserState extends Equatable {
   const GetUserState();
 
   @override
-  List<Object> get props => [];
+  List<UserInfo> get props => [];
 }
 
 class GetUserInitial extends GetUserState {}
@@ -16,7 +16,7 @@ class GetUserSuccess extends GetUserState {
 
   const GetUserSuccess({required this.userInfo});
   @override
-  List<Object> get props => [userInfo];
+  List<UserInfo> get props => [userInfo];
 }
 
 class GetUserFailure extends GetUserState {
@@ -30,7 +30,7 @@ class OnEditSuccess extends GetUserState {
 
   const OnEditSuccess(this.userInfo);
   @override
-  List<Object> get props => [userInfo];
+  List<UserInfo> get props => [userInfo];
 }
 
 class GetUserProductsSuccess extends GetUserState {

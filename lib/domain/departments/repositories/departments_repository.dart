@@ -33,7 +33,27 @@ abstract class DepartmentRepository {
 
   Future<Either<Failure, List<CategoryProducts>>> getAllProducts();
 
+  Future<Either<Failure, CategoryProducts>> getProductById({
+    required String productId,
+  });
+
   Future<Either<Failure, List<CategoryProducts>>> getUserProducts({
     required String username,
+  });
+
+  Future<Either<Failure, String>> deleteProduct({
+    required String productId,
+  });
+
+  Future<Either<Failure, String>> editProduct({
+    required String productId,
+    required String name,
+    required String description,
+    required File? image,
+    File? video,
+    required int price,
+    bool? guarantee,
+    String? address,
+    String? madeIn,
   });
 }

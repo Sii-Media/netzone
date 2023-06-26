@@ -33,7 +33,14 @@ abstract class DepartmentsRemoteDataSource {
   );
 
   Future<List<CategoryProductsModel>> getAllProducts();
+
+  Future<CategoryProductsModel> getProductById(
+    String productId,
+  );
+
   Future<List<CategoryProductsModel>> getUserProducts(String username);
+
+  Future<String> deleteProduct(String productId);
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -86,5 +93,17 @@ abstract class DepartmentsRemoteDataSourceImpl
   @GET('/departments/getUserProducts')
   Future<List<CategoryProductsModel>> getUserProducts(
     @Part() String username,
+  );
+
+  @override
+  @DELETE('/departments/delete-product/{productId}')
+  Future<String> deleteProduct(
+    @Path() String productId,
+  );
+
+  @override
+  @GET('/departments/getproduct/{productId}')
+  Future<CategoryProductsModel> getProductById(
+    @Path() String productId,
   );
 }

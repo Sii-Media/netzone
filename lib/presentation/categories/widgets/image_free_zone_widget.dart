@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../core/helpers/share_image_function.dart';
 
@@ -17,7 +18,7 @@ class ImageFreeZoneWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "صور المنطقة الحرة : ",
+            "${AppLocalizations.of(context).translate('freeZone_images')} : ",
             style: TextStyle(
               fontSize: 16.sp,
               color: AppColor.black,

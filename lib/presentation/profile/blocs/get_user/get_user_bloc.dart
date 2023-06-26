@@ -35,7 +35,8 @@ class GetUserBloc extends Bloc<GetUserEvent, GetUserState> {
       );
     });
     on<OnEditProfileEvent>((event, emit) async {
-      emit(GetUserSuccess(userInfo: event.userInfo));
+      state.props[0] = event.userInfo;
+      emit(GetUserSuccess(userInfo: state.props[0]));
     });
     on<GetUserProductsEvent>((event, emit) async {
       emit(GetUserProductsInProgress());

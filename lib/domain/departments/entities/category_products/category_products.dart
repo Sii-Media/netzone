@@ -1,11 +1,13 @@
 import 'package:equatable/equatable.dart';
 
+import '../departments_categories/departments_categories.dart';
+
 class CategoryProducts extends Equatable {
   final String id;
   final String owner;
   final String name;
   final String imageUrl;
-  final String category;
+  final DepartmentsCategories category;
   final String description;
   final int price;
   final List<String>? images;

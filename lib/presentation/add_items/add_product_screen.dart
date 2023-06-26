@@ -2,17 +2,19 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:netzoon/domain/departments/entities/departments_categories/departments_categories.dart';
 import 'package:netzoon/injection_container.dart';
-import 'package:netzoon/presentation/add_items/blocs/bloc/add_product_bloc.dart';
+import 'package:netzoon/presentation/add_items/blocs/add_product/add_product_bloc.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/home/blocs/elec_devices/elec_devices_bloc.dart';
+import 'package:netzoon/presentation/notifications/blocs/notifications/notifications_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -34,6 +36,10 @@ class _AddProductScreenState extends State<AddProductScreen>
     "منتجات غذائية",
     "عطور",
     'ساعات',
+    'حيوانات',
+    'آلات موسيقية',
+    'أجهزة رياضية',
+    'الزراعة',
   ];
   String selectedValue = 'الكترونيات';
 
@@ -67,6 +73,18 @@ class _AddProductScreenState extends State<AddProductScreen>
     });
   }
 
+  final ImagePicker imagePicker = ImagePicker();
+
+  List<XFile> imageFileList = [];
+
+  void selectImages() async {
+    final List<XFile> selectedImages = await imagePicker.pickMultiImage();
+    if (selectedImages.isNotEmpty) {
+      imageFileList.addAll(selectedImages);
+    }
+    setState(() {});
+  }
+
   late TextEditingController categoryName = TextEditingController();
   late TextEditingController productName = TextEditingController();
   late TextEditingController productImage = TextEditingController();
@@ -82,6 +100,8 @@ class _AddProductScreenState extends State<AddProductScreen>
   final catBloc = sl<ElecDevicesBloc>();
   List<String> item2 = [""];
   bool _isGuarantee = false;
+
+  final notifiBloc = sl<NotificationsBloc>();
   @override
   void initState() {
     catBloc.add(const GetElcDevicesEvent(department: 'الكترونيات'));
@@ -131,6 +151,14 @@ class _AddProductScreenState extends State<AddProductScreen>
                     ),
                     backgroundColor: Theme.of(context).colorScheme.secondary,
                   ));
+                  Navigator.of(context).pop();
+                  FirebaseMessaging.instance.getToken().then((value) {
+                    notifiBloc.add(SendNotificationEvent(
+                        fcmtoken: value ?? '',
+                        text: productName.text,
+                        category: 'products',
+                        itemId: state.product));
+                  });
                 }
               },
               child: BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
@@ -208,6 +236,7 @@ class _AddProductScreenState extends State<AddProductScreen>
                                   child: DropdownButton<String>(
                                     // Set the selected value
                                     value: selectedValue,
+                                    menuMaxHeight: 300.h,
                                     // Handle the value change
                                     onChanged: (String? newValue) {
                                       setState(
@@ -265,6 +294,7 @@ class _AddProductScreenState extends State<AddProductScreen>
                                     // Set the selected value
                                     value: selectCat,
                                     // // Handle the value change
+                                    menuMaxHeight: 300.h,
                                     onChanged:
                                         (DepartmentsCategories? newValue) {
                                       setState(() {
@@ -436,6 +466,62 @@ class _AddProductScreenState extends State<AddProductScreen>
                                   ),
                                 ),
                           SizedBox(
+                            height: 20.h,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'add product images',
+                                    style: TextStyle(
+                                      color: AppColor.backgroundColor,
+                                      fontSize: 15.sp,
+                                    ),
+                                  ),
+                                  Text(
+                                    'maximum images : 6',
+                                    style: TextStyle(
+                                      color: AppColor.secondGrey,
+                                      fontSize: 11.sp,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              addPhotoButton(
+                                  text: 'Selecte Images',
+                                  onPressed: () {
+                                    selectImages();
+                                  }),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 7.h,
+                          ),
+                          SizedBox(
+                            height: imageFileList.isNotEmpty ? 200.h : 10.h,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: imageFileList.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Image.file(
+                                    File(imageFileList[index].path),
+                                    fit: BoxFit.cover,
+                                    // height: 100,
+                                    // width: 100,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+
+                          SizedBox(
                             height: 10.h,
                           ),
                           addPhotoButton(
@@ -566,7 +652,7 @@ class _AddProductScreenState extends State<AddProductScreen>
                                     description: productDesc.text,
                                     price: int.parse(productPrice.text),
                                     guarantee: _isGuarantee,
-                                    // images: [],
+                                    productimages: imageFileList,
                                     madeIn: madeInController.text,
                                     address: productAddress.text,
                                     video: _video,

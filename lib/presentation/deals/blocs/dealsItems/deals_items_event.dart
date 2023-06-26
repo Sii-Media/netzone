@@ -38,3 +38,9 @@ class AddDealEvent extends DealsItemsEvent {
     required this.category,
   });
 }
+
+class GetDealByIdEvent extends DealsItemsEvent {
+  final String id;
+
+  const GetDealByIdEvent({required this.id});
+}

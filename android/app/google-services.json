@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "746173490441",
+    "project_id": "netzoon",
+    "storage_bucket": "netzoon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746173490441:android:a7c89d623178f56b3d5fd8",
+        "android_client_info": {
+          "package_name": "com.example.netzain"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746173490441-39bkbn2bo42v7qj0o0d00ded82h1bdre.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrctgYFB62Wt-YMwjma8z43sHtTm0O9cc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746173490441-39bkbn2bo42v7qj0o0d00ded82h1bdre.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

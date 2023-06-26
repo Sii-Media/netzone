@@ -4,11 +4,15 @@ import 'package:netzoon/data/models/news/news/news_model.dart';
 import 'package:netzoon/data/models/news/news_comment/news_comment_model.dart';
 import 'package:retrofit/http.dart';
 import '../../../../injection_container.dart';
+import '../../../models/news/news_info/news_info_model.dart';
 
 part 'news_remote_data_source.g.dart';
 
 abstract class NewsRemoteDataSourse {
   Future<NewsModel> getAllNews();
+
+  Future<NewsInfoModel> getNewsById(String id);
+
   Future<AddNewsModel> addNews(
     final String title,
     final String description,
@@ -80,5 +84,11 @@ abstract class NewsRemoteDataSourseImpl implements NewsRemoteDataSourse {
   Future<String> toggleOnLike(
     @Path() String newsId,
     @Part() String userId,
+  );
+
+  @override
+  @GET('/news/{id}')
+  Future<NewsInfoModel> getNewsById(
+    @Path() String id,
   );
 }

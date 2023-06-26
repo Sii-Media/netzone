@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,6 +13,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/news/blocs/add_news/add_news_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
+
+import '../notifications/blocs/notifications/notifications_bloc.dart';
 
 class AddNewScreen extends StatefulWidget {
   const AddNewScreen({super.key});
@@ -32,6 +35,8 @@ class _AddNewScreenState extends State<AddNewScreen>
   void initState() {
     super.initState();
   }
+
+  final notifiBloc = sl<NotificationsBloc>();
 
   @override
   Widget screen(BuildContext context) {
@@ -83,6 +88,14 @@ class _AddNewScreenState extends State<AddNewScreen>
                   ),
                   backgroundColor: Theme.of(context).colorScheme.secondary,
                 ));
+                Navigator.of(context).pop();
+                FirebaseMessaging.instance.getToken().then((value) {
+                  notifiBloc.add(SendNotificationEvent(
+                      fcmtoken: value ?? '',
+                      text: titleController.text,
+                      category: 'news',
+                      itemId: state.news));
+                });
               }
             },
             child: SingleChildScrollView(

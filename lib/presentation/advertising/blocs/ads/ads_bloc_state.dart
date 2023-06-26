@@ -22,3 +22,9 @@ class AdsBlocFailure extends AdsBlocState {
 
   const AdsBlocFailure({required this.message});
 }
+
+class GetAdsByIdSuccess extends AdsBlocState {
+  final Advertisement ads;
+
+  const GetAdsByIdSuccess({required this.ads});
+}

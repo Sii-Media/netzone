@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/advertisements/entities/advertisement.dart';
+import 'package:netzoon/domain/advertisements/usercases/get_ads_by_id_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_ads_by_type_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_advertisements_usecase.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
@@ -12,9 +13,11 @@ part 'ads_bloc_state.dart';
 class AdsBlocBloc extends Bloc<AdsBlocEvent, AdsBlocState> {
   final GetAdvertismentsUseCase getAdvertismentsUseCase;
   final GetAdsByTypeUseCase getAdsByTypeUseCase;
+  final GetAdsByIdUseCase getAdsByIdUseCase;
   AdsBlocBloc({
     required this.getAdvertismentsUseCase,
     required this.getAdsByTypeUseCase,
+    required this.getAdsByIdUseCase,
   }) : super(AdsBlocInitial()) {
     on<GetAllAdsEvent>(
       (event, emit) async {
@@ -38,6 +41,17 @@ class AdsBlocBloc extends Bloc<AdsBlocEvent, AdsBlocState> {
       emit(ads.fold(
           (failure) => AdsBlocFailure(message: mapFailureToString(failure)),
           (ads) => AdsBlocSuccess(ads: ads.advertisement)));
+    });
+    on<GetAdsByIdEvent>((event, emit) async {
+      emit(AdsBlocInProgress());
+      final ads = await getAdsByIdUseCase(event.id);
+
+      emit(
+        ads.fold(
+          (failure) => AdsBlocFailure(message: mapFailureToString(failure)),
+          (ads) => GetAdsByIdSuccess(ads: ads),
+        ),
+      );
     });
   }
 }

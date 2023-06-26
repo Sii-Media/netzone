@@ -5,8 +5,12 @@ import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/news/entities/news.dart';
 import 'package:netzoon/domain/news/entities/news_comment.dart';
 
+import '../entities/news_info.dart';
+
 abstract class NewsRepository {
   Future<Either<Failure, NewsBasic>> getAllNews();
+
+  Future<Either<Failure, News>> getNewsById({required String id});
 
   Future<Either<Failure, String>> addNews({
     required String title,
