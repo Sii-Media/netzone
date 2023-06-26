@@ -31,7 +31,7 @@ class SplashScreen extends StatelessWidget {
             showControlsOnInitialize: false,
             showControls: false),
       ),
-      backgroundColor: Color.fromARGB(255, 87, 121, 165),
+      backgroundColor: Color.fromARGB(255, 88, 120, 161),
       // splashTransition: SplashTransition.fadeTransition,
       animationDuration: const Duration(seconds: 3),
       splashIconSize: 800,
