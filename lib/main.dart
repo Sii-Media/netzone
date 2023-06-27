@@ -22,10 +22,11 @@ import 'injection_container.dart' as di;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  FirebaseMessaging.instance
-      .getToken()
-      // ignore: avoid_print
-      .then((value) => {print('getToken : $value')});
+  await FirebaseMessaging.instance.subscribeToTopic('Netzoon');
+  // FirebaseMessaging.instance
+  //     .getToken()
+  //     // ignore: avoid_print
+  //     .then((value) => {print('getToken : $value')});
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
     handleMessage(message);
   });

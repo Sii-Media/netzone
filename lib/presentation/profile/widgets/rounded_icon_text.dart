@@ -10,8 +10,9 @@ Widget roundedIconText(
     required IconData icon,
     Function()? onTap}) {
   return Container(
-    width: 70.w,
+    width: 85.w,
     child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         GestureDetector(
