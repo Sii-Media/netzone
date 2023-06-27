@@ -196,7 +196,7 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
               ));
               Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
                   CupertinoPageRoute(builder: (context) {
-                return const StartScreen();
+                return const TestScreen();
               }), (route) => false);
             }
           },
@@ -302,15 +302,15 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                           // label: 'Add',
                         ),
                         BottomNavigationBarItem(
-                            icon: BlocBuilder<AuthBloc, AuthState>(
-                          bloc: authBloc,
-                          builder: (context, state) {
-                            return GestureDetector(
-                              onLongPress: state is Authenticated
-                                  ? () {
-                                      getAccountsBloc
-                                          .add(GetUserAccountsEvent());
-                                      showModalBottomSheet(
+                          icon: BlocBuilder<AuthBloc, AuthState>(
+                            bloc: authBloc,
+                            builder: (context, state) {
+                              return GestureDetector(
+                                onLongPress: state is Authenticated
+                                    ? () {
+                                        getAccountsBloc
+                                            .add(GetUserAccountsEvent());
+                                        showModalBottomSheet(
                                           context: context,
                                           backgroundColor:
                                               AppColor.backgroundColor,
@@ -327,159 +327,64 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.only(
-                                                            top: 24.0,
-                                                            bottom: 4.0),
+                                                      top: 24.0,
+                                                      bottom: 4.0,
+                                                    ),
                                                     child: Container(
                                                       width: 75,
                                                       height: 7,
-                                                      decoration: const BoxDecoration(
-                                                          color:
-                                                              Color(0xFFC6E2DD),
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          5))),
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        color:
+                                                            Color(0xFFC6E2DD),
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                          Radius.circular(5),
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                   const SizedBox(
                                                     height: 6.0,
                                                   ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Expanded(
-                                                        child: BlocBuilder<
-                                                            AddAccountBloc,
-                                                            AddAccountState>(
-                                                      bloc: getAccountsBloc,
-                                                      builder: (context,
-                                                          accountstate) {
-                                                        if (accountstate
-                                                            is GetUserAccountsInProgress) {
-                                                          return const Center(
-                                                            child:
-                                                                CircularProgressIndicator(
-                                                              color: AppColor
-                                                                  .white,
-                                                            ),
-                                                          );
-                                                        } else if (accountstate
-                                                            is GetUserAccountsFailure) {
-                                                          final failure =
-                                                              accountstate
-                                                                  .message;
-                                                          return FailureWidget(
-                                                            failure: failure,
-                                                            onPressed: () {
-                                                              getAccountsBloc.add(
-                                                                  GetUserAccountsEvent());
-                                                            },
-                                                          );
-                                                        } else if (accountstate
-                                                            is GetUserAccountsSuccess) {
-                                                          return SingleChildScrollView(
-                                                            child: Column(
-                                                              children: [
-                                                                Row(
-                                                                  children: [
-                                                                    Container(
-                                                                      height:
-                                                                          40,
-                                                                      width: 40,
-                                                                      decoration: BoxDecoration(
-                                                                          color: AppColor.backgroundColor,
-                                                                          image: DecorationImage(
-                                                                              image: CachedNetworkImageProvider(
-                                                                                // ignore: unnecessary_type_check
-                                                                                state is Authenticated ? state.user.userInfo.profilePhoto! : 'https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg',
-                                                                              ),
-                                                                              fit: BoxFit.cover),
-                                                                          borderRadius: BorderRadius.circular(100)),
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width:
-                                                                          10.w,
-                                                                    ),
-                                                                    Text(
-                                                                      state.user.userInfo
-                                                                              .username ??
-                                                                          '',
-                                                                      style: const TextStyle(
-                                                                          color: AppColor
-                                                                              .white,
-                                                                          fontSize:
-                                                                              16,
-                                                                          fontWeight:
-                                                                              FontWeight.w500),
-                                                                    ),
-                                                                    const Spacer(),
-                                                                    Radio<int>(
-                                                                      value: 0,
-                                                                      groupValue:
-                                                                          0,
-                                                                      onChanged:
-                                                                          (int?
-                                                                              value) {
-                                                                        // Handle radio button selection
-                                                                      },
-                                                                      activeColor:
-                                                                          AppColor
-                                                                              .white,
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 20.h,
-                                                                ),
-                                                                ListView
-                                                                    .builder(
-                                                                  shrinkWrap:
-                                                                      true,
-                                                                  itemCount:
-                                                                      accountstate
-                                                                          .users
-                                                                          .length,
-                                                                  scrollDirection:
-                                                                      Axis.vertical,
-                                                                  itemBuilder:
-                                                                      (context,
-                                                                          index) {
-                                                                    return Padding(
-                                                                      padding: const EdgeInsets
-                                                                              .symmetric(
-                                                                          vertical:
-                                                                              4.0),
-                                                                      child: accountWidget(
-                                                                          accountstate: accountstate,
-                                                                          index: index,
-                                                                          onTap: () {
-                                                                            getAccountsBloc.add(OnChangeAccountEvent(
-                                                                                email: accountstate.users[index].email!,
-                                                                                password: accountstate.users[index].password!));
-                                                                          },
-                                                                          onChanged: (int? val) {
-                                                                            getAccountsBloc.add(OnChangeAccountEvent(
-                                                                                email: accountstate.users[index].email!,
-                                                                                password: accountstate.users[index].password!));
-                                                                          }),
-                                                                    );
-                                                                  },
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 20.h,
-                                                                ),
-                                                                GestureDetector(
-                                                                  onTap: () {
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .push(MaterialPageRoute(builder:
-                                                                            (context) {
-                                                                      return const AddAccountScreen();
-                                                                    }));
-                                                                  },
-                                                                  child: Row(
+                                                  Expanded(
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: BlocBuilder<
+                                                          AddAccountBloc,
+                                                          AddAccountState>(
+                                                        bloc: getAccountsBloc,
+                                                        builder: (context,
+                                                            accountstate) {
+                                                          if (accountstate
+                                                              is GetUserAccountsInProgress) {
+                                                            return const Center(
+                                                              child:
+                                                                  CircularProgressIndicator(
+                                                                color: AppColor
+                                                                    .white,
+                                                              ),
+                                                            );
+                                                          } else if (accountstate
+                                                              is GetUserAccountsFailure) {
+                                                            final failure =
+                                                                accountstate
+                                                                    .message;
+                                                            return FailureWidget(
+                                                              failure: failure,
+                                                              onPressed: () {
+                                                                getAccountsBloc.add(
+                                                                    GetUserAccountsEvent());
+                                                              },
+                                                            );
+                                                          } else if (accountstate
+                                                              is GetUserAccountsSuccess) {
+                                                            return SingleChildScrollView(
+                                                              child: Column(
+                                                                children: [
+                                                                  Row(
                                                                     children: [
                                                                       Container(
                                                                         height:
@@ -489,18 +394,19 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                                                         decoration:
                                                                             BoxDecoration(
                                                                           color:
-                                                                              AppColor.white,
+                                                                              AppColor.backgroundColor,
+                                                                          image:
+                                                                              DecorationImage(
+                                                                            image:
+                                                                                CachedNetworkImageProvider(
+                                                                              // ignore: unnecessary_type_check
+                                                                              state is Authenticated ? state.user.userInfo.profilePhoto! : 'https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg',
+                                                                            ),
+                                                                            fit:
+                                                                                BoxFit.cover,
+                                                                          ),
                                                                           borderRadius:
                                                                               BorderRadius.circular(100),
-                                                                        ),
-                                                                        child:
-                                                                            const Icon(
-                                                                          Icons
-                                                                              .add,
-                                                                          color:
-                                                                              AppColor.backgroundColor,
-                                                                          size:
-                                                                              30,
                                                                         ),
                                                                       ),
                                                                       SizedBox(
@@ -508,55 +414,183 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                                                             10.w,
                                                                       ),
                                                                       Text(
-                                                                        AppLocalizations.of(context)
-                                                                            .translate('add_account'),
-                                                                        style: const TextStyle(
-                                                                            color: AppColor
-                                                                                .white,
-                                                                            fontSize:
-                                                                                16,
-                                                                            fontWeight:
-                                                                                FontWeight.w500),
+                                                                        state.user.userInfo.username ??
+                                                                            '',
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              AppColor.white,
+                                                                          fontSize:
+                                                                              16,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                        ),
+                                                                      ),
+                                                                      const Spacer(),
+                                                                      Radio<
+                                                                          int>(
+                                                                        value:
+                                                                            0,
+                                                                        groupValue:
+                                                                            0,
+                                                                        onChanged:
+                                                                            (int?
+                                                                                value) {
+                                                                          // Handle radio button selection
+                                                                        },
+                                                                        activeColor:
+                                                                            AppColor.white,
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          );
-                                                        }
-                                                        return Container();
-                                                      },
-                                                    )),
+                                                                  SizedBox(
+                                                                    height:
+                                                                        20.h,
+                                                                  ),
+                                                                  ListView
+                                                                      .builder(
+                                                                    shrinkWrap:
+                                                                        true,
+                                                                    itemCount:
+                                                                        accountstate
+                                                                            .users
+                                                                            .length,
+                                                                    scrollDirection:
+                                                                        Axis.vertical,
+                                                                    itemBuilder:
+                                                                        (context,
+                                                                            index) {
+                                                                      return Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.symmetric(vertical: 4.0),
+                                                                        child:
+                                                                            accountWidget(
+                                                                          accountstate:
+                                                                              accountstate,
+                                                                          index:
+                                                                              index,
+                                                                          onTap:
+                                                                              () {
+                                                                            getAccountsBloc.add(
+                                                                              OnChangeAccountEvent(
+                                                                                email: accountstate.users[index].email!,
+                                                                                password: accountstate.users[index].password!,
+                                                                              ),
+                                                                            );
+                                                                          },
+                                                                          onChanged:
+                                                                              (int? val) {
+                                                                            getAccountsBloc.add(
+                                                                              OnChangeAccountEvent(
+                                                                                email: accountstate.users[index].email!,
+                                                                                password: accountstate.users[index].password!,
+                                                                              ),
+                                                                            );
+                                                                          },
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height:
+                                                                        20.h,
+                                                                  ),
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .push(
+                                                                        MaterialPageRoute(
+                                                                          builder:
+                                                                              (context) {
+                                                                            return const AddAccountScreen();
+                                                                          },
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Container(
+                                                                          height:
+                                                                              40,
+                                                                          width:
+                                                                              40,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color:
+                                                                                AppColor.white,
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(100),
+                                                                          ),
+                                                                          child:
+                                                                              const Icon(
+                                                                            Icons.add,
+                                                                            color:
+                                                                                AppColor.backgroundColor,
+                                                                            size:
+                                                                                30,
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              10.w,
+                                                                        ),
+                                                                        Text(
+                                                                          AppLocalizations.of(context)
+                                                                              .translate('add_account'),
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            color:
+                                                                                AppColor.white,
+                                                                            fontSize:
+                                                                                16,
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            );
+                                                          }
+                                                          return Container();
+                                                        },
+                                                      ),
+                                                    ),
                                                   ),
                                                 ],
                                               ),
                                             );
-                                          });
-                                    }
-                                  : () {},
-                              child: state is Authenticated
-                                  ? Container(
-                                      height: 32,
-                                      width: 32,
-                                      decoration: BoxDecoration(
+                                          },
+                                        );
+                                      }
+                                    : () {},
+                                child: state is Authenticated
+                                    ? Container(
+                                        height: 32,
+                                        width: 32,
+                                        decoration: BoxDecoration(
                                           color: AppColor.backgroundColor,
                                           image: DecorationImage(
-                                              image: CachedNetworkImageProvider(
-                                                state.user.userInfo
-                                                    .profilePhoto!,
-                                              ),
-                                              fit: BoxFit.cover),
+                                            image: CachedNetworkImageProvider(
+                                              state.user.userInfo.profilePhoto!,
+                                            ),
+                                            fit: BoxFit.cover,
+                                          ),
                                           borderRadius:
-                                              BorderRadius.circular(100)),
-                                    )
-                                  : const Icon(
-                                      CupertinoIcons.person_alt_circle),
-                            );
-                          },
-                        )
-                            // label: 'Profile',
-                            ),
+                                              BorderRadius.circular(100),
+                                        ),
+                                      )
+                                    : const Icon(
+                                        CupertinoIcons.person_alt_circle,
+                                      ),
+                              );
+                            },
+                          ),
+                          // label: 'Profile',
+                        ),
                         const BottomNavigationBarItem(
                           icon: Icon(CupertinoIcons.list_dash),
                           // label: 'More',
@@ -693,14 +727,15 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
-            'Really!!',
+          title: Text(
+            AppLocalizations.of(context).translate('Really!!'),
             style: TextStyle(
               color: AppColor.backgroundColor,
             ),
           ),
-          content: const Text(
-            'Do you want to close the app ?',
+          content: Text(
+            AppLocalizations.of(context)
+                .translate('Do you want to close the app ?'),
             style: TextStyle(
               color: AppColor.backgroundColor,
             ),
@@ -710,13 +745,13 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: const Text('No'),
+              child: Text(AppLocalizations.of(context).translate('No')),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
-              child: const Text('Yes'),
+              child: Text(AppLocalizations.of(context).translate('Yes')),
             ),
           ],
         );

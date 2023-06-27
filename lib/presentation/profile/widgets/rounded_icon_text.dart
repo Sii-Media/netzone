@@ -4,13 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/constant/colors.dart';
 import '../../utils/app_localizations.dart';
 
-Padding roundedIconText(
+Widget roundedIconText(
     {required BuildContext context,
     required String text,
     required IconData icon,
     Function()? onTap}) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 8),
+  return Container(
+    width: 70.w,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -42,7 +42,7 @@ Padding roundedIconText(
           AppLocalizations.of(context).translate(text),
           style: TextStyle(
               color: AppColor.backgroundColor,
-              fontSize: 11.sp,
+              fontSize: 8.sp,
               fontWeight: FontWeight.bold),
         ),
       ],

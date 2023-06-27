@@ -52,7 +52,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           'Choose the category you want to add to it'),
                       style: TextStyle(
                           color: AppColor.backgroundColor,
-                          fontSize: 20.sp,
+                          fontSize: 15.sp,
                           fontWeight: FontWeight.w400),
                     ),
                     SizedBox(

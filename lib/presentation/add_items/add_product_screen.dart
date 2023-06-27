@@ -482,7 +482,7 @@ class _AddProductScreenState extends State<AddProductScreen>
                                     ),
                                   ),
                                   Text(
-                                    'maximum images : 6',
+                                    '${AppLocalizations.of(context).translate('maximum images')} : 6',
                                     style: TextStyle(
                                       color: AppColor.secondGrey,
                                       fontSize: 11.sp,

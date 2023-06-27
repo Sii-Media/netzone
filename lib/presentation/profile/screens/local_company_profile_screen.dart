@@ -157,12 +157,14 @@ class _MyLocalCompanyProfileScreenState
                           unselectedLabelColor: AppColor.secondGrey,
                           // isScrollable: true,
 
-                          tabs: const [
+                          tabs: [
                             Tab(
-                              text: 'About',
+                              text: AppLocalizations.of(context)
+                                  .translate('about_us'),
                             ),
                             Tab(
-                              text: 'Products',
+                              text: AppLocalizations.of(context)
+                                  .translate('Products'),
                             ),
                           ],
                         ),

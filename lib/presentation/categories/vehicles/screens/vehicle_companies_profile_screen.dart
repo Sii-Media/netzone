@@ -157,7 +157,8 @@ class _VehicleCompaniesProfileScreenState
                     tabs: [
                       Tab(
                         icon: Text(
-                          AppLocalizations.of(context).translate('vehicles'),
+                          AppLocalizations.of(context)
+                              .translate(widget.vehiclesCompany.type),
                         ),
                       ),
                       Tab(

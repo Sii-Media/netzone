@@ -79,7 +79,8 @@ class _AddAccountScreenState extends State<AddAccountScreen>
                   children: [
                     Center(
                       child: Text(
-                        'Please enter the username and password of the account to be added',
+                        AppLocalizations.of(context)
+                            .translate('add_account_text'),
                         style: TextStyle(
                             color: AppColor.secondGrey, fontSize: 12.sp),
                       ),
@@ -87,8 +88,8 @@ class _AddAccountScreenState extends State<AddAccountScreen>
                     SizedBox(
                       height: 25.h,
                     ),
-                    const Text(
-                      'User name',
+                    Text(
+                      AppLocalizations.of(context).translate('username'),
                       style: TextStyle(color: AppColor.backgroundColor),
                     ),
                     TextFormField(
@@ -140,8 +141,8 @@ class _AddAccountScreenState extends State<AddAccountScreen>
                     SizedBox(
                       height: 20.h,
                     ),
-                    const Text(
-                      'Password',
+                    Text(
+                      AppLocalizations.of(context).translate('password'),
                       style: TextStyle(color: AppColor.backgroundColor),
                     ),
                     TextFormField(
@@ -209,9 +210,10 @@ class _AddAccountScreenState extends State<AddAccountScreen>
                             Size.fromWidth(200),
                           ),
                         ),
-                        child: const Center(
+                        child: Center(
                           child: Text(
-                            'add account',
+                            AppLocalizations.of(context)
+                                .translate('add account'),
                           ),
                         ),
                       ),
