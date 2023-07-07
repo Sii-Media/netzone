@@ -15,12 +15,16 @@ SizedBox customAppBar(BuildContext context) {
       children: [
         Container(
           width: 150.w,
-          height: 130.h,
-          padding: const EdgeInsets.only(left: 0, right: 5),
+          // height: 120.h,
+          padding: const EdgeInsets.only(
+            left: 0,
+            right: 5,
+            bottom: 2,
+          ),
           decoration: const BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.cover,
-              image: AssetImage("assets/images/logo.png"),
+              image: AssetImage("assets/images/netzoon-logo.png"),
             ),
           ),
         ),
@@ -79,7 +83,7 @@ SizedBox customAppBar(BuildContext context) {
             const Text(
               'AED',
               style: TextStyle(
-                color: AppColor.white,
+                color: AppColor.backgroundColor,
               ),
             ),
             SizedBox(
@@ -101,7 +105,7 @@ SizedBox customAppBar(BuildContext context) {
               },
               child: const Icon(
                 Icons.notifications,
-                color: AppColor.white,
+                color: AppColor.backgroundColor,
               ),
             ),
             SizedBox(
@@ -117,7 +121,7 @@ SizedBox customAppBar(BuildContext context) {
               },
               child: const Icon(
                 Icons.search,
-                color: AppColor.white,
+                color: AppColor.backgroundColor,
               ),
             ),
             SizedBox(

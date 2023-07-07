@@ -2,6 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_user_by_id_use_case.dart';
+import 'package:netzoon/domain/departments/usecases/add_to_selected_products_use_case.dart';
+import 'package:netzoon/domain/departments/usecases/delete_from_selected_products_use_case.dart';
+import 'package:netzoon/domain/departments/usecases/get_selected_products_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_user_products_use_case.dart';
 
 import '../../../../domain/auth/entities/user.dart';
@@ -17,10 +20,16 @@ class GetUserBloc extends Bloc<GetUserEvent, GetUserState> {
   final GetUserByIdUseCase getUserByIdUseCase;
   final GetUserProductsUseCase getUserProductsUseCase;
   final GetSignedInUserUseCase getSignedInUserUseCase;
+  final GetSelectedProductsUseCase getSelectedProductsUseCase;
+  final AddToSelectedProductsUseCase addToSelectedProductsUseCase;
+  final DeleteFromSelectedProductsUseCase deleteFromSelectedProductsUseCase;
   GetUserBloc({
     required this.getUserByIdUseCase,
     required this.getUserProductsUseCase,
     required this.getSignedInUserUseCase,
+    required this.getSelectedProductsUseCase,
+    required this.addToSelectedProductsUseCase,
+    required this.deleteFromSelectedProductsUseCase,
   }) : super(GetUserInitial()) {
     on<GetUserByIdEvent>((event, emit) async {
       emit(GetUserInProgress());
@@ -45,14 +54,78 @@ class GetUserBloc extends Bloc<GetUserEvent, GetUserState> {
       late User user;
       result.fold((l) => null, (r) => user = r!);
 
-      final products =
-          await getUserProductsUseCase(user.userInfo.username ?? '');
+      final products = await getUserProductsUseCase(user.userInfo.id);
 
       emit(
         products.fold(
           (failure) =>
               GetUserProductsFailure(message: mapFailureToString(failure)),
           (products) => GetUserProductsSuccess(products: products),
+        ),
+      );
+    });
+    on<GetUserProductsByIdEvent>((event, emit) async {
+      emit(GetUserProductsInProgress());
+
+      final products = await getUserProductsUseCase(event.id);
+
+      emit(
+        products.fold(
+          (failure) =>
+              GetUserProductsFailure(message: mapFailureToString(failure)),
+          (products) => GetUserProductsSuccess(products: products),
+        ),
+      );
+    });
+    on<GetSelectedProductsEvent>((event, emit) async {
+      emit(GetSelectedProductsInProgress());
+
+      final result = await getSignedInUserUseCase.call(NoParams());
+      late User user;
+      result.fold((l) => null, (r) => user = r!);
+      final products = await getSelectedProductsUseCase(user.userInfo.id);
+
+      emit(
+        products.fold(
+          (failure) =>
+              GetSelectedProductsFailure(message: mapFailureToString(failure)),
+          (products) => GetSelectedProductsSuccess(products: products),
+        ),
+      );
+    });
+    on<AddToSelectedProductsEvent>((event, emit) async {
+      emit(AddToSelectedProductsInProgress());
+      final result = await getSignedInUserUseCase.call(NoParams());
+      late User user;
+      result.fold((l) => null, (r) => user = r!);
+
+      final products = await addToSelectedProductsUseCase(
+          AddToSelectedProductsParams(
+              userId: user.userInfo.id, productIds: event.productIds));
+      emit(
+        products.fold(
+          (failure) => AddToSelectedProductsFailure(
+              message: mapFailureToString(failure)),
+          (message) => AddToSelectedProductsSuccess(message: message),
+        ),
+      );
+    });
+    on<DeleteFromSelectedProductsEvent>((event, emit) async {
+      emit(DeleteFromSelectedProductsInProgress());
+
+      final result = await getSignedInUserUseCase.call(NoParams());
+      late User user;
+      result.fold((l) => null, (r) => user = r!);
+
+      final products = await deleteFromSelectedProductsUseCase(
+          DeleteFromSelectedProductsParams(
+              userId: user.userInfo.id, productId: event.productId));
+
+      emit(
+        products.fold(
+          (failure) => DeleteFromSelectedProductsFailure(
+              message: mapFailureToString(failure)),
+          (message) => DeleteFromSelectedProductsSuccess(message: message),
         ),
       );
     });

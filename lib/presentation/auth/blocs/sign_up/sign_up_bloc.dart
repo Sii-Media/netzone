@@ -22,9 +22,15 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
           userType: event.userType,
           firstMobile: event.firstMobile,
           isFreeZoon: event.isFreeZoon,
+          deliverable: event.deliverable,
           profilePhoto: event.profilePhoto,
           coverPhoto: event.coverPhoto,
           banerPhoto: event.banerPhoto,
+          frontIdPhoto: event.frontIdPhoto,
+          backIdPhoto: event.backIdPhoto,
+          bio: event.bio,
+          description: event.description,
+          website: event.website,
         ));
 
         emit(failureOrUser.fold(

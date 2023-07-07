@@ -34,8 +34,20 @@ class _NotificatiionScreenState extends State<NotificatiionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColor.backgroundColor,
-        title: Text(AppLocalizations.of(context).translate('notifications')),
+        backgroundColor: AppColor.white,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: const Icon(
+            Icons.arrow_back_rounded,
+            color: AppColor.backgroundColor,
+          ),
+        ),
+        title: Text(
+          AppLocalizations.of(context).translate('notifications'),
+          style: const TextStyle(color: AppColor.backgroundColor),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

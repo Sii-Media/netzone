@@ -26,12 +26,10 @@ import 'package:netzoon/presentation/home/widgets/images_slider.dart';
 import 'package:netzoon/presentation/home/widgets/list_of_categories.dart';
 import 'package:netzoon/presentation/home/widgets/list_of_items.dart';
 import 'package:netzoon/presentation/home/widgets/slider_news_widget.dart';
-import 'package:netzoon/presentation/home/widgets/tender_widget.dart';
 import 'package:netzoon/presentation/home/widgets/title_and_button.dart';
 import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
 import 'package:netzoon/presentation/news/news_screen.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersItem/tenders_item_bloc.dart';
-import 'package:netzoon/presentation/tenders/tender_categories_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../chat/screens/chat_home_screen.dart';

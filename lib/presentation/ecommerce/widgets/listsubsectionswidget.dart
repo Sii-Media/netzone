@@ -32,58 +32,88 @@ class ListSubSectionsWidget extends StatelessWidget {
       child: Card(
         child: Padding(
           padding: EdgeInsets.all(size.height * 0.002),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: Stack(
             children: [
-              CachedNetworkImage(
-                imageUrl: deviceList.imageUrl,
-                height: 120.h,
-                width: MediaQuery.of(context).size.width,
-                fit: BoxFit.contain,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              SizedBox(
-                height: 30.h,
-                child: Text(
-                  deviceList.name,
-                  style: TextStyle(
-                      color: AppColor.black,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 5.0, horizontal: 4.0),
-                child: SizedBox(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '${deviceList.price} : ${AppLocalizations.of(context).translate('price')}',
-                        style: const TextStyle(
-                          color: AppColor.backgroundColor,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          await shareImageWithDescription(
-                              imageUrl: deviceList.imageUrl,
-                              description: deviceList.name);
-                        },
-                        child: const Icon(
-                          Icons.share,
-                          color: AppColor.backgroundColor,
-                        ),
-                      ),
-                    ],
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CachedNetworkImage(
+                    imageUrl: deviceList.imageUrl,
+                    height: 120.h,
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.contain,
                   ),
-                ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                    child: Text(
+                      deviceList.name,
+                      style: TextStyle(
+                        color: AppColor.black,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 5.0, horizontal: 4.0),
+                    child: SizedBox(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '${deviceList.price} : ${AppLocalizations.of(context).translate('price')}',
+                            style: const TextStyle(
+                              color: AppColor.backgroundColor,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              await shareImageWithDescription(
+                                imageUrl: deviceList.imageUrl,
+                                description: deviceList.name,
+                              );
+                            },
+                            child: const Icon(
+                              Icons.share,
+                              color: AppColor.backgroundColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
+              deviceList.condition != null
+                  ? Positioned(
+                      top: 3,
+                      right: 0,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 4, horizontal: 8),
+                        decoration: BoxDecoration(
+                          color: deviceList.condition == 'new'
+                              ? Colors.green
+                              : Colors.blue,
+                          borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(8)),
+                        ),
+                        child: Text(
+                          deviceList.condition == 'new' ? 'New' : 'Used',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
             ],
           ),
         ),

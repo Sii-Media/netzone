@@ -96,6 +96,7 @@ class _AddProductScreenState extends State<AddProductScreen>
 
   late TextEditingController productProps = TextEditingController();
 
+  String? _selectedCondition;
   final AddProductBloc addBloc = sl<AddProductBloc>();
   final catBloc = sl<ElecDevicesBloc>();
   List<String> item2 = [""];
@@ -357,6 +358,63 @@ class _AddProductScreenState extends State<AddProductScreen>
                           SizedBox(
                             height: 7.h,
                           ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${AppLocalizations.of(context).translate('condition')} :',
+                                style: TextStyle(
+                                  color: AppColor.backgroundColor,
+                                  fontSize: 15.sp,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 40.w,
+                              ),
+                              Row(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Radio(
+                                        value: 'new',
+                                        groupValue: _selectedCondition,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _selectedCondition = value ?? '';
+                                          });
+                                        },
+                                        activeColor: AppColor.backgroundColor,
+                                      ),
+                                      Text(AppLocalizations.of(context)
+                                          .translate('new'))
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width: 20.w,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Radio(
+                                        value: 'used',
+                                        groupValue: _selectedCondition,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _selectedCondition = value ?? "";
+                                          });
+                                        },
+                                        activeColor: AppColor.backgroundColor,
+                                      ),
+                                      Text(AppLocalizations.of(context)
+                                          .translate('Used')),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 7.h,
+                          ),
                           addProductTextField(
                             context: context,
                             title:
@@ -475,7 +533,8 @@ class _AddProductScreenState extends State<AddProductScreen>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'add product images',
+                                    AppLocalizations.of(context)
+                                        .translate('add product images'),
                                     style: TextStyle(
                                       color: AppColor.backgroundColor,
                                       fontSize: 15.sp,
@@ -649,6 +708,7 @@ class _AddProductScreenState extends State<AddProductScreen>
                                     departmentName: selectedValue,
                                     categoryName: selectCat?.name ?? '',
                                     name: productName.text,
+                                    condition: _selectedCondition,
                                     description: productDesc.text,
                                     price: int.parse(productPrice.text),
                                     guarantee: _isGuarantee,

@@ -35,12 +35,20 @@ class TitleAndButton extends StatelessWidget {
             child: Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  border: Border.all(color: AppColor.backgroundColor)),
+                border: Border.all(color: AppColor.white),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColor.backgroundColor.withOpacity(0.8),
+                    // spreadRadius: 2,
+                    blurRadius: 1,
+                    // offset: const Offset(0, 1),
+                  ),
+                ],
+              ),
               child: Text(
                 AppLocalizations.of(context).translate('show_all'),
                 textAlign: TextAlign.center,
-                style:
-                    TextStyle(color: AppColor.backgroundColor, fontSize: 13.sp),
+                style: TextStyle(color: AppColor.white, fontSize: 13.sp),
               ),
             ),
           ),

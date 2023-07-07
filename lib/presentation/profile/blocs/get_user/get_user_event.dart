@@ -20,3 +20,23 @@ class OnEditProfileEvent extends GetUserEvent {
 }
 
 class GetUserProductsEvent extends GetUserEvent {}
+
+class GetUserProductsByIdEvent extends GetUserEvent {
+  final String id;
+
+  const GetUserProductsByIdEvent({required this.id});
+}
+
+class GetSelectedProductsEvent extends GetUserEvent {}
+
+class AddToSelectedProductsEvent extends GetUserEvent {
+  final List<String> productIds;
+
+  const AddToSelectedProductsEvent({required this.productIds});
+}
+
+class DeleteFromSelectedProductsEvent extends GetUserEvent {
+  final String productId;
+
+  const DeleteFromSelectedProductsEvent({required this.productId});
+}

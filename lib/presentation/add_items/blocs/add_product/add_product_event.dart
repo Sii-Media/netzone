@@ -11,6 +11,7 @@ class AddProductRequestedEvent extends AddProductEvent {
   final String departmentName;
   final String categoryName;
   final String name;
+  final String? condition;
   final String description;
   final int price;
   final List<XFile>? productimages;
@@ -25,6 +26,7 @@ class AddProductRequestedEvent extends AddProductEvent {
     required this.departmentName,
     required this.categoryName,
     required this.name,
+    this.condition,
     required this.description,
     required this.price,
     this.productimages,

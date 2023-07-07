@@ -37,8 +37,22 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
   Widget screen(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColor.backgroundColor,
-          title: const Text('Change Password'),
+          backgroundColor: AppColor.white,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: const Icon(
+              Icons.arrow_back_rounded,
+              color: AppColor.backgroundColor,
+            ),
+          ),
+          title: const Text(
+            'Change Password',
+            style: TextStyle(
+              color: AppColor.backgroundColor,
+            ),
+          ),
         ),
         body: BlocListener<ChangePasswordBloc, ChangePasswordState>(
           bloc: passwordBloc,

@@ -10,6 +10,7 @@ import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/data/categories.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../users/screens/users_list_screen.dart';
 import '../vehicles/screens/vehicles_companies_screen.dart';
 
 class ListGridView extends StatelessWidget {
@@ -162,6 +163,14 @@ class GridCategory extends StatelessWidget {
             //     },
             //   ),
             // );
+          } else if (category.name == 'users') {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return const UsersListScreen();
+                },
+              ),
+            );
           }
         },
         child: Stack(

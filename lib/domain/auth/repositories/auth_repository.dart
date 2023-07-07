@@ -14,9 +14,15 @@ abstract class AuthRepository {
     required String userType,
     required String firstMobile,
     required bool isFreeZoon,
+    bool? deliverable,
     File? profilePhoto,
     File? coverPhoto,
     File? banerPhoto,
+    File? frontIdPhoto,
+    File? backIdPhoto,
+    String? bio,
+    String? description,
+    String? website,
   });
 
   Future<Either<Failure, User>> signIn({

@@ -6,6 +6,8 @@ import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/legal_advice/blocs/legal_advice/legal_advice_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../core/widgets/custom_appbar.dart';
+
 class LegalAdviceScreen extends StatefulWidget {
   const LegalAdviceScreen({super.key});
 
@@ -24,8 +26,6 @@ class _LegalAdviceScreenState extends State<LegalAdviceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController search = TextEditingController();
-
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SizedBox(
@@ -37,8 +37,20 @@ class _LegalAdviceScreenState extends State<LegalAdviceScreen> {
               left: 0,
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.30,
-                decoration:
-                    const BoxDecoration(color: AppColor.backgroundColor),
+                decoration: BoxDecoration(
+                  color: AppColor.white,
+                  border: Border(
+                    bottom: BorderSide(
+                        width: 1, color: AppColor.mainGrey.withOpacity(0.1)),
+                  ),
+                  boxShadow: const [
+                    BoxShadow(
+                        color: Colors.grey,
+                        spreadRadius: 3,
+                        blurRadius: 10,
+                        offset: Offset(0, 3)),
+                  ],
+                ),
               ),
             ),
             Container(
@@ -50,50 +62,51 @@ class _LegalAdviceScreenState extends State<LegalAdviceScreen> {
                 ),
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.18,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 135.w,
-                    height: 130.h,
-                    padding: const EdgeInsets.only(left: 0, right: 5),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage("assets/images/logo.png"),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 5.0, bottom: 5.0),
-                      child: TextFormField(
-                        style: const TextStyle(color: Colors.black),
-                        controller: search,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: AppColor.white,
-                          prefixIcon: InkWell(
-                              child: const Icon(Icons.search), onTap: () {}),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30)),
-                          hintText: AppLocalizations.of(context)
-                              .translate('search in netzoon'),
-                          alignLabelWithHint: true,
-                          hintStyle: TextStyle(
-                            fontSize: 8.sp,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 0, horizontal: 30),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            customAppBar(context),
+            // SizedBox(
+            //   height: MediaQuery.of(context).size.height * 0.18,
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Container(
+            //         width: 135.w,
+            //         height: 130.h,
+            //         padding: const EdgeInsets.only(left: 0, right: 5),
+            //         decoration: const BoxDecoration(
+            //           image: DecorationImage(
+            //             fit: BoxFit.cover,
+            //             image: AssetImage("assets/images/logo.png"),
+            //           ),
+            //         ),
+            //       ),
+            //       Expanded(
+            //         child: Padding(
+            //           padding: const EdgeInsets.only(right: 5.0, bottom: 5.0),
+            //           child: TextFormField(
+            //             style: const TextStyle(color: Colors.black),
+            //             controller: search,
+            //             decoration: InputDecoration(
+            //               filled: true,
+            //               fillColor: AppColor.white,
+            //               prefixIcon: InkWell(
+            //                   child: const Icon(Icons.search), onTap: () {}),
+            //               border: OutlineInputBorder(
+            //                   borderRadius: BorderRadius.circular(30)),
+            //               hintText: AppLocalizations.of(context)
+            //                   .translate('search in netzoon'),
+            //               alignLabelWithHint: true,
+            //               hintStyle: TextStyle(
+            //                 fontSize: 8.sp,
+            //               ),
+            //               contentPadding: const EdgeInsets.symmetric(
+            //                   vertical: 0, horizontal: 30),
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             Positioned(
               left: 0,
               right: 0,
@@ -101,7 +114,8 @@ class _LegalAdviceScreenState extends State<LegalAdviceScreen> {
               child: Center(
                 child: Text(
                   AppLocalizations.of(context).translate('legal_advices'),
-                  style: TextStyle(fontSize: 22.sp, color: Colors.white),
+                  style: TextStyle(
+                      fontSize: 22.sp, color: AppColor.backgroundColor),
                 ),
               ),
             ),

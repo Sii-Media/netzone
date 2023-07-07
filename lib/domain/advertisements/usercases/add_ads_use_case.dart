@@ -4,6 +4,7 @@ import 'package:netzoon/domain/advertisements/repositories/advertisment_reposito
 import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:dartz/dartz.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
+import 'package:share_plus/share_plus.dart';
 
 class AddAdvertisementUseCase extends UseCase<String, AddAdvertisementParams> {
   final AdvertismentRepository advertismentRepository;
@@ -12,6 +13,7 @@ class AddAdvertisementUseCase extends UseCase<String, AddAdvertisementParams> {
   @override
   Future<Either<Failure, String>> call(AddAdvertisementParams params) {
     return advertismentRepository.addAdvertisement(
+      owner: params.owner,
       advertisingTitle: params.advertisingTitle,
       advertisingStartDate: params.advertisingStartDate,
       advertisingEndDate: params.advertisingEndDate,
@@ -23,11 +25,15 @@ class AddAdvertisementUseCase extends UseCase<String, AddAdvertisementParams> {
       advertisingLocation: params.advertisingLocation,
       advertisingPrice: params.advertisingPrice,
       advertisingType: params.advertisingType,
+      advertisingImageList: params.advertisingImageList,
+      video: params.video,
+      purchasable: params.purchasable,
     );
   }
 }
 
 class AddAdvertisementParams {
+  final String owner;
   final String advertisingTitle;
   final String advertisingStartDate;
   final String advertisingEndDate;
@@ -39,8 +45,12 @@ class AddAdvertisementParams {
   final String advertisingLocation;
   final double advertisingPrice;
   final String advertisingType;
+  final List<XFile>? advertisingImageList;
+  final File? video;
+  final bool purchasable;
 
   AddAdvertisementParams({
+    required this.owner,
     required this.advertisingTitle,
     required this.advertisingStartDate,
     required this.advertisingEndDate,
@@ -52,5 +62,8 @@ class AddAdvertisementParams {
     required this.advertisingLocation,
     required this.advertisingPrice,
     required this.advertisingType,
+    this.advertisingImageList,
+    this.video,
+    required this.purchasable,
   });
 }

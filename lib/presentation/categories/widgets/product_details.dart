@@ -40,7 +40,7 @@ class ProductDetailsScreen extends StatelessWidget {
                     }),
               ),
               const SizedBox(
-                height: 80,
+                height: 60,
               ),
             ],
           ),

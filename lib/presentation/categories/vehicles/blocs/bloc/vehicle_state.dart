@@ -24,7 +24,7 @@ class VehicleFailure extends VehicleState {
 }
 
 class VehiclesCompaniesSuccess extends VehicleState {
-  final List<VehiclesCompanies> vehiclesCompanies;
+  final List<UserInfo> vehiclesCompanies;
 
   const VehiclesCompaniesSuccess({required this.vehiclesCompanies});
 }

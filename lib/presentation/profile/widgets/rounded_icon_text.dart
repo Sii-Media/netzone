@@ -9,7 +9,7 @@ Widget roundedIconText(
     required String text,
     required IconData icon,
     Function()? onTap}) {
-  return Container(
+  return SizedBox(
     width: 85.w,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,

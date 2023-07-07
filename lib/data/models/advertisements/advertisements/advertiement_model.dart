@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:netzoon/data/models/auth/user_info/user_info_model.dart';
 import 'package:netzoon/domain/advertisements/entities/advertisement.dart';
 
 part 'advertiement_model.g.dart';
@@ -7,6 +8,7 @@ part 'advertiement_model.g.dart';
 class AdvertisemenetModel {
   @JsonKey(name: '_id')
   final String id;
+  final UserInfoModel owner;
   final String advertisingTitle;
   final String advertisingStartDate;
   final String advertisingEndDate;
@@ -21,9 +23,11 @@ class AdvertisemenetModel {
   final List<String>? advertisingImageList;
   final String? advertisingVedio;
   final String advertisingType;
+  final bool purchasable;
 
   AdvertisemenetModel({
     required this.id,
+    required this.owner,
     required this.advertisingTitle,
     required this.advertisingStartDate,
     required this.advertisingEndDate,
@@ -38,6 +42,7 @@ class AdvertisemenetModel {
     this.advertisingImageList,
     this.advertisingVedio,
     required this.advertisingType,
+    required this.purchasable,
   });
 
   factory AdvertisemenetModel.fromJson(Map<String, dynamic> json) =>
@@ -49,6 +54,7 @@ class AdvertisemenetModel {
 extension MapToDomain on AdvertisemenetModel {
   Advertisement toDomain() => Advertisement(
         id: id,
+        owner: owner.toDomain(),
         name: advertisingTitle,
         advertisingStartDate: advertisingStartDate,
         advertisingEndDate: advertisingEndDate,
@@ -63,5 +69,6 @@ extension MapToDomain on AdvertisemenetModel {
         advertisingImageList: advertisingImageList,
         advertisingVedio: advertisingVedio,
         advertisingType: advertisingType,
+        purchasable: purchasable,
       );
 }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/departments/entities/departments_categories/departments_categories.dart';
@@ -14,21 +15,72 @@ class ListCategoriesEcommerce extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        margin: const EdgeInsets.only(bottom: 2),
-        child: ListView.builder(
+        margin: const EdgeInsets.only(bottom: 80),
+        child: GridView.builder(
+          padding: const EdgeInsets.all(16.0),
           shrinkWrap: true,
           physics: const BouncingScrollPhysics(),
           itemCount: items.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1.2,
+            crossAxisSpacing: 16.0,
+            mainAxisSpacing: 16.0,
+          ),
           itemBuilder: (context, index) {
-            return SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                  child:
-                      CategoriesEcommerce(item: items[index], filter: filter),
+            return GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) {
+                    return SubSectionsScreen(
+                      filter: filter,
+                      category: items[index].name,
+                    );
+                  }),
+                );
+              },
+              child: Card(
+                elevation: 4.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(16.0),
+                      child: CachedNetworkImage(
+                        imageUrl: items[index].imageUrl,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.0),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.transparent,
+                            AppColor.backgroundColor.withOpacity(0.6),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Text(
+                        AppLocalizations.of(context)
+                            .translate(items[index].name),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14.0.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             );
@@ -39,6 +91,31 @@ class ListCategoriesEcommerce extends StatelessWidget {
   }
 }
 
+/* ListView.builder(
+          shrinkWrap: true,
+          physics: const BouncingScrollPhysics(),
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 5,
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20)),
+                      child: CategoriesEcommerce(
+                          item: items[index], filter: filter),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),*/
 class CategoriesEcommerce extends StatelessWidget {
   const CategoriesEcommerce(
       {super.key, required this.item, required this.filter});

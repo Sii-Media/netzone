@@ -1,13 +1,15 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../auth/entities/user_info.dart';
 import '../departments_categories/departments_categories.dart';
 
 class CategoryProducts extends Equatable {
   final String id;
-  final String owner;
+  final UserInfo owner;
   final String name;
   final String imageUrl;
   final DepartmentsCategories category;
+  final String? condition;
   final String description;
   final int price;
   final List<String>? images;
@@ -26,6 +28,7 @@ class CategoryProducts extends Equatable {
     required this.name,
     required this.imageUrl,
     required this.category,
+    this.condition,
     required this.description,
     required this.price,
     this.images,
@@ -45,6 +48,7 @@ class CategoryProducts extends Equatable {
         name,
         imageUrl,
         category,
+        condition,
         description,
         price,
         images,

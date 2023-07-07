@@ -40,8 +40,22 @@ class _RefundScreenState extends State<RefundScreen>
   Widget screen(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColor.backgroundColor,
-        title: Text(AppLocalizations.of(context).translate('refund_request')),
+        backgroundColor: AppColor.white,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: const Icon(
+            Icons.arrow_back_rounded,
+            color: AppColor.backgroundColor,
+          ),
+        ),
+        title: Text(
+          AppLocalizations.of(context).translate('refund_request'),
+          style: const TextStyle(
+            color: AppColor.backgroundColor,
+          ),
+        ),
       ),
       body: Form(
         key: _formKey,

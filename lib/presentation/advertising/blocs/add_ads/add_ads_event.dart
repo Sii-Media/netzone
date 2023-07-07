@@ -19,6 +19,9 @@ class AddAdsRequestedEvent extends AddAdsEvent {
   final String advertisingLocation;
   final double advertisingPrice;
   final String advertisingType;
+  final List<XFile>? advertisingImageList;
+  final File? video;
+  final bool purchasable;
 
   const AddAdsRequestedEvent({
     required this.advertisingTitle,
@@ -32,5 +35,8 @@ class AddAdsRequestedEvent extends AddAdsEvent {
     required this.advertisingLocation,
     required this.advertisingPrice,
     required this.advertisingType,
+    this.advertisingImageList,
+    this.video,
+    required this.purchasable,
   });
 }

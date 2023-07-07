@@ -21,7 +21,6 @@ import '../cart/cart_screen.dart';
 import '../core/widgets/on_failure_widget.dart';
 import '../more/more_screen.dart';
 import '../profile/screens/add_account_screen.dart';
-import '../start_screen.dart';
 import '../utils/app_localizations.dart';
 
 class TestScreen extends StatefulWidget {
@@ -210,10 +209,16 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                   child: CupertinoTabScaffold(
                     controller: tabController,
                     tabBar: CupertinoTabBar(
-                      backgroundColor: AppColor.backgroundColor,
-                      activeColor: AppColor.white,
-                      inactiveColor: AppColor.white.withOpacity(0.5),
+                      backgroundColor: AppColor.white,
+                      activeColor: AppColor.backgroundColor,
+                      inactiveColor: AppColor.backgroundColor.withOpacity(0.9),
                       height: 60,
+                      border: Border(
+                        top: BorderSide(
+                          width: 1,
+                          color: AppColor.mainGrey.withOpacity(0.1),
+                        ),
+                      ),
                       items: [
                         const BottomNavigationBarItem(
                           icon: Icon(CupertinoIcons.home),
@@ -234,7 +239,7 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                   child: Container(
                                     padding: const EdgeInsets.all(2.0),
                                     decoration: const BoxDecoration(
-                                      color: AppColor.white,
+                                      color: AppColor.backgroundColor,
                                       shape: BoxShape.circle,
                                     ),
                                     constraints: const BoxConstraints(
@@ -245,7 +250,7 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                         ? Text(
                                             state.totalQuantity.toString(),
                                             style: const TextStyle(
-                                              color: AppColor.backgroundColor,
+                                              color: AppColor.white,
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -275,10 +280,10 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: AppColor
-                                  .backgroundColor, // Set the outer circle color to blue
+                                  .white, // Set the outer circle color to blue
                               border: Border.all(
-                                color: Colors
-                                    .white, // Set the outer circle border color to white
+                                color: AppColor
+                                    .backgroundColor, // Set the outer circle border color to white
                                 width: 2.0, // Set the outer circle border width
                               ),
                             ),
@@ -290,11 +295,11 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: AppColor
-                                      .white, // Set the outer circle color to blue
+                                      .backgroundColor, // Set the outer circle color to blue
                                 ),
                                 child: const Icon(
                                   Icons.add,
-                                  color: AppColor.backgroundColor,
+                                  color: AppColor.white,
                                 ),
                               ),
                             ),

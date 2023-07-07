@@ -30,8 +30,20 @@ class _CommentsPageState extends State<CommentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColor.backgroundColor,
-        title: Text(AppLocalizations.of(context).translate('comments')),
+        backgroundColor: AppColor.white,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: const Icon(
+            Icons.arrow_back_rounded,
+            color: AppColor.backgroundColor,
+          ),
+        ),
+        title: Text(
+          AppLocalizations.of(context).translate('comments'),
+          style: const TextStyle(color: AppColor.backgroundColor),
+        ),
       ),
       body: RefreshIndicator(
         onRefresh: () async {

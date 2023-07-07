@@ -10,8 +10,20 @@ class OrdersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColor.backgroundColor,
-        title: const Text('Orders'),
+        backgroundColor: AppColor.white,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: const Icon(
+            Icons.arrow_back_rounded,
+            color: AppColor.backgroundColor,
+          ),
+        ),
+        title: const Text(
+          'Orders',
+          style: TextStyle(color: AppColor.backgroundColor),
+        ),
       ),
       body: Center(
         child: Column(

@@ -1,7 +1,17 @@
 import 'package:netzoon/domain/advertisements/entities/advertisement.dart';
+import 'package:netzoon/domain/auth/entities/user_info.dart';
 
 List<Advertisement> advertisments = [
-  const Advertisement(
+  Advertisement(
+    owner: UserInfo(
+        username: 'username',
+        email: 'email',
+        password: 'password',
+        userType: 'userType',
+        firstMobile: 'firstMobile',
+        isFreeZoon: true,
+        id: 'id'),
+    purchasable: true,
     id: '',
     name: 'نيسان للبيع في إمارة عجمان',
     advertisingStartDate: '16/03/2023',
@@ -16,7 +26,7 @@ List<Advertisement> advertisments = [
     advertisingViews: 22,
     advertisingPrice: '50000',
     advertisingYear: '2023',
-    advertisingImageList: [
+    advertisingImageList: const [
       'https://images.unsplash.com/photo-1581540222194-0def2dda95b8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8bmlzc2FufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
       'https://images.unsplash.com/photo-1551817280-6d59c77ce1b8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bmlzc2FufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
       'https://images.unsplash.com/photo-1584920735791-be9a8eba8baa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fG5pc3NhbnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
@@ -24,8 +34,17 @@ List<Advertisement> advertisments = [
     advertisingVedio: 'LM0F4LHUWJE',
     advertisingType: '',
   ),
-  const Advertisement(
+  Advertisement(
     id: '',
+    owner: UserInfo(
+        username: 'username',
+        email: 'email',
+        password: 'password',
+        userType: 'userType',
+        firstMobile: 'firstMobile',
+        isFreeZoon: true,
+        id: 'id'),
+    purchasable: true,
     name: 'أرض للبيع في دبي ',
     advertisingStartDate: '16/03/2023',
     advertisingEndDate: '31/03/2023',
@@ -37,14 +56,23 @@ List<Advertisement> advertisments = [
     advertisingViews: 22,
     advertisingYear: '2023',
     advertisingPrice: '50000',
-    advertisingImageList: [
+    advertisingImageList: const [
       'https://www.elitejo.com/sites/default/files/sa_23.jpg',
     ],
     advertisingVedio: '',
     advertisingType: '',
   ),
-  const Advertisement(
+  Advertisement(
     id: '',
+    owner: UserInfo(
+        username: 'username',
+        email: 'email',
+        password: 'password',
+        userType: 'userType',
+        firstMobile: 'firstMobile',
+        isFreeZoon: true,
+        id: 'id'),
+    purchasable: true,
     name: 'نيسان للبيع في إمارة عجمان',
     advertisingStartDate: '16/03/2023',
     advertisingEndDate: '31/03/2023',
@@ -57,14 +85,23 @@ List<Advertisement> advertisments = [
     advertisingViews: 22,
     advertisingYear: '2023',
     advertisingPrice: '50000',
-    advertisingImageList: [
+    advertisingImageList: const [
       'https://images.unsplash.com/photo-1581540222194-0def2dda95b8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8bmlzc2FufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
     ],
     advertisingVedio: 'LM0F4LHUWJE',
     advertisingType: '',
   ),
-  const Advertisement(
+  Advertisement(
     id: '',
+    owner: UserInfo(
+        username: 'username',
+        email: 'email',
+        password: 'password',
+        userType: 'userType',
+        firstMobile: 'firstMobile',
+        isFreeZoon: true,
+        id: 'id'),
+    purchasable: true,
     name: 'نيسان للبيع في إمارة عجمان',
     advertisingStartDate: '16/03/2023',
     advertisingEndDate: '31/03/2023',
@@ -77,7 +114,7 @@ List<Advertisement> advertisments = [
     advertisingViews: 22,
     advertisingYear: '2023',
     advertisingPrice: '50000',
-    advertisingImageList: [
+    advertisingImageList: const [
       'https://images.unsplash.com/photo-1581540222194-0def2dda95b8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8bmlzc2FufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
     ],
     advertisingVedio: 'LM0F4LHUWJE',

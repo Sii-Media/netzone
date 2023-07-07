@@ -90,7 +90,7 @@ class _AddAccountScreenState extends State<AddAccountScreen>
                     ),
                     Text(
                       AppLocalizations.of(context).translate('username'),
-                      style: TextStyle(color: AppColor.backgroundColor),
+                      style: const TextStyle(color: AppColor.backgroundColor),
                     ),
                     TextFormField(
                       key: usernameFormFieldKey,
@@ -143,7 +143,7 @@ class _AddAccountScreenState extends State<AddAccountScreen>
                     ),
                     Text(
                       AppLocalizations.of(context).translate('password'),
-                      style: TextStyle(color: AppColor.backgroundColor),
+                      style: const TextStyle(color: AppColor.backgroundColor),
                     ),
                     TextFormField(
                       key: passwordFormFieldKey,

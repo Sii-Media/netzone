@@ -13,7 +13,7 @@ class AppColor {
   static const Color red = Colors.red;
 
   // static const Color backgroundColor = Color(0xFF5776a5);
-
+/*Color.fromARGB(255, 16, 24, 39);*/
   //
   // static const Color grey = Color(0xff8e8e8e);
   // static const Color black = Color(0xff000000);

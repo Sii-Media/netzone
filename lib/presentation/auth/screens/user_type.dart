@@ -19,7 +19,7 @@ class _UserTypeState extends State<UserType> {
     final List<String> items = [
       'الشركات المحلية',
       'السيارات',
-      'السفن',
+      'الشركات البحرية',
       'المستهلك',
       'منطقة حرة',
       'المصانع',

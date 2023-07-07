@@ -9,6 +9,7 @@ import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../categories/governmental/govermental_category_screen.dart';
+import '../../categories/users/screens/users_list_screen.dart';
 import '../../categories/vehicles/screens/vehicles_companies_screen.dart';
 
 class ListOfCategories extends StatelessWidget {
@@ -99,6 +100,14 @@ class ListOfCategories extends StatelessWidget {
                             },
                           ),
                         );
+                      } else if (categories[index].name == 'users') {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const UsersListScreen();
+                            },
+                          ),
+                        );
                       }
                     },
                     child: Container(
@@ -130,7 +139,7 @@ class ListOfCategories extends StatelessWidget {
                             left: 0,
                             right: 0,
                             child: Container(
-                              height: 35.h,
+                              height: 36.h,
                               color: AppColor.backgroundColor.withOpacity(0.8),
                               alignment: Alignment.center,
                               child: Text(
@@ -138,7 +147,7 @@ class ListOfCategories extends StatelessWidget {
                                 AppLocalizations.of(context)
                                     .translate(categories[index].name),
                                 style: TextStyle(
-                                    fontSize: 10.sp,
+                                    fontSize: 8.sp,
                                     color: Colors.white,
                                     fontWeight: FontWeight.w800),
                               ),

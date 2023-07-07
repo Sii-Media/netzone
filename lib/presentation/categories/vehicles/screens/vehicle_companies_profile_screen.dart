@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/categories/vehicles/blocs/bloc/vehicle_bloc.dart';
 
-import '../../../../domain/categories/entities/vehicles/vehicles_companies.dart';
+import '../../../../domain/auth/entities/user_info.dart';
 import '../../../../injection_container.dart';
 import '../../../core/constant/colors.dart';
 import '../../../core/widgets/vehicle_details.dart';
@@ -13,7 +13,7 @@ import '../../../utils/app_localizations.dart';
 class VehicleCompaniesProfileScreen extends StatefulWidget {
   const VehicleCompaniesProfileScreen(
       {super.key, required this.vehiclesCompany});
-  final VehiclesCompanies vehiclesCompany;
+  final UserInfo vehiclesCompany;
   @override
   State<VehicleCompaniesProfileScreen> createState() =>
       _VehicleCompaniesProfileScreenState();
@@ -26,7 +26,8 @@ class _VehicleCompaniesProfileScreenState
   @override
   void initState() {
     bloc.add(GetCompanyVehiclesEvent(
-        type: widget.vehiclesCompany.type, id: widget.vehiclesCompany.id));
+        type: widget.vehiclesCompany.userType ?? '',
+        id: widget.vehiclesCompany.id));
     super.initState();
   }
 
@@ -34,8 +35,20 @@ class _VehicleCompaniesProfileScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.vehiclesCompany.name),
-        backgroundColor: AppColor.backgroundColor,
+        title: Text(
+          widget.vehiclesCompany.username ?? '',
+          style: const TextStyle(color: AppColor.backgroundColor),
+        ),
+        backgroundColor: AppColor.white,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: const Icon(
+            Icons.arrow_back_rounded,
+            color: AppColor.backgroundColor,
+          ),
+        ),
       ),
       body: DefaultTabController(
         length: 2,
@@ -60,7 +73,7 @@ class _VehicleCompaniesProfileScreenState
                             ),
                           ),
                           child: CachedNetworkImage(
-                            imageUrl: widget.vehiclesCompany.coverUrl ??
+                            imageUrl: widget.vehiclesCompany.coverPhoto ??
                                 'https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000',
                             fit: BoxFit.contain,
                           ),
@@ -82,7 +95,9 @@ class _VehicleCompaniesProfileScreenState
                                     borderRadius: BorderRadius.circular(100),
                                   ),
                                   child: CachedNetworkImage(
-                                    imageUrl: widget.vehiclesCompany.imgUrl,
+                                    imageUrl:
+                                        widget.vehiclesCompany.profilePhoto ??
+                                            '',
                                     width: 100,
                                     height: 100,
                                     fit: BoxFit.fill,
@@ -96,7 +111,7 @@ class _VehicleCompaniesProfileScreenState
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    widget.vehiclesCompany.name,
+                                    widget.vehiclesCompany.username ?? '',
                                     style: TextStyle(
                                       color: AppColor.black,
                                       fontWeight: FontWeight.w600,
@@ -132,7 +147,7 @@ class _VehicleCompaniesProfileScreenState
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Text(
-                            widget.vehiclesCompany.bio,
+                            widget.vehiclesCompany.bio ?? '',
                             style: const TextStyle(color: AppColor.mainGrey),
                           ),
                         ),
@@ -158,7 +173,7 @@ class _VehicleCompaniesProfileScreenState
                       Tab(
                         icon: Text(
                           AppLocalizations.of(context)
-                              .translate(widget.vehiclesCompany.type),
+                              .translate(widget.vehiclesCompany.userType ?? ''),
                         ),
                       ),
                       Tab(
@@ -174,7 +189,7 @@ class _VehicleCompaniesProfileScreenState
                       RefreshIndicator(
                         onRefresh: () async {
                           bloc.add(GetCompanyVehiclesEvent(
-                              type: widget.vehiclesCompany.type,
+                              type: widget.vehiclesCompany.userType ?? '',
                               id: widget.vehiclesCompany.id));
                         },
                         color: AppColor.white,
@@ -318,27 +333,29 @@ class _VehicleCompaniesProfileScreenState
                               titleAndInput(
                                   title: AppLocalizations.of(context)
                                       .translate('company_name'),
-                                  input: widget.vehiclesCompany.name),
+                                  input: widget.vehiclesCompany.username ?? ''),
                               titleAndInput(
                                   title: AppLocalizations.of(context)
                                       .translate('desc'),
-                                  input: widget.vehiclesCompany.description),
+                                  input:
+                                      widget.vehiclesCompany.description ?? ''),
                               titleAndInput(
                                   title: AppLocalizations.of(context)
                                       .translate('Bio'),
-                                  input: widget.vehiclesCompany.bio),
+                                  input: widget.vehiclesCompany.bio ?? ''),
                               titleAndInput(
                                   title: AppLocalizations.of(context)
                                       .translate('mobile'),
-                                  input: widget.vehiclesCompany.mobile),
+                                  input: widget.vehiclesCompany.firstMobile ??
+                                      ';'),
                               titleAndInput(
                                   title: AppLocalizations.of(context)
                                       .translate('email'),
-                                  input: widget.vehiclesCompany.mail),
+                                  input: widget.vehiclesCompany.email ?? ''),
                               titleAndInput(
                                   title: AppLocalizations.of(context)
                                       .translate('website'),
-                                  input: widget.vehiclesCompany.website),
+                                  input: widget.vehiclesCompany.website ?? ''),
                             ],
                           ),
                         ],

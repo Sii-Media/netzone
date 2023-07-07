@@ -10,11 +10,12 @@ CategoryProductsModel _$CategoryProductsModelFromJson(
         Map<String, dynamic> json) =>
     CategoryProductsModel(
       id: json['_id'] as String,
-      owner: json['owner'] as String,
+      owner: UserInfoModel.fromJson(json['owner'] as Map<String, dynamic>),
       name: json['name'] as String,
       imageUrl: json['imageUrl'] as String,
       category: DepartmentsCategoryModel.fromJson(
           json['category'] as Map<String, dynamic>),
+      condition: json['condition'] as String?,
       description: json['description'] as String,
       price: json['price'] as int,
       images:
@@ -36,6 +37,7 @@ Map<String, dynamic> _$CategoryProductsModelToJson(
       'name': instance.name,
       'imageUrl': instance.imageUrl,
       'category': instance.category,
+      'condition': instance.condition,
       'description': instance.description,
       'price': instance.price,
       'images': instance.images,

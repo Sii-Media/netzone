@@ -9,6 +9,7 @@ part of 'advertiement_model.dart';
 AdvertisemenetModel _$AdvertisemenetModelFromJson(Map<String, dynamic> json) =>
     AdvertisemenetModel(
       id: json['_id'] as String,
+      owner: UserInfoModel.fromJson(json['owner'] as Map<String, dynamic>),
       advertisingTitle: json['advertisingTitle'] as String,
       advertisingStartDate: json['advertisingStartDate'] as String,
       advertisingEndDate: json['advertisingEndDate'] as String,
@@ -26,12 +27,14 @@ AdvertisemenetModel _$AdvertisemenetModelFromJson(Map<String, dynamic> json) =>
           .toList(),
       advertisingVedio: json['advertisingVedio'] as String?,
       advertisingType: json['advertisingType'] as String,
+      purchasable: json['purchasable'] as bool,
     );
 
 Map<String, dynamic> _$AdvertisemenetModelToJson(
         AdvertisemenetModel instance) =>
     <String, dynamic>{
       '_id': instance.id,
+      'owner': instance.owner,
       'advertisingTitle': instance.advertisingTitle,
       'advertisingStartDate': instance.advertisingStartDate,
       'advertisingEndDate': instance.advertisingEndDate,
@@ -46,4 +49,5 @@ Map<String, dynamic> _$AdvertisemenetModelToJson(
       'advertisingImageList': instance.advertisingImageList,
       'advertisingVedio': instance.advertisingVedio,
       'advertisingType': instance.advertisingType,
+      'purchasable': instance.purchasable,
     };

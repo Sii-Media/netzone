@@ -67,6 +67,7 @@ dependencies:
   firebase_messaging: ^14.6.3
   flutter_local_notifications: ^14.1.1
   lottie: ^2.3.2
+  geocoding: ^2.1.0
 
 dev_dependencies:
   flutter_test:

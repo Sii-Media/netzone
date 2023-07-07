@@ -40,19 +40,18 @@ class BackgroundAuthWidget extends StatelessWidget {
               left: 0,
               child: Container(
                 height: MediaQuery.of(context).size.height * n,
-                decoration:
-                    const BoxDecoration(color: AppColor.backgroundColor),
+                decoration: const BoxDecoration(color: AppColor.white),
               ),
             ),
-            Container(
-              height: MediaQuery.of(context).size.height,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/00.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+            // Container(
+            //   height: MediaQuery.of(context).size.height,
+            //   decoration: const BoxDecoration(
+            //     image: DecorationImage(
+            //       image: AssetImage("assets/images/00.png"),
+            //       fit: BoxFit.cover,
+            //     ),
+            //   ),
+            // ),
             SizedBox(
               height: MediaQuery.of(context).size.height * topLogo,
               child: Row(
@@ -66,7 +65,7 @@ class BackgroundAuthWidget extends StatelessWidget {
                     decoration: const BoxDecoration(
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage("assets/images/logo.png"),
+                        image: AssetImage("assets/images/netzoon-logo.png"),
                       ),
                     ),
                   ),
@@ -83,7 +82,8 @@ class BackgroundAuthWidget extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 40.0).r,
                   child: Text(
                     title,
-                    style: TextStyle(fontSize: 25.sp, color: Colors.white),
+                    style: TextStyle(
+                        fontSize: 25.sp, color: AppColor.backgroundColor),
                   ),
                 ),
               ),
@@ -101,14 +101,15 @@ class BackgroundAuthWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Icon(
-                          color: Colors.white,
+                          color: AppColor.backgroundColor,
                           Icons.arrow_back,
                           size: 20.h,
                           weight: 20.w,
                         ),
                         Text(
                           AppLocalizations.of(context).translate('back'),
-                          style: const TextStyle(color: Colors.white),
+                          style:
+                              const TextStyle(color: AppColor.backgroundColor),
                           textAlign: TextAlign.center,
                         )
                       ],

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +14,7 @@ import 'package:netzoon/presentation/core/widgets/add_photo_button.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../notifications/blocs/notifications/notifications_bloc.dart';
 import '../utils/app_localizations.dart';
@@ -56,10 +58,23 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
     'شركات',
   ];
   String selectedValue = 'مناطق حرة';
+  File? _video;
+  String videoName = '';
+
+  List<XFile> imageFileList = [];
+
+  final ImagePicker imagePicker = ImagePicker();
+  void selectImages() async {
+    final List<XFile> selectedImages = await imagePicker.pickMultiImage();
+    if (selectedImages.isNotEmpty) {
+      imageFileList.addAll(selectedImages);
+    }
+    setState(() {});
+  }
 
   final addAdsbloc = sl<AddAdsBloc>();
   final notifiBloc = sl<NotificationsBloc>();
-
+  bool _purchasable = false;
   @override
   Widget screen(BuildContext context) {
     return Scaffold(
@@ -409,6 +424,139 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                       SizedBox(
                         height: 10.h,
                       ),
+                      CheckboxListTile(
+                        title: Text(
+                          AppLocalizations.of(context)
+                              .translate('is_purchasable'),
+                          style: TextStyle(
+                            color: AppColor.backgroundColor,
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                        activeColor: AppColor.backgroundColor,
+                        value: _purchasable,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _purchasable = value ?? false;
+                          });
+                        },
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)
+                                    .translate('add product images'),
+                                style: TextStyle(
+                                  color: AppColor.backgroundColor,
+                                  fontSize: 15.sp,
+                                ),
+                              ),
+                              Text(
+                                '${AppLocalizations.of(context).translate('maximum images')} : 6',
+                                style: TextStyle(
+                                  color: AppColor.secondGrey,
+                                  fontSize: 11.sp,
+                                ),
+                              ),
+                            ],
+                          ),
+                          addPhotoButton(
+                              context: context,
+                              text: 'Selecte Images',
+                              onPressed: () {
+                                selectImages();
+                              }),
+                        ],
+                      ),
+                      SizedBox(
+                        height: imageFileList.isNotEmpty ? 200.h : 10.h,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: imageFileList.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Card(
+                                child: SizedBox(
+                                  height: 200.h,
+                                  width:
+                                      MediaQuery.of(context).size.width.w - 85,
+                                  child: Image.file(
+                                    File(imageFileList[index].path),
+                                    fit: BoxFit.contain,
+                                    // height: 100,
+                                    // width: 100,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(250.0).w,
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: <Color>[
+                                  Colors.greenAccent.withOpacity(0.9),
+                                  AppColor.backgroundColor
+                                ],
+                              ),
+                            ),
+                            child: RawMaterialButton(
+                              onPressed: () async {
+                                final result =
+                                    await FilePicker.platform.pickFiles(
+                                  type: FileType.custom,
+                                  allowedExtensions: ['mp4'],
+                                );
+
+                                if (result == null) return;
+                                //Open Single File
+                                final file = result.files.first;
+                                // openFile(file);
+                                setState(() {
+                                  videoName = file.name;
+                                });
+                                final newFile = await saveFilePermanently(file);
+
+                                setState(() {
+                                  _video = newFile;
+                                });
+                              },
+                              child: const Text(
+                                'pick video',
+                                style: TextStyle(color: AppColor.white),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            videoName,
+                            style: const TextStyle(
+                              color: AppColor.backgroundColor,
+                            ),
+                          ),
+                        ],
+                      ),
                       Center(
                         child: addPhotoButton(
                             context: context,
@@ -455,6 +603,9 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                                 advertisingPrice:
                                     double.tryParse(priceController.text) ?? 0,
                                 advertisingType: selectedValue,
+                                advertisingImageList: imageFileList,
+                                video: _video,
+                                purchasable: _purchasable,
                               ));
                             }),
                       ),
@@ -468,6 +619,12 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
             )),
       ),
     );
+  }
+
+  Future<File> saveFilePermanently(PlatformFile file) async {
+    final appStorage = await getApplicationDocumentsDirectory();
+    final newFile = File('${appStorage.path}/${file.name}');
+    return File(file.path!).copy(newFile.path);
   }
 
   Column addAdsFormFeild(

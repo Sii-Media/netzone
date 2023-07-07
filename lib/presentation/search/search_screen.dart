@@ -48,12 +48,19 @@ class _SearchPageState extends State<SearchPage> {
     filteredItems = [];
   }
 
-  void filterItems() {
+  void filterItems(String cat) {
     setState(() {
-      filteredItems = items
-          .where((item) =>
-              item.name.toLowerCase().contains(searchText.toLowerCase()))
-          .toList();
+      if (cat == 'local_companies') {
+        filteredItems = items
+            .where((item) =>
+                item.username.toLowerCase().contains(searchText.toLowerCase()))
+            .toList();
+      } else {
+        filteredItems = items
+            .where((item) =>
+                item.name.toLowerCase().contains(searchText.toLowerCase()))
+            .toList();
+      }
     });
   }
 
@@ -65,16 +72,29 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColor.backgroundColor,
-        title: const Text('Search Page'),
+        backgroundColor: AppColor.white,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Icon(
+            Icons.arrow_back_rounded,
+            color: AppColor.backgroundColor,
+          ),
+        ),
+        title: Text(
+          AppLocalizations.of(context).translate('Search Page'),
+          style: TextStyle(color: AppColor.backgroundColor),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            const Text(
-              'Choose what you want to search for',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)
+                  .translate('Choose what you want to search for'),
+              style: const TextStyle(
                 color: AppColor.backgroundColor,
               ),
             ),
@@ -107,7 +127,8 @@ class _SearchPageState extends State<SearchPage> {
                           if (cat == 'Products') {
                             productBloc.add(GetAllProductsEvent());
                           } else if (cat == 'local_companies') {
-                            localCompanyBloc.add(GetAllLocalCompaniesEvent());
+                            localCompanyBloc.add(GetLocalCompaniesEvent(
+                                userType: 'local_company'));
                           } else if (cat == 'advertiments') {
                             adsBloc.add(GetAllAdsEvent());
                           } else if (cat == 'cars') {
@@ -192,8 +213,10 @@ class _SearchPageState extends State<SearchPage> {
                   borderRadius: BorderRadius.circular(18.0),
                 )),
               ),
-              onPressed: filterItems,
-              child: const Text('Search'),
+              onPressed: () {
+                filterItems(selectedCategory);
+              },
+              child: Text(AppLocalizations.of(context).translate('Search')),
             ),
             const SizedBox(height: 16.0),
             Expanded(
@@ -250,7 +273,9 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                       child: ListTile(
                         title: Text(
-                          filteredItems[index].name,
+                          selectedCategory == 'local_companies'
+                              ? filteredItems[index].username
+                              : filteredItems[index].name,
                           style: TextStyle(
                               color: AppColor.backgroundColor,
                               fontSize: 17.sp,
@@ -469,8 +494,8 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
           );
-        } else if (state is LocalCompanySuccess) {
-          items = state.localCompanies;
+        } else if (state is GetLocalCompaniesSuccess) {
+          items = state.companies;
           return TypeAheadField(
             textFieldConfiguration: TextFieldConfiguration(
               controller: controller,
@@ -484,17 +509,17 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
             suggestionsCallback: (pattern) {
-              return state.localCompanies.where((item) =>
-                  item.name.toLowerCase().contains(pattern.toLowerCase()));
+              return state.companies.where((item) =>
+                  item.username!.toLowerCase().contains(pattern.toLowerCase()));
             },
             itemBuilder: (context, suggestion) {
               return ListTile(
-                title: Text(suggestion.name),
+                title: Text(suggestion.username ?? ''),
               );
             },
             onSuggestionSelected: (suggestion) {
               setState(() {
-                searchText = suggestion.name;
+                searchText = suggestion.username ?? '';
               });
               controller.text = searchText;
               controller.selection = TextSelection.fromPosition(

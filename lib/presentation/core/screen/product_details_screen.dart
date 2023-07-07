@@ -149,12 +149,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                       productId: widget.item));
                                 });
                           } else if (state is GetProductByIdSuccess) {
-                            _videoPlayerController =
-                                VideoPlayerController.network('')
-                                  ..initialize().then((_) {
-                                    // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-                                    setState(() {});
-                                  });
+                            _videoPlayerController = VideoPlayerController
+                                .network(state.product.vedioUrl ?? '')
+                              ..initialize().then((_) {
+                                // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+                                setState(() {});
+                              });
                             _chewieController = ChewieController(
                               videoPlayerController: _videoPlayerController,
                               aspectRatio: 16 / 9,
@@ -301,7 +301,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                               .user
                                                               .userInfo
                                                               .username ==
-                                                          state.product.owner) {
+                                                          state.product.owner
+                                                              .username) {
                                                         return Row(
                                                           children: [
                                                             IconButton(
@@ -382,7 +383,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                         titleAndInput(
                                           title: AppLocalizations.of(context)
                                               .translate('owner'),
-                                          input: state.product.owner,
+                                          input: state.product.owner.username ??
+                                              '',
                                         ),
                                         SizedBox(
                                           height: 7.h,
@@ -408,6 +410,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                         // SizedBox(
                                         //   height: 7.h,
                                         // ),
+                                        state.product.condition != null
+                                            ? titleAndInput(
+                                                title:
+                                                    AppLocalizations.of(context)
+                                                        .translate('condition'),
+                                                input:
+                                                    state.product.condition ??
+                                                        '',
+                                              )
+                                            : const SizedBox(),
+                                        SizedBox(
+                                          height: 7.h,
+                                        ),
                                         titleAndInput(
                                           title: AppLocalizations.of(context)
                                               .translate('guarantee'),
@@ -669,7 +684,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                 bloc: authBloc,
                 builder: (context, authState) {
                   if (authState is Authenticated &&
-                      authState.user.userInfo.username == state.product.owner) {
+                      authState.user.userInfo.username ==
+                          state.product.owner.username) {
                     return const SizedBox();
                   }
                   return BottomAppBar(

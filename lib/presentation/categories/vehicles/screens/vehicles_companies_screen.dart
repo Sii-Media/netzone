@@ -97,8 +97,10 @@ class _VehiclesCompaniesScreenState extends State<VehiclesCompaniesScreen> {
                                               bottom: 0,
                                               child: CachedNetworkImage(
                                                 imageUrl: state
-                                                    .vehiclesCompanies[index]
-                                                    .imgUrl,
+                                                        .vehiclesCompanies[
+                                                            index]
+                                                        .profilePhoto ??
+                                                    '',
                                                 fit: BoxFit.fill,
                                               ),
                                             ),
@@ -116,7 +118,8 @@ class _VehiclesCompaniesScreenState extends State<VehiclesCompaniesScreen> {
                                                     .withOpacity(0.8),
                                                 child: Text(
                                                   state.vehiclesCompanies[index]
-                                                      .name,
+                                                          .username ??
+                                                      '',
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 20.sp),

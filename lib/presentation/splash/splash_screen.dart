@@ -1,8 +1,6 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/start_screen.dart';
 import 'package:video_player/video_player.dart';
 
@@ -31,7 +29,7 @@ class SplashScreen extends StatelessWidget {
             showControlsOnInitialize: false,
             showControls: false),
       ),
-      backgroundColor: Color.fromARGB(255, 88, 120, 161),
+      backgroundColor: const Color.fromARGB(255, 88, 120, 161),
       // splashTransition: SplashTransition.fadeTransition,
       animationDuration: const Duration(seconds: 3),
       splashIconSize: 800,

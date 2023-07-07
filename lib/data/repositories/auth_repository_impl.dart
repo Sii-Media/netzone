@@ -32,52 +32,137 @@ class AuthRepositoryImpl implements AuthRepository {
     required String userType,
     required String firstMobile,
     required bool isFreeZoon,
+    bool? deliverable,
     File? profilePhoto,
     File? coverPhoto,
     File? banerPhoto,
+    File? frontIdPhoto,
+    File? backIdPhoto,
+    String? bio,
+    String? description,
+    String? website,
   }) async {
     try {
       if (await networkInfo.isConnected) {
-        FormData formData;
-        // final user = await authRemoteDataSource.signUp(
-        //     username, email, password, userType, firstMobile, isFreeZoon);
-        // SharedPreferences preferences = await SharedPreferences.getInstance();
-        // await preferences.setBool('IsLoggedIn', true);
+        // FormData formData;
+        // // final user = await authRemoteDataSource.signUp(
+        // //     username, email, password, userType, firstMobile, isFreeZoon);
+        // // SharedPreferences preferences = await SharedPreferences.getInstance();
+        // // await preferences.setBool('IsLoggedIn', true);
         Dio dio = Dio();
-        if (profilePhoto != null && coverPhoto != null && banerPhoto != null) {
-          formData = FormData.fromMap({
-            'username': username,
-            'email': email,
-            'password': password,
-            'userType': userType,
-            'firstMobile': firstMobile,
-            'isFreeZoon': isFreeZoon,
-            'profilePhoto': await MultipartFile.fromFile(profilePhoto.path,
-                filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
-            'coverPhoto': await MultipartFile.fromFile(coverPhoto.path,
-                filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
-            'bannerPhoto': await MultipartFile.fromFile(banerPhoto.path,
-                filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
-          });
-        } else if (profilePhoto != null &&
-            coverPhoto != null &&
-            banerPhoto == null) {
-          formData = FormData.fromMap({
-            'username': username,
-            'email': email,
-            'password': password,
-            'userType': userType,
-            'firstMobile': firstMobile,
-            'isFreeZoon': isFreeZoon,
-            'profilePhoto': await MultipartFile.fromFile(profilePhoto.path,
-                filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
-            'coverPhoto': await MultipartFile.fromFile(coverPhoto.path,
-                filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
-          });
-        } else {
-          return Left(ServerFailure());
+        // if (profilePhoto != null && coverPhoto != null && banerPhoto != null) {
+        //   formData = FormData.fromMap({
+        //     'username': username,
+        //     'email': email,
+        //     'password': password,
+        //     'userType': userType,
+        //     'firstMobile': firstMobile,
+        //     'isFreeZoon': isFreeZoon,
+        //     'profilePhoto': await MultipartFile.fromFile(profilePhoto.path,
+        //         filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
+        //     'coverPhoto': await MultipartFile.fromFile(coverPhoto.path,
+        //         filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
+        //     'bannerPhoto': await MultipartFile.fromFile(banerPhoto.path,
+        //         filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
+        //     'frontIdPhoto': await MultipartFile.fromFile(
+        //         frontIdPhoto?.path ?? '',
+        //         filename: 'image.jpg',
+        //         contentType: MediaType('image', 'jpeg')),
+        //     'backIdPhoto': await MultipartFile.fromFile(backIdPhoto?.path ?? '',
+        //         filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
+        //   });
+        // } else if (profilePhoto != null &&
+        //     coverPhoto != null &&
+        //     banerPhoto == null) {
+        //   formData = FormData.fromMap({
+        //     'username': username,
+        //     'email': email,
+        //     'password': password,
+        //     'userType': userType,
+        //     'firstMobile': firstMobile,
+        //     'isFreeZoon': isFreeZoon,
+        //     'profilePhoto': await MultipartFile.fromFile(profilePhoto.path,
+        //         filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
+        //     'coverPhoto': await MultipartFile.fromFile(coverPhoto.path,
+        //         filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
+        //     'frontIdPhoto': await MultipartFile.fromFile(
+        //         frontIdPhoto?.path ?? '',
+        //         filename: 'image.jpg',
+        //         contentType: MediaType('image', 'jpeg')),
+        //     'backIdPhoto': await MultipartFile.fromFile(backIdPhoto?.path ?? '',
+        //         filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
+        //   });
+        // } else {
+        //   return Left(ServerFailure());
+        // }
+        FormData formData = FormData();
+        formData.fields.addAll([
+          MapEntry('username', username),
+          MapEntry('email', email),
+          MapEntry('password', password),
+          MapEntry('userType', userType),
+          MapEntry('firstMobile', firstMobile),
+          MapEntry('isFreeZoon', isFreeZoon.toString()),
+          MapEntry('deliverable', deliverable.toString()),
+          MapEntry('bio', bio ?? ''),
+          MapEntry('description', description ?? ''),
+          MapEntry('website', website ?? ''),
+        ]);
+        if (profilePhoto != null) {
+          String fileName = 'image.jpg';
+          formData.files.add(MapEntry(
+            'profilePhoto',
+            await MultipartFile.fromFile(
+              profilePhoto.path,
+              filename: fileName,
+              contentType: MediaType('image', 'jpeg'),
+            ),
+          ));
         }
-
+        if (coverPhoto != null) {
+          String fileName = 'image.jpg';
+          formData.files.add(MapEntry(
+            'coverPhoto',
+            await MultipartFile.fromFile(
+              coverPhoto.path,
+              filename: fileName,
+              contentType: MediaType('image', 'jpeg'),
+            ),
+          ));
+        }
+        if (banerPhoto != null) {
+          String fileName = 'image.jpg';
+          formData.files.add(MapEntry(
+            'bannerPhoto',
+            await MultipartFile.fromFile(
+              banerPhoto.path,
+              filename: fileName,
+              contentType: MediaType('image', 'jpeg'),
+            ),
+          ));
+        }
+        if (frontIdPhoto != null) {
+          String fileName = 'image.jpg';
+          formData.files.add(MapEntry(
+            'frontIdPhoto',
+            await MultipartFile.fromFile(
+              frontIdPhoto.path,
+              filename: fileName,
+              contentType: MediaType('image', 'jpeg'),
+            ),
+          ));
+        }
+        if (backIdPhoto != null) {
+          String fileName = 'image.jpg';
+          formData.files.add(MapEntry(
+            'backIdPhoto',
+            await MultipartFile.fromFile(
+              backIdPhoto.path,
+              filename: fileName,
+              contentType: MediaType('image', 'jpeg'),
+            ),
+          ));
+        }
         Response response = await dio.post(
             'https://net-zoon.onrender.com/user/register',
             data: formData);
@@ -244,6 +329,7 @@ class AuthRepositoryImpl implements AuthRepository {
                       ? profilePhoto.path
                       : user.userInfo.profilePhoto,
                   isFreeZoon: user.userInfo.isFreeZoon,
+                  deliverable: user.userInfo.deliverable,
                   id: user.userInfo.id,
                 ));
           }

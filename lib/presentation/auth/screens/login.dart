@@ -53,19 +53,19 @@ class _LogInScreenState extends State<LogInScreen> {
             children: [
               Container(
                 height: MediaQuery.of(context).size.height,
-                decoration: const BoxDecoration(
-                  color: Color(0xFF5776a5),
-                ),
+                // decoration: const BoxDecoration(
+                //   color: Color(0xFF5776a5),
+                // ),
               ),
-              Container(
-                height: MediaQuery.of(context).size.height,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/asd.png"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
+              // Container(
+              //   height: MediaQuery.of(context).size.height,
+              //   decoration: const BoxDecoration(
+              //     image: DecorationImage(
+              //       image: AssetImage("assets/images/asd.png"),
+              //       fit: BoxFit.cover,
+              //     ),
+              //   ),
+              // ),
               SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -77,7 +77,8 @@ class _LogInScreenState extends State<LogInScreen> {
                           width: MediaQuery.of(context).size.width,
                           decoration: const BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage("assets/images/logo.png"),
+                                image: AssetImage(
+                                    "assets/images/netzoon-logo.png"),
                                 fit: BoxFit.cover),
                           ),
                         ),
@@ -109,7 +110,8 @@ class _LogInScreenState extends State<LogInScreen> {
                             ),
                             Text(
                               "- ${AppLocalizations.of(context).translate('or')} -",
-                              style: const TextStyle(color: Colors.white),
+                              style: const TextStyle(
+                                  color: AppColor.backgroundColor),
                             ),
                             SizedBox(
                               height: 7.h,

@@ -27,10 +27,11 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
       late User? user;
       result.fold((l) => null, (r) => user = r);
       final Response response = await _uploadFile(
-        owner: user?.userInfo.username ?? '',
+        owner: user?.userInfo.id ?? '',
         departmentName: event.departmentName,
         categoryName: event.categoryName,
         name: event.name,
+        condition: event.condition,
         description: event.description,
         price: event.price,
         image: event.image,
@@ -121,6 +122,7 @@ Future<Response<dynamic>> _uploadFile({
   required String owner,
   required String departmentName,
   required String categoryName,
+  required String? condition,
   required String name,
   required String description,
   required int price,
@@ -149,7 +151,11 @@ Future<Response<dynamic>> _uploadFile({
       MapEntry('year', year?.toString() ?? ''),
       MapEntry('address', address ?? ''),
     ]);
-
+    if (condition != null) {
+      formData.fields.add(
+        MapEntry('condition', condition),
+      );
+    }
     // ignore: unnecessary_null_comparison
     if (image != null) {
       String fileName = 'image.jpg';

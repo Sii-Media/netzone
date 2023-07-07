@@ -268,28 +268,28 @@ class _EditLocalCompanyprofileScreenState
                     },
                   ),
                   const SizedBox(height: 25),
-                  // TextFormField(
-                  //   controller: _userNameController,
-                  //   style: const TextStyle(
-                  //     color: AppColor.backgroundColor,
-                  //   ),
-                  //   decoration: const InputDecoration(
-                  //     hintText: 'first_name',
-                  //     prefixIcon: Padding(
-                  //         padding: EdgeInsets.all(8.0),
-                  //         child: Icon(Icons.person)),
-                  //   ),
-                  //   keyboardType: TextInputType.text,
-                  //   textInputAction: TextInputAction.next,
-                  //   validator: (text) {
-                  //     if (text == null || text.isEmpty) {
-                  //       return 'field_required_message';
-                  //     }
+                  TextFormField(
+                    controller: _userNameController,
+                    style: const TextStyle(
+                      color: AppColor.backgroundColor,
+                    ),
+                    decoration: const InputDecoration(
+                      hintText: 'first_name',
+                      prefixIcon: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(Icons.person)),
+                    ),
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'field_required_message';
+                      }
 
-                  //     return null;
-                  //   },
-                  // ),
-                  // const SizedBox(height: 25),
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 25),
                   TextFormField(
                     controller: _firstMobileController,
                     style: const TextStyle(
@@ -432,7 +432,8 @@ class _EditLocalCompanyprofileScreenState
                         ),
                         const SizedBox(width: 10.0),
                         Text(
-                          'change_password',
+                          AppLocalizations.of(context)
+                              .translate('change_password'),
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,
                             fontSize: 16,
@@ -456,7 +457,7 @@ class _EditLocalCompanyprofileScreenState
                       onPressed: () {
                         if (!_formKey.currentState!.validate()) return;
                         editBloc.add(OnEditProfileEvent(
-                            username: widget.userInfo.username ?? '',
+                            username: _userNameController.text,
                             email: _emailController.text,
                             firstMobile: _firstMobileController.text,
                             secondeMobile: _secondeMobileController.text,
@@ -474,9 +475,10 @@ class _EditLocalCompanyprofileScreenState
                           Size.fromWidth(200),
                         ),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          'save_changes',
+                          AppLocalizations.of(context)
+                              .translate('save_changes'),
                         ),
                       ),
                     ),

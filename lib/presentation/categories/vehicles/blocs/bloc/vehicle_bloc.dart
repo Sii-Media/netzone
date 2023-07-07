@@ -11,7 +11,7 @@ import 'package:netzoon/domain/categories/usecases/vehicles/get_planes_companies
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 
-import '../../../../../domain/categories/entities/vehicles/vehicles_companies.dart';
+import '../../../../../domain/auth/entities/user_info.dart';
 
 part 'vehicle_event.dart';
 part 'vehicle_state.dart';

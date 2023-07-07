@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:netzoon/domain/advertisements/entities/advertisement.dart';
 import 'package:netzoon/domain/advertisements/entities/advertising.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
+import 'package:share_plus/share_plus.dart';
 
 abstract class AdvertismentRepository {
   Future<Either<Failure, Advertising>> getAllAds();
@@ -16,6 +17,7 @@ abstract class AdvertismentRepository {
     required String userAdvertisingType,
   });
   Future<Either<Failure, String>> addAdvertisement({
+    required String owner,
     required String advertisingTitle,
     required String advertisingStartDate,
     required String advertisingEndDate,
@@ -27,5 +29,8 @@ abstract class AdvertismentRepository {
     required String advertisingLocation,
     required double advertisingPrice,
     required String advertisingType,
+    List<XFile>? advertisingImageList,
+    File? video,
+    required bool purchasable,
   });
 }

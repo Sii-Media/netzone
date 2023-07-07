@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
+import 'package:netzoon/domain/auth/entities/user_info.dart';
 
 class Advertisement extends Equatable {
+  final UserInfo owner;
   final String id;
   final String name;
   final String advertisingStartDate;
@@ -16,7 +18,9 @@ class Advertisement extends Equatable {
   final List<String>? advertisingImageList;
   final String? advertisingVedio;
   final String advertisingType;
+  final bool purchasable;
   const Advertisement({
+    required this.owner,
     required this.id,
     required this.name,
     required this.advertisingStartDate,
@@ -32,6 +36,7 @@ class Advertisement extends Equatable {
     this.advertisingImageList,
     this.advertisingVedio,
     required this.advertisingType,
+    required this.purchasable,
   });
 
   @override
@@ -46,5 +51,7 @@ class Advertisement extends Equatable {
         advertisingImageList,
         advertisingVedio,
         advertisingType,
+        owner,
+        purchasable,
       ];
 }

@@ -11,6 +11,6 @@ class GetUserProductsUseCase extends UseCase<List<CategoryProducts>, String> {
   GetUserProductsUseCase({required this.departmentRepository});
   @override
   Future<Either<Failure, List<CategoryProducts>>> call(String params) {
-    return departmentRepository.getUserProducts(username: params);
+    return departmentRepository.getUserProducts(userId: params);
   }
 }

@@ -1,10 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:netzoon/data/models/auth/user_info/user_info_model.dart';
 import 'package:netzoon/data/models/vehicles/vehicle_model.dart';
 import 'package:netzoon/data/models/vehicles/vehicle_reponse_model.dart';
 import 'package:netzoon/injection_container.dart';
 import 'package:retrofit/http.dart';
-
-import '../../../models/vehicles/vehicles_companies_model.dart';
 
 part 'vehicle_remote_data_source.g.dart';
 
@@ -12,8 +11,8 @@ abstract class VehicleRemoteDataSource {
   Future<VehicleResponseModel> getAllCars();
   Future<VehicleResponseModel> getAllUsedPlanes();
   Future<VehicleResponseModel> getAllNewPlanes();
-  Future<List<VehiclesCompaniesModel>> getCarsCompanies();
-  Future<List<VehiclesCompaniesModel>> getPlanesCompanies();
+  Future<List<UserInfoModel>> getCarsCompanies();
+  Future<List<UserInfoModel>> getPlanesCompanies();
 
   Future<List<VehicleModel>> getCompanyVehicles(String type, String id);
 }
@@ -44,11 +43,11 @@ abstract class VehicleRemoteDataSourceImpl implements VehicleRemoteDataSource {
 
   @override
   @GET('/categories/cars-companies')
-  Future<List<VehiclesCompaniesModel>> getCarsCompanies();
+  Future<List<UserInfoModel>> getCarsCompanies();
 
   @override
   @GET('/categories/planes-companies')
-  Future<List<VehiclesCompaniesModel>> getPlanesCompanies();
+  Future<List<UserInfoModel>> getPlanesCompanies();
 
   @override
   @GET('/categories/company-vehicles')

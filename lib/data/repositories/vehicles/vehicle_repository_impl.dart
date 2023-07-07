@@ -1,12 +1,12 @@
 import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/remote/vehicles/vehicle_remote_data_source.dart';
+import 'package:netzoon/data/models/auth/user_info/user_info_model.dart';
 import 'package:netzoon/data/models/vehicles/vehicle_model.dart';
 import 'package:netzoon/data/models/vehicles/vehicle_reponse_model.dart';
-import 'package:netzoon/data/models/vehicles/vehicles_companies_model.dart';
+import 'package:netzoon/domain/auth/entities/user_info.dart';
 import 'package:netzoon/domain/categories/entities/vehicles/vehicle.dart';
 import 'package:netzoon/domain/categories/entities/vehicles/vehicle_response.dart';
 import 'package:dartz/dartz.dart';
-import 'package:netzoon/domain/categories/entities/vehicles/vehicles_companies.dart';
 import 'package:netzoon/domain/categories/repositories/vehicle_repository.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 
@@ -59,7 +59,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
   }
 
   @override
-  Future<Either<Failure, List<VehiclesCompanies>>> getCarsCompanies() async {
+  Future<Either<Failure, List<UserInfo>>> getCarsCompanies() async {
     try {
       if (await networkInfo.isConnected) {
         final carsCompanies = await vehicleRemoteDataSource.getCarsCompanies();
@@ -74,7 +74,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
   }
 
   @override
-  Future<Either<Failure, List<VehiclesCompanies>>> getPlanesCompanies() async {
+  Future<Either<Failure, List<UserInfo>>> getPlanesCompanies() async {
     try {
       if (await networkInfo.isConnected) {
         final planesCompanies =

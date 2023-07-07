@@ -200,14 +200,14 @@ class _DepartmentsRemoteDataSourceImpl
   }
 
   @override
-  Future<List<CategoryProductsModel>> getUserProducts(username) async {
+  Future<List<CategoryProductsModel>> getUserProducts(userId) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry(
-      'username',
-      username,
+      'userId',
+      userId,
     ));
     final _result = await _dio.fetch<List<dynamic>>(
         _setStreamType<List<CategoryProductsModel>>(Options(
@@ -271,6 +271,86 @@ class _DepartmentsRemoteDataSourceImpl
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = CategoryProductsModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<List<CategoryProductsModel>> getSelectedProducts(userId) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<List<dynamic>>(
+        _setStreamType<List<CategoryProductsModel>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/user/getSelectedProducts/${userId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!
+        .map((dynamic i) =>
+            CategoryProductsModel.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<String> addToSelectedProducts(
+    userId,
+    productIds,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    // ignore: avoid_function_literals_in_foreach_calls
+    productIds.forEach((i) {
+      _data.fields.add(MapEntry('productIds', i));
+    });
+    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/user/addToSelectedProducts/${userId}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!;
+    return value;
+  }
+
+  @override
+  Future<String> deleteFromSelectedProducts(
+    userId,
+    productId,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/user/deleteFromSelectedProducts/${userId}/${productId}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!;
     return value;
   }
 

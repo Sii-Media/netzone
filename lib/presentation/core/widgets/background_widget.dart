@@ -27,8 +27,20 @@ class BackgroundWidget extends StatelessWidget {
               left: 0,
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.12,
-                decoration:
-                    const BoxDecoration(color: AppColor.backgroundColor),
+                decoration: BoxDecoration(
+                  color: AppColor.white,
+                  border: Border(
+                    bottom: BorderSide(
+                        width: 1, color: AppColor.mainGrey.withOpacity(0.1)),
+                  ),
+                  boxShadow: const [
+                    BoxShadow(
+                        color: Colors.grey,
+                        spreadRadius: 3,
+                        blurRadius: 10,
+                        offset: Offset(0, 3)),
+                  ],
+                ),
               ),
             ),
             // Container(

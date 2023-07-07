@@ -90,6 +90,7 @@ class DealsRepositoryImpl implements DealsRepository {
           MapEntry('location', location),
           MapEntry('category', category),
         ]);
+        // ignore: unnecessary_null_comparison
         if (dealImage != null) {
           String fileName = 'image.jpg';
           formData.files.add(MapEntry(

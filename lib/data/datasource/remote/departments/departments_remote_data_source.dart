@@ -38,9 +38,14 @@ abstract class DepartmentsRemoteDataSource {
     String productId,
   );
 
-  Future<List<CategoryProductsModel>> getUserProducts(String username);
+  Future<List<CategoryProductsModel>> getUserProducts(String userId);
 
   Future<String> deleteProduct(String productId);
+
+  Future<List<CategoryProductsModel>> getSelectedProducts(String userId);
+
+  Future<String> addToSelectedProducts(String userId, List<String> productIds);
+  Future<String> deleteFromSelectedProducts(String userId, String productId);
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -92,7 +97,7 @@ abstract class DepartmentsRemoteDataSourceImpl
   @override
   @GET('/departments/getUserProducts')
   Future<List<CategoryProductsModel>> getUserProducts(
-    @Part() String username,
+    @Part() String userId,
   );
 
   @override
@@ -104,6 +109,26 @@ abstract class DepartmentsRemoteDataSourceImpl
   @override
   @GET('/departments/getproduct/{productId}')
   Future<CategoryProductsModel> getProductById(
+    @Path() String productId,
+  );
+
+  @override
+  @GET('/user/getSelectedProducts/{userId}')
+  Future<List<CategoryProductsModel>> getSelectedProducts(
+    @Path() String userId,
+  );
+
+  @override
+  @POST('/user/addToSelectedProducts/{userId}')
+  Future<String> addToSelectedProducts(
+    @Path() String userId,
+    @Part() List<String> productIds,
+  );
+
+  @override
+  @DELETE('/user/deleteFromSelectedProducts/{userId}/{productId}')
+  Future<String> deleteFromSelectedProducts(
+    @Path() String userId,
     @Path() String productId,
   );
 }

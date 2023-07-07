@@ -108,11 +108,11 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
 
   @override
   Future<Either<Failure, List<CategoryProducts>>> getUserProducts(
-      {required String username}) async {
+      {required String userId}) async {
     try {
       if (await networkInfo.isConnected) {
         final products =
-            await departmentsRemoteDataSource.getUserProducts(username);
+            await departmentsRemoteDataSource.getUserProducts(userId);
         return Right(products.map((e) => e.toDomain()).toList());
       } else {
         return Left(OfflineFailure());
@@ -207,6 +207,54 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
             await departmentsRemoteDataSource.getProductById(productId);
 
         return Right(product.toDomain());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<CategoryProducts>>> getSelectedProducts(
+      {required String userId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final products =
+            await departmentsRemoteDataSource.getSelectedProducts(userId);
+        return Right(products.map((e) => e.toDomain()).toList());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> addToSelectedProducts(
+      {required String userId, required List<String> productIds}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final products = await departmentsRemoteDataSource
+            .addToSelectedProducts(userId, productIds);
+        return Right(products);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> deleteFromSelectedProducts(
+      {required String userId, required String productId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final products = await departmentsRemoteDataSource
+            .deleteFromSelectedProducts(userId, productId);
+        return Right(products);
       } else {
         return Left(OfflineFailure());
       }

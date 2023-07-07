@@ -5,6 +5,8 @@ class UserInfo {
   final String? userType;
   final String? firstMobile;
   final bool? isFreeZoon;
+  final bool? deliverable;
+
   final String? secondeMobile;
 
   final String? thirdMobile;
@@ -25,7 +27,8 @@ class UserInfo {
   final String? profilePhoto;
   final String? coverPhoto;
   final String? banerPhoto;
-
+  final String? frontIdPhoto;
+  final String? backIdPhoto;
   final List? vehicles;
   final List? products;
 
@@ -42,6 +45,7 @@ class UserInfo {
     this.subcategory,
     this.address,
     required this.isFreeZoon,
+    this.deliverable,
     this.businessLicense,
     this.companyProductsNumber,
     this.sellType,
@@ -52,6 +56,8 @@ class UserInfo {
     this.profilePhoto,
     this.coverPhoto,
     this.banerPhoto,
+    this.frontIdPhoto,
+    this.backIdPhoto,
     this.vehicles,
     this.products,
     required this.id,

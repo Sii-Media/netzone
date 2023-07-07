@@ -48,18 +48,31 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
             left: 0,
             child: Container(
               height: MediaQuery.of(context).size.height * 0.22,
-              decoration: const BoxDecoration(color: AppColor.backgroundColor),
-            ),
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/00.png"),
-                fit: BoxFit.cover,
+              decoration: BoxDecoration(
+                color: AppColor.white,
+                border: Border(
+                  bottom: BorderSide(
+                      width: 1, color: AppColor.mainGrey.withOpacity(0.1)),
+                ),
+                boxShadow: const [
+                  BoxShadow(
+                      color: Colors.grey,
+                      spreadRadius: 3,
+                      blurRadius: 10,
+                      offset: Offset(0, 3)),
+                ],
               ),
             ),
           ),
+          // Container(
+          //   height: MediaQuery.of(context).size.height,
+          //   decoration: const BoxDecoration(
+          //     image: DecorationImage(
+          //       image: AssetImage("assets/images/00.png"),
+          //       fit: BoxFit.cover,
+          //     ),
+          //   ),
+          // ),
           customAppBar(context),
           Positioned(
             top: 147.h,
@@ -87,7 +100,8 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Text(
                     widget.title,
-                    style: TextStyle(fontSize: 22.sp, color: Colors.white),
+                    style: TextStyle(
+                        fontSize: 22.sp, color: AppColor.backgroundColor),
                   ),
                 ),
                 DropdownButton2(

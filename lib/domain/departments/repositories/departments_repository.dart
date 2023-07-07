@@ -38,7 +38,7 @@ abstract class DepartmentRepository {
   });
 
   Future<Either<Failure, List<CategoryProducts>>> getUserProducts({
-    required String username,
+    required String userId,
   });
 
   Future<Either<Failure, String>> deleteProduct({
@@ -55,5 +55,19 @@ abstract class DepartmentRepository {
     bool? guarantee,
     String? address,
     String? madeIn,
+  });
+
+  Future<Either<Failure, List<CategoryProducts>>> getSelectedProducts({
+    required String userId,
+  });
+
+  Future<Either<Failure, String>> addToSelectedProducts({
+    required String userId,
+    required List<String> productIds,
+  });
+
+  Future<Either<Failure, String>> deleteFromSelectedProducts({
+    required String userId,
+    required String productId,
   });
 }

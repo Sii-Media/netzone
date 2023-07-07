@@ -57,6 +57,7 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
             name: event.product.name,
             imageUrl: event.product.imageUrl,
             category: event.product.category,
+            condition: event.product.condition,
             description: event.product.description,
             price: event.product.price,
             images: event.product.images,

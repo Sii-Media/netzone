@@ -10,6 +10,7 @@ import '../auth/blocs/auth_bloc/auth_bloc.dart';
 import '../core/constant/colors.dart';
 import '../deals/add_deals_screen.dart';
 import '../news/add_new_page.dart';
+import '../profile/screens/all_product_screen.dart';
 import '../utils/app_localizations.dart';
 
 class AddItemScreen extends StatefulWidget {
@@ -55,6 +56,14 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           fontSize: 15.sp,
                           fontWeight: FontWeight.w400),
                     ),
+                    addWidget(
+                        title: 'select from our products',
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return const AllProductsScreen();
+                          }));
+                        }),
                     SizedBox(
                       height: 10.h,
                     ),

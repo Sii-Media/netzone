@@ -43,6 +43,10 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
   final TextEditingController companyProductsNumber = TextEditingController();
   final TextEditingController sellType = TextEditingController();
   final TextEditingController toCountry = TextEditingController();
+  final TextEditingController bioController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController websiteController = TextEditingController();
+
   File? profileImage;
   File? coverImage;
   final GlobalKey<FormFieldState> _emailFormFieldKey =
@@ -109,6 +113,9 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
         companyProductsNumber: companyProductsNumber,
         sellType: sellType,
         toCountry: toCountry,
+        bioController: bioController,
+        descriptionController: descriptionController,
+        websiteController: websiteController,
       ),
     );
   }
@@ -135,6 +142,9 @@ class SignUpWidget extends StatefulWidget {
     required this.companyProductsNumber,
     required this.sellType,
     required this.toCountry,
+    required this.bioController,
+    required this.descriptionController,
+    required this.websiteController,
   });
   final GlobalKey<FormState> formKey;
   final GlobalKey<FormFieldState> emailFormFieldKey;
@@ -152,6 +162,9 @@ class SignUpWidget extends StatefulWidget {
   final TextEditingController companyProductsNumber;
   final TextEditingController sellType;
   final TextEditingController toCountry;
+  final TextEditingController bioController;
+  final TextEditingController descriptionController;
+  final TextEditingController websiteController;
 
   final bool rememberMe;
   final SignUpBloc bloc;
@@ -166,6 +179,10 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   File? profileImage;
   File? coverImage;
   File? banerImage;
+  File? frontIdPhoto;
+  File? backIdPhoto;
+  bool _isDeliverable = false;
+
   Future getProfileImage(ImageSource imageSource) async {
     final image = await ImagePicker().pickImage(source: imageSource);
 
@@ -196,6 +213,32 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
     setState(() {
       banerImage = imageTemporary;
+    });
+  }
+
+  Future getFrontIdImage(
+    ImageSource imageSource,
+  ) async {
+    final image = await ImagePicker().pickImage(source: imageSource);
+
+    if (image == null) return;
+    final imageTemporary = File(image.path);
+
+    setState(() {
+      frontIdPhoto = imageTemporary;
+    });
+  }
+
+  Future getBackIdImage(
+    ImageSource imageSource,
+  ) async {
+    final image = await ImagePicker().pickImage(source: imageSource);
+
+    if (image == null) return;
+    final imageTemporary = File(image.path);
+
+    setState(() {
+      backIdPhoto = imageTemporary;
     });
   }
 
@@ -376,6 +419,81 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     ),
                   )
                 ],
+              ),
+              TextSignup(text: AppLocalizations.of(context).translate('Bio')),
+              TextFormField(
+                controller: widget.bioController,
+                style: const TextStyle(color: AppColor.black),
+                decoration: InputDecoration(
+                  filled: true,
+                  //<-- SEE HERE
+                  fillColor: Colors.green.withOpacity(0.1),
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 30)
+                          .flipped,
+
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                keyboardType: TextInputType.text,
+
+                // textInputAction: widget.textInputAction ?? TextInputAction.done,
+
+                onChanged: (text) {
+                  widget.passwordFormFieldKey.currentState!.validate();
+                },
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              TextSignup(text: AppLocalizations.of(context).translate('desc')),
+              TextFormField(
+                controller: widget.descriptionController,
+                style: const TextStyle(color: AppColor.black),
+                decoration: InputDecoration(
+                  filled: true,
+                  //<-- SEE HERE
+                  fillColor: Colors.green.withOpacity(0.1),
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 30)
+                          .flipped,
+
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                keyboardType: TextInputType.text,
+
+                // textInputAction: widget.textInputAction ?? TextInputAction.done,
+
+                onChanged: (text) {
+                  widget.passwordFormFieldKey.currentState!.validate();
+                },
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              CheckboxListTile(
+                title: Text(
+                  AppLocalizations.of(context).translate('Is there delivery'),
+                  style: TextStyle(
+                    color: AppColor.backgroundColor,
+                    fontSize: 15.sp,
+                  ),
+                ),
+                activeColor: AppColor.backgroundColor,
+                value: _isDeliverable,
+                onChanged: (bool? value) {
+                  setState(() {
+                    _isDeliverable = value ?? false;
+                  });
+                },
+              ),
+              SizedBox(
+                height: 10.h,
               ),
               widget.accountTitle == 'المستهلك' ||
                       widget.accountTitle == 'جهة إخبارية'
@@ -658,6 +776,130 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               SizedBox(
                 height: 10.h,
               ),
+              widget.accountTitle == 'المستهلك' ||
+                      widget.accountTitle == 'جهة إخبارية'
+                  ? Container()
+                  : TextSignup(
+                      text: AppLocalizations.of(context)
+                          .translate('front_id_photo'),
+                    ),
+              widget.accountTitle == 'المستهلك' ||
+                      widget.accountTitle == 'جهة إخبارية'
+                  ? Container()
+                  : Column(
+                      children: [
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            addPhotoButton(
+                                context: context,
+                                text: 'add_from_camera',
+                                onPressed: () {
+                                  getFrontIdImage(
+                                    ImageSource.camera,
+                                  );
+                                }),
+                            addPhotoButton(
+                                context: context,
+                                text: 'add_from_gallery',
+                                onPressed: () {
+                                  getFrontIdImage(
+                                    ImageSource.gallery,
+                                  );
+                                }),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        frontIdPhoto != null
+                            ? Center(
+                                child: Image.file(
+                                  frontIdPhoto!,
+                                  width: 250.w,
+                                  height: 250.h,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : Center(
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
+                                  width: 250.w,
+                                  height: 250.h,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                      ],
+                    ),
+              SizedBox(
+                height: 10.h,
+              ),
+              widget.accountTitle == 'المستهلك' ||
+                      widget.accountTitle == 'جهة إخبارية'
+                  ? Container()
+                  : TextSignup(
+                      text: AppLocalizations.of(context)
+                          .translate('back_id_photo'),
+                    ),
+              widget.accountTitle == 'المستهلك' ||
+                      widget.accountTitle == 'جهة إخبارية'
+                  ? Container()
+                  : Column(
+                      children: [
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            addPhotoButton(
+                                context: context,
+                                text: 'add_from_camera',
+                                onPressed: () {
+                                  getBackIdImage(
+                                    ImageSource.camera,
+                                  );
+                                }),
+                            addPhotoButton(
+                                context: context,
+                                text: 'add_from_gallery',
+                                onPressed: () {
+                                  getBackIdImage(
+                                    ImageSource.gallery,
+                                  );
+                                }),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        backIdPhoto != null
+                            ? Center(
+                                child: Image.file(
+                                  backIdPhoto!,
+                                  width: 250.w,
+                                  height: 250.h,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : Center(
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
+                                  width: 250.w,
+                                  height: 250.h,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                      ],
+                    ),
+              SizedBox(
+                height: 20.h,
+              ),
               Container(
                 width: 100.w,
                 // margin: EdgeInsets.symmetric(horizontal: 60, vertical: 10).r,
@@ -710,7 +952,37 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           return;
                         }
                         final String userType = getUserType();
-
+                        if (userType == 'local_company') {
+                          if (frontIdPhoto == null || backIdPhoto == null) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    AppLocalizations.of(context)
+                                        .translate('no_image_selected'),
+                                    style: const TextStyle(color: AppColor.red),
+                                  ),
+                                  content: Text(
+                                    AppLocalizations.of(context).translate(
+                                        'please_select_an_front_and_back_Id_image_before_uploading'),
+                                    style: const TextStyle(color: AppColor.red),
+                                  ),
+                                  actions: [
+                                    ElevatedButton(
+                                      child: Text(AppLocalizations.of(context)
+                                          .translate('ok')),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                            return;
+                          }
+                        }
                         if (!widget.formKey.currentState!.validate()) return;
                         widget.bloc.add(SignUpRequested(
                           username: widget.username.text,
@@ -719,9 +991,15 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           userType: userType,
                           firstMobile: widget.numberPhoneOne.text,
                           isFreeZoon: true,
+                          deliverable: true,
                           profilePhoto: profileImage,
                           coverPhoto: coverImage,
                           banerPhoto: banerImage,
+                          frontIdPhoto: frontIdPhoto,
+                          backIdPhoto: backIdPhoto,
+                          bio: widget.bioController.text,
+                          description: widget.descriptionController.text,
+                          website: widget.websiteController.text,
                         ));
                       },
                       child: Text(
@@ -752,8 +1030,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
         return 'local_company';
       case 'السيارات':
         return 'car';
-      case 'السفن':
-        return 'ship';
+      case 'الشركات البحرية':
+        return 'sea_companies';
       case 'منطقة حرة':
         return 'freezoon';
       case 'المصانع':

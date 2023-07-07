@@ -4,12 +4,14 @@ part 'user_info_model.g.dart';
 
 @JsonSerializable()
 class UserInfoModel {
-  final String? username;
+  final String username;
   final String? email;
   final String? password;
   final String? userType;
   final String? firstMobile;
   final bool? isFreeZoon;
+  final bool? deliverable;
+
   final String? secondeMobile;
 
   final String? thirdMobile;
@@ -48,6 +50,7 @@ class UserInfoModel {
     this.subcategory,
     this.address,
     required this.isFreeZoon,
+    this.deliverable,
     this.businessLicense,
     this.companyProductsNumber,
     this.sellType,
@@ -77,6 +80,7 @@ extension MapToDomain on UserInfoModel {
       userType: userType,
       firstMobile: firstMobile,
       isFreeZoon: isFreeZoon,
+      deliverable: deliverable,
       secondeMobile: secondeMobile,
       thirdMobile: thirdMobile,
       subcategory: subcategory,
