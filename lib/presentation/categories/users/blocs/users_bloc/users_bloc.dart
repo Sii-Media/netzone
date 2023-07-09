@@ -23,6 +23,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       final result = await getSignedInUser.call(NoParams());
       late User? user;
       result.fold((l) => null, (r) => user = r);
+      // ignore: unused_local_variable
       late List<UserInfo> filteredUsers;
       filteredUsers = users.fold(
         (failure) => [],

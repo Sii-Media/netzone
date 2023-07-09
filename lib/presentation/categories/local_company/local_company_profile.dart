@@ -4,12 +4,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/auth/entities/user_info.dart';
 import 'package:netzoon/injection_container.dart';
+import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/categories/local_company/local_company_bloc/local_company_bloc.dart';
 import 'package:netzoon/presentation/categories/widgets/product_details.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../../advertising/advertising_details.dart';
 import '../../chat/screens/chat_page_screen.dart';
+import '../../core/widgets/on_failure_widget.dart';
 import '../../profile/blocs/get_user/get_user_bloc.dart';
 
 class LocalCompanyProfileScreen extends StatefulWidget {
@@ -30,6 +33,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
   final productsBloc = sl<LocalCompanyBloc>();
   final userBloc = sl<GetUserBloc>();
   final prodBloc = sl<LocalCompanyBloc>();
+  final adsBloc = sl<AdsBlocBloc>();
 
   @override
   void initState() {
@@ -37,6 +41,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
 
     userBloc.add(GetUserByIdEvent(userId: widget.localCompany.id));
     prodBloc.add(GetLocalProductsEvent(username: widget.localCompany.id));
+    adsBloc.add(GetUserAdsEvent(userId: widget.localCompany.id));
     super.initState();
   }
 
@@ -416,8 +421,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                             ),
                           ),
                           Text(
-                            AppLocalizations.of(context)
-                                .translate('the documents'),
+                            AppLocalizations.of(context).translate('my_ads'),
                             style: TextStyle(
                               color: AppColor.black,
                               fontSize: 11.sp,
@@ -544,17 +548,230 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                 return Container();
                               },
                             ),
-                            Container(
-                              padding: const EdgeInsets.only(top: 30),
-                              child: Text(
-                                AppLocalizations.of(context)
-                                    .translate('There are no documents'),
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  color: AppColor.black,
-                                ),
-                              ),
+                            BlocBuilder<AdsBlocBloc, AdsBlocState>(
+                              bloc: adsBloc,
+                              builder: (context, state) {
+                                if (state is AdsBlocInProgress) {
+                                  return SizedBox(
+                                    height: MediaQuery.of(context).size.height -
+                                        120.h,
+                                    child: const Center(
+                                      child: CircularProgressIndicator(
+                                        color: AppColor.backgroundColor,
+                                      ),
+                                    ),
+                                  );
+                                } else if (state is AdsBlocFailure) {
+                                  final failure = state.message;
+                                  return FailureWidget(
+                                      failure: failure,
+                                      onPressed: () {
+                                        adsBloc.add(GetUserAdsEvent(
+                                            userId: widget.localCompany.id));
+                                      });
+                                } else if (state is AdsBlocSuccess) {
+                                  return state.ads.isEmpty
+                                      ? Text(
+                                          AppLocalizations.of(context)
+                                              .translate('no_items'),
+                                          style: TextStyle(
+                                            color: AppColor.backgroundColor,
+                                            fontSize: 22.sp,
+                                          ),
+                                        )
+                                      : GridView.builder(
+                                          gridDelegate:
+                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 3,
+                                                  childAspectRatio: 0.95,
+                                                  crossAxisSpacing: 10.w,
+                                                  mainAxisSpacing: 10.h),
+                                          shrinkWrap: true,
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          itemCount: state.ads.length,
+                                          itemBuilder: (context, index) {
+                                            return ClipRRect(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(20)),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return AdvertismentDetalsScreen(
+                                                            adsId: state
+                                                                .ads[index].id);
+                                                      },
+                                                    ),
+                                                  );
+                                                },
+                                                // child: Column(
+                                                //   mainAxisAlignment:
+                                                //       MainAxisAlignment.start,
+                                                //   crossAxisAlignment:
+                                                //       CrossAxisAlignment.center,
+                                                //   children: [
+                                                //     CachedNetworkImage(
+                                                //       imageUrl: state.ads[index]
+                                                //           .advertisingImage,
+                                                //       height: 65.h,
+                                                //       width: 120.w,
+                                                //       fit: BoxFit.contain,
+                                                //     ),
+                                                //     Row(
+                                                //       mainAxisAlignment:
+                                                //           MainAxisAlignment
+                                                //               .spaceEvenly,
+                                                //       children: [
+                                                //         Text(
+                                                //           state.ads[index].name,
+                                                //           style: const TextStyle(
+                                                //               color: AppColor
+                                                //                   .backgroundColor,
+                                                //               fontSize: 10),
+                                                //         ),
+                                                //         Text(
+                                                //           '${state.ads[index].advertisingPrice} \$',
+                                                //           style: const TextStyle(
+                                                //               color: AppColor
+                                                //                   .colorTwo,
+                                                //               fontSize: 10),
+                                                //         ),
+                                                //       ],
+                                                //     ),
+                                                //   ],
+                                                // ),
+                                                child: Card(
+                                                  elevation: 4.0,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16.0),
+                                                  ),
+                                                  child: SizedBox(
+                                                    height: 100.h,
+                                                    width: 180.w,
+                                                    child: Stack(
+                                                      // fit: StackFit.expand,
+                                                      alignment:
+                                                          AlignmentDirectional
+                                                              .bottomCenter,
+                                                      children: [
+                                                        ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      16.0),
+                                                          child:
+                                                              CachedNetworkImage(
+                                                            imageUrl: state
+                                                                .ads[index]
+                                                                .advertisingImage,
+                                                            height: 200.h,
+                                                            width: double
+                                                                .maxFinite,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        16.0),
+                                                            gradient:
+                                                                LinearGradient(
+                                                              begin: Alignment
+                                                                  .topCenter,
+                                                              end: Alignment
+                                                                  .bottomCenter,
+                                                              colors: [
+                                                                Colors
+                                                                    .transparent,
+                                                                AppColor
+                                                                    .backgroundColor
+                                                                    .withOpacity(
+                                                                        0.6),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      6.0),
+                                                          child: Align(
+                                                            alignment: Alignment
+                                                                .bottomCenter,
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                Text(
+                                                                  state
+                                                                      .ads[
+                                                                          index]
+                                                                      .name,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        14.0.sp,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  '${state.ads[index].advertisingPrice} \$',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        14.0.sp,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .right,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                }
+                                return Container();
+                              },
                             ),
+                            // Container(
+                            //   padding: const EdgeInsets.only(top: 30),
+                            //   child: Text(
+                            //     AppLocalizations.of(context)
+                            //         .translate('There are no documents'),
+                            //     textAlign: TextAlign.center,
+                            //     style: const TextStyle(
+                            //       color: AppColor.black,
+                            //     ),
+                            //   ),
+                            // ),
                             ListView(
                               children: [
                                 Column(

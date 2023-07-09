@@ -9,8 +9,12 @@ part 'vehicle_remote_data_source.g.dart';
 
 abstract class VehicleRemoteDataSource {
   Future<VehicleResponseModel> getAllCars();
+  Future<VehicleResponseModel> getLatestCarByCreator();
+
   Future<VehicleResponseModel> getAllUsedPlanes();
   Future<VehicleResponseModel> getAllNewPlanes();
+  Future<VehicleResponseModel> getAllPlanes();
+
   Future<List<UserInfoModel>> getCarsCompanies();
   Future<List<UserInfoModel>> getPlanesCompanies();
 
@@ -34,6 +38,10 @@ abstract class VehicleRemoteDataSourceImpl implements VehicleRemoteDataSource {
   Future<VehicleResponseModel> getAllCars();
 
   @override
+  @GET('/categories/latest-cars-by-creator')
+  Future<VehicleResponseModel> getLatestCarByCreator();
+
+  @override
   @GET('/categories/planes/getoldplanes')
   Future<VehicleResponseModel> getAllUsedPlanes();
 
@@ -55,4 +63,7 @@ abstract class VehicleRemoteDataSourceImpl implements VehicleRemoteDataSource {
     @Part() String type,
     @Part() String id,
   );
+  @override
+  @GET('/categories/planes')
+  Future<VehicleResponseModel> getAllPlanes();
 }

@@ -58,7 +58,7 @@ class _MyLocalCompanyProfileScreenState
                   image: CachedNetworkImageProvider(
                     coverUrl,
                   ),
-                  fit: BoxFit.cover),
+                  fit: BoxFit.contain),
             ),
           ),
         ),

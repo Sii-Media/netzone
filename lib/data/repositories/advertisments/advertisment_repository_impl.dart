@@ -177,4 +177,20 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, Advertising>> getUserAds(
+      {required String userId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final ads = await advertismentRemotDataSource.getUserAds(userId);
+
+        return Right(ads.toDomain());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
 }

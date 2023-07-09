@@ -77,14 +77,14 @@ class _SearchPageState extends State<SearchPage> {
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back_rounded,
             color: AppColor.backgroundColor,
           ),
         ),
         title: Text(
           AppLocalizations.of(context).translate('Search Page'),
-          style: TextStyle(color: AppColor.backgroundColor),
+          style: const TextStyle(color: AppColor.backgroundColor),
         ),
       ),
       body: Padding(

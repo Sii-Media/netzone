@@ -62,6 +62,7 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
         String address = placemark.name ?? placemark.thoroughfare ?? '';
 
         // Print the obtained address or place name
+        // ignore: avoid_print
         print('Current Location: $address');
       }
     }
@@ -76,7 +77,7 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
           padding: const EdgeInsets.only(left: 8.0),
           child: CircleAvatar(
             backgroundColor: Colors.grey.withOpacity(0.1),
-            child: Icon(
+            child: const Icon(
               Icons.location_on_sharp,
               color: AppColor.secondGrey,
               size: 16,
@@ -104,13 +105,13 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
         children: [
           Form(
             child: Padding(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               child: TextFormField(
                 onChanged: (value) {
                   placeAutoComplete(value);
                 },
                 textInputAction: TextInputAction.search,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Search your location',
                   prefixIcon: Padding(
                     padding: EdgeInsets.symmetric(vertical: 12),
@@ -129,11 +130,11 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
             color: Colors.grey.withOpacity(0.1),
           ),
           Padding(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             child: ElevatedButton.icon(
               onPressed: getCurrentLocation,
-              icon: Icon(Feather.map_pin),
-              label: Text(
+              icon: const Icon(Feather.map_pin),
+              label: const Text(
                 'Use My Current Location',
               ),
               style: ElevatedButton.styleFrom(

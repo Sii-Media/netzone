@@ -44,6 +44,29 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
   }
 
   @override
+  Future<VehicleResponseModel> getLatestCarByCreator() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<VehicleResponseModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/categories/latest-cars-by-creator',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = VehicleResponseModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<VehicleResponseModel> getAllUsedPlanes() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -172,6 +195,29 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
     var value = _result.data!
         .map((dynamic i) => VehicleModel.fromJson(i as Map<String, dynamic>))
         .toList();
+    return value;
+  }
+
+  @override
+  Future<VehicleResponseModel> getAllPlanes() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<VehicleResponseModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/categories/planes',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = VehicleResponseModel.fromJson(_result.data!);
     return value;
   }
 

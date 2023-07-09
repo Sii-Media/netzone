@@ -29,6 +29,12 @@ class GetUserProductsByIdEvent extends GetUserEvent {
 
 class GetSelectedProductsEvent extends GetUserEvent {}
 
+class GetSelectedProductsByUserIdEvent extends GetUserEvent {
+  final String userId;
+
+  const GetSelectedProductsByUserIdEvent({required this.userId});
+}
+
 class AddToSelectedProductsEvent extends GetUserEvent {
   final List<String> productIds;
 

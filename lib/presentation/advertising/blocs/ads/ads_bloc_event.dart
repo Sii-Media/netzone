@@ -20,3 +20,9 @@ class GetAdsByIdEvent extends AdsBlocEvent {
 
   const GetAdsByIdEvent({required this.id});
 }
+
+class GetUserAdsEvent extends AdsBlocEvent {
+  final String userId;
+
+  const GetUserAdsEvent({required this.userId});
+}

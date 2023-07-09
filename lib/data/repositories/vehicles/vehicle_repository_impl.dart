@@ -31,6 +31,20 @@ class VehicleRepositoryImpl implements VehicleRepository {
   }
 
   @override
+  Future<Either<Failure, VehicleResponse>> getLatestCarByCreator() async {
+    try {
+      if (await networkInfo.isConnected) {
+        final cars = await vehicleRemoteDataSource.getLatestCarByCreator();
+        return Right(cars.toDomain());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
   Future<Either<Failure, VehicleResponse>> getAllUsedPlanes() async {
     try {
       if (await networkInfo.isConnected) {
@@ -98,6 +112,20 @@ class VehicleRepositoryImpl implements VehicleRepository {
             await vehicleRemoteDataSource.getCompanyVehicles(type, id);
 
         return Right(vehicles.map((e) => e.toDomain()).toList());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, VehicleResponse>> getAllPlanes() async {
+    try {
+      if (await networkInfo.isConnected) {
+        final planes = await vehicleRemoteDataSource.getAllPlanes();
+        return Right(planes.toDomain());
       } else {
         return Left(OfflineFailure());
       }

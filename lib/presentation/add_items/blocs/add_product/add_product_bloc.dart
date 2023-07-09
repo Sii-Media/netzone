@@ -34,6 +34,7 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
         condition: event.condition,
         description: event.description,
         price: event.price,
+        quantity: event.quantity,
         image: event.image,
         productimages: event.productimages,
         video: event.video,
@@ -41,6 +42,7 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
         madeIn: event.madeIn,
         year: event.year,
         address: event.address,
+        discountPercentage: event.discountPercentage,
       );
       if (response.statusCode == 201) {
         emit(AddProductSuccess(product: response.data));
@@ -126,6 +128,7 @@ Future<Response<dynamic>> _uploadFile({
   required String name,
   required String description,
   required int price,
+  required int quantity,
   required File image,
   List<XFile>? productimages,
   File? video,
@@ -134,6 +137,7 @@ Future<Response<dynamic>> _uploadFile({
   String? madeIn,
   DateTime? year,
   String? address,
+  int? discountPercentage,
 }) async {
   try {
     Dio dio = Dio();
@@ -146,10 +150,12 @@ Future<Response<dynamic>> _uploadFile({
       MapEntry('name', name),
       MapEntry('description', description),
       MapEntry('price', price.toString()),
+      MapEntry('quantity', quantity.toString()),
       MapEntry('guarantee', guarantee.toString()),
       MapEntry('madeIn', madeIn ?? ''),
       MapEntry('year', year?.toString() ?? ''),
       MapEntry('address', address ?? ''),
+      MapEntry('discountPercentage', discountPercentage.toString()),
     ]);
     if (condition != null) {
       formData.fields.add(

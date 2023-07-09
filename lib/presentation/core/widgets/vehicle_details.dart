@@ -127,8 +127,16 @@ class VehicleDetailsScreen extends StatelessWidget {
                         ),
                         titleAndInput(
                           title:
+                              AppLocalizations.of(context).translate('owner'),
+                          input: vehicle.creator.username,
+                        ),
+                        SizedBox(
+                          height: 7.h,
+                        ),
+                        titleAndInput(
+                          title:
                               AppLocalizations.of(context).translate('categ'),
-                          input: 'S-line',
+                          input: vehicle.category,
                         ),
                         SizedBox(
                           height: 7.h,
@@ -149,9 +157,9 @@ class VehicleDetailsScreen extends StatelessWidget {
                           height: 7.h,
                         ),
                         titleAndInput(
-                          title: AppLocalizations.of(context)
-                              .translate('regional_specifications'),
-                          input: 'مواصفات خليجية',
+                          title:
+                              AppLocalizations.of(context).translate('address'),
+                          input: vehicle.location,
                         ),
                         SizedBox(
                           height: 7.h,

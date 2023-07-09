@@ -8,6 +8,8 @@ part 'ads_remote_data_source.g.dart';
 
 abstract class AdvertismentRemotDataSource {
   Future<AdvertisingModel> getAllAdvertisment();
+  Future<AdvertisingModel> getUserAds(String userId);
+
   Future<AdvertisemenetModel> getAdsById(String id);
   Future<AdvertisingModel> getAdvertisementByType(
     final String userAdvertisingType,
@@ -41,5 +43,11 @@ abstract class AdvertismentRemotDataSourceImpl
   @GET('/advertisements/{id}')
   Future<AdvertisemenetModel> getAdsById(
     @Path() String id,
+  );
+
+  @override
+  @GET('/advertisements/getUserAds/{userId}')
+  Future<AdvertisingModel> getUserAds(
+    @Path() String userId,
   );
 }

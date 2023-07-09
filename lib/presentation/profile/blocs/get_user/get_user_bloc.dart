@@ -129,5 +129,18 @@ class GetUserBloc extends Bloc<GetUserEvent, GetUserState> {
         ),
       );
     });
+    on<GetSelectedProductsByUserIdEvent>((event, emit) async {
+      emit(GetSelectedProductsInProgress());
+
+      final products = await getSelectedProductsUseCase(event.userId);
+
+      emit(
+        products.fold(
+          (failure) =>
+              GetSelectedProductsFailure(message: mapFailureToString(failure)),
+          (products) => GetSelectedProductsSuccess(products: products),
+        ),
+      );
+    });
   }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field, unused_element
+
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -160,6 +162,7 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
               _currentIndex = 0;
               return false;
             } else {
+              // ignore: use_build_context_synchronously
               return _onBackButtonPressed(context);
             }
           }
@@ -734,14 +737,14 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
         return AlertDialog(
           title: Text(
             AppLocalizations.of(context).translate('Really!!'),
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColor.backgroundColor,
             ),
           ),
           content: Text(
             AppLocalizations.of(context)
                 .translate('Do you want to close the app ?'),
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColor.backgroundColor,
             ),
           ),

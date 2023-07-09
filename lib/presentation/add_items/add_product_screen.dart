@@ -50,7 +50,7 @@ class _AddProductScreenState extends State<AddProductScreen>
   String videoName = '';
 
   String department = '';
-
+  double _discountPercentage = 0.0;
   Future getImage(ImageSource imageSource) async {
     final image = await ImagePicker().pickImage(source: imageSource);
 
@@ -89,6 +89,8 @@ class _AddProductScreenState extends State<AddProductScreen>
   late TextEditingController productName = TextEditingController();
   late TextEditingController productImage = TextEditingController();
   late TextEditingController productPrice = TextEditingController();
+  late TextEditingController productQuantity = TextEditingController();
+
   late TextEditingController productDesc = TextEditingController();
   late TextEditingController productAddress = TextEditingController();
   late TextEditingController mobileController = TextEditingController();
@@ -354,6 +356,48 @@ class _AddProductScreenState extends State<AddProductScreen>
                             title:
                                 '${AppLocalizations.of(context).translate('price')} :',
                             isNumber: true,
+                          ),
+                          SizedBox(
+                            height: 7.h,
+                          ),
+                          addProductTextField(
+                            context: context,
+                            controller: productQuantity,
+                            title:
+                                '${AppLocalizations.of(context).translate('quantity')} :',
+                            isNumber: true,
+                          ),
+                          SizedBox(
+                            height: 7.h,
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'discount percentage : ${_discountPercentage.round().toString()}%',
+                                style: TextStyle(
+                                  color: AppColor.backgroundColor,
+                                  fontSize: 15.sp,
+                                ),
+                              ),
+                              Slider(
+                                value: _discountPercentage,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _discountPercentage = newValue;
+                                  });
+                                },
+                                min: 0,
+                                max: 100,
+                                divisions: 100,
+                                label: '${_discountPercentage.round()}%',
+                                activeColor: AppColor.backgroundColor,
+                                thumbColor: AppColor.backgroundColor,
+                                inactiveColor:
+                                    AppColor.backgroundColor.withOpacity(0.3),
+                              ),
+                            ],
                           ),
                           SizedBox(
                             height: 7.h,
@@ -711,12 +755,15 @@ class _AddProductScreenState extends State<AddProductScreen>
                                     condition: _selectedCondition,
                                     description: productDesc.text,
                                     price: int.parse(productPrice.text),
+                                    quantity: int.parse(productQuantity.text),
                                     guarantee: _isGuarantee,
                                     productimages: imageFileList,
                                     madeIn: madeInController.text,
                                     address: productAddress.text,
                                     video: _video,
                                     image: _image!,
+                                    discountPercentage:
+                                        _discountPercentage.round(),
                                   ));
                                 }),
                           ),

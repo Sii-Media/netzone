@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/categories/entities/vehicles/vehicle.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_all_cars_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_all_new_planes_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/vehicles/get_all_planes_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_all_used_planes_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_cars_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_company_vehicles_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/vehicles/get_latest_car_by_creator_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_planes_companies_use_case.dart';
 
 import 'package:netzoon/domain/core/usecase/usecase.dart';
@@ -18,18 +20,22 @@ part 'vehicle_state.dart';
 
 class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
   final GetAllCarsUseCase getAllCarsUseCase;
+  final GetLatestCarByCreatorUseCase getLatestCarByCreatorUseCase;
   final GetAllUsedPlanesUseCase getAllUsedPlanesUseCase;
   final GetAllNewPlanesUseCase getAllNewPlanesUseCase;
   final GetCarsCompaniesUseCase getCarsCompaniesUseCase;
   final GetPlanesCompaniesUseCase getPlanesCompaniesUseCase;
   final GetCompanyVehiclesUseCase getCompanyVehiclesUseCase;
+  final GetAllPlanesUseCase getAllPlanesUseCase;
   VehicleBloc({
     required this.getAllCarsUseCase,
+    required this.getLatestCarByCreatorUseCase,
     required this.getAllUsedPlanesUseCase,
     required this.getAllNewPlanesUseCase,
     required this.getCarsCompaniesUseCase,
     required this.getPlanesCompaniesUseCase,
     required this.getCompanyVehiclesUseCase,
+    required this.getAllPlanesUseCase,
   }) : super(VehicleInitial()) {
     on<GetAllCarsEvent>((event, emit) async {
       emit(VehicleInProgress());
@@ -40,6 +46,30 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
         failureOrCars.fold(
           (failure) => VehicleFailure(message: mapFailureToString(failure)),
           (cars) => VehicleSuccess(vehilces: cars.vehicle),
+        ),
+      );
+    });
+    on<GetLatestCarByCreatorEvent>((event, emit) async {
+      emit(VehicleInProgress());
+
+      final failureOrCars = await getLatestCarByCreatorUseCase(NoParams());
+
+      emit(
+        failureOrCars.fold(
+          (failure) => VehicleFailure(message: mapFailureToString(failure)),
+          (cars) => VehicleSuccess(vehilces: cars.vehicle),
+        ),
+      );
+    });
+    on<GetAllPlanesEvent>((event, emit) async {
+      emit(VehicleInProgress());
+
+      final failureOrPlanes = await getAllPlanesUseCase(NoParams());
+
+      emit(
+        failureOrPlanes.fold(
+          (failure) => VehicleFailure(message: mapFailureToString(failure)),
+          (planes) => VehicleSuccess(vehilces: planes.vehicle),
         ),
       );
     });

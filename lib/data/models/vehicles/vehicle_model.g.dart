@@ -17,7 +17,9 @@ VehicleModel _$VehicleModelFromJson(Map<String, dynamic> json) => VehicleModel(
       location: json['location'] as String,
       type: json['type'] as String,
       category: json['category'] as String,
-      creator: json['creator'] as String?,
+      creator: json['creator'] == null
+          ? null
+          : UserInfoModel.fromJson(json['creator'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$VehicleModelToJson(VehicleModel instance) =>

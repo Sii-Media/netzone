@@ -9,6 +9,10 @@ abstract class VehicleEvent extends Equatable {
 
 class GetAllCarsEvent extends VehicleEvent {}
 
+class GetLatestCarByCreatorEvent extends VehicleEvent {}
+
+class GetAllPlanesEvent extends VehicleEvent {}
+
 class GetAllUsedPlanesEvent extends VehicleEvent {}
 
 class GetAllNewPlanesEvent extends VehicleEvent {}

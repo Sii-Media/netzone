@@ -7,8 +7,10 @@ import '../entities/vehicles/vehicle.dart';
 
 abstract class VehicleRepository {
   Future<Either<Failure, VehicleResponse>> getAllCars();
+  Future<Either<Failure, VehicleResponse>> getLatestCarByCreator();
   Future<Either<Failure, VehicleResponse>> getAllUsedPlanes();
   Future<Either<Failure, VehicleResponse>> getAllNewPlanes();
+  Future<Either<Failure, VehicleResponse>> getAllPlanes();
   Future<Either<Failure, List<UserInfo>>> getCarsCompanies();
   Future<Either<Failure, List<UserInfo>>> getPlanesCompanies();
   Future<Either<Failure, List<Vehicle>>> getCompanyVehicles(

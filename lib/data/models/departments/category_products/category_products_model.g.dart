@@ -18,6 +18,7 @@ CategoryProductsModel _$CategoryProductsModelFromJson(
       condition: json['condition'] as String?,
       description: json['description'] as String,
       price: json['price'] as int,
+      quantity: json['quantity'] as num?,
       images:
           (json['images'] as List<dynamic>?)?.map((e) => e as String).toList(),
       vedioUrl: json['vedioUrl'] as String?,
@@ -27,6 +28,8 @@ CategoryProductsModel _$CategoryProductsModelFromJson(
       madeIn: json['madeIn'] as String?,
       year: json['year'] as String?,
       gifUrl: json['gifUrl'] as String?,
+      discountPercentage: (json['discountPercentage'] as num?)?.toDouble(),
+      priceAfterDiscount: (json['priceAfterDiscount'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$CategoryProductsModelToJson(
@@ -40,6 +43,7 @@ Map<String, dynamic> _$CategoryProductsModelToJson(
       'condition': instance.condition,
       'description': instance.description,
       'price': instance.price,
+      'quantity': instance.quantity,
       'images': instance.images,
       'vedioUrl': instance.vedioUrl,
       'guarantee': instance.guarantee,
@@ -48,4 +52,6 @@ Map<String, dynamic> _$CategoryProductsModelToJson(
       'madeIn': instance.madeIn,
       'year': instance.year,
       'gifUrl': instance.gifUrl,
+      'discountPercentage': instance.discountPercentage,
+      'priceAfterDiscount': instance.priceAfterDiscount,
     };

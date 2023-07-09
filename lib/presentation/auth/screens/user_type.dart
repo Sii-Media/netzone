@@ -18,6 +18,8 @@ class _UserTypeState extends State<UserType> {
   Widget build(BuildContext context) {
     final List<String> items = [
       'الشركات المحلية',
+      'شركة عقارات',
+      "تاجر",
       'السيارات',
       'الشركات البحرية',
       'المستهلك',

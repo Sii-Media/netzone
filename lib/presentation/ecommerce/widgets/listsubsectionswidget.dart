@@ -30,91 +30,160 @@ class ListSubSectionsWidget extends StatelessWidget {
         );
       },
       child: Card(
-        child: Padding(
-          padding: EdgeInsets.all(size.height * 0.002),
-          child: Stack(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CachedNetworkImage(
-                    imageUrl: deviceList.imageUrl,
-                    height: 120.h,
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  SizedBox(
-                    height: 30.h,
-                    child: Text(
-                      deviceList.name,
-                      style: TextStyle(
-                        color: AppColor.black,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.bold,
+        elevation: 3,
+        child: SizedBox(
+          height: 230.h,
+          child: Padding(
+            padding: EdgeInsets.all(size.height * 0.002),
+            child: Stack(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CachedNetworkImage(
+                      imageUrl: deviceList.imageUrl,
+                      height: 120.h,
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    SizedBox(
+                      height: 30.h,
+                      child: Text(
+                        deviceList.name,
+                        style: TextStyle(
+                          color: AppColor.black,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 5.0, horizontal: 4.0),
-                    child: SizedBox(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '${deviceList.price} : ${AppLocalizations.of(context).translate('price')}',
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5.0, horizontal: 4.0),
+                      child: SizedBox(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                RichText(
+                                  text: TextSpan(
+                                      style: TextStyle(
+                                          fontSize: 17.sp,
+                                          color: AppColor.backgroundColor),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: '${deviceList.price}',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              decoration: deviceList
+                                                          .discountPercentage !=
+                                                      null
+                                                  ? TextDecoration.lineThrough
+                                                  : TextDecoration.none,
+                                            )),
+                                        TextSpan(
+                                          text: '\$',
+                                          style: TextStyle(
+                                              color: AppColor.backgroundColor,
+                                              fontSize: 10.sp),
+                                        )
+                                      ]),
+                                ),
+
+                                // Text(
+                                //   'AED ${deviceList.price}',
+                                //   style: TextStyle(
+                                //       color: AppColor.backgroundColor,
+                                //       fontWeight: FontWeight.w700,
+                                //       fontSize: 18,
+                                //       decoration:
+                                //           deviceList.discountPercentage != null
+                                //               ? TextDecoration.lineThrough
+                                //               : TextDecoration.none),
+                                // ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    await shareImageWithDescription(
+                                      imageUrl: deviceList.imageUrl,
+                                      description: deviceList.name,
+                                    );
+                                  },
+                                  child: const Icon(
+                                    Icons.share,
+                                    color: AppColor.backgroundColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            deviceList.discountPercentage != null
+                                ? RichText(
+                                    text: TextSpan(
+                                        style: TextStyle(
+                                            fontSize: 17.sp,
+                                            color: AppColor.backgroundColor),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text:
+                                                  '${deviceList.priceAfterDiscount}',
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                              )),
+                                          TextSpan(
+                                            text: '\$ ',
+                                            style: TextStyle(
+                                                color: AppColor.backgroundColor,
+                                                fontSize: 10.sp),
+                                          ),
+                                          TextSpan(
+                                            text:
+                                                '  ${deviceList.discountPercentage?.round().toString()}% ${AppLocalizations.of(context).translate('OFF')}',
+                                            style: TextStyle(
+                                                color: Colors.green,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 14.sp),
+                                          )
+                                        ]),
+                                  )
+                                : Container()
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                deviceList.condition != null
+                    ? Positioned(
+                        top: 3,
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 4, horizontal: 8),
+                          decoration: BoxDecoration(
+                            color: deviceList.condition == 'new'
+                                ? Colors.red
+                                : Colors.yellow,
+                            borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(8)),
+                          ),
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .translate(deviceList.condition.toString()),
                             style: const TextStyle(
-                              color: AppColor.backgroundColor,
-                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () async {
-                              await shareImageWithDescription(
-                                imageUrl: deviceList.imageUrl,
-                                description: deviceList.name,
-                              );
-                            },
-                            child: const Icon(
-                              Icons.share,
-                              color: AppColor.backgroundColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              deviceList.condition != null
-                  ? Positioned(
-                      top: 3,
-                      right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 4, horizontal: 8),
-                        decoration: BoxDecoration(
-                          color: deviceList.condition == 'new'
-                              ? Colors.green
-                              : Colors.blue,
-                          borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(8)),
                         ),
-                        child: Text(
-                          deviceList.condition == 'new' ? 'New' : 'Used',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    )
-                  : const SizedBox(),
-            ],
+                      )
+                    : const SizedBox(),
+              ],
+            ),
           ),
         ),
       ),

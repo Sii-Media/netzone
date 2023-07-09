@@ -9,6 +9,10 @@ import 'package:share_plus/share_plus.dart';
 abstract class AdvertismentRepository {
   Future<Either<Failure, Advertising>> getAllAds();
 
+  Future<Either<Failure, Advertising>> getUserAds({
+    required String userId,
+  });
+
   Future<Either<Failure, Advertisement>> getAdsById({
     required String id,
   });

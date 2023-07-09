@@ -16,6 +16,7 @@ class CategoryProductsModel {
   final String? condition;
   final String description;
   final int price;
+  final num? quantity;
   final List<String>? images;
   final String? vedioUrl;
   final bool? guarantee;
@@ -26,6 +27,9 @@ class CategoryProductsModel {
   final String? year;
   final String? gifUrl;
 
+  final double? discountPercentage;
+  final double? priceAfterDiscount;
+
   CategoryProductsModel({
     required this.id,
     required this.owner,
@@ -35,6 +39,7 @@ class CategoryProductsModel {
     this.condition,
     required this.description,
     required this.price,
+    this.quantity,
     this.images,
     this.vedioUrl,
     this.guarantee,
@@ -43,6 +48,8 @@ class CategoryProductsModel {
     this.madeIn,
     this.year,
     this.gifUrl,
+    this.discountPercentage,
+    this.priceAfterDiscount,
   });
 
   factory CategoryProductsModel.fromJson(Map<String, dynamic> json) =>
@@ -61,6 +68,7 @@ extension MapToDomain on CategoryProductsModel {
         condition: condition,
         description: description,
         price: price,
+        quantity: quantity,
         images: images,
         vedioUrl: vedioUrl,
         guarantee: guarantee,
@@ -69,5 +77,7 @@ extension MapToDomain on CategoryProductsModel {
         madeIn: madeIn,
         year: year,
         gifUrl: gifUrl,
+        discountPercentage: discountPercentage,
+        priceAfterDiscount: priceAfterDiscount,
       );
 }

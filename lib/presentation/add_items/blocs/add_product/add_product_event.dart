@@ -14,6 +14,7 @@ class AddProductRequestedEvent extends AddProductEvent {
   final String? condition;
   final String description;
   final int price;
+  final int quantity;
   final List<XFile>? productimages;
   final File? video;
   final bool? guarantee;
@@ -21,6 +22,7 @@ class AddProductRequestedEvent extends AddProductEvent {
   final String? madeIn;
   final File image;
   final DateTime? year;
+  final int? discountPercentage;
 
   const AddProductRequestedEvent({
     required this.departmentName,
@@ -29,6 +31,7 @@ class AddProductRequestedEvent extends AddProductEvent {
     this.condition,
     required this.description,
     required this.price,
+    required this.quantity,
     this.productimages,
     this.video,
     this.guarantee,
@@ -36,5 +39,6 @@ class AddProductRequestedEvent extends AddProductEvent {
     this.madeIn,
     required this.image,
     this.year,
+    this.discountPercentage,
   });
 }

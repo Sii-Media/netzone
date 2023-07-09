@@ -205,6 +205,7 @@
     "buy": "Buy",
     "new": "new",
     "Used": "Used",
+    "used": "used",
     "الكترونيات": "electronics",
     "أجهزة المنزل والمكتب": "Home and office devices",
     "موضة رجالية": "Men's fashion",
@@ -418,5 +419,17 @@
     "users": "Users",
     "submit": "Submit",
     "sea_companies": "Sea Companies",
-    "is_purchasable": "Is Purchasable ?"
+    "is_purchasable": "Is Purchasable ?",
+    "price_after_discount": "Price After Discount",
+    "OFF": "OFF",
+    "price_now": "Price Now",
+    "companies_products": "Companies Products",
+    "شركة عقارات": "Real Estate",
+    "تاجر": "Saller",
+    "quantity": "Quantity",
+    "طائرات": "Aircraft",
+    "area": "Area",
+    "Bathrooms": "Bathrooms",
+    "Bedrooms": "Bedrooms",
+    "my_ads":"My Ads"
 }

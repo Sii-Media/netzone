@@ -196,13 +196,52 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
-                                                Text(
-                                                  '${AppLocalizations.of(context).translate('price')} : ${state.product.price}',
-                                                  style: TextStyle(
-                                                      color: AppColor.colorOne,
-                                                      fontSize: 17.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      '${AppLocalizations.of(context).translate('price')}: ',
+                                                      style: const TextStyle(
+                                                          color:
+                                                              AppColor.colorOne,
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                    RichText(
+                                                      text: TextSpan(
+                                                          style: TextStyle(
+                                                              fontSize: 18.sp,
+                                                              color: AppColor
+                                                                  .backgroundColor),
+                                                          children: <TextSpan>[
+                                                            TextSpan(
+                                                                text:
+                                                                    '${state.product.price}',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  decoration: state
+                                                                              .product
+                                                                              .discountPercentage !=
+                                                                          null
+                                                                      ? TextDecoration
+                                                                          .lineThrough
+                                                                      : TextDecoration
+                                                                          .none,
+                                                                )),
+                                                            TextSpan(
+                                                              text: '\$',
+                                                              style: TextStyle(
+                                                                  color: AppColor
+                                                                      .backgroundColor,
+                                                                  fontSize:
+                                                                      12.sp),
+                                                            )
+                                                          ]),
+                                                    ),
+                                                  ],
                                                 ),
                                                 Row(
                                                   mainAxisAlignment:
@@ -278,6 +317,65 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                             SizedBox(
                                               height: 7.h,
                                             ),
+                                            state.product.discountPercentage !=
+                                                    null
+                                                ? Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        '${AppLocalizations.of(context).translate('price_now')}: ',
+                                                        style: const TextStyle(
+                                                            color: AppColor
+                                                                .colorOne,
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      ),
+                                                      RichText(
+                                                        text: TextSpan(
+                                                            style: TextStyle(
+                                                                fontSize: 18.sp,
+                                                                color: AppColor
+                                                                    .backgroundColor),
+                                                            children: <
+                                                                TextSpan>[
+                                                              TextSpan(
+                                                                  text:
+                                                                      '${state.product.priceAfterDiscount}',
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                  )),
+                                                              TextSpan(
+                                                                text: '\$ ',
+                                                                style: TextStyle(
+                                                                    color: AppColor
+                                                                        .backgroundColor,
+                                                                    fontSize:
+                                                                        12.sp),
+                                                              ),
+                                                              TextSpan(
+                                                                text:
+                                                                    '  ${state.product.discountPercentage?.round().toString()}% ${AppLocalizations.of(context).translate('OFF')}',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .green,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    fontSize:
+                                                                        14.sp),
+                                                              )
+                                                            ]),
+                                                      ),
+                                                    ],
+                                                  )
+                                                : Container(),
                                             Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
@@ -385,6 +483,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                               .translate('owner'),
                                           input: state.product.owner.username ??
                                               '',
+                                        ),
+                                        SizedBox(
+                                          height: 7.h,
+                                        ),
+                                        titleAndInput(
+                                          title: AppLocalizations.of(context)
+                                              .translate('quantity'),
+                                          input: state.product.quantity == null
+                                              ? 1.toString()
+                                              : state.product.quantity
+                                                  .toString(),
                                         ),
                                         SizedBox(
                                           height: 7.h,

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:netzoon/domain/auth/entities/user_info.dart';
 
 class Vehicle extends Equatable {
   final String name;
@@ -10,7 +11,7 @@ class Vehicle extends Equatable {
   final String location;
   final String type;
   final String category;
-  final String? creator;
+  final UserInfo? creator;
 
   const Vehicle({
     required this.name,

@@ -143,7 +143,7 @@ class _LogInScreenState extends State<LogInScreen> {
             return UserProfileScreen(
               userId: state.user.userInfo.id,
             );
-          } else if (state.user.userInfo.userType == 'local_company') {
+          } else {
             return MyLocalCompanyProfileScreen(
               userId: state.user.userInfo.id,
             );

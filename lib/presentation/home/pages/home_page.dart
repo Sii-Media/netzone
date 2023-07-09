@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,9 +33,15 @@ import 'package:netzoon/presentation/news/news_screen.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersItem/tenders_item_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../../categories/real_estate/blocs/real_estate/real_estate_bloc.dart';
+import '../../categories/real_estate/screens/real_estate_details_screen.dart';
+import '../../categories/real_estate/screens/real_estate_list_screen.dart';
+import '../../categories/vehicles/blocs/bloc/vehicle_bloc.dart';
+import '../../categories/vehicles/screens/vehicle_list_screen.dart';
 import '../../chat/screens/chat_home_screen.dart';
 import '../../core/widgets/no_data_widget.dart';
 import '../../core/widgets/on_failure_widget.dart';
+import '../../core/widgets/vehicle_details.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -77,7 +84,9 @@ class _HomePageState extends State<HomePage> {
   final musicBloc = sl<ElecDevicesBloc>();
   final sportBloc = sl<ElecDevicesBloc>();
   final agricultureBloc = sl<ElecDevicesBloc>();
-
+  final planesBloc = sl<VehicleBloc>();
+  final carsBloc = sl<VehicleBloc>();
+  final realEstateBloc = sl<RealEstateBloc>();
   // late AnimationController _animationController;
 
   @override
@@ -97,7 +106,9 @@ class _HomePageState extends State<HomePage> {
     musicBloc.add(const GetElcDevicesEvent(department: 'آلات موسيقية'));
     sportBloc.add(const GetElcDevicesEvent(department: 'أجهزة رياضية'));
     agricultureBloc.add(const GetElcDevicesEvent(department: 'الزراعة'));
-
+    planesBloc.add(GetAllPlanesEvent());
+    carsBloc.add(GetLatestCarByCreatorEvent());
+    realEstateBloc.add(GetAllRealEstatesEvent());
     // _animationController = AnimationController(
     //     vsync: this, duration: const Duration(milliseconds: 750));
     // _animationController.repeat(reverse: true);
@@ -132,6 +143,9 @@ class _HomePageState extends State<HomePage> {
           musicBloc.add(const GetElcDevicesEvent(department: 'آلات موسيقية'));
           sportBloc.add(const GetElcDevicesEvent(department: 'أجهزة رياضية'));
           agricultureBloc.add(const GetElcDevicesEvent(department: 'الزراعة'));
+          planesBloc.add(GetAllPlanesEvent());
+          carsBloc.add(GetLatestCarByCreatorEvent());
+          realEstateBloc.add(GetAllRealEstatesEvent());
         },
         color: AppColor.white,
         backgroundColor: AppColor.backgroundColor,
@@ -777,6 +791,378 @@ class _HomePageState extends State<HomePage> {
                           filter: 'الزراعة',
                           // devices: elecDevices,
                           elec: state.elecDevices,
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('طائرات'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return const VehicleListScreen(
+                          vehicleType: 'planes',
+                        );
+                      }),
+                    );
+                  },
+                ),
+                BlocBuilder<VehicleBloc, VehicleState>(
+                  bloc: planesBloc,
+                  builder: (context, state) {
+                    if (state is VehicleInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (state is VehicleFailure) {
+                      final failure = state.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          planesBloc.add(GetAllPlanesEvent());
+                        },
+                      );
+                    } else if (state is VehicleSuccess) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3.0,
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 209, 219, 235)
+                              .withOpacity(0.8),
+                        ),
+                        height: 120.h,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: state.vehilces.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return VehicleDetailsScreen(
+                                        vehicle: state.vehilces[index],
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                              child: Card(
+                                elevation: 4.0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                ),
+                                child: SizedBox(
+                                  height: 100.h,
+                                  width: 180.w,
+                                  child: Stack(
+                                    // fit: StackFit.expand,
+                                    alignment:
+                                        AlignmentDirectional.bottomCenter,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              state.vehilces[index].imageUrl,
+                                          height: 200.h,
+                                          width: double.maxFinite,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(16.0),
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Colors.transparent,
+                                              AppColor.backgroundColor
+                                                  .withOpacity(0.6),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Text(
+                                          state.vehilces[index].name,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14.0.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('سيارات'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return const VehicleListScreen(
+                          vehicleType: 'cars',
+                        );
+                      }),
+                    );
+                  },
+                ),
+                BlocBuilder<VehicleBloc, VehicleState>(
+                  bloc: carsBloc,
+                  builder: (context, state) {
+                    if (state is VehicleInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (state is VehicleFailure) {
+                      final failure = state.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          carsBloc.add(GetLatestCarByCreatorEvent());
+                        },
+                      );
+                    } else if (state is VehicleSuccess) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3.0,
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 209, 219, 235)
+                              .withOpacity(0.8),
+                        ),
+                        height: 120.h,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: state.vehilces.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return VehicleDetailsScreen(
+                                        vehicle: state.vehilces[index],
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                              child: Card(
+                                elevation: 4.0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                ),
+                                child: SizedBox(
+                                  height: 100.h,
+                                  width: 180.w,
+                                  child: Stack(
+                                    // fit: StackFit.expand,
+                                    alignment:
+                                        AlignmentDirectional.bottomCenter,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              state.vehilces[index].imageUrl,
+                                          height: 200.h,
+                                          width: double.maxFinite,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(16.0),
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Colors.transparent,
+                                              AppColor.backgroundColor
+                                                  .withOpacity(0.6),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Text(
+                                          state.vehilces[index].name,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14.0.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('عقارات'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return const RealEstateListScreen();
+                      }),
+                    );
+                  },
+                ),
+                BlocBuilder<RealEstateBloc, RealEstateState>(
+                  bloc: realEstateBloc,
+                  builder: (context, state) {
+                    if (state is GetRealEstateInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (state is GetRealEstateFailure) {
+                      final failure = state.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          realEstateBloc.add(GetAllRealEstatesEvent());
+                        },
+                      );
+                    } else if (state is GetAllRealEstatesSuccess) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3.0,
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 209, 219, 235)
+                              .withOpacity(0.8),
+                        ),
+                        height: 120.h,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: state.realEstates.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return RealEstateDetailsScreen(
+                                          realEstate: state.realEstates[index]);
+                                    },
+                                  ),
+                                );
+                              },
+                              child: Card(
+                                elevation: 4.0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                ),
+                                child: SizedBox(
+                                  height: 100.h,
+                                  width: 180.w,
+                                  child: Stack(
+                                    // fit: StackFit.expand,
+                                    alignment:
+                                        AlignmentDirectional.bottomCenter,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              state.realEstates[index].imageUrl,
+                                          height: 200.h,
+                                          width: double.maxFinite,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(16.0),
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Colors.transparent,
+                                              AppColor.backgroundColor
+                                                  .withOpacity(0.6),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Text(
+                                          state.realEstates[index].title,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14.0.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       );
                     }

@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:netzoon/data/models/auth/user_info/user_info_model.dart';
 import 'package:netzoon/domain/categories/entities/vehicles/vehicle.dart';
 
 part 'vehicle_model.g.dart';
@@ -16,7 +17,7 @@ class VehicleModel {
   final String location;
   final String type;
   final String category;
-  final String? creator;
+  final UserInfoModel? creator;
 
   VehicleModel({
     this.id,
@@ -40,14 +41,15 @@ class VehicleModel {
 
 extension MapToDomain on VehicleModel {
   Vehicle toDomain() => Vehicle(
-      name: name,
-      imageUrl: imageUrl,
-      description: description,
-      price: price,
-      kilometers: kilometers,
-      year: year,
-      location: location,
-      type: type,
-      category: category,
-      creator: creator);
+        name: name,
+        imageUrl: imageUrl,
+        description: description,
+        price: price,
+        kilometers: kilometers,
+        year: year,
+        location: location,
+        type: type,
+        category: category,
+        creator: creator?.toDomain(),
+      );
 }
