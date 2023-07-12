@@ -1,15 +1,23 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/auth/entities/user_info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../data/core/constants/constants.dart';
+import '../../../../data/models/auth/user/user_model.dart';
 import '../../../../injection_container.dart';
+import '../../../auth/blocs/auth_bloc/auth_bloc.dart';
 import '../../../chat/screens/chat_page_screen.dart';
 import '../../../core/constant/colors.dart';
 import '../../../core/screen/product_details_screen.dart';
 import '../../../profile/blocs/get_user/get_user_bloc.dart';
 import '../../../utils/app_localizations.dart';
+import '../../widgets/build_rating.dart';
 
 class UsersProfileScreen extends StatefulWidget {
   final UserInfo user;
@@ -24,13 +32,39 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
   final userBloc = sl<GetUserBloc>();
   final productBloc = sl<GetUserBloc>();
   final myProductBloc = sl<GetUserBloc>();
+  final authBloc = sl<AuthBloc>();
+  bool isFollowing = false;
   @override
   void initState() {
     userBloc.add(GetUserByIdEvent(userId: widget.user.id));
     productBloc.add(GetUserProductsByIdEvent(id: widget.user.id));
     myProductBloc.add(GetSelectedProductsByUserIdEvent(userId: widget.user.id));
+    authBloc.add(AuthCheckRequested());
 
+    checkFollowStatus();
     super.initState();
+  }
+
+  void checkFollowStatus() async {
+    bool followStatus = await isFollow(widget.user.id);
+    setState(() {
+      isFollowing = followStatus;
+    });
+  }
+
+  Future<bool> isFollow(element) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    if (!prefs.containsKey(SharedPreferencesKeys.user)) {
+      return false;
+    }
+
+    final user = UserModel.fromJson(
+      json.decode(prefs.getString(SharedPreferencesKeys.user)!)
+          as Map<String, dynamic>,
+    );
+    final isFollow = user.userInfo.followings?.contains(element);
+    return isFollow ?? false;
   }
 
   @override
@@ -139,13 +173,108 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                       SizedBox(
                                         width: 20.w,
                                       ),
-                                      Text(
-                                        state.userInfo.username ?? '',
-                                        style: TextStyle(
-                                          color: AppColor.black,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16.sp,
-                                        ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            state.userInfo.username ?? '',
+                                            style: TextStyle(
+                                              color: AppColor.black,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 16.sp,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 10.h,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () => showRating(context),
+                                            child: RatingBar.builder(
+                                              minRating: 1,
+                                              maxRating: 5,
+                                              initialRating: 3,
+                                              itemSize: 25,
+                                              ignoreGestures: true,
+                                              itemBuilder: (context, _) {
+                                                return const Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                );
+                                              },
+                                              allowHalfRating: true,
+                                              updateOnDrag: true,
+                                              onRatingUpdate: (rating) {},
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 10.h,
+                                          ),
+                                          BlocBuilder<AuthBloc, AuthState>(
+                                            bloc: authBloc,
+                                            builder: (context, state) {
+                                              if (state is AuthInProgress) {
+                                                return const Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: AppColor
+                                                        .backgroundColor,
+                                                  ),
+                                                );
+                                              } else if (state
+                                                  is Authenticated) {
+                                                // isFollowing = state.user
+                                                //         .userInfo.followings!
+                                                //         .contains(widget
+                                                //             .localCompany.id)
+                                                //     ? true
+                                                //     : false;
+                                                return ElevatedButton(
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all(AppColor
+                                                                .backgroundColor),
+                                                    shape: MaterialStateProperty
+                                                        .all(
+                                                            RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              18.0),
+                                                    )),
+                                                  ),
+                                                  child: Text(
+                                                    isFollowing
+                                                        ? AppLocalizations.of(
+                                                                context)
+                                                            .translate(
+                                                                'unfollow')
+                                                        : AppLocalizations.of(
+                                                                context)
+                                                            .translate(
+                                                                'follow'),
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      isFollowing =
+                                                          !isFollowing;
+                                                    });
+                                                    userBloc.add(
+                                                        ToggleFollowEvent(
+                                                            otherUserId: widget
+                                                                .user.id));
+                                                  },
+                                                );
+                                              }
+                                              return Container();
+                                            },
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
@@ -247,8 +376,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                     child: Text(
                                                       AppLocalizations.of(
                                                               context)
-                                                          .translate(
-                                                              'customers service'),
+                                                          .translate('chat'),
                                                       style: TextStyle(
                                                         color: AppColor.white,
                                                         fontSize: 13.sp,
@@ -296,7 +424,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                             ),
                           ),
                           Text(
-                            AppLocalizations.of(context).translate('about_us'),
+                            AppLocalizations.of(context).translate('my_info'),
                             style: TextStyle(
                               color: AppColor.black,
                               fontSize: 10.sp,
@@ -395,16 +523,17 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                           child:
                                                               GestureDetector(
                                                             onTap: () {
-                                                              // Navigator.of(context).push(
-                                                              //     MaterialPageRoute(
-                                                              //         builder:
-                                                              //             (context) {
-                                                              //   return ProductDetailScreen(
-                                                              //       item: state
-                                                              //           .products[
-                                                              //               index]
-                                                              //           .id);
-                                                              // }));
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .push(MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) {
+                                                                return ProductDetailScreen(
+                                                                    item: state
+                                                                        .products[
+                                                                            index]
+                                                                        .id);
+                                                              }));
                                                             },
                                                             child: Column(
                                                               mainAxisAlignment:

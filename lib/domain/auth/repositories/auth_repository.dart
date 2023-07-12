@@ -14,6 +14,13 @@ abstract class AuthRepository {
     required String userType,
     required String firstMobile,
     required bool isFreeZoon,
+    String? secondMobile,
+    String? thirdMobile,
+    String? subcategory,
+    String? address,
+    int? companyProductsNumbe,
+    String? sellType,
+    String? toCountry,
     bool? deliverable,
     File? profilePhoto,
     File? coverPhoto,
@@ -79,5 +86,17 @@ abstract class AuthRepository {
 
   Future<Either<Failure, List<UserInfo>>> getUserAccounts({
     required String email,
+  });
+
+  Future<Either<Failure, List<UserInfo>>> getUserFollowings({
+    required String userId,
+  });
+
+  Future<Either<Failure, List<UserInfo>>> getUserFollowers({
+    required String userId,
+  });
+  Future<Either<Failure, String>> toggleFollow({
+    required String currentUserId,
+    required String otherUserId,
   });
 }

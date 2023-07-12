@@ -46,3 +46,19 @@ class DeleteFromSelectedProductsEvent extends GetUserEvent {
 
   const DeleteFromSelectedProductsEvent({required this.productId});
 }
+
+class GetUserFollowingsEvent extends GetUserEvent {}
+
+class GetUserFollowersEvent extends GetUserEvent {}
+
+class ToggleFollowEvent extends GetUserEvent {
+  final String otherUserId;
+
+  const ToggleFollowEvent({required this.otherUserId});
+}
+
+class IsFollowingEvent extends GetUserEvent {
+  final String id;
+
+  const IsFollowingEvent({required this.id});
+}

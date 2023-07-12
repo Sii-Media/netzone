@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
@@ -6,13 +7,47 @@ import 'package:netzoon/presentation/core/helpers/map_to_date.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
+import 'package:video_player/video_player.dart';
 
+import '../../categories/widgets/image_free_zone_widget.dart';
 import '../helpers/share_image_function.dart';
 
-class VehicleDetailsScreen extends StatelessWidget {
+class VehicleDetailsScreen extends StatefulWidget {
   const VehicleDetailsScreen({super.key, required this.vehicle});
 
   final dynamic vehicle;
+
+  @override
+  State<VehicleDetailsScreen> createState() => _VehicleDetailsScreenState();
+}
+
+class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
+  late VideoPlayerController _videoPlayerController;
+  late ChewieController _chewieController;
+
+  @override
+  void initState() {
+    _videoPlayerController =
+        VideoPlayerController.network(widget.vehicle.vedioUrl ?? '')
+          ..initialize().then((_) {
+            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+            _videoPlayerController.play();
+            setState(() {});
+          });
+    _chewieController = ChewieController(
+      videoPlayerController: _videoPlayerController,
+      aspectRatio: 16 / 9,
+    );
+    _videoPlayerController.setLooping(true);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _videoPlayerController.dispose();
+    _chewieController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +74,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       CachedNetworkImage(
-                        imageUrl: vehicle.imageUrl,
+                        imageUrl: widget.vehicle.imageUrl,
                         width: 700.w,
                         height: 200.h,
                         fit: BoxFit.cover,
@@ -54,7 +89,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '${vehicle.price.toString()} \$',
+                                  '${widget.vehicle.price.toString()} \$',
                                   style: TextStyle(
                                       color: AppColor.colorOne,
                                       fontSize: 17.sp,
@@ -67,8 +102,9 @@ class VehicleDetailsScreen extends StatelessWidget {
                                     IconButton(
                                       onPressed: () async {
                                         await shareImageWithDescription(
-                                            imageUrl: vehicle.imageUrl,
-                                            description: vehicle.description);
+                                            imageUrl: widget.vehicle.imageUrl,
+                                            description:
+                                                widget.vehicle.description);
                                       },
                                       icon: const Icon(
                                         Icons.share,
@@ -87,7 +123,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                               height: 7.h,
                             ),
                             Text(
-                              vehicle.name,
+                              widget.vehicle.name,
                               style: TextStyle(
                                 color: AppColor.black,
                                 fontSize: 22.sp,
@@ -128,7 +164,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                         titleAndInput(
                           title:
                               AppLocalizations.of(context).translate('owner'),
-                          input: vehicle.creator.username,
+                          input: widget.vehicle.creator.username,
                         ),
                         SizedBox(
                           height: 7.h,
@@ -136,14 +172,14 @@ class VehicleDetailsScreen extends StatelessWidget {
                         titleAndInput(
                           title:
                               AppLocalizations.of(context).translate('categ'),
-                          input: vehicle.category,
+                          input: widget.vehicle.category,
                         ),
                         SizedBox(
                           height: 7.h,
                         ),
                         titleAndInput(
                           title: AppLocalizations.of(context).translate('year'),
-                          input: formatDate(vehicle.year),
+                          input: formatDate(widget.vehicle.year),
                         ),
                         SizedBox(
                           height: 7.h,
@@ -151,7 +187,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                         titleAndInput(
                           title: AppLocalizations.of(context)
                               .translate('kilometers'),
-                          input: vehicle.kilometers.toString(),
+                          input: widget.vehicle.kilometers.toString(),
                         ),
                         SizedBox(
                           height: 7.h,
@@ -159,18 +195,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                         titleAndInput(
                           title:
                               AppLocalizations.of(context).translate('address'),
-                          input: vehicle.location,
-                        ),
-                        SizedBox(
-                          height: 7.h,
-                        ),
-                        titleAndInput(
-                          title: AppLocalizations.of(context)
-                              .translate('guarantee'),
-                          input: 'لا ينطبق',
-                        ),
-                        SizedBox(
-                          height: 7.h,
+                          input: widget.vehicle.location,
                         ),
                       ],
                     ),
@@ -199,7 +224,7 @@ class VehicleDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        vehicle.description,
+                        widget.vehicle.description,
                         style: TextStyle(
                           color: AppColor.mainGrey,
                           fontSize: 15.sp,
@@ -207,6 +232,94 @@ class VehicleDetailsScreen extends StatelessWidget {
                       ),
                     ],
                   ),
+                ),
+                SizedBox(
+                  height: 7.h,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 7,
+                        color: Colors.grey.withOpacity(0.4),
+                      ),
+                    ),
+                  ),
+                  child: Column(
+                    // mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${AppLocalizations.of(context).translate('images')} :',
+                        style: TextStyle(
+                          color: AppColor.black,
+                          fontSize: 17.sp,
+                        ),
+                      ),
+                      widget.vehicle.carImages?.isNotEmpty == true
+                          ? GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: widget.vehicle.carImages?.length,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      childAspectRatio: 0.94),
+                              itemBuilder: (BuildContext context, index) {
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  child: ListOfPictures(
+                                    img: widget.vehicle.carImages[index],
+                                  ),
+                                );
+                              })
+                          : GestureDetector(
+                              onTap: () {},
+                              child: Text(
+                                AppLocalizations.of(context)
+                                    .translate('no_images'),
+                                style: TextStyle(
+                                  color: AppColor.mainGrey,
+                                  fontSize: 15.sp,
+                                ),
+                              ),
+                            ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 7,
+                        color: Colors.grey.withOpacity(0.4),
+                      ),
+                    ),
+                  ),
+                  child: widget.vehicle.vedioUrl != null &&
+                          widget.vehicle.vedioUrl != ''
+                      // ? VideoFreeZoneWidget(
+                      //     title:
+                      //         "${AppLocalizations.of(context).translate('vedio')}  : ",
+                      //     vediourl: state.ads.advertisingVedio ?? '',
+                      //   )
+                      ? AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: Chewie(
+                            controller: _chewieController,
+                          ),
+                        )
+                      : Text(
+                          AppLocalizations.of(context).translate('no_vedio'),
+                          style: TextStyle(
+                            color: AppColor.mainGrey,
+                            fontSize: 15.sp,
+                          ),
+                        ),
                 ),
                 SizedBox(
                   height: 110.h,

@@ -7,6 +7,9 @@ import 'package:netzoon/presentation/auth/screens/signin.dart';
 import 'package:netzoon/presentation/auth/screens/user_type.dart';
 import 'package:netzoon/presentation/auth/widgets/button_auth_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/profile/screens/my_news_profile_screen.dart';
+import 'package:netzoon/presentation/profile/screens/my_realestate_company_profile_screen.dart';
+import 'package:netzoon/presentation/profile/screens/my_vehicle_profile_screen.dart';
 import 'package:netzoon/presentation/profile/screens/profile_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
@@ -143,8 +146,21 @@ class _LogInScreenState extends State<LogInScreen> {
             return UserProfileScreen(
               userId: state.user.userInfo.id,
             );
-          } else {
+          } else if (state.user.userInfo.userType == 'local_company' ||
+              state.user.userInfo.userType == 'trader') {
             return MyLocalCompanyProfileScreen(
+              userId: state.user.userInfo.id,
+            );
+          } else if (state.user.userInfo.userType == 'real_estate') {
+            return MyRealEstateCompanyProfileScreen(
+                userId: state.user.userInfo.id);
+          } else if (state.user.userInfo.userType == 'car' ||
+              state.user.userInfo.userType == 'plans') {
+            return MyVehicleProfileScreen(
+                userId: state.user.userInfo.id,
+                type: state.user.userInfo.userType ?? '');
+          } else if (state.user.userInfo.userType == 'news_agency') {
+            return MyNewsProfileScreen(
               userId: state.user.userInfo.id,
             );
           }

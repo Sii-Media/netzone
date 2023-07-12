@@ -1,19 +1,28 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/auth/entities/user_info.dart';
 import 'package:netzoon/injection_container.dart';
+import 'package:netzoon/presentation/advertising/advertising.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
+import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
 import 'package:netzoon/presentation/categories/local_company/local_company_bloc/local_company_bloc.dart';
 import 'package:netzoon/presentation/categories/widgets/product_details.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../advertising/advertising_details.dart';
+import '../../../data/core/constants/constants.dart';
+import '../../../data/models/auth/user/user_model.dart';
 import '../../chat/screens/chat_page_screen.dart';
 import '../../core/widgets/on_failure_widget.dart';
 import '../../profile/blocs/get_user/get_user_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+
+import '../widgets/build_rating.dart';
 
 class LocalCompanyProfileScreen extends StatefulWidget {
   // final LocalCompany localCompany;
@@ -34,6 +43,8 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
   final userBloc = sl<GetUserBloc>();
   final prodBloc = sl<LocalCompanyBloc>();
   final adsBloc = sl<AdsBlocBloc>();
+  final authBloc = sl<AuthBloc>();
+  bool isFollowing = false;
 
   @override
   void initState() {
@@ -42,7 +53,32 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
     userBloc.add(GetUserByIdEvent(userId: widget.localCompany.id));
     prodBloc.add(GetLocalProductsEvent(username: widget.localCompany.id));
     adsBloc.add(GetUserAdsEvent(userId: widget.localCompany.id));
+    authBloc.add(AuthCheckRequested());
+
+    checkFollowStatus();
     super.initState();
+  }
+
+  void checkFollowStatus() async {
+    bool followStatus = await isFollow(widget.localCompany.id);
+    setState(() {
+      isFollowing = followStatus;
+    });
+  }
+
+  Future<bool> isFollow(element) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    if (!prefs.containsKey(SharedPreferencesKeys.user)) {
+      return false;
+    }
+
+    final user = UserModel.fromJson(
+      json.decode(prefs.getString(SharedPreferencesKeys.user)!)
+          as Map<String, dynamic>,
+    );
+    final isFollow = user.userInfo.followings?.contains(element);
+    return isFollow ?? false;
   }
 
   @override
@@ -156,6 +192,8 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                       Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             state.userInfo.username ?? '',
@@ -168,22 +206,91 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                           SizedBox(
                                             height: 10.h,
                                           ),
-                                          ElevatedButton(
-                                            style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      AppColor.backgroundColor),
-                                              shape: MaterialStateProperty.all(
-                                                  RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(18.0),
-                                              )),
+                                          GestureDetector(
+                                            onTap: () => showRating(context),
+                                            child: RatingBar.builder(
+                                              minRating: 1,
+                                              maxRating: 5,
+                                              initialRating: 3,
+                                              itemSize: 25,
+                                              ignoreGestures: true,
+                                              itemBuilder: (context, _) {
+                                                return const Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                );
+                                              },
+                                              allowHalfRating: true,
+                                              updateOnDrag: true,
+                                              onRatingUpdate: (rating) {},
                                             ),
-                                            child: Text(
-                                                AppLocalizations.of(context)
-                                                    .translate('follow')),
-                                            onPressed: () {},
                                           ),
+                                          SizedBox(
+                                            height: 10.h,
+                                          ),
+                                          BlocBuilder<AuthBloc, AuthState>(
+                                            bloc: authBloc,
+                                            builder: (context, state) {
+                                              if (state is AuthInProgress) {
+                                                return const Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: AppColor
+                                                        .backgroundColor,
+                                                  ),
+                                                );
+                                              } else if (state
+                                                  is Authenticated) {
+                                                // isFollowing = state.user
+                                                //         .userInfo.followings!
+                                                //         .contains(widget
+                                                //             .localCompany.id)
+                                                //     ? true
+                                                //     : false;
+                                                return ElevatedButton(
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all(AppColor
+                                                                .backgroundColor),
+                                                    shape: MaterialStateProperty
+                                                        .all(
+                                                            RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              18.0),
+                                                    )),
+                                                  ),
+                                                  child: Text(
+                                                    isFollowing
+                                                        ? AppLocalizations.of(
+                                                                context)
+                                                            .translate(
+                                                                'unfollow')
+                                                        : AppLocalizations.of(
+                                                                context)
+                                                            .translate(
+                                                                'follow'),
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      isFollowing =
+                                                          !isFollowing;
+                                                    });
+                                                    userBloc.add(
+                                                        ToggleFollowEvent(
+                                                            otherUserId: widget
+                                                                .localCompany
+                                                                .id));
+                                                  },
+                                                );
+                                              }
+                                              return Container();
+                                            },
+                                          )
                                         ],
                                       ),
                                     ],
@@ -497,6 +604,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                         return ProductDetailsScreen(
                                                           products:
                                                               state.products,
+                                                          index: index,
                                                         );
                                                       },
                                                     ),
@@ -579,184 +687,147 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                             fontSize: 22.sp,
                                           ),
                                         )
-                                      : GridView.builder(
-                                          gridDelegate:
-                                              SliverGridDelegateWithFixedCrossAxisCount(
-                                                  crossAxisCount: 3,
-                                                  childAspectRatio: 0.95,
-                                                  crossAxisSpacing: 10.w,
-                                                  mainAxisSpacing: 10.h),
+                                      : ListView.builder(
                                           shrinkWrap: true,
                                           physics:
                                               const BouncingScrollPhysics(),
                                           itemCount: state.ads.length,
+                                          scrollDirection: Axis.vertical,
                                           itemBuilder: (context, index) {
-                                            return ClipRRect(
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(20)),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                      builder: (context) {
-                                                        return AdvertismentDetalsScreen(
-                                                            adsId: state
-                                                                .ads[index].id);
-                                                      },
-                                                    ),
-                                                  );
-                                                },
-                                                // child: Column(
-                                                //   mainAxisAlignment:
-                                                //       MainAxisAlignment.start,
-                                                //   crossAxisAlignment:
-                                                //       CrossAxisAlignment.center,
-                                                //   children: [
-                                                //     CachedNetworkImage(
-                                                //       imageUrl: state.ads[index]
-                                                //           .advertisingImage,
-                                                //       height: 65.h,
-                                                //       width: 120.w,
-                                                //       fit: BoxFit.contain,
-                                                //     ),
-                                                //     Row(
-                                                //       mainAxisAlignment:
-                                                //           MainAxisAlignment
-                                                //               .spaceEvenly,
-                                                //       children: [
-                                                //         Text(
-                                                //           state.ads[index].name,
-                                                //           style: const TextStyle(
-                                                //               color: AppColor
-                                                //                   .backgroundColor,
-                                                //               fontSize: 10),
-                                                //         ),
-                                                //         Text(
-                                                //           '${state.ads[index].advertisingPrice} \$',
-                                                //           style: const TextStyle(
-                                                //               color: AppColor
-                                                //                   .colorTwo,
-                                                //               fontSize: 10),
-                                                //         ),
-                                                //       ],
-                                                //     ),
-                                                //   ],
-                                                // ),
-                                                child: Card(
-                                                  elevation: 4.0,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            16.0),
-                                                  ),
-                                                  child: SizedBox(
-                                                    height: 100.h,
-                                                    width: 180.w,
-                                                    child: Stack(
-                                                      // fit: StackFit.expand,
-                                                      alignment:
-                                                          AlignmentDirectional
-                                                              .bottomCenter,
-                                                      children: [
-                                                        ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      16.0),
-                                                          child:
-                                                              CachedNetworkImage(
-                                                            imageUrl: state
-                                                                .ads[index]
-                                                                .advertisingImage,
-                                                            height: 200.h,
-                                                            width: double
-                                                                .maxFinite,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        16.0),
-                                                            gradient:
-                                                                LinearGradient(
-                                                              begin: Alignment
-                                                                  .topCenter,
-                                                              end: Alignment
-                                                                  .bottomCenter,
-                                                              colors: [
-                                                                Colors
-                                                                    .transparent,
-                                                                AppColor
-                                                                    .backgroundColor
-                                                                    .withOpacity(
-                                                                        0.6),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      6.0),
-                                                          child: Align(
-                                                            alignment: Alignment
-                                                                .bottomCenter,
-                                                            child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Text(
-                                                                  state
-                                                                      .ads[
-                                                                          index]
-                                                                      .name,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        14.0.sp,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
-                                                                Text(
-                                                                  '${state.ads[index].advertisingPrice} \$',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        14.0.sp,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .right,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
+                                            return Container(
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              height: 220.h,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8),
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20)
+                                                          .w),
+                                              child: Advertising(
+                                                  advertisment:
+                                                      state.ads[index]),
                                             );
                                           },
                                         );
+                                  // : GridView.builder(
+                                  //     gridDelegate:
+                                  //         SliverGridDelegateWithFixedCrossAxisCount(
+                                  //             crossAxisCount: 3,
+                                  //             childAspectRatio: 0.95,
+                                  //             crossAxisSpacing: 10.w,
+                                  //             mainAxisSpacing: 10.h),
+                                  //     shrinkWrap: true,
+                                  //     physics:
+                                  //         const BouncingScrollPhysics(),
+                                  //     itemCount: state.ads.length,
+                                  //     itemBuilder: (context, index) {
+                                  //       return ClipRRect(
+                                  //         borderRadius:
+                                  //             const BorderRadius.all(
+                                  //                 Radius.circular(20)),
+                                  //         child: GestureDetector(
+                                  //           onTap: () {
+                                  //             Navigator.of(context).push(
+                                  //               MaterialPageRoute(
+                                  //                 builder: (context) {
+                                  //                   return AdvertismentDetalsScreen(
+                                  //                       adsId: state
+                                  //                           .ads[index].id);
+                                  //                 },
+                                  //               ),
+                                  //             );
+                                  //           },
+                                  //           child: Card(
+                                  //             elevation: 4.0,
+                                  //             shape: RoundedRectangleBorder(
+                                  //               borderRadius:
+                                  //                   BorderRadius.circular(
+                                  //                       16.0),
+                                  //             ),
+                                  //             child: SizedBox(
+                                  //               height: 100.h,
+                                  //               width: 180.w,
+                                  //               child: Stack(
+                                  //                 // fit: StackFit.expand,
+                                  //                 alignment:
+                                  //                     AlignmentDirectional
+                                  //                         .bottomCenter,
+                                  //                 children: [
+                                  //                   ClipRRect(
+                                  //                     borderRadius:
+                                  //                         BorderRadius
+                                  //                             .circular(
+                                  //                                 16.0),
+                                  //                     child:
+                                  //                         CachedNetworkImage(
+                                  //                       imageUrl: state
+                                  //                           .ads[index]
+                                  //                           .advertisingImage,
+                                  //                       height: 200.h,
+                                  //                       width: double
+                                  //                           .maxFinite,
+                                  //                       fit: BoxFit.cover,
+                                  //                     ),
+                                  //                   ),
+                                  //                   Container(
+                                  //                     decoration:
+                                  //                         BoxDecoration(
+                                  //                       borderRadius:
+                                  //                           BorderRadius
+                                  //                               .circular(
+                                  //                                   16.0),
+                                  //                       gradient:
+                                  //                           LinearGradient(
+                                  //                         begin: Alignment
+                                  //                             .topCenter,
+                                  //                         end: Alignment
+                                  //                             .bottomCenter,
+                                  //                         colors: [
+                                  //                           Colors
+                                  //                               .transparent,
+                                  //                           AppColor
+                                  //                               .backgroundColor
+                                  //                               .withOpacity(
+                                  //                                   0.6),
+                                  //                         ],
+                                  //                       ),
+                                  //                     ),
+                                  //                   ),
+                                  //                   Padding(
+                                  //                     padding:
+                                  //                         const EdgeInsets
+                                  //                                 .symmetric(
+                                  //                             horizontal:
+                                  //                                 6.0),
+                                  //                     child: Align(
+                                  //                       alignment: Alignment
+                                  //                           .bottomCenter,
+                                  //                       child: Text(
+                                  //                         state.ads[index]
+                                  //                             .name,
+                                  //                         style: TextStyle(
+                                  //                           color: Colors
+                                  //                               .white,
+                                  //                           fontSize:
+                                  //                               10.0.sp,
+                                  //                           fontWeight:
+                                  //                               FontWeight
+                                  //                                   .bold,
+                                  //                         ),
+                                  //                       ),
+                                  //                     ),
+                                  //                   ),
+                                  //                 ],
+                                  //               ),
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //       );
+                                  //     },
+                                  //   );
                                 }
                                 return Container();
                               },

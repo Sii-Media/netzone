@@ -36,3 +36,9 @@ class GetNewsByIdSuccess extends NewsState {
 
   const GetNewsByIdSuccess({required this.news});
 }
+
+class GetCompanyNewsSuccess extends NewsState {
+  final List<News> news;
+
+  const GetCompanyNewsSuccess({required this.news});
+}

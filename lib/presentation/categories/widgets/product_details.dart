@@ -16,10 +16,44 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../cart/blocs/cart_bloc/cart_bloc_bloc.dart';
 
-class ProductDetailsScreen extends StatelessWidget {
-  const ProductDetailsScreen({super.key, required this.products});
+class ProductDetailsScreen extends StatefulWidget {
+  const ProductDetailsScreen(
+      {super.key, required this.products, required this.index});
 
   final List<CategoryProducts> products;
+  final int index;
+
+  @override
+  State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
+}
+
+class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    _scrollController = ScrollController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      scrollToIndex(widget.index);
+    });
+    super.initState();
+  }
+
+  void scrollToIndex(int index) {
+    _scrollController.animateTo(
+      530.0 * index, // Replace with your desired item height
+      duration: const Duration(
+          milliseconds: 500), // Replace with your desired duration
+      curve: Curves.easeInOut, // Replace with your desired curve
+    );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,14 +64,16 @@ class ProductDetailsScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: ListView.builder(
-                    itemCount: products.length,
-                    shrinkWrap: true,
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return Product(
-                        product: products[index],
-                      );
-                    }),
+                  controller: _scrollController,
+                  itemCount: widget.products.length,
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return Product(
+                      product: widget.products[index],
+                    );
+                  },
+                ),
               ),
               const SizedBox(
                 height: 60,

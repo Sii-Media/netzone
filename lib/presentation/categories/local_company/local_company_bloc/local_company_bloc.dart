@@ -81,9 +81,22 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
         companies.fold(
           (failure) =>
               LocalCompanyFailure(message: mapFailureToString(failure)),
-          (companies) => GetLocalCompaniesSuccess(companies: companies),
+          (companies) {
+            filteredCompanies = companies
+                .where((company) => company.username != user?.userInfo.username)
+                .toList();
+            return GetLocalCompaniesSuccess(companies: filteredCompanies);
+          },
         ),
       );
+
+      // emit(
+      //   companies.fold(
+      //     (failure) =>
+      //         LocalCompanyFailure(message: mapFailureToString(failure)),
+      //     (companies) => GetLocalCompaniesSuccess(companies: companies),
+      //   ),
+      // );
     });
     on<GetLocalProductsEvent>((event, emit) async {
       emit(LocalCompanyInProgress());

@@ -801,131 +801,6 @@ class _HomePageState extends State<HomePage> {
                   height: 10.0,
                 ),
                 TitleAndButton(
-                  title: AppLocalizations.of(context).translate('طائرات'),
-                  icon: true,
-                  onPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return const VehicleListScreen(
-                          vehicleType: 'planes',
-                        );
-                      }),
-                    );
-                  },
-                ),
-                BlocBuilder<VehicleBloc, VehicleState>(
-                  bloc: planesBloc,
-                  builder: (context, state) {
-                    if (state is VehicleInProgress) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColor.backgroundColor,
-                        ),
-                      );
-                    } else if (state is VehicleFailure) {
-                      final failure = state.message;
-                      return FailureWidget(
-                        failure: failure,
-                        onPressed: () {
-                          planesBloc.add(GetAllPlanesEvent());
-                        },
-                      );
-                    } else if (state is VehicleSuccess) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 3.0,
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 209, 219, 235)
-                              .withOpacity(0.8),
-                        ),
-                        height: 120.h,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: state.vehilces.length,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return VehicleDetailsScreen(
-                                        vehicle: state.vehilces[index],
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
-                              child: Card(
-                                elevation: 4.0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                ),
-                                child: SizedBox(
-                                  height: 100.h,
-                                  width: 180.w,
-                                  child: Stack(
-                                    // fit: StackFit.expand,
-                                    alignment:
-                                        AlignmentDirectional.bottomCenter,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(16.0),
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              state.vehilces[index].imageUrl,
-                                          height: 200.h,
-                                          width: double.maxFinite,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(16.0),
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            colors: [
-                                              Colors.transparent,
-                                              AppColor.backgroundColor
-                                                  .withOpacity(0.6),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Text(
-                                          state.vehilces[index].name,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14.0.sp,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          textAlign: TextAlign.right,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    }
-                    return Container();
-                  },
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                TitleAndButton(
                   title: AppLocalizations.of(context).translate('سيارات'),
                   icon: true,
                   onPress: () {
@@ -961,11 +836,11 @@ class _HomePageState extends State<HomePage> {
                           vertical: 3.0,
                         ),
                         width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 209, 219, 235)
-                              .withOpacity(0.8),
-                        ),
-                        height: 120.h,
+                        // decoration: BoxDecoration(
+                        //   color: const Color.fromARGB(255, 209, 219, 235)
+                        //       .withOpacity(0.8),
+                        // ),
+                        height: 130.h,
                         child: ListView.builder(
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
@@ -985,7 +860,8 @@ class _HomePageState extends State<HomePage> {
                                 );
                               },
                               child: Card(
-                                elevation: 4.0,
+                                elevation: 10.0,
+                                shadowColor: AppColor.mainGrey,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(16.0),
                                 ),
@@ -1084,11 +960,11 @@ class _HomePageState extends State<HomePage> {
                           vertical: 3.0,
                         ),
                         width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 209, 219, 235)
-                              .withOpacity(0.8),
-                        ),
-                        height: 120.h,
+                        // decoration: BoxDecoration(
+                        //   color: const Color.fromARGB(255, 209, 219, 235)
+                        //       .withOpacity(0.8),
+                        // ),
+                        height: 130.h,
                         child: ListView.builder(
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
@@ -1107,7 +983,8 @@ class _HomePageState extends State<HomePage> {
                                 );
                               },
                               child: Card(
-                                elevation: 4.0,
+                                elevation: 10.0,
+                                shadowColor: AppColor.mainGrey,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(16.0),
                                 ),
@@ -1149,6 +1026,132 @@ class _HomePageState extends State<HomePage> {
                                         alignment: Alignment.bottomCenter,
                                         child: Text(
                                           state.realEstates[index].title,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14.0.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('طائرات'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return const VehicleListScreen(
+                          vehicleType: 'planes',
+                        );
+                      }),
+                    );
+                  },
+                ),
+                BlocBuilder<VehicleBloc, VehicleState>(
+                  bloc: planesBloc,
+                  builder: (context, state) {
+                    if (state is VehicleInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (state is VehicleFailure) {
+                      final failure = state.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          planesBloc.add(GetAllPlanesEvent());
+                        },
+                      );
+                    } else if (state is VehicleSuccess) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3.0,
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        // decoration: BoxDecoration(
+                        //   color: const Color.fromARGB(255, 209, 219, 235)
+                        //       .withOpacity(0.8),
+                        // ),
+                        height: 130.h,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: state.vehilces.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return VehicleDetailsScreen(
+                                        vehicle: state.vehilces[index],
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                              child: Card(
+                                elevation: 10.0,
+                                shadowColor: AppColor.mainGrey,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                ),
+                                child: SizedBox(
+                                  height: 100.h,
+                                  width: 180.w,
+                                  child: Stack(
+                                    // fit: StackFit.expand,
+                                    alignment:
+                                        AlignmentDirectional.bottomCenter,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              state.vehilces[index].imageUrl,
+                                          height: 200.h,
+                                          width: double.maxFinite,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(16.0),
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Colors.transparent,
+                                              AppColor.backgroundColor
+                                                  .withOpacity(0.6),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Text(
+                                          state.vehilces[index].name,
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 14.0.sp,

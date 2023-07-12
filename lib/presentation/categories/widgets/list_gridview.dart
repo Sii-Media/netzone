@@ -6,6 +6,7 @@ import 'package:netzoon/presentation/categories/factories/factories_categories.d
 import 'package:netzoon/presentation/categories/free_zoon/category_free_zoon.dart';
 import 'package:netzoon/presentation/categories/governmental/govermental_category_screen.dart';
 import 'package:netzoon/presentation/categories/local_company/local_companies.dart';
+import 'package:netzoon/presentation/categories/real_estate/screens/real_estate_companies_list_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/data/categories.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
@@ -91,7 +92,9 @@ class GridCategory extends StatelessWidget {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
-                  return const GovernmentalCompanies();
+                  return const GovernmentalCompanies(
+                    userType: 'local_company',
+                  );
                 },
               ),
             );
@@ -168,6 +171,24 @@ class GridCategory extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) {
                   return const UsersListScreen();
+                },
+              ),
+            );
+          } else if (category.name == 'real_estate') {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return const RealEstateCompaniesListScreen();
+                },
+              ),
+            );
+          } else if (category.name == 'traders') {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return const GovernmentalCompanies(
+                    userType: 'trader',
+                  );
                 },
               ),
             );

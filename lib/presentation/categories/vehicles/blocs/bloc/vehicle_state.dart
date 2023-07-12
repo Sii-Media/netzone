@@ -34,3 +34,17 @@ class GetCompanyVehiclesSuccess extends VehicleState {
 
   const GetCompanyVehiclesSuccess({required this.companyVehicles});
 }
+
+class AddVehicleInProgress extends VehicleState {}
+
+class AddVehicleFailure extends VehicleState {
+  final String message;
+
+  const AddVehicleFailure({required this.message});
+}
+
+class AddVehicleSuccess extends VehicleState {
+  final String message;
+
+  const AddVehicleSuccess({required this.message});
+}

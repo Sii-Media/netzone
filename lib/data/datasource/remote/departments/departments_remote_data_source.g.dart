@@ -1,5 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
 part of 'departments_remote_data_source.dart';
 
 // **************************************************************************
@@ -309,7 +311,6 @@ class _DepartmentsRemoteDataSourceImpl
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    // ignore: avoid_function_literals_in_foreach_calls
     productIds.forEach((i) {
       _data.fields.add(MapEntry('productIds', i));
     });

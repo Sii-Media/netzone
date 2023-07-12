@@ -36,6 +36,7 @@ abstract class NewsRemoteDataSourse {
     final String newsId,
     final String userId,
   );
+  Future<List<NewsInfoModel>> getCompanyNews(final String id);
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -89,6 +90,12 @@ abstract class NewsRemoteDataSourseImpl implements NewsRemoteDataSourse {
   @override
   @GET('/news/{id}')
   Future<NewsInfoModel> getNewsById(
+    @Path() String id,
+  );
+
+  @override
+  @GET('/news/companyNews/{id}')
+  Future<List<NewsInfoModel>> getCompanyNews(
     @Path() String id,
   );
 }

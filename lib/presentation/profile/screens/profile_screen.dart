@@ -20,6 +20,7 @@ import '../widgets/rounded_icon_text.dart';
 import 'add_account_screen.dart';
 import 'credits_screen.dart';
 import 'edit_profile_screen.dart';
+import 'followings_list_screen.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final String userId;
@@ -644,6 +645,79 @@ class _UserProfileScreenState extends State<UserProfileScreen>
                         ),
                       ),
                       // socialMedialRow(),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(builder: (context) {
+                                  return const FollowingsListScreen(
+                                    type: 'followings',
+                                  );
+                                }));
+                              },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '${state.userInfo.followings?.length}',
+                                    style: TextStyle(
+                                      color: AppColor.mainGrey,
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    AppLocalizations.of(context)
+                                        .translate('Followings'),
+                                    style: TextStyle(
+                                        color: AppColor.secondGrey,
+                                        fontSize: 15.sp),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(builder: (context) {
+                                  return const FollowingsListScreen(
+                                    type: 'followers',
+                                  );
+                                }));
+                              },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '${state.userInfo.followers?.length}',
+                                    style: TextStyle(
+                                      color: AppColor.mainGrey,
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    AppLocalizations.of(context)
+                                        .translate('Followers'),
+                                    style: TextStyle(
+                                        color: AppColor.secondGrey,
+                                        fontSize: 15.sp),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       SizedBox(
                         height: 10.h,
                       ),

@@ -37,110 +37,125 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BackgroundWidget(
-          widget: BlocBuilder<VehicleBloc, VehicleState>(
-        bloc: vehicleBloc,
-        builder: (context, state) {
-          if (state is VehicleInProgress) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: AppColor.backgroundColor,
-              ),
-            );
-          } else if (state is VehicleFailure) {
-            final failure = state.message;
-            return FailureWidget(
-              failure: failure,
-              onPressed: () {
-                if (widget.vehicleType == 'planes') {
-                  vehicleBloc.add(GetAllPlanesEvent());
-                } else {
-                  vehicleBloc.add(GetAllCarsEvent());
-                }
-              },
-            );
-          } else if (state is VehicleSuccess) {
-            return Column(
-              children: [
-                GridView.builder(
-                  padding: const EdgeInsets.all(16.0),
-                  shrinkWrap: true,
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: state.vehilces.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1.2,
-                    crossAxisSpacing: 16.0,
-                    mainAxisSpacing: 16.0,
-                  ),
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return VehicleDetailsScreen(
-                                vehicle: state.vehilces[index],
-                              );
-                            },
+      body: RefreshIndicator(
+        onRefresh: () async {
+          if (widget.vehicleType == 'planes') {
+            vehicleBloc.add(GetAllPlanesEvent());
+          } else {
+            vehicleBloc.add(GetAllCarsEvent());
+          }
+        },
+        color: AppColor.white,
+        backgroundColor: AppColor.backgroundColor,
+        child: BackgroundWidget(
+            widget: BlocBuilder<VehicleBloc, VehicleState>(
+          bloc: vehicleBloc,
+          builder: (context, state) {
+            if (state is VehicleInProgress) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: AppColor.backgroundColor,
+                ),
+              );
+            } else if (state is VehicleFailure) {
+              final failure = state.message;
+              return FailureWidget(
+                failure: failure,
+                onPressed: () {
+                  if (widget.vehicleType == 'planes') {
+                    vehicleBloc.add(GetAllPlanesEvent());
+                  } else {
+                    vehicleBloc.add(GetAllCarsEvent());
+                  }
+                },
+              );
+            } else if (state is VehicleSuccess) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    GridView.builder(
+                      padding: const EdgeInsets.all(16.0),
+                      shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: state.vehilces.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 1.2,
+                        crossAxisSpacing: 16.0,
+                        mainAxisSpacing: 16.0,
+                      ),
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return VehicleDetailsScreen(
+                                    vehicle: state.vehilces[index],
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                          child: Card(
+                            elevation: 4.0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                            child: Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  child: CachedNetworkImage(
+                                    imageUrl: state.vehilces[index].imageUrl,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Colors.transparent,
+                                        AppColor.backgroundColor
+                                            .withOpacity(0.6),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Text(
+                                    state.vehilces[index].name,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14.0.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },
-                      child: Card(
-                        elevation: 4.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(16.0),
-                              child: CachedNetworkImage(
-                                imageUrl: state.vehilces[index].imageUrl,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16.0),
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [
-                                    Colors.transparent,
-                                    AppColor.backgroundColor.withOpacity(0.6),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Text(
-                                state.vehilces[index].name,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14.0.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
+                    ),
+                    SizedBox(
+                      height: 80.h,
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height: 80.h,
-                ),
-              ],
-            );
-          }
-          return Container();
-        },
-      )),
+              );
+            }
+            return Container();
+          },
+        )),
+      ),
     );
   }
 }

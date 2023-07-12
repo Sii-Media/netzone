@@ -34,4 +34,8 @@ abstract class NewsRepository {
     required String newsId,
     required String userId,
   });
+
+  Future<Either<Failure, List<News>>> getCompanyNews({
+    required String id,
+  });
 }

@@ -31,6 +31,8 @@ class UserInfo {
   final String? backIdPhoto;
   final List? vehicles;
   final List? products;
+  final List<String>? followings;
+  final List<String>? followers;
 
   final String id;
 
@@ -60,6 +62,8 @@ class UserInfo {
     this.backIdPhoto,
     this.vehicles,
     this.products,
+    this.followings,
+    this.followers,
     required this.id,
   });
 }

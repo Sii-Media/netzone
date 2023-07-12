@@ -137,4 +137,19 @@ class NewsRepositoryImpl implements NewsRepository {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, List<News>>> getCompanyNews(
+      {required String id}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final news = await newsRemoteDataSourse.getCompanyNews(id);
+        return Right(news.map((e) => e.toDomain()).toList());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
 }

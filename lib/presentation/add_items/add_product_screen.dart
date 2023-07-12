@@ -613,11 +613,19 @@ class _AddProductScreenState extends State<AddProductScreen>
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: const EdgeInsets.all(4.0),
-                                  child: Image.file(
-                                    File(imageFileList[index].path),
-                                    fit: BoxFit.cover,
-                                    // height: 100,
-                                    // width: 100,
+                                  child: Card(
+                                    child: SizedBox(
+                                      height: 200.h,
+                                      width:
+                                          MediaQuery.of(context).size.width.w -
+                                              85,
+                                      child: Image.file(
+                                        File(imageFileList[index].path),
+                                        fit: BoxFit.contain,
+                                        // height: 100,
+                                        // width: 100,
+                                      ),
+                                    ),
                                   ),
                                 );
                               },

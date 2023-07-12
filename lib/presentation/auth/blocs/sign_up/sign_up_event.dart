@@ -13,6 +13,14 @@ class SignUpRequested extends SignUpEvent {
   final String password;
   final String userType;
   final String firstMobile;
+  final String? secondMobile;
+  final String? thirdMobile;
+  final String? subcategory;
+  final String? address;
+  final int? companyProductsNumber;
+  final String? sellType;
+  final String? toCountry;
+
   final bool isFreeZoon;
   final bool? deliverable;
   final File? profilePhoto;
@@ -30,6 +38,13 @@ class SignUpRequested extends SignUpEvent {
     required this.password,
     required this.userType,
     required this.firstMobile,
+    this.secondMobile,
+    this.thirdMobile,
+    this.subcategory,
+    this.address,
+    this.companyProductsNumber,
+    this.sellType,
+    this.toCountry,
     required this.isFreeZoon,
     this.deliverable,
     this.profilePhoto,

@@ -31,6 +31,12 @@ UserInfoModel _$UserInfoModelFromJson(Map<String, dynamic> json) =>
       banerPhoto: json['banerPhoto'] as String?,
       vehicles: json['vehicles'] as List<dynamic>?,
       products: json['products'] as List<dynamic>?,
+      followings: (json['followings'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      followers: (json['followers'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       id: json['_id'] as String,
     );
 
@@ -59,5 +65,7 @@ Map<String, dynamic> _$UserInfoModelToJson(UserInfoModel instance) =>
       'banerPhoto': instance.banerPhoto,
       'vehicles': instance.vehicles,
       'products': instance.products,
+      'followings': instance.followings,
+      'followers': instance.followers,
       '_id': instance.id,
     };

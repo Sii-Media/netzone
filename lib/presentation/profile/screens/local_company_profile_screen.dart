@@ -17,6 +17,7 @@ import '../blocs/get_user/get_user_bloc.dart';
 import '../widgets/rounded_icon_text.dart';
 import 'add_account_screen.dart';
 import 'edit_local_company_profile_screen.dart';
+import 'followings_list_screen.dart';
 
 class MyLocalCompanyProfileScreen extends StatefulWidget {
   final String userId;
@@ -53,12 +54,12 @@ class _MyLocalCompanyProfileScreenState
           child: Container(
             height: MediaQuery.of(context).size.height * 0.2,
             decoration: BoxDecoration(
-              color: AppColor.backgroundColor,
+              // color: AppColor.backgroundColor,
               image: DecorationImage(
                   image: CachedNetworkImageProvider(
                     coverUrl,
                   ),
-                  fit: BoxFit.contain),
+                  fit: BoxFit.fitWidth),
             ),
           ),
         ),
@@ -535,9 +536,88 @@ class _MyLocalCompanyProfileScreenState
                                         ],
                                       ),
                                     ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) {
+                                                return const FollowingsListScreen(
+                                                  type: 'followings',
+                                                );
+                                              }));
+                                            },
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  '${state.userInfo.followings?.length}',
+                                                  style: TextStyle(
+                                                    color: AppColor.mainGrey,
+                                                    fontSize: 18.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  AppLocalizations.of(context)
+                                                      .translate('Followings'),
+                                                  style: TextStyle(
+                                                      color:
+                                                          AppColor.secondGrey,
+                                                      fontSize: 15.sp),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) {
+                                                return const FollowingsListScreen(
+                                                  type: 'followers',
+                                                );
+                                              }));
+                                            },
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  '${state.userInfo.followers?.length}',
+                                                  style: TextStyle(
+                                                    color: AppColor.mainGrey,
+                                                    fontSize: 18.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  AppLocalizations.of(context)
+                                                      .translate('Followers'),
+                                                  style: TextStyle(
+                                                      color:
+                                                          AppColor.secondGrey,
+                                                      fontSize: 15.sp),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                     const Divider(
                                       color: AppColor.secondGrey,
-                                      thickness: 0.4,
+                                      thickness: 0.2,
                                       indent: 30,
                                       endIndent: 30,
                                     ),

@@ -39,7 +39,7 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
   final TextEditingController numberPhoneThree = TextEditingController();
   final TextEditingController subcategory = TextEditingController();
   final TextEditingController address = TextEditingController();
-  final TextEditingController isFreeZoon = TextEditingController();
+  // final TextEditingController isFreeZoon = TextEditingController();
   final TextEditingController companyProductsNumber = TextEditingController();
   final TextEditingController sellType = TextEditingController();
   final TextEditingController toCountry = TextEditingController();
@@ -105,7 +105,6 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
         numberPhoneOne: numberPhoneOne,
         numberPhoneTow: numberPhoneTow,
         numberPhoneThree: numberPhoneThree,
-        rememberMe: true,
         bloc: bloc,
         emailFormFieldKey: _emailFormFieldKey,
         address: address,
@@ -133,7 +132,6 @@ class SignUpWidget extends StatefulWidget {
     required this.numberPhoneOne,
     required this.numberPhoneTow,
     required this.numberPhoneThree,
-    required this.rememberMe,
     required this.bloc,
     required this.emailFormFieldKey,
     required this.passwordFormFieldKey,
@@ -166,7 +164,6 @@ class SignUpWidget extends StatefulWidget {
   final TextEditingController descriptionController;
   final TextEditingController websiteController;
 
-  final bool rememberMe;
   final SignUpBloc bloc;
 
   @override
@@ -182,6 +179,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   File? frontIdPhoto;
   File? backIdPhoto;
   bool _isDeliverable = false;
+  bool _isFreeZone = false;
 
   Future getProfileImage(ImageSource imageSource) async {
     final image = await ImagePicker().pickImage(source: imageSource);
@@ -382,7 +380,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   Expanded(
                     child: TextFormSignupWidget(
                       password: false,
-                      isNumber: false,
+                      isNumber: true,
                       valid: (val) {
                         if (val!.isEmpty) {
                           return AppLocalizations.of(context)
@@ -397,7 +395,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   Expanded(
                     child: TextFormSignupWidget(
                       password: false,
-                      isNumber: false,
+                      isNumber: true,
                       valid: (val) {
                         return null;
 
@@ -409,7 +407,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   Expanded(
                     child: TextFormSignupWidget(
                       password: false,
-                      isNumber: false,
+                      isNumber: true,
                       valid: (val) {
                         return null;
 
@@ -533,26 +531,43 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                            child: TextSignup(
-                                text: AppLocalizations.of(context)
-                                    .translate('affiliated_to_a_free_zone'))),
-                        SizedBox(
-                          width: 20.w,
-                          child: CheckboxListTile(
-                            controlAffinity: ListTileControlAffinity.leading,
-                            onChanged: (val) {
-                              // print("object");
-                              // controller.checkbox(val!);
-                            },
-                            value: widget.rememberMe,
-                          ),
-                        )
-                      ],
+                  : CheckboxListTile(
+                      title: Text(
+                        AppLocalizations.of(context)
+                            .translate('affiliated_to_a_free_zone'),
+                        style: TextStyle(
+                          color: AppColor.backgroundColor,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                      activeColor: AppColor.backgroundColor,
+                      value: _isFreeZone,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _isFreeZone = value ?? false;
+                        });
+                      },
                     ),
+              // : Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       Expanded(
+              //           child: TextSignup(
+              //               text: AppLocalizations.of(context)
+              //                   .translate('affiliated_to_a_free_zone'))),
+              //       SizedBox(
+              //         width: 20.w,
+              //         child: CheckboxListTile(
+              //           controlAffinity: ListTileControlAffinity.leading,
+              //           onChanged: (val) {
+              //             // print("object");
+              //             // controller.checkbox(val!);
+              //           },
+              //           value: widget.rememberMe,
+              //         ),
+              //       )
+              //     ],
+              //   ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
                   : TextSignup(
@@ -579,7 +594,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   ? Container()
                   : TextFormSignupWidget(
                       password: false,
-                      isNumber: false,
+                      isNumber: true,
                       valid: (val) {
                         return null;
 
@@ -990,8 +1005,16 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           password: widget.passwordSignup.text,
                           userType: userType,
                           firstMobile: widget.numberPhoneOne.text,
-                          isFreeZoon: true,
-                          deliverable: true,
+                          secondMobile: widget.numberPhoneTow.text,
+                          thirdMobile: widget.numberPhoneThree.text,
+                          address: widget.address.text,
+                          companyProductsNumber:
+                              int.parse(widget.companyProductsNumber.text),
+                          sellType: widget.sellType.text,
+                          subcategory: widget.subcategory.text,
+                          toCountry: widget.toCountry.text,
+                          isFreeZoon: _isFreeZone,
+                          deliverable: _isDeliverable,
                           profilePhoto: profileImage,
                           coverPhoto: coverImage,
                           banerPhoto: banerImage,
@@ -1039,6 +1062,10 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
       case 'جهة إخبارية':
         return 'news_agency';
+      case 'شركة عقارات':
+        return 'real_estate';
+      case 'تاجر':
+        return 'trader';
 
       default:
         return 'user';

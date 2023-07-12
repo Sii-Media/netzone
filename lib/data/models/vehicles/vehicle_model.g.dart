@@ -20,6 +20,10 @@ VehicleModel _$VehicleModelFromJson(Map<String, dynamic> json) => VehicleModel(
       creator: json['creator'] == null
           ? null
           : UserInfoModel.fromJson(json['creator'] as Map<String, dynamic>),
+      carImages: (json['carImages'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      vedioUrl: json['vedioUrl'] as String?,
     );
 
 Map<String, dynamic> _$VehicleModelToJson(VehicleModel instance) =>
@@ -35,4 +39,6 @@ Map<String, dynamic> _$VehicleModelToJson(VehicleModel instance) =>
       'type': instance.type,
       'category': instance.category,
       'creator': instance.creator,
+      'carImages': instance.carImages,
+      'vedioUrl': instance.vedioUrl,
     };

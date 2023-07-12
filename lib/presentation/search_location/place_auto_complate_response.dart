@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_null_aware_operators
+
 import 'dart:convert';
 
 import 'package:netzoon/presentation/search_location/autocomplate_prediction.dart';

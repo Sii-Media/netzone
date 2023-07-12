@@ -2,6 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_user_by_id_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/get_user_followers_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/get_user_followings_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/toggle_follow_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/add_to_selected_products_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/delete_from_selected_products_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_selected_products_use_case.dart';
@@ -23,6 +26,9 @@ class GetUserBloc extends Bloc<GetUserEvent, GetUserState> {
   final GetSelectedProductsUseCase getSelectedProductsUseCase;
   final AddToSelectedProductsUseCase addToSelectedProductsUseCase;
   final DeleteFromSelectedProductsUseCase deleteFromSelectedProductsUseCase;
+  final GetUserFollowingsUseCase getUserFollowingsUseCase;
+  final GetUserFollowersUseCase getUserFollowersUseCase;
+  final ToggleFollowUseCase toggleFollowUseCase;
   GetUserBloc({
     required this.getUserByIdUseCase,
     required this.getUserProductsUseCase,
@@ -30,6 +36,9 @@ class GetUserBloc extends Bloc<GetUserEvent, GetUserState> {
     required this.getSelectedProductsUseCase,
     required this.addToSelectedProductsUseCase,
     required this.deleteFromSelectedProductsUseCase,
+    required this.getUserFollowingsUseCase,
+    required this.getUserFollowersUseCase,
+    required this.toggleFollowUseCase,
   }) : super(GetUserInitial()) {
     on<GetUserByIdEvent>((event, emit) async {
       emit(GetUserInProgress());
@@ -141,6 +150,47 @@ class GetUserBloc extends Bloc<GetUserEvent, GetUserState> {
           (products) => GetSelectedProductsSuccess(products: products),
         ),
       );
+    });
+    on<GetUserFollowingsEvent>((event, emit) async {
+      emit(GetUserFollowsInProgress());
+
+      final result = await getSignedInUserUseCase.call(NoParams());
+      late User user;
+      result.fold((l) => null, (r) => user = r!);
+
+      final followings = await getUserFollowingsUseCase(user.userInfo.id);
+
+      emit(
+        followings.fold(
+          (failure) =>
+              GetUserFollowsFailure(message: mapFailureToString(failure)),
+          (followings) => GetUserFollowsSuccess(follows: followings),
+        ),
+      );
+    });
+    on<GetUserFollowersEvent>((event, emit) async {
+      emit(GetUserFollowsInProgress());
+
+      final result = await getSignedInUserUseCase.call(NoParams());
+      late User user;
+      result.fold((l) => null, (r) => user = r!);
+
+      final followings = await getUserFollowersUseCase(user.userInfo.id);
+
+      emit(
+        followings.fold(
+          (failure) =>
+              GetUserFollowsFailure(message: mapFailureToString(failure)),
+          (followers) => GetUserFollowsSuccess(follows: followers),
+        ),
+      );
+    });
+    on<ToggleFollowEvent>((event, emit) async {
+      final result = await getSignedInUserUseCase.call(NoParams());
+      late User user;
+      result.fold((l) => null, (r) => user = r!);
+      await toggleFollowUseCase(ToggleFollowParams(
+          currentUserId: user.userInfo.id, otherUserId: event.otherUserId));
     });
   }
 }

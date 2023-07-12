@@ -4,6 +4,7 @@ import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/domain/news/entities/news_info.dart';
 import 'package:netzoon/domain/news/usecases/add_like_use_case.dart';
 import 'package:netzoon/domain/news/usecases/get_all_news_usecase.dart';
+import 'package:netzoon/domain/news/usecases/get_company_news_use_case.dart';
 import 'package:netzoon/domain/news/usecases/get_news_by_id_use_case.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 
@@ -18,11 +19,13 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   final GetSignedInUserUseCase getSignedInUser;
   final ToggleOnLikeUseCase toggleOnLikeUseCase;
   final GetNewsByIdUseCase getNewsByIdUseCase;
+  final GetCompanyNewsUseCase getCompanyNewsUseCase;
   NewsBloc({
     required this.getAllNewsUseCase,
     required this.getSignedInUser,
     required this.toggleOnLikeUseCase,
     required this.getNewsByIdUseCase,
+    required this.getCompanyNewsUseCase,
   }) : super(NewsInitial()) {
     on<GetAllNewsEvent>(
       (event, emit) async {
@@ -69,6 +72,18 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
         news.fold(
           (failure) => NewsFailure(message: mapFailureToString(failure)),
           (news) => GetNewsByIdSuccess(news: news),
+        ),
+      );
+    });
+    on<GetCompanyNewsEvent>((event, emit) async {
+      emit(NewsInProgress());
+      final news = await getCompanyNewsUseCase(event.id);
+      emit(
+        news.fold(
+          (failure) => NewsFailure(message: mapFailureToString(failure)),
+          (news) {
+            return GetCompanyNewsSuccess(news: news);
+          },
         ),
       );
     });

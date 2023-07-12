@@ -94,3 +94,17 @@ class ProductRemovedState extends GetUserState {
 
   const ProductRemovedState(this.updatedProducts);
 }
+
+class GetUserFollowsInProgress extends GetUserState {}
+
+class GetUserFollowsFailure extends GetUserState {
+  final String message;
+
+  const GetUserFollowsFailure({required this.message});
+}
+
+class GetUserFollowsSuccess extends GetUserState {
+  final List<UserInfo> follows;
+
+  const GetUserFollowsSuccess({required this.follows});
+}

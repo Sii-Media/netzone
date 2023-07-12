@@ -12,7 +12,8 @@ class Vehicle extends Equatable {
   final String type;
   final String category;
   final UserInfo? creator;
-
+  final List<String>? carImages;
+  final String? vedioUrl;
   const Vehicle({
     required this.name,
     required this.imageUrl,
@@ -24,6 +25,8 @@ class Vehicle extends Equatable {
     required this.type,
     required this.category,
     this.creator,
+    this.carImages,
+    this.vedioUrl,
   });
   @override
   List<Object?> get props => [

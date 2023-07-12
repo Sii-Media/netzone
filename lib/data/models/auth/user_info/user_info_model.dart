@@ -35,7 +35,8 @@ class UserInfoModel {
 
   final List? vehicles;
   final List? products;
-
+  final List<String>? followings;
+  final List<String>? followers;
   @JsonKey(name: '_id')
   final String id;
 
@@ -63,6 +64,8 @@ class UserInfoModel {
     this.banerPhoto,
     this.vehicles,
     this.products,
+    this.followings,
+    this.followers,
     required this.id,
   });
 
@@ -97,5 +100,7 @@ extension MapToDomain on UserInfoModel {
       banerPhoto: banerPhoto,
       vehicles: vehicles,
       products: products,
+      followings: followings,
+      followers: followers,
       id: id);
 }

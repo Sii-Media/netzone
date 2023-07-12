@@ -14,6 +14,7 @@ abstract class AuthLocalDatasource {
   void setFirstTimeLogged(bool firstTimeLogged);
 
   bool getIsFirstTimeLogged();
+  Future<void> toggoleFollow(String id);
 }
 
 class AuthLocalDatasourceImpl implements AuthLocalDatasource {
@@ -53,5 +54,20 @@ class AuthLocalDatasourceImpl implements AuthLocalDatasource {
   void setFirstTimeLogged(bool firstTimeLogged) {
     sharedPreferences.setBool(
         SharedPreferencesKeys.isFirstTimeLogged, firstTimeLogged);
+  }
+
+  @override
+  Future<void> toggoleFollow(String id) async {
+    final user = getSignedInUser();
+    final isFollow = user?.userInfo.followings?.contains(id);
+    if (isFollow == true) {
+      user?.userInfo.followings?.remove(id);
+    } else {
+      user?.userInfo.followings?.add(id);
+    }
+    await sharedPreferences.setString(
+      SharedPreferencesKeys.user,
+      json.encode(user?.toJson()),
+    );
   }
 }

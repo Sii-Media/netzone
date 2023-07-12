@@ -7,6 +7,8 @@ import 'package:netzoon/presentation/auth/screens/signin.dart';
 import '../../injection_container.dart';
 import '../advertising/add_ads_page.dart';
 import '../auth/blocs/auth_bloc/auth_bloc.dart';
+import '../categories/real_estate/screens/add_real_estate_screen.dart';
+import '../categories/vehicles/screens/add_vehicle_screen.dart';
 import '../core/constant/colors.dart';
 import '../deals/add_deals_screen.dart';
 import '../news/add_new_page.dart';
@@ -57,28 +59,27 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           fontWeight: FontWeight.w400),
                     ),
                     addWidget(
-                        title: 'select from our products',
+                        title: AppLocalizations.of(context)
+                            .translate('select_from_our_products'),
                         onTap: () {
                           Navigator.of(context)
                               .push(MaterialPageRoute(builder: (context) {
                             return const AllProductsScreen();
                           }));
                         }),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    addWidget(
-                        title: AppLocalizations.of(context)
-                            .translate('add_product'),
-                        onTap: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
-                            return const AddProductScreen();
-                          }));
-                        }),
-                    SizedBox(
-                      height: 10.h,
-                    ),
+
+                    state.user.userInfo.userType == 'user'
+                        ? const SizedBox()
+                        : addWidget(
+                            title: AppLocalizations.of(context)
+                                .translate('add_product'),
+                            onTap: () {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                return const AddProductScreen();
+                              }));
+                            }),
+
                     addWidget(
                         title:
                             AppLocalizations.of(context).translate('add_ads'),
@@ -91,9 +92,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             ),
                           );
                         }),
-                    SizedBox(
-                      height: 10.h,
-                    ),
+
                     addWidget(
                         title:
                             AppLocalizations.of(context).translate('add_deals'),
@@ -106,6 +105,53 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             ),
                           );
                         }),
+
+                    state.user.userInfo.userType == 'car'
+                        ? addWidget(
+                            title: AppLocalizations.of(context)
+                                .translate('add_car'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const AddVehicleScreen(
+                                      category: 'cars',
+                                    );
+                                  },
+                                ),
+                              );
+                            })
+                        : const SizedBox(),
+                    state.user.userInfo.userType == 'plans'
+                        ? addWidget(
+                            title: AppLocalizations.of(context)
+                                .translate('add_airplane'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const AddVehicleScreen(
+                                      category: 'plans',
+                                    );
+                                  },
+                                ),
+                              );
+                            })
+                        : const SizedBox(),
+                    state.user.userInfo.userType == 'real_estate'
+                        ? addWidget(
+                            title: AppLocalizations.of(context)
+                                .translate('add_real_estate'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const AddRealEstateScreen();
+                                  },
+                                ),
+                              );
+                            })
+                        : const SizedBox(),
                     // SizedBox(
                     //   height: 10.h,
                     // ),
@@ -118,9 +164,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     //         return const AddTenderScreen();
                     //       }));
                     //     }),
-                    SizedBox(
-                      height: 10.h,
-                    ),
+
                     state.user.userInfo.userType == 'news_agency'
                         ? addWidget(
                             title: AppLocalizations.of(context)
@@ -184,32 +228,38 @@ class _AddItemScreenState extends State<AddItemScreen> {
     );
   }
 
-  ClipRRect addWidget({required String title, void Function()? onTap}) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10.0),
-      child: InkWell(
-          onTap: onTap,
-          child: Container(
-            // alignment: Alignment.centerRight,
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            height: 60.h,
-            width: double.infinity,
-            color: AppColor.backgroundColor,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(fontSize: 15.sp, color: AppColor.white),
-                ),
-                Icon(
-                  Icons.arrow_forward_ios_outlined,
-                  color: AppColor.white,
-                  size: 20.sp,
-                ),
-              ],
-            ),
-          )),
+  Widget addWidget({required String title, void Function()? onTap}) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10.0),
+        child: InkWell(
+            onTap: onTap,
+            child: Container(
+              // alignment: Alignment.centerRight,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+              ),
+
+              height: 60.h,
+              width: double.infinity,
+              color: AppColor.backgroundColor,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(fontSize: 15.sp, color: AppColor.white),
+                  ),
+                  Icon(
+                    Icons.arrow_forward_ios_outlined,
+                    color: AppColor.white,
+                    size: 20.sp,
+                  ),
+                ],
+              ),
+            )),
+      ),
     );
   }
 }

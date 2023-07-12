@@ -75,7 +75,6 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
   }) async {
     try {
       if (await networkInfo.isConnected) {
-        Dio dio = Dio();
         // FormData formData = FormData.fromMap({
         //   'advertisingTitle': advertisingTitle,
         //   'advertisingStartDate': advertisingStartDate,
@@ -90,6 +89,7 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
         //   'advertisingPrice': advertisingPrice,
         //   'advertisingType': advertisingType,
         // });
+        Dio dio = Dio();
         FormData formData = FormData();
         formData.fields.addAll([
           MapEntry('owner', owner),

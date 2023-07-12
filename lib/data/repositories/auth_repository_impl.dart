@@ -32,6 +32,13 @@ class AuthRepositoryImpl implements AuthRepository {
     required String userType,
     required String firstMobile,
     required bool isFreeZoon,
+    String? secondMobile,
+    String? thirdMobile,
+    String? subcategory,
+    String? address,
+    int? companyProductsNumbe,
+    String? sellType,
+    String? toCountry,
     bool? deliverable,
     File? profilePhoto,
     File? coverPhoto,
@@ -104,6 +111,13 @@ class AuthRepositoryImpl implements AuthRepository {
           MapEntry('firstMobile', firstMobile),
           MapEntry('isFreeZoon', isFreeZoon.toString()),
           MapEntry('deliverable', deliverable.toString()),
+          MapEntry('secondMobile', secondMobile ?? ''),
+          MapEntry('thirdMobile', thirdMobile ?? ''),
+          MapEntry('address', address ?? ''),
+          MapEntry('subcategory', subcategory ?? ''),
+          MapEntry('companyProductsNumbe', companyProductsNumbe.toString()),
+          MapEntry('sellType', sellType ?? ''),
+          MapEntry('toCountry', toCountry ?? ''),
           MapEntry('bio', bio ?? ''),
           MapEntry('description', description ?? ''),
           MapEntry('website', website ?? ''),
@@ -406,6 +420,53 @@ class AuthRepositoryImpl implements AuthRepository {
       if (await networkInfo.isConnected) {
         final accounts = await authRemoteDataSource.getUserAccounts(email);
         return Right(accounts.map((e) => e.toDomain()).toList());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(CredintialFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<UserInfo>>> getUserFollowers(
+      {required String userId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final followings = await authRemoteDataSource.getUserFollowers(userId);
+        return Right(followings.map((e) => e.toDomain()).toList());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(CredintialFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<UserInfo>>> getUserFollowings(
+      {required String userId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final followers = await authRemoteDataSource.getUserFollowings(userId);
+        return Right(followers.map((e) => e.toDomain()).toList());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(CredintialFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> toggleFollow(
+      {required String currentUserId, required String otherUserId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final result =
+            await authRemoteDataSource.toggleFollow(currentUserId, otherUserId);
+        await local.toggoleFollow(otherUserId);
+        return Right(result);
       } else {
         return Left(OfflineFailure());
       }

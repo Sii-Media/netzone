@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
 import 'package:netzoon/domain/categories/entities/vehicles/vehicle.dart';
+import 'package:netzoon/domain/categories/usecases/vehicles/add_vehicle_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_all_cars_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_all_new_planes_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_all_planes_use_case.dart';
@@ -12,7 +16,9 @@ import 'package:netzoon/domain/categories/usecases/vehicles/get_planes_companies
 
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
+import 'package:share_plus/share_plus.dart';
 
+import '../../../../../domain/auth/entities/user.dart';
 import '../../../../../domain/auth/entities/user_info.dart';
 
 part 'vehicle_event.dart';
@@ -27,6 +33,8 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
   final GetPlanesCompaniesUseCase getPlanesCompaniesUseCase;
   final GetCompanyVehiclesUseCase getCompanyVehiclesUseCase;
   final GetAllPlanesUseCase getAllPlanesUseCase;
+  final AddVehicleUseCase addVehicleUseCase;
+  final GetSignedInUserUseCase getSignedInUserUseCase;
   VehicleBloc({
     required this.getAllCarsUseCase,
     required this.getLatestCarByCreatorUseCase,
@@ -36,6 +44,8 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
     required this.getPlanesCompaniesUseCase,
     required this.getCompanyVehiclesUseCase,
     required this.getAllPlanesUseCase,
+    required this.addVehicleUseCase,
+    required this.getSignedInUserUseCase,
   }) : super(VehicleInitial()) {
     on<GetAllCarsEvent>((event, emit) async {
       emit(VehicleInProgress());
@@ -133,6 +143,34 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
           (failure) => VehicleFailure(message: mapFailureToString(failure)),
           (companyVehicles) =>
               GetCompanyVehiclesSuccess(companyVehicles: companyVehicles),
+        ),
+      );
+    });
+    on<AddVehicleEvent>((event, emit) async {
+      emit(AddVehicleInProgress());
+
+      final result = await getSignedInUserUseCase.call(NoParams());
+      late User? user;
+      result.fold((l) => null, (r) => user = r);
+
+      final response = await addVehicleUseCase(AddVehicleParams(
+        name: event.name,
+        description: event.description,
+        price: event.price,
+        kilometers: event.kilometers,
+        year: event.year,
+        location: event.location,
+        type: event.type,
+        category: event.category,
+        creator: user?.userInfo.id ?? '',
+        image: event.image,
+        carimages: event.carimages,
+        video: event.video,
+      ));
+      emit(
+        response.fold(
+          (failure) => AddVehicleFailure(message: mapFailureToString(failure)),
+          (message) => AddVehicleSuccess(message: message),
         ),
       );
     });

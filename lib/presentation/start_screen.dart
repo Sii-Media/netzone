@@ -291,13 +291,13 @@ class _StartScreenState extends State<StartScreen> {
                           fontWeight: FontWeight.w700,
                         ),
                         onChanged: (val) {
+                          // print(val);
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(builder: (context) {
                               return const TestScreen();
                             }),
                           );
                         },
-
                         // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
                         initialSelection: 'AE',
                         favorite: const ['+971', 'AE'],

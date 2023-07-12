@@ -328,7 +328,7 @@ class _EditLocalCompanyprofileScreenState
                   ),
                   const SizedBox(height: 25),
                   TextFormField(
-                    controller: _secondeMobileController,
+                    controller: _thirdMobileController,
                     style: const TextStyle(
                       color: AppColor.backgroundColor,
                     ),

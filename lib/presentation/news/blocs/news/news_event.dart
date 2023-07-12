@@ -22,3 +22,9 @@ class GetNewsByIdEvent extends NewsEvent {
 
   const GetNewsByIdEvent({required this.id});
 }
+
+class GetCompanyNewsEvent extends NewsEvent {
+  final String id;
+
+  const GetCompanyNewsEvent({required this.id});
+}

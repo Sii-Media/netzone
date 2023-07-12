@@ -58,6 +58,13 @@ abstract class AuthRemoteDataSource {
   //     String secondeMobile,
   //     String thirdMobile,
   //     File? profilePhoto);
+
+  Future<List<UserInfoModel>> getUserFollowings(final String userId);
+  Future<List<UserInfoModel>> getUserFollowers(final String userId);
+  Future<String> toggleFollow(
+    final String currentUserId,
+    final String otherUserId,
+  );
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -151,4 +158,20 @@ abstract class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   //   @Part(name: 'thirdMobile') String thirdMobile,
   //   @Part(name: 'profilePhoto') File? profilePhoto,
   // );
+
+  @override
+  @GET('/user/getUserFollowings/{userId}')
+  Future<List<UserInfoModel>> getUserFollowings(
+    @Path() String userId,
+  );
+
+  @override
+  @GET('/user/getUserFollowers/{userId}')
+  Future<List<UserInfoModel>> getUserFollowers(
+    @Path() String userId,
+  );
+  @override
+  @PUT('/user/toggleFollow/{otherUserId}')
+  Future<String> toggleFollow(
+      @Part() String currentUserId, @Path() String otherUserId);
 }

@@ -27,3 +27,31 @@ class GetCompanyVehiclesEvent extends VehicleEvent {
 
   const GetCompanyVehiclesEvent({required this.type, required this.id});
 }
+
+class AddVehicleEvent extends VehicleEvent {
+  final String name;
+  final String description;
+  final int price;
+  final int kilometers;
+  final DateTime year;
+  final String location;
+  final String type;
+  final String category;
+  final File image;
+  final List<XFile>? carimages;
+  final File? video;
+
+  const AddVehicleEvent({
+    required this.name,
+    required this.description,
+    required this.price,
+    required this.kilometers,
+    required this.year,
+    required this.location,
+    required this.type,
+    required this.category,
+    required this.image,
+    this.carimages,
+    this.video,
+  });
+}
