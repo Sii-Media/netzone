@@ -67,6 +67,7 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
             madeIn: event.product.madeIn,
             year: event.product.year,
             quantity: event.quantity,
+            country: event.product.country,
           );
           updatedCart[index] = updatedItem;
         }

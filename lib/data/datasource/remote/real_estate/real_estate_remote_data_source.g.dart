@@ -22,9 +22,9 @@ class _RealEstateRemoteDataSourceImpl
   String? baseUrl;
 
   @override
-  Future<List<RealEstateModel>> getAllRealEstates() async {
+  Future<List<RealEstateModel>> getAllRealEstates(country) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio
@@ -47,9 +47,9 @@ class _RealEstateRemoteDataSourceImpl
   }
 
   @override
-  Future<List<UserInfoModel>> getRealEstateCompanies() async {
+  Future<List<UserInfoModel>> getRealEstateCompanies(country) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio

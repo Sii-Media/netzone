@@ -13,7 +13,9 @@ import '../../../../data/models/auth/user/user_model.dart';
 import '../../../../domain/auth/entities/user_info.dart';
 import '../../../../injection_container.dart';
 import '../../../auth/blocs/auth_bloc/auth_bloc.dart';
+import '../../../core/blocs/country_bloc/country_bloc.dart';
 import '../../../core/constant/colors.dart';
+import '../../../core/helpers/get_currency_of_country.dart';
 import '../../../core/widgets/vehicle_details.dart';
 import '../../../profile/blocs/get_user/get_user_bloc.dart';
 import '../../../utils/app_localizations.dart';
@@ -33,7 +35,7 @@ class _VehicleCompaniesProfileScreenState
   final bloc = sl<VehicleBloc>();
   final authBloc = sl<AuthBloc>();
   final userBloc = sl<GetUserBloc>();
-
+  late final CountryBloc countryBloc;
   bool isFollowing = false;
 
   @override
@@ -43,6 +45,8 @@ class _VehicleCompaniesProfileScreenState
         id: widget.vehiclesCompany.id));
     authBloc.add(AuthCheckRequested());
     checkFollowStatus();
+    countryBloc = BlocProvider.of<CountryBloc>(context);
+    countryBloc.add(GetCountryEvent());
     super.initState();
   }
 
@@ -309,103 +313,153 @@ class _VehicleCompaniesProfileScreenState
                               );
                             } else if (state is GetCompanyVehiclesSuccess) {
                               return state.companyVehicles.isNotEmpty
-                                  ? GridView.builder(
-                                      gridDelegate:
-                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2,
-                                              childAspectRatio: 0.95,
-                                              crossAxisSpacing: 10.w,
-                                              mainAxisSpacing: 10.h),
-                                      shrinkWrap: true,
-                                      physics: const BouncingScrollPhysics(),
-                                      itemCount: state.companyVehicles.length,
-                                      itemBuilder: (context, index) {
-                                        return Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 8),
-                                          decoration: BoxDecoration(
-                                              color: AppColor.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: AppColor.secondGrey
-                                                      .withOpacity(0.5),
-                                                  blurRadius: 10,
-                                                  spreadRadius: 2,
-                                                  offset: const Offset(0, 3),
-                                                ),
-                                              ]),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(20)),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                    builder: (context) {
-                                                      return VehicleDetailsScreen(
-                                                          vehicle: state
-                                                                  .companyVehicles[
-                                                              index]);
+                                  ? BlocBuilder<CountryBloc, CountryState>(
+                                      bloc: countryBloc,
+                                      builder: (context, countryState) {
+                                        if (countryState is CountryInitial) {
+                                          return GridView.builder(
+                                            gridDelegate:
+                                                SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisCount: 2,
+                                                    childAspectRatio: 0.95,
+                                                    crossAxisSpacing: 10.w,
+                                                    mainAxisSpacing: 10.h),
+                                            shrinkWrap: true,
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            itemCount:
+                                                state.companyVehicles.length,
+                                            itemBuilder: (context, index) {
+                                              return Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 8),
+                                                decoration: BoxDecoration(
+                                                    color: AppColor.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: AppColor
+                                                            .secondGrey
+                                                            .withOpacity(0.5),
+                                                        blurRadius: 10,
+                                                        spreadRadius: 2,
+                                                        offset:
+                                                            const Offset(0, 3),
+                                                      ),
+                                                    ]),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(20)),
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.of(context)
+                                                          .push(
+                                                        MaterialPageRoute(
+                                                          builder: (context) {
+                                                            return VehicleDetailsScreen(
+                                                                vehicle: state
+                                                                        .companyVehicles[
+                                                                    index]);
+                                                          },
+                                                        ),
+                                                      );
                                                     },
-                                                  ),
-                                                );
-                                              },
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  CachedNetworkImage(
-                                                    imageUrl: state
-                                                        .companyVehicles[index]
-                                                        .imageUrl,
-                                                    height: 120.h,
-                                                    width: 200.w,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 9.0,
-                                                            left: 9.0,
-                                                            bottom: 8.0),
-                                                    child: Row(
+                                                    child: Column(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .spaceBetween,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
                                                       children: [
-                                                        Text(
-                                                          state
+                                                        CachedNetworkImage(
+                                                          imageUrl: state
                                                               .companyVehicles[
                                                                   index]
-                                                              .name,
-                                                          style:
-                                                              const TextStyle(
-                                                            color: AppColor
-                                                                .backgroundColor,
-                                                          ),
+                                                              .imageUrl,
+                                                          height: 120.h,
+                                                          width: 200.w,
+                                                          fit: BoxFit.cover,
                                                         ),
-                                                        Text(
-                                                          '${state.companyVehicles[index].price} \$',
-                                                          style:
-                                                              const TextStyle(
-                                                            color: AppColor
-                                                                .colorTwo,
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  right: 9.0,
+                                                                  left: 9.0,
+                                                                  bottom: 8.0),
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                state
+                                                                    .companyVehicles[
+                                                                        index]
+                                                                    .name,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: AppColor
+                                                                      .backgroundColor,
+                                                                ),
+                                                              ),
+                                                              // Text(
+                                                              //   '${state.companyVehicles[index].price} \$',
+                                                              //   style:
+                                                              //       const TextStyle(
+                                                              //     color: AppColor
+                                                              //         .colorTwo,
+                                                              //   ),
+                                                              // ),
+                                                              RichText(
+                                                                text: TextSpan(
+                                                                    style: TextStyle(
+                                                                        fontSize: 13
+                                                                            .sp,
+                                                                        color: AppColor
+                                                                            .backgroundColor),
+                                                                    children: <
+                                                                        TextSpan>[
+                                                                      TextSpan(
+                                                                        text:
+                                                                            '${state.companyVehicles[index].price}',
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          fontWeight:
+                                                                              FontWeight.w700,
+                                                                        ),
+                                                                      ),
+                                                                      TextSpan(
+                                                                        text:
+                                                                            getCurrencyFromCountry(
+                                                                          countryState
+                                                                              .selectedCountry,
+                                                                          context,
+                                                                        ),
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                AppColor.backgroundColor,
+                                                                            fontSize: 10),
+                                                                      )
+                                                                    ]),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
                                                       ],
                                                     ),
                                                   ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        );
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        }
+                                        return Container();
                                       },
                                     )
                                   : Center(

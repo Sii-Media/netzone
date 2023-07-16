@@ -21,9 +21,9 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
   String? baseUrl;
 
   @override
-  Future<VehicleResponseModel> getAllCars() async {
+  Future<VehicleResponseModel> getAllCars(country) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -44,9 +44,9 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
   }
 
   @override
-  Future<VehicleResponseModel> getLatestCarByCreator() async {
+  Future<VehicleResponseModel> getLatestCarByCreator(country) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -67,9 +67,9 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
   }
 
   @override
-  Future<VehicleResponseModel> getAllUsedPlanes() async {
+  Future<VehicleResponseModel> getAllUsedPlanes(country) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -90,9 +90,9 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
   }
 
   @override
-  Future<VehicleResponseModel> getAllNewPlanes() async {
+  Future<VehicleResponseModel> getAllNewPlanes(country) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -113,9 +113,9 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
   }
 
   @override
-  Future<List<UserInfoModel>> getCarsCompanies() async {
+  Future<List<UserInfoModel>> getCarsCompanies(country) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio
@@ -138,9 +138,9 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
   }
 
   @override
-  Future<List<UserInfoModel>> getPlanesCompanies() async {
+  Future<List<UserInfoModel>> getPlanesCompanies(country) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio
@@ -199,9 +199,9 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
   }
 
   @override
-  Future<VehicleResponseModel> getAllPlanes() async {
+  Future<VehicleResponseModel> getAllPlanes(country) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(

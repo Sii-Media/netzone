@@ -24,6 +24,7 @@ RealEstateModel _$RealEstateModelFromJson(Map<String, dynamic> json) =>
           (json['images'] as List<dynamic>?)?.map((e) => e as String).toList(),
       createdBy:
           UserInfoModel.fromJson(json['createdBy'] as Map<String, dynamic>),
+      country: json['country'] as String,
     );
 
 Map<String, dynamic> _$RealEstateModelToJson(RealEstateModel instance) =>
@@ -40,4 +41,5 @@ Map<String, dynamic> _$RealEstateModelToJson(RealEstateModel instance) =>
       'amenities': instance.amenities,
       'images': instance.images,
       'createdBy': instance.createdBy,
+      'country': instance.country,
     };

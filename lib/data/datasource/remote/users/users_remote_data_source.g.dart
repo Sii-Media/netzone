@@ -21,9 +21,12 @@ class _UsersRemoteDataSourceImpl implements UsersRemoteDataSourceImpl {
   String? baseUrl;
 
   @override
-  Future<List<UserInfoModel>> getUsersList(userType) async {
+  Future<List<UserInfoModel>> getUsersList(
+    country,
+    userType,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry(

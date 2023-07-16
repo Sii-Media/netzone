@@ -8,6 +8,8 @@ import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import '../../utils/app_localizations.dart';
+
 class GovernmentalCompanies extends StatefulWidget {
   final String userType;
   const GovernmentalCompanies({super.key, required this.userType});
@@ -67,85 +69,105 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
                           ),
                         );
                       } else if (state is GetLocalCompaniesSuccess) {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: state.companies.length,
-                          itemBuilder: (BuildContext context, index) {
-                            return SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.40,
-                              child: InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) {
-                                          return LocalCompanyProfileScreen(
-                                            localCompany:
-                                                state.companies[index],
-                                          );
-                                        }),
-                                      );
-                                    },
-                                    child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(25.0),
-                                        child: Card(
-                                          child: Stack(
-                                            children: [
-                                              Positioned(
-                                                left: 0,
-                                                bottom: 0,
-                                                top: 0,
-                                                right: 0,
-                                                child: CachedNetworkImage(
-                                                  imageUrl: state
-                                                          .companies[index]
-                                                          .profilePhoto ??
-                                                      'https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg',
-                                                  fit: BoxFit.contain,
-                                                ),
-                                              ),
-                                              Positioned(
-                                                bottom: 0,
-                                                left: 0,
-                                                right: 0,
-                                                child: Container(
-                                                  alignment: Alignment.center,
-                                                  height: 50.h,
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
-                                                  color: AppColor
-                                                      .backgroundColor
-                                                      .withOpacity(0.8),
-                                                  child: Center(
-                                                    child: Text(
-                                                      state.companies[index]
-                                                              .username ??
-                                                          '',
-                                                      style: TextStyle(
-                                                          fontSize: 18.sp,
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                      textAlign:
-                                                          TextAlign.center,
+                        return state.companies.isNotEmpty
+                            ? ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: state.companies.length,
+                                itemBuilder: (BuildContext context, index) {
+                                  return SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.40,
+                                    child: InkWell(
+                                      onTap: () {},
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 10),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                                return LocalCompanyProfileScreen(
+                                                  localCompany:
+                                                      state.companies[index],
+                                                );
+                                              }),
+                                            );
+                                          },
+                                          child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(25.0),
+                                              child: Card(
+                                                child: Stack(
+                                                  children: [
+                                                    Positioned(
+                                                      left: 0,
+                                                      bottom: 0,
+                                                      top: 0,
+                                                      right: 0,
+                                                      child: CachedNetworkImage(
+                                                        imageUrl: state
+                                                                .companies[
+                                                                    index]
+                                                                .profilePhoto ??
+                                                            'https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg',
+                                                        fit: BoxFit.contain,
+                                                      ),
                                                     ),
-                                                  ),
+                                                    Positioned(
+                                                      bottom: 0,
+                                                      left: 0,
+                                                      right: 0,
+                                                      child: Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        height: 50.h,
+                                                        width: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width,
+                                                        color: AppColor
+                                                            .backgroundColor
+                                                            .withOpacity(0.8),
+                                                        child: Center(
+                                                          child: Text(
+                                                            state
+                                                                    .companies[
+                                                                        index]
+                                                                    .username ??
+                                                                '',
+                                                            style: TextStyle(
+                                                                fontSize: 18.sp,
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
                                                 ),
-                                              )
-                                            ],
-                                          ),
-                                        )),
+                                              )),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            : Center(
+                                child: Text(
+                                  AppLocalizations.of(context)
+                                      .translate('no_items'),
+                                  style: TextStyle(
+                                    color: AppColor.backgroundColor,
+                                    fontSize: 22.sp,
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                        );
+                              );
                       }
                       return Container();
                     },

@@ -8,8 +8,8 @@ import '../../../../injection_container.dart';
 part 'real_estate_remote_data_source.g.dart';
 
 abstract class RealEstateRemoteDataSource {
-  Future<List<RealEstateModel>> getAllRealEstates();
-  Future<List<UserInfoModel>> getRealEstateCompanies();
+  Future<List<RealEstateModel>> getAllRealEstates(String country);
+  Future<List<UserInfoModel>> getRealEstateCompanies(String country);
   Future<List<RealEstateModel>> getCompanyRealEstates(String id);
 }
 
@@ -28,11 +28,15 @@ abstract class RealEstateRemoteDataSourceImpl
 
   @override
   @GET('/real-estate')
-  Future<List<RealEstateModel>> getAllRealEstates();
+  Future<List<RealEstateModel>> getAllRealEstates(
+    @Query('country') String country,
+  );
 
   @override
   @GET('/real-estate/get-real-estate-companies')
-  Future<List<UserInfoModel>> getRealEstateCompanies();
+  Future<List<UserInfoModel>> getRealEstateCompanies(
+    @Query('country') String country,
+  );
 
   @override
   @GET('/real-estate/get-companies-realestate/{id}')

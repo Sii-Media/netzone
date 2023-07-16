@@ -24,6 +24,7 @@ VehicleModel _$VehicleModelFromJson(Map<String, dynamic> json) => VehicleModel(
           ?.map((e) => e as String)
           .toList(),
       vedioUrl: json['vedioUrl'] as String?,
+      country: json['country'] as String,
     );
 
 Map<String, dynamic> _$VehicleModelToJson(VehicleModel instance) =>
@@ -41,4 +42,5 @@ Map<String, dynamic> _$VehicleModelToJson(VehicleModel instance) =>
       'creator': instance.creator,
       'carImages': instance.carImages,
       'vedioUrl': instance.vedioUrl,
+      'country': instance.country,
     };

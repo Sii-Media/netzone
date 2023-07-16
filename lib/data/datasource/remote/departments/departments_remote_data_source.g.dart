@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: avoid_function_literals_in_foreach_calls
-
 part of 'departments_remote_data_source.dart';
 
 // **************************************************************************
@@ -53,11 +51,12 @@ class _DepartmentsRemoteDataSourceImpl
 
   @override
   Future<CategoryProductsResponseModel> getProductsByCategory(
+    country,
     department,
     category,
   ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry(
@@ -176,9 +175,9 @@ class _DepartmentsRemoteDataSourceImpl
   }
 
   @override
-  Future<List<CategoryProductsModel>> getAllProducts() async {
+  Future<List<CategoryProductsModel>> getAllProducts(country) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<List<dynamic>>(
@@ -311,6 +310,7 @@ class _DepartmentsRemoteDataSourceImpl
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
+    // ignore: avoid_function_literals_in_foreach_calls
     productIds.forEach((i) {
       _data.fields.add(MapEntry('productIds', i));
     });

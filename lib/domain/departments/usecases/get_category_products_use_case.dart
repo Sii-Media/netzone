@@ -14,16 +14,20 @@ class GetCategoryProductsUseCase
   Future<Either<Failure, CategoryProductsResponse>> call(
       CategoryProductsParams params) {
     return departmentRepository.getProductsByCategory(
-        department: params.department, category: params.category);
+        department: params.department,
+        category: params.category,
+        country: params.country);
   }
 }
 
 class CategoryProductsParams {
   final String department;
   final String category;
+  final String country;
 
   CategoryProductsParams({
     required this.department,
     required this.category,
+    required this.country,
   });
 }

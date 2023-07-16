@@ -36,11 +36,11 @@ class DealsRepositoryImpl implements DealsRepository {
 
   @override
   Future<Either<Failure, DealsItemsResponse>> getDealsByCategory(
-      {required String category}) async {
+      {required String category, required String country}) async {
     try {
       if (await networkInfo.isConnected) {
         final dealsItem =
-            await dealsRemoteDataSource.getDealsByCategory(category);
+            await dealsRemoteDataSource.getDealsByCategory(country, category);
         return Right(dealsItem.toDomain());
       } else {
         return Left(OfflineFailure());
@@ -51,10 +51,11 @@ class DealsRepositoryImpl implements DealsRepository {
   }
 
   @override
-  Future<Either<Failure, DealsItemsResponse>> getDealsItems() async {
+  Future<Either<Failure, DealsItemsResponse>> getDealsItems(
+      {required String country}) async {
     try {
       if (await networkInfo.isConnected) {
-        final dealItem = await dealsRemoteDataSource.getDealsItems();
+        final dealItem = await dealsRemoteDataSource.getDealsItems(country);
         return Right(dealItem.toDomain());
       } else {
         return Left(OfflineFailure());
@@ -65,16 +66,18 @@ class DealsRepositoryImpl implements DealsRepository {
   }
 
   @override
-  Future<Either<Failure, String>> addDeal(
-      {required String name,
-      required String companyName,
-      required File dealImage,
-      required int prevPrice,
-      required int currentPrice,
-      required DateTime startDate,
-      required DateTime endDate,
-      required String location,
-      required String category}) async {
+  Future<Either<Failure, String>> addDeal({
+    required String name,
+    required String companyName,
+    required File dealImage,
+    required int prevPrice,
+    required int currentPrice,
+    required DateTime startDate,
+    required DateTime endDate,
+    required String location,
+    required String category,
+    required String country,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
         Dio dio = Dio();
@@ -89,6 +92,7 @@ class DealsRepositoryImpl implements DealsRepository {
           MapEntry('endDate', endDate.toString()),
           MapEntry('location', location),
           MapEntry('category', category),
+          MapEntry('country', country),
         ]);
         // ignore: unnecessary_null_comparison
         if (dealImage != null) {

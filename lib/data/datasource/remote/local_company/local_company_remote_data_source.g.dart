@@ -74,9 +74,12 @@ class _LocalCompanyRemoteDataSourceImpl
   }
 
   @override
-  Future<List<UserInfoModel>> getLocalCompanies(userType) async {
+  Future<List<UserInfoModel>> getLocalCompanies(
+    country,
+    userType,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry(

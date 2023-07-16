@@ -18,6 +18,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/core/constants/constants.dart';
 import '../../../data/models/auth/user/user_model.dart';
 import '../../chat/screens/chat_page_screen.dart';
+import '../../core/blocs/country_bloc/country_bloc.dart';
+import '../../core/helpers/get_currency_of_country.dart';
 import '../../core/widgets/on_failure_widget.dart';
 import '../../profile/blocs/get_user/get_user_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -45,9 +47,11 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
   final adsBloc = sl<AdsBlocBloc>();
   final authBloc = sl<AuthBloc>();
   bool isFollowing = false;
-
+  late final CountryBloc countryBloc;
   @override
   void initState() {
+    countryBloc = BlocProvider.of<CountryBloc>(context);
+    countryBloc.add(GetCountryEvent());
     // productsBloc.add(GetLocalCompanyProductsEvent(id: widget.localCompany.id));
 
     userBloc.add(GetUserByIdEvent(userId: widget.localCompany.id));
@@ -311,98 +315,98 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                         color: AppColor.mainGrey),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20.0),
-                                  child: SizedBox(
-                                    // height: 50.h,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                AppLocalizations.of(context)
-                                                    .translate('Rating'),
-                                                style: TextStyle(
-                                                  color: Colors.grey[500],
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontSize: 13.sp,
-                                                ),
-                                              ),
-                                              Text(
-                                                '1/10',
-                                                style: TextStyle(
-                                                  color: Colors.grey[700],
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 13.sp,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                AppLocalizations.of(context)
-                                                    .translate('Products'),
-                                                style: TextStyle(
-                                                  color: Colors.grey[500],
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontSize: 13.sp,
-                                                ),
-                                              ),
-                                              Text(
-                                                '4',
-                                                style: TextStyle(
-                                                  color: Colors.grey[700],
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 13.sp,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                AppLocalizations.of(context)
-                                                    .translate('Views'),
-                                                style: TextStyle(
-                                                  color: Colors.grey[500],
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontSize: 13.sp,
-                                                ),
-                                              ),
-                                              Text(
-                                                '1/10',
-                                                style: TextStyle(
-                                                  color: Colors.grey[700],
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 13.sp,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                // Padding(
+                                //   padding: const EdgeInsets.symmetric(
+                                //       horizontal: 20.0),
+                                //   child: SizedBox(
+                                //     // height: 50.h,
+                                //     child: Padding(
+                                //       padding: const EdgeInsets.symmetric(
+                                //           horizontal: 20.0),
+                                //       child: Row(
+                                //         mainAxisAlignment:
+                                //             MainAxisAlignment.spaceBetween,
+                                //         children: [
+                                //           Column(
+                                //             mainAxisAlignment:
+                                //                 MainAxisAlignment.spaceBetween,
+                                //             crossAxisAlignment:
+                                //                 CrossAxisAlignment.center,
+                                //             children: [
+                                //               Text(
+                                //                 AppLocalizations.of(context)
+                                //                     .translate('Rating'),
+                                //                 style: TextStyle(
+                                //                   color: Colors.grey[500],
+                                //                   // fontWeight: FontWeight.bold,
+                                //                   fontSize: 13.sp,
+                                //                 ),
+                                //               ),
+                                //               Text(
+                                //                 '1/10',
+                                //                 style: TextStyle(
+                                //                   color: Colors.grey[700],
+                                //                   fontWeight: FontWeight.bold,
+                                //                   fontSize: 13.sp,
+                                //                 ),
+                                //               ),
+                                //             ],
+                                //           ),
+                                //           Column(
+                                //             mainAxisAlignment:
+                                //                 MainAxisAlignment.spaceBetween,
+                                //             crossAxisAlignment:
+                                //                 CrossAxisAlignment.center,
+                                //             children: [
+                                //               Text(
+                                //                 AppLocalizations.of(context)
+                                //                     .translate('Products'),
+                                //                 style: TextStyle(
+                                //                   color: Colors.grey[500],
+                                //                   // fontWeight: FontWeight.bold,
+                                //                   fontSize: 13.sp,
+                                //                 ),
+                                //               ),
+                                //               Text(
+                                //                 '4',
+                                //                 style: TextStyle(
+                                //                   color: Colors.grey[700],
+                                //                   fontWeight: FontWeight.bold,
+                                //                   fontSize: 13.sp,
+                                //                 ),
+                                //               ),
+                                //             ],
+                                //           ),
+                                //           Column(
+                                //             mainAxisAlignment:
+                                //                 MainAxisAlignment.spaceBetween,
+                                //             crossAxisAlignment:
+                                //                 CrossAxisAlignment.center,
+                                //             children: [
+                                //               Text(
+                                //                 AppLocalizations.of(context)
+                                //                     .translate('Views'),
+                                //                 style: TextStyle(
+                                //                   color: Colors.grey[500],
+                                //                   // fontWeight: FontWeight.bold,
+                                //                   fontSize: 13.sp,
+                                //                 ),
+                                //               ),
+                                //               Text(
+                                //                 '1/10',
+                                //                 style: TextStyle(
+                                //                   color: Colors.grey[700],
+                                //                   fontWeight: FontWeight.bold,
+                                //                   fontSize: 13.sp,
+                                //                 ),
+                                //               ),
+                                //             ],
+                                //           ),
+                                //         ],
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
                                 SizedBox(
                                   height: 12.h,
                                 ),
@@ -580,76 +584,126 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                             fontSize: 22.sp,
                                           ),
                                         )
-                                      : GridView.builder(
-                                          gridDelegate:
-                                              SliverGridDelegateWithFixedCrossAxisCount(
-                                                  crossAxisCount: 3,
-                                                  childAspectRatio: 0.95,
-                                                  crossAxisSpacing: 10.w,
-                                                  mainAxisSpacing: 10.h),
-                                          shrinkWrap: true,
-                                          physics:
-                                              const BouncingScrollPhysics(),
-                                          itemCount: state.products.length,
-                                          itemBuilder: (context, index) {
-                                            return ClipRRect(
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(20)),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                      builder: (context) {
-                                                        return ProductDetailsScreen(
-                                                          products:
-                                                              state.products,
-                                                          index: index,
+                                      : BlocBuilder<CountryBloc, CountryState>(
+                                          bloc: countryBloc,
+                                          builder: (context, countryState) {
+                                            if (countryState
+                                                is CountryInitial) {
+                                              return GridView.builder(
+                                                gridDelegate:
+                                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                                        crossAxisCount: 3,
+                                                        childAspectRatio: 0.95,
+                                                        crossAxisSpacing: 10.w,
+                                                        mainAxisSpacing: 10.h),
+                                                shrinkWrap: true,
+                                                physics:
+                                                    const BouncingScrollPhysics(),
+                                                itemCount:
+                                                    state.products.length,
+                                                itemBuilder: (context, index) {
+                                                  return ClipRRect(
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                            Radius.circular(
+                                                                20)),
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.of(context)
+                                                            .push(
+                                                          MaterialPageRoute(
+                                                            builder: (context) {
+                                                              return ProductDetailsScreen(
+                                                                products: state
+                                                                    .products,
+                                                                index: index,
+                                                              );
+                                                            },
+                                                          ),
                                                         );
                                                       },
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          CachedNetworkImage(
+                                                            imageUrl: state
+                                                                .products[index]
+                                                                .imageUrl,
+                                                            height: 65.h,
+                                                            width: 120.w,
+                                                            fit: BoxFit.contain,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceEvenly,
+                                                            children: [
+                                                              Text(
+                                                                state
+                                                                    .products[
+                                                                        index]
+                                                                    .name,
+                                                                style: const TextStyle(
+                                                                    color: AppColor
+                                                                        .backgroundColor,
+                                                                    fontSize:
+                                                                        10),
+                                                              ),
+                                                              // Text(
+                                                              //   '${state.products[index].price} \$',
+                                                              //   style: const TextStyle(
+                                                              //       color: AppColor
+                                                              //           .colorTwo,
+                                                              //       fontSize:
+                                                              //           10),
+                                                              // ),
+                                                              RichText(
+                                                                text: TextSpan(
+                                                                    style: TextStyle(
+                                                                        fontSize: 10
+                                                                            .sp,
+                                                                        color: AppColor
+                                                                            .backgroundColor),
+                                                                    children: <
+                                                                        TextSpan>[
+                                                                      TextSpan(
+                                                                        text:
+                                                                            '${state.products[index].price}',
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          fontWeight:
+                                                                              FontWeight.w700,
+                                                                        ),
+                                                                      ),
+                                                                      TextSpan(
+                                                                        text:
+                                                                            getCurrencyFromCountry(
+                                                                          countryState
+                                                                              .selectedCountry,
+                                                                          context,
+                                                                        ),
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                AppColor.backgroundColor,
+                                                                            fontSize: 10.sp),
+                                                                      )
+                                                                    ]),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   );
                                                 },
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    CachedNetworkImage(
-                                                      imageUrl: state
-                                                          .products[index]
-                                                          .imageUrl,
-                                                      height: 65.h,
-                                                      width: 120.w,
-                                                      fit: BoxFit.contain,
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceEvenly,
-                                                      children: [
-                                                        Text(
-                                                          state.products[index]
-                                                              .name,
-                                                          style: const TextStyle(
-                                                              color: AppColor
-                                                                  .backgroundColor,
-                                                              fontSize: 10),
-                                                        ),
-                                                        Text(
-                                                          '${state.products[index].price} \$',
-                                                          style: const TextStyle(
-                                                              color: AppColor
-                                                                  .colorTwo,
-                                                              fontSize: 10),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            );
+                                              );
+                                            }
+                                            return Container();
                                           },
                                         );
                                 }

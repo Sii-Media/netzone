@@ -7,6 +7,7 @@ import 'package:netzoon/domain/categories/usecases/real_estate/add_real_estate_u
 import 'package:netzoon/domain/categories/usecases/real_estate/get_all_real_estates_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/real_estate/get_company_real_estates_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/real_estate/get_real_estate_companies_use_case.dart';
+import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 import 'package:share_plus/share_plus.dart';
@@ -24,17 +25,23 @@ class RealEstateBloc extends Bloc<RealEstateEvent, RealEstateState> {
   final GetCompanyRealEstatesUseCase getCompanyRealEstatesUseCase;
   final GetSignedInUserUseCase getSignedInUserUseCase;
   final AddRealEstateUseCase addRealEstateUseCase;
+  final GetCountryUseCase getCountryUseCase;
   RealEstateBloc({
     required this.getAllRealEstatesUseCase,
     required this.getRealEstateCompaniesUseCase,
     required this.getCompanyRealEstatesUseCase,
     required this.getSignedInUserUseCase,
     required this.addRealEstateUseCase,
+    required this.getCountryUseCase,
   }) : super(RealEstateInitial()) {
     on<GetAllRealEstatesEvent>((event, emit) async {
       emit(GetRealEstateInProgress());
 
-      final realEstates = await getAllRealEstatesUseCase(NoParams());
+      late String country;
+      final countryresult = await getCountryUseCase(NoParams());
+      countryresult.fold((l) => null, (r) => country = r ?? 'AE');
+
+      final realEstates = await getAllRealEstatesUseCase(country);
 
       emit(
         realEstates.fold(
@@ -47,7 +54,10 @@ class RealEstateBloc extends Bloc<RealEstateEvent, RealEstateState> {
     on<GetRealEstateCompaniesEvent>((event, emit) async {
       emit(GetRealEstateInProgress());
 
-      final companies = await getRealEstateCompaniesUseCase(NoParams());
+      late String country;
+      final countryresult = await getCountryUseCase(NoParams());
+      countryresult.fold((l) => null, (r) => country = r ?? 'AE');
+      final companies = await getRealEstateCompaniesUseCase(country);
 
       emit(
         companies.fold(
@@ -74,18 +84,25 @@ class RealEstateBloc extends Bloc<RealEstateEvent, RealEstateState> {
       final result = await getSignedInUserUseCase.call(NoParams());
       late User user;
       result.fold((l) => null, (r) => user = r!);
+
+      late String country;
+      final countryresult = await getCountryUseCase(NoParams());
+      countryresult.fold((l) => null, (r) => country = r ?? 'AE');
+
       final realEstate = await addRealEstateUseCase(AddRealEstateParams(
-          createdBy: user.userInfo.id,
-          title: event.title,
-          image: event.image,
-          description: event.description,
-          price: event.price,
-          area: event.area,
-          location: event.location,
-          bedrooms: event.bedrooms,
-          bathrooms: event.bathrooms,
-          amenities: event.amenities,
-          realestateimages: event.realestateimages));
+        createdBy: user.userInfo.id,
+        title: event.title,
+        image: event.image,
+        description: event.description,
+        price: event.price,
+        area: event.area,
+        location: event.location,
+        bedrooms: event.bedrooms,
+        bathrooms: event.bathrooms,
+        amenities: event.amenities,
+        realestateimages: event.realestateimages,
+        country: country,
+      ));
 
       emit(
         realEstate.fold(

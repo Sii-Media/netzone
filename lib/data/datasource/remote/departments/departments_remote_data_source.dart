@@ -14,6 +14,7 @@ abstract class DepartmentsRemoteDataSource {
     final String department,
   );
   Future<CategoryProductsResponseModel> getProductsByCategory(
+    final String country,
     final String department,
     final String category,
   );
@@ -32,7 +33,7 @@ abstract class DepartmentsRemoteDataSource {
     final File image,
   );
 
-  Future<List<CategoryProductsModel>> getAllProducts();
+  Future<List<CategoryProductsModel>> getAllProducts(final String country);
 
   Future<CategoryProductsModel> getProductById(
     String productId,
@@ -70,6 +71,7 @@ abstract class DepartmentsRemoteDataSourceImpl
   @override
   @GET('/departments/products')
   Future<CategoryProductsResponseModel> getProductsByCategory(
+    @Query('country') String country,
     @Part() String department,
     @Part() String category,
   );
@@ -92,7 +94,9 @@ abstract class DepartmentsRemoteDataSourceImpl
 
   @override
   @GET('/departments/allProducts')
-  Future<List<CategoryProductsModel>> getAllProducts();
+  Future<List<CategoryProductsModel>> getAllProducts(
+    @Query('country') String country,
+  );
 
   @override
   @GET('/departments/getUserProducts')

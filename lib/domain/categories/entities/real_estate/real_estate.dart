@@ -14,6 +14,7 @@ class RealEstate extends Equatable {
   final List<String>? amenities;
   final List<String>? images;
   final UserInfo createdBy;
+  final String country;
 
   const RealEstate({
     required this.id,
@@ -28,6 +29,7 @@ class RealEstate extends Equatable {
     this.amenities,
     this.images,
     required this.createdBy,
+    required this.country,
   });
 
   @override
@@ -43,6 +45,7 @@ class RealEstate extends Equatable {
         bathrooms,
         amenities,
         images,
-        createdBy
+        createdBy,
+        country,
       ];
 }

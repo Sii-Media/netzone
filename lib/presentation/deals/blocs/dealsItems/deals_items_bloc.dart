@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/domain/deals/entities/dealsItems/deals_items.dart';
 import 'package:netzoon/domain/deals/usecases/add_deal_use_case.dart';
@@ -18,16 +19,23 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
   final GetDealsItemUsecase getDealsItemUsecase;
   final AddDealUseCase addDealUseCase;
   final GetDealByIdUseCase getDealByIdUseCase;
+  final GetCountryUseCase getCountryUseCase;
   DealsItemsBloc({
     required this.addDealUseCase,
     required this.getDealsItemsByCat,
     required this.getDealsItemUsecase,
     required this.getDealByIdUseCase,
+    required this.getCountryUseCase,
   }) : super(DealsItemsInitial()) {
     on<DealsItemsByCatEvent>((event, emit) async {
       emit(DealsItemsInProgress());
-      final failureOrDealsItems =
-          await getDealsItemsByCat(DealsItemsParams(category: event.category));
+
+      late String country;
+      final result = await getCountryUseCase(NoParams());
+      result.fold((l) => null, (r) => country = r ?? 'AE');
+
+      final failureOrDealsItems = await getDealsItemsByCat(
+          DealsItemsParams(category: event.category, country: country));
       emit(
         failureOrDealsItems.fold(
           (failure) => DealsItemsFailure(message: mapFailureToString(failure)),
@@ -40,7 +48,10 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
     on<GetDealsItemEvent>(
       (event, emit) async {
         emit(DealsItemsInProgress());
-        final failureOrDealsItems = await getDealsItemUsecase(NoParams());
+        late String country;
+        final result = await getCountryUseCase(NoParams());
+        result.fold((l) => null, (r) => country = r ?? 'AE');
+        final failureOrDealsItems = await getDealsItemUsecase(country);
         emit(
           failureOrDealsItems.fold(
               (failure) =>
@@ -53,6 +64,9 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
     );
     on<AddDealEvent>((event, emit) async {
       emit(DealsItemsInProgress());
+      late String country;
+      final result = await getCountryUseCase(NoParams());
+      result.fold((l) => null, (r) => country = r ?? 'AE');
       final failureOrDealsItems = await addDealUseCase(AddDealParams(
         name: event.name,
         companyName: event.companyName,
@@ -63,6 +77,7 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
         endDate: event.endDate,
         location: event.location,
         category: event.category,
+        country: country,
       ));
 
       emit(

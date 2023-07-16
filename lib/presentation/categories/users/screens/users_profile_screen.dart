@@ -13,7 +13,9 @@ import '../../../../data/models/auth/user/user_model.dart';
 import '../../../../injection_container.dart';
 import '../../../auth/blocs/auth_bloc/auth_bloc.dart';
 import '../../../chat/screens/chat_page_screen.dart';
+import '../../../core/blocs/country_bloc/country_bloc.dart';
 import '../../../core/constant/colors.dart';
+import '../../../core/helpers/get_currency_of_country.dart';
 import '../../../core/screen/product_details_screen.dart';
 import '../../../profile/blocs/get_user/get_user_bloc.dart';
 import '../../../utils/app_localizations.dart';
@@ -33,6 +35,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
   final productBloc = sl<GetUserBloc>();
   final myProductBloc = sl<GetUserBloc>();
   final authBloc = sl<AuthBloc>();
+  late final CountryBloc countryBloc;
   bool isFollowing = false;
   @override
   void initState() {
@@ -40,6 +43,8 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
     productBloc.add(GetUserProductsByIdEvent(id: widget.user.id));
     myProductBloc.add(GetSelectedProductsByUserIdEvent(userId: widget.user.id));
     authBloc.add(AuthCheckRequested());
+    countryBloc = BlocProvider.of<CountryBloc>(context);
+    countryBloc.add(GetCountryEvent());
 
     checkFollowStatus();
     super.initState();
@@ -402,442 +407,493 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                       )
                     ];
                   },
-                  body: Column(
-                    children: [
-                      TabBar(
-                        controller: tabController,
-                        tabs: [
-                          Text(
-                            AppLocalizations.of(context)
-                                .translate('my_products'),
-                            style: TextStyle(
-                              color: AppColor.black,
-                              fontSize: 10.sp,
-                            ),
-                          ),
-                          Text(
-                            AppLocalizations.of(context)
-                                .translate('companies_products'),
-                            style: TextStyle(
-                              color: AppColor.black,
-                              fontSize: 10.sp,
-                            ),
-                          ),
-                          Text(
-                            AppLocalizations.of(context).translate('my_info'),
-                            style: TextStyle(
-                              color: AppColor.black,
-                              fontSize: 10.sp,
-                            ),
-                          ),
-                        ],
-                      ),
-                      // SizedBox(
-                      //   height: 20.h,
-                      // ),
-                      Expanded(
-                        child: TabBarView(
-                          controller: tabController,
+                  body: BlocBuilder<CountryBloc, CountryState>(
+                    bloc: countryBloc,
+                    builder: (context, countryState) {
+                      if (countryState is CountryInitial) {
+                        return Column(
                           children: [
-                            RefreshIndicator(
-                              onRefresh: () async {
-                                productBloc.add(GetUserProductsByIdEvent(
-                                    id: widget.user.id));
-                              },
-                              color: AppColor.white,
-                              backgroundColor: AppColor.backgroundColor,
-                              child: BlocBuilder<GetUserBloc, GetUserState>(
-                                bloc: productBloc,
-                                builder: (context, state) {
-                                  if (state is GetUserProductsInProgress) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(
-                                        color: AppColor.backgroundColor,
-                                      ),
-                                    );
-                                  } else if (state is GetUserProductsFailure) {
-                                    final failure = state.message;
-                                    return Center(
-                                      child: Text(
-                                        failure,
-                                        style: const TextStyle(
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                    );
-                                  } else if (state is GetUserProductsSuccess) {
-                                    return state.products.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Column(
-                                              children: [
-                                                Expanded(
-                                                  child: GridView.builder(
-                                                    gridDelegate:
-                                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                                            crossAxisCount: 3,
-                                                            childAspectRatio:
-                                                                0.95,
-                                                            crossAxisSpacing:
-                                                                10.w,
-                                                            mainAxisSpacing:
-                                                                10.h),
-                                                    shrinkWrap: true,
-                                                    physics:
-                                                        const BouncingScrollPhysics(),
-                                                    itemCount:
-                                                        state.products.length,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return Container(
-                                                        margin: const EdgeInsets
-                                                                .symmetric(
-                                                            vertical: 8),
-                                                        decoration: BoxDecoration(
-                                                            color:
-                                                                AppColor.white,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                            boxShadow: [
-                                                              BoxShadow(
-                                                                color: AppColor
-                                                                    .secondGrey
-                                                                    .withOpacity(
-                                                                        0.5),
-                                                                blurRadius: 10,
-                                                                spreadRadius: 2,
-                                                                offset:
-                                                                    const Offset(
-                                                                        0, 3),
-                                                              ),
-                                                            ]),
-                                                        child: ClipRRect(
-                                                          borderRadius:
-                                                              const BorderRadius
-                                                                      .all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          20)),
-                                                          child:
-                                                              GestureDetector(
-                                                            onTap: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .push(MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) {
-                                                                return ProductDetailScreen(
-                                                                    item: state
-                                                                        .products[
-                                                                            index]
-                                                                        .id);
-                                                              }));
-                                                            },
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                CachedNetworkImage(
-                                                                  imageUrl: state
-                                                                      .products[
-                                                                          index]
-                                                                      .imageUrl,
-                                                                  height: 65.h,
-                                                                  width: 160.w,
-                                                                  fit: BoxFit
-                                                                      .contain,
-                                                                ),
-                                                                Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .only(
-                                                                      right:
-                                                                          9.0,
-                                                                      left: 9.0,
-                                                                      bottom:
-                                                                          8.0),
-                                                                  child: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
-                                                                    children: [
-                                                                      Text(
-                                                                        state
-                                                                            .products[index]
-                                                                            .name,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              AppColor.backgroundColor,
-                                                                          fontSize:
-                                                                              11.sp,
-                                                                        ),
-                                                                      ),
-                                                                      Text(
-                                                                        '${state.products[index].price} \$',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              AppColor.colorTwo,
-                                                                          fontSize:
-                                                                              11.sp,
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        : Center(
-                                            child: Text(
-                                                AppLocalizations.of(context)
-                                                    .translate('no_items'),
-                                                style: const TextStyle(
-                                                    color: AppColor
-                                                        .backgroundColor)),
-                                          );
-                                  }
-                                  return Container();
-                                },
-                              ),
-                            ),
-                            RefreshIndicator(
-                              onRefresh: () async {
-                                myProductBloc.add(
-                                    GetSelectedProductsByUserIdEvent(
-                                        userId: widget.user.id));
-                              },
-                              color: AppColor.white,
-                              backgroundColor: AppColor.backgroundColor,
-                              child: BlocBuilder<GetUserBloc, GetUserState>(
-                                bloc: myProductBloc,
-                                builder: (context, sstate) {
-                                  if (sstate is GetSelectedProductsInProgress) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(
-                                        color: AppColor.backgroundColor,
-                                      ),
-                                    );
-                                  } else if (sstate
-                                      is GetSelectedProductsFailure) {
-                                    final failure = sstate.message;
-                                    return Center(
-                                      child: Text(
-                                        failure,
-                                        style: const TextStyle(
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                    );
-                                  } else if (sstate
-                                      is GetSelectedProductsSuccess) {
-                                    return sstate.products.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Column(
-                                              children: [
-                                                Expanded(
-                                                  child: GridView.builder(
-                                                    gridDelegate:
-                                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                                            crossAxisCount: 3,
-                                                            childAspectRatio:
-                                                                0.95,
-                                                            crossAxisSpacing:
-                                                                10.w,
-                                                            mainAxisSpacing:
-                                                                10.h),
-                                                    shrinkWrap: true,
-                                                    physics:
-                                                        const BouncingScrollPhysics(),
-                                                    itemCount:
-                                                        sstate.products.length,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return Container(
-                                                        margin: const EdgeInsets
-                                                                .symmetric(
-                                                            vertical: 8),
-                                                        decoration: BoxDecoration(
-                                                            color:
-                                                                AppColor.white,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                            boxShadow: [
-                                                              BoxShadow(
-                                                                color: AppColor
-                                                                    .secondGrey
-                                                                    .withOpacity(
-                                                                        0.5),
-                                                                blurRadius: 10,
-                                                                spreadRadius: 2,
-                                                                offset:
-                                                                    const Offset(
-                                                                        0, 3),
-                                                              ),
-                                                            ]),
-                                                        child: ClipRRect(
-                                                          borderRadius:
-                                                              const BorderRadius
-                                                                      .all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          20)),
-                                                          child:
-                                                              GestureDetector(
-                                                            onTap: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .push(MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) {
-                                                                return ProductDetailScreen(
-                                                                    item: sstate
-                                                                        .products[
-                                                                            index]
-                                                                        .id);
-                                                              }));
-                                                            },
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                CachedNetworkImage(
-                                                                  imageUrl: sstate
-                                                                      .products[
-                                                                          index]
-                                                                      .imageUrl,
-                                                                  height: 65.h,
-                                                                  width: 160.w,
-                                                                  fit: BoxFit
-                                                                      .contain,
-                                                                ),
-                                                                Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .only(
-                                                                      right:
-                                                                          9.0,
-                                                                      left: 9.0,
-                                                                      bottom:
-                                                                          8.0),
-                                                                  child: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
-                                                                    children: [
-                                                                      Text(
-                                                                        sstate
-                                                                            .products[index]
-                                                                            .name,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              AppColor.backgroundColor,
-                                                                          fontSize:
-                                                                              11.sp,
-                                                                        ),
-                                                                      ),
-                                                                      Text(
-                                                                        '${sstate.products[index].price} \$',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              AppColor.colorTwo,
-                                                                          fontSize:
-                                                                              11.sp,
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        : Center(
-                                            child: Text(
-                                                AppLocalizations.of(context)
-                                                    .translate('no_items'),
-                                                style: const TextStyle(
-                                                    color: AppColor
-                                                        .backgroundColor)),
-                                          );
-                                  }
-                                  return Container(
-                                    width: 100,
-                                    height: 100,
-                                    color: AppColor.red,
-                                  );
-                                },
-                              ),
-                            ),
-                            ListView(
-                              children: [
-                                Column(
-                                  children: [
-                                    titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('username'),
-                                        input: state.userInfo.username ?? ''),
-                                    titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('email'),
-                                        input: state.userInfo.email ?? ''),
-                                    titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('mobile'),
-                                        input:
-                                            state.userInfo.firstMobile ?? ''),
-                                    state.userInfo.bio != null
-                                        ? titleAndInput(
-                                            title: AppLocalizations.of(context)
-                                                .translate('Bio'),
-                                            input: state.userInfo.bio ?? '')
-                                        : const SizedBox(),
-                                    // titleAndInput(
-                                    //   title: AppLocalizations.of(context)
-                                    //       .translate('Is there delivery'),
-                                    //   input: state.userInfo.deliverable!
-                                    //       ? AppLocalizations.of(context)
-                                    //           .translate('Yes')
-                                    //       : AppLocalizations.of(context)
-                                    //           .translate('No'),
-                                    // ),
-                                  ],
+                            TabBar(
+                              controller: tabController,
+                              tabs: [
+                                Text(
+                                  AppLocalizations.of(context)
+                                      .translate('my_products'),
+                                  style: TextStyle(
+                                    color: AppColor.black,
+                                    fontSize: 10.sp,
+                                  ),
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)
+                                      .translate('companies_products'),
+                                  style: TextStyle(
+                                    color: AppColor.black,
+                                    fontSize: 10.sp,
+                                  ),
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)
+                                      .translate('my_info'),
+                                  style: TextStyle(
+                                    color: AppColor.black,
+                                    fontSize: 10.sp,
+                                  ),
                                 ),
                               ],
                             ),
+                            // SizedBox(
+                            //   height: 20.h,
+                            // ),
+                            Expanded(
+                              child: TabBarView(
+                                controller: tabController,
+                                children: [
+                                  RefreshIndicator(
+                                    onRefresh: () async {
+                                      productBloc.add(GetUserProductsByIdEvent(
+                                          id: widget.user.id));
+                                    },
+                                    color: AppColor.white,
+                                    backgroundColor: AppColor.backgroundColor,
+                                    child:
+                                        BlocBuilder<GetUserBloc, GetUserState>(
+                                      bloc: productBloc,
+                                      builder: (context, state) {
+                                        if (state
+                                            is GetUserProductsInProgress) {
+                                          return const Center(
+                                            child: CircularProgressIndicator(
+                                              color: AppColor.backgroundColor,
+                                            ),
+                                          );
+                                        } else if (state
+                                            is GetUserProductsFailure) {
+                                          final failure = state.message;
+                                          return Center(
+                                            child: Text(
+                                              failure,
+                                              style: const TextStyle(
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                          );
+                                        } else if (state
+                                            is GetUserProductsSuccess) {
+                                          return state.products.isNotEmpty
+                                              ? Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Column(
+                                                    children: [
+                                                      Expanded(
+                                                        child: GridView.builder(
+                                                          gridDelegate:
+                                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                                                  crossAxisCount:
+                                                                      3,
+                                                                  childAspectRatio:
+                                                                      0.95,
+                                                                  crossAxisSpacing:
+                                                                      10.w,
+                                                                  mainAxisSpacing:
+                                                                      10.h),
+                                                          shrinkWrap: true,
+                                                          physics:
+                                                              const BouncingScrollPhysics(),
+                                                          itemCount: state
+                                                              .products.length,
+                                                          itemBuilder:
+                                                              (context, index) {
+                                                            return Container(
+                                                              margin: const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 8),
+                                                              decoration: BoxDecoration(
+                                                                  color: AppColor
+                                                                      .white,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              20),
+                                                                  boxShadow: [
+                                                                    BoxShadow(
+                                                                      color: AppColor
+                                                                          .secondGrey
+                                                                          .withOpacity(
+                                                                              0.5),
+                                                                      blurRadius:
+                                                                          10,
+                                                                      spreadRadius:
+                                                                          2,
+                                                                      offset:
+                                                                          const Offset(
+                                                                              0,
+                                                                              3),
+                                                                    ),
+                                                                  ]),
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    const BorderRadius
+                                                                            .all(
+                                                                        Radius.circular(
+                                                                            20)),
+                                                                child:
+                                                                    GestureDetector(
+                                                                  onTap: () {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .push(MaterialPageRoute(builder:
+                                                                            (context) {
+                                                                      return ProductDetailScreen(
+                                                                          item: state
+                                                                              .products[index]
+                                                                              .id);
+                                                                    }));
+                                                                  },
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      CachedNetworkImage(
+                                                                        imageUrl: state
+                                                                            .products[index]
+                                                                            .imageUrl,
+                                                                        height:
+                                                                            65.h,
+                                                                        width:
+                                                                            160.w,
+                                                                        fit: BoxFit
+                                                                            .contain,
+                                                                      ),
+                                                                      Padding(
+                                                                        padding: const EdgeInsets.only(
+                                                                            right:
+                                                                                9.0,
+                                                                            left:
+                                                                                9.0,
+                                                                            bottom:
+                                                                                8.0),
+                                                                        child:
+                                                                            Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.spaceBetween,
+                                                                          children: [
+                                                                            Text(
+                                                                              state.products[index].name,
+                                                                              style: TextStyle(
+                                                                                color: AppColor.backgroundColor,
+                                                                                fontSize: 11.sp,
+                                                                              ),
+                                                                            ),
+                                                                            // Text(
+                                                                            //   '${state.products[index].price} \$',
+                                                                            //   style: TextStyle(
+                                                                            //     color: AppColor.colorTwo,
+                                                                            //     fontSize: 11.sp,
+                                                                            //   ),
+                                                                            // ),
+                                                                            RichText(
+                                                                              text: TextSpan(style: TextStyle(fontSize: 12.sp, color: AppColor.backgroundColor), children: <TextSpan>[
+                                                                                TextSpan(
+                                                                                  text: '${state.products[index].price}',
+                                                                                  style: const TextStyle(
+                                                                                    fontWeight: FontWeight.w700,
+                                                                                  ),
+                                                                                ),
+                                                                                TextSpan(
+                                                                                  text: getCurrencyFromCountry(
+                                                                                    countryState.selectedCountry,
+                                                                                    context,
+                                                                                  ),
+                                                                                  style: TextStyle(color: AppColor.backgroundColor, fontSize: 10.sp),
+                                                                                )
+                                                                              ]),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                              : Center(
+                                                  child: Text(
+                                                      AppLocalizations.of(
+                                                              context)
+                                                          .translate(
+                                                              'no_items'),
+                                                      style: const TextStyle(
+                                                          color: AppColor
+                                                              .backgroundColor)),
+                                                );
+                                        }
+                                        return Container();
+                                      },
+                                    ),
+                                  ),
+                                  RefreshIndicator(
+                                    onRefresh: () async {
+                                      myProductBloc.add(
+                                          GetSelectedProductsByUserIdEvent(
+                                              userId: widget.user.id));
+                                    },
+                                    color: AppColor.white,
+                                    backgroundColor: AppColor.backgroundColor,
+                                    child:
+                                        BlocBuilder<GetUserBloc, GetUserState>(
+                                      bloc: myProductBloc,
+                                      builder: (context, sstate) {
+                                        if (sstate
+                                            is GetSelectedProductsInProgress) {
+                                          return const Center(
+                                            child: CircularProgressIndicator(
+                                              color: AppColor.backgroundColor,
+                                            ),
+                                          );
+                                        } else if (sstate
+                                            is GetSelectedProductsFailure) {
+                                          final failure = sstate.message;
+                                          return Center(
+                                            child: Text(
+                                              failure,
+                                              style: const TextStyle(
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                          );
+                                        } else if (sstate
+                                            is GetSelectedProductsSuccess) {
+                                          return sstate.products.isNotEmpty
+                                              ? Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Column(
+                                                    children: [
+                                                      Expanded(
+                                                        child: GridView.builder(
+                                                          gridDelegate:
+                                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                                                  crossAxisCount:
+                                                                      3,
+                                                                  childAspectRatio:
+                                                                      0.95,
+                                                                  crossAxisSpacing:
+                                                                      10.w,
+                                                                  mainAxisSpacing:
+                                                                      10.h),
+                                                          shrinkWrap: true,
+                                                          physics:
+                                                              const BouncingScrollPhysics(),
+                                                          itemCount: sstate
+                                                              .products.length,
+                                                          itemBuilder:
+                                                              (context, index) {
+                                                            return Container(
+                                                              margin: const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 8),
+                                                              decoration: BoxDecoration(
+                                                                  color: AppColor
+                                                                      .white,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              20),
+                                                                  boxShadow: [
+                                                                    BoxShadow(
+                                                                      color: AppColor
+                                                                          .secondGrey
+                                                                          .withOpacity(
+                                                                              0.5),
+                                                                      blurRadius:
+                                                                          10,
+                                                                      spreadRadius:
+                                                                          2,
+                                                                      offset:
+                                                                          const Offset(
+                                                                              0,
+                                                                              3),
+                                                                    ),
+                                                                  ]),
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    const BorderRadius
+                                                                            .all(
+                                                                        Radius.circular(
+                                                                            20)),
+                                                                child:
+                                                                    GestureDetector(
+                                                                  onTap: () {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .push(MaterialPageRoute(builder:
+                                                                            (context) {
+                                                                      return ProductDetailScreen(
+                                                                          item: sstate
+                                                                              .products[index]
+                                                                              .id);
+                                                                    }));
+                                                                  },
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      CachedNetworkImage(
+                                                                        imageUrl: sstate
+                                                                            .products[index]
+                                                                            .imageUrl,
+                                                                        height:
+                                                                            65.h,
+                                                                        width:
+                                                                            160.w,
+                                                                        fit: BoxFit
+                                                                            .contain,
+                                                                      ),
+                                                                      Padding(
+                                                                        padding: const EdgeInsets.only(
+                                                                            right:
+                                                                                9.0,
+                                                                            left:
+                                                                                9.0,
+                                                                            bottom:
+                                                                                8.0),
+                                                                        child:
+                                                                            Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.spaceBetween,
+                                                                          children: [
+                                                                            Text(
+                                                                              sstate.products[index].name,
+                                                                              style: TextStyle(
+                                                                                color: AppColor.backgroundColor,
+                                                                                fontSize: 11.sp,
+                                                                              ),
+                                                                            ),
+                                                                            // Text(
+                                                                            //   '${sstate.products[index].price} \$',
+                                                                            //   style: TextStyle(
+                                                                            //     color: AppColor.colorTwo,
+                                                                            //     fontSize: 11.sp,
+                                                                            //   ),
+                                                                            // ),
+                                                                            RichText(
+                                                                              text: TextSpan(style: TextStyle(fontSize: 12.sp, color: AppColor.backgroundColor), children: <TextSpan>[
+                                                                                TextSpan(
+                                                                                  text: '${sstate.products[index].price}',
+                                                                                  style: const TextStyle(
+                                                                                    fontWeight: FontWeight.w700,
+                                                                                  ),
+                                                                                ),
+                                                                                TextSpan(
+                                                                                  text: getCurrencyFromCountry(
+                                                                                    countryState.selectedCountry,
+                                                                                    context,
+                                                                                  ),
+                                                                                  style: TextStyle(color: AppColor.backgroundColor, fontSize: 10.sp),
+                                                                                )
+                                                                              ]),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                              : Center(
+                                                  child: Text(
+                                                      AppLocalizations.of(
+                                                              context)
+                                                          .translate(
+                                                              'no_items'),
+                                                      style: const TextStyle(
+                                                          color: AppColor
+                                                              .backgroundColor)),
+                                                );
+                                        }
+                                        return Container(
+                                          width: 100,
+                                          height: 100,
+                                          color: AppColor.red,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  ListView(
+                                    children: [
+                                      Column(
+                                        children: [
+                                          titleAndInput(
+                                              title:
+                                                  AppLocalizations.of(context)
+                                                      .translate('username'),
+                                              input: state.userInfo.username ??
+                                                  ''),
+                                          titleAndInput(
+                                              title:
+                                                  AppLocalizations.of(context)
+                                                      .translate('email'),
+                                              input:
+                                                  state.userInfo.email ?? ''),
+                                          titleAndInput(
+                                              title:
+                                                  AppLocalizations.of(context)
+                                                      .translate('mobile'),
+                                              input:
+                                                  state.userInfo.firstMobile ??
+                                                      ''),
+                                          state.userInfo.bio != null
+                                              ? titleAndInput(
+                                                  title: AppLocalizations.of(
+                                                          context)
+                                                      .translate('Bio'),
+                                                  input:
+                                                      state.userInfo.bio ?? '')
+                                              : const SizedBox(),
+                                          // titleAndInput(
+                                          //   title: AppLocalizations.of(context)
+                                          //       .translate('Is there delivery'),
+                                          //   input: state.userInfo.deliverable!
+                                          //       ? AppLocalizations.of(context)
+                                          //           .translate('Yes')
+                                          //       : AppLocalizations.of(context)
+                                          //           .translate('No'),
+                                          // ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
-                        ),
-                      ),
-                    ],
+                        );
+                      }
+                      return Container();
+                    },
                   ),
                 ),
               );

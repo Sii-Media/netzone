@@ -12,6 +12,7 @@ abstract class LocalCompanyRepository {
   });
 
   Future<Either<Failure, List<UserInfo>>> getLocalCompanies({
+    required String country,
     required String userType,
   });
 }

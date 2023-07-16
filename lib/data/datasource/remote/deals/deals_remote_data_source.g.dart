@@ -44,9 +44,12 @@ class _DealsRemoteDataSourceImpl implements DealsRemoteDataSourceImpl {
   }
 
   @override
-  Future<DealsItemsResponseModel> getDealsByCategory(category) async {
+  Future<DealsItemsResponseModel> getDealsByCategory(
+    country,
+    category,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry(
@@ -71,9 +74,9 @@ class _DealsRemoteDataSourceImpl implements DealsRemoteDataSourceImpl {
   }
 
   @override
-  Future<DealsItemsResponseModel> getDealsItems() async {
+  Future<DealsItemsResponseModel> getDealsItems(country) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(

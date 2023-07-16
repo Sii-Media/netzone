@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/add_product_use_case.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -17,15 +18,22 @@ part 'add_product_state.dart';
 class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
   final AddProductUseCase addProductUseCase;
   final GetSignedInUserUseCase getSignedInUser;
+  final GetCountryUseCase getCountryUseCase;
   AddProductBloc({
     required this.addProductUseCase,
     required this.getSignedInUser,
+    required this.getCountryUseCase,
   }) : super(AddProductInitial()) {
     on<AddProductRequestedEvent>((event, emit) async {
       emit(AddProductInProgress());
       final result = await getSignedInUser.call(NoParams());
       late User? user;
       result.fold((l) => null, (r) => user = r);
+
+      late String country;
+      final countryresult = await getCountryUseCase(NoParams());
+      countryresult.fold((l) => null, (r) => country = r ?? 'AE');
+
       final Response response = await _uploadFile(
         owner: user?.userInfo.id ?? '',
         departmentName: event.departmentName,
@@ -43,6 +51,7 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
         year: event.year,
         address: event.address,
         discountPercentage: event.discountPercentage,
+        country: country,
       );
       if (response.statusCode == 201) {
         emit(AddProductSuccess(product: response.data));
@@ -138,6 +147,7 @@ Future<Response<dynamic>> _uploadFile({
   DateTime? year,
   String? address,
   int? discountPercentage,
+  required String country,
 }) async {
   try {
     Dio dio = Dio();
@@ -156,6 +166,7 @@ Future<Response<dynamic>> _uploadFile({
       MapEntry('year', year?.toString() ?? ''),
       MapEntry('address', address ?? ''),
       MapEntry('discountPercentage', discountPercentage.toString()),
+      MapEntry('country', country),
     ]);
     if (condition != null) {
       formData.fields.add(

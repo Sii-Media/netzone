@@ -25,6 +25,7 @@ class AddVehicleUseCase extends UseCase<String, AddVehicleParams> {
       image: params.image,
       carimages: params.carimages,
       video: params.video,
+      country: params.country,
     );
   }
 }
@@ -42,7 +43,7 @@ class AddVehicleParams {
   final File image;
   final List<XFile>? carimages;
   final File? video;
-
+  final String country;
   AddVehicleParams({
     required this.name,
     required this.description,
@@ -56,5 +57,6 @@ class AddVehicleParams {
     required this.image,
     this.carimages,
     this.video,
+    required this.country,
   });
 }

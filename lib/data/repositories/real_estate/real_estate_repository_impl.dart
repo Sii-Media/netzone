@@ -23,11 +23,13 @@ class RealEstateRepositoryImpl implements RealEstateRepository {
   });
 
   @override
-  Future<Either<Failure, List<RealEstate>>> getAllRealEstates() async {
+  Future<Either<Failure, List<RealEstate>>> getAllRealEstates({
+    required String country,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
         final realEstates =
-            await realEstateRemoteDataSource.getAllRealEstates();
+            await realEstateRemoteDataSource.getAllRealEstates(country);
         return Right(realEstates.map((e) => e.toDomain()).toList());
       } else {
         return Left(OfflineFailure());
@@ -38,11 +40,13 @@ class RealEstateRepositoryImpl implements RealEstateRepository {
   }
 
   @override
-  Future<Either<Failure, List<UserInfo>>> getRealEstateCompanies() async {
+  Future<Either<Failure, List<UserInfo>>> getRealEstateCompanies({
+    required String country,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
         final realEstateCompanies =
-            await realEstateRemoteDataSource.getRealEstateCompanies();
+            await realEstateRemoteDataSource.getRealEstateCompanies(country);
 
         return Right(realEstateCompanies.map((e) => e.toDomain()).toList());
       } else {
@@ -70,18 +74,20 @@ class RealEstateRepositoryImpl implements RealEstateRepository {
   }
 
   @override
-  Future<Either<Failure, String>> addRealEstate(
-      {required String createdBy,
-      required String title,
-      required File image,
-      required String description,
-      required int price,
-      required int area,
-      required String location,
-      required int bedrooms,
-      required int bathrooms,
-      List<String>? amenities,
-      List<XFile>? realestateimages}) async {
+  Future<Either<Failure, String>> addRealEstate({
+    required String createdBy,
+    required String title,
+    required File image,
+    required String description,
+    required int price,
+    required int area,
+    required String location,
+    required int bedrooms,
+    required int bathrooms,
+    List<String>? amenities,
+    List<XFile>? realestateimages,
+    required String country,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
         Dio dio = Dio();
@@ -95,6 +101,7 @@ class RealEstateRepositoryImpl implements RealEstateRepository {
           MapEntry('location', location),
           MapEntry('bedrooms', bedrooms.toString()),
           MapEntry('bathrooms', bathrooms.toString()),
+          MapEntry('country', country),
         ]);
         if (amenities != null && amenities.isNotEmpty) {
           formData.fields.add(MapEntry('amenities', amenities.toString()));

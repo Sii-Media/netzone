@@ -19,7 +19,7 @@ class UserInfo {
   final int? companyProductsNumber;
 
   final String? sellType;
-
+  final String? country;
   final String? toCountry;
   final String? bio;
   final String? description;
@@ -51,6 +51,7 @@ class UserInfo {
     this.businessLicense,
     this.companyProductsNumber,
     this.sellType,
+    this.country,
     this.toCountry,
     this.bio,
     this.description,

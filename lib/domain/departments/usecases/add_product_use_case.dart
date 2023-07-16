@@ -23,6 +23,7 @@ class AddProductUseCase extends UseCase<String, AddProductParams> {
       madeIn: params.madeIn,
       property: params.property,
       videoUrl: params.videoUrl,
+      country: params.country,
     );
   }
 }
@@ -39,6 +40,7 @@ class AddProductParams {
   final String? property;
   final String? madeIn;
   final File image;
+  final String country;
 
   AddProductParams({
     required this.departmentName,
@@ -52,5 +54,6 @@ class AddProductParams {
     this.property,
     this.madeIn,
     required this.image,
+    required this.country,
   });
 }

@@ -46,7 +46,7 @@ class CompanyProfile extends StatelessWidget {
                 ),
               ),
             ),
-            customAppBar(context),
+            CustomAppBar(context: context),
             Positioned(
               top: 205.h,
               right: 0,

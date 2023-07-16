@@ -113,38 +113,38 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
               );
             },
           ),
-          SizedBox(
-            height: 10.h,
-          ),
-          SettingsCategory(
-            name: AppLocalizations.of(context).translate('vacancies'),
-            icon: Icons.work,
-            onTap: () {
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (context) {
-              //       return const MobileLoginScreen();
-              //     },
-              //   ),
-              // );
-            },
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
-          SettingsCategory(
-            name: AppLocalizations.of(context).translate('country'),
-            icon: Icons.location_city,
-            onTap: () {
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (context) {
-              //       return const LanguagesScreen();
-              //     },
-              //   ),
-              // );
-            },
-          ),
+          // SizedBox(
+          //   height: 10.h,
+          // ),
+          // SettingsCategory(
+          //   name: AppLocalizations.of(context).translate('vacancies'),
+          //   icon: Icons.work,
+          //   onTap: () {
+          //     // Navigator.of(context).push(
+          //     //   MaterialPageRoute(
+          //     //     builder: (context) {
+          //     //       return const MobileLoginScreen();
+          //     //     },
+          //     //   ),
+          //     // );
+          //   },
+          // ),
+          // SizedBox(
+          //   height: 10.h,
+          // ),
+          // SettingsCategory(
+          //   name: AppLocalizations.of(context).translate('country'),
+          //   icon: Icons.location_city,
+          //   onTap: () {
+          //     // Navigator.of(context).push(
+          //     //   MaterialPageRoute(
+          //     //     builder: (context) {
+          //     //       return const LanguagesScreen();
+          //     //     },
+          //     //   ),
+          //     // );
+          //   },
+          // ),
           SizedBox(
             height: 10.h,
           ),

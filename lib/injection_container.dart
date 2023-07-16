@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/local/auth/auth_local_data_source.dart';
+import 'package:netzoon/data/datasource/local/country/country_local_data_source.dart';
 import 'package:netzoon/data/datasource/local/favorite/favorite_local_data_source.dart';
 import 'package:netzoon/data/datasource/local/lang/lang_local_data_resource.dart';
 import 'package:netzoon/data/datasource/remote/advertisements/ads_remote_data_source.dart';
@@ -30,6 +31,7 @@ import 'package:netzoon/data/datasource/remote/vehicles/vehicle_remote_data_sour
 import 'package:netzoon/data/repositories/advertisments/advertisment_repository_impl.dart';
 import 'package:netzoon/data/repositories/auth_repository_impl.dart';
 import 'package:netzoon/data/repositories/complaints/complaints_repository_impl.dart';
+import 'package:netzoon/data/repositories/country/country_repository_impl.dart';
 import 'package:netzoon/data/repositories/customs/customs_repository_impl.dart';
 import 'package:netzoon/data/repositories/deals/deals_repository_impl.dart';
 import 'package:netzoon/data/repositories/departments/departments_repository_impl.dart';
@@ -107,6 +109,9 @@ import 'package:netzoon/domain/categories/usecases/vehicles/get_planes_companies
 import 'package:netzoon/domain/complaints/repositories/complaints_repository.dart';
 import 'package:netzoon/domain/complaints/usecases/add_complaints_usecase.dart';
 import 'package:netzoon/domain/complaints/usecases/get_complaints_usecase.dart';
+import 'package:netzoon/domain/core/repositories/country_repository.dart';
+import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
+import 'package:netzoon/domain/core/usecase/set_country_use_case.dart';
 import 'package:netzoon/domain/deals/repositories/deals_repository.dart';
 import 'package:netzoon/domain/deals/usecases/add_deal_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_all_deals_items_use_case.dart';
@@ -176,6 +181,7 @@ import 'package:netzoon/presentation/contact/blocs/add_question/add_question_blo
 import 'package:netzoon/presentation/contact/blocs/add_request/add_request_bloc.dart';
 import 'package:netzoon/presentation/contact/blocs/get_complaints/get_complaint_bloc.dart';
 import 'package:netzoon/presentation/contact/blocs/send_email/send_email_bloc.dart';
+import 'package:netzoon/presentation/core/blocs/country_bloc/country_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/deals_category/deals_categoty_bloc.dart';
 import 'package:netzoon/presentation/favorites/favorite_blocs/favorites_bloc.dart';
@@ -244,6 +250,7 @@ Future<void> init() async {
         getDealsItemUsecase: sl(),
         addDealUseCase: sl(),
         getDealByIdUseCase: sl(),
+        getCountryUseCase: sl(),
       ));
 
   sl.registerFactory(() => ElecDevicesBloc(
@@ -253,11 +260,13 @@ Future<void> init() async {
         deleteProductUseCase: sl(),
         editProductUseCase: sl(),
         getProductByIdUseCase: sl(),
+        getCountryUseCase: sl(),
       ));
 
   sl.registerFactory(() => AddProductBloc(
         addProductUseCase: sl(),
         getSignedInUser: sl(),
+        getCountryUseCase: sl(),
       ));
   sl.registerFactory(() => CartBlocBloc());
 
@@ -305,6 +314,7 @@ Future<void> init() async {
         getAllPlanesUseCase: sl(),
         addVehicleUseCase: sl(),
         getSignedInUserUseCase: sl(),
+        getCountryUseCase: sl(),
       ));
 
   sl.registerFactory(() => FreezoneBloc(
@@ -319,6 +329,7 @@ Future<void> init() async {
         getLocalCompaniesUseCase: sl(),
         getSignedInUser: sl(),
         getUserProductsUseCase: sl(),
+        getCountryUseCase: sl(),
       ));
 
   sl.registerFactory(() => GovermentalBloc(
@@ -373,15 +384,25 @@ Future<void> init() async {
       sendNotificationUseCase: sl(),
       getSignedInUser: sl()));
 
-  sl.registerFactory(
-      () => UsersBloc(getSignedInUser: sl(), getUsersListUseCase: sl()));
+  sl.registerFactory(() => UsersBloc(
+        getSignedInUser: sl(),
+        getUsersListUseCase: sl(),
+        getCountryUseCase: sl(),
+      ));
 
   sl.registerFactory(() => RealEstateBloc(
-      getAllRealEstatesUseCase: sl(),
-      getRealEstateCompaniesUseCase: sl(),
-      getCompanyRealEstatesUseCase: sl(),
-      addRealEstateUseCase: sl(),
-      getSignedInUserUseCase: sl()));
+        getAllRealEstatesUseCase: sl(),
+        getRealEstateCompaniesUseCase: sl(),
+        getCompanyRealEstatesUseCase: sl(),
+        addRealEstateUseCase: sl(),
+        getSignedInUserUseCase: sl(),
+        getCountryUseCase: sl(),
+      ));
+
+  sl.registerFactory(() => CountryBloc(
+        getCountryUseCase: sl(),
+        setCountryUseCase: sl(),
+      ));
 
   //! UseCases
   sl.registerLazySingleton(() => GetSignedInUserUseCase(authRepository: sl()));
@@ -594,6 +615,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => GetCompanyNewsUseCase(newsRepository: sl()));
 
+  sl.registerLazySingleton(() => GetCountryUseCase(countryRepository: sl()));
+  sl.registerLazySingleton(() => SetCountryUseCase(countryRepository: sl()));
+
   //! Repositories
 
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
@@ -672,6 +696,9 @@ Future<void> init() async {
   sl.registerLazySingleton<RealEstateRepository>(() => RealEstateRepositoryImpl(
       networkInfo: sl(), realEstateRemoteDataSource: sl()));
 
+  sl.registerLazySingleton<CountryRepository>(
+      () => CountryRepositoryImpl(countryLocalDataSource: sl()));
+
   //! DataSourses
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
@@ -747,6 +774,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton<RealEstateRemoteDataSource>(
       () => RealEstateRemoteDataSourceImpl(sl(), baseUrl: baseUrl));
+
+  sl.registerLazySingleton<CountryLocalDataSource>(
+      () => CountryLocalDataSourceImpl(sharedPreferences: sl()));
 
   //! Core
 

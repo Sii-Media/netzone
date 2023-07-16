@@ -7,7 +7,7 @@ import '../../../models/auth/user_info/user_info_model.dart';
 part 'users_remote_data_source.g.dart';
 
 abstract class UsersRemoteDataSource {
-  Future<List<UserInfoModel>> getUsersList(String userType);
+  Future<List<UserInfoModel>> getUsersList(String country, String userType);
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -25,6 +25,7 @@ abstract class UsersRemoteDataSourceImpl implements UsersRemoteDataSource {
   @override
   @GET('/user/getUserByType')
   Future<List<UserInfoModel>> getUsersList(
+    @Query('country') String country,
     @Part() String userType,
   );
 }

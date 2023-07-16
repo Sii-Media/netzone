@@ -450,5 +450,15 @@
     "recovered_airplanes": "Recovered AirPlanes",
     "add_your_rating": "Add your rating",
     "rating": "Rating",
-    "please leave a star rating": "Please leave a star rating"
+    "please leave a star rating": "Please leave a star rating",
+    "there_is_no_cars_in_this_country": "There is no cars in this country",
+    "there is no realestates in this country": "There is no realestates in this country",
+    "there is no airplanes in this country": "There is no aircraft in this country",
+    "there is no deals in this country": "There is no deals in this country",
+    "sorry": "Sorry",
+    "This is not Available now": "This is not Available now",
+    "EGP":"EGP",
+    "JOD":"JOD",
+    "IQD":"IQD",
+    "SAR":"SAR"
 }

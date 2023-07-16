@@ -11,12 +11,13 @@ class GetDealsItemsByCatUseCase
   GetDealsItemsByCatUseCase({required this.dealsRepository});
   @override
   Future<Either<Failure, DealsItemsResponse>> call(params) {
-    return dealsRepository.getDealsByCategory(category: params.category);
+    return dealsRepository.getDealsByCategory(
+        category: params.category, country: params.country);
   }
 }
 
 class DealsItemsParams {
   final String category;
-
-  DealsItemsParams({required this.category});
+  final String country;
+  DealsItemsParams({required this.category, required this.country});
 }

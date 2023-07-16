@@ -22,10 +22,11 @@ class VehicleRepositoryImpl implements VehicleRepository {
   VehicleRepositoryImpl(
       {required this.networkInfo, required this.vehicleRemoteDataSource});
   @override
-  Future<Either<Failure, VehicleResponse>> getAllCars() async {
+  Future<Either<Failure, VehicleResponse>> getAllCars(
+      {required String country}) async {
     try {
       if (await networkInfo.isConnected) {
-        final cars = await vehicleRemoteDataSource.getAllCars();
+        final cars = await vehicleRemoteDataSource.getAllCars(country);
         return Right(cars.toDomain());
       } else {
         return Left(OfflineFailure());
@@ -36,10 +37,12 @@ class VehicleRepositoryImpl implements VehicleRepository {
   }
 
   @override
-  Future<Either<Failure, VehicleResponse>> getLatestCarByCreator() async {
+  Future<Either<Failure, VehicleResponse>> getLatestCarByCreator(
+      {required String country}) async {
     try {
       if (await networkInfo.isConnected) {
-        final cars = await vehicleRemoteDataSource.getLatestCarByCreator();
+        final cars =
+            await vehicleRemoteDataSource.getLatestCarByCreator(country);
         return Right(cars.toDomain());
       } else {
         return Left(OfflineFailure());
@@ -50,10 +53,11 @@ class VehicleRepositoryImpl implements VehicleRepository {
   }
 
   @override
-  Future<Either<Failure, VehicleResponse>> getAllUsedPlanes() async {
+  Future<Either<Failure, VehicleResponse>> getAllUsedPlanes(
+      {required String country}) async {
     try {
       if (await networkInfo.isConnected) {
-        final planes = await vehicleRemoteDataSource.getAllUsedPlanes();
+        final planes = await vehicleRemoteDataSource.getAllUsedPlanes(country);
         return Right(planes.toDomain());
       } else {
         return Left(OfflineFailure());
@@ -64,10 +68,11 @@ class VehicleRepositoryImpl implements VehicleRepository {
   }
 
   @override
-  Future<Either<Failure, VehicleResponse>> getAllNewPlanes() async {
+  Future<Either<Failure, VehicleResponse>> getAllNewPlanes(
+      {required String country}) async {
     try {
       if (await networkInfo.isConnected) {
-        final planes = await vehicleRemoteDataSource.getAllNewPlanes();
+        final planes = await vehicleRemoteDataSource.getAllNewPlanes(country);
         return Right(planes.toDomain());
       } else {
         return Left(OfflineFailure());
@@ -78,10 +83,12 @@ class VehicleRepositoryImpl implements VehicleRepository {
   }
 
   @override
-  Future<Either<Failure, List<UserInfo>>> getCarsCompanies() async {
+  Future<Either<Failure, List<UserInfo>>> getCarsCompanies(
+      {required String country}) async {
     try {
       if (await networkInfo.isConnected) {
-        final carsCompanies = await vehicleRemoteDataSource.getCarsCompanies();
+        final carsCompanies =
+            await vehicleRemoteDataSource.getCarsCompanies(country);
 
         return Right(carsCompanies.map((e) => e.toDomain()).toList());
       } else {
@@ -93,11 +100,12 @@ class VehicleRepositoryImpl implements VehicleRepository {
   }
 
   @override
-  Future<Either<Failure, List<UserInfo>>> getPlanesCompanies() async {
+  Future<Either<Failure, List<UserInfo>>> getPlanesCompanies(
+      {required String country}) async {
     try {
       if (await networkInfo.isConnected) {
         final planesCompanies =
-            await vehicleRemoteDataSource.getPlanesCompanies();
+            await vehicleRemoteDataSource.getPlanesCompanies(country);
 
         return Right(planesCompanies.map((e) => e.toDomain()).toList());
       } else {
@@ -126,10 +134,11 @@ class VehicleRepositoryImpl implements VehicleRepository {
   }
 
   @override
-  Future<Either<Failure, VehicleResponse>> getAllPlanes() async {
+  Future<Either<Failure, VehicleResponse>> getAllPlanes(
+      {required String country}) async {
     try {
       if (await networkInfo.isConnected) {
-        final planes = await vehicleRemoteDataSource.getAllPlanes();
+        final planes = await vehicleRemoteDataSource.getAllPlanes(country);
         return Right(planes.toDomain());
       } else {
         return Left(OfflineFailure());
@@ -140,19 +149,21 @@ class VehicleRepositoryImpl implements VehicleRepository {
   }
 
   @override
-  Future<Either<Failure, String>> addVehicle(
-      {required String name,
-      required String description,
-      required int price,
-      required int kilometers,
-      required DateTime year,
-      required String location,
-      required String type,
-      required String category,
-      required String creator,
-      required File image,
-      List<XFile>? carimages,
-      File? video}) async {
+  Future<Either<Failure, String>> addVehicle({
+    required String name,
+    required String description,
+    required int price,
+    required int kilometers,
+    required DateTime year,
+    required String location,
+    required String type,
+    required String category,
+    required String creator,
+    required File image,
+    List<XFile>? carimages,
+    File? video,
+    required String country,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
         Dio dio = Dio();
@@ -167,6 +178,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
           MapEntry('type', type),
           MapEntry('category', category),
           MapEntry('creator', creator),
+          MapEntry('country', country),
         ]);
 
         String fileName = 'image.jpg';

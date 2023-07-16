@@ -11,6 +11,7 @@ class DealsItems extends Equatable {
   final String endDate;
   final String location;
   final String category;
+  final String country;
 
   const DealsItems({
     this.id,
@@ -23,6 +24,7 @@ class DealsItems extends Equatable {
     required this.endDate,
     required this.location,
     required this.category,
+    required this.country,
   });
   @override
   List<Object?> get props => [
@@ -36,5 +38,6 @@ class DealsItems extends Equatable {
         endDate,
         location,
         category,
+        country,
       ];
 }

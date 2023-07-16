@@ -23,6 +23,7 @@ class AddDealUseCase extends UseCase<String, AddDealParams> {
       endDate: params.endDate,
       location: params.location,
       category: params.category,
+      country: params.country,
     );
   }
 }
@@ -37,7 +38,7 @@ class AddDealParams {
   final DateTime endDate;
   final String location;
   final String category;
-
+  final String country;
   AddDealParams({
     required this.name,
     required this.companyName,
@@ -48,5 +49,6 @@ class AddDealParams {
     required this.endDate,
     required this.location,
     required this.category,
+    required this.country,
   });
 }

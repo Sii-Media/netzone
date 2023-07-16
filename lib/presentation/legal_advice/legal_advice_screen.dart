@@ -62,7 +62,8 @@ class _LegalAdviceScreenState extends State<LegalAdviceScreen> {
                 ),
               ),
             ),
-            customAppBar(context),
+            CustomAppBar(context: context),
+
             // SizedBox(
             //   height: MediaQuery.of(context).size.height * 0.18,
             //   child: Row(

@@ -11,7 +11,8 @@ part 'local_company_remote_data_source.g.dart';
 abstract class LocalCompanyRemoteDataSource {
   Future<List<LocalCompanyModel>> getAllLocalCompanies();
   Future<List<CategoryProductsModel>> getCompanyProducts(String id);
-  Future<List<UserInfoModel>> getLocalCompanies(String userType);
+  Future<List<UserInfoModel>> getLocalCompanies(
+      String country, String userType);
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -40,6 +41,7 @@ abstract class LocalCompanyRemoteDataSourceImpl
   @override
   @GET('/user/getUserByType')
   Future<List<UserInfoModel>> getLocalCompanies(
+    @Query('country') String country,
     @Part() String userType,
   );
 }

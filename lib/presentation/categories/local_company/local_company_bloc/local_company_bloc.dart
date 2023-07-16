@@ -4,6 +4,7 @@ import 'package:netzoon/domain/categories/entities/local_company/local_company.d
 import 'package:netzoon/domain/categories/usecases/local_company/get_all_local_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_company_products_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_local_companies_use_case.dart';
+import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
@@ -22,13 +23,14 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
   final GetLocalCompaniesUseCase getLocalCompaniesUseCase;
   final GetSignedInUserUseCase getSignedInUser;
   final GetUserProductsUseCase getUserProductsUseCase;
-
+  final GetCountryUseCase getCountryUseCase;
   LocalCompanyBloc({
     required this.getLocalCompaniesUseCase,
     required this.getAllLocalCompaniesUseCase,
     required this.getCompanyProductsUseCase,
     required this.getSignedInUser,
     required this.getUserProductsUseCase,
+    required this.getCountryUseCase,
   }) : super(LocalCompanyInitial()) {
     on<GetAllLocalCompaniesEvent>((event, emit) async {
       emit(LocalCompanyInProgress());
@@ -58,8 +60,11 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
     });
     on<GetLocalCompaniesEvent>((event, emit) async {
       emit(LocalCompanyInProgress());
-
-      final companies = await getLocalCompaniesUseCase(event.userType);
+      late String country;
+      final countryresult = await getCountryUseCase(NoParams());
+      countryresult.fold((l) => null, (r) => country = r ?? 'AE');
+      final companies = await getLocalCompaniesUseCase(
+          GetLocalCompaniesParams(country: country, userType: event.userType));
       final result = await getSignedInUser.call(NoParams());
       late User? user;
       result.fold((l) => null, (r) => user = r);

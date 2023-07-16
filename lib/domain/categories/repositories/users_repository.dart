@@ -4,6 +4,7 @@ import 'package:netzoon/domain/core/error/failures.dart';
 
 abstract class UsersRepository {
   Future<Either<Failure, List<UserInfo>>> getUsersList({
+    required String country,
     required String userType,
   });
 }

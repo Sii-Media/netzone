@@ -15,6 +15,7 @@ import '../../../../domain/auth/entities/user_info.dart';
 import '../../../../injection_container.dart';
 import '../../../auth/blocs/auth_bloc/auth_bloc.dart';
 import '../../../chat/screens/chat_page_screen.dart';
+import '../../../core/blocs/country_bloc/country_bloc.dart';
 import '../../../core/constant/colors.dart';
 import '../../../profile/blocs/get_user/get_user_bloc.dart';
 import '../../../utils/app_localizations.dart';
@@ -37,8 +38,11 @@ class _RealEstateCompanyProfileScreenState
   final realEstatesBloc = sl<RealEstateBloc>();
   final authBloc = sl<AuthBloc>();
   bool isFollowing = false;
+  late final CountryBloc countryBloc;
   @override
   void initState() {
+    countryBloc = BlocProvider.of<CountryBloc>(context);
+    countryBloc.add(GetCountryEvent());
     userBloc.add(GetUserByIdEvent(userId: widget.user.id));
     realEstatesBloc.add(GetCompanyRealEstatesEvent(id: widget.user.id));
     authBloc.add(AuthCheckRequested());

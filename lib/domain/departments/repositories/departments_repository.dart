@@ -15,6 +15,7 @@ abstract class DepartmentRepository {
   Future<Either<Failure, CategoryProductsResponse>> getProductsByCategory({
     required String department,
     required String category,
+    required String country,
   });
 
   Future<Either<Failure, String>> addProduct({
@@ -29,9 +30,12 @@ abstract class DepartmentRepository {
     String? property,
     String? madeIn,
     required File image,
+    required String country,
   });
 
-  Future<Either<Failure, List<CategoryProducts>>> getAllProducts();
+  Future<Either<Failure, List<CategoryProducts>>> getAllProducts({
+    required String country,
+  });
 
   Future<Either<Failure, CategoryProducts>> getProductById({
     required String productId,

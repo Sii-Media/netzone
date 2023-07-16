@@ -5,12 +5,12 @@ import 'package:netzoon/domain/core/usecase/usecase.dart';
 
 import '../../../auth/entities/user_info.dart';
 
-class GetPlanesCompaniesUseCase extends UseCase<List<UserInfo>, NoParams> {
+class GetPlanesCompaniesUseCase extends UseCase<List<UserInfo>, String> {
   final VehicleRepository vehicleRepository;
 
   GetPlanesCompaniesUseCase({required this.vehicleRepository});
   @override
-  Future<Either<Failure, List<UserInfo>>> call(NoParams params) {
-    return vehicleRepository.getPlanesCompanies();
+  Future<Either<Failure, List<UserInfo>>> call(String params) {
+    return vehicleRepository.getPlanesCompanies(country: params);
   }
 }

@@ -52,7 +52,7 @@ class BackgroundWidget extends StatelessWidget {
             //     ),
             //   ),
             // ),
-            customAppBar(context),
+            CustomAppBar(context: context),
             Positioned(
               top: 57.h,
               right: 0,

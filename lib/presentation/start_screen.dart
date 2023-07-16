@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/core/constants/constants.dart';
 import '../injection_container.dart';
+import 'core/blocs/country_bloc/country_bloc.dart';
 import 'language_screen/blocs/language_bloc/language_bloc.dart';
 
 class StartScreen extends StatefulWidget {
@@ -217,8 +218,10 @@ class _StartScreenState extends State<StartScreen> {
   }
 
   bool choosedLanguage = false;
+  String selectedCountry = 'AE';
   @override
   Widget build(BuildContext context) {
+    final countryBloc = BlocProvider.of<CountryBloc>(context);
     return Stack(
       children: [
         Container(
@@ -266,51 +269,67 @@ class _StartScreenState extends State<StartScreen> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          top: BorderSide(width: 2.0, color: AppColor.white),
-                          bottom: BorderSide(width: 2.0, color: AppColor.white),
-                        ),
-                      ),
-                      child: CountryCodePicker(
-                        searchStyle: const TextStyle(color: AppColor.black),
-                        dialogTextStyle: const TextStyle(
-                          color: AppColor.black,
-                        ),
-                        boxDecoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 209, 219, 235)
-                              .withOpacity(0.8),
-                        ),
+                    BlocBuilder<CountryBloc, CountryState>(
+                      builder: (context, state) {
+                        selectedCountry = state.selectedCountry;
+                        return Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              top:
+                                  BorderSide(width: 2.0, color: AppColor.white),
+                              bottom:
+                                  BorderSide(width: 2.0, color: AppColor.white),
+                            ),
+                          ),
+                          child: CountryCodePicker(
+                            searchStyle: const TextStyle(color: AppColor.black),
+                            dialogTextStyle: const TextStyle(
+                              color: AppColor.black,
+                            ),
+                            boxDecoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 209, 219, 235)
+                                  .withOpacity(0.8),
+                            ),
 
-                        textStyle: TextStyle(
-                          color: AppColor.white,
-                          fontSize: 10.sp,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        onChanged: (val) {
-                          // print(val);
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (context) {
-                              return const TestScreen();
-                            }),
-                          );
-                        },
-                        // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-                        initialSelection: 'AE',
-                        favorite: const ['+971', 'AE'],
-                        // optional. Shows only country name and flag
-                        showCountryOnly: true,
-                        // optional. Shows only country name and flag when popup is closed.
-                        showOnlyCountryWhenClosed: true,
-                        // optional. aligns the flag and the Text left
-                        alignLeft: false,
-                        // backgroundColor: AppColor.backgroundColor,
-                        // barrierColor: AppColor.backgroundColor,
-                      ),
-                    ),
+                            textStyle: TextStyle(
+                              color: AppColor.white,
+                              fontSize: 10.sp,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            onChanged: (val) {
+                              selectedCountry = val.code ?? 'AE';
+                              // print(val);
+                              countryBloc
+                                  .add(UpdateCountryEvent(selectedCountry));
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(builder: (context) {
+                                  return const TestScreen();
+                                }),
+                              );
+                            },
+                            // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+                            initialSelection: selectedCountry,
+                            favorite: const [
+                              'EG',
+                              'JO',
+                              'IQ',
+                              '+971',
+                              'AE',
+                            ],
+                            // optional. Shows only country name and flag
+                            showCountryOnly: true,
+                            // optional. Shows only country name and flag when popup is closed.
+                            showOnlyCountryWhenClosed: true,
+                            // optional. aligns the flag and the Text left
+                            alignLeft: false,
+                            // backgroundColor: AppColor.backgroundColor,
+                            // barrierColor: AppColor.backgroundColor,
+                          ),
+                        );
+                      },
+                    )
                   ],
                 )
               : const Center(

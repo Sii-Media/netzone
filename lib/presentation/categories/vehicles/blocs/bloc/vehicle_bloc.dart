@@ -13,6 +13,7 @@ import 'package:netzoon/domain/categories/usecases/vehicles/get_cars_companies_u
 import 'package:netzoon/domain/categories/usecases/vehicles/get_company_vehicles_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_latest_car_by_creator_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_planes_companies_use_case.dart';
+import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
@@ -35,6 +36,7 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
   final GetAllPlanesUseCase getAllPlanesUseCase;
   final AddVehicleUseCase addVehicleUseCase;
   final GetSignedInUserUseCase getSignedInUserUseCase;
+  final GetCountryUseCase getCountryUseCase;
   VehicleBloc({
     required this.getAllCarsUseCase,
     required this.getLatestCarByCreatorUseCase,
@@ -46,11 +48,14 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
     required this.getAllPlanesUseCase,
     required this.addVehicleUseCase,
     required this.getSignedInUserUseCase,
+    required this.getCountryUseCase,
   }) : super(VehicleInitial()) {
     on<GetAllCarsEvent>((event, emit) async {
       emit(VehicleInProgress());
-
-      final failureOrCars = await getAllCarsUseCase(NoParams());
+      late String country;
+      final countryresult = await getCountryUseCase(NoParams());
+      countryresult.fold((l) => null, (r) => country = r ?? 'AE');
+      final failureOrCars = await getAllCarsUseCase(country);
 
       emit(
         failureOrCars.fold(
@@ -61,8 +66,10 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
     });
     on<GetLatestCarByCreatorEvent>((event, emit) async {
       emit(VehicleInProgress());
-
-      final failureOrCars = await getLatestCarByCreatorUseCase(NoParams());
+      late String country;
+      final countryresult = await getCountryUseCase(NoParams());
+      countryresult.fold((l) => null, (r) => country = r ?? 'AE');
+      final failureOrCars = await getLatestCarByCreatorUseCase(country);
 
       emit(
         failureOrCars.fold(
@@ -73,8 +80,10 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
     });
     on<GetAllPlanesEvent>((event, emit) async {
       emit(VehicleInProgress());
-
-      final failureOrPlanes = await getAllPlanesUseCase(NoParams());
+      late String country;
+      final countryresult = await getCountryUseCase(NoParams());
+      countryresult.fold((l) => null, (r) => country = r ?? 'AE');
+      final failureOrPlanes = await getAllPlanesUseCase(country);
 
       emit(
         failureOrPlanes.fold(
@@ -85,8 +94,10 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
     });
     on<GetAllUsedPlanesEvent>((event, emit) async {
       emit(VehicleInProgress());
-
-      final failureOrPlanes = await getAllUsedPlanesUseCase(NoParams());
+      late String country;
+      final countryresult = await getCountryUseCase(NoParams());
+      countryresult.fold((l) => null, (r) => country = r ?? 'AE');
+      final failureOrPlanes = await getAllUsedPlanesUseCase(country);
 
       emit(
         failureOrPlanes.fold(
@@ -97,8 +108,10 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
     });
     on<GetAllNewPlanesEvent>((event, emit) async {
       emit(VehicleInProgress());
-
-      final failureOrPlanes = await getAllNewPlanesUseCase(NoParams());
+      late String country;
+      final countryresult = await getCountryUseCase(NoParams());
+      countryresult.fold((l) => null, (r) => country = r ?? 'AE');
+      final failureOrPlanes = await getAllNewPlanesUseCase(country);
 
       emit(
         failureOrPlanes.fold(
@@ -109,7 +122,12 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
     });
     on<GetCarsCompaniesEvent>((event, emit) async {
       emit(VehicleInProgress());
-      final failureOrcarsCompanies = await getCarsCompaniesUseCase(NoParams());
+
+      late String country;
+      final countryresult = await getCountryUseCase(NoParams());
+      countryresult.fold((l) => null, (r) => country = r ?? 'AE');
+
+      final failureOrcarsCompanies = await getCarsCompaniesUseCase(country);
 
       emit(
         failureOrcarsCompanies.fold(
@@ -122,8 +140,11 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
 
     on<GetPlanesCompaniesEvent>((event, emit) async {
       emit(VehicleInProgress());
-      final failureOrcarsCompanies =
-          await getPlanesCompaniesUseCase(NoParams());
+      late String country;
+      final countryresult = await getCountryUseCase(NoParams());
+      countryresult.fold((l) => null, (r) => country = r ?? 'AE');
+
+      final failureOrcarsCompanies = await getPlanesCompaniesUseCase(country);
 
       emit(
         failureOrcarsCompanies.fold(
@@ -153,6 +174,10 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
       late User? user;
       result.fold((l) => null, (r) => user = r);
 
+      late String country;
+      final countryresult = await getCountryUseCase(NoParams());
+      countryresult.fold((l) => null, (r) => country = r ?? 'AE');
+
       final response = await addVehicleUseCase(AddVehicleParams(
         name: event.name,
         description: event.description,
@@ -166,6 +191,7 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
         image: event.image,
         carimages: event.carimages,
         video: event.video,
+        country: country,
       ));
       emit(
         response.fold(

@@ -20,6 +20,7 @@ class VehicleModel {
   final UserInfoModel? creator;
   final List<String>? carImages;
   final String? vedioUrl;
+  final String country;
 
   VehicleModel({
     this.id,
@@ -35,6 +36,7 @@ class VehicleModel {
     this.creator,
     this.carImages,
     this.vedioUrl,
+    required this.country,
   });
 
   factory VehicleModel.fromJson(Map<String, dynamic> json) =>
@@ -57,5 +59,6 @@ extension MapToDomain on VehicleModel {
         creator: creator?.toDomain(),
         carImages: carImages,
         vedioUrl: vedioUrl,
+        country: country,
       );
 }

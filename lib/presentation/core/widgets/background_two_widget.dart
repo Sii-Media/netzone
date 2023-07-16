@@ -73,7 +73,8 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
           //     ),
           //   ),
           // ),
-          customAppBar(context),
+          CustomAppBar(context: context),
+
           Positioned(
             top: 147.h,
             right: 0,

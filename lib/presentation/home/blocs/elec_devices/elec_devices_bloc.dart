@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 import 'package:netzoon/domain/departments/entities/departments_categories/departments_categories.dart';
 import 'package:netzoon/domain/departments/usecases/edit_product_use_case.dart';
@@ -24,6 +25,7 @@ class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
   final DeleteProductUseCase deleteProductUseCase;
   final EditProductUseCase editProductUseCase;
   final GetProductByIdUseCase getProductByIdUseCase;
+  final GetCountryUseCase getCountryUseCase;
   ElecDevicesBloc({
     required this.deleteProductUseCase,
     required this.getAllProductsUseCase,
@@ -31,6 +33,7 @@ class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
     required this.getCategoryProductsUseCase,
     required this.editProductUseCase,
     required this.getProductByIdUseCase,
+    required this.getCountryUseCase,
   }) : super(ElecDevicesInitial()) {
     on<GetElcDevicesEvent>((event, emit) async {
       emit(ElecDevicesInProgress());
@@ -49,9 +52,14 @@ class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
     });
     on<GetElcCategoryProductsEvent>((event, emit) async {
       emit(ElecDevicesInProgress());
+      late String country;
+      final result = await getCountryUseCase(NoParams());
+      result.fold((l) => null, (r) => country = r ?? 'AE');
       final failureOrProducts = await getCategoryProductsUseCase(
           CategoryProductsParams(
-              department: event.department, category: event.category));
+              country: country,
+              department: event.department,
+              category: event.category));
       emit(
         failureOrProducts.fold(
           (failure) {
@@ -68,7 +76,11 @@ class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
     });
     on<GetAllProductsEvent>((event, emit) async {
       emit(ElecDevicesInProgress());
-      final products = await getAllProductsUseCase(NoParams());
+      late String country;
+      final result = await getCountryUseCase(NoParams());
+      result.fold((l) => null, (r) => country = r ?? 'AE');
+
+      final products = await getAllProductsUseCase(country);
 
       emit(
         products.fold(

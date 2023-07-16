@@ -9,13 +9,27 @@ import 'package:share_plus/share_plus.dart';
 import '../entities/vehicles/vehicle.dart';
 
 abstract class VehicleRepository {
-  Future<Either<Failure, VehicleResponse>> getAllCars();
-  Future<Either<Failure, VehicleResponse>> getLatestCarByCreator();
-  Future<Either<Failure, VehicleResponse>> getAllUsedPlanes();
-  Future<Either<Failure, VehicleResponse>> getAllNewPlanes();
-  Future<Either<Failure, VehicleResponse>> getAllPlanes();
-  Future<Either<Failure, List<UserInfo>>> getCarsCompanies();
-  Future<Either<Failure, List<UserInfo>>> getPlanesCompanies();
+  Future<Either<Failure, VehicleResponse>> getAllCars({
+    required String country,
+  });
+  Future<Either<Failure, VehicleResponse>> getLatestCarByCreator({
+    required String country,
+  });
+  Future<Either<Failure, VehicleResponse>> getAllUsedPlanes({
+    required String country,
+  });
+  Future<Either<Failure, VehicleResponse>> getAllNewPlanes({
+    required String country,
+  });
+  Future<Either<Failure, VehicleResponse>> getAllPlanes({
+    required String country,
+  });
+  Future<Either<Failure, List<UserInfo>>> getCarsCompanies({
+    required String country,
+  });
+  Future<Either<Failure, List<UserInfo>>> getPlanesCompanies({
+    required String country,
+  });
   Future<Either<Failure, List<Vehicle>>> getCompanyVehicles(
       {required String type, required String id});
 
@@ -32,5 +46,6 @@ abstract class VehicleRepository {
     required File image,
     List<XFile>? carimages,
     File? video,
+    required String country,
   });
 }

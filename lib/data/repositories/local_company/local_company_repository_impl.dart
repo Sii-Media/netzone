@@ -49,12 +49,14 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
   }
 
   @override
-  Future<Either<Failure, List<UserInfo>>> getLocalCompanies(
-      {required String userType}) async {
+  Future<Either<Failure, List<UserInfo>>> getLocalCompanies({
+    required String country,
+    required String userType,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
-        final companies =
-            await localCompanyRemoteDataSource.getLocalCompanies(userType);
+        final companies = await localCompanyRemoteDataSource.getLocalCompanies(
+            country, userType);
 
         return Right(
           companies.map((e) => e.toDomain()).toList(),

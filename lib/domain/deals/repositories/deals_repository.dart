@@ -9,12 +9,14 @@ import '../entities/dealsItems/deals_items.dart';
 
 abstract class DealsRepository {
   Future<Either<Failure, DealsResponse>> getDealsCategories();
-  Future<Either<Failure, DealsItemsResponse>> getDealsItems();
+  Future<Either<Failure, DealsItemsResponse>> getDealsItems(
+      {required String country});
 
   Future<Either<Failure, DealsItems>> getDealById({required String id});
 
   Future<Either<Failure, DealsItemsResponse>> getDealsByCategory({
     required final String category,
+    required final String country,
   });
 
   Future<Either<Failure, String>> addDeal({
@@ -27,5 +29,6 @@ abstract class DealsRepository {
     required final DateTime endDate,
     required final String location,
     required final String category,
+    required final String country,
   });
 }

@@ -15,7 +15,7 @@
     "show_all": "عرض الكل",
     "category": "الفئات",
     "no_items": "لا يوجد عناصر",
-    "AED": "درهم",
+    "AED": "د.إ",
     "price": "السعر",
     "details": "تفاصيل",
     "categ": "الفئة",
@@ -450,5 +450,15 @@
     "recovered_airplanes": "الطائرات المسترجعة",
     "add_your_rating": "اضف تقييمك",
     "rating": "التقييم",
-    "please leave a star rating": "الرجاء القيام بالتقييم"
+    "please leave a star rating": "الرجاء القيام بالتقييم",
+    "there_is_no_cars_in_this_country": "لا يوجد سيارات بعد في هذه الدولة",
+    "there is no realestates in this country": "لا يوجد عقارات بعد في هذه الدولة",
+    "there is no airplanes in this country": "لا يوجد طائرات بعد في هذه الدولة",
+    "there is no deals in this country": "لا يوجد صفقات بعد في هذه الدولة",
+    "sorry": "عذرا",
+    "This is not Available now": "غير متاح حاليا",
+    "EGP":"ج.م",
+    "JOD":"د.أ",
+    "IQD":"د.ع",
+    "SAR":"ر.س"
 }

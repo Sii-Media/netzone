@@ -16,6 +16,7 @@ class DealsItemsModel {
   final String endDate;
   final String location;
   final String category;
+  final String country;
 
   DealsItemsModel({
     this.id,
@@ -28,6 +29,7 @@ class DealsItemsModel {
     required this.endDate,
     required this.location,
     required this.category,
+    required this.country,
   });
 
   factory DealsItemsModel.fromJson(Map<String, dynamic> json) =>
@@ -48,5 +50,6 @@ extension MapToDomain on DealsItemsModel {
         endDate: endDate,
         location: location,
         category: category,
+        country: country,
       );
 }

@@ -7,8 +7,12 @@ import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:share_plus/share_plus.dart';
 
 abstract class RealEstateRepository {
-  Future<Either<Failure, List<RealEstate>>> getAllRealEstates();
-  Future<Either<Failure, List<UserInfo>>> getRealEstateCompanies();
+  Future<Either<Failure, List<RealEstate>>> getAllRealEstates({
+    required String country,
+  });
+  Future<Either<Failure, List<UserInfo>>> getRealEstateCompanies({
+    required String country,
+  });
   Future<Either<Failure, List<RealEstate>>> getcompanyRealEstates({
     required String id,
   });
@@ -24,5 +28,6 @@ abstract class RealEstateRepository {
     required int bathrooms,
     List<String>? amenities,
     List<XFile>? realestateimages,
+    required String country,
   });
 }

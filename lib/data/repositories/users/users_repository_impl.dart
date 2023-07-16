@@ -16,11 +16,14 @@ class UsersRepositoryImpl implements UsersRepository {
   UsersRepositoryImpl(
       {required this.networkInfo, required this.userRemoteDataSource});
   @override
-  Future<Either<Failure, List<UserInfo>>> getUsersList(
-      {required String userType}) async {
+  Future<Either<Failure, List<UserInfo>>> getUsersList({
+    required String country,
+    required String userType,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
-        final users = await userRemoteDataSource.getUsersList(userType);
+        final users =
+            await userRemoteDataSource.getUsersList(country, userType);
 
         return Right(users.map((e) => e.toDomain()).toList());
       } else {

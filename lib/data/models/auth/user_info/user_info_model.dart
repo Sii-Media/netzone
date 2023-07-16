@@ -24,6 +24,7 @@ class UserInfoModel {
   final int? companyProductsNumber;
 
   final String? sellType;
+  final String? country;
 
   final String? toCountry;
   final String? bio;
@@ -55,6 +56,7 @@ class UserInfoModel {
     this.businessLicense,
     this.companyProductsNumber,
     this.sellType,
+    this.country,
     this.toCountry,
     this.bio,
     this.description,
@@ -91,6 +93,7 @@ extension MapToDomain on UserInfoModel {
       businessLicense: businessLicense,
       companyProductsNumber: companyProductsNumber,
       sellType: sellType,
+      country: country,
       toCountry: toCountry,
       bio: bio,
       description: description,

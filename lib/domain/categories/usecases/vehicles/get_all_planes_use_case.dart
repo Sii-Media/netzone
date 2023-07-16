@@ -6,13 +6,13 @@ import '../../../core/usecase/usecase.dart';
 import '../../entities/vehicles/vehicle_response.dart';
 import '../../repositories/vehicle_repository.dart';
 
-class GetAllPlanesUseCase extends UseCase<VehicleResponse, NoParams> {
+class GetAllPlanesUseCase extends UseCase<VehicleResponse, String> {
   final VehicleRepository vehicleRepository;
 
   GetAllPlanesUseCase({required this.vehicleRepository});
 
   @override
-  Future<Either<Failure, VehicleResponse>> call(NoParams params) {
-    return vehicleRepository.getAllPlanes();
+  Future<Either<Failure, VehicleResponse>> call(String params) {
+    return vehicleRepository.getAllPlanes(country: params);
   }
 }

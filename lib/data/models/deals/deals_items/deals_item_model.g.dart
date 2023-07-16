@@ -18,6 +18,7 @@ DealsItemsModel _$DealsItemsModelFromJson(Map<String, dynamic> json) =>
       endDate: json['endDate'] as String,
       location: json['location'] as String,
       category: json['category'] as String,
+      country: json['country'] as String,
     );
 
 Map<String, dynamic> _$DealsItemsModelToJson(DealsItemsModel instance) =>
@@ -32,4 +33,5 @@ Map<String, dynamic> _$DealsItemsModelToJson(DealsItemsModel instance) =>
       'endDate': instance.endDate,
       'location': instance.location,
       'category': instance.category,
+      'country': instance.country,
     };

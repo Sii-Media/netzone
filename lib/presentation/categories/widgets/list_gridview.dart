@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/categories/entities/categories.dart';
 import 'package:netzoon/presentation/categories/customs_screen/customs_category.dart';
@@ -11,77 +12,102 @@ import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/data/categories.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../../core/blocs/country_bloc/country_bloc.dart';
 import '../users/screens/users_list_screen.dart';
 import '../vehicles/screens/vehicles_companies_screen.dart';
 
-class ListGridView extends StatelessWidget {
+class ListGridView extends StatefulWidget {
   const ListGridView({Key? key}) : super(key: key);
+
+  @override
+  State<ListGridView> createState() => _ListGridViewState();
+}
+
+class _ListGridViewState extends State<ListGridView> {
+  late final CountryBloc countryBloc;
+
+  @override
+  void initState() {
+    countryBloc = BlocProvider.of<CountryBloc>(context);
+    countryBloc.add(GetCountryEvent());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final categories = cat;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: SizedBox(
-            // height: 70.sp,
-            child: Row(
-              children: [
-                Text(
-                  AppLocalizations.of(context).translate('category'),
-                  style: const TextStyle(fontSize: 25, color: Colors.black),
-                ),
-                SizedBox(
-                  width: 10.w,
-                ),
-                const Icon(
-                  Icons.arrow_downward_sharp,
-                  color: Colors.black,
-                ),
-              ],
-            ),
-          ),
-        ),
-        Expanded(
-          child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.95,
-                crossAxisSpacing: 10.w,
-                mainAxisSpacing: 10.h),
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            itemCount: categories.length,
-            itemBuilder: (context, index) {
-              return SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Container(
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                    child: GridCategory(category: categories[index]),
+    return BlocBuilder<CountryBloc, CountryState>(
+      bloc: countryBloc,
+      builder: (context, state) {
+        if (state is CountryInitial) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: SizedBox(
+                  // height: 70.sp,
+                  child: Row(
+                    children: [
+                      Text(
+                        AppLocalizations.of(context).translate('category'),
+                        style:
+                            const TextStyle(fontSize: 25, color: Colors.black),
+                      ),
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                      const Icon(
+                        Icons.arrow_downward_sharp,
+                        color: Colors.black,
+                      ),
+                    ],
                   ),
                 ),
-              );
-            },
-          ),
-        ),
-        SizedBox(
-          height: 90.h,
-        ),
-      ],
+              ),
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.95,
+                      crossAxisSpacing: 10.w,
+                      mainAxisSpacing: 10.h),
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20)),
+                          child: GridCategory(
+                              category: categories[index], state: state),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 90.h,
+              ),
+            ],
+          );
+        }
+        return Container();
+      },
     );
   }
 }
 
 class GridCategory extends StatelessWidget {
-  const GridCategory({super.key, required this.category});
+  const GridCategory({super.key, required this.category, required this.state});
 
   final Category category;
-
+  final CountryInitial state;
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -99,13 +125,42 @@ class GridCategory extends StatelessWidget {
               ),
             );
           } else if (category.name == 'free_zone_companies') {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) {
-                  return const CategoriesFreeZone();
+            if (state.selectedCountry == 'AE') {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const CategoriesFreeZone();
+                  },
+                ),
+              );
+            } else {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(
+                      AppLocalizations.of(context).translate('sorry'),
+                      style: const TextStyle(color: AppColor.red),
+                    ),
+                    content: Text(
+                      AppLocalizations.of(context)
+                          .translate('This is not Available now'),
+                      style: const TextStyle(color: AppColor.red),
+                    ),
+                    actions: [
+                      ElevatedButton(
+                        child: Text(
+                          AppLocalizations.of(context).translate('ok'),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
                 },
-              ),
-            );
+              );
+            }
           } else if (category.name == 'customs') {
             Navigator.of(context).push(
               MaterialPageRoute(

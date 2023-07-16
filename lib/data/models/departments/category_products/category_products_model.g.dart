@@ -30,6 +30,7 @@ CategoryProductsModel _$CategoryProductsModelFromJson(
       gifUrl: json['gifUrl'] as String?,
       discountPercentage: (json['discountPercentage'] as num?)?.toDouble(),
       priceAfterDiscount: (json['priceAfterDiscount'] as num?)?.toDouble(),
+      country: json['country'] as String,
     );
 
 Map<String, dynamic> _$CategoryProductsModelToJson(
@@ -54,4 +55,5 @@ Map<String, dynamic> _$CategoryProductsModelToJson(
       'gifUrl': instance.gifUrl,
       'discountPercentage': instance.discountPercentage,
       'priceAfterDiscount': instance.priceAfterDiscount,
+      'country': instance.country,
     };

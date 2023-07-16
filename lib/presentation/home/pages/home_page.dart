@@ -841,83 +841,95 @@ class _HomePageState extends State<HomePage> {
                         //       .withOpacity(0.8),
                         // ),
                         height: 130.h,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: state.vehilces.length,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return VehicleDetailsScreen(
-                                        vehicle: state.vehilces[index],
+                        child: state.vehilces.isNotEmpty
+                            ? ListView.builder(
+                                shrinkWrap: true,
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: state.vehilces.length,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return VehicleDetailsScreen(
+                                              vehicle: state.vehilces[index],
+                                            );
+                                          },
+                                        ),
                                       );
                                     },
-                                  ),
-                                );
-                              },
-                              child: Card(
-                                elevation: 10.0,
-                                shadowColor: AppColor.mainGrey,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                ),
-                                child: SizedBox(
-                                  height: 100.h,
-                                  width: 180.w,
-                                  child: Stack(
-                                    // fit: StackFit.expand,
-                                    alignment:
-                                        AlignmentDirectional.bottomCenter,
-                                    children: [
-                                      ClipRRect(
+                                    child: Card(
+                                      elevation: 10.0,
+                                      shadowColor: AppColor.mainGrey,
+                                      shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(16.0),
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              state.vehilces[index].imageUrl,
-                                          height: 200.h,
-                                          width: double.maxFinite,
-                                          fit: BoxFit.cover,
+                                      ),
+                                      child: SizedBox(
+                                        height: 100.h,
+                                        width: 180.w,
+                                        child: Stack(
+                                          // fit: StackFit.expand,
+                                          alignment:
+                                              AlignmentDirectional.bottomCenter,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(16.0),
+                                              child: CachedNetworkImage(
+                                                imageUrl: state
+                                                    .vehilces[index].imageUrl,
+                                                height: 200.h,
+                                                width: double.maxFinite,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(16.0),
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
+                                                  colors: [
+                                                    Colors.transparent,
+                                                    AppColor.backgroundColor
+                                                        .withOpacity(0.6),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.bottomCenter,
+                                              child: Text(
+                                                state.vehilces[index].name,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14.0.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                textAlign: TextAlign.right,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(16.0),
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            colors: [
-                                              Colors.transparent,
-                                              AppColor.backgroundColor
-                                                  .withOpacity(0.6),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Text(
-                                          state.vehilces[index].name,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14.0.sp,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          textAlign: TextAlign.right,
-                                        ),
-                                      ),
-                                    ],
+                                    ),
+                                  );
+                                },
+                              )
+                            : Center(
+                                child: Text(
+                                  AppLocalizations.of(context).translate(
+                                      'there_is_no_cars_in_this_country'),
+                                  style: TextStyle(
+                                    color: AppColor.backgroundColor,
+                                    fontSize: 15.sp,
                                   ),
                                 ),
                               ),
-                            );
-                          },
-                        ),
                       );
                     }
                     return Container();
@@ -965,82 +977,96 @@ class _HomePageState extends State<HomePage> {
                         //       .withOpacity(0.8),
                         // ),
                         height: 130.h,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: state.realEstates.length,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return RealEstateDetailsScreen(
-                                          realEstate: state.realEstates[index]);
+                        child: state.realEstates.isNotEmpty
+                            ? ListView.builder(
+                                shrinkWrap: true,
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: state.realEstates.length,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return RealEstateDetailsScreen(
+                                                realEstate:
+                                                    state.realEstates[index]);
+                                          },
+                                        ),
+                                      );
                                     },
-                                  ),
-                                );
-                              },
-                              child: Card(
-                                elevation: 10.0,
-                                shadowColor: AppColor.mainGrey,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                ),
-                                child: SizedBox(
-                                  height: 100.h,
-                                  width: 180.w,
-                                  child: Stack(
-                                    // fit: StackFit.expand,
-                                    alignment:
-                                        AlignmentDirectional.bottomCenter,
-                                    children: [
-                                      ClipRRect(
+                                    child: Card(
+                                      elevation: 10.0,
+                                      shadowColor: AppColor.mainGrey,
+                                      shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(16.0),
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              state.realEstates[index].imageUrl,
-                                          height: 200.h,
-                                          width: double.maxFinite,
-                                          fit: BoxFit.cover,
+                                      ),
+                                      child: SizedBox(
+                                        height: 100.h,
+                                        width: 180.w,
+                                        child: Stack(
+                                          // fit: StackFit.expand,
+                                          alignment:
+                                              AlignmentDirectional.bottomCenter,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(16.0),
+                                              child: CachedNetworkImage(
+                                                imageUrl: state
+                                                    .realEstates[index]
+                                                    .imageUrl,
+                                                height: 200.h,
+                                                width: double.maxFinite,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(16.0),
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
+                                                  colors: [
+                                                    Colors.transparent,
+                                                    AppColor.backgroundColor
+                                                        .withOpacity(0.6),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.bottomCenter,
+                                              child: Text(
+                                                state.realEstates[index].title,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14.0.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                textAlign: TextAlign.right,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(16.0),
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            colors: [
-                                              Colors.transparent,
-                                              AppColor.backgroundColor
-                                                  .withOpacity(0.6),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Text(
-                                          state.realEstates[index].title,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14.0.sp,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          textAlign: TextAlign.right,
-                                        ),
-                                      ),
-                                    ],
+                                    ),
+                                  );
+                                },
+                              )
+                            : Center(
+                                child: Text(
+                                  AppLocalizations.of(context).translate(
+                                      'there is no realestates in this country'),
+                                  style: TextStyle(
+                                    color: AppColor.backgroundColor,
+                                    fontSize: 15.sp,
                                   ),
                                 ),
                               ),
-                            );
-                          },
-                        ),
                       );
                     }
                     return Container();
@@ -1090,83 +1116,95 @@ class _HomePageState extends State<HomePage> {
                         //       .withOpacity(0.8),
                         // ),
                         height: 130.h,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: state.vehilces.length,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return VehicleDetailsScreen(
-                                        vehicle: state.vehilces[index],
+                        child: state.vehilces.isNotEmpty
+                            ? ListView.builder(
+                                shrinkWrap: true,
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: state.vehilces.length,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return VehicleDetailsScreen(
+                                              vehicle: state.vehilces[index],
+                                            );
+                                          },
+                                        ),
                                       );
                                     },
-                                  ),
-                                );
-                              },
-                              child: Card(
-                                elevation: 10.0,
-                                shadowColor: AppColor.mainGrey,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                ),
-                                child: SizedBox(
-                                  height: 100.h,
-                                  width: 180.w,
-                                  child: Stack(
-                                    // fit: StackFit.expand,
-                                    alignment:
-                                        AlignmentDirectional.bottomCenter,
-                                    children: [
-                                      ClipRRect(
+                                    child: Card(
+                                      elevation: 10.0,
+                                      shadowColor: AppColor.mainGrey,
+                                      shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(16.0),
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              state.vehilces[index].imageUrl,
-                                          height: 200.h,
-                                          width: double.maxFinite,
-                                          fit: BoxFit.cover,
+                                      ),
+                                      child: SizedBox(
+                                        height: 100.h,
+                                        width: 180.w,
+                                        child: Stack(
+                                          // fit: StackFit.expand,
+                                          alignment:
+                                              AlignmentDirectional.bottomCenter,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(16.0),
+                                              child: CachedNetworkImage(
+                                                imageUrl: state
+                                                    .vehilces[index].imageUrl,
+                                                height: 200.h,
+                                                width: double.maxFinite,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(16.0),
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
+                                                  colors: [
+                                                    Colors.transparent,
+                                                    AppColor.backgroundColor
+                                                        .withOpacity(0.6),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.bottomCenter,
+                                              child: Text(
+                                                state.vehilces[index].name,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14.0.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                textAlign: TextAlign.right,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(16.0),
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            colors: [
-                                              Colors.transparent,
-                                              AppColor.backgroundColor
-                                                  .withOpacity(0.6),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Text(
-                                          state.vehilces[index].name,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14.0.sp,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          textAlign: TextAlign.right,
-                                        ),
-                                      ),
-                                    ],
+                                    ),
+                                  );
+                                },
+                              )
+                            : Center(
+                                child: Text(
+                                  AppLocalizations.of(context).translate(
+                                      'there is no airplanes in this country'),
+                                  style: TextStyle(
+                                    color: AppColor.backgroundColor,
+                                    fontSize: 15.sp,
                                   ),
                                 ),
                               ),
-                            );
-                          },
-                        ),
                       );
                     }
                     return Container();
@@ -1218,17 +1256,28 @@ class _HomePageState extends State<HomePage> {
                               .withOpacity(0.8),
                         ),
                         height: MediaQuery.of(context).size.height * 0.38,
-                        child: DealsListWidget(
-                          deals: state.dealsItems,
-                          buttonText: AppLocalizations.of(context)
-                              .translate('buy_deal'),
-                          subTitle:
-                              AppLocalizations.of(context).translate('saller'),
-                          desTitle1: AppLocalizations.of(context)
-                              .translate('prev_price'),
-                          desTitle2: AppLocalizations.of(context)
-                              .translate('curr_price'),
-                        ),
+                        child: state.dealsItems.isNotEmpty
+                            ? DealsListWidget(
+                                deals: state.dealsItems,
+                                buttonText: AppLocalizations.of(context)
+                                    .translate('buy_deal'),
+                                subTitle: AppLocalizations.of(context)
+                                    .translate('saller'),
+                                desTitle1: AppLocalizations.of(context)
+                                    .translate('prev_price'),
+                                desTitle2: AppLocalizations.of(context)
+                                    .translate('curr_price'),
+                              )
+                            : Center(
+                                child: Text(
+                                  AppLocalizations.of(context).translate(
+                                      'there is no deals in this country'),
+                                  style: TextStyle(
+                                    color: AppColor.backgroundColor,
+                                    fontSize: 15.sp,
+                                  ),
+                                ),
+                              ),
                       );
                       // return DealsListWidget(
                       //   deals: state.dealsItems,

@@ -39,11 +39,13 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
 
   @override
   Future<Either<Failure, CategoryProductsResponse>> getProductsByCategory(
-      {required String department, required String category}) async {
+      {required String department,
+      required String category,
+      required String country}) async {
     try {
       if (await networkInfo.isConnected) {
         final categoryProducts = await departmentsRemoteDataSource
-            .getProductsByCategory(department, category);
+            .getProductsByCategory(country, department, category);
         return Right(categoryProducts.toDomain());
       } else {
         return Left(OfflineFailure());
@@ -65,6 +67,7 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
       String? guarantee,
       String? property,
       String? madeIn,
+      required String country,
       required File image}) async {
     try {
       if (await networkInfo.isConnected) {
@@ -93,10 +96,13 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
   }
 
   @override
-  Future<Either<Failure, List<CategoryProducts>>> getAllProducts() async {
+  Future<Either<Failure, List<CategoryProducts>>> getAllProducts({
+    required String country,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
-        final products = await departmentsRemoteDataSource.getAllProducts();
+        final products =
+            await departmentsRemoteDataSource.getAllProducts(country);
         return Right(products.map((e) => e.toDomain()).toList());
       } else {
         return Left(OfflineFailure());

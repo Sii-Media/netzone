@@ -10,9 +10,10 @@ part 'deals_remote_data_source.g.dart';
 abstract class DealsRemoteDataSource {
   Future<DealsResponseModel> getDealsCategories();
   Future<DealsItemsResponseModel> getDealsByCategory(
+    final String country,
     final String category,
   );
-  Future<DealsItemsResponseModel> getDealsItems();
+  Future<DealsItemsResponseModel> getDealsItems(String country);
 
   Future<DealsItemsModel> getDealById(String id);
 }
@@ -36,12 +37,15 @@ abstract class DealsRemoteDataSourceImpl implements DealsRemoteDataSource {
   @override
   @GET('/deals/dealsByCat')
   Future<DealsItemsResponseModel> getDealsByCategory(
+    @Query('country') String country,
     @Part() String category,
   );
 
   @override
   @GET('/deals/alldealsItems')
-  Future<DealsItemsResponseModel> getDealsItems();
+  Future<DealsItemsResponseModel> getDealsItems(
+    @Query('country') String country,
+  );
 
   @override
   @GET('/deals/{id}')
