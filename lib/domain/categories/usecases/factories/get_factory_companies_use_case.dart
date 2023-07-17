@@ -5,12 +5,21 @@ import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 
 class GetFactoryCompaniesUseCase
-    extends UseCase<FactoriesCompaniesResponse, String> {
+    extends UseCase<FactoriesCompaniesResponse, FactoriesCompaniesParams> {
   final FactoriesRepository factoriesRepository;
 
   GetFactoryCompaniesUseCase({required this.factoriesRepository});
   @override
-  Future<Either<Failure, FactoriesCompaniesResponse>> call(String params) {
-    return factoriesRepository.getFactoryCompanies(id: params);
+  Future<Either<Failure, FactoriesCompaniesResponse>> call(
+      FactoriesCompaniesParams params) {
+    return factoriesRepository.getFactoryCompanies(
+        id: params.id, country: params.country);
   }
+}
+
+class FactoriesCompaniesParams {
+  final String id;
+  final String country;
+
+  FactoriesCompaniesParams({required this.id, required this.country});
 }

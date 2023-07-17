@@ -18,7 +18,7 @@ class FactoriesSuccess extends FactoriesState {
 }
 
 class FactoryCompaniesSuccess extends FactoriesState {
-  final List<FactoryCompanies> companies;
+  final List<UserInfo> companies;
 
   const FactoryCompaniesSuccess({required this.companies});
 }

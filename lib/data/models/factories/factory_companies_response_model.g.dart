@@ -10,7 +10,7 @@ FactoryCompaniesResponseModel _$FactoryCompaniesResponseModelFromJson(
         Map<String, dynamic> json) =>
     FactoryCompaniesResponseModel(
       factoryCompanies: (json['factory'] as List<dynamic>)
-          .map((e) => FactoryCompaniesModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => UserInfoModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

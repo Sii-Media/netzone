@@ -218,7 +218,10 @@ final sl = GetIt.instance;
 
 Future<void> init() async {
   //! Bloc
-  sl.registerFactory(() => SignUpBloc(signUpUseCase: sl()));
+  sl.registerFactory(() => SignUpBloc(
+        signUpUseCase: sl(),
+        getCountryUseCase: sl(),
+      ));
   sl.registerFactory(() => SignInBloc(signInUseCase: sl()));
   sl.registerFactory(() => AdsBlocBloc(
         getAdvertismentsUseCase: sl(),
@@ -321,7 +324,10 @@ Future<void> init() async {
       getFreeZonePlacesUseCase: sl(), getFreeZonePlacesByIdUseCase: sl()));
 
   sl.registerFactory(() => FactoriesBloc(
-      getAllFactoriesUseCase: sl(), getFactoryCompaniesUseCase: sl()));
+        getAllFactoriesUseCase: sl(),
+        getFactoryCompaniesUseCase: sl(),
+        getCountryUseCase: sl(),
+      ));
 
   sl.registerFactory(() => LocalCompanyBloc(
         getAllLocalCompaniesUseCase: sl(),

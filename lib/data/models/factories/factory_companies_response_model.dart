@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:netzoon/data/models/auth/user_info/user_info_model.dart';
 import 'package:netzoon/data/models/factories/factory_companies_model.dart';
 import 'package:netzoon/domain/categories/entities/factories/factories_companies_reponse.dart';
 
@@ -7,7 +8,7 @@ part 'factory_companies_response_model.g.dart';
 @JsonSerializable()
 class FactoryCompaniesResponseModel {
   @JsonKey(name: 'factory')
-  final List<FactoryCompaniesModel> factoryCompanies;
+  final List<UserInfoModel> factoryCompanies;
 
   FactoryCompaniesResponseModel({required this.factoryCompanies});
 

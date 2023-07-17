@@ -31,6 +31,7 @@ class SignUpRequested extends SignUpEvent {
   final String? bio;
   final String? description;
   final String? website;
+  final String? title;
 
   const SignUpRequested({
     required this.username,
@@ -55,5 +56,6 @@ class SignUpRequested extends SignUpEvent {
     this.bio,
     this.description,
     this.website,
+    this.title,
   });
 }

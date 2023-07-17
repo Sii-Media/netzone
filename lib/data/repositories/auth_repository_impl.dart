@@ -32,6 +32,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required String userType,
     required String firstMobile,
     required bool isFreeZoon,
+    required String country,
     String? secondMobile,
     String? thirdMobile,
     String? subcategory,
@@ -48,6 +49,7 @@ class AuthRepositoryImpl implements AuthRepository {
     String? bio,
     String? description,
     String? website,
+    String? title,
   }) async {
     try {
       if (await networkInfo.isConnected) {
@@ -57,51 +59,7 @@ class AuthRepositoryImpl implements AuthRepository {
         // // SharedPreferences preferences = await SharedPreferences.getInstance();
         // // await preferences.setBool('IsLoggedIn', true);
         Dio dio = Dio();
-        // if (profilePhoto != null && coverPhoto != null && banerPhoto != null) {
-        //   formData = FormData.fromMap({
-        //     'username': username,
-        //     'email': email,
-        //     'password': password,
-        //     'userType': userType,
-        //     'firstMobile': firstMobile,
-        //     'isFreeZoon': isFreeZoon,
-        //     'profilePhoto': await MultipartFile.fromFile(profilePhoto.path,
-        //         filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
-        //     'coverPhoto': await MultipartFile.fromFile(coverPhoto.path,
-        //         filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
-        //     'bannerPhoto': await MultipartFile.fromFile(banerPhoto.path,
-        //         filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
-        //     'frontIdPhoto': await MultipartFile.fromFile(
-        //         frontIdPhoto?.path ?? '',
-        //         filename: 'image.jpg',
-        //         contentType: MediaType('image', 'jpeg')),
-        //     'backIdPhoto': await MultipartFile.fromFile(backIdPhoto?.path ?? '',
-        //         filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
-        //   });
-        // } else if (profilePhoto != null &&
-        //     coverPhoto != null &&
-        //     banerPhoto == null) {
-        //   formData = FormData.fromMap({
-        //     'username': username,
-        //     'email': email,
-        //     'password': password,
-        //     'userType': userType,
-        //     'firstMobile': firstMobile,
-        //     'isFreeZoon': isFreeZoon,
-        //     'profilePhoto': await MultipartFile.fromFile(profilePhoto.path,
-        //         filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
-        //     'coverPhoto': await MultipartFile.fromFile(coverPhoto.path,
-        //         filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
-        //     'frontIdPhoto': await MultipartFile.fromFile(
-        //         frontIdPhoto?.path ?? '',
-        //         filename: 'image.jpg',
-        //         contentType: MediaType('image', 'jpeg')),
-        //     'backIdPhoto': await MultipartFile.fromFile(backIdPhoto?.path ?? '',
-        //         filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
-        //   });
-        // } else {
-        //   return Left(ServerFailure());
-        // }
+
         FormData formData = FormData();
         formData.fields.addAll([
           MapEntry('username', username),
@@ -121,7 +79,11 @@ class AuthRepositoryImpl implements AuthRepository {
           MapEntry('bio', bio ?? ''),
           MapEntry('description', description ?? ''),
           MapEntry('website', website ?? ''),
+          MapEntry('country', country),
         ]);
+        if (title != null) {
+          formData.fields.add(MapEntry('title', title));
+        }
         if (profilePhoto != null) {
           String fileName = 'image.jpg';
           formData.files.add(MapEntry(

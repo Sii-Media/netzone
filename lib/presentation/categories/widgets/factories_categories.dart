@@ -1,12 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/domain/auth/entities/user_info.dart';
 import 'package:netzoon/domain/categories/entities/factories/factory_companies.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 
+import '../factories/factory_profile_screen.dart';
+
 class ViewFactoriesWidget extends StatelessWidget {
   const ViewFactoriesWidget({super.key, required this.factory});
-  final List<FactoryCompanies> factory;
+  final List<UserInfo> factory;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -33,12 +36,14 @@ class ViewFactoriesWidget extends StatelessWidget {
 
 class FactoriesCategories extends StatelessWidget {
   const FactoriesCategories({super.key, required this.factory});
-  final FactoryCompanies factory;
+  final UserInfo factory;
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // controller.getData(factoryCategoriesModel.factoryCategoriesId);
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return FactoryProfileScreen(user: factory);
+        }));
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -55,7 +60,7 @@ class FactoriesCategories extends StatelessWidget {
                   top: 0,
                   bottom: 0,
                   child: CachedNetworkImage(
-                    imageUrl: factory.imgurl,
+                    imageUrl: factory.profilePhoto ?? '',
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -69,7 +74,7 @@ class FactoriesCategories extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     color: AppColor.backgroundColor.withOpacity(0.8),
                     child: Text(
-                      factory.name,
+                      factory.username ?? '',
                       style: TextStyle(color: Colors.white, fontSize: 20.sp),
                     ),
                   ),

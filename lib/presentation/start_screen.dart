@@ -8,12 +8,16 @@ import 'package:geolocator/geolocator.dart';
 import 'package:netzoon/presentation/home/test.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
+// import 'package:quickblox_sdk/auth/module.dart';
+// import 'package:quickblox_sdk/models/qb_session.dart';
+// import 'package:quickblox_sdk/models/qb_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/core/constants/constants.dart';
 import '../injection_container.dart';
 import 'core/blocs/country_bloc/country_bloc.dart';
 import 'language_screen/blocs/language_bloc/language_bloc.dart';
+// import 'package:quickblox_sdk/quickblox_sdk.dart';
 
 class StartScreen extends StatefulWidget {
   const StartScreen({super.key});
@@ -23,6 +27,20 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
+  // void _loginToQuickBlox() async {
+  //   try {
+  //     QBUser? qbUser;
+  //     QBSession? qbSession;
+  //     QBLoginResult result = await QB.auth.login('netzoonTest', '123456789');
+  //     qbUser = result.qbUser;
+  //     qbSession = result.qbSession;
+  //     print(qbUser);
+  //     print(qbSession);
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+
   // Declare a variable to store the current position
 
   bool isGetLocation = false;
@@ -303,11 +321,12 @@ class _StartScreenState extends State<StartScreen> {
                               // print(val);
                               countryBloc
                                   .add(UpdateCountryEvent(selectedCountry));
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(builder: (context) {
-                                  return const TestScreen();
-                                }),
-                              );
+                              // Navigator.of(context).pushReplacement(
+                              //   MaterialPageRoute(builder: (context) {
+                              //     return const TestScreen();
+                              //   }),
+                              // );
+                              // _loginToQuickBlox();
                             },
                             // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
                             initialSelection: selectedCountry,

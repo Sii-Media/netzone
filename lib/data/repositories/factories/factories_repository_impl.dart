@@ -29,12 +29,17 @@ class FactoriesRepositoryImpl implements FactoriesRepository {
   }
 
   @override
-  Future<Either<Failure, FactoriesCompaniesResponse>> getFactoryCompanies(
-      {required String id}) async {
+  Future<Either<Failure, FactoriesCompaniesResponse>> getFactoryCompanies({
+    required String id,
+    required String country,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
         final factoryCompanies =
-            await factoriesRemoteDataSource.getFactoryCompanies(id);
+            await factoriesRemoteDataSource.getFactoryCompanies(
+          id,
+          country,
+        );
         return Right(factoryCompanies.toDomain());
       } else {
         return Left(OfflineFailure());

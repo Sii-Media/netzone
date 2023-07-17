@@ -7,5 +7,6 @@ abstract class FactoriesRepository {
   Future<Either<Failure, List<Factories>>> getAllFactories();
   Future<Either<Failure, FactoriesCompaniesResponse>> getFactoryCompanies({
     required String id,
+    required String country,
   });
 }

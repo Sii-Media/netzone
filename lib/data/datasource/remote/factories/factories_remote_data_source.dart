@@ -9,7 +9,8 @@ part 'factories_remote_data_source.g.dart';
 
 abstract class FactoriesRemoteDataSource {
   Future<List<FactoriesModel>> getAllFactories();
-  Future<FactoryCompaniesResponseModel> getFactoryCompanies(String id);
+  Future<FactoryCompaniesResponseModel> getFactoryCompanies(
+      String id, String country);
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -32,5 +33,7 @@ abstract class FactoriesRemoteDataSourceImpl
   @override
   @GET('/categories/get-all-factories/{id}')
   Future<FactoryCompaniesResponseModel> getFactoryCompanies(
-      @Path('id') String id);
+    @Path('id') String id,
+    @Query('country') String country,
+  );
 }

@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:netzoon/domain/categories/entities/factories/factories.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
 import 'package:netzoon/presentation/auth/widgets/background_auth_widget.dart';
 import 'package:netzoon/presentation/auth/widgets/text_form_signup_widget.dart';
@@ -17,6 +18,9 @@ import 'package:netzoon/injection_container.dart' as di;
 import 'package:netzoon/presentation/home/test.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
+
+import '../../../injection_container.dart';
+import '../../categories/factories/blocs/factories_bloc/factories_bloc.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key, required this.accountTitle});
@@ -47,6 +51,9 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController websiteController = TextEditingController();
 
+  final TextEditingController titleController = TextEditingController();
+  final factoryBloc = sl<FactoriesBloc>();
+
   File? profileImage;
   File? coverImage;
   final GlobalKey<FormFieldState> _emailFormFieldKey =
@@ -55,6 +62,9 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
       GlobalKey<FormFieldState>();
   @override
   void initState() {
+    if (widget.accountTitle == 'المصانع') {
+      factoryBloc.add(GetAllFactoriesEvent());
+    }
     super.initState();
   }
 
@@ -115,6 +125,8 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
         bioController: bioController,
         descriptionController: descriptionController,
         websiteController: websiteController,
+        titleController: titleController,
+        factoriesBloc: factoryBloc,
       ),
     );
   }
@@ -143,6 +155,8 @@ class SignUpWidget extends StatefulWidget {
     required this.bioController,
     required this.descriptionController,
     required this.websiteController,
+    required this.titleController,
+    required this.factoriesBloc,
   });
   final GlobalKey<FormState> formKey;
   final GlobalKey<FormFieldState> emailFormFieldKey;
@@ -163,9 +177,9 @@ class SignUpWidget extends StatefulWidget {
   final TextEditingController bioController;
   final TextEditingController descriptionController;
   final TextEditingController websiteController;
-
+  final TextEditingController titleController;
   final SignUpBloc bloc;
-
+  final FactoriesBloc factoriesBloc;
   @override
   State<SignUpWidget> createState() => _SignUpWidgetState();
 }
@@ -240,6 +254,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
     });
   }
 
+  Factories? selectCat;
+
   @override
   Widget build(BuildContext context) {
     return BackgroundAuthWidget(
@@ -261,6 +277,88 @@ class _SignUpWidgetState extends State<SignUpWidget> {
           color: Colors.grey.withOpacity(0.1),
           child: ListView(
             children: [
+              widget.accountTitle == 'المصانع'
+                  ? BlocBuilder<FactoriesBloc, FactoriesState>(
+                      bloc: widget.factoriesBloc,
+                      builder: (context, state) {
+                        if (state is FactoriesInProgress) {
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColor.backgroundColor,
+                            ),
+                          );
+                        } else if (state is FactoriesFailure) {
+                          final failure = state.message;
+                          return Center(
+                            child: Text(
+                              failure,
+                              style: const TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                          );
+                        } else if (state is FactoriesSuccess) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context).translate('categ'),
+                                style: TextStyle(
+                                  color: AppColor.backgroundColor,
+                                  fontSize: 15.sp,
+                                ),
+                              ),
+                              Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin: const EdgeInsets.symmetric(
+                                          horizontal: 2, vertical: 10)
+                                      .r,
+                                  // Add some padding and a background color
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  decoration: BoxDecoration(
+                                      color: Colors.green.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: AppColor.black,
+                                      )),
+                                  // Create the dropdown button
+                                  child: DropdownButton<Factories>(
+                                    // Set the selected value
+                                    value: selectCat,
+                                    // // Handle the value change
+                                    menuMaxHeight: 300.h,
+                                    onChanged: (Factories? newValue) {
+                                      setState(() {
+                                        selectCat = newValue!;
+                                      });
+                                    },
+                                    // onChanged: (String? newValue) => setState(
+                                    //     () => selectedValue = newValue ?? ''),
+                                    // Map each option to a widget
+                                    items: state.factories
+                                        .map<DropdownMenuItem<Factories>>(
+                                            (Factories value) {
+                                      return DropdownMenuItem<Factories>(
+                                        value: value,
+                                        // Use a colored box to show the option
+                                        child: Text(
+                                          AppLocalizations.of(context)
+                                              .translate(value.title),
+                                          style: const TextStyle(
+                                              color: Colors.black),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  )),
+                            ],
+                          );
+                        }
+                        return Container();
+                      },
+                    )
+                  : SizedBox(),
               TextSignup(text: AppLocalizations.of(context).translate('email')),
               TextFormField(
                 key: widget.emailFormFieldKey,
@@ -1023,6 +1121,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           bio: widget.bioController.text,
                           description: widget.descriptionController.text,
                           website: widget.websiteController.text,
+                          title: selectCat?.title,
                         ));
                       },
                       child: Text(

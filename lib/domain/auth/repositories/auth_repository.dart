@@ -14,6 +14,7 @@ abstract class AuthRepository {
     required String userType,
     required String firstMobile,
     required bool isFreeZoon,
+    required String country,
     String? secondMobile,
     String? thirdMobile,
     String? subcategory,
@@ -30,6 +31,7 @@ abstract class AuthRepository {
     String? bio,
     String? description,
     String? website,
+    String? title,
   });
 
   Future<Either<Failure, User>> signIn({
