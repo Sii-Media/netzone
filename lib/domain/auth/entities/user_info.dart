@@ -29,6 +29,14 @@ class UserInfo {
   final String? banerPhoto;
   final String? frontIdPhoto;
   final String? backIdPhoto;
+  final String? tradeLicensePhoto;
+  final String? deliveryPermitPhoto;
+  final bool? isThereWarehouse;
+  final bool? isThereFoodsDelivery;
+  final String? deliveryType;
+  final int? deliveryCarsNum;
+  final int? deliveryMotorsNum;
+
   final List? vehicles;
   final List? products;
   final List<String>? followings;
@@ -66,5 +74,12 @@ class UserInfo {
     this.followings,
     this.followers,
     required this.id,
+    this.tradeLicensePhoto,
+    this.deliveryPermitPhoto,
+    this.isThereWarehouse,
+    this.isThereFoodsDelivery,
+    this.deliveryType,
+    this.deliveryCarsNum,
+    this.deliveryMotorsNum,
   });
 }

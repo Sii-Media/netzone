@@ -26,6 +26,22 @@ class AddVehicleUseCase extends UseCase<String, AddVehicleParams> {
       carimages: params.carimages,
       video: params.video,
       country: params.country,
+      contactNumber: params.contactNumber,
+      exteriorColor: params.exteriorColor,
+      interiorColor: params.interiorColor,
+      bodyCondition: params.bodyCondition,
+      bodyType: params.bodyType,
+      doors: params.doors,
+      extras: params.extras,
+      fuelType: params.fuelType,
+      guarantee: params.guarantee,
+      horsepower: params.horsepower,
+      mechanicalCondition: params.mechanicalCondition,
+      numofCylinders: params.numofCylinders,
+      seatingCapacity: params.seatingCapacity,
+      steeringSide: params.steeringSide,
+      technicalFeatures: params.technicalFeatures,
+      transmissionType: params.transmissionType,
     );
   }
 }
@@ -44,6 +60,22 @@ class AddVehicleParams {
   final List<XFile>? carimages;
   final File? video;
   final String country;
+  final String? contactNumber;
+  final String? exteriorColor;
+  final String? interiorColor;
+  final int? doors;
+  final String? bodyCondition;
+  final String? bodyType;
+  final String? mechanicalCondition;
+  final int? seatingCapacity;
+  final int? numofCylinders;
+  final String? transmissionType;
+  final String? horsepower;
+  final String? fuelType;
+  final String? extras;
+  final String? technicalFeatures;
+  final String? steeringSide;
+  final bool? guarantee;
   AddVehicleParams({
     required this.name,
     required this.description,
@@ -58,5 +90,21 @@ class AddVehicleParams {
     this.carimages,
     this.video,
     required this.country,
+    this.contactNumber,
+    this.exteriorColor,
+    this.interiorColor,
+    this.doors,
+    this.bodyCondition,
+    this.bodyType,
+    this.mechanicalCondition,
+    this.seatingCapacity,
+    this.numofCylinders,
+    this.transmissionType,
+    this.horsepower,
+    this.fuelType,
+    this.extras,
+    this.technicalFeatures,
+    this.steeringSide,
+    this.guarantee,
   });
 }

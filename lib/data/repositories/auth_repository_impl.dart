@@ -50,6 +50,13 @@ class AuthRepositoryImpl implements AuthRepository {
     String? description,
     String? website,
     String? title,
+    File? tradeLicensePhoto,
+    File? deliveryPermitPhoto,
+    bool? isThereWarehouse,
+    bool? isThereFoodsDelivery,
+    String? deliveryType,
+    int? deliveryCarsNum,
+    int? deliveryMotorsNum,
   }) async {
     try {
       if (await networkInfo.isConnected) {
@@ -80,6 +87,11 @@ class AuthRepositoryImpl implements AuthRepository {
           MapEntry('description', description ?? ''),
           MapEntry('website', website ?? ''),
           MapEntry('country', country),
+          MapEntry('isThereWarehouse', isThereWarehouse.toString()),
+          MapEntry('isThereFoodsDelivery', isThereFoodsDelivery.toString()),
+          MapEntry('deliveryType', deliveryType.toString()),
+          MapEntry('deliveryCarsNum', deliveryCarsNum.toString()),
+          MapEntry('deliveryMotorsNum', deliveryMotorsNum.toString()),
         ]);
         if (title != null) {
           formData.fields.add(MapEntry('title', title));
@@ -134,6 +146,29 @@ class AuthRepositoryImpl implements AuthRepository {
             'backIdPhoto',
             await MultipartFile.fromFile(
               backIdPhoto.path,
+              filename: fileName,
+              contentType: MediaType('image', 'jpeg'),
+            ),
+          ));
+        }
+        if (tradeLicensePhoto != null) {
+          String fileName = 'image.jpg';
+          formData.files.add(MapEntry(
+            'tradeLicensePhoto',
+            await MultipartFile.fromFile(
+              tradeLicensePhoto.path,
+              filename: fileName,
+              contentType: MediaType('image', 'jpeg'),
+            ),
+          ));
+        }
+
+        if (deliveryPermitPhoto != null) {
+          String fileName = 'image.jpg';
+          formData.files.add(MapEntry(
+            'deliveryPermitPhoto',
+            await MultipartFile.fromFile(
+              deliveryPermitPhoto.path,
               filename: fileName,
               contentType: MediaType('image', 'jpeg'),
             ),

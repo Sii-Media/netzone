@@ -467,6 +467,7 @@ class _MyNewsProfileScreenState extends State<MyNewsProfileScreen>
                                                 builder: (context) {
                                           return const FollowingsListScreen(
                                             type: 'followings',
+                                            who: 'me',
                                           );
                                         }));
                                       },
@@ -501,6 +502,7 @@ class _MyNewsProfileScreenState extends State<MyNewsProfileScreen>
                                                 builder: (context) {
                                           return const FollowingsListScreen(
                                             type: 'followers',
+                                            who: 'me',
                                           );
                                         }));
                                       },

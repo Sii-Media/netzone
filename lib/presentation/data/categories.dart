@@ -15,4 +15,5 @@ final List<Category> cat = [
   const Category(url: 'assets/images/users.png', name: 'users'),
   const Category(url: 'assets/images/real_estate.jpg', name: 'real_estate'),
   const Category(url: 'assets/images/seller.jpg', name: 'traders'),
+  const Category(url: 'assets/images/delivery.jpg', name: 'delivery_companies')
 ];

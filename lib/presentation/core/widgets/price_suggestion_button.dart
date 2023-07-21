@@ -21,6 +21,9 @@ class PriceSuggestionButton extends StatelessWidget {
           shape: MaterialStateProperty.all(RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18.0),
           )),
+          fixedSize: const MaterialStatePropertyAll(
+            Size.fromWidth(160),
+          ),
           side: MaterialStateProperty.all(const BorderSide(
             color: AppColor.backgroundColor,
             width: 2,

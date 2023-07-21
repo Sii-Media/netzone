@@ -260,6 +260,26 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
                                     SizedBox(
                                       height: 7.h,
                                     ),
+                                    state.ads.type != null &&
+                                            state.ads.type != ''
+                                        ? titleAndInput(
+                                            title: 'car_name',
+                                            input: state.ads.type ?? '',
+                                          )
+                                        : const SizedBox(),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    state.ads.category != null &&
+                                            state.ads.category != ''
+                                        ? titleAndInput(
+                                            title: 'car_category',
+                                            input: state.ads.category ?? '',
+                                          )
+                                        : const SizedBox(),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
                                     titleAndInput(
                                       title: 'year',
                                       input: state.ads.advertisingYear,
@@ -274,17 +294,30 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen> {
                                     SizedBox(
                                       height: 7.h,
                                     ),
-                                    titleAndInput(
-                                      title: 'regional_specifications',
-                                      input: 'مواصفات خليجية',
-                                    ),
+                                    // titleAndInput(
+                                    //   title: 'regional_specifications',
+                                    //   input: 'مواصفات خليجية',
+                                    // ),
+                                    state.ads.color != null &&
+                                            state.ads.color != ''
+                                        ? titleAndInput(
+                                            title: 'color',
+                                            input: state.ads.color ?? '',
+                                          )
+                                        : const SizedBox(),
                                     SizedBox(
                                       height: 7.h,
                                     ),
-                                    titleAndInput(
-                                      title: 'guarantee',
-                                      input: 'لا ينطبق',
-                                    ),
+                                    state.ads.guarantee != null
+                                        ? titleAndInput(
+                                            title: 'guarantee',
+                                            input: state.ads.guarantee == true
+                                                ? AppLocalizations.of(context)
+                                                    .translate('applies')
+                                                : AppLocalizations.of(context)
+                                                    .translate('do not apply'),
+                                          )
+                                        : const SizedBox(),
                                     SizedBox(
                                       height: 7.h,
                                     ),

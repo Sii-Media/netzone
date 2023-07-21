@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/auth/entities/user_info.dart';
 import 'package:netzoon/domain/categories/entities/factories/factories.dart';
-import 'package:netzoon/domain/categories/entities/factories/factory_companies.dart';
 import 'package:netzoon/domain/categories/usecases/factories/get_all_factories_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/factories/get_factory_companies_use_case.dart';
 import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';

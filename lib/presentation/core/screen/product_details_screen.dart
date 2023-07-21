@@ -521,6 +521,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                           SizedBox(
                                             height: 7.h,
                                           ),
+                                          titleAndInput(
+                                              title:
+                                                  AppLocalizations.of(context)
+                                                      .translate('color'),
+                                              input: state.product.color ?? ''),
+                                          SizedBox(
+                                            height: 7.h,
+                                          ),
                                           state.product.year != null
                                               ? titleAndInput(
                                                   title: AppLocalizations.of(

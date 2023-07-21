@@ -37,8 +37,30 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
   late TextEditingController locationController = TextEditingController();
   late TextEditingController typeController = TextEditingController();
   late TextEditingController categoryController = TextEditingController();
+  late TextEditingController contactNumberController = TextEditingController();
+  late TextEditingController exteriorColorController = TextEditingController();
+  late TextEditingController interiorColorController = TextEditingController();
+  late TextEditingController doorsController = TextEditingController();
+  late TextEditingController bodyConditionController = TextEditingController();
+  late TextEditingController bodyTypeController = TextEditingController();
+  late TextEditingController mechanicalConditionController =
+      TextEditingController();
+  late TextEditingController seatingCapacityController =
+      TextEditingController();
+  late TextEditingController numofCylindersController = TextEditingController();
+  late TextEditingController transmissionTypeController =
+      TextEditingController();
+  late TextEditingController horsepowerController = TextEditingController();
+  late TextEditingController fuelTypeController = TextEditingController();
+  late TextEditingController extrasController = TextEditingController();
+
+  late TextEditingController technicalFeaturesController =
+      TextEditingController();
+  late TextEditingController steeringSideController = TextEditingController();
+  late TextEditingController guaranteeController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isGuarantee = false;
 
   File? _image;
   Future getImage(ImageSource imageSource) async {
@@ -202,6 +224,22 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                     ),
                     addVehicleFormFeild(
                       context: context,
+                      controller: contactNumberController,
+                      title: 'contactNumber',
+                      isNumber: true,
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return 'هذا الحقل مطلوب';
+                        }
+
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    addVehicleFormFeild(
+                      context: context,
                       controller: killometersController,
                       title: 'kilometers',
                       isNumber: false,
@@ -290,6 +328,174 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                       },
                     ),
                     SizedBox(
+                      height: 10.h,
+                    ),
+                    addVehicleFormFeild(
+                      context: context,
+                      controller: exteriorColorController,
+                      title: 'exterior_color',
+                      isNumber: false,
+                      validator: (val) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    addVehicleFormFeild(
+                      context: context,
+                      controller: interiorColorController,
+                      title: 'interior_color',
+                      isNumber: false,
+                      validator: (val) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    addVehicleFormFeild(
+                      context: context,
+                      controller: doorsController,
+                      title: 'doors',
+                      isNumber: true,
+                      validator: (val) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    addVehicleFormFeild(
+                      context: context,
+                      controller: bodyConditionController,
+                      title: 'body_condition',
+                      isNumber: false,
+                      validator: (val) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    addVehicleFormFeild(
+                      context: context,
+                      controller: bodyTypeController,
+                      title: 'body_type',
+                      isNumber: false,
+                      validator: (val) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    addVehicleFormFeild(
+                      context: context,
+                      controller: mechanicalConditionController,
+                      title: 'mechanical_condition',
+                      isNumber: false,
+                      validator: (val) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    addVehicleFormFeild(
+                      context: context,
+                      controller: seatingCapacityController,
+                      title: 'seating_capacity',
+                      isNumber: true,
+                      validator: (val) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    addVehicleFormFeild(
+                      context: context,
+                      controller: numofCylindersController,
+                      title: 'num_of_cylinders',
+                      isNumber: true,
+                      validator: (val) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    addVehicleFormFeild(
+                      context: context,
+                      controller: transmissionTypeController,
+                      title: 'transmission_type',
+                      isNumber: false,
+                      validator: (val) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    addVehicleFormFeild(
+                      context: context,
+                      controller: horsepowerController,
+                      title: 'horsepower',
+                      isNumber: false,
+                      validator: (val) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    addVehicleFormFeild(
+                      context: context,
+                      controller: fuelTypeController,
+                      title: 'fuelType',
+                      isNumber: false,
+                      validator: (val) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    addVehicleFormFeild(
+                      context: context,
+                      controller: extrasController,
+                      title: 'extras',
+                      isNumber: false,
+                      validator: (val) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    addVehicleFormFeild(
+                      context: context,
+                      controller: technicalFeaturesController,
+                      title: 'technicalFeatures',
+                      isNumber: false,
+                      validator: (val) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    addVehicleFormFeild(
+                      context: context,
+                      controller: steeringSideController,
+                      title: 'steering_side',
+                      isNumber: false,
+                      validator: (val) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(
                       height: 7.h,
                     ),
                     Row(
@@ -345,6 +551,25 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                           ],
                         ),
                       ],
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    CheckboxListTile(
+                      title: Text(
+                        AppLocalizations.of(context).translate('is_guarantee'),
+                        style: TextStyle(
+                          color: AppColor.backgroundColor,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                      activeColor: AppColor.backgroundColor,
+                      value: _isGuarantee,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _isGuarantee = value ?? false;
+                        });
+                      },
                     ),
                     SizedBox(
                       height: 10.h,
@@ -538,6 +763,26 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                               image: _image!,
                               carimages: imageFileList,
                               video: _video,
+                              contactNumber: contactNumberController.text,
+                              exteriorColor: exteriorColorController.text,
+                              interiorColor: interiorColorController.text,
+                              bodyCondition: bodyConditionController.text,
+                              bodyType: bodyTypeController.text,
+                              doors: int.tryParse(doorsController.text),
+                              extras: extrasController.text,
+                              fuelType: fuelTypeController.text,
+                              guarantee: _isGuarantee,
+                              horsepower: horsepowerController.text,
+                              mechanicalCondition:
+                                  mechanicalConditionController.text,
+                              numofCylinders:
+                                  int.tryParse(numofCylindersController.text),
+                              seatingCapacity:
+                                  int.tryParse(seatingCapacityController.text),
+                              steeringSide: steeringSideController.text,
+                              technicalFeatures:
+                                  technicalFeaturesController.text,
+                              transmissionType: transmissionTypeController.text,
                             ));
                           }),
                     ),

@@ -16,6 +16,7 @@ import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../data/cars.dart';
 import '../notifications/blocs/notifications/notifications_bloc.dart';
 import '../utils/app_localizations.dart';
 
@@ -30,15 +31,21 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
   late TextEditingController titleController = TextEditingController();
   late TextEditingController descController = TextEditingController();
 
-  late TextEditingController alphaController = TextEditingController();
-  late TextEditingController brandController = TextEditingController();
   late TextEditingController locController = TextEditingController();
   late TextEditingController priceController = TextEditingController();
   late TextEditingController yearController = TextEditingController();
+  late TextEditingController colorController = TextEditingController();
+  late TextEditingController contactNumberController = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? _selectedStartDate;
   String? _selectedEndDate;
+  String? selectedCarType;
+  String? selectedCategory;
+  bool _isGuarantee = false;
+
   File? _image;
+  final cars = carTypes;
   Future getImage(ImageSource imageSource) async {
     final image = await ImagePicker().pickImage(source: imageSource);
 
@@ -195,7 +202,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                       addAdsFormFeild(
                         context: context,
                         controller: titleController,
-                        title: 'address',
+                        title: 'title',
                         isNumber: false,
                         validator: (val) {
                           if (val!.isEmpty) {
@@ -313,65 +320,105 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                       SizedBox(
                         height: 10.h,
                       ),
-                      addPhotoButton(
-                        context: context,
-                        text: 'add_from_gallery',
-                        onPressed: () {
-                          getImage(ImageSource.gallery);
-                        },
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      _image != null
-                          ? Center(
-                              child: Image.file(
-                                _image!,
-                                width: 250.w,
-                                height: 250.h,
-                                fit: BoxFit.cover,
-                              ),
+                      selectedValue == 'سيارات'
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${AppLocalizations.of(context).translate('department')} :',
+                                  style: TextStyle(
+                                    color: AppColor.backgroundColor,
+                                    fontSize: 16.sp,
+                                  ),
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin: const EdgeInsets.symmetric(
+                                          horizontal: 2, vertical: 10)
+                                      .r,
+                                  // Add some padding and a background color
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  decoration: BoxDecoration(
+                                      color: Colors.green.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: AppColor.black,
+                                      )),
+                                  child: DropdownButton<String>(
+                                    value: selectedCarType,
+                                    hint: const Text('Select car type'),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedCarType = value;
+                                        selectedCategory =
+                                            null; // Reset the selected category when the car type changes
+                                      });
+                                    },
+                                    items: carTypes.map((carType) {
+                                      return DropdownMenuItem<String>(
+                                        value: carType.name,
+                                        child: Text(carType.name),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                                const SizedBox(height: 16.0),
+                                if (selectedCarType != null)
+                                  Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    margin: const EdgeInsets.symmetric(
+                                            horizontal: 2, vertical: 10)
+                                        .r,
+                                    // Add some padding and a background color
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    decoration: BoxDecoration(
+                                        color: Colors.green.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          color: AppColor.black,
+                                        )),
+                                    child: DropdownButton<String>(
+                                      value: selectedCategory,
+                                      hint: const Text('Select category'),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedCategory = value;
+                                        });
+                                      },
+                                      items: carTypes
+                                          .firstWhere((carType) =>
+                                              carType.name == selectedCarType)
+                                          .categories
+                                          .map((category) {
+                                        return DropdownMenuItem<String>(
+                                          value: category,
+                                          child: Text(category),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                              ],
                             )
-                          : Center(
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
-                                width: 250.w,
-                                height: 250.h,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                          : const SizedBox(),
                       SizedBox(
                         height: 10.h,
                       ),
-                      addAdsFormFeild(
-                        context: context,
-                        controller: alphaController,
-                        title: 'CountryAlphaCode',
-                        isNumber: false,
-                        validator: (val) {
-                          if (val!.isEmpty) {
-                            return 'هذا الحقل مطلوب';
-                          }
-
-                          return null;
-                        },
-                      ),
+                      selectedValue == 'سيارات'
+                          ? addAdsFormFeild(
+                              context: context,
+                              controller: colorController,
+                              title: 'color',
+                              isNumber: false,
+                              validator: (val) {
+                                return null;
+                              },
+                            )
+                          : const SizedBox(),
                       SizedBox(
                         height: 10.h,
-                      ),
-                      addAdsFormFeild(
-                        context: context,
-                        controller: brandController,
-                        title: 'Brand',
-                        isNumber: false,
-                        validator: (val) {
-                          if (val!.isEmpty) {
-                            return 'هذا الحقل مطلوب';
-                          }
-
-                          return null;
-                        },
                       ),
                       SizedBox(
                         height: 10.h,
@@ -402,6 +449,18 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                             return 'هذا الحقل مطلوب';
                           }
 
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      addAdsFormFeild(
+                        context: context,
+                        controller: contactNumberController,
+                        title: 'contactNumber',
+                        isNumber: true,
+                        validator: (val) {
                           return null;
                         },
                       ),
@@ -441,6 +500,60 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                           });
                         },
                       ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      CheckboxListTile(
+                        title: Text(
+                          AppLocalizations.of(context)
+                              .translate('is_guarantee'),
+                          style: TextStyle(
+                            color: AppColor.backgroundColor,
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                        activeColor: AppColor.backgroundColor,
+                        value: _isGuarantee,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _isGuarantee = value ?? false;
+                          });
+                        },
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      addPhotoButton(
+                        context: context,
+                        text: 'add_from_gallery',
+                        onPressed: () {
+                          getImage(ImageSource.gallery);
+                        },
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      _image != null
+                          ? Center(
+                              child: Image.file(
+                                _image!,
+                                width: 250.w,
+                                height: 250.h,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : Center(
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
+                                width: 250.w,
+                                height: 250.h,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                       SizedBox(
                         height: 20.h,
                       ),
@@ -595,9 +708,6 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                                 advertisingEndDate: _selectedEndDate ?? '',
                                 advertisingDescription: descController.text,
                                 image: _image!,
-                                advertisingCountryAlphaCode:
-                                    alphaController.text,
-                                advertisingBrand: brandController.text,
                                 advertisingYear: yearController.text,
                                 advertisingLocation: locController.text,
                                 advertisingPrice:
@@ -606,6 +716,11 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                                 advertisingImageList: imageFileList,
                                 video: _video,
                                 purchasable: _purchasable,
+                                type: selectedCarType,
+                                category: selectedCategory,
+                                color: colorController.text,
+                                contactNumber: contactNumberController.text,
+                                guarantee: _isGuarantee,
                               ));
                             }),
                       ),

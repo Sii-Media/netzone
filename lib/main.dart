@@ -18,7 +18,7 @@ import 'package:netzoon/presentation/notifications/screens/notification_screen.d
 import 'package:netzoon/presentation/splash/splash_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:netzoon/presentation/utils/constants.dart';
-// import 'package:quickblox_sdk/quickblox_sdk.dart';
+import 'package:quickblox_sdk/quickblox_sdk.dart';
 import 'injection_container.dart' as di;
 
 Future<void> main() async {
@@ -105,15 +105,16 @@ const _androidChannel = AndroidNotificationChannel(
 
 final _localNotifications = FlutterLocalNotificationsPlugin();
 
-// Future<void> initializeQuickBlox() async {
-//   try {
-//     await QB.settings.init(
-//         '101248', '7QsUQCOppNXAmTq', 's4XksyBADdYYkPa', '6Ks95ZqZu8PNbwv4Yvz9');
-//   } catch (e) {
-//     // Handle initialization error
-//     print("QuickBlox initialization error: $e");
-//   }
-// }
+Future<void> initializeQuickBlox() async {
+  try {
+    await QB.settings.init(
+        '101248', '7QsUQCOppNXAmTq', 's4XksyBADdYYkPa', '6Ks95ZqZu8PNbwv4Yvz9');
+  } catch (e) {
+    // Handle initialization error
+    // ignore: avoid_print
+    print("QuickBlox initialization error: $e");
+  }
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

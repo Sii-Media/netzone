@@ -97,6 +97,7 @@ class _AddProductScreenState extends State<AddProductScreen>
   late TextEditingController madeInController = TextEditingController();
 
   late TextEditingController productProps = TextEditingController();
+  late TextEditingController colorController = TextEditingController();
 
   String? _selectedCondition;
   final AddProductBloc addBloc = sl<AddProductBloc>();
@@ -366,6 +367,16 @@ class _AddProductScreenState extends State<AddProductScreen>
                             title:
                                 '${AppLocalizations.of(context).translate('quantity')} :',
                             isNumber: true,
+                          ),
+                          SizedBox(
+                            height: 7.h,
+                          ),
+                          addProductTextField(
+                            context: context,
+                            controller: colorController,
+                            title:
+                                '${AppLocalizations.of(context).translate('color')} :',
+                            isNumber: false,
                           ),
                           SizedBox(
                             height: 7.h,
@@ -772,6 +783,7 @@ class _AddProductScreenState extends State<AddProductScreen>
                                     image: _image!,
                                     discountPercentage:
                                         _discountPercentage.round(),
+                                    color: colorController.text,
                                   ));
                                 }),
                           ),

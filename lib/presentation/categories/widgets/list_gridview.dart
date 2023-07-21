@@ -13,6 +13,7 @@ import 'package:netzoon/presentation/data/categories.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../core/blocs/country_bloc/country_bloc.dart';
+import '../delivery_company/screens/delivery_companies_list_screen.dart';
 import '../users/screens/users_list_screen.dart';
 import '../vehicles/screens/vehicles_companies_screen.dart';
 
@@ -234,6 +235,14 @@ class GridCategory extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) {
                   return const RealEstateCompaniesListScreen();
+                },
+              ),
+            );
+          } else if (category.name == 'delivery_companies') {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return const DeliveryCompaniesListScreen();
                 },
               ),
             );

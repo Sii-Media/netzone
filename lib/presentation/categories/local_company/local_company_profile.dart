@@ -24,6 +24,7 @@ import '../../core/widgets/on_failure_widget.dart';
 import '../../profile/blocs/get_user/get_user_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+import '../../profile/screens/followings_list_screen.dart';
 import '../widgets/build_rating.dart';
 
 class LocalCompanyProfileScreen extends StatefulWidget {
@@ -313,6 +314,87 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                     state.userInfo.bio ?? 'BIO',
                                     style: const TextStyle(
                                         color: AppColor.mainGrey),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                            return FollowingsListScreen(
+                                              type: 'followings',
+                                              who: 'other',
+                                              id: widget.localCompany.id,
+                                            );
+                                          }));
+                                        },
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '${state.userInfo.followings?.length}',
+                                              style: TextStyle(
+                                                color: AppColor.mainGrey,
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              AppLocalizations.of(context)
+                                                  .translate('Followings'),
+                                              style: TextStyle(
+                                                  color: AppColor.secondGrey,
+                                                  fontSize: 15.sp),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                            return FollowingsListScreen(
+                                              type: 'followers',
+                                              who: 'other',
+                                              id: widget.localCompany.id,
+                                            );
+                                          }));
+                                        },
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '${state.userInfo.followers?.length}',
+                                              style: TextStyle(
+                                                color: AppColor.mainGrey,
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              AppLocalizations.of(context)
+                                                  .translate('Followers'),
+                                              style: TextStyle(
+                                                  color: AppColor.secondGrey,
+                                                  fontSize: 15.sp),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 // Padding(

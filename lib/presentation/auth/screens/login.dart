@@ -14,6 +14,7 @@ import 'package:netzoon/presentation/profile/screens/profile_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../profile/screens/local_company_profile_screen.dart';
+import '../../profile/screens/my_delivery_company_profile_screen.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -161,6 +162,10 @@ class _LogInScreenState extends State<LogInScreen> {
                 type: state.user.userInfo.userType ?? '');
           } else if (state.user.userInfo.userType == 'news_agency') {
             return MyNewsProfileScreen(
+              userId: state.user.userInfo.id,
+            );
+          } else if (state.user.userInfo.userType == 'delivery_company') {
+            return MyDeliveryCompanyProfileScreen(
               userId: state.user.userInfo.id,
             );
           }

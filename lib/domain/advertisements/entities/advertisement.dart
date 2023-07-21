@@ -9,8 +9,7 @@ class Advertisement extends Equatable {
   final String advertisingEndDate;
   final String advertisingDescription;
   final String advertisingImage;
-  final String advertisingCountryAlphaCode;
-  final String advertisingBrand;
+
   final int? advertisingViews;
   final String advertisingYear;
   final String advertisingLocation;
@@ -19,6 +18,11 @@ class Advertisement extends Equatable {
   final String? advertisingVedio;
   final String advertisingType;
   final bool purchasable;
+  final String? type;
+  final String? category;
+  final String? color;
+  final bool? guarantee;
+  final String? contactNumber;
   const Advertisement({
     required this.owner,
     required this.id,
@@ -27,8 +31,6 @@ class Advertisement extends Equatable {
     required this.advertisingEndDate,
     required this.advertisingDescription,
     required this.advertisingImage,
-    required this.advertisingCountryAlphaCode,
-    required this.advertisingBrand,
     required this.advertisingViews,
     required this.advertisingYear,
     required this.advertisingLocation,
@@ -37,6 +39,11 @@ class Advertisement extends Equatable {
     this.advertisingVedio,
     required this.advertisingType,
     required this.purchasable,
+    this.type,
+    this.category,
+    this.color,
+    this.guarantee,
+    this.contactNumber,
   });
 
   @override
@@ -47,11 +54,15 @@ class Advertisement extends Equatable {
         advertisingEndDate,
         advertisingDescription,
         advertisingImage,
-        advertisingCountryAlphaCode,
         advertisingImageList,
         advertisingVedio,
         advertisingType,
         owner,
         purchasable,
+        type,
+        category,
+        color,
+        guarantee,
+        contactNumber,
       ];
 }

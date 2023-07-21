@@ -9,12 +9,16 @@ import 'package:netzoon/presentation/categories/vehicles/screens/vehicle_compani
 import 'package:netzoon/presentation/profile/blocs/get_user/get_user_bloc.dart';
 
 import '../../../injection_container.dart';
+import '../../categories/delivery_company/screens/delivery_company_profile_screen.dart';
 import '../../core/constant/colors.dart';
 import '../../utils/app_localizations.dart';
 
 class FollowingsListScreen extends StatefulWidget {
   final String type;
-  const FollowingsListScreen({super.key, required this.type});
+  final String who;
+  final String? id;
+  const FollowingsListScreen(
+      {super.key, required this.type, required this.who, this.id});
 
   @override
   State<FollowingsListScreen> createState() => _FollowingsListScreenState();
@@ -26,9 +30,17 @@ class _FollowingsListScreenState extends State<FollowingsListScreen> {
   @override
   void initState() {
     if (widget.type == 'followings') {
-      followBloc.add(GetUserFollowingsEvent());
+      if (widget.who == 'me') {
+        followBloc.add(GetUserFollowingsEvent());
+      } else {
+        followBloc.add(GetUserFollowingsByIdEvent(id: widget.id ?? ''));
+      }
     } else {
-      followBloc.add(GetUserFollowersEvent());
+      if (widget.who == 'me') {
+        followBloc.add(GetUserFollowersEvent());
+      } else {
+        followBloc.add(GetUserFollowersByIdEvent(id: widget.id ?? ''));
+      }
     }
 
     super.initState();
@@ -109,6 +121,11 @@ class _FollowingsListScreenState extends State<FollowingsListScreen> {
                                   'trader') {
                                 return LocalCompanyProfileScreen(
                                   localCompany: state.follows[index],
+                                );
+                              } else if (state.follows[index].userType ==
+                                  'delivery_company') {
+                                return DeliveryCompanyProfileScreen(
+                                  deliveryCompany: state.follows[index],
                                 );
                               } else {
                                 return UsersProfileScreen(

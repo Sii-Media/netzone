@@ -32,6 +32,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
     'EG': 'EGP',
     'IQ': 'IQD',
     'JO': 'JOD',
+    'SA': 'SAR',
   };
   // final countryBloc = sl<CountryBloc>();
   late final CountryBloc countryBloc;
@@ -104,6 +105,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         'IQ',
                         '+971',
                         'AE',
+                        'SA',
                       ],
                       showCountryOnly: true,
                       showFlag: true,

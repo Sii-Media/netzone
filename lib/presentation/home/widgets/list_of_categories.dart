@@ -10,6 +10,7 @@ import 'package:netzoon/presentation/categories/real_estate/screens/real_estate_
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../../categories/delivery_company/screens/delivery_companies_list_screen.dart';
 import '../../categories/governmental/govermental_category_screen.dart';
 import '../../categories/users/screens/users_list_screen.dart';
 import '../../categories/vehicles/screens/vehicles_companies_screen.dart';
@@ -177,6 +178,15 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                 MaterialPageRoute(
                                   builder: (context) {
                                     return const RealEstateCompaniesListScreen();
+                                  },
+                                ),
+                              );
+                            } else if (widget.categories[index].name ==
+                                'delivery_companies') {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const DeliveryCompaniesListScreen();
                                   },
                                 ),
                               );

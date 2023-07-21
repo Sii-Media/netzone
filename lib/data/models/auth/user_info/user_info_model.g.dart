@@ -39,6 +39,11 @@ UserInfoModel _$UserInfoModelFromJson(Map<String, dynamic> json) =>
           ?.map((e) => e as String)
           .toList(),
       id: json['_id'] as String,
+      isThereWarehouse: json['isThereWarehouse'] as bool?,
+      isThereFoodsDelivery: json['isThereFoodsDelivery'] as bool?,
+      deliveryType: json['deliveryType'] as String?,
+      deliveryCarsNum: json['deliveryCarsNum'] as int?,
+      deliveryMotorsNum: json['deliveryMotorsNum'] as int?,
     );
 
 Map<String, dynamic> _$UserInfoModelToJson(UserInfoModel instance) =>
@@ -65,6 +70,11 @@ Map<String, dynamic> _$UserInfoModelToJson(UserInfoModel instance) =>
       'profilePhoto': instance.profilePhoto,
       'coverPhoto': instance.coverPhoto,
       'banerPhoto': instance.banerPhoto,
+      'isThereWarehouse': instance.isThereWarehouse,
+      'isThereFoodsDelivery': instance.isThereFoodsDelivery,
+      'deliveryType': instance.deliveryType,
+      'deliveryCarsNum': instance.deliveryCarsNum,
+      'deliveryMotorsNum': instance.deliveryMotorsNum,
       'vehicles': instance.vehicles,
       'products': instance.products,
       'followings': instance.followings,

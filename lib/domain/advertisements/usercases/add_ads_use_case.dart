@@ -19,8 +19,6 @@ class AddAdvertisementUseCase extends UseCase<String, AddAdvertisementParams> {
       advertisingEndDate: params.advertisingEndDate,
       advertisingDescription: params.advertisingDescription,
       image: params.image,
-      advertisingCountryAlphaCode: params.advertisingCountryAlphaCode,
-      advertisingBrand: params.advertisingBrand,
       advertisingYear: params.advertisingYear,
       advertisingLocation: params.advertisingLocation,
       advertisingPrice: params.advertisingPrice,
@@ -28,6 +26,11 @@ class AddAdvertisementUseCase extends UseCase<String, AddAdvertisementParams> {
       advertisingImageList: params.advertisingImageList,
       video: params.video,
       purchasable: params.purchasable,
+      type: params.type,
+      category: params.category,
+      color: params.color,
+      guarantee: params.guarantee,
+      contactNumber: params.contactNumber,
     );
   }
 }
@@ -39,8 +42,6 @@ class AddAdvertisementParams {
   final String advertisingEndDate;
   final String advertisingDescription;
   final File image;
-  final String advertisingCountryAlphaCode;
-  final String advertisingBrand;
   final String advertisingYear;
   final String advertisingLocation;
   final double advertisingPrice;
@@ -48,7 +49,11 @@ class AddAdvertisementParams {
   final List<XFile>? advertisingImageList;
   final File? video;
   final bool purchasable;
-
+  final String? type;
+  final String? category;
+  final String? color;
+  final bool? guarantee;
+  final String? contactNumber;
   AddAdvertisementParams({
     required this.owner,
     required this.advertisingTitle,
@@ -56,8 +61,6 @@ class AddAdvertisementParams {
     required this.advertisingEndDate,
     required this.advertisingDescription,
     required this.image,
-    required this.advertisingCountryAlphaCode,
-    required this.advertisingBrand,
     required this.advertisingYear,
     required this.advertisingLocation,
     required this.advertisingPrice,
@@ -65,5 +68,10 @@ class AddAdvertisementParams {
     this.advertisingImageList,
     this.video,
     required this.purchasable,
+    this.type,
+    this.category,
+    this.color,
+    this.guarantee,
+    this.contactNumber,
   });
 }

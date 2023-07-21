@@ -14,8 +14,6 @@ class AdvertisemenetModel {
   final String advertisingEndDate;
   final String advertisingDescription;
   final String advertisingImage;
-  final String advertisingCountryAlphaCode;
-  final String advertisingBrand;
   final int? advertisingViews;
   final String advertisingYear;
   final String advertisingLocation;
@@ -24,7 +22,11 @@ class AdvertisemenetModel {
   final String? advertisingVedio;
   final String advertisingType;
   final bool purchasable;
-
+  final String? type;
+  final String? category;
+  final String? color;
+  final bool? guarantee;
+  final String? contactNumber;
   AdvertisemenetModel({
     required this.id,
     required this.owner,
@@ -33,8 +35,6 @@ class AdvertisemenetModel {
     required this.advertisingEndDate,
     required this.advertisingDescription,
     required this.advertisingImage,
-    required this.advertisingCountryAlphaCode,
-    required this.advertisingBrand,
     required this.advertisingViews,
     required this.advertisingYear,
     required this.advertisingLocation,
@@ -43,6 +43,11 @@ class AdvertisemenetModel {
     this.advertisingVedio,
     required this.advertisingType,
     required this.purchasable,
+    this.type,
+    this.category,
+    this.color,
+    this.guarantee,
+    this.contactNumber,
   });
 
   factory AdvertisemenetModel.fromJson(Map<String, dynamic> json) =>
@@ -60,8 +65,6 @@ extension MapToDomain on AdvertisemenetModel {
         advertisingEndDate: advertisingEndDate,
         advertisingDescription: advertisingDescription,
         advertisingImage: advertisingImage,
-        advertisingCountryAlphaCode: advertisingCountryAlphaCode,
-        advertisingBrand: advertisingBrand,
         advertisingViews: advertisingViews,
         advertisingYear: advertisingYear,
         advertisingLocation: advertisingLocation,
@@ -70,5 +73,10 @@ extension MapToDomain on AdvertisemenetModel {
         advertisingVedio: advertisingVedio,
         advertisingType: advertisingType,
         purchasable: purchasable,
+        type: type,
+        category: category,
+        color: color,
+        guarantee: guarantee,
+        contactNumber: contactNumber,
       );
 }

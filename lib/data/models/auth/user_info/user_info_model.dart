@@ -34,6 +34,11 @@ class UserInfoModel {
   final String? coverPhoto;
   final String? banerPhoto;
 
+  final bool? isThereWarehouse;
+  final bool? isThereFoodsDelivery;
+  final String? deliveryType;
+  final int? deliveryCarsNum;
+  final int? deliveryMotorsNum;
   final List? vehicles;
   final List? products;
   final List<String>? followings;
@@ -69,6 +74,11 @@ class UserInfoModel {
     this.followings,
     this.followers,
     required this.id,
+    this.isThereWarehouse,
+    this.isThereFoodsDelivery,
+    this.deliveryType,
+    this.deliveryCarsNum,
+    this.deliveryMotorsNum,
   });
 
   factory UserInfoModel.fromJson(Map<String, dynamic> json) =>
@@ -79,31 +89,37 @@ class UserInfoModel {
 
 extension MapToDomain on UserInfoModel {
   UserInfo toDomain() => UserInfo(
-      username: username,
-      email: email,
-      password: password,
-      userType: userType,
-      firstMobile: firstMobile,
-      isFreeZoon: isFreeZoon,
-      deliverable: deliverable,
-      secondeMobile: secondeMobile,
-      thirdMobile: thirdMobile,
-      subcategory: subcategory,
-      address: address,
-      businessLicense: businessLicense,
-      companyProductsNumber: companyProductsNumber,
-      sellType: sellType,
-      country: country,
-      toCountry: toCountry,
-      bio: bio,
-      description: description,
-      website: website,
-      profilePhoto: profilePhoto,
-      coverPhoto: coverPhoto,
-      banerPhoto: banerPhoto,
-      vehicles: vehicles,
-      products: products,
-      followings: followings,
-      followers: followers,
-      id: id);
+        username: username,
+        email: email,
+        password: password,
+        userType: userType,
+        firstMobile: firstMobile,
+        isFreeZoon: isFreeZoon,
+        deliverable: deliverable,
+        secondeMobile: secondeMobile,
+        thirdMobile: thirdMobile,
+        subcategory: subcategory,
+        address: address,
+        businessLicense: businessLicense,
+        companyProductsNumber: companyProductsNumber,
+        sellType: sellType,
+        country: country,
+        toCountry: toCountry,
+        bio: bio,
+        description: description,
+        website: website,
+        profilePhoto: profilePhoto,
+        coverPhoto: coverPhoto,
+        banerPhoto: banerPhoto,
+        vehicles: vehicles,
+        products: products,
+        followings: followings,
+        followers: followers,
+        id: id,
+        deliveryCarsNum: deliveryCarsNum,
+        deliveryMotorsNum: deliveryMotorsNum,
+        deliveryType: deliveryType,
+        isThereFoodsDelivery: isThereFoodsDelivery,
+        isThereWarehouse: isThereWarehouse,
+      );
 }

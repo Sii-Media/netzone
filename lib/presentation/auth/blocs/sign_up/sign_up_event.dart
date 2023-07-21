@@ -32,7 +32,13 @@ class SignUpRequested extends SignUpEvent {
   final String? description;
   final String? website;
   final String? title;
-
+  final File? tradeLicensePhoto;
+  final File? deliveryPermitPhoto;
+  final bool? isThereWarehouse;
+  final bool? isThereFoodsDelivery;
+  final String? deliveryType;
+  final int? deliveryCarsNum;
+  final int? deliveryMotorsNum;
   const SignUpRequested({
     required this.username,
     required this.email,
@@ -57,5 +63,12 @@ class SignUpRequested extends SignUpEvent {
     this.description,
     this.website,
     this.title,
+    this.tradeLicensePhoto,
+    this.deliveryPermitPhoto,
+    this.isThereWarehouse,
+    this.isThereFoodsDelivery,
+    this.deliveryType,
+    this.deliveryCarsNum,
+    this.deliveryMotorsNum,
   });
 }

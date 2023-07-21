@@ -27,8 +27,6 @@ abstract class AdvertismentRepository {
     required String advertisingEndDate,
     required String advertisingDescription,
     required File image,
-    required String advertisingCountryAlphaCode,
-    required String advertisingBrand,
     required String advertisingYear,
     required String advertisingLocation,
     required double advertisingPrice,
@@ -36,5 +34,10 @@ abstract class AdvertismentRepository {
     List<XFile>? advertisingImageList,
     File? video,
     required bool purchasable,
+    String? type,
+    String? category,
+    String? color,
+    bool? guarantee,
+    String? contactNumber,
   });
 }

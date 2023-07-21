@@ -549,6 +549,7 @@ class _MyLocalCompanyProfileScreenState
                                                       builder: (context) {
                                                 return const FollowingsListScreen(
                                                   type: 'followings',
+                                                  who: 'me',
                                                 );
                                               }));
                                             },
@@ -584,6 +585,7 @@ class _MyLocalCompanyProfileScreenState
                                                       builder: (context) {
                                                 return const FollowingsListScreen(
                                                   type: 'followers',
+                                                  who: 'me',
                                                 );
                                               }));
                                             },

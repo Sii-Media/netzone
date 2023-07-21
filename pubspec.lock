@@ -1213,6 +1213,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.2"
+  quickblox_sdk:
+    dependency: "direct main"
+    description:
+      name: quickblox_sdk
+      sha256: b841ea38984889a1b0a44e05e317c1bec1dddf57977d4ad3a1a8ee8c4154688f
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.4-beta"
   recase:
     dependency: transitive
     description:

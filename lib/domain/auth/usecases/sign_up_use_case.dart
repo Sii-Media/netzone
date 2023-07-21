@@ -37,6 +37,13 @@ class SignUpUseCase extends UseCase<User, SignUpUseCaseParams> {
       description: params.description,
       website: params.website,
       title: params.title,
+      tradeLicensePhoto: params.tradeLicensePhoto,
+      deliveryPermitPhoto: params.deliveryPermitPhoto,
+      deliveryCarsNum: params.deliveryCarsNum,
+      deliveryMotorsNum: params.deliveryMotorsNum,
+      deliveryType: params.deliveryType,
+      isThereFoodsDelivery: params.isThereFoodsDelivery,
+      isThereWarehouse: params.isThereWarehouse,
     );
   }
 }
@@ -67,6 +74,13 @@ class SignUpUseCaseParams {
   final String? description;
   final String? website;
   final String? title;
+  final File? tradeLicensePhoto;
+  final File? deliveryPermitPhoto;
+  final bool? isThereWarehouse;
+  final bool? isThereFoodsDelivery;
+  final String? deliveryType;
+  final int? deliveryCarsNum;
+  final int? deliveryMotorsNum;
   SignUpUseCaseParams({
     required this.username,
     required this.email,
@@ -92,5 +106,12 @@ class SignUpUseCaseParams {
     this.description,
     this.website,
     this.title,
+    this.tradeLicensePhoto,
+    this.deliveryPermitPhoto,
+    this.isThereWarehouse,
+    this.isThereFoodsDelivery,
+    this.deliveryType,
+    this.deliveryCarsNum,
+    this.deliveryMotorsNum,
   });
 }

@@ -16,7 +16,6 @@ import 'package:netzoon/presentation/core/widgets/add_photo_button.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/injection_container.dart' as di;
 import 'package:netzoon/presentation/home/test.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../../injection_container.dart';
@@ -52,6 +51,13 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
   final TextEditingController websiteController = TextEditingController();
 
   final TextEditingController titleController = TextEditingController();
+
+  final TextEditingController deliveryCarsNumController =
+      TextEditingController();
+
+  final TextEditingController deliveryMotorsNumController =
+      TextEditingController();
+
   final factoryBloc = sl<FactoriesBloc>();
 
   File? profileImage;
@@ -127,6 +133,8 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
         websiteController: websiteController,
         titleController: titleController,
         factoriesBloc: factoryBloc,
+        deliveryCarsNumController: deliveryCarsNumController,
+        deliveryMotorsNumController: deliveryMotorsNumController,
       ),
     );
   }
@@ -157,6 +165,8 @@ class SignUpWidget extends StatefulWidget {
     required this.websiteController,
     required this.titleController,
     required this.factoriesBloc,
+    required this.deliveryCarsNumController,
+    required this.deliveryMotorsNumController,
   });
   final GlobalKey<FormState> formKey;
   final GlobalKey<FormFieldState> emailFormFieldKey;
@@ -178,6 +188,9 @@ class SignUpWidget extends StatefulWidget {
   final TextEditingController descriptionController;
   final TextEditingController websiteController;
   final TextEditingController titleController;
+  final TextEditingController deliveryCarsNumController;
+  final TextEditingController deliveryMotorsNumController;
+
   final SignUpBloc bloc;
   final FactoriesBloc factoriesBloc;
   @override
@@ -192,9 +205,13 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   File? banerImage;
   File? frontIdPhoto;
   File? backIdPhoto;
+  File? deliveryPermitPhoto;
+  File? tradeLicensePhoto;
   bool _isDeliverable = false;
+  bool _isThereWarehouse = false;
+  bool _isThereFoodsDelivery = false;
   bool _isFreeZone = false;
-
+  String? deliveryType;
   Future getProfileImage(ImageSource imageSource) async {
     final image = await ImagePicker().pickImage(source: imageSource);
 
@@ -225,6 +242,28 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
     setState(() {
       banerImage = imageTemporary;
+    });
+  }
+
+  Future getTradeImage(ImageSource imageSource) async {
+    final image = await ImagePicker().pickImage(source: imageSource);
+
+    if (image == null) return;
+    final imageTemporary = File(image.path);
+
+    setState(() {
+      tradeLicensePhoto = imageTemporary;
+    });
+  }
+
+  Future getdeliveryPermitImage(ImageSource imageSource) async {
+    final image = await ImagePicker().pickImage(source: imageSource);
+
+    if (image == null) return;
+    final imageTemporary = File(image.path);
+
+    setState(() {
+      deliveryPermitPhoto = imageTemporary;
     });
   }
 
@@ -358,7 +397,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         return Container();
                       },
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
               TextSignup(text: AppLocalizations.of(context).translate('email')),
               TextFormField(
                 key: widget.emailFormFieldKey,
@@ -572,25 +611,189 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               SizedBox(
                 height: 10.h,
               ),
-              CheckboxListTile(
-                title: Text(
-                  AppLocalizations.of(context).translate('Is there delivery'),
-                  style: TextStyle(
-                    color: AppColor.backgroundColor,
-                    fontSize: 15.sp,
-                  ),
-                ),
-                activeColor: AppColor.backgroundColor,
-                value: _isDeliverable,
-                onChanged: (bool? value) {
-                  setState(() {
-                    _isDeliverable = value ?? false;
-                  });
-                },
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
+              widget.accountTitle == 'الشركات المحلية'
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: CheckboxListTile(
+                        title: Text(
+                          AppLocalizations.of(context)
+                              .translate('Is there delivery'),
+                          style: TextStyle(
+                            color: AppColor.backgroundColor,
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                        activeColor: AppColor.backgroundColor,
+                        value: _isDeliverable,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _isDeliverable = value ?? false;
+                          });
+                        },
+                      ),
+                    )
+                  : const SizedBox(),
+              widget.accountTitle == 'شركة توصيل'
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: CheckboxListTile(
+                        title: Text(
+                          AppLocalizations.of(context)
+                              .translate('is_there_warehouse'),
+                          style: TextStyle(
+                            color: AppColor.backgroundColor,
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                        activeColor: AppColor.backgroundColor,
+                        value: _isThereWarehouse,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _isThereWarehouse = value ?? false;
+                          });
+                        },
+                      ),
+                    )
+                  : const SizedBox(),
+              widget.accountTitle == 'شركة توصيل'
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: CheckboxListTile(
+                        title: Text(
+                          AppLocalizations.of(context)
+                              .translate('is_there_food_delivery'),
+                          style: TextStyle(
+                            color: AppColor.backgroundColor,
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                        activeColor: AppColor.backgroundColor,
+                        value: _isThereFoodsDelivery,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _isThereFoodsDelivery = value ?? false;
+                          });
+                        },
+                      ),
+                    )
+                  : const SizedBox(),
+
+              widget.accountTitle == 'شركة توصيل'
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)
+                                .translate('delivery_type'),
+                            style: TextStyle(
+                              color: AppColor.backgroundColor,
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Radio(
+                                value: 'inside',
+                                groupValue: deliveryType,
+                                onChanged: (value) {
+                                  setState(() {
+                                    deliveryType = value ?? '';
+                                  });
+                                },
+                                activeColor: AppColor.backgroundColor,
+                              ),
+                              Text(AppLocalizations.of(context)
+                                  .translate('inside_country'))
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Radio(
+                                value: 'outside',
+                                groupValue: deliveryType,
+                                onChanged: (value) {
+                                  setState(() {
+                                    deliveryType = value ?? "";
+                                  });
+                                },
+                                activeColor: AppColor.backgroundColor,
+                              ),
+                              Text(AppLocalizations.of(context)
+                                  .translate('outside_country')),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Radio(
+                                value: 'inside_and_outside',
+                                groupValue: deliveryType,
+                                onChanged: (value) {
+                                  setState(() {
+                                    deliveryType = value ?? '';
+                                  });
+                                },
+                                activeColor: AppColor.backgroundColor,
+                              ),
+                              Text(AppLocalizations.of(context)
+                                  .translate('inside_and_outside_country'))
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
+                  : const SizedBox(),
+              widget.accountTitle == 'شركة توصيل'
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextSignup(
+                              text: AppLocalizations.of(context)
+                                  .translate('deliveryCarsNum')),
+                          TextFormSignupWidget(
+                            password: false,
+                            isNumber: true,
+                            valid: (val) {
+                              return null;
+
+                              // return validInput(val!, 5, 100, "password");
+                            },
+                            myController: widget.deliveryCarsNumController,
+                          ),
+                        ],
+                      ),
+                    )
+                  : const SizedBox(),
+
+              widget.accountTitle == 'شركة توصيل'
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextSignup(
+                              text: AppLocalizations.of(context)
+                                  .translate('deliveryMotorsNum')),
+                          TextFormSignupWidget(
+                            password: false,
+                            isNumber: true,
+                            valid: (val) {
+                              return null;
+
+                              // return validInput(val!, 5, 100, "password");
+                            },
+                            myController: widget.deliveryMotorsNumController,
+                          ),
+                        ],
+                      ),
+                    )
+                  : const SizedBox(),
               widget.accountTitle == 'المستهلك' ||
                       widget.accountTitle == 'جهة إخبارية'
                   ? Container()
@@ -666,29 +869,16 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               //       )
               //     ],
               //   ),
-              widget.accountTitle == 'المستهلك'
-                  ? Container()
-                  : TextSignup(
-                      text: AppLocalizations.of(context)
-                          .translate('copy_of_trade_license')),
-              widget.accountTitle == 'المستهلك'
-                  ? Container()
-                  : Container(
-                      height: MediaQuery.of(context).size.height * 0.5,
-                      decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.1),
-                          image: const DecorationImage(
-                              image: AssetImage("assets/images/logo.png"),
-                              fit: BoxFit.cover)),
-                    ),
               widget.accountTitle == 'المستهلك' ||
-                      widget.accountTitle == 'جهة إخبارية'
+                      widget.accountTitle == 'جهة إخبارية' ||
+                      widget.accountTitle == 'شركة توصيل'
                   ? Container()
                   : TextSignup(
                       text: AppLocalizations.of(context)
                           .translate('number_of_company_products')),
               widget.accountTitle == 'المستهلك' ||
-                      widget.accountTitle == 'جهة إخبارية'
+                      widget.accountTitle == 'جهة إخبارية' ||
+                      widget.accountTitle == 'شركة توصيل'
                   ? Container()
                   : TextFormSignupWidget(
                       password: false,
@@ -701,14 +891,16 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       myController: widget.companyProductsNumber,
                     ),
               widget.accountTitle == 'المستهلك' ||
-                      widget.accountTitle == 'جهة إخبارية'
+                      widget.accountTitle == 'جهة إخبارية' ||
+                      widget.accountTitle == 'شركة توصيل'
                   ? Container()
                   : TextSignup(
                       text:
                           AppLocalizations.of(context).translate('sell_method'),
                     ),
               widget.accountTitle == 'المستهلك' ||
-                      widget.accountTitle == 'جهة إخبارية'
+                      widget.accountTitle == 'جهة إخبارية' ||
+                      widget.accountTitle == 'شركة توصيل'
                   ? Container()
                   : TextFormSignupWidget(
                       password: false,
@@ -721,14 +913,16 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       myController: widget.sellType,
                     ),
               widget.accountTitle == 'المستهلك' ||
-                      widget.accountTitle == 'جهة إخبارية'
+                      widget.accountTitle == 'جهة إخبارية' ||
+                      widget.accountTitle == 'شركة توصيل'
                   ? Container()
                   : TextSignup(
                       text: AppLocalizations.of(context)
                           .translate('where_to_sell'),
                     ),
               widget.accountTitle == 'المستهلك' ||
-                      widget.accountTitle == 'جهة إخبارية'
+                      widget.accountTitle == 'جهة إخبارية' ||
+                      widget.accountTitle == 'شركة توصيل'
                   ? Container()
                   : TextFormSignupWidget(
                       password: false,
@@ -740,6 +934,62 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       },
                       myController: widget.toCountry,
                     ),
+              widget.accountTitle == 'المستهلك'
+                  ? Container()
+                  : TextSignup(
+                      text: AppLocalizations.of(context)
+                          .translate('copy_of_trade_license')),
+              widget.accountTitle == 'المستهلك'
+                  ? Container()
+                  : Column(
+                      children: [
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            addPhotoButton(
+                                context: context,
+                                text: 'add_from_camera',
+                                onPressed: () {
+                                  getTradeImage(ImageSource.camera);
+                                }),
+                            addPhotoButton(
+                                context: context,
+                                text: 'add_from_gallery',
+                                onPressed: () {
+                                  getTradeImage(ImageSource.gallery);
+                                }),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        tradeLicensePhoto != null
+                            ? Center(
+                                child: Image.file(
+                                  tradeLicensePhoto!,
+                                  width: 250.w,
+                                  height: 250.h,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : Center(
+                                child: Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.5,
+                                  decoration: BoxDecoration(
+                                      color: Colors.green.withOpacity(0.1),
+                                      image: const DecorationImage(
+                                          image: AssetImage(
+                                              "assets/images/logo.png"),
+                                          fit: BoxFit.cover)),
+                                ),
+                              ),
+                      ],
+                    ),
+
               TextSignup(
                 text: AppLocalizations.of(context).translate('profile_photo'),
               ),
@@ -776,12 +1026,15 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       ),
                     )
                   : Center(
-                      child: CachedNetworkImage(
-                        imageUrl:
-                            'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
-                        width: 250.w,
-                        height: 250.h,
-                        fit: BoxFit.cover,
+                      child: Center(
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.5,
+                          decoration: BoxDecoration(
+                              color: Colors.green.withOpacity(0.1),
+                              image: const DecorationImage(
+                                  image: AssetImage("assets/images/logo.png"),
+                                  fit: BoxFit.cover)),
+                        ),
                       ),
                     ),
               SizedBox(
@@ -823,12 +1076,15 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       ),
                     )
                   : Center(
-                      child: CachedNetworkImage(
-                        imageUrl:
-                            'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
-                        width: 250.w,
-                        height: 250.h,
-                        fit: BoxFit.cover,
+                      child: Center(
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.5,
+                          decoration: BoxDecoration(
+                              color: Colors.green.withOpacity(0.1),
+                              image: const DecorationImage(
+                                  image: AssetImage("assets/images/logo.png"),
+                                  fit: BoxFit.cover)),
+                        ),
                       ),
                     ),
               widget.accountTitle == 'المستهلك' ||
@@ -876,12 +1132,17 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                 ),
                               )
                             : Center(
-                                child: CachedNetworkImage(
-                                  imageUrl:
-                                      'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
-                                  width: 250.w,
-                                  height: 250.h,
-                                  fit: BoxFit.cover,
+                                child: Center(
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.5,
+                                    decoration: BoxDecoration(
+                                        color: Colors.green.withOpacity(0.1),
+                                        image: const DecorationImage(
+                                            image: AssetImage(
+                                                "assets/images/logo.png"),
+                                            fit: BoxFit.cover)),
+                                  ),
                                 ),
                               ),
                       ],
@@ -938,12 +1199,17 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                 ),
                               )
                             : Center(
-                                child: CachedNetworkImage(
-                                  imageUrl:
-                                      'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
-                                  width: 250.w,
-                                  height: 250.h,
-                                  fit: BoxFit.cover,
+                                child: Center(
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.5,
+                                    decoration: BoxDecoration(
+                                        color: Colors.green.withOpacity(0.1),
+                                        image: const DecorationImage(
+                                            image: AssetImage(
+                                                "assets/images/logo.png"),
+                                            fit: BoxFit.cover)),
+                                  ),
                                 ),
                               ),
                       ],
@@ -1000,16 +1266,77 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                 ),
                               )
                             : Center(
-                                child: CachedNetworkImage(
-                                  imageUrl:
-                                      'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
-                                  width: 250.w,
-                                  height: 250.h,
-                                  fit: BoxFit.cover,
+                                child: Center(
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.5,
+                                    decoration: BoxDecoration(
+                                        color: Colors.green.withOpacity(0.1),
+                                        image: const DecorationImage(
+                                            image: AssetImage(
+                                                "assets/images/logo.png"),
+                                            fit: BoxFit.cover)),
+                                  ),
                                 ),
                               ),
                       ],
                     ),
+              SizedBox(
+                height: 10.h,
+              ),
+              widget.accountTitle == 'شركة توصيل'
+                  ? Column(
+                      children: [
+                        const TextSignup(
+                          text: 'delev',
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            addPhotoButton(
+                                context: context,
+                                text: 'add_from_camera',
+                                onPressed: () {
+                                  getdeliveryPermitImage(ImageSource.camera);
+                                }),
+                            addPhotoButton(
+                                context: context,
+                                text: 'add_from_gallery',
+                                onPressed: () {
+                                  getdeliveryPermitImage(ImageSource.gallery);
+                                }),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        deliveryPermitPhoto != null
+                            ? Center(
+                                child: Image.file(
+                                  deliveryPermitPhoto!,
+                                  width: 250.w,
+                                  height: 250.h,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : Center(
+                                child: Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.5,
+                                  decoration: BoxDecoration(
+                                      color: Colors.green.withOpacity(0.1),
+                                      image: const DecorationImage(
+                                          image: AssetImage(
+                                              "assets/images/logo.png"),
+                                          fit: BoxFit.cover)),
+                                ),
+                              ),
+                      ],
+                    )
+                  : const SizedBox(),
               SizedBox(
                 height: 20.h,
               ),
@@ -1097,6 +1424,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           }
                         }
                         if (!widget.formKey.currentState!.validate()) return;
+
                         widget.bloc.add(SignUpRequested(
                           username: widget.username.text,
                           email: widget.emailSignup.text,
@@ -1107,7 +1435,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           thirdMobile: widget.numberPhoneThree.text,
                           address: widget.address.text,
                           companyProductsNumber:
-                              int.parse(widget.companyProductsNumber.text),
+                              int.tryParse(widget.companyProductsNumber.text),
                           sellType: widget.sellType.text,
                           subcategory: widget.subcategory.text,
                           toCountry: widget.toCountry.text,
@@ -1122,6 +1450,15 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           description: widget.descriptionController.text,
                           website: widget.websiteController.text,
                           title: selectCat?.title,
+                          deliveryCarsNum: int.tryParse(
+                              widget.deliveryCarsNumController.text),
+                          deliveryMotorsNum: int.tryParse(
+                              widget.deliveryMotorsNumController.text),
+                          deliveryPermitPhoto: deliveryPermitPhoto,
+                          deliveryType: deliveryType,
+                          isThereFoodsDelivery: _isThereFoodsDelivery,
+                          isThereWarehouse: _isThereWarehouse,
+                          tradeLicensePhoto: tradeLicensePhoto,
                         ));
                       },
                       child: Text(
@@ -1165,7 +1502,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
         return 'real_estate';
       case 'تاجر':
         return 'trader';
-
+      case 'شركة توصيل':
+        return 'delivery_company';
       default:
         return 'user';
     }

@@ -52,6 +52,7 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
         address: event.address,
         discountPercentage: event.discountPercentage,
         country: country,
+        color: event.color,
       );
       if (response.statusCode == 201) {
         emit(AddProductSuccess(product: response.data));
@@ -148,6 +149,7 @@ Future<Response<dynamic>> _uploadFile({
   String? address,
   int? discountPercentage,
   required String country,
+  String? color,
 }) async {
   try {
     Dio dio = Dio();
@@ -171,6 +173,11 @@ Future<Response<dynamic>> _uploadFile({
     if (condition != null) {
       formData.fields.add(
         MapEntry('condition', condition),
+      );
+    }
+    if (color != null) {
+      formData.fields.add(
+        MapEntry('color', color),
       );
     }
     // ignore: unnecessary_null_comparison

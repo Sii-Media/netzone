@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:netzoon/domain/categories/entities/factories/factory_companies.dart';
 
 import '../../../auth/entities/user_info.dart';
 

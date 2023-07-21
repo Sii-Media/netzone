@@ -659,6 +659,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>
                                     .push(MaterialPageRoute(builder: (context) {
                                   return const FollowingsListScreen(
                                     type: 'followings',
+                                    who: 'me',
                                   );
                                 }));
                               },
@@ -690,6 +691,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>
                                     .push(MaterialPageRoute(builder: (context) {
                                   return const FollowingsListScreen(
                                     type: 'followers',
+                                    who: 'me',
                                   );
                                 }));
                               },

@@ -15,9 +15,6 @@ AdvertisemenetModel _$AdvertisemenetModelFromJson(Map<String, dynamic> json) =>
       advertisingEndDate: json['advertisingEndDate'] as String,
       advertisingDescription: json['advertisingDescription'] as String,
       advertisingImage: json['advertisingImage'] as String,
-      advertisingCountryAlphaCode:
-          json['advertisingCountryAlphaCode'] as String,
-      advertisingBrand: json['advertisingBrand'] as String,
       advertisingViews: json['advertisingViews'] as int?,
       advertisingYear: json['advertisingYear'] as String,
       advertisingLocation: json['advertisingLocation'] as String,
@@ -28,6 +25,11 @@ AdvertisemenetModel _$AdvertisemenetModelFromJson(Map<String, dynamic> json) =>
       advertisingVedio: json['advertisingVedio'] as String?,
       advertisingType: json['advertisingType'] as String,
       purchasable: json['purchasable'] as bool,
+      type: json['type'] as String?,
+      category: json['category'] as String?,
+      color: json['color'] as String?,
+      guarantee: json['guarantee'] as bool?,
+      contactNumber: json['contactNumber'] as String?,
     );
 
 Map<String, dynamic> _$AdvertisemenetModelToJson(
@@ -40,8 +42,6 @@ Map<String, dynamic> _$AdvertisemenetModelToJson(
       'advertisingEndDate': instance.advertisingEndDate,
       'advertisingDescription': instance.advertisingDescription,
       'advertisingImage': instance.advertisingImage,
-      'advertisingCountryAlphaCode': instance.advertisingCountryAlphaCode,
-      'advertisingBrand': instance.advertisingBrand,
       'advertisingViews': instance.advertisingViews,
       'advertisingYear': instance.advertisingYear,
       'advertisingLocation': instance.advertisingLocation,
@@ -50,4 +50,9 @@ Map<String, dynamic> _$AdvertisemenetModelToJson(
       'advertisingVedio': instance.advertisingVedio,
       'advertisingType': instance.advertisingType,
       'purchasable': instance.purchasable,
+      'type': instance.type,
+      'category': instance.category,
+      'color': instance.color,
+      'guarantee': instance.guarantee,
+      'contactNumber': instance.contactNumber,
     };

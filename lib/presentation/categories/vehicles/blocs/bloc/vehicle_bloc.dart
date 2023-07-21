@@ -192,6 +192,22 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
         carimages: event.carimages,
         video: event.video,
         country: country,
+        contactNumber: event.contactNumber,
+        exteriorColor: event.exteriorColor,
+        interiorColor: event.interiorColor,
+        bodyCondition: event.bodyCondition,
+        bodyType: event.bodyType,
+        doors: event.doors,
+        extras: event.extras,
+        fuelType: event.fuelType,
+        guarantee: event.guarantee,
+        horsepower: event.horsepower,
+        mechanicalCondition: event.mechanicalCondition,
+        numofCylinders: event.numofCylinders,
+        seatingCapacity: event.seatingCapacity,
+        steeringSide: event.steeringSide,
+        technicalFeatures: event.technicalFeatures,
+        transmissionType: event.transmissionType,
       ));
       emit(
         response.fold(

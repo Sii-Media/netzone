@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, unused_local_variable, duplicate_ignore
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -8,16 +10,19 @@ import 'package:geolocator/geolocator.dart';
 import 'package:netzoon/presentation/home/test.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
-// import 'package:quickblox_sdk/auth/module.dart';
-// import 'package:quickblox_sdk/models/qb_session.dart';
-// import 'package:quickblox_sdk/models/qb_user.dart';
+import 'package:quickblox_sdk/auth/module.dart';
+import 'package:quickblox_sdk/chat/constants.dart';
+import 'package:quickblox_sdk/models/qb_dialog.dart';
+import 'package:quickblox_sdk/models/qb_message.dart';
+import 'package:quickblox_sdk/models/qb_session.dart';
+import 'package:quickblox_sdk/models/qb_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/core/constants/constants.dart';
 import '../injection_container.dart';
 import 'core/blocs/country_bloc/country_bloc.dart';
 import 'language_screen/blocs/language_bloc/language_bloc.dart';
-// import 'package:quickblox_sdk/quickblox_sdk.dart';
+import 'package:quickblox_sdk/quickblox_sdk.dart';
 
 class StartScreen extends StatefulWidget {
   const StartScreen({super.key});
@@ -27,19 +32,128 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
-  // void _loginToQuickBlox() async {
-  //   try {
-  //     QBUser? qbUser;
-  //     QBSession? qbSession;
-  //     QBLoginResult result = await QB.auth.login('netzoonTest', '123456789');
-  //     qbUser = result.qbUser;
-  //     qbSession = result.qbSession;
-  //     print(qbUser);
-  //     print(qbSession);
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
+  // ignore: unused_element
+  void _loginToQuickBlox() async {
+    try {
+      QBUser? qbUser;
+      QBSession? qbSession;
+      QBLoginResult result = await QB.auth.login('netzoonTest', '123456789');
+      qbUser = result.qbUser;
+      qbSession = result.qbSession;
+      print(qbUser?.login);
+      print(qbSession);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> authenticateUser() async {
+    try {
+      // Connect to QuickBlox
+      await QB.chat.connect(137967696, '123123123123');
+
+      // Authenticate the user
+      QBLoginResult loginResult = await QB.auth.login(
+        "test1@gmail.com",
+        "123123123123",
+      );
+
+      // User authentication successful, perform further operations
+      int userId = loginResult.qbUser?.id ?? -1;
+
+      // Create a new chat dialog
+      QBDialog? createdDialog = await QB.chat.createDialog(
+          [userId], 'dialogName1',
+          dialogType: QBChatDialogTypes.CHAT);
+
+      // Send a chat message
+      await QB.chat.sendMessage(createdDialog?.id ?? '',
+          body: 'test 1', saveToHistory: true);
+
+      // Disconnect from QuickBlox after the message is sent
+      await QB.chat.disconnect();
+    } catch (e) {
+      // Handle error
+      print("QuickBlox error: $e");
+    }
+  }
+
+  Future<void> sendMessageToRecipient() async {
+    try {
+      // Connect to QuickBlox
+      await QB.chat.connect(137967696, '123123123123');
+
+      // Disconnect from QuickBlox if already logged in
+      bool? isConnected = await QB.chat.isConnected();
+      print(isConnected);
+      print('11111111111111');
+      if (isConnected!) {
+        await QB.chat.disconnect();
+      }
+
+      // Authenticate the user
+      QBLoginResult loginResult = await QB.auth.login(
+        "test1@gmail.com",
+        "123123123123",
+      );
+
+      // User authentication successful, perform further operations
+      int currentUserId = loginResult.qbUser?.id ?? -1;
+      int recipientId = 137967706; // Replace with the recipient's QuickBlox ID
+
+      // Create a new chat dialog with the recipient
+      // QBDialog? createdDialog = await QB.chat.createDialog(
+      //     [currentUserId, recipientId], 'dialogName1',
+      //     dialogType: QBChatDialogTypes.CHAT);
+
+      String dialogId = '64b53cda32eaaf00310a89c4';
+
+      List<QBMessage?> messages = await QB.chat.getDialogMessages(dialogId);
+      print(messages.map((e) => e?.body));
+
+      // Send a chat message to the recipient
+      // await QB.chat
+      //     .sendMessage(dialogId, body: 'test message 22', saveToHistory: true);
+
+      // Disconnect from QuickBlox after the message is sent
+      await QB.chat.disconnect();
+    } catch (e) {
+      // Handle error
+      print("QuickBlox error: $e");
+    }
+  }
+
+  Future<String?> getDialogId() async {
+    try {
+      // Connect to QuickBlox
+      await QB.chat.connect(137967696, '123123123123');
+
+      // Authenticate the user if not already authenticated
+      QBLoginResult loginResult = await QB.auth.login(
+        "test1@gmail.com",
+        "123123123123",
+      );
+
+      // User authentication successful, perform further operations
+      int currentUserId = loginResult.qbUser?.id ?? -1;
+
+      // Retrieve dialogs for the current user
+      List<QBDialog?> dialogResponse = await QB.chat.getDialogs();
+
+      // Get the first dialog from the response
+      QBDialog? dialog = dialogResponse.elementAt(0);
+
+      // Disconnect from QuickBlox
+      await QB.chat.disconnect();
+
+      // Return the dialog ID
+      return dialog?.id;
+    } catch (e) {
+      // Handle error
+      print("QuickBlox error: $e");
+      return null;
+    }
+  }
 
   // Declare a variable to store the current position
 
@@ -321,12 +435,12 @@ class _StartScreenState extends State<StartScreen> {
                               // print(val);
                               countryBloc
                                   .add(UpdateCountryEvent(selectedCountry));
-                              // Navigator.of(context).pushReplacement(
-                              //   MaterialPageRoute(builder: (context) {
-                              //     return const TestScreen();
-                              //   }),
-                              // );
-                              // _loginToQuickBlox();
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(builder: (context) {
+                                  return const TestScreen();
+                                }),
+                              );
+                              // sendMessageToRecipient();
                             },
                             // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
                             initialSelection: selectedCountry,
@@ -336,6 +450,7 @@ class _StartScreenState extends State<StartScreen> {
                               'IQ',
                               '+971',
                               'AE',
+                              'SA'
                             ],
                             // optional. Shows only country name and flag
                             showCountryOnly: true,

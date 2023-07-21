@@ -163,6 +163,22 @@ class VehicleRepositoryImpl implements VehicleRepository {
     List<XFile>? carimages,
     File? video,
     required String country,
+    String? contactNumber,
+    String? exteriorColor,
+    String? interiorColor,
+    int? doors,
+    String? bodyCondition,
+    String? bodyType,
+    String? mechanicalCondition,
+    int? seatingCapacity,
+    int? numofCylinders,
+    String? transmissionType,
+    String? horsepower,
+    String? fuelType,
+    String? extras,
+    String? technicalFeatures,
+    String? steeringSide,
+    bool? guarantee,
   }) async {
     try {
       if (await networkInfo.isConnected) {
@@ -179,8 +195,83 @@ class VehicleRepositoryImpl implements VehicleRepository {
           MapEntry('category', category),
           MapEntry('creator', creator),
           MapEntry('country', country),
+          MapEntry('contactNumber', contactNumber ?? ""),
         ]);
-
+        if (exteriorColor != null) {
+          formData.fields.add(
+            MapEntry('exteriorColor', exteriorColor),
+          );
+        }
+        if (interiorColor != null) {
+          formData.fields.add(
+            MapEntry('interiorColor', interiorColor),
+          );
+        }
+        if (doors != null) {
+          formData.fields.add(
+            MapEntry('doors', doors.toString()),
+          );
+        }
+        if (bodyCondition != null) {
+          formData.fields.add(
+            MapEntry('bodyCondition', bodyCondition),
+          );
+        }
+        if (bodyType != null) {
+          formData.fields.add(
+            MapEntry('bodyType', bodyType),
+          );
+        }
+        if (mechanicalCondition != null) {
+          formData.fields.add(
+            MapEntry('mechanicalCondition', mechanicalCondition),
+          );
+        }
+        if (seatingCapacity != null) {
+          formData.fields.add(
+            MapEntry('seatingCapacity', seatingCapacity.toString()),
+          );
+        }
+        if (numofCylinders != null) {
+          formData.fields.add(
+            MapEntry('numofCylinders', numofCylinders.toString()),
+          );
+        }
+        if (transmissionType != null) {
+          formData.fields.add(
+            MapEntry('transmissionType', transmissionType),
+          );
+        }
+        if (horsepower != null) {
+          formData.fields.add(
+            MapEntry('horsepower', horsepower),
+          );
+        }
+        if (fuelType != null) {
+          formData.fields.add(
+            MapEntry('fuelType', fuelType),
+          );
+        }
+        if (extras != null) {
+          formData.fields.add(
+            MapEntry('extras', extras),
+          );
+        }
+        if (technicalFeatures != null) {
+          formData.fields.add(
+            MapEntry('technicalFeatures', technicalFeatures),
+          );
+        }
+        if (steeringSide != null) {
+          formData.fields.add(
+            MapEntry('steeringSide', steeringSide),
+          );
+        }
+        if (guarantee != null) {
+          formData.fields.add(
+            MapEntry('guarantee', guarantee.toString()),
+          );
+        }
         String fileName = 'image.jpg';
         formData.files.add(MapEntry(
           'image',

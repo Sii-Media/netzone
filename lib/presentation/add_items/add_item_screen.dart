@@ -7,6 +7,7 @@ import 'package:netzoon/presentation/auth/screens/signin.dart';
 import '../../injection_container.dart';
 import '../advertising/add_ads_page.dart';
 import '../auth/blocs/auth_bloc/auth_bloc.dart';
+import '../categories/delivery_company/screens/add_service_screen.dart';
 import '../categories/real_estate/screens/add_real_estate_screen.dart';
 import '../categories/vehicles/screens/add_vehicle_screen.dart';
 import '../core/constant/colors.dart';
@@ -58,15 +59,17 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           fontSize: 15.sp,
                           fontWeight: FontWeight.w400),
                     ),
-                    addWidget(
-                        title: AppLocalizations.of(context)
-                            .translate('select_from_our_products'),
-                        onTap: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
-                            return const AllProductsScreen();
-                          }));
-                        }),
+                    state.user.userInfo.userType == 'user'
+                        ? addWidget(
+                            title: AppLocalizations.of(context)
+                                .translate('select_from_our_products'),
+                            onTap: () {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                return const AllProductsScreen();
+                              }));
+                            })
+                        : const SizedBox(),
 
                     state.user.userInfo.userType == 'user'
                         ? const SizedBox()
@@ -174,6 +177,20 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                 MaterialPageRoute(
                                   builder: (context) {
                                     return const AddNewScreen();
+                                  },
+                                ),
+                              );
+                            })
+                        : const SizedBox(),
+                    state.user.userInfo.userType == 'delivery_company'
+                        ? addWidget(
+                            title: AppLocalizations.of(context)
+                                .translate('add_service'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const AddServiceScreen();
                                   },
                                 ),
                               );

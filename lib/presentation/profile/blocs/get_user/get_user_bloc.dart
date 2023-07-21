@@ -185,6 +185,28 @@ class GetUserBloc extends Bloc<GetUserEvent, GetUserState> {
         ),
       );
     });
+    on<GetUserFollowingsByIdEvent>((event, emit) async {
+      emit(GetUserFollowsInProgress());
+      final followings = await getUserFollowingsUseCase(event.id);
+      emit(
+        followings.fold(
+          (failure) =>
+              GetUserFollowsFailure(message: mapFailureToString(failure)),
+          (followers) => GetUserFollowsSuccess(follows: followers),
+        ),
+      );
+    });
+    on<GetUserFollowersByIdEvent>((event, emit) async {
+      emit(GetUserFollowsInProgress());
+      final followings = await getUserFollowersUseCase(event.id);
+      emit(
+        followings.fold(
+          (failure) =>
+              GetUserFollowsFailure(message: mapFailureToString(failure)),
+          (followers) => GetUserFollowsSuccess(follows: followers),
+        ),
+      );
+    });
     on<ToggleFollowEvent>((event, emit) async {
       final result = await getSignedInUserUseCase.call(NoParams());
       late User user;

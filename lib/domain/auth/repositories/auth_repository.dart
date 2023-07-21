@@ -32,6 +32,13 @@ abstract class AuthRepository {
     String? description,
     String? website,
     String? title,
+    File? tradeLicensePhoto,
+    File? deliveryPermitPhoto,
+    bool? isThereWarehouse,
+    bool? isThereFoodsDelivery,
+    String? deliveryType,
+    int? deliveryCarsNum,
+    int? deliveryMotorsNum,
   });
 
   Future<Either<Failure, User>> signIn({

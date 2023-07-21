@@ -11,6 +11,7 @@ import 'package:netzoon/data/datasource/remote/auth/auth_remote_datasource.dart'
 import 'package:netzoon/data/datasource/remote/complaints/complaints_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/customs/customs_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/deals/deals_remote_data_source.dart';
+import 'package:netzoon/data/datasource/remote/delivery_service/delivery_service_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/departments/departments_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/factories/factories_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/favorites/favorite_remote_data_source.dart';
@@ -34,6 +35,7 @@ import 'package:netzoon/data/repositories/complaints/complaints_repository_impl.
 import 'package:netzoon/data/repositories/country/country_repository_impl.dart';
 import 'package:netzoon/data/repositories/customs/customs_repository_impl.dart';
 import 'package:netzoon/data/repositories/deals/deals_repository_impl.dart';
+import 'package:netzoon/data/repositories/delivery_service/delivery_service_repository_impl.dart';
 import 'package:netzoon/data/repositories/departments/departments_repository_impl.dart';
 import 'package:netzoon/data/repositories/factories/factories_repository_impl.dart';
 import 'package:netzoon/data/repositories/favorites/favorite_repository_impl.dart';
@@ -75,6 +77,7 @@ import 'package:netzoon/domain/auth/usecases/sign_up_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/toggle_follow_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/verify_otp_code_use_case.dart';
 import 'package:netzoon/domain/categories/repositories/customs_repository.dart';
+import 'package:netzoon/domain/categories/repositories/delivery_service_repository.dart';
 import 'package:netzoon/domain/categories/repositories/factories_repository.dart';
 import 'package:netzoon/domain/categories/repositories/freezone_repository.dart';
 import 'package:netzoon/domain/categories/repositories/govermental_repository.dart';
@@ -84,6 +87,8 @@ import 'package:netzoon/domain/categories/repositories/users_repository.dart';
 import 'package:netzoon/domain/categories/repositories/vehicle_repository.dart';
 import 'package:netzoon/domain/categories/usecases/customs/get_all_customs_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/customs/get_custom_companies_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/delivery_services/add_delivery_service_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/delivery_services/get_delivery_company_services_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/factories/get_all_factories_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/factories/get_factory_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/freezone/get_freezone_places_by_id_use_case.dart';
@@ -167,6 +172,7 @@ import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
 import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
 import 'package:netzoon/presentation/categories/cars/blocs/cars_bloc/cars_bloc.dart';
 import 'package:netzoon/presentation/categories/customs_screen/customs_bloc/customs_bloc.dart';
+import 'package:netzoon/presentation/categories/delivery_company/blocs/delivery_service/delivery_service_bloc.dart';
 import 'package:netzoon/presentation/categories/factories/blocs/factories_bloc/factories_bloc.dart';
 import 'package:netzoon/presentation/categories/free_zoon/blocs/freezone_bloc/freezone_bloc.dart';
 import 'package:netzoon/presentation/categories/governmental/govermental_bloc/govermental_bloc.dart';
@@ -410,6 +416,12 @@ Future<void> init() async {
         setCountryUseCase: sl(),
       ));
 
+  sl.registerFactory(() => DeliveryServiceBloc(
+        addDeliveryServiceUseCase: sl(),
+        getDeliveryCompanyServicesUseCase: sl(),
+        getSignedInUserUseCase: sl(),
+      ));
+
   //! UseCases
   sl.registerLazySingleton(() => GetSignedInUserUseCase(authRepository: sl()));
   sl.registerLazySingleton(
@@ -624,6 +636,12 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetCountryUseCase(countryRepository: sl()));
   sl.registerLazySingleton(() => SetCountryUseCase(countryRepository: sl()));
 
+  sl.registerLazySingleton(
+      () => GetDeliveryCompanyServicesUseCase(deliveryServiceRepository: sl()));
+  sl.registerLazySingleton(() => AddDeliveryServiceUseCase(
+        deliveryServiceRepository: sl(),
+      ));
+
   //! Repositories
 
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
@@ -705,6 +723,9 @@ Future<void> init() async {
   sl.registerLazySingleton<CountryRepository>(
       () => CountryRepositoryImpl(countryLocalDataSource: sl()));
 
+  sl.registerLazySingleton<DeliveryServiceRepository>(
+      () => DeliveryServiceRepositoryImpl(networkInfo: sl(), dataSource: sl()));
+
   //! DataSourses
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
@@ -783,6 +804,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton<CountryLocalDataSource>(
       () => CountryLocalDataSourceImpl(sharedPreferences: sl()));
+
+  sl.registerLazySingleton<DeliveryServiceRemoteDataSource>(
+      () => DeliveryServiceRemoteDataSourceImpl(sl(), baseUrl: baseUrl));
 
   //! Core
 

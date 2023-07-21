@@ -23,6 +23,7 @@ class AddProductRequestedEvent extends AddProductEvent {
   final File image;
   final DateTime? year;
   final int? discountPercentage;
+  final String? color;
 
   const AddProductRequestedEvent({
     required this.departmentName,
@@ -40,5 +41,6 @@ class AddProductRequestedEvent extends AddProductEvent {
     required this.image,
     this.year,
     this.discountPercentage,
+    this.color,
   });
 }

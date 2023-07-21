@@ -63,8 +63,6 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
     required String advertisingEndDate,
     required String advertisingDescription,
     required File image,
-    required String advertisingCountryAlphaCode,
-    required String advertisingBrand,
     required String advertisingYear,
     required String advertisingLocation,
     required double advertisingPrice,
@@ -72,6 +70,11 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
     List<XFile>? advertisingImageList,
     File? video,
     required bool purchasable,
+    String? type,
+    String? category,
+    String? color,
+    bool? guarantee,
+    String? contactNumber,
   }) async {
     try {
       if (await networkInfo.isConnected) {
@@ -97,14 +100,37 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
           MapEntry('advertisingStartDate', advertisingStartDate),
           MapEntry('advertisingEndDate', advertisingEndDate),
           MapEntry('advertisingDescription', advertisingDescription),
-          MapEntry('advertisingCountryAlphaCode', advertisingCountryAlphaCode),
-          MapEntry('advertisingBrand', advertisingBrand),
           MapEntry('advertisingYear', advertisingYear),
           MapEntry('advertisingLocation', advertisingLocation),
           MapEntry('advertisingPrice', advertisingPrice.toString()),
           MapEntry('advertisingType', advertisingType),
           MapEntry('purchasable', purchasable.toString()),
         ]);
+        if (type != null) {
+          formData.fields.add(
+            MapEntry('type', type),
+          );
+        }
+        if (category != null) {
+          formData.fields.add(
+            MapEntry('category', category),
+          );
+        }
+        if (color != null) {
+          formData.fields.add(
+            MapEntry('color', color),
+          );
+        }
+        if (guarantee != null) {
+          formData.fields.add(
+            MapEntry('guarantee', guarantee.toString()),
+          );
+        }
+        if (contactNumber != null) {
+          formData.fields.add(
+            MapEntry('contactNumber', contactNumber),
+          );
+        }
         // ignore: unnecessary_null_comparison
         if (image != null) {
           String fileName = 'image.jpg';

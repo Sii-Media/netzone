@@ -25,7 +25,7 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<NewsModel>(Options(
       method: 'GET',
@@ -102,7 +102,7 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<NewsCommentModel>>(Options(
       method: 'GET',
@@ -191,7 +191,7 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<NewsInfoModel>(Options(
       method: 'GET',
@@ -214,7 +214,7 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<NewsInfoModel>>(Options(
       method: 'GET',

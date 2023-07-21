@@ -3,9 +3,11 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/domain/categories/entities/vehicles/vehicle.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/helpers/map_to_date.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
+import 'package:netzoon/presentation/core/widgets/phone_call_button.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:video_player/video_player.dart';
@@ -18,7 +20,7 @@ import '../helpers/share_image_function.dart';
 class VehicleDetailsScreen extends StatefulWidget {
   const VehicleDetailsScreen({super.key, required this.vehicle});
 
-  final dynamic vehicle;
+  final Vehicle vehicle;
 
   @override
   State<VehicleDetailsScreen> createState() => _VehicleDetailsScreenState();
@@ -201,7 +203,7 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                               titleAndInput(
                                 title: AppLocalizations.of(context)
                                     .translate('owner'),
-                                input: widget.vehicle.creator.username,
+                                input: widget.vehicle.creator?.username ?? '',
                               ),
                               SizedBox(
                                 height: 7.h,
@@ -210,6 +212,14 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                 title: AppLocalizations.of(context)
                                     .translate('categ'),
                                 input: widget.vehicle.category,
+                              ),
+                              SizedBox(
+                                height: 7.h,
+                              ),
+                              titleAndInput(
+                                title: AppLocalizations.of(context)
+                                    .translate('contactNumber'),
+                                input: widget.vehicle.contactNumber ?? '',
                               ),
                               SizedBox(
                                 height: 7.h,
@@ -235,6 +245,186 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                     .translate('address'),
                                 input: widget.vehicle.location,
                               ),
+
+                              widget.vehicle.exteriorColor != null
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 7.0),
+                                      child: titleAndInput(
+                                        title: AppLocalizations.of(context)
+                                            .translate('exterior_color'),
+                                        input:
+                                            widget.vehicle.exteriorColor ?? '',
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              widget.vehicle.interiorColor != null
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 7.0),
+                                      child: titleAndInput(
+                                        title: AppLocalizations.of(context)
+                                            .translate('interior_color'),
+                                        input:
+                                            widget.vehicle.interiorColor ?? '',
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              widget.vehicle.doors != null
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 7.0),
+                                      child: titleAndInput(
+                                        title: AppLocalizations.of(context)
+                                            .translate('doors'),
+                                        input: '${widget.vehicle.doors} doors',
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              widget.vehicle.bodyCondition != null
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 7.0),
+                                      child: titleAndInput(
+                                        title: AppLocalizations.of(context)
+                                            .translate('body_condition'),
+                                        input:
+                                            widget.vehicle.bodyCondition ?? '',
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              widget.vehicle.bodyType != null
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 7.0),
+                                      child: titleAndInput(
+                                        title: AppLocalizations.of(context)
+                                            .translate('body_type'),
+                                        input: widget.vehicle.bodyType ?? '',
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              widget.vehicle.mechanicalCondition != null
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 7.0),
+                                      child: titleAndInput(
+                                        title: AppLocalizations.of(context)
+                                            .translate('mechanical_condition'),
+                                        input: widget
+                                                .vehicle.mechanicalCondition ??
+                                            '',
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              widget.vehicle.seatingCapacity != null
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 7.0),
+                                      child: titleAndInput(
+                                        title: AppLocalizations.of(context)
+                                            .translate('seating_capacity'),
+                                        input:
+                                            '${widget.vehicle.seatingCapacity} Seater',
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              widget.vehicle.numofCylinders != null
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 7.0),
+                                      child: titleAndInput(
+                                        title: AppLocalizations.of(context)
+                                            .translate('num_of_cylinders'),
+                                        input:
+                                            '${widget.vehicle.numofCylinders}',
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              widget.vehicle.transmissionType != null
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 7.0),
+                                      child: titleAndInput(
+                                        title: AppLocalizations.of(context)
+                                            .translate('transmission_type'),
+                                        input:
+                                            widget.vehicle.transmissionType ??
+                                                "",
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              widget.vehicle.horsepower != null
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 7.0),
+                                      child: titleAndInput(
+                                        title: AppLocalizations.of(context)
+                                            .translate('horsepower'),
+                                        input: widget.vehicle.horsepower ?? "",
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              widget.vehicle.fuelType != null
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 7.0),
+                                      child: titleAndInput(
+                                        title: AppLocalizations.of(context)
+                                            .translate('fuelType'),
+                                        input: widget.vehicle.fuelType ?? "",
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              widget.vehicle.extras != null
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 7.0),
+                                      child: titleAndInput(
+                                        title: AppLocalizations.of(context)
+                                            .translate('extras'),
+                                        input: widget.vehicle.extras ?? "",
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              widget.vehicle.technicalFeatures != null
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 7.0),
+                                      child: titleAndInput(
+                                        title: AppLocalizations.of(context)
+                                            .translate('technicalFeatures'),
+                                        input:
+                                            widget.vehicle.technicalFeatures ??
+                                                "",
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              widget.vehicle.steeringSide != null
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 7.0),
+                                      child: titleAndInput(
+                                        title: AppLocalizations.of(context)
+                                            .translate('steering_side'),
+                                        input:
+                                            widget.vehicle.steeringSide ?? "",
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              widget.vehicle.guarantee != null
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 7.0),
+                                      child: titleAndInput(
+                                        title: AppLocalizations.of(context)
+                                            .translate('guarantee'),
+                                        input: widget.vehicle.guarantee == true
+                                            ? 'applies'
+                                            : 'do not apply',
+                                      ),
+                                    )
+                                  : const SizedBox(),
                             ],
                           ),
                         ),
@@ -311,7 +501,7 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                         borderRadius:
                                             BorderRadius.circular(25.0),
                                         child: ListOfPictures(
-                                          img: widget.vehicle.carImages[index],
+                                          img: widget.vehicle.carImages![index],
                                         ),
                                       );
                                     })
@@ -380,21 +570,21 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            PhoneCallWidget(phonePath: widget.vehicle.contactNumber ?? ""),
             ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
-                  AppColor.backgroundColor,
+                onPressed: () {},
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    AppColor.backgroundColor,
+                  ),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  )),
+                  fixedSize: const MaterialStatePropertyAll(
+                    Size.fromWidth(100),
+                  ),
                 ),
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                )),
-                fixedSize: const MaterialStatePropertyAll(
-                  Size.fromWidth(200),
-                ),
-              ),
-              child: Text(AppLocalizations.of(context).translate('buy')),
-              onPressed: () {},
-            ),
+                child: Text(AppLocalizations.of(context).translate('chat'))),
             PriceSuggestionButton(input: input),
           ],
         ),

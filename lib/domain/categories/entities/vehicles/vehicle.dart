@@ -15,6 +15,22 @@ class Vehicle extends Equatable {
   final List<String>? carImages;
   final String? vedioUrl;
   final String country;
+  final String? contactNumber;
+  final String? exteriorColor;
+  final String? interiorColor;
+  final int? doors;
+  final String? bodyCondition;
+  final String? bodyType;
+  final String? mechanicalCondition;
+  final int? seatingCapacity;
+  final int? numofCylinders;
+  final String? transmissionType;
+  final String? horsepower;
+  final String? fuelType;
+  final String? extras;
+  final String? technicalFeatures;
+  final String? steeringSide;
+  final bool? guarantee;
 
   const Vehicle({
     required this.name,
@@ -30,6 +46,22 @@ class Vehicle extends Equatable {
     this.carImages,
     this.vedioUrl,
     required this.country,
+    this.contactNumber,
+    this.exteriorColor,
+    this.interiorColor,
+    this.doors,
+    this.bodyCondition,
+    this.bodyType,
+    this.mechanicalCondition,
+    this.seatingCapacity,
+    this.numofCylinders,
+    this.transmissionType,
+    this.horsepower,
+    this.fuelType,
+    this.extras,
+    this.technicalFeatures,
+    this.steeringSide,
+    this.guarantee,
   });
   @override
   List<Object?> get props => [
@@ -44,5 +76,21 @@ class Vehicle extends Equatable {
         category,
         creator,
         country,
+        contactNumber,
+        exteriorColor,
+        interiorColor,
+        doors,
+        bodyCondition,
+        bodyType,
+        mechanicalCondition,
+        seatingCapacity,
+        numofCylinders,
+        transmissionType,
+        horsepower,
+        fuelType,
+        extras,
+        technicalFeatures,
+        steeringSide,
+        guarantee,
       ];
 }

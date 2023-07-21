@@ -331,21 +331,21 @@ class _RealEstateDetailsScreenState extends State<RealEstateDetailsScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
-                  AppColor.backgroundColor,
-                ),
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                )),
-                fixedSize: const MaterialStatePropertyAll(
-                  Size.fromWidth(200),
-                ),
-              ),
-              child: Text(AppLocalizations.of(context).translate('buy')),
-              onPressed: () {},
-            ),
+            // ElevatedButton(
+            //   style: ButtonStyle(
+            //     backgroundColor: MaterialStateProperty.all(
+            //       AppColor.backgroundColor,
+            //     ),
+            //     shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(18.0),
+            //     )),
+            //     fixedSize: const MaterialStatePropertyAll(
+            //       Size.fromWidth(200),
+            //     ),
+            //   ),
+            //   child: Text(AppLocalizations.of(context).translate('buy')),
+            //   onPressed: () {},
+            // ),
             PriceSuggestionButton(input: input),
           ],
         ),

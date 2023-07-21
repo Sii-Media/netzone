@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/auth/entities/user_info.dart';
-import 'package:netzoon/domain/categories/entities/factories/factory_companies.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 
 import '../factories/factory_profile_screen.dart';

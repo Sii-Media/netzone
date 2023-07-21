@@ -21,6 +21,22 @@ class VehicleModel {
   final List<String>? carImages;
   final String? vedioUrl;
   final String country;
+  final String? contactNumber;
+  final String? exteriorColor;
+  final String? interiorColor;
+  final int? doors;
+  final String? bodyCondition;
+  final String? bodyType;
+  final String? mechanicalCondition;
+  final int? seatingCapacity;
+  final int? numofCylinders;
+  final String? transmissionType;
+  final String? horsepower;
+  final String? fuelType;
+  final String? extras;
+  final String? technicalFeatures;
+  final String? steeringSide;
+  final bool? guarantee;
 
   VehicleModel({
     this.id,
@@ -37,6 +53,22 @@ class VehicleModel {
     this.carImages,
     this.vedioUrl,
     required this.country,
+    this.contactNumber,
+    this.exteriorColor,
+    this.interiorColor,
+    this.doors,
+    this.bodyCondition,
+    this.bodyType,
+    this.mechanicalCondition,
+    this.seatingCapacity,
+    this.numofCylinders,
+    this.transmissionType,
+    this.horsepower,
+    this.fuelType,
+    this.extras,
+    this.technicalFeatures,
+    this.steeringSide,
+    this.guarantee,
   });
 
   factory VehicleModel.fromJson(Map<String, dynamic> json) =>
@@ -60,5 +92,21 @@ extension MapToDomain on VehicleModel {
         carImages: carImages,
         vedioUrl: vedioUrl,
         country: country,
+        contactNumber: contactNumber,
+        exteriorColor: exteriorColor,
+        interiorColor: interiorColor,
+        bodyCondition: bodyCondition,
+        bodyType: bodyType,
+        doors: doors,
+        extras: extras,
+        fuelType: fuelType,
+        horsepower: horsepower,
+        mechanicalCondition: mechanicalCondition,
+        numofCylinders: numofCylinders,
+        seatingCapacity: seatingCapacity,
+        steeringSide: steeringSide,
+        technicalFeatures: technicalFeatures,
+        transmissionType: transmissionType,
+        guarantee: guarantee,
       );
 }

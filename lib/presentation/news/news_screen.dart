@@ -145,168 +145,226 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
     return BlocBuilder<NewsBloc, NewsState>(
       bloc: widget.newsBloc,
       builder: (context, state) {
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: widget.news.length,
-          itemBuilder: (BuildContext context, index) {
-            final News newsItem = widget.news[index];
-
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 20.0),
-              child: SizedBox(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: CachedNetworkImage(
-                            width: 35.w,
-                            height: 35.h,
-                            fit: BoxFit.cover,
-                            imageUrl: widget.news[index].creator.profilePhoto ??
-                                'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+        return Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: widget.news.length,
+                itemBuilder: (BuildContext context, index) {
+                  final News newsItem = widget.news[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: SizedBox(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: CachedNetworkImage(
+                                  width: 35.w,
+                                  height: 35.h,
+                                  fit: BoxFit.cover,
+                                  imageUrl: widget
+                                          .news[index].creator.profilePhoto ??
+                                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                                ),
+                              ),
+                              SizedBox(
+                                width: 6.w,
+                              ),
+                              Text(
+                                widget.news[index].creator.username ?? '',
+                                style: TextStyle(
+                                  color: AppColor.backgroundColor,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        SizedBox(
-                          width: 6.w,
-                        ),
-                        Text(
-                          widget.news[index].creator.username ?? '',
-                          style: TextStyle(
-                            color: AppColor.backgroundColor,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 240.h,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) {
-                              return NewsDetails(
-                                news: widget.news[index],
-                              );
-                            }),
-                          );
-                        },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(25.0),
-                          child: Card(
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                  left: 0,
-                                  bottom: 0,
-                                  top: 0,
-                                  right: 0,
-                                  child: CachedNetworkImage(
-                                    imageUrl: widget.news[index].imgUrl,
-                                    fit: BoxFit.cover,
+                          SizedBox(
+                            height: 240.h,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) {
+                                    return NewsDetails(
+                                      news: widget.news[index],
+                                    );
+                                  }),
+                                );
+                              },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(25.0),
+                                child: Card(
+                                  child: Stack(
+                                    children: [
+                                      Positioned(
+                                        left: 0,
+                                        bottom: 0,
+                                        top: 0,
+                                        right: 0,
+                                        child: CachedNetworkImage(
+                                          imageUrl: widget.news[index].imgUrl,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      Positioned(
+                                        bottom: 0,
+                                        left: 0,
+                                        right: 0,
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          color: AppColor.backgroundColor,
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                convertDateToString(widget
+                                                        .news[index]
+                                                        .createdAt ??
+                                                    ''),
+                                                style: TextStyle(
+                                                  fontSize: 12.sp,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 5),
+                                                height: 50.h,
+                                                child: Text(
+                                                  widget.news[index].title,
+                                                  style: TextStyle(
+                                                    fontSize: 13.sp,
+                                                    color: Colors.white,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 5),
+                                                height: 30.h,
+                                                child: Text(
+                                                  widget
+                                                      .news[index].description,
+                                                  style: const TextStyle(
+                                                    color: AppColor.white,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 1,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                Positioned(
-                                  bottom: 0,
-                                  left: 0,
-                                  right: 0,
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    width: MediaQuery.of(context).size.width,
-                                    color: AppColor.backgroundColor,
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          convertDateToString(
-                                              widget.news[index].createdAt ??
-                                                  ''),
-                                          style: TextStyle(
-                                            fontSize: 12.sp,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 5),
-                                          height: 50.h,
-                                          child: Text(
-                                            widget.news[index].title,
-                                            style: TextStyle(
-                                              fontSize: 13.sp,
-                                              color: Colors.white,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 5),
-                                          height: 30.h,
-                                          child: Text(
-                                            widget.news[index].description,
-                                            style: const TextStyle(
-                                              color: AppColor.white,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isLikedList[index] = !isLikedList[index];
+                                    });
+
+                                    widget.newsBloc.add(
+                                      ToggleonlikeEvent(
+                                          newsId: newsItem.id ?? ''),
+                                    );
+                                  },
+                                  child: Icon(
+                                    isLikedList[index]
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    color: isLikedList[index]
+                                        ? AppColor.red
+                                        : AppColor.black,
+                                  ),
+                                ),
+                                // IconButton(
+                                //   icon: Icon(
+                                //     isLikedList[index]
+                                //         ? Icons.favorite
+                                //         : Icons.favorite_border,
+                                //   ),
+                                //   onPressed: () {
+                                //     setState(() {
+                                //       isLikedList[index] = !isLikedList[index];
+                                //     });
+
+                                //     widget.newsBloc.add(
+                                //       ToggleonlikeEvent(newsId: newsItem.id ?? ''),
+                                //     );
+                                //   },
+                                // ),
+                                SizedBox(
+                                  width: 5.w,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                        return CommentsPage(
+                                          newsId: widget.news[index].id ?? '',
+                                        );
+                                      }),
+                                    );
+                                  },
+                                  child: const Icon(
+                                    Feather.message_circle,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5.w,
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    await shareImageWithDescription(
+                                      imageUrl: widget.news[index].imgUrl,
+                                      description:
+                                          widget.news[index].description,
+                                    );
+                                  },
+                                  child: const Icon(
+                                    Feather.send,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isLikedList[index] = !isLikedList[index];
-                              });
-
-                              widget.newsBloc.add(
-                                ToggleonlikeEvent(newsId: newsItem.id ?? ''),
-                              );
-                            },
-                            child: Icon(
-                              isLikedList[index]
-                                  ? Icons.favorite
-                                  : Icons.favorite_border,
-                              color: isLikedList[index]
-                                  ? AppColor.red
-                                  : AppColor.black,
+                          Text(
+                            getLikeText(
+                                widget.news[index].likes, isLikedList[index]),
+                            style: const TextStyle(
+                              color: AppColor.secondGrey,
                             ),
                           ),
-                          // IconButton(
-                          //   icon: Icon(
-                          //     isLikedList[index]
-                          //         ? Icons.favorite
-                          //         : Icons.favorite_border,
-                          //   ),
-                          //   onPressed: () {
-                          //     setState(() {
-                          //       isLikedList[index] = !isLikedList[index];
-                          //     });
-
-                          //     widget.newsBloc.add(
-                          //       ToggleonlikeEvent(newsId: newsItem.id ?? ''),
-                          //     );
-                          //   },
-                          // ),
                           SizedBox(
-                            width: 5.w,
+                            height: 5.h,
+                          ),
+                          Text(
+                            getCommentText(widget.news[index].comments),
+                            style: const TextStyle(
+                              color: AppColor.secondGrey,
+                            ),
                           ),
                           GestureDetector(
                             onTap: () {
@@ -318,74 +376,35 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
                                 }),
                               );
                             },
-                            child: const Icon(
-                              Feather.message_circle,
+                            child: Text(
+                              AppLocalizations.of(context)
+                                  .translate('View All Comments'),
+                              style: const TextStyle(
+                                color: AppColor.secondGrey,
+                              ),
                             ),
                           ),
                           SizedBox(
-                            width: 5.w,
+                            height: 5.h,
                           ),
-                          GestureDetector(
-                            onTap: () async {
-                              await shareImageWithDescription(
-                                imageUrl: widget.news[index].imgUrl,
-                                description: widget.news[index].description,
-                              );
-                            },
-                            child: const Icon(
-                              Feather.send,
+                          Text(
+                            convertDateToString(
+                                widget.news[index].createdAt ?? ''),
+                            style: const TextStyle(
+                              color: Colors.grey,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    Text(
-                      getLikeText(widget.news[index].likes, isLikedList[index]),
-                      style: const TextStyle(
-                        color: AppColor.secondGrey,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    Text(
-                      getCommentText(widget.news[index].comments),
-                      style: const TextStyle(
-                        color: AppColor.secondGrey,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) {
-                            return CommentsPage(
-                              newsId: widget.news[index].id ?? '',
-                            );
-                          }),
-                        );
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)
-                            .translate('View All Comments'),
-                        style: const TextStyle(
-                          color: AppColor.secondGrey,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    Text(
-                      convertDateToString(widget.news[index].createdAt ?? ''),
-                      style: const TextStyle(
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
+                  );
+                },
               ),
-            );
-          },
+            ),
+            SizedBox(
+              height: 60.h,
+            ),
+          ],
         );
       },
     );

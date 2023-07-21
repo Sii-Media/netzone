@@ -37,8 +37,6 @@ class AddAdsBloc extends Bloc<AddAdsEvent, AddAdsState> {
           advertisingEndDate: event.advertisingEndDate,
           advertisingDescription: event.advertisingDescription,
           image: event.image,
-          advertisingCountryAlphaCode: event.advertisingCountryAlphaCode,
-          advertisingBrand: event.advertisingBrand,
           advertisingYear: event.advertisingYear,
           advertisingLocation: event.advertisingLocation,
           advertisingPrice: event.advertisingPrice,
@@ -46,6 +44,11 @@ class AddAdsBloc extends Bloc<AddAdsEvent, AddAdsState> {
           advertisingImageList: event.advertisingImageList,
           video: event.video,
           purchasable: event.purchasable,
+          type: event.type,
+          category: event.category,
+          color: event.color,
+          guarantee: event.guarantee,
+          contactNumber: event.contactNumber,
         ));
 
         emit(

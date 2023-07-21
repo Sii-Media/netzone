@@ -448,6 +448,7 @@ class _MyVehicleProfileScreenState extends State<MyVehicleProfileScreen>
                                                     builder: (context) {
                                               return const FollowingsListScreen(
                                                 type: 'followings',
+                                                who: 'me',
                                               );
                                             }));
                                           },
@@ -482,6 +483,7 @@ class _MyVehicleProfileScreenState extends State<MyVehicleProfileScreen>
                                                     builder: (context) {
                                               return const FollowingsListScreen(
                                                 type: 'followers',
+                                                who: 'me',
                                               );
                                             }));
                                           },

@@ -51,6 +51,18 @@ class GetUserFollowingsEvent extends GetUserEvent {}
 
 class GetUserFollowersEvent extends GetUserEvent {}
 
+class GetUserFollowingsByIdEvent extends GetUserEvent {
+  final String id;
+
+  const GetUserFollowingsByIdEvent({required this.id});
+}
+
+class GetUserFollowersByIdEvent extends GetUserEvent {
+  final String id;
+
+  const GetUserFollowersByIdEvent({required this.id});
+}
+
 class ToggleFollowEvent extends GetUserEvent {
   final String otherUserId;
 
