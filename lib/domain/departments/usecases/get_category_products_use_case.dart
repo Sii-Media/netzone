@@ -14,9 +14,14 @@ class GetCategoryProductsUseCase
   Future<Either<Failure, CategoryProductsResponse>> call(
       CategoryProductsParams params) {
     return departmentRepository.getProductsByCategory(
-        department: params.department,
-        category: params.category,
-        country: params.country);
+      department: params.department,
+      category: params.category,
+      country: params.country,
+      condition: params.condition,
+      owner: params.owner,
+      priceMax: params.priceMax,
+      priceMin: params.priceMin,
+    );
   }
 }
 
@@ -24,10 +29,17 @@ class CategoryProductsParams {
   final String department;
   final String category;
   final String country;
-
+  final int? priceMin;
+  final int? priceMax;
+  final String? owner;
+  final String? condition;
   CategoryProductsParams({
     required this.department,
     required this.category,
     required this.country,
+    this.priceMin,
+    this.priceMax,
+    this.owner,
+    this.condition,
   });
 }

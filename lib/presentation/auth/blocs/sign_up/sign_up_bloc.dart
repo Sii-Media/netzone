@@ -40,6 +40,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
           subcategory: event.subcategory,
           toCountry: event.toCountry,
           isFreeZoon: event.isFreeZoon,
+          isService: event.isService,
+          freezoneCity: event.freezoneCity,
           deliverable: event.deliverable,
           profilePhoto: event.profilePhoto,
           coverPhoto: event.coverPhoto,

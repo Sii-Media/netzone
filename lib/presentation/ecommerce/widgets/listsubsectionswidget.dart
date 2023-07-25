@@ -54,7 +54,7 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
             child: Card(
               elevation: 3,
               child: SizedBox(
-                height: 230.h,
+                // height: 250.h,
                 child: Padding(
                   padding: EdgeInsets.all(size.height * 0.002),
                   child: Stack(
@@ -63,9 +63,12 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          SizedBox(
+                            height: 12.h,
+                          ),
                           CachedNetworkImage(
                             imageUrl: widget.deviceList.imageUrl,
-                            height: 120.h,
+                            height: 140.h,
                             width: MediaQuery.of(context).size.width,
                             fit: BoxFit.contain,
                           ),
@@ -81,6 +84,19 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.bold,
                               ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 30.h,
+                            child: Text(
+                              widget.deviceList.description,
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 11.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           Padding(
@@ -126,18 +142,6 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                                               )
                                             ]),
                                       ),
-
-                                      // Text(
-                                      //   'AED ${deviceList.price}',
-                                      //   style: TextStyle(
-                                      //       color: AppColor.backgroundColor,
-                                      //       fontWeight: FontWeight.w700,
-                                      //       fontSize: 18,
-                                      //       decoration:
-                                      //           deviceList.discountPercentage != null
-                                      //               ? TextDecoration.lineThrough
-                                      //               : TextDecoration.none),
-                                      // ),
                                       GestureDetector(
                                         onTap: () async {
                                           await shareImageWithDescription(
@@ -195,7 +199,7 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                       ),
                       widget.deviceList.condition != null
                           ? Positioned(
-                              top: 0,
+                              top: -2,
                               right: 0,
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
@@ -210,10 +214,13 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                                 child: Text(
                                   AppLocalizations.of(context).translate(
                                       widget.deviceList.condition.toString()),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: TextStyle(
+                                      color:
+                                          widget.deviceList.condition == 'new'
+                                              ? AppColor.white
+                                              : AppColor.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 10.sp),
                                 ),
                               ),
                             )

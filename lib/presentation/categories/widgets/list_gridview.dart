@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/categories/entities/categories.dart';
 import 'package:netzoon/presentation/categories/customs_screen/customs_category.dart';
 import 'package:netzoon/presentation/categories/factories/factories_categories.dart';
-import 'package:netzoon/presentation/categories/free_zoon/category_free_zoon.dart';
 import 'package:netzoon/presentation/categories/governmental/govermental_category_screen.dart';
 import 'package:netzoon/presentation/categories/local_company/local_companies.dart';
 import 'package:netzoon/presentation/categories/real_estate/screens/real_estate_companies_list_screen.dart';
@@ -14,6 +13,7 @@ import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../core/blocs/country_bloc/country_bloc.dart';
 import '../delivery_company/screens/delivery_companies_list_screen.dart';
+import '../free_zoon/freezone_companies_list_screen.dart';
 import '../users/screens/users_list_screen.dart';
 import '../vehicles/screens/vehicles_companies_screen.dart';
 
@@ -130,7 +130,7 @@ class GridCategory extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) {
-                    return const CategoriesFreeZone();
+                    return const FreeZoneCompaniesListScreen();
                   },
                 ),
               );

@@ -143,7 +143,7 @@ abstract class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   @GET('/user/getuseraccounts')
   Future<List<UserInfoModel>> getUserAccounts(
-    @Part() String email,
+    @Query('email') String email,
   );
 
   // @override

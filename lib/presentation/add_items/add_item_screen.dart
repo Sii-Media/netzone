@@ -15,6 +15,7 @@ import '../deals/add_deals_screen.dart';
 import '../news/add_new_page.dart';
 import '../profile/screens/all_product_screen.dart';
 import '../utils/app_localizations.dart';
+import 'add_company_service_screen.dart';
 
 class AddItemScreen extends StatefulWidget {
   const AddItemScreen({super.key});
@@ -73,15 +74,30 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
                     state.user.userInfo.userType == 'user'
                         ? const SizedBox()
-                        : addWidget(
+                        : state.user.userInfo.isService == false ||
+                                state.user.userInfo.isService == null
+                            ? addWidget(
+                                title: AppLocalizations.of(context)
+                                    .translate('add_product'),
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return const AddProductScreen();
+                                  }));
+                                })
+                            : const SizedBox(),
+                    state.user.userInfo.userType == 'local_company' &&
+                            state.user.userInfo.isService == true
+                        ? addWidget(
                             title: AppLocalizations.of(context)
-                                .translate('add_product'),
+                                .translate('add_service'),
                             onTap: () {
                               Navigator.of(context)
                                   .push(MaterialPageRoute(builder: (context) {
-                                return const AddProductScreen();
+                                return const AddCompanyServiceScreen();
                               }));
-                            }),
+                            })
+                        : const SizedBox(),
 
                     addWidget(
                         title:
@@ -185,7 +201,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     state.user.userInfo.userType == 'delivery_company'
                         ? addWidget(
                             title: AppLocalizations.of(context)
-                                .translate('add_service'),
+                                .translate('add_delivery_service'),
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(

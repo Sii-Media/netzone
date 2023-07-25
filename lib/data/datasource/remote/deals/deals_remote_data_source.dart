@@ -38,7 +38,7 @@ abstract class DealsRemoteDataSourceImpl implements DealsRemoteDataSource {
   @GET('/deals/dealsByCat')
   Future<DealsItemsResponseModel> getDealsByCategory(
     @Query('country') String country,
-    @Part() String category,
+    @Query('category') String category,
   );
 
   @override

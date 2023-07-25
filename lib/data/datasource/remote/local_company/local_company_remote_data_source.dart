@@ -5,6 +5,7 @@ import 'package:retrofit/http.dart';
 
 import '../../../../injection_container.dart';
 import '../../../models/auth/user_info/user_info_model.dart';
+import '../../../models/company_service/company_service_model.dart';
 
 part 'local_company_remote_data_source.g.dart';
 
@@ -13,6 +14,10 @@ abstract class LocalCompanyRemoteDataSource {
   Future<List<CategoryProductsModel>> getCompanyProducts(String id);
   Future<List<UserInfoModel>> getLocalCompanies(
       String country, String userType);
+
+  Future<List<CompanyServiceModel>> getCompanyServices(String id);
+  Future<String> addCompanyService(
+      String title, String description, int price, String owner);
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -42,6 +47,21 @@ abstract class LocalCompanyRemoteDataSourceImpl
   @GET('/user/getUserByType')
   Future<List<UserInfoModel>> getLocalCompanies(
     @Query('country') String country,
-    @Part() String userType,
+    @Query('userType') String userType,
+  );
+
+  @override
+  @GET('/categories/local-company/get-services/{id}')
+  Future<List<CompanyServiceModel>> getCompanyServices(
+    @Path('id') String id,
+  );
+
+  @override
+  @POST('/categories/local-company/add-service')
+  Future<String> addCompanyService(
+    @Part() String title,
+    @Part() String description,
+    @Part() int price,
+    @Part() String owner,
   );
 }

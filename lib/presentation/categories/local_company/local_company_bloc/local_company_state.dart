@@ -34,3 +34,15 @@ class GetLocalCompaniesSuccess extends LocalCompanyState {
 
   const GetLocalCompaniesSuccess({required this.companies});
 }
+
+class GetCompanyServiceSuccess extends LocalCompanyState {
+  final List<CompanyService> services;
+
+  const GetCompanyServiceSuccess({required this.services});
+}
+
+class AddCompanyServiceSuccess extends LocalCompanyState {
+  final String message;
+
+  const AddCompanyServiceSuccess({required this.message});
+}

@@ -9,20 +9,37 @@ abstract class LocalCompanyEvent extends Equatable {
 
 class GetAllLocalCompaniesEvent extends LocalCompanyEvent {}
 
-class GetLocalCompanyProductsEvent extends GetAllLocalCompaniesEvent {
+class GetLocalCompanyProductsEvent extends LocalCompanyEvent {
   final String id;
 
-  GetLocalCompanyProductsEvent({required this.id});
+  const GetLocalCompanyProductsEvent({required this.id});
 }
 
-class GetLocalCompaniesEvent extends GetAllLocalCompaniesEvent {
+class GetLocalCompaniesEvent extends LocalCompanyEvent {
   final String userType;
 
-  GetLocalCompaniesEvent({required this.userType});
+  const GetLocalCompaniesEvent({required this.userType});
 }
 
-class GetLocalProductsEvent extends GetAllLocalCompaniesEvent {
+class GetLocalProductsEvent extends LocalCompanyEvent {
   final String username;
 
-  GetLocalProductsEvent({required this.username});
+  const GetLocalProductsEvent({required this.username});
+}
+
+class AddCompanyServiceEvent extends LocalCompanyEvent {
+  final String title;
+  final String description;
+  final int price;
+
+  const AddCompanyServiceEvent(
+      {required this.title, required this.description, required this.price});
+}
+
+class GetCompanyServicesEvent extends LocalCompanyEvent {}
+
+class GetCompanyServicesByIdEvent extends LocalCompanyEvent {
+  final String id;
+
+  const GetCompanyServicesByIdEvent({required this.id});
 }

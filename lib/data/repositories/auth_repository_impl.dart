@@ -32,6 +32,8 @@ class AuthRepositoryImpl implements AuthRepository {
     required String userType,
     required String firstMobile,
     required bool isFreeZoon,
+    bool? isService,
+    String? freezoneCity,
     required String country,
     String? secondMobile,
     String? thirdMobile,
@@ -90,11 +92,23 @@ class AuthRepositoryImpl implements AuthRepository {
           MapEntry('isThereWarehouse', isThereWarehouse.toString()),
           MapEntry('isThereFoodsDelivery', isThereFoodsDelivery.toString()),
           MapEntry('deliveryType', deliveryType.toString()),
-          MapEntry('deliveryCarsNum', deliveryCarsNum.toString()),
-          MapEntry('deliveryMotorsNum', deliveryMotorsNum.toString()),
         ]);
         if (title != null) {
           formData.fields.add(MapEntry('title', title));
+        }
+        if (freezoneCity != null) {
+          formData.fields.add(MapEntry('freezoneCity', freezoneCity));
+        }
+        if (deliveryCarsNum != null) {
+          formData.fields
+              .add(MapEntry('deliveryCarsNum', deliveryCarsNum.toString()));
+        }
+        if (deliveryMotorsNum != null) {
+          formData.fields
+              .add(MapEntry('deliveryMotorsNum', deliveryMotorsNum.toString()));
+        }
+        if (isService != null) {
+          formData.fields.add(MapEntry('isService', isService.toString()));
         }
         if (profilePhoto != null) {
           String fileName = 'image.jpg';

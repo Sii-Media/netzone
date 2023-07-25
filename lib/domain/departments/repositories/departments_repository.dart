@@ -16,6 +16,10 @@ abstract class DepartmentRepository {
     required String department,
     required String category,
     required String country,
+    int? priceMin,
+    int? priceMax,
+    String? owner,
+    String? condition,
   });
 
   Future<Either<Failure, String>> addProduct({

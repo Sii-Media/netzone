@@ -79,6 +79,20 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
     setState(() {});
   }
 
+  int _totalPrice = 0;
+
+  void _calculateTotalPrice() {
+    if (_selectedStartDate != null && _selectedEndDate != null) {
+      DateTime startDate = DateTime.parse(_selectedStartDate!);
+      DateTime endDate = DateTime.parse(_selectedEndDate!);
+      Duration difference = endDate.difference(startDate);
+      int totalPrice = difference.inDays * 6;
+      setState(() {
+        _totalPrice = totalPrice;
+      });
+    }
+  }
+
   final addAdsbloc = sl<AddAdsBloc>();
   final notifiBloc = sl<NotificationsBloc>();
   bool _purchasable = false;
@@ -240,7 +254,6 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                         ),
                       ),
                       DateTimePicker(
-                        initialValue: '',
                         decoration: InputDecoration(
                           filled: true,
                           //<-- SEE HERE
@@ -263,6 +276,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                         onChanged: (selectedDate) {
                           setState(() {
                             _selectedStartDate = selectedDate;
+                            _calculateTotalPrice();
                           });
                         },
                         validator: (value) {
@@ -284,7 +298,6 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                         ),
                       ),
                       DateTimePicker(
-                        initialValue: '',
                         decoration: InputDecoration(
                           filled: true,
                           //<-- SEE HERE
@@ -307,6 +320,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                         onChanged: (selectedDate) {
                           setState(() {
                             _selectedEndDate = selectedDate;
+                            _calculateTotalPrice();
                           });
                         },
                         validator: (value) {
@@ -317,6 +331,15 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                         },
                         // onSaved: (val) => print(val),
                       ),
+                      _selectedStartDate != null && _selectedEndDate != null
+                          ? Text(
+                              '${AppLocalizations.of(context).translate('Advertising cost depending on the number of days')}: $_totalPrice',
+                              style: TextStyle(
+                                color: AppColor.colorOne,
+                                fontSize: 14.sp,
+                              ),
+                            )
+                          : const SizedBox(),
                       SizedBox(
                         height: 10.h,
                       ),

@@ -26,6 +26,6 @@ abstract class UsersRemoteDataSourceImpl implements UsersRemoteDataSource {
   @GET('/user/getUserByType')
   Future<List<UserInfoModel>> getUsersList(
     @Query('country') String country,
-    @Part() String userType,
+    @Query('userType') String userType,
   );
 }

@@ -31,7 +31,7 @@ abstract class VehicleRepository {
     required String country,
   });
   Future<Either<Failure, List<Vehicle>>> getCompanyVehicles(
-      {required String type, required String id});
+      {required String id});
 
   Future<Either<Failure, String>> addVehicle({
     required String name,

@@ -26,6 +26,7 @@ class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
   final EditProductUseCase editProductUseCase;
   final GetProductByIdUseCase getProductByIdUseCase;
   final GetCountryUseCase getCountryUseCase;
+  List<CategoryProducts> filteredProducts = [];
   ElecDevicesBloc({
     required this.deleteProductUseCase,
     required this.getAllProductsUseCase,
@@ -55,11 +56,18 @@ class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
       late String country;
       final result = await getCountryUseCase(NoParams());
       result.fold((l) => null, (r) => country = r ?? 'AE');
-      final failureOrProducts = await getCategoryProductsUseCase(
-          CategoryProductsParams(
-              country: country,
-              department: event.department,
-              category: event.category));
+      final failureOrProducts =
+          await getCategoryProductsUseCase(CategoryProductsParams(
+        country: country,
+        department: event.department,
+        category: event.category,
+        priceMin: event.priceMin,
+        priceMax: event.priceMax,
+        owner: event.owner,
+        condition: event.condition,
+      ));
+      filteredProducts = failureOrProducts.fold(
+          (l) => [], (categoryProducts) => categoryProducts.products);
       emit(
         failureOrProducts.fold(
           (failure) {
@@ -136,6 +144,16 @@ class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
           (product) => GetProductByIdSuccess(product: product),
         ),
       );
+    });
+    on<SearchProductsEvent>((event, emit) {
+      // ignore: unused_local_variable
+      final searchResults = filteredProducts
+          .where((product) => product.name
+              .toLowerCase()
+              .contains(event.searchQuery.toLowerCase()))
+          .toList();
+
+      emit(ElecCategoryProductSuccess(categoryProducts: filteredProducts));
     });
   }
 }

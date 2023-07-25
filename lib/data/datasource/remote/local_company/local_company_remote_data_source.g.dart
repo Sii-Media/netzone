@@ -79,13 +79,12 @@ class _LocalCompanyRemoteDataSourceImpl
     userType,
   ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'country': country};
+    final queryParameters = <String, dynamic>{
+      r'country': country,
+      r'userType': userType,
+    };
     final _headers = <String, dynamic>{};
-    final _data = FormData();
-    _data.fields.add(MapEntry(
-      'userType',
-      userType,
-    ));
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<UserInfoModel>>(Options(
       method: 'GET',
@@ -102,6 +101,75 @@ class _LocalCompanyRemoteDataSourceImpl
     var value = _result.data!
         .map((dynamic i) => UserInfoModel.fromJson(i as Map<String, dynamic>))
         .toList();
+    return value;
+  }
+
+  @override
+  Future<List<CompanyServiceModel>> getCompanyServices(id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<CompanyServiceModel>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/categories/local-company/get-services/${id}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!
+        .map((dynamic i) =>
+            CompanyServiceModel.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<String> addCompanyService(
+    title,
+    description,
+    price,
+    owner,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'title',
+      title,
+    ));
+    _data.fields.add(MapEntry(
+      'description',
+      description,
+    ));
+    _data.fields.add(MapEntry(
+      'price',
+      price.toString(),
+    ));
+    _data.fields.add(MapEntry(
+      'owner',
+      owner,
+    ));
+    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/categories/local-company/add-service',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!;
     return value;
   }
 

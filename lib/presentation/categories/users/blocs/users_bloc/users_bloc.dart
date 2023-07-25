@@ -7,12 +7,12 @@ import '../../../../../domain/auth/entities/user.dart';
 import '../../../../../domain/auth/entities/user_info.dart';
 import '../../../../../domain/auth/usecases/get_signed_in_user_use_case.dart';
 import '../../../../../domain/core/usecase/usecase.dart';
-import '../../../../core/helpers/map_failure_to_string.dart';
 
 part 'users_event.dart';
 part 'users_state.dart';
 
 class UsersBloc extends Bloc<UsersEvent, UsersState> {
+  List<UserInfo> filteredUsers = [];
   final GetSignedInUserUseCase getSignedInUser;
   final GetUsersListUseCase getUsersListUseCase;
   final GetCountryUseCase getCountryUseCase;
@@ -34,7 +34,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       late User? user;
       result.fold((l) => null, (r) => user = r);
       // ignore: unused_local_variable
-      late List<UserInfo> filteredUsers;
+      // late List<UserInfo> filteredUsers;
       filteredUsers = users.fold(
         (failure) => [],
         (usersList) => usersList
@@ -42,12 +42,21 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
                 (singleUser) => singleUser.username != user?.userInfo.username)
             .toList(),
       );
-      emit(
-        users.fold(
-          (failure) => GetUsersFailure(message: mapFailureToString(failure)),
-          (usersList) => GetUsersSuccess(users: usersList),
-        ),
-      );
+      // emit(
+      //   users.fold(
+      //     (failure) => GetUsersFailure(message: mapFailureToString(failure)),
+      //     (usersList) => GetUsersSuccess(users: usersList),
+      //   ),
+      // );
+      emit(GetUsersSuccess(users: filteredUsers));
+    });
+    on<SearchUsersEvent>((event, emit) {
+      final searchResults = filteredUsers
+          .where((user) => user.freezoneCity!
+              .toLowerCase()
+              .contains(event.searchQuery.toLowerCase()))
+          .toList();
+      emit(GetUsersSuccess(users: searchResults));
     });
   }
 }

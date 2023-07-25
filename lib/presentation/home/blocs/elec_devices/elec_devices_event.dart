@@ -16,9 +16,18 @@ class GetElcDevicesEvent extends ElecDevicesEvent {
 class GetElcCategoryProductsEvent extends ElecDevicesEvent {
   final String department;
   final String category;
-
-  const GetElcCategoryProductsEvent(
-      {required this.department, required this.category});
+  final int? priceMin;
+  final int? priceMax;
+  final String? owner;
+  final String? condition;
+  const GetElcCategoryProductsEvent({
+    required this.department,
+    required this.category,
+    this.priceMin,
+    this.priceMax,
+    this.owner,
+    this.condition,
+  });
 }
 
 class GetAllProductsEvent extends ElecDevicesEvent {}
@@ -56,4 +65,13 @@ class GetProductByIdEvent extends ElecDevicesEvent {
   final String productId;
 
   const GetProductByIdEvent({required this.productId});
+}
+
+class SearchProductsEvent extends ElecDevicesEvent {
+  final String searchQuery;
+
+  const SearchProductsEvent({required this.searchQuery});
+
+  @override
+  List<Object> get props => [searchQuery];
 }

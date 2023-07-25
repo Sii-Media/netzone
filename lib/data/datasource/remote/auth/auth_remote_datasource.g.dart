@@ -307,13 +307,9 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
   @override
   Future<List<UserInfoModel>> getUserAccounts(email) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'email': email};
     final _headers = <String, dynamic>{};
-    final _data = FormData();
-    _data.fields.add(MapEntry(
-      'email',
-      email,
-    ));
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<UserInfoModel>>(Options(
       method: 'GET',

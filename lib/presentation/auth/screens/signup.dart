@@ -51,7 +51,7 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
   final TextEditingController websiteController = TextEditingController();
 
   final TextEditingController titleController = TextEditingController();
-
+  final TextEditingController freezoneCityController = TextEditingController();
   final TextEditingController deliveryCarsNumController =
       TextEditingController();
 
@@ -132,6 +132,7 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
         descriptionController: descriptionController,
         websiteController: websiteController,
         titleController: titleController,
+        freezoneCityController: freezoneCityController,
         factoriesBloc: factoryBloc,
         deliveryCarsNumController: deliveryCarsNumController,
         deliveryMotorsNumController: deliveryMotorsNumController,
@@ -164,6 +165,7 @@ class SignUpWidget extends StatefulWidget {
     required this.descriptionController,
     required this.websiteController,
     required this.titleController,
+    required this.freezoneCityController,
     required this.factoriesBloc,
     required this.deliveryCarsNumController,
     required this.deliveryMotorsNumController,
@@ -188,6 +190,7 @@ class SignUpWidget extends StatefulWidget {
   final TextEditingController descriptionController;
   final TextEditingController websiteController;
   final TextEditingController titleController;
+  final TextEditingController freezoneCityController;
   final TextEditingController deliveryCarsNumController;
   final TextEditingController deliveryMotorsNumController;
 
@@ -211,6 +214,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   bool _isThereWarehouse = false;
   bool _isThereFoodsDelivery = false;
   bool _isFreeZone = false;
+  bool _isService = false;
   String? deliveryType;
   Future getProfileImage(ImageSource imageSource) async {
     final image = await ImagePicker().pickImage(source: imageSource);
@@ -611,6 +615,30 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               SizedBox(
                 height: 10.h,
               ),
+              widget.accountTitle == 'منطقة حرة'
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextSignup(
+                              text: AppLocalizations.of(context)
+                                  .translate('freezoneCity')),
+                          TextFormSignupWidget(
+                            password: false,
+                            isNumber: false,
+                            valid: (val) {
+                              return null;
+
+                              // return validInput(val!, 5, 100, "password");
+                            },
+                            myController: widget.freezoneCityController,
+                          ),
+                        ],
+                      ),
+                    )
+                  : const SizedBox(),
               widget.accountTitle == 'الشركات المحلية'
                   ? Padding(
                       padding: const EdgeInsets.only(bottom: 10.0),
@@ -846,6 +874,25 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       onChanged: (bool? value) {
                         setState(() {
                           _isFreeZone = value ?? false;
+                        });
+                      },
+                    ),
+              widget.accountTitle != 'الشركات المحلية'
+                  ? Container()
+                  : CheckboxListTile(
+                      title: Text(
+                        AppLocalizations.of(context).translate(
+                            'Do you offer services rather than products'),
+                        style: TextStyle(
+                          color: AppColor.backgroundColor,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                      activeColor: AppColor.backgroundColor,
+                      value: _isService,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _isService = value ?? false;
                         });
                       },
                     ),
@@ -1087,66 +1134,66 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         ),
                       ),
                     ),
-              widget.accountTitle == 'المستهلك' ||
-                      widget.accountTitle == 'جهة إخبارية'
-                  ? Container()
-                  : TextSignup(
-                      text: AppLocalizations.of(context)
-                          .translate('banner_photo'),
-                    ),
-              widget.accountTitle == 'المستهلك' ||
-                      widget.accountTitle == 'جهة إخبارية'
-                  ? Container()
-                  : Column(
-                      children: [
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            addPhotoButton(
-                                context: context,
-                                text: 'add_from_camera',
-                                onPressed: () {
-                                  getBanerImage(ImageSource.camera);
-                                }),
-                            addPhotoButton(
-                                context: context,
-                                text: 'add_from_gallery',
-                                onPressed: () {
-                                  getBanerImage(ImageSource.gallery);
-                                }),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        banerImage != null
-                            ? Center(
-                                child: Image.file(
-                                  banerImage!,
-                                  width: 250.w,
-                                  height: 250.h,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            : Center(
-                                child: Center(
-                                  child: Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.5,
-                                    decoration: BoxDecoration(
-                                        color: Colors.green.withOpacity(0.1),
-                                        image: const DecorationImage(
-                                            image: AssetImage(
-                                                "assets/images/logo.png"),
-                                            fit: BoxFit.cover)),
-                                  ),
-                                ),
-                              ),
-                      ],
-                    ),
+              // widget.accountTitle == 'المستهلك' ||
+              //         widget.accountTitle == 'جهة إخبارية'
+              //     ? Container()
+              //     : TextSignup(
+              //         text: AppLocalizations.of(context)
+              //             .translate('banner_photo'),
+              //       ),
+              // widget.accountTitle == 'المستهلك' ||
+              //         widget.accountTitle == 'جهة إخبارية'
+              //     ? Container()
+              //     : Column(
+              //         children: [
+              //           SizedBox(
+              //             height: 10.h,
+              //           ),
+              //           Row(
+              //             mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //             children: [
+              //               addPhotoButton(
+              //                   context: context,
+              //                   text: 'add_from_camera',
+              //                   onPressed: () {
+              //                     getBanerImage(ImageSource.camera);
+              //                   }),
+              //               addPhotoButton(
+              //                   context: context,
+              //                   text: 'add_from_gallery',
+              //                   onPressed: () {
+              //                     getBanerImage(ImageSource.gallery);
+              //                   }),
+              //             ],
+              //           ),
+              //           SizedBox(
+              //             height: 10.h,
+              //           ),
+              //           banerImage != null
+              //               ? Center(
+              //                   child: Image.file(
+              //                     banerImage!,
+              //                     width: 250.w,
+              //                     height: 250.h,
+              //                     fit: BoxFit.cover,
+              //                   ),
+              //                 )
+              //               : Center(
+              //                   child: Center(
+              //                     child: Container(
+              //                       height: MediaQuery.of(context).size.height *
+              //                           0.5,
+              //                       decoration: BoxDecoration(
+              //                           color: Colors.green.withOpacity(0.1),
+              //                           image: const DecorationImage(
+              //                               image: AssetImage(
+              //                                   "assets/images/logo.png"),
+              //                               fit: BoxFit.cover)),
+              //                     ),
+              //                   ),
+              //                 ),
+              //         ],
+              //       ),
               SizedBox(
                 height: 10.h,
               ),
@@ -1440,10 +1487,12 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           subcategory: widget.subcategory.text,
                           toCountry: widget.toCountry.text,
                           isFreeZoon: _isFreeZone,
+                          isService: _isService,
+                          freezoneCity: widget.freezoneCityController.text,
                           deliverable: _isDeliverable,
                           profilePhoto: profileImage,
                           coverPhoto: coverImage,
-                          banerPhoto: banerImage,
+                          // banerPhoto: banerImage,
                           frontIdPhoto: frontIdPhoto,
                           backIdPhoto: backIdPhoto,
                           bio: widget.bioController.text,
@@ -1492,7 +1541,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
       case 'الشركات البحرية':
         return 'sea_companies';
       case 'منطقة حرة':
-        return 'freezoon';
+        return 'freezone';
       case 'المصانع':
         return 'factory';
 

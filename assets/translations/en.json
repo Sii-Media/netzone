@@ -496,5 +496,13 @@
     "technicalFeatures": "Technical Features",
     "steering_side": "Steering Side",
     "color": "Color",
-    "car_category": "Car Category"
+    "car_category": "Car Category",
+    "freezoneCity": "Free Zone City",
+    "search by city": "Search by city",
+    "search": "Search...",
+    "search_by_owner_name": "Search by owner name",
+    "apply_filters": "Apply filters",
+    "Advertising cost depending on the number of days": "Advertising cost depending on the number of days",
+    "Do you offer services rather than products": "Do you offer services rather than products?",
+    "add_delivery_service": "Add delivery service"
 }

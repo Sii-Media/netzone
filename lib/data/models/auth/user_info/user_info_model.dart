@@ -10,6 +10,8 @@ class UserInfoModel {
   final String? userType;
   final String? firstMobile;
   final bool? isFreeZoon;
+  final bool? isService;
+  final String? freezoneCity;
   final bool? deliverable;
 
   final String? secondeMobile;
@@ -57,6 +59,8 @@ class UserInfoModel {
     this.subcategory,
     this.address,
     required this.isFreeZoon,
+    this.isService,
+    this.freezoneCity,
     this.deliverable,
     this.businessLicense,
     this.companyProductsNumber,
@@ -95,6 +99,8 @@ extension MapToDomain on UserInfoModel {
         userType: userType,
         firstMobile: firstMobile,
         isFreeZoon: isFreeZoon,
+        isService: isService,
+        freezoneCity: freezoneCity,
         deliverable: deliverable,
         secondeMobile: secondeMobile,
         thirdMobile: thirdMobile,

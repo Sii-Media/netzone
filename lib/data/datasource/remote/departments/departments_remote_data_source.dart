@@ -17,6 +17,10 @@ abstract class DepartmentsRemoteDataSource {
     final String country,
     final String department,
     final String category,
+    final int? priceMin,
+    final int? priceMax,
+    final String? owner,
+    final String? condition,
   );
 
   Future<String> addProduct(
@@ -65,15 +69,19 @@ abstract class DepartmentsRemoteDataSourceImpl
   @override
   @GET('/departments/categories')
   Future<DepartmentCategoryResponseModel> getCategoriesByDepartment(
-    @Part() String department,
+    @Query('department') String department,
   );
 
   @override
   @GET('/departments/products')
   Future<CategoryProductsResponseModel> getProductsByCategory(
     @Query('country') String country,
-    @Part() String department,
-    @Part() String category,
+    @Query('department') String department,
+    @Query('category') String category,
+    @Query('priceMin') int? priceMin,
+    @Query('priceMax') int? priceMax,
+    @Query('owner') String? owner,
+    @Query('condition ') String? condition,
   );
 
   @override
@@ -99,9 +107,9 @@ abstract class DepartmentsRemoteDataSourceImpl
   );
 
   @override
-  @GET('/departments/getUserProducts')
+  @GET('/departments/getUserProducts/{userId}')
   Future<List<CategoryProductsModel>> getUserProducts(
-    @Part() String userId,
+    @Path('userId') String userId,
   );
 
   @override

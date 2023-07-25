@@ -19,6 +19,8 @@ class SignUpUseCase extends UseCase<User, SignUpUseCaseParams> {
       userType: params.userType,
       firstMobile: params.firstMobile,
       isFreeZoon: params.isFreeZoon,
+      isService: params.isService,
+      freezoneCity: params.freezoneCity,
       country: params.country,
       secondMobile: params.secondMobile,
       thirdMobile: params.thirdMobile,
@@ -64,6 +66,9 @@ class SignUpUseCaseParams {
   final String? toCountry;
 
   final bool isFreeZoon;
+  final bool? isService;
+  final String? freezoneCity;
+
   final bool? deliverable;
   final File? profilePhoto;
   final File? coverPhoto;
@@ -88,6 +93,8 @@ class SignUpUseCaseParams {
     required this.userType,
     required this.firstMobile,
     required this.isFreeZoon,
+    this.isService,
+    this.freezoneCity,
     required this.deliverable,
     required this.country,
     this.secondMobile,

@@ -292,7 +292,7 @@
     "comments": "تعليقات",
     "chat_home": "يمكنك البدء بالدردشة و القيام بمكالمات الصوت والفيديو مع الشركات والمستخدمين المسجلين لدى تطبيق نت زوون ",
     "Type Something": "اكتب تعليقك",
-    "Followings": "أتابع",
+    "Followings": "يتابع",
     "Followers": "متابعون",
     "Favorites": "المفضلة",
     "Orders": "طلباتي",
@@ -496,5 +496,13 @@
     "technicalFeatures": "ميزات تقنية",
     "steering_side": "جانب التوجيه",
     "color": "اللون",
-    "car_category": "فئة السيارة"
+    "car_category": "فئة السيارة",
+    "freezoneCity": "مدينة المنطقة الحرة",
+    "search by city": "البحث عن طريق المدينة",
+    "search": "بحث...",
+    "search_by_owner_name": "بحث عن طريق اسم المالك",
+    "apply_filters": "تطبيق الفلترة",
+    "Advertising cost depending on the number of days": "تكلفة الاعلان تبعا لعدد الايام ",
+    "Do you offer services rather than products": "هل تقدمون خدمات بدلاً من منتجات؟",
+    "add_delivery_service": "إضافة خدمة توصيل"
 }

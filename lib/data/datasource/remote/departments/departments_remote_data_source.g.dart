@@ -25,13 +25,9 @@ class _DepartmentsRemoteDataSourceImpl
   Future<DepartmentCategoryResponseModel> getCategoriesByDepartment(
       department) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'department': department};
     final _headers = <String, dynamic>{};
-    final _data = FormData();
-    _data.fields.add(MapEntry(
-      'department',
-      department,
-    ));
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<DepartmentCategoryResponseModel>(Options(
       method: 'GET',
@@ -54,19 +50,24 @@ class _DepartmentsRemoteDataSourceImpl
     country,
     department,
     category,
+    priceMin,
+    priceMax,
+    owner,
+    condition,
   ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'country': country};
+    final queryParameters = <String, dynamic>{
+      r'country': country,
+      r'department': department,
+      r'category': category,
+      r'priceMin': priceMin,
+      r'priceMax': priceMax,
+      r'owner': owner,
+      r'condition ': condition,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = FormData();
-    _data.fields.add(MapEntry(
-      'department',
-      department,
-    ));
-    _data.fields.add(MapEntry(
-      'category',
-      category,
-    ));
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<CategoryProductsResponseModel>(Options(
       method: 'GET',
@@ -205,11 +206,7 @@ class _DepartmentsRemoteDataSourceImpl
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = FormData();
-    _data.fields.add(MapEntry(
-      'userId',
-      userId,
-    ));
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<List<dynamic>>(
         _setStreamType<List<CategoryProductsModel>>(Options(
       method: 'GET',
@@ -218,7 +215,7 @@ class _DepartmentsRemoteDataSourceImpl
     )
             .compose(
               _dio.options,
-              '/departments/getUserProducts',
+              '/departments/getUserProducts/${userId}',
               queryParameters: queryParameters,
               data: _data,
             )

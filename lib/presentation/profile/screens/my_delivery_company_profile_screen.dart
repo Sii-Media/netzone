@@ -747,11 +747,42 @@ class _MyDeliveryCompanyProfileScreenState
                                                 .translate('mobile'),
                                             input: state.userInfo.firstMobile ??
                                                 ''),
-                                        titleAndInput(
-                                            title: AppLocalizations.of(context)
-                                                .translate('website'),
-                                            input:
-                                                state.userInfo.website ?? ''),
+                                        state.userInfo.bio != null &&
+                                                state.userInfo.bio != ''
+                                            ? titleAndInput(
+                                                title:
+                                                    AppLocalizations.of(context)
+                                                        .translate('Bio'),
+                                                input: state.userInfo.bio ?? '')
+                                            : const SizedBox(),
+                                        state.userInfo.description != null &&
+                                                state.userInfo.description != ''
+                                            ? titleAndInput(
+                                                title:
+                                                    AppLocalizations.of(context)
+                                                        .translate('desc'),
+                                                input: state
+                                                        .userInfo.description ??
+                                                    '')
+                                            : const SizedBox(),
+                                        state.userInfo.address != null &&
+                                                state.userInfo.address != ''
+                                            ? titleAndInput(
+                                                title:
+                                                    AppLocalizations.of(context)
+                                                        .translate('address'),
+                                                input: state.userInfo.address ??
+                                                    '')
+                                            : const SizedBox(),
+                                        state.userInfo.website != null &&
+                                                state.userInfo.website != ''
+                                            ? titleAndInput(
+                                                title:
+                                                    AppLocalizations.of(context)
+                                                        .translate('website'),
+                                                input: state.userInfo.website ??
+                                                    '')
+                                            : const SizedBox(),
                                         titleAndInput(
                                             title: AppLocalizations.of(context)
                                                 .translate('delivery_type'),

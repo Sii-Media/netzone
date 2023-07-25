@@ -12,6 +12,8 @@ String mapFailureToString(Failure failure) {
       return 'Credintial Failure';
     case OTPValidFailure:
       return 'InValid OTP';
+    case FilteredFailure:
+      return 'No products found with the provided filters';
     default:
       return "UnExpected Error, Please try again later.";
   }

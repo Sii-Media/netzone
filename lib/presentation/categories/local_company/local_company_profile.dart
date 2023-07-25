@@ -47,6 +47,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
   final prodBloc = sl<LocalCompanyBloc>();
   final adsBloc = sl<AdsBlocBloc>();
   final authBloc = sl<AuthBloc>();
+  final serviceBloc = sl<LocalCompanyBloc>();
   bool isFollowing = false;
   late final CountryBloc countryBloc;
   @override
@@ -132,6 +133,13 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                 ),
               );
             } else if (state is GetUserSuccess) {
+              if (state.userInfo.isService == true) {
+                serviceBloc
+                    .add(GetCompanyServicesByIdEvent(id: state.userInfo.id));
+              } else {
+                prodBloc.add(
+                    GetLocalProductsEvent(username: widget.localCompany.id));
+              }
               return DefaultTabController(
                 length: 3,
                 child: NestedScrollView(
@@ -397,98 +405,6 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                     ],
                                   ),
                                 ),
-                                // Padding(
-                                //   padding: const EdgeInsets.symmetric(
-                                //       horizontal: 20.0),
-                                //   child: SizedBox(
-                                //     // height: 50.h,
-                                //     child: Padding(
-                                //       padding: const EdgeInsets.symmetric(
-                                //           horizontal: 20.0),
-                                //       child: Row(
-                                //         mainAxisAlignment:
-                                //             MainAxisAlignment.spaceBetween,
-                                //         children: [
-                                //           Column(
-                                //             mainAxisAlignment:
-                                //                 MainAxisAlignment.spaceBetween,
-                                //             crossAxisAlignment:
-                                //                 CrossAxisAlignment.center,
-                                //             children: [
-                                //               Text(
-                                //                 AppLocalizations.of(context)
-                                //                     .translate('Rating'),
-                                //                 style: TextStyle(
-                                //                   color: Colors.grey[500],
-                                //                   // fontWeight: FontWeight.bold,
-                                //                   fontSize: 13.sp,
-                                //                 ),
-                                //               ),
-                                //               Text(
-                                //                 '1/10',
-                                //                 style: TextStyle(
-                                //                   color: Colors.grey[700],
-                                //                   fontWeight: FontWeight.bold,
-                                //                   fontSize: 13.sp,
-                                //                 ),
-                                //               ),
-                                //             ],
-                                //           ),
-                                //           Column(
-                                //             mainAxisAlignment:
-                                //                 MainAxisAlignment.spaceBetween,
-                                //             crossAxisAlignment:
-                                //                 CrossAxisAlignment.center,
-                                //             children: [
-                                //               Text(
-                                //                 AppLocalizations.of(context)
-                                //                     .translate('Products'),
-                                //                 style: TextStyle(
-                                //                   color: Colors.grey[500],
-                                //                   // fontWeight: FontWeight.bold,
-                                //                   fontSize: 13.sp,
-                                //                 ),
-                                //               ),
-                                //               Text(
-                                //                 '4',
-                                //                 style: TextStyle(
-                                //                   color: Colors.grey[700],
-                                //                   fontWeight: FontWeight.bold,
-                                //                   fontSize: 13.sp,
-                                //                 ),
-                                //               ),
-                                //             ],
-                                //           ),
-                                //           Column(
-                                //             mainAxisAlignment:
-                                //                 MainAxisAlignment.spaceBetween,
-                                //             crossAxisAlignment:
-                                //                 CrossAxisAlignment.center,
-                                //             children: [
-                                //               Text(
-                                //                 AppLocalizations.of(context)
-                                //                     .translate('Views'),
-                                //                 style: TextStyle(
-                                //                   color: Colors.grey[500],
-                                //                   // fontWeight: FontWeight.bold,
-                                //                   fontSize: 13.sp,
-                                //                 ),
-                                //               ),
-                                //               Text(
-                                //                 '1/10',
-                                //                 style: TextStyle(
-                                //                   color: Colors.grey[700],
-                                //                   fontWeight: FontWeight.bold,
-                                //                   fontSize: 13.sp,
-                                //                 ),
-                                //               ),
-                                //             ],
-                                //           ),
-                                //         ],
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
                                 SizedBox(
                                   height: 12.h,
                                 ),
@@ -607,7 +523,11 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                         controller: tabController,
                         tabs: [
                           Text(
-                            AppLocalizations.of(context).translate('Products'),
+                            state.userInfo.isService == true
+                                ? AppLocalizations.of(context)
+                                    .translate('services')
+                                : AppLocalizations.of(context)
+                                    .translate('Products'),
                             style: TextStyle(
                               color: AppColor.black,
                               fontSize: 11.sp,
@@ -636,162 +556,159 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                         child: TabBarView(
                           controller: tabController,
                           children: [
-                            BlocBuilder<LocalCompanyBloc, LocalCompanyState>(
-                              bloc: prodBloc,
-                              builder: (context, state) {
-                                if (state is LocalCompanyInProgress) {
-                                  return const Center(
-                                    child: CircularProgressIndicator(
-                                      color: AppColor.backgroundColor,
-                                    ),
-                                  );
-                                } else if (state is LocalCompanyFailure) {
-                                  final failure = state.message;
-                                  return Center(
-                                    child: Text(
-                                      failure,
-                                      style: const TextStyle(
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  );
-                                } else if (state
-                                    is LocalCompanyProductsSuccess) {
-                                  return state.products.isEmpty
-                                      ? Text(
-                                          AppLocalizations.of(context)
-                                              .translate('no_items'),
-                                          style: TextStyle(
-                                            color: AppColor.backgroundColor,
-                                            fontSize: 22.sp,
-                                          ),
-                                        )
-                                      : BlocBuilder<CountryBloc, CountryState>(
-                                          bloc: countryBloc,
-                                          builder: (context, countryState) {
-                                            if (countryState
-                                                is CountryInitial) {
-                                              return GridView.builder(
-                                                gridDelegate:
-                                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                                        crossAxisCount: 3,
-                                                        childAspectRatio: 0.95,
-                                                        crossAxisSpacing: 10.w,
-                                                        mainAxisSpacing: 10.h),
-                                                shrinkWrap: true,
-                                                physics:
-                                                    const BouncingScrollPhysics(),
-                                                itemCount:
-                                                    state.products.length,
-                                                itemBuilder: (context, index) {
-                                                  return ClipRRect(
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                            Radius.circular(
-                                                                20)),
-                                                    child: GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.of(context)
-                                                            .push(
-                                                          MaterialPageRoute(
-                                                            builder: (context) {
-                                                              return ProductDetailsScreen(
-                                                                products: state
-                                                                    .products,
-                                                                index: index,
-                                                              );
-                                                            },
-                                                          ),
-                                                        );
-                                                      },
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          CachedNetworkImage(
-                                                            imageUrl: state
-                                                                .products[index]
-                                                                .imageUrl,
-                                                            height: 65.h,
-                                                            width: 120.w,
-                                                            fit: BoxFit.contain,
-                                                          ),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceEvenly,
-                                                            children: [
-                                                              Text(
-                                                                state
-                                                                    .products[
-                                                                        index]
-                                                                    .name,
-                                                                style: const TextStyle(
-                                                                    color: AppColor
-                                                                        .backgroundColor,
-                                                                    fontSize:
-                                                                        10),
-                                                              ),
-                                                              // Text(
-                                                              //   '${state.products[index].price} \$',
-                                                              //   style: const TextStyle(
-                                                              //       color: AppColor
-                                                              //           .colorTwo,
-                                                              //       fontSize:
-                                                              //           10),
-                                                              // ),
-                                                              RichText(
-                                                                text: TextSpan(
-                                                                    style: TextStyle(
-                                                                        fontSize: 10
-                                                                            .sp,
-                                                                        color: AppColor
-                                                                            .backgroundColor),
-                                                                    children: <
-                                                                        TextSpan>[
-                                                                      TextSpan(
-                                                                        text:
-                                                                            '${state.products[index].price}',
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          fontWeight:
-                                                                              FontWeight.w700,
-                                                                        ),
-                                                                      ),
-                                                                      TextSpan(
-                                                                        text:
-                                                                            getCurrencyFromCountry(
-                                                                          countryState
-                                                                              .selectedCountry,
-                                                                          context,
-                                                                        ),
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                AppColor.backgroundColor,
-                                                                            fontSize: 10.sp),
-                                                                      )
-                                                                    ]),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
+                            state.userInfo.isService == false ||
+                                    state.userInfo.isService == null
+                                ? ProductListWidget(
+                                    prodBloc: prodBloc,
+                                    widget: widget,
+                                    countryBloc: countryBloc)
+                                : RefreshIndicator(
+                                    onRefresh: () async {
+                                      serviceBloc.add(
+                                          GetCompanyServicesByIdEvent(
+                                              id: state.userInfo.id));
+                                    },
+                                    color: AppColor.white,
+                                    backgroundColor: AppColor.backgroundColor,
+                                    child: BlocBuilder<LocalCompanyBloc,
+                                        LocalCompanyState>(
+                                      bloc: serviceBloc,
+                                      builder: (context, serviceState) {
+                                        if (serviceState
+                                            is LocalCompanyInProgress) {
+                                          return const Center(
+                                            child: CircularProgressIndicator(
+                                              color: AppColor.backgroundColor,
+                                            ),
+                                          );
+                                        } else if (serviceState
+                                            is LocalCompanyFailure) {
+                                          final failure = serviceState.message;
+                                          return Center(
+                                            child: Text(
+                                              failure,
+                                              style: const TextStyle(
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                          );
+                                        } else if (serviceState
+                                            is GetCompanyServiceSuccess) {
+                                          return BlocBuilder<CountryBloc,
+                                              CountryState>(
+                                            bloc: countryBloc,
+                                            builder: (context, countryState) {
+                                              if (countryState
+                                                  is CountryInitial) {
+                                                return ListView.builder(
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      const BouncingScrollPhysics(),
+                                                  itemCount: serviceState
+                                                      .services.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Card(
+                                                      elevation: 3,
+                                                      margin: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 16,
+                                                          vertical: 8),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12),
                                                       ),
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            }
-                                            return Container();
-                                          },
-                                        );
-                                }
-                                return Container();
-                              },
-                            ),
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(16),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              serviceState
+                                                                  .services[
+                                                                      index]
+                                                                  .title,
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      18.sp,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: AppColor
+                                                                      .backgroundColor),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 8.h),
+                                                            Text(
+                                                              serviceState
+                                                                  .services[
+                                                                      index]
+                                                                  .description,
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      16.sp,
+                                                                  color: AppColor
+                                                                      .secondGrey),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 8.h),
+                                                            RichText(
+                                                              text: TextSpan(
+                                                                  style: const TextStyle(
+                                                                      fontSize:
+                                                                          16,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color: AppColor
+                                                                          .black),
+                                                                  children: <
+                                                                      TextSpan>[
+                                                                    TextSpan(
+                                                                      text:
+                                                                          '${serviceState.services[index].price}',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.w700,
+                                                                      ),
+                                                                    ),
+                                                                    TextSpan(
+                                                                      text:
+                                                                          getCurrencyFromCountry(
+                                                                        countryState
+                                                                            .selectedCountry,
+                                                                        context,
+                                                                      ),
+                                                                      style: const TextStyle(
+                                                                          color: AppColor
+                                                                              .backgroundColor,
+                                                                          fontSize:
+                                                                              10),
+                                                                    )
+                                                                  ]),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              }
+                                              return Container();
+                                            },
+                                          );
+                                        }
+                                        return Container();
+                                      },
+                                    ),
+                                  ),
                             BlocBuilder<AdsBlocBloc, AdsBlocState>(
                               bloc: adsBloc,
                               builder: (context, state) {
@@ -848,122 +765,6 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                             );
                                           },
                                         );
-                                  // : GridView.builder(
-                                  //     gridDelegate:
-                                  //         SliverGridDelegateWithFixedCrossAxisCount(
-                                  //             crossAxisCount: 3,
-                                  //             childAspectRatio: 0.95,
-                                  //             crossAxisSpacing: 10.w,
-                                  //             mainAxisSpacing: 10.h),
-                                  //     shrinkWrap: true,
-                                  //     physics:
-                                  //         const BouncingScrollPhysics(),
-                                  //     itemCount: state.ads.length,
-                                  //     itemBuilder: (context, index) {
-                                  //       return ClipRRect(
-                                  //         borderRadius:
-                                  //             const BorderRadius.all(
-                                  //                 Radius.circular(20)),
-                                  //         child: GestureDetector(
-                                  //           onTap: () {
-                                  //             Navigator.of(context).push(
-                                  //               MaterialPageRoute(
-                                  //                 builder: (context) {
-                                  //                   return AdvertismentDetalsScreen(
-                                  //                       adsId: state
-                                  //                           .ads[index].id);
-                                  //                 },
-                                  //               ),
-                                  //             );
-                                  //           },
-                                  //           child: Card(
-                                  //             elevation: 4.0,
-                                  //             shape: RoundedRectangleBorder(
-                                  //               borderRadius:
-                                  //                   BorderRadius.circular(
-                                  //                       16.0),
-                                  //             ),
-                                  //             child: SizedBox(
-                                  //               height: 100.h,
-                                  //               width: 180.w,
-                                  //               child: Stack(
-                                  //                 // fit: StackFit.expand,
-                                  //                 alignment:
-                                  //                     AlignmentDirectional
-                                  //                         .bottomCenter,
-                                  //                 children: [
-                                  //                   ClipRRect(
-                                  //                     borderRadius:
-                                  //                         BorderRadius
-                                  //                             .circular(
-                                  //                                 16.0),
-                                  //                     child:
-                                  //                         CachedNetworkImage(
-                                  //                       imageUrl: state
-                                  //                           .ads[index]
-                                  //                           .advertisingImage,
-                                  //                       height: 200.h,
-                                  //                       width: double
-                                  //                           .maxFinite,
-                                  //                       fit: BoxFit.cover,
-                                  //                     ),
-                                  //                   ),
-                                  //                   Container(
-                                  //                     decoration:
-                                  //                         BoxDecoration(
-                                  //                       borderRadius:
-                                  //                           BorderRadius
-                                  //                               .circular(
-                                  //                                   16.0),
-                                  //                       gradient:
-                                  //                           LinearGradient(
-                                  //                         begin: Alignment
-                                  //                             .topCenter,
-                                  //                         end: Alignment
-                                  //                             .bottomCenter,
-                                  //                         colors: [
-                                  //                           Colors
-                                  //                               .transparent,
-                                  //                           AppColor
-                                  //                               .backgroundColor
-                                  //                               .withOpacity(
-                                  //                                   0.6),
-                                  //                         ],
-                                  //                       ),
-                                  //                     ),
-                                  //                   ),
-                                  //                   Padding(
-                                  //                     padding:
-                                  //                         const EdgeInsets
-                                  //                                 .symmetric(
-                                  //                             horizontal:
-                                  //                                 6.0),
-                                  //                     child: Align(
-                                  //                       alignment: Alignment
-                                  //                           .bottomCenter,
-                                  //                       child: Text(
-                                  //                         state.ads[index]
-                                  //                             .name,
-                                  //                         style: TextStyle(
-                                  //                           color: Colors
-                                  //                               .white,
-                                  //                           fontSize:
-                                  //                               10.0.sp,
-                                  //                           fontWeight:
-                                  //                               FontWeight
-                                  //                                   .bold,
-                                  //                         ),
-                                  //                       ),
-                                  //                     ),
-                                  //                   ),
-                                  //                 ],
-                                  //               ),
-                                  //             ),
-                                  //           ),
-                                  //         ),
-                                  //       );
-                                  //     },
-                                  //   );
                                 }
                                 return Container();
                               },
@@ -996,13 +797,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                     .localCompany.description ??
                                                 '')
                                         : const SizedBox(),
-                                    widget.localCompany.bio != null
-                                        ? titleAndInput(
-                                            title: AppLocalizations.of(context)
-                                                .translate('Bio'),
-                                            input:
-                                                widget.localCompany.bio ?? '')
-                                        : const SizedBox(),
+
                                     titleAndInput(
                                         title: AppLocalizations.of(context)
                                             .translate('mobile'),
@@ -1013,13 +808,42 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                         title: AppLocalizations.of(context)
                                             .translate('email'),
                                         input: widget.localCompany.email ?? ''),
-                                    widget.localCompany.website != null
+                                    // widget.localCompany.website != null
+                                    //     ? titleAndInput(
+                                    //         title: AppLocalizations.of(context)
+                                    //             .translate('website'),
+                                    //         input:
+                                    //             widget.localCompany.website ??
+                                    //                 '')
+                                    //     : const SizedBox(),
+                                    state.userInfo.bio != null &&
+                                            state.userInfo.bio != ''
+                                        ? titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('Bio'),
+                                            input: state.userInfo.bio ?? '')
+                                        : const SizedBox(),
+                                    state.userInfo.description != null &&
+                                            state.userInfo.description != ''
+                                        ? titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('desc'),
+                                            input: state.userInfo.description ??
+                                                '')
+                                        : const SizedBox(),
+                                    state.userInfo.address != null &&
+                                            state.userInfo.address != ''
+                                        ? titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('address'),
+                                            input: state.userInfo.address ?? '')
+                                        : const SizedBox(),
+                                    state.userInfo.website != null &&
+                                            state.userInfo.website != ''
                                         ? titleAndInput(
                                             title: AppLocalizations.of(context)
                                                 .translate('website'),
-                                            input:
-                                                widget.localCompany.website ??
-                                                    '')
+                                            input: state.userInfo.website ?? '')
                                         : const SizedBox(),
                                     widget.localCompany.deliverable != null
                                         ? titleAndInput(
@@ -1089,6 +913,160 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ProductListWidget extends StatelessWidget {
+  const ProductListWidget({
+    super.key,
+    required this.prodBloc,
+    required this.widget,
+    required this.countryBloc,
+  });
+
+  final LocalCompanyBloc prodBloc;
+  final LocalCompanyProfileScreen widget;
+  final CountryBloc countryBloc;
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        prodBloc.add(GetLocalProductsEvent(username: widget.localCompany.id));
+      },
+      color: AppColor.white,
+      backgroundColor: AppColor.backgroundColor,
+      child: BlocBuilder<LocalCompanyBloc, LocalCompanyState>(
+        bloc: prodBloc,
+        builder: (context, state) {
+          if (state is LocalCompanyInProgress) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: AppColor.backgroundColor,
+              ),
+            );
+          } else if (state is LocalCompanyFailure) {
+            final failure = state.message;
+            return Center(
+              child: Text(
+                failure,
+                style: const TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            );
+          } else if (state is LocalCompanyProductsSuccess) {
+            return state.products.isEmpty
+                ? Text(
+                    AppLocalizations.of(context).translate('no_items'),
+                    style: TextStyle(
+                      color: AppColor.backgroundColor,
+                      fontSize: 22.sp,
+                    ),
+                  )
+                : BlocBuilder<CountryBloc, CountryState>(
+                    bloc: countryBloc,
+                    builder: (context, countryState) {
+                      if (countryState is CountryInitial) {
+                        return GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  childAspectRatio: 0.95,
+                                  crossAxisSpacing: 10.w,
+                                  mainAxisSpacing: 10.h),
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: state.products.length,
+                          itemBuilder: (context, index) {
+                            return ClipRRect(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(20)),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return ProductDetailsScreen(
+                                          products: state.products,
+                                          index: index,
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    CachedNetworkImage(
+                                      imageUrl: state.products[index].imageUrl,
+                                      height: 65.h,
+                                      width: 120.w,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text(
+                                          state.products[index].name,
+                                          style: const TextStyle(
+                                              color: AppColor.backgroundColor,
+                                              fontSize: 10),
+                                        ),
+                                        // Text(
+                                        //   '${state.products[index].price} \$',
+                                        //   style: const TextStyle(
+                                        //       color: AppColor
+                                        //           .colorTwo,
+                                        //       fontSize:
+                                        //           10),
+                                        // ),
+                                        RichText(
+                                          text: TextSpan(
+                                              style: TextStyle(
+                                                  fontSize: 10.sp,
+                                                  color:
+                                                      AppColor.backgroundColor),
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                  text:
+                                                      '${state.products[index].price}',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: getCurrencyFromCountry(
+                                                    countryState
+                                                        .selectedCountry,
+                                                    context,
+                                                  ),
+                                                  style: TextStyle(
+                                                      color: AppColor
+                                                          .backgroundColor,
+                                                      fontSize: 10.sp),
+                                                )
+                                              ]),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                      return Container();
+                    },
+                  );
+          }
+          return Container();
+        },
       ),
     );
   }

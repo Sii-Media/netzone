@@ -12,3 +12,12 @@ class GetUsersListEvent extends UsersEvent {
 
   const GetUsersListEvent({required this.userType});
 }
+
+class SearchUsersEvent extends UsersEvent {
+  final String searchQuery;
+
+  const SearchUsersEvent({required this.searchQuery});
+
+  @override
+  List<Object> get props => [searchQuery];
+}

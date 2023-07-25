@@ -49,13 +49,12 @@ class _DealsRemoteDataSourceImpl implements DealsRemoteDataSourceImpl {
     category,
   ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'country': country};
+    final queryParameters = <String, dynamic>{
+      r'country': country,
+      r'category': category,
+    };
     final _headers = <String, dynamic>{};
-    final _data = FormData();
-    _data.fields.add(MapEntry(
-      'category',
-      category,
-    ));
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<DealsItemsResponseModel>(Options(
       method: 'GET',

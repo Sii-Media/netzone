@@ -38,20 +38,26 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
   }
 
   @override
-  Future<Either<Failure, CategoryProductsResponse>> getProductsByCategory(
-      {required String department,
-      required String category,
-      required String country}) async {
+  Future<Either<Failure, CategoryProductsResponse>> getProductsByCategory({
+    required String department,
+    required String category,
+    required String country,
+    int? priceMin,
+    int? priceMax,
+    String? owner,
+    String? condition,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
-        final categoryProducts = await departmentsRemoteDataSource
-            .getProductsByCategory(country, department, category);
+        final categoryProducts =
+            await departmentsRemoteDataSource.getProductsByCategory(country,
+                department, category, priceMin, priceMax, owner, condition);
         return Right(categoryProducts.toDomain());
       } else {
         return Left(OfflineFailure());
       }
     } catch (e) {
-      return Left(ServerFailure());
+      return Left(FilteredFailure());
     }
   }
 

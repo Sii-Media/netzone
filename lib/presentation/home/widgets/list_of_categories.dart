@@ -4,13 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/categories/entities/categories.dart';
 import 'package:netzoon/presentation/categories/customs_screen/customs_category.dart';
 import 'package:netzoon/presentation/categories/factories/factories_categories.dart';
-import 'package:netzoon/presentation/categories/free_zoon/category_free_zoon.dart';
 import 'package:netzoon/presentation/categories/local_company/local_companies.dart';
 import 'package:netzoon/presentation/categories/real_estate/screens/real_estate_companies_list_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../categories/delivery_company/screens/delivery_companies_list_screen.dart';
+import '../../categories/free_zoon/freezone_companies_list_screen.dart';
 import '../../categories/governmental/govermental_category_screen.dart';
 import '../../categories/users/screens/users_list_screen.dart';
 import '../../categories/vehicles/screens/vehicles_companies_screen.dart';
@@ -74,46 +74,53 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                               }));
                             } else if (widget.categories[index].name ==
                                 'free_zone_companies') {
-                              if (state.selectedCountry == 'AE') {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return const CategoriesFreeZone();
-                                    },
-                                  ),
-                                );
-                              } else {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text(
-                                        AppLocalizations.of(context)
-                                            .translate('sorry'),
-                                        style: const TextStyle(
-                                            color: AppColor.red),
-                                      ),
-                                      content: Text(
-                                        AppLocalizations.of(context).translate(
-                                            'This is not Available now'),
-                                        style: const TextStyle(
-                                            color: AppColor.red),
-                                      ),
-                                      actions: [
-                                        ElevatedButton(
-                                          child: Text(
-                                            AppLocalizations.of(context)
-                                                .translate('ok'),
-                                          ),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                      ],
-                                    );
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const FreeZoneCompaniesListScreen();
                                   },
-                                );
-                              }
+                                ),
+                              );
+                              // if (state.selectedCountry == 'AE') {
+                              //   Navigator.of(context).push(
+                              //     MaterialPageRoute(
+                              //       builder: (context) {
+                              //         return const CategoriesFreeZone();
+                              //       },
+                              //     ),
+                              //   );
+                              // } else {
+                              //   showDialog(
+                              //     context: context,
+                              //     builder: (BuildContext context) {
+                              //       return AlertDialog(
+                              //         title: Text(
+                              //           AppLocalizations.of(context)
+                              //               .translate('sorry'),
+                              //           style: const TextStyle(
+                              //               color: AppColor.red),
+                              //         ),
+                              //         content: Text(
+                              //           AppLocalizations.of(context).translate(
+                              //               'This is not Available now'),
+                              //           style: const TextStyle(
+                              //               color: AppColor.red),
+                              //         ),
+                              //         actions: [
+                              //           ElevatedButton(
+                              //             child: Text(
+                              //               AppLocalizations.of(context)
+                              //                   .translate('ok'),
+                              //             ),
+                              //             onPressed: () {
+                              //               Navigator.of(context).pop();
+                              //             },
+                              //           ),
+                              //         ],
+                              //       );
+                              //     },
+                              //   );
+                              // }
                             } else if (widget.categories[index].name ==
                                 'customs') {
                               Navigator.of(context).push(

@@ -127,7 +127,7 @@ class _SearchPageState extends State<SearchPage> {
                           if (cat == 'Products') {
                             productBloc.add(GetAllProductsEvent());
                           } else if (cat == 'local_companies') {
-                            localCompanyBloc.add(GetLocalCompaniesEvent(
+                            localCompanyBloc.add(const GetLocalCompaniesEvent(
                                 userType: 'local_company'));
                           } else if (cat == 'advertiments') {
                             adsBloc.add(GetAllAdsEvent());

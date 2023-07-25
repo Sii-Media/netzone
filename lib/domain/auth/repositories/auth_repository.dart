@@ -14,6 +14,8 @@ abstract class AuthRepository {
     required String userType,
     required String firstMobile,
     required bool isFreeZoon,
+    bool? isService,
+    String? freezoneCity,
     required String country,
     String? secondMobile,
     String? thirdMobile,

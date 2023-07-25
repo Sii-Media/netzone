@@ -20,6 +20,7 @@ import '../../../core/screen/product_details_screen.dart';
 import '../../../profile/blocs/get_user/get_user_bloc.dart';
 import '../../../utils/app_localizations.dart';
 import '../../widgets/build_rating.dart';
+import '../../widgets/title_and_input.dart';
 
 class UsersProfileScreen extends StatefulWidget {
   final UserInfo user;
@@ -900,48 +901,6 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
             }
             return Container();
           },
-        ),
-      ),
-    );
-  }
-
-  Padding titleAndInput({required String title, required String input}) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        // height: 40.h,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: Colors.grey.withOpacity(0.4),
-              width: 1.0,
-            ),
-          ),
-        ),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  color: AppColor.black,
-                  fontSize: 15.sp,
-                ),
-              ),
-              SizedBox(
-                width: 190,
-                child: Text(
-                  input,
-                  style: TextStyle(
-                    color: AppColor.mainGrey,
-                    fontSize: 15.sp,
-                  ),
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );

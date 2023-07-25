@@ -5,6 +5,9 @@ class UserInfo {
   final String? userType;
   final String? firstMobile;
   final bool? isFreeZoon;
+  final bool? isService;
+
+  final String? freezoneCity;
   final bool? deliverable;
 
   final String? secondeMobile;
@@ -55,6 +58,8 @@ class UserInfo {
     this.subcategory,
     this.address,
     required this.isFreeZoon,
+    this.isService,
+    this.freezoneCity,
     this.deliverable,
     this.businessLicense,
     this.companyProductsNumber,

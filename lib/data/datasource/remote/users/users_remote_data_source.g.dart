@@ -26,13 +26,12 @@ class _UsersRemoteDataSourceImpl implements UsersRemoteDataSourceImpl {
     userType,
   ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'country': country};
+    final queryParameters = <String, dynamic>{
+      r'country': country,
+      r'userType': userType,
+    };
     final _headers = <String, dynamic>{};
-    final _data = FormData();
-    _data.fields.add(MapEntry(
-      'userType',
-      userType,
-    ));
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<UserInfoModel>>(Options(
       method: 'GET',

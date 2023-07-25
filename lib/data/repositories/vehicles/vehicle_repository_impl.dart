@@ -118,11 +118,10 @@ class VehicleRepositoryImpl implements VehicleRepository {
 
   @override
   Future<Either<Failure, List<Vehicle>>> getCompanyVehicles(
-      {required String type, required String id}) async {
+      {required String id}) async {
     try {
       if (await networkInfo.isConnected) {
-        final vehicles =
-            await vehicleRemoteDataSource.getCompanyVehicles(type, id);
+        final vehicles = await vehicleRemoteDataSource.getCompanyVehicles(id);
 
         return Right(vehicles.map((e) => e.toDomain()).toList());
       } else {

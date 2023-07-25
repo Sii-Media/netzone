@@ -95,8 +95,10 @@ import 'package:netzoon/domain/categories/usecases/freezone/get_freezone_places_
 import 'package:netzoon/domain/categories/usecases/freezone/get_freezone_places_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/governmental/get_all_governmental_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/governmental/get_govermental_companies_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/local_company/add_company_service_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_all_local_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_company_products_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/local_company/get_company_service_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_local_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/real_estate/add_real_estate_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/real_estate/get_all_real_estates_use_case.dart';
@@ -342,6 +344,8 @@ Future<void> init() async {
         getSignedInUser: sl(),
         getUserProductsUseCase: sl(),
         getCountryUseCase: sl(),
+        addCompanyServiceUseCase: sl(),
+        getCompanyServicesUseCase: sl(),
       ));
 
   sl.registerFactory(() => GovermentalBloc(
@@ -641,6 +645,13 @@ Future<void> init() async {
   sl.registerLazySingleton(() => AddDeliveryServiceUseCase(
         deliveryServiceRepository: sl(),
       ));
+
+  sl.registerLazySingleton(() => GetCompanyServicesUseCase(
+        localCompanyRepository: sl(),
+      ));
+
+  sl.registerLazySingleton(
+      () => AddCompanyServiceUseCase(localCompanyRepository: sl()));
 
   //! Repositories
 

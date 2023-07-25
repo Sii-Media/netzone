@@ -12,8 +12,7 @@ class GetCompanyVehiclesUseCase
   GetCompanyVehiclesUseCase({required this.vehicleRepository});
   @override
   Future<Either<Failure, List<Vehicle>>> call(GetCompanyVehiclesParams params) {
-    return vehicleRepository.getCompanyVehicles(
-        type: params.type, id: params.id);
+    return vehicleRepository.getCompanyVehicles(id: params.id);
   }
 }
 

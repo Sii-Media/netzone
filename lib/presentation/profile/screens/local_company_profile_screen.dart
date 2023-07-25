@@ -3,12 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/presentation/categories/local_company/local_company_bloc/local_company_bloc.dart';
 import 'package:netzoon/presentation/chat/screens/chat_home_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 
 import '../../../injection_container.dart';
+import '../../core/blocs/country_bloc/country_bloc.dart';
+import '../../core/helpers/get_currency_of_country.dart';
 import '../../core/widgets/on_failure_widget.dart';
 import '../../home/test.dart';
 import '../../utils/app_localizations.dart';
@@ -36,11 +39,13 @@ class _MyLocalCompanyProfileScreenState
   final userBloc = sl<GetUserBloc>();
   final productBloc = sl<GetUserBloc>();
   final getAccountsBloc = sl<AddAccountBloc>();
-
+  final serviceBloc = sl<LocalCompanyBloc>();
+  late final CountryBloc countryBloc;
   @override
   void initState() {
     userBloc.add(GetUserByIdEvent(userId: widget.userId));
-    productBloc.add(GetUserProductsEvent());
+    countryBloc = BlocProvider.of<CountryBloc>(context);
+    countryBloc.add(GetCountryEvent());
     super.initState();
   }
 
@@ -169,7 +174,7 @@ class _MyLocalCompanyProfileScreenState
       body: RefreshIndicator(
           onRefresh: () async {
             userBloc.add(GetUserByIdEvent(userId: widget.userId));
-            productBloc.add(GetUserProductsEvent());
+            // productBloc.add(GetUserProductsEvent());
           },
           color: AppColor.white,
           backgroundColor: AppColor.backgroundColor,
@@ -184,15 +189,26 @@ class _MyLocalCompanyProfileScreenState
                 );
               } else if (state is GetUserFailure) {
                 final failure = state.message;
-                return Center(
-                  child: Text(
-                    failure,
-                    style: const TextStyle(
-                      color: Colors.red,
-                    ),
-                  ),
+                // return Center(
+                //   child: Text(
+                //     failure,
+                //     style: const TextStyle(
+                //       color: Colors.red,
+                //     ),
+                //   ),
+                // );
+                return FailureWidget(
+                  failure: failure,
+                  onPressed: () {
+                    userBloc.add(GetUserByIdEvent(userId: widget.userId));
+                  },
                 );
               } else if (state is GetUserSuccess) {
+                if (state.userInfo.isService == true) {
+                  serviceBloc.add(GetCompanyServicesEvent());
+                } else {
+                  productBloc.add(GetUserProductsEvent());
+                }
                 return BlocListener<AddAccountBloc, AddAccountState>(
                   bloc: getAccountsBloc,
                   listener: (context, changeAccountstate) {
@@ -644,8 +660,12 @@ class _MyLocalCompanyProfileScreenState
                                     .translate('about_us'),
                               ),
                               Tab(
-                                text: AppLocalizations.of(context)
-                                    .translate('Products'),
+                                text: state.userInfo.isService == false ||
+                                        state.userInfo.isService == null
+                                    ? AppLocalizations.of(context)
+                                        .translate('Products')
+                                    : AppLocalizations.of(context)
+                                        .translate('services'),
                               ),
                             ],
                           ),
@@ -660,7 +680,7 @@ class _MyLocalCompanyProfileScreenState
                                   onRefresh: () async {
                                     userBloc.add(GetUserByIdEvent(
                                         userId: widget.userId));
-                                    productBloc.add(GetUserProductsEvent());
+                                    // productBloc.add(GetUserProductsEvent());
                                   },
                                   color: AppColor.white,
                                   backgroundColor: AppColor.backgroundColor,
@@ -687,6 +707,46 @@ class _MyLocalCompanyProfileScreenState
                                               input:
                                                   state.userInfo.firstMobile ??
                                                       ''),
+                                          state.userInfo.bio != null &&
+                                                  state.userInfo.bio != ''
+                                              ? titleAndInput(
+                                                  title: AppLocalizations.of(
+                                                          context)
+                                                      .translate('Bio'),
+                                                  input:
+                                                      state.userInfo.bio ?? '')
+                                              : const SizedBox(),
+                                          state.userInfo.description != null &&
+                                                  state.userInfo.description !=
+                                                      ''
+                                              ? titleAndInput(
+                                                  title: AppLocalizations.of(
+                                                          context)
+                                                      .translate('desc'),
+                                                  input: state.userInfo
+                                                          .description ??
+                                                      '')
+                                              : const SizedBox(),
+                                          state.userInfo.address != null &&
+                                                  state.userInfo.address != ''
+                                              ? titleAndInput(
+                                                  title: AppLocalizations.of(
+                                                          context)
+                                                      .translate('address'),
+                                                  input:
+                                                      state.userInfo.address ??
+                                                          '')
+                                              : const SizedBox(),
+                                          state.userInfo.website != null &&
+                                                  state.userInfo.website != ''
+                                              ? titleAndInput(
+                                                  title: AppLocalizations.of(
+                                                          context)
+                                                      .translate('website'),
+                                                  input:
+                                                      state.userInfo.website ??
+                                                          '')
+                                              : const SizedBox(),
                                           // titleAndInput(
                                           //   title: AppLocalizations.of(context)
                                           //       .translate('Is there delivery'),
@@ -701,186 +761,190 @@ class _MyLocalCompanyProfileScreenState
                                     ],
                                   ),
                                 ),
-                                RefreshIndicator(
-                                  onRefresh: () async {
-                                    productBloc.add(GetUserProductsEvent());
-                                  },
-                                  color: AppColor.white,
-                                  backgroundColor: AppColor.backgroundColor,
-                                  child: BlocBuilder<GetUserBloc, GetUserState>(
-                                    bloc: productBloc,
-                                    builder: (context, state) {
-                                      if (state is GetUserProductsInProgress) {
-                                        return const Center(
-                                          child: CircularProgressIndicator(
-                                            color: AppColor.backgroundColor,
-                                          ),
-                                        );
-                                      } else if (state
-                                          is GetUserProductsFailure) {
-                                        final failure = state.message;
-                                        return Center(
-                                          child: Text(
-                                            failure,
-                                            style: const TextStyle(
-                                              color: Colors.red,
-                                            ),
-                                          ),
-                                        );
-                                      } else if (state
-                                          is GetUserProductsSuccess) {
-                                        return state.products.isNotEmpty
-                                            ? Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Column(
-                                                  children: [
-                                                    Expanded(
-                                                      child: GridView.builder(
-                                                        gridDelegate:
-                                                            SliverGridDelegateWithFixedCrossAxisCount(
-                                                                crossAxisCount:
-                                                                    3,
-                                                                childAspectRatio:
-                                                                    0.95,
-                                                                crossAxisSpacing:
-                                                                    10.w,
-                                                                mainAxisSpacing:
-                                                                    10.h),
-                                                        shrinkWrap: true,
-                                                        physics:
-                                                            const BouncingScrollPhysics(),
-                                                        itemCount: state
-                                                            .products.length,
-                                                        itemBuilder:
-                                                            (context, index) {
-                                                          return Container(
-                                                            margin:
-                                                                const EdgeInsets
+                                state.userInfo.isService == false ||
+                                        state.userInfo.isService == null
+                                    ? ProductsListWidget(
+                                        productBloc: productBloc)
+                                    : RefreshIndicator(
+                                        onRefresh: () async {
+                                          serviceBloc
+                                              .add(GetCompanyServicesEvent());
+                                        },
+                                        color: AppColor.white,
+                                        backgroundColor:
+                                            AppColor.backgroundColor,
+                                        child: BlocBuilder<LocalCompanyBloc,
+                                            LocalCompanyState>(
+                                          bloc: serviceBloc,
+                                          builder: (context, serviceState) {
+                                            if (serviceState
+                                                is LocalCompanyInProgress) {
+                                              return const Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color:
+                                                      AppColor.backgroundColor,
+                                                ),
+                                              );
+                                            } else if (serviceState
+                                                is LocalCompanyFailure) {
+                                              final failure =
+                                                  serviceState.message;
+                                              return Center(
+                                                child: Text(
+                                                  failure,
+                                                  style: const TextStyle(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                              );
+                                            } else if (serviceState
+                                                is GetCompanyServiceSuccess) {
+                                              return BlocBuilder<CountryBloc,
+                                                  CountryState>(
+                                                bloc: countryBloc,
+                                                builder:
+                                                    (context, countryState) {
+                                                  if (countryState
+                                                      is CountryInitial) {
+                                                    return Column(
+                                                      children: [
+                                                        Expanded(
+                                                          child:
+                                                              ListView.builder(
+                                                            shrinkWrap: true,
+                                                            physics:
+                                                                const BouncingScrollPhysics(),
+                                                            itemCount:
+                                                                serviceState
+                                                                    .services
+                                                                    .length,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              String
+                                                                  fullDescription =
+                                                                  serviceState
+                                                                      .services[
+                                                                          index]
+                                                                      .description;
+                                                              String first =
+                                                                  fullDescription
+                                                                      .substring(
+                                                                          0,
+                                                                          100);
+                                                              String seconde =
+                                                                  fullDescription
+                                                                      .substring(
+                                                                          100);
+                                                              return Card(
+                                                                elevation: 3,
+                                                                margin: const EdgeInsets
                                                                         .symmetric(
+                                                                    horizontal:
+                                                                        16,
                                                                     vertical:
                                                                         8),
-                                                            decoration: BoxDecoration(
-                                                                color: AppColor
-                                                                    .white,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            20),
-                                                                boxShadow: [
-                                                                  BoxShadow(
-                                                                    color: AppColor
-                                                                        .secondGrey
-                                                                        .withOpacity(
-                                                                            0.5),
-                                                                    blurRadius:
-                                                                        10,
-                                                                    spreadRadius:
-                                                                        2,
-                                                                    offset:
-                                                                        const Offset(
-                                                                            0,
-                                                                            3),
-                                                                  ),
-                                                                ]),
-                                                            child: ClipRRect(
-                                                              borderRadius:
-                                                                  const BorderRadius
-                                                                          .all(
-                                                                      Radius.circular(
-                                                                          20)),
-                                                              child:
-                                                                  GestureDetector(
-                                                                onTap: () {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .push(MaterialPageRoute(
-                                                                          builder:
-                                                                              (context) {
-                                                                    return ProductDetailScreen(
-                                                                        item: state
-                                                                            .products[index]
-                                                                            .id);
-                                                                  }));
-                                                                },
-                                                                child: Column(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
-                                                                  children: [
-                                                                    CachedNetworkImage(
-                                                                      imageUrl: state
-                                                                          .products[
-                                                                              index]
-                                                                          .imageUrl,
-                                                                      height:
-                                                                          65.h,
-                                                                      width:
-                                                                          160.w,
-                                                                      fit: BoxFit
-                                                                          .contain,
-                                                                    ),
-                                                                    Padding(
-                                                                      padding: const EdgeInsets
-                                                                              .only(
-                                                                          right:
-                                                                              9.0,
-                                                                          left:
-                                                                              9.0,
-                                                                          bottom:
-                                                                              8.0),
-                                                                      child:
-                                                                          Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
-                                                                        children: [
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              12),
+                                                                ),
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(16),
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Text(
+                                                                        serviceState
+                                                                            .services[index]
+                                                                            .title,
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                18.sp,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            color: AppColor.backgroundColor),
+                                                                      ),
+                                                                      SizedBox(
+                                                                          height:
+                                                                              8.h),
+                                                                      ExpansionTile(
+                                                                        title:
+                                                                            Text(
+                                                                          first,
+                                                                          maxLines:
+                                                                              3,
+                                                                          // overflow:
+                                                                          //     TextOverflow.ellipsis,
+                                                                          style: TextStyle(
+                                                                              fontSize: 16.sp,
+                                                                              color: AppColor.secondGrey),
+                                                                        ),
+                                                                        children: <
+                                                                            Widget>[
+                                                                          // The widget displayed when the tile expands
                                                                           Text(
-                                                                            state.products[index].name,
+                                                                            seconde,
                                                                             style:
-                                                                                const TextStyle(
-                                                                              color: AppColor.backgroundColor,
-                                                                            ),
-                                                                          ),
-                                                                          Text(
-                                                                            '${state.products[index].price} \$',
-                                                                            style:
-                                                                                const TextStyle(
-                                                                              color: AppColor.colorTwo,
+                                                                                TextStyle(
+                                                                              fontSize: 16.sp,
+                                                                              color: AppColor.secondGrey,
                                                                             ),
                                                                           ),
                                                                         ],
                                                                       ),
-                                                                    ),
-                                                                  ],
+                                                                      SizedBox(
+                                                                          height:
+                                                                              8.h),
+                                                                      RichText(
+                                                                        text: TextSpan(
+                                                                            style: const TextStyle(
+                                                                                fontSize: 16,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                color: AppColor.black),
+                                                                            children: <TextSpan>[
+                                                                              TextSpan(
+                                                                                text: '${serviceState.services[index].price}',
+                                                                                style: const TextStyle(
+                                                                                  fontWeight: FontWeight.w700,
+                                                                                ),
+                                                                              ),
+                                                                              TextSpan(
+                                                                                text: getCurrencyFromCountry(
+                                                                                  countryState.selectedCountry,
+                                                                                  context,
+                                                                                ),
+                                                                                style: const TextStyle(color: AppColor.backgroundColor, fontSize: 10),
+                                                                              )
+                                                                            ]),
+                                                                      ),
+                                                                    ],
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                            ),
-                                                          );
-                                                        },
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 70.h,
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                            : Center(
-                                                child: Text(
-                                                    AppLocalizations.of(context)
-                                                        .translate('no_items'),
-                                                    style: const TextStyle(
-                                                        color: AppColor
-                                                            .backgroundColor)),
+                                                              );
+                                                            },
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 80.h,
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }
+                                                  return Container();
+                                                },
                                               );
-                                      }
-                                      return Container();
-                                    },
-                                  ),
-                                )
+                                            }
+                                            return Container();
+                                          },
+                                        ),
+                                      ),
                               ],
                             ),
                           ),
@@ -893,6 +957,150 @@ class _MyLocalCompanyProfileScreenState
               return Container();
             },
           )),
+    );
+  }
+}
+
+class ProductsListWidget extends StatelessWidget {
+  const ProductsListWidget({
+    super.key,
+    required this.productBloc,
+  });
+
+  final GetUserBloc productBloc;
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        productBloc.add(GetUserProductsEvent());
+      },
+      color: AppColor.white,
+      backgroundColor: AppColor.backgroundColor,
+      child: BlocBuilder<GetUserBloc, GetUserState>(
+        bloc: productBloc,
+        builder: (context, state) {
+          if (state is GetUserProductsInProgress) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: AppColor.backgroundColor,
+              ),
+            );
+          } else if (state is GetUserProductsFailure) {
+            final failure = state.message;
+            return Center(
+              child: Text(
+                failure,
+                style: const TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            );
+          } else if (state is GetUserProductsSuccess) {
+            return state.products.isNotEmpty
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    childAspectRatio: 0.95,
+                                    crossAxisSpacing: 10.w,
+                                    mainAxisSpacing: 10.h),
+                            shrinkWrap: true,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: state.products.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin: const EdgeInsets.symmetric(vertical: 8),
+                                decoration: BoxDecoration(
+                                    color: AppColor.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppColor.secondGrey
+                                            .withOpacity(0.5),
+                                        blurRadius: 10,
+                                        spreadRadius: 2,
+                                        offset: const Offset(0, 3),
+                                      ),
+                                    ]),
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(20)),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (context) {
+                                        return ProductDetailScreen(
+                                            item: state.products[index].id);
+                                      }));
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        CachedNetworkImage(
+                                          imageUrl:
+                                              state.products[index].imageUrl,
+                                          height: 65.h,
+                                          width: 160.w,
+                                          fit: BoxFit.contain,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 9.0,
+                                              left: 9.0,
+                                              bottom: 8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                state.products[index].name,
+                                                style: const TextStyle(
+                                                  color:
+                                                      AppColor.backgroundColor,
+                                                ),
+                                              ),
+                                              Text(
+                                                '${state.products[index].price} \$',
+                                                style: const TextStyle(
+                                                  color: AppColor.colorTwo,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: 70.h,
+                        ),
+                      ],
+                    ),
+                  )
+                : Center(
+                    child: Text(
+                        AppLocalizations.of(context).translate('no_items'),
+                        style:
+                            const TextStyle(color: AppColor.backgroundColor)),
+                  );
+          }
+          return Container();
+        },
+      ),
     );
   }
 }
