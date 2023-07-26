@@ -32,6 +32,8 @@ class UserInfoModel {
   final String? bio;
   final String? description;
   final String? website;
+  final String? slogn;
+  final String? link;
   final String? profilePhoto;
   final String? coverPhoto;
   final String? banerPhoto;
@@ -70,6 +72,8 @@ class UserInfoModel {
     this.bio,
     this.description,
     this.website,
+    this.slogn,
+    this.link,
     this.profilePhoto,
     this.coverPhoto,
     this.banerPhoto,
@@ -114,6 +118,8 @@ extension MapToDomain on UserInfoModel {
         bio: bio,
         description: description,
         website: website,
+        slogn: slogn,
+        link: link,
         profilePhoto: profilePhoto,
         coverPhoto: coverPhoto,
         banerPhoto: banerPhoto,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/categories/entities/local_company/local_company.dart';
@@ -129,10 +131,12 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
       late User? user;
       result.fold((l) => null, (r) => user = r);
       final success = await addCompanyServiceUseCase(AddCompanyServiceParams(
-          title: event.title,
-          description: event.description,
-          price: event.price,
-          owner: user?.userInfo.id ?? ''));
+        title: event.title,
+        description: event.description,
+        price: event.price,
+        owner: user?.userInfo.id ?? '',
+        image: event.image,
+      ));
       emit(
         success.fold(
           (failure) =>

@@ -331,15 +331,13 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                         },
                         // onSaved: (val) => print(val),
                       ),
-                      _selectedStartDate != null && _selectedEndDate != null
-                          ? Text(
-                              '${AppLocalizations.of(context).translate('Advertising cost depending on the number of days')}: $_totalPrice',
-                              style: TextStyle(
-                                color: AppColor.colorOne,
-                                fontSize: 14.sp,
-                              ),
-                            )
-                          : const SizedBox(),
+                      Text(
+                        '${AppLocalizations.of(context).translate('total_amount')}: $_totalPrice AED',
+                        style: TextStyle(
+                          color: AppColor.colorOne,
+                          fontSize: 16.sp,
+                        ),
+                      ),
                       SizedBox(
                         height: 10.h,
                       ),

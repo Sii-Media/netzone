@@ -31,9 +31,14 @@ class AddCompanyServiceEvent extends LocalCompanyEvent {
   final String title;
   final String description;
   final int price;
+  final File? image;
 
-  const AddCompanyServiceEvent(
-      {required this.title, required this.description, required this.price});
+  const AddCompanyServiceEvent({
+    required this.title,
+    required this.description,
+    required this.price,
+    this.image,
+  });
 }
 
 class GetCompanyServicesEvent extends LocalCompanyEvent {}

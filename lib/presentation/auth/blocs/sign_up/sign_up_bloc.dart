@@ -51,6 +51,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
           bio: event.bio,
           description: event.description,
           website: event.website,
+          slogn: event.slogn,
+          link: event.link,
           title: event.title,
           country: country,
           deliveryCarsNum: event.deliveryCarsNum,

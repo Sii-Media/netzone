@@ -13,6 +13,7 @@ CompanyServiceModel _$CompanyServiceModelFromJson(Map<String, dynamic> json) =>
       description: json['description'] as String,
       price: json['price'] as int,
       owner: UserInfoModel.fromJson(json['owner'] as Map<String, dynamic>),
+      imageUrl: json['imageUrl'] as String?,
     );
 
 Map<String, dynamic> _$CompanyServiceModelToJson(
@@ -23,4 +24,5 @@ Map<String, dynamic> _$CompanyServiceModelToJson(
       'description': instance.description,
       'price': instance.price,
       'owner': instance.owner,
+      'imageUrl': instance.imageUrl,
     };

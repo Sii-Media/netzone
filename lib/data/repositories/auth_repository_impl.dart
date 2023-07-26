@@ -51,6 +51,8 @@ class AuthRepositoryImpl implements AuthRepository {
     String? bio,
     String? description,
     String? website,
+    String? slogn,
+    String? link,
     String? title,
     File? tradeLicensePhoto,
     File? deliveryPermitPhoto,
@@ -110,6 +112,13 @@ class AuthRepositoryImpl implements AuthRepository {
         if (isService != null) {
           formData.fields.add(MapEntry('isService', isService.toString()));
         }
+        if (slogn != null) {
+          formData.fields.add(MapEntry('slogn', slogn));
+        }
+        if (link != null) {
+          formData.fields.add(MapEntry('link', link));
+        }
+
         if (profilePhoto != null) {
           String fileName = 'image.jpg';
           formData.files.add(MapEntry(

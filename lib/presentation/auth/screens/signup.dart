@@ -49,6 +49,8 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
   final TextEditingController bioController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController websiteController = TextEditingController();
+  final TextEditingController slognController = TextEditingController();
+  final TextEditingController linkController = TextEditingController();
 
   final TextEditingController titleController = TextEditingController();
   final TextEditingController freezoneCityController = TextEditingController();
@@ -131,6 +133,8 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
         bioController: bioController,
         descriptionController: descriptionController,
         websiteController: websiteController,
+        slognController: slognController,
+        linkController: linkController,
         titleController: titleController,
         freezoneCityController: freezoneCityController,
         factoriesBloc: factoryBloc,
@@ -164,6 +168,8 @@ class SignUpWidget extends StatefulWidget {
     required this.bioController,
     required this.descriptionController,
     required this.websiteController,
+    required this.slognController,
+    required this.linkController,
     required this.titleController,
     required this.freezoneCityController,
     required this.factoriesBloc,
@@ -189,6 +195,8 @@ class SignUpWidget extends StatefulWidget {
   final TextEditingController bioController;
   final TextEditingController descriptionController;
   final TextEditingController websiteController;
+  final TextEditingController slognController;
+  final TextEditingController linkController;
   final TextEditingController titleController;
   final TextEditingController freezoneCityController;
   final TextEditingController deliveryCarsNumController;
@@ -576,12 +584,13 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-                keyboardType: TextInputType.text,
-
+                keyboardType: TextInputType.multiline,
+                maxLength: 300,
+                maxLines: 4,
                 // textInputAction: widget.textInputAction ?? TextInputAction.done,
 
                 onChanged: (text) {
-                  widget.passwordFormFieldKey.currentState!.validate();
+                  // widget.passwordFormFieldKey.currentState!.validate();
                 },
               ),
               SizedBox(
@@ -604,12 +613,69 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
+                keyboardType: TextInputType.multiline,
+                maxLines: 3,
+                // textInputAction: widget.textInputAction ?? TextInputAction.done,
+
+                onChanged: (text) {
+                  // widget.passwordFormFieldKey.currentState!.validate();
+                },
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              TextSignup(
+                  text: AppLocalizations.of(context).translate('website')),
+              TextFormField(
+                controller: widget.websiteController,
+                style: const TextStyle(color: AppColor.black),
+                decoration: InputDecoration(
+                  filled: true,
+                  //<-- SEE HERE
+                  fillColor: Colors.green.withOpacity(0.1),
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 30)
+                          .flipped,
+
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
                 keyboardType: TextInputType.text,
 
                 // textInputAction: widget.textInputAction ?? TextInputAction.done,
 
                 onChanged: (text) {
-                  widget.passwordFormFieldKey.currentState!.validate();
+                  // widget.passwordFormFieldKey.currentState!.validate();
+                },
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              TextSignup(text: AppLocalizations.of(context).translate('link')),
+              TextFormField(
+                controller: widget.linkController,
+                style: const TextStyle(color: AppColor.black),
+                decoration: InputDecoration(
+                  filled: true,
+                  //<-- SEE HERE
+                  fillColor: Colors.green.withOpacity(0.1),
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 30)
+                          .flipped,
+
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                keyboardType: TextInputType.text,
+
+                // textInputAction: widget.textInputAction ?? TextInputAction.done,
+
+                onChanged: (text) {
+                  // widget.passwordFormFieldKey.currentState!.validate();
                 },
               ),
               SizedBox(
@@ -1498,6 +1564,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           bio: widget.bioController.text,
                           description: widget.descriptionController.text,
                           website: widget.websiteController.text,
+                          link: widget.linkController.text,
+                          slogn: widget.slognController.text,
                           title: selectCat?.title,
                           deliveryCarsNum: int.tryParse(
                               widget.deliveryCarsNumController.text),

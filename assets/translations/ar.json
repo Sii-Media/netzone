@@ -504,5 +504,8 @@
     "apply_filters": "تطبيق الفلترة",
     "Advertising cost depending on the number of days": "تكلفة الاعلان تبعا لعدد الايام ",
     "Do you offer services rather than products": "هل تقدمون خدمات بدلاً من منتجات؟",
-    "add_delivery_service": "إضافة خدمة توصيل"
+    "add_delivery_service": "إضافة خدمة توصيل",
+    "add_service_image": "إضافة صورة للخدمة",
+    "total_amount": "التكلفة الكلية",
+    "link": "رابط"
 }

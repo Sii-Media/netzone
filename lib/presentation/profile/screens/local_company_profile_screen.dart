@@ -10,8 +10,8 @@ import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 
 import '../../../injection_container.dart';
+import '../../categories/local_company/company_service_detail_screen.dart';
 import '../../core/blocs/country_bloc/country_bloc.dart';
-import '../../core/helpers/get_currency_of_country.dart';
 import '../../core/widgets/on_failure_widget.dart';
 import '../../home/test.dart';
 import '../../utils/app_localizations.dart';
@@ -810,125 +810,266 @@ class _MyLocalCompanyProfileScreenState
                                                     return Column(
                                                       children: [
                                                         Expanded(
-                                                          child:
-                                                              ListView.builder(
-                                                            shrinkWrap: true,
-                                                            physics:
-                                                                const BouncingScrollPhysics(),
-                                                            itemCount:
-                                                                serviceState
-                                                                    .services
-                                                                    .length,
-                                                            itemBuilder:
-                                                                (context,
-                                                                    index) {
-                                                              String
-                                                                  fullDescription =
+                                                          // child:
+                                                          //     ListView.builder(
+                                                          //   shrinkWrap: true,
+                                                          //   physics:
+                                                          //       const BouncingScrollPhysics(),
+                                                          //   itemCount:
+                                                          //       serviceState
+                                                          //           .services
+                                                          //           .length,
+                                                          //   itemBuilder:
+                                                          //       (context,
+                                                          //           index) {
+                                                          //     String
+                                                          //         fullDescription =
+                                                          //         serviceState
+                                                          //             .services[
+                                                          //                 index]
+                                                          //             .description;
+                                                          //     String first =
+                                                          //         fullDescription
+                                                          //             .substring(
+                                                          //                 0,
+                                                          //                 100);
+                                                          //     String seconde =
+                                                          //         fullDescription
+                                                          //             .substring(
+                                                          //                 100);
+                                                          //     return Card(
+                                                          //       elevation: 3,
+                                                          //       margin: const EdgeInsets
+                                                          //               .symmetric(
+                                                          //           horizontal:
+                                                          //               16,
+                                                          //           vertical:
+                                                          //               8),
+                                                          //       shape:
+                                                          //           RoundedRectangleBorder(
+                                                          //         borderRadius:
+                                                          //             BorderRadius
+                                                          //                 .circular(
+                                                          //                     12),
+                                                          //       ),
+                                                          //       child: Padding(
+                                                          //         padding:
+                                                          //             const EdgeInsets
+                                                          //                 .all(16),
+                                                          //         child: Column(
+                                                          //           crossAxisAlignment:
+                                                          //               CrossAxisAlignment
+                                                          //                   .start,
+                                                          //           children: [
+                                                          //             Text(
+                                                          //               serviceState
+                                                          //                   .services[index]
+                                                          //                   .title,
+                                                          //               style: TextStyle(
+                                                          //                   fontSize:
+                                                          //                       18.sp,
+                                                          //                   fontWeight: FontWeight.bold,
+                                                          //                   color: AppColor.backgroundColor),
+                                                          //             ),
+                                                          //             SizedBox(
+                                                          //                 height:
+                                                          //                     8.h),
+                                                          //             ExpansionTile(
+                                                          //               title:
+                                                          //                   Text(
+                                                          //                 first,
+                                                          //                 maxLines:
+                                                          //                     3,
+                                                          //                 // overflow:
+                                                          //                 //     TextOverflow.ellipsis,
+                                                          //                 style: TextStyle(
+                                                          //                     fontSize: 16.sp,
+                                                          //                     color: AppColor.secondGrey),
+                                                          //               ),
+                                                          //               children: <
+                                                          //                   Widget>[
+                                                          //                 // The widget displayed when the tile expands
+                                                          //                 Text(
+                                                          //                   seconde,
+                                                          //                   style:
+                                                          //                       TextStyle(
+                                                          //                     fontSize: 16.sp,
+                                                          //                     color: AppColor.secondGrey,
+                                                          //                   ),
+                                                          //                 ),
+                                                          //               ],
+                                                          //             ),
+                                                          //             SizedBox(
+                                                          //                 height:
+                                                          //                     8.h),
+                                                          //             RichText(
+                                                          //               text: TextSpan(
+                                                          //                   style: const TextStyle(
+                                                          //                       fontSize: 16,
+                                                          //                       fontWeight: FontWeight.bold,
+                                                          //                       color: AppColor.black),
+                                                          //                   children: <TextSpan>[
+                                                          //                     TextSpan(
+                                                          //                       text: '${serviceState.services[index].price}',
+                                                          //                       style: const TextStyle(
+                                                          //                         fontWeight: FontWeight.w700,
+                                                          //                       ),
+                                                          //                     ),
+                                                          //                     TextSpan(
+                                                          //                       text: getCurrencyFromCountry(
+                                                          //                         countryState.selectedCountry,
+                                                          //                         context,
+                                                          //                       ),
+                                                          //                       style: const TextStyle(color: AppColor.backgroundColor, fontSize: 10),
+                                                          //                     )
+                                                          //                   ]),
+                                                          //             ),
+                                                          //           ],
+                                                          //         ),
+                                                          //       ),
+                                                          //     );
+                                                          //   },
+                                                          // ),
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: GridView
+                                                                .builder(
+                                                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                                                  crossAxisCount:
+                                                                      2,
+                                                                  childAspectRatio:
+                                                                      0.95,
+                                                                  crossAxisSpacing:
+                                                                      10.w,
+                                                                  mainAxisSpacing:
+                                                                      10.h),
+                                                              shrinkWrap: true,
+                                                              physics:
+                                                                  const BouncingScrollPhysics(),
+                                                              itemCount:
                                                                   serviceState
-                                                                      .services[
-                                                                          index]
-                                                                      .description;
-                                                              String first =
-                                                                  fullDescription
-                                                                      .substring(
-                                                                          0,
-                                                                          100);
-                                                              String seconde =
-                                                                  fullDescription
-                                                                      .substring(
-                                                                          100);
-                                                              return Card(
-                                                                elevation: 3,
-                                                                margin: const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        16,
-                                                                    vertical:
-                                                                        8),
-                                                                shape:
-                                                                    RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              12),
-                                                                ),
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(16),
-                                                                  child: Column(
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
-                                                                    children: [
-                                                                      Text(
-                                                                        serviceState
-                                                                            .services[index]
-                                                                            .title,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                18.sp,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            color: AppColor.backgroundColor),
+                                                                      .services
+                                                                      .length,
+                                                              itemBuilder:
+                                                                  (context,
+                                                                      index) {
+                                                                return Container(
+                                                                  margin: const EdgeInsets
+                                                                          .symmetric(
+                                                                      vertical:
+                                                                          8),
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: AppColor
+                                                                        .white,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            20),
+                                                                    boxShadow: [
+                                                                      BoxShadow(
+                                                                        color: AppColor
+                                                                            .secondGrey
+                                                                            .withOpacity(0.5),
+                                                                        blurRadius:
+                                                                            10,
+                                                                        spreadRadius:
+                                                                            2,
+                                                                        offset: const Offset(
+                                                                            0,
+                                                                            3),
                                                                       ),
-                                                                      SizedBox(
-                                                                          height:
-                                                                              8.h),
-                                                                      ExpansionTile(
-                                                                        title:
-                                                                            Text(
-                                                                          first,
-                                                                          maxLines:
-                                                                              3,
-                                                                          // overflow:
-                                                                          //     TextOverflow.ellipsis,
-                                                                          style: TextStyle(
-                                                                              fontSize: 16.sp,
-                                                                              color: AppColor.secondGrey),
-                                                                        ),
-                                                                        children: <
-                                                                            Widget>[
-                                                                          // The widget displayed when the tile expands
-                                                                          Text(
-                                                                            seconde,
-                                                                            style:
-                                                                                TextStyle(
-                                                                              fontSize: 16.sp,
-                                                                              color: AppColor.secondGrey,
+                                                                    ],
+                                                                  ),
+                                                                  child:
+                                                                      ClipRRect(
+                                                                    borderRadius: const BorderRadius
+                                                                            .all(
+                                                                        Radius.circular(
+                                                                            20)),
+                                                                    child:
+                                                                        GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        Navigator.of(context)
+                                                                            .push(
+                                                                          MaterialPageRoute(
+                                                                            builder:
+                                                                                (context) {
+                                                                              return CompanyServiceDetailsScreen(companyService: serviceState.services[index]);
+                                                                            },
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                      child:
+                                                                          Column(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        children: [
+                                                                          CachedNetworkImage(
+                                                                            imageUrl:
+                                                                                serviceState.services[index].imageUrl ?? '',
+                                                                            height:
+                                                                                120.h,
+                                                                            width:
+                                                                                200.w,
+                                                                            fit:
+                                                                                BoxFit.cover,
+                                                                          ),
+                                                                          Padding(
+                                                                            padding: const EdgeInsets.only(
+                                                                                right: 9.0,
+                                                                                left: 9.0,
+                                                                                bottom: 8.0),
+                                                                            child:
+                                                                                Column(
+                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                                              children: [
+                                                                                Text(
+                                                                                  serviceState.services[index].title,
+                                                                                  style: const TextStyle(
+                                                                                    color: AppColor.backgroundColor,
+                                                                                  ),
+                                                                                ),
+                                                                                // Text(
+                                                                                //   '${state.companyVehicles[index].price} \$',
+                                                                                //   style:
+                                                                                //       const TextStyle(
+                                                                                //     color: AppColor
+                                                                                //         .colorTwo,
+                                                                                //   ),
+                                                                                // ),
+                                                                                // RichText(
+                                                                                //   text: TextSpan(style: TextStyle(fontSize: 13.sp, color: AppColor.backgroundColor), children: <TextSpan>[
+                                                                                //     TextSpan(
+                                                                                //       text: '${serviceState.services[index].price}',
+                                                                                //       style: const TextStyle(
+                                                                                //         fontWeight: FontWeight.w700,
+                                                                                //       ),
+                                                                                //     ),
+                                                                                //     TextSpan(
+                                                                                //       text: getCurrencyFromCountry(
+                                                                                //         countryState.selectedCountry,
+                                                                                //         context,
+                                                                                //       ),
+                                                                                //       style: const TextStyle(color: AppColor.backgroundColor, fontSize: 10),
+                                                                                //     )
+                                                                                //   ]),
+                                                                                // ),
+                                                                              ],
                                                                             ),
                                                                           ),
                                                                         ],
                                                                       ),
-                                                                      SizedBox(
-                                                                          height:
-                                                                              8.h),
-                                                                      RichText(
-                                                                        text: TextSpan(
-                                                                            style: const TextStyle(
-                                                                                fontSize: 16,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                color: AppColor.black),
-                                                                            children: <TextSpan>[
-                                                                              TextSpan(
-                                                                                text: '${serviceState.services[index].price}',
-                                                                                style: const TextStyle(
-                                                                                  fontWeight: FontWeight.w700,
-                                                                                ),
-                                                                              ),
-                                                                              TextSpan(
-                                                                                text: getCurrencyFromCountry(
-                                                                                  countryState.selectedCountry,
-                                                                                  context,
-                                                                                ),
-                                                                                style: const TextStyle(color: AppColor.backgroundColor, fontSize: 10),
-                                                                              )
-                                                                            ]),
-                                                                      ),
-                                                                    ],
+                                                                    ),
                                                                   ),
-                                                                ),
-                                                              );
-                                                            },
+                                                                );
+                                                              },
+                                                            ),
                                                           ),
                                                         ),
                                                         SizedBox(

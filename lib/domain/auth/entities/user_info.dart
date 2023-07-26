@@ -27,6 +27,8 @@ class UserInfo {
   final String? bio;
   final String? description;
   final String? website;
+  final String? slogn;
+  final String? link;
   final String? profilePhoto;
   final String? coverPhoto;
   final String? banerPhoto;
@@ -69,6 +71,8 @@ class UserInfo {
     this.bio,
     this.description,
     this.website,
+    this.slogn,
+    this.link,
     this.profilePhoto,
     this.coverPhoto,
     this.banerPhoto,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:netzoon/domain/categories/entities/local_company/local_company.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
@@ -26,5 +28,6 @@ abstract class LocalCompanyRepository {
     required String description,
     required int price,
     required String owner,
+    File? image,
   });
 }

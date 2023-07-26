@@ -12,6 +12,7 @@ class CompanyServiceModel {
   final String description;
   final int price;
   final UserInfoModel owner;
+  final String? imageUrl;
 
   CompanyServiceModel({
     required this.id,
@@ -19,6 +20,7 @@ class CompanyServiceModel {
     required this.description,
     required this.price,
     required this.owner,
+    this.imageUrl,
   });
 
   factory CompanyServiceModel.fromJson(Map<String, dynamic> json) =>
@@ -34,5 +36,6 @@ extension MapToDomain on CompanyServiceModel {
         description: description,
         price: price,
         owner: owner.toDomain(),
+        imageUrl: imageUrl,
       );
 }

@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/remote/local_company/local_company_remote_data_source.dart';
 import 'package:netzoon/data/models/auth/user_info/user_info_model.dart';
@@ -72,16 +76,47 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
   }
 
   @override
-  Future<Either<Failure, String>> addCompanyService(
-      {required String title,
-      required String description,
-      required int price,
-      required String owner}) async {
+  Future<Either<Failure, String>> addCompanyService({
+    required String title,
+    required String description,
+    required int price,
+    required String owner,
+    File? image,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
-        final result = await localCompanyRemoteDataSource.addCompanyService(
-            title, description, price, owner);
-        return Right(result);
+        Dio dio = Dio();
+
+        FormData formData = FormData();
+        formData.fields.addAll([
+          MapEntry('title', title),
+          MapEntry('description', description),
+          MapEntry('price', price.toString()),
+          MapEntry('owner', owner),
+        ]);
+        if (image != null) {
+          String fileName = 'image.jpg';
+          formData.files.add(MapEntry(
+            'image',
+            await MultipartFile.fromFile(
+              image.path,
+              filename: fileName,
+              contentType: MediaType('image', 'jpeg'),
+            ),
+          ));
+        }
+        Response response = await dio.post(
+            'https://net-zoon.onrender.com/categories/local-company/add-service',
+            data: formData);
+
+        if (response.statusCode == 201) {
+          return Right(response.data);
+        } else {
+          return Left(ServerFailure());
+        }
+        // final result = await localCompanyRemoteDataSource.addCompanyService(
+        //     title, description, price, owner);
+        // return Right(result);
       } else {
         return Left(OfflineFailure());
       }

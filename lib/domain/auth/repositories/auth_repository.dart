@@ -33,6 +33,8 @@ abstract class AuthRepository {
     String? bio,
     String? description,
     String? website,
+    String? slogn,
+    String? link,
     String? title,
     File? tradeLicensePhoto,
     File? deliveryPermitPhoto,

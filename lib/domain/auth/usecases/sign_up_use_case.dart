@@ -38,6 +38,8 @@ class SignUpUseCase extends UseCase<User, SignUpUseCaseParams> {
       bio: params.bio,
       description: params.description,
       website: params.website,
+      slogn: params.slogn,
+      link: params.link,
       title: params.title,
       tradeLicensePhoto: params.tradeLicensePhoto,
       deliveryPermitPhoto: params.deliveryPermitPhoto,
@@ -78,6 +80,8 @@ class SignUpUseCaseParams {
   final String? bio;
   final String? description;
   final String? website;
+  final String? slogn;
+  final String? link;
   final String? title;
   final File? tradeLicensePhoto;
   final File? deliveryPermitPhoto;
@@ -112,6 +116,8 @@ class SignUpUseCaseParams {
     this.bio,
     this.description,
     this.website,
+    this.slogn,
+    this.link,
     this.title,
     this.tradeLicensePhoto,
     this.deliveryPermitPhoto,

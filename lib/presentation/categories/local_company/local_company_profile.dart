@@ -9,11 +9,13 @@ import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/advertising/advertising.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
+import 'package:netzoon/presentation/categories/local_company/company_service_detail_screen.dart';
 import 'package:netzoon/presentation/categories/local_company/local_company_bloc/local_company_bloc.dart';
 import 'package:netzoon/presentation/categories/widgets/product_details.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/link.dart';
 
 import '../../../data/core/constants/constants.dart';
 import '../../../data/models/auth/user/user_model.dart';
@@ -193,8 +195,8 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                             imageUrl:
                                                 state.userInfo.profilePhoto ??
                                                     '',
-                                            width: 100,
-                                            height: 100,
+                                            width: 80,
+                                            height: 80,
                                             fit: BoxFit.fill,
                                           ),
                                         ),
@@ -216,104 +218,115 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                               fontSize: 16.sp,
                                             ),
                                           ),
-                                          SizedBox(
-                                            height: 10.h,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () => showRating(context),
-                                            child: RatingBar.builder(
-                                              minRating: 1,
-                                              maxRating: 5,
-                                              initialRating: 3,
-                                              itemSize: 25,
-                                              ignoreGestures: true,
-                                              itemBuilder: (context, _) {
-                                                return const Icon(
-                                                  Icons.star,
-                                                  color: Colors.amber,
-                                                );
-                                              },
-                                              allowHalfRating: true,
-                                              updateOnDrag: true,
-                                              onRatingUpdate: (rating) {},
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 10.h,
-                                          ),
-                                          BlocBuilder<AuthBloc, AuthState>(
-                                            bloc: authBloc,
-                                            builder: (context, state) {
-                                              if (state is AuthInProgress) {
-                                                return const Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    color: AppColor
-                                                        .backgroundColor,
+                                          state.userInfo.slogn != null
+                                              ? Text(
+                                                  state.userInfo.slogn ?? '',
+                                                  style: TextStyle(
+                                                    color: AppColor.secondGrey,
+                                                    fontWeight: FontWeight.w300,
+                                                    fontSize: 13.sp,
                                                   ),
-                                                );
-                                              } else if (state
-                                                  is Authenticated) {
-                                                // isFollowing = state.user
-                                                //         .userInfo.followings!
-                                                //         .contains(widget
-                                                //             .localCompany.id)
-                                                //     ? true
-                                                //     : false;
-                                                return ElevatedButton(
-                                                  style: ButtonStyle(
-                                                    backgroundColor:
-                                                        MaterialStateProperty
-                                                            .all(AppColor
-                                                                .backgroundColor),
-                                                    shape: MaterialStateProperty
-                                                        .all(
-                                                            RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              18.0),
-                                                    )),
-                                                  ),
-                                                  child: Text(
-                                                    isFollowing
-                                                        ? AppLocalizations.of(
-                                                                context)
-                                                            .translate(
-                                                                'unfollow')
-                                                        : AppLocalizations.of(
-                                                                context)
-                                                            .translate(
-                                                                'follow'),
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      isFollowing =
-                                                          !isFollowing;
-                                                    });
-                                                    userBloc.add(
-                                                        ToggleFollowEvent(
-                                                            otherUserId: widget
-                                                                .localCompany
-                                                                .id));
+                                                )
+                                              : const SizedBox(),
+                                          // SizedBox(
+                                          //   height: 10.h,
+                                          // ),
+                                          Row(
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () =>
+                                                    showRating(context),
+                                                child: RatingBar.builder(
+                                                  minRating: 1,
+                                                  maxRating: 5,
+                                                  initialRating: 3,
+                                                  itemSize: 25,
+                                                  ignoreGestures: true,
+                                                  itemBuilder: (context, _) {
+                                                    return const Icon(
+                                                      Icons.star,
+                                                      color: Colors.amber,
+                                                    );
                                                   },
-                                                );
-                                              }
-                                              return Container();
-                                            },
-                                          )
+                                                  allowHalfRating: true,
+                                                  updateOnDrag: true,
+                                                  onRatingUpdate: (rating) {},
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 15.w,
+                                              ),
+                                              BlocBuilder<AuthBloc, AuthState>(
+                                                bloc: authBloc,
+                                                builder: (context, state) {
+                                                  if (state is AuthInProgress) {
+                                                    return const Center(
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        color: AppColor
+                                                            .backgroundColor,
+                                                      ),
+                                                    );
+                                                  } else if (state
+                                                      is Authenticated) {
+                                                    // isFollowing = state.user
+                                                    //         .userInfo.followings!
+                                                    //         .contains(widget
+                                                    //             .localCompany.id)
+                                                    //     ? true
+                                                    //     : false;
+                                                    return ElevatedButton(
+                                                      style: ButtonStyle(
+                                                        backgroundColor:
+                                                            MaterialStateProperty
+                                                                .all(AppColor
+                                                                    .backgroundColor),
+                                                        shape: MaterialStateProperty
+                                                            .all(
+                                                                RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      18.0),
+                                                        )),
+                                                      ),
+                                                      child: Text(
+                                                        isFollowing
+                                                            ? AppLocalizations
+                                                                    .of(context)
+                                                                .translate(
+                                                                    'unfollow')
+                                                            : AppLocalizations
+                                                                    .of(context)
+                                                                .translate(
+                                                                    'follow'),
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          isFollowing =
+                                                              !isFollowing;
+                                                        });
+                                                        userBloc.add(
+                                                            ToggleFollowEvent(
+                                                                otherUserId: widget
+                                                                    .localCompany
+                                                                    .id));
+                                                      },
+                                                    );
+                                                  }
+                                                  return Container();
+                                                },
+                                              ),
+                                            ],
+                                          ),
                                         ],
                                       ),
                                     ],
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 14.h,
-                                ),
-                                SizedBox(
-                                  height: 14.h,
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -324,6 +337,43 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                         color: AppColor.mainGrey),
                                   ),
                                 ),
+                                state.userInfo.link != null
+                                    ? Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: Link(
+                                          uri: Uri.parse(
+                                            state.userInfo.link ?? '',
+                                          ),
+                                          builder: ((context, followLink) =>
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.link,
+                                                    color: AppColor.secondGrey,
+                                                    size: 20,
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: followLink,
+                                                    child: Text(
+                                                      state.userInfo.link ?? '',
+                                                      style: TextStyle(
+                                                        color: AppColor
+                                                            .backgroundColor,
+                                                        fontSize: 15.sp,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )),
+                                        ),
+                                      )
+                                    : const SizedBox(),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
@@ -352,7 +402,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                               '${state.userInfo.followings?.length}',
                                               style: TextStyle(
                                                 color: AppColor.mainGrey,
-                                                fontSize: 18.sp,
+                                                fontSize: 15.sp,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -361,7 +411,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                   .translate('Followings'),
                                               style: TextStyle(
                                                   color: AppColor.secondGrey,
-                                                  fontSize: 15.sp),
+                                                  fontSize: 12.sp),
                                             ),
                                           ],
                                         ),
@@ -388,7 +438,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                               '${state.userInfo.followers?.length}',
                                               style: TextStyle(
                                                 color: AppColor.mainGrey,
-                                                fontSize: 18.sp,
+                                                fontSize: 15.sp,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -397,7 +447,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                   .translate('Followers'),
                                               style: TextStyle(
                                                   color: AppColor.secondGrey,
-                                                  fontSize: 15.sp),
+                                                  fontSize: 12.sp),
                                             ),
                                           ],
                                         ),
@@ -406,7 +456,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 12.h,
+                                  height: 10.h,
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -600,105 +650,153 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                             builder: (context, countryState) {
                                               if (countryState
                                                   is CountryInitial) {
-                                                return ListView.builder(
-                                                  shrinkWrap: true,
-                                                  physics:
-                                                      const BouncingScrollPhysics(),
-                                                  itemCount: serviceState
-                                                      .services.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return Card(
-                                                      elevation: 3,
-                                                      margin: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 16,
-                                                          vertical: 8),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(12),
-                                                      ),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(16),
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                              serviceState
-                                                                  .services[
-                                                                      index]
-                                                                  .title,
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      18.sp,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color: AppColor
-                                                                      .backgroundColor),
-                                                            ),
-                                                            SizedBox(
-                                                                height: 8.h),
-                                                            Text(
-                                                              serviceState
-                                                                  .services[
-                                                                      index]
-                                                                  .description,
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      16.sp,
-                                                                  color: AppColor
-                                                                      .secondGrey),
-                                                            ),
-                                                            SizedBox(
-                                                                height: 8.h),
-                                                            RichText(
-                                                              text: TextSpan(
-                                                                  style: const TextStyle(
-                                                                      fontSize:
-                                                                          16,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      color: AppColor
-                                                                          .black),
-                                                                  children: <
-                                                                      TextSpan>[
-                                                                    TextSpan(
-                                                                      text:
-                                                                          '${serviceState.services[index].price}',
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight.w700,
-                                                                      ),
-                                                                    ),
-                                                                    TextSpan(
-                                                                      text:
-                                                                          getCurrencyFromCountry(
-                                                                        countryState
-                                                                            .selectedCountry,
-                                                                        context,
-                                                                      ),
-                                                                      style: const TextStyle(
-                                                                          color: AppColor
-                                                                              .backgroundColor,
-                                                                          fontSize:
-                                                                              10),
-                                                                    )
-                                                                  ]),
+                                                return Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: GridView.builder(
+                                                    gridDelegate:
+                                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                                            crossAxisCount: 2,
+                                                            childAspectRatio:
+                                                                0.95,
+                                                            crossAxisSpacing:
+                                                                10.w,
+                                                            mainAxisSpacing:
+                                                                10.h),
+                                                    shrinkWrap: true,
+                                                    physics:
+                                                        const BouncingScrollPhysics(),
+                                                    itemCount: serviceState
+                                                        .services.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return Container(
+                                                        margin: const EdgeInsets
+                                                                .symmetric(
+                                                            vertical: 8),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: AppColor.white,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                              color: AppColor
+                                                                  .secondGrey
+                                                                  .withOpacity(
+                                                                      0.5),
+                                                              blurRadius: 10,
+                                                              spreadRadius: 2,
+                                                              offset:
+                                                                  const Offset(
+                                                                      0, 3),
                                                             ),
                                                           ],
                                                         ),
-                                                      ),
-                                                    );
-                                                  },
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                      .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          20)),
+                                                          child:
+                                                              GestureDetector(
+                                                            onTap: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .push(
+                                                                MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) {
+                                                                    return CompanyServiceDetailsScreen(
+                                                                        companyService:
+                                                                            serviceState.services[index]);
+                                                                  },
+                                                                ),
+                                                              );
+                                                            },
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                CachedNetworkImage(
+                                                                  imageUrl: serviceState
+                                                                          .services[
+                                                                              index]
+                                                                          .imageUrl ??
+                                                                      '',
+                                                                  height: 120.h,
+                                                                  width: 200.w,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                                Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      right:
+                                                                          9.0,
+                                                                      left: 9.0,
+                                                                      bottom:
+                                                                          8.0),
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Text(
+                                                                        serviceState
+                                                                            .services[index]
+                                                                            .title,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              AppColor.backgroundColor,
+                                                                        ),
+                                                                      ),
+                                                                      // Text(
+                                                                      //   '${state.companyVehicles[index].price} \$',
+                                                                      //   style:
+                                                                      //       const TextStyle(
+                                                                      //     color: AppColor
+                                                                      //         .colorTwo,
+                                                                      //   ),
+                                                                      // ),
+                                                                      // RichText(
+                                                                      //   text: TextSpan(style: TextStyle(fontSize: 13.sp, color: AppColor.backgroundColor), children: <TextSpan>[
+                                                                      //     TextSpan(
+                                                                      //       text: '${serviceState.services[index].price}',
+                                                                      //       style: const TextStyle(
+                                                                      //         fontWeight: FontWeight.w700,
+                                                                      //       ),
+                                                                      //     ),
+                                                                      //     TextSpan(
+                                                                      //       text: getCurrencyFromCountry(
+                                                                      //         countryState.selectedCountry,
+                                                                      //         context,
+                                                                      //       ),
+                                                                      //       style: const TextStyle(color: AppColor.backgroundColor, fontSize: 10),
+                                                                      //     )
+                                                                      //   ]),
+                                                                      // ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
                                                 );
                                               }
                                               return Container();
@@ -823,14 +921,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                 .translate('Bio'),
                                             input: state.userInfo.bio ?? '')
                                         : const SizedBox(),
-                                    state.userInfo.description != null &&
-                                            state.userInfo.description != ''
-                                        ? titleAndInput(
-                                            title: AppLocalizations.of(context)
-                                                .translate('desc'),
-                                            input: state.userInfo.description ??
-                                                '')
-                                        : const SizedBox(),
+
                                     state.userInfo.address != null &&
                                             state.userInfo.address != ''
                                         ? titleAndInput(
@@ -844,6 +935,13 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                             title: AppLocalizations.of(context)
                                                 .translate('website'),
                                             input: state.userInfo.website ?? '')
+                                        : const SizedBox(),
+                                    state.userInfo.link != null &&
+                                            state.userInfo.link != ''
+                                        ? titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('link'),
+                                            input: state.userInfo.link ?? '')
                                         : const SizedBox(),
                                     widget.localCompany.deliverable != null
                                         ? titleAndInput(

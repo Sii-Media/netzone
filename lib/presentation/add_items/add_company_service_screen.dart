@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:netzoon/presentation/categories/local_company/local_company_bloc/local_company_bloc.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 
@@ -25,6 +29,19 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
   late TextEditingController priceController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final addBloc = sl<LocalCompanyBloc>();
+  File? _image;
+
+  Future getImage(ImageSource imageSource) async {
+    final image = await ImagePicker().pickImage(source: imageSource);
+
+    if (image == null) return;
+    final imageTemporary = File(image.path);
+
+    setState(() {
+      _image = imageTemporary;
+    });
+  }
+
   @override
   Widget screen(BuildContext context) {
     return Scaffold(
@@ -143,8 +160,57 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
                       },
                     ),
                     SizedBox(
+                      height: 7.h,
+                    ),
+                    Text(
+                      AppLocalizations.of(context)
+                          .translate('add_service_image'),
+                      style: TextStyle(
+                        color: AppColor.backgroundColor,
+                        fontSize: 15.sp,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 7.h,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        addPhotoButton(
+                            text: 'add_from_camera',
+                            onPressed: () {
+                              getImage(ImageSource.camera);
+                            },
+                            context: context),
+                        addPhotoButton(
+                            text: 'add_from_gallery',
+                            onPressed: () {
+                              getImage(ImageSource.gallery);
+                            },
+                            context: context),
+                      ],
+                    ),
+                    SizedBox(
                       height: 10.h,
                     ),
+                    _image != null
+                        ? Center(
+                            child: Image.file(
+                              _image!,
+                              width: 250.w,
+                              height: 250.h,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Center(
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
+                              width: 250.w,
+                              height: 250.h,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                     SizedBox(
                       height: 20.h,
                     ),
@@ -160,6 +226,7 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
                               title: titleController.text,
                               description: descController.text,
                               price: int.parse(priceController.text),
+                              image: _image,
                             ),
                           );
                         },

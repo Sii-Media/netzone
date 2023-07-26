@@ -504,5 +504,8 @@
     "apply_filters": "Apply filters",
     "Advertising cost depending on the number of days": "Advertising cost depending on the number of days",
     "Do you offer services rather than products": "Do you offer services rather than products?",
-    "add_delivery_service": "Add delivery service"
+    "add_delivery_service": "Add delivery service",
+    "add_service_image": "Add service image",
+    "total_amount": "Total amount",
+    "link": "Link"
 }

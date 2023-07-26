@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:netzoon/domain/categories/repositories/local_company_reponsitory.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:dartz/dartz.dart';
@@ -11,10 +13,12 @@ class AddCompanyServiceUseCase
   @override
   Future<Either<Failure, String>> call(AddCompanyServiceParams params) {
     return localCompanyRepository.addCompanyService(
-        title: params.title,
-        description: params.description,
-        price: params.price,
-        owner: params.owner);
+      title: params.title,
+      description: params.description,
+      price: params.price,
+      owner: params.owner,
+      image: params.image,
+    );
   }
 }
 
@@ -23,11 +27,12 @@ class AddCompanyServiceParams {
   final String description;
   final int price;
   final String owner;
-
+  File? image;
   AddCompanyServiceParams({
     required this.title,
     required this.description,
     required this.price,
     required this.owner,
+    this.image,
   });
 }
