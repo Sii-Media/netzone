@@ -25,7 +25,7 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<VehicleResponseModel>(Options(
       method: 'GET',
@@ -48,7 +48,7 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<VehicleResponseModel>(Options(
       method: 'GET',
@@ -71,7 +71,7 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<VehicleResponseModel>(Options(
       method: 'GET',
@@ -94,7 +94,7 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<VehicleResponseModel>(Options(
       method: 'GET',
@@ -117,7 +117,7 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<UserInfoModel>>(Options(
       method: 'GET',
@@ -142,7 +142,7 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<UserInfoModel>>(Options(
       method: 'GET',
@@ -167,7 +167,7 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<VehicleModel>>(Options(
       method: 'GET',
@@ -192,7 +192,7 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<VehicleResponseModel>(Options(
       method: 'GET',

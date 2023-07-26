@@ -26,7 +26,7 @@ class _LocalCompanyRemoteDataSourceImpl
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<LocalCompanyModel>>(Options(
       method: 'GET',
@@ -52,7 +52,7 @@ class _LocalCompanyRemoteDataSourceImpl
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<List<dynamic>>(
         _setStreamType<List<CategoryProductsModel>>(Options(
       method: 'GET',
@@ -84,7 +84,7 @@ class _LocalCompanyRemoteDataSourceImpl
       r'userType': userType,
     };
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<UserInfoModel>>(Options(
       method: 'GET',
@@ -109,7 +109,7 @@ class _LocalCompanyRemoteDataSourceImpl
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<CompanyServiceModel>>(Options(
       method: 'GET',

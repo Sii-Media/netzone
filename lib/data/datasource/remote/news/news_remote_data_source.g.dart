@@ -25,7 +25,7 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<NewsModel>(Options(
       method: 'GET',
@@ -98,11 +98,66 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
   }
 
   @override
+  Future<NewsInfoModel> editNews(
+    id,
+    title,
+    description,
+    image,
+    creator,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = {
+      'title': title,
+      'description': description,
+      'creator': creator,
+    };
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<NewsInfoModel>(Options(
+      method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/news/${id}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = NewsInfoModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<String> deleteNews(id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/news/${id}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!;
+    return value;
+  }
+
+  @override
   Future<List<NewsCommentModel>> getComments(newsId) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<NewsCommentModel>>(Options(
       method: 'GET',
@@ -191,7 +246,7 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<NewsInfoModel>(Options(
       method: 'GET',
@@ -214,7 +269,7 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<NewsInfoModel>>(Options(
       method: 'GET',

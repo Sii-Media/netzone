@@ -31,7 +31,7 @@ class _UsersRemoteDataSourceImpl implements UsersRemoteDataSourceImpl {
       r'userType': userType,
     };
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<UserInfoModel>>(Options(
       method: 'GET',

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:netzoon/data/models/news/add_news/add_news_model.dart';
 import 'package:netzoon/data/models/news/news/news_model.dart';
@@ -22,6 +24,17 @@ abstract class NewsRemoteDataSourse {
     final String creator,
   );
 
+  Future<NewsInfoModel> editNews(
+    final String id,
+    final String title,
+    final String description,
+    final File image,
+    final String creator,
+  );
+
+  Future<String> deleteNews(
+    final String id,
+  );
   Future<List<NewsCommentModel>> getComments(
     final String newsId,
   );
@@ -64,6 +77,22 @@ abstract class NewsRemoteDataSourseImpl implements NewsRemoteDataSourse {
     @Part() String ownerName,
     @Part() String ownerImage,
     @Part() String creator,
+  );
+
+  @override
+  @PUT('/news/{id}')
+  Future<NewsInfoModel> editNews(
+    @Path('id') String id,
+    @Field() String title,
+    @Field() String description,
+    @MultiPart() File image,
+    @Field() String creator,
+  );
+
+  @override
+  @DELETE('/news/{id}')
+  Future<String> deleteNews(
+    @Path('id') String id,
   );
 
   @override

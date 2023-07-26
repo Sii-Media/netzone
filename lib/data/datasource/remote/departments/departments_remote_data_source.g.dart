@@ -27,7 +27,7 @@ class _DepartmentsRemoteDataSourceImpl
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'department': department};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<DepartmentCategoryResponseModel>(Options(
       method: 'GET',
@@ -67,7 +67,7 @@ class _DepartmentsRemoteDataSourceImpl
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<CategoryProductsResponseModel>(Options(
       method: 'GET',
@@ -180,7 +180,7 @@ class _DepartmentsRemoteDataSourceImpl
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<List<dynamic>>(
         _setStreamType<List<CategoryProductsModel>>(Options(
       method: 'GET',
@@ -206,7 +206,7 @@ class _DepartmentsRemoteDataSourceImpl
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<List<dynamic>>(
         _setStreamType<List<CategoryProductsModel>>(Options(
       method: 'GET',
@@ -232,7 +232,7 @@ class _DepartmentsRemoteDataSourceImpl
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
       method: 'DELETE',
       headers: _headers,
@@ -254,7 +254,7 @@ class _DepartmentsRemoteDataSourceImpl
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<CategoryProductsModel>(Options(
       method: 'GET',
@@ -277,7 +277,7 @@ class _DepartmentsRemoteDataSourceImpl
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<List<dynamic>>(
         _setStreamType<List<CategoryProductsModel>>(Options(
       method: 'GET',
@@ -307,7 +307,6 @@ class _DepartmentsRemoteDataSourceImpl
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = FormData();
-    // ignore: avoid_function_literals_in_foreach_calls
     productIds.forEach((i) {
       _data.fields.add(MapEntry('productIds', i));
     });
@@ -335,7 +334,7 @@ class _DepartmentsRemoteDataSourceImpl
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
       method: 'DELETE',
       headers: _headers,

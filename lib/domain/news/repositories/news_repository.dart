@@ -21,6 +21,18 @@ abstract class NewsRepository {
     required String creator,
   });
 
+  Future<Either<Failure, News>> editNews({
+    required String id,
+    required String title,
+    required String description,
+    required File image,
+    required String creator,
+  });
+
+  Future<Either<Failure, String>> deleteNews({
+    required String id,
+  });
+
   Future<Either<Failure, List<NewsComment>>> getComments({
     required String newsId,
   });

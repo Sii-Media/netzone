@@ -152,4 +152,38 @@ class NewsRepositoryImpl implements NewsRepository {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, String>> deleteNews({required String id}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final news = await newsRemoteDataSourse.deleteNews(id);
+        return Right(news);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, News>> editNews(
+      {required String id,
+      required String title,
+      required String description,
+      required File image,
+      required String creator}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final news = await newsRemoteDataSourse.editNews(
+            id, title, description, image, creator);
+        return Right(news.toDomain());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
 }

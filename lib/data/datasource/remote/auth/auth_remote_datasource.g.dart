@@ -213,7 +213,7 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<UserInfoModel>(Options(
       method: 'GET',
@@ -309,7 +309,7 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'email': email};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<UserInfoModel>>(Options(
       method: 'GET',
@@ -334,7 +334,7 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<UserInfoModel>>(Options(
       method: 'GET',
@@ -359,7 +359,7 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<UserInfoModel>>(Options(
       method: 'GET',
