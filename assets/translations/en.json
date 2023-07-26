@@ -508,5 +508,7 @@
     "add_service_image": "Add service image",
     "total_amount": "Total amount",
     "link": "Link",
-    "slogn": "slogn"
+    "slogn": "slogn",
+    "my_services": "My services",
+    "popular": "Popular"
 }

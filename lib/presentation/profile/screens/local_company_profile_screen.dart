@@ -517,13 +517,23 @@ class _MyLocalCompanyProfileScreenState
                                         children: [
                                           roundedIconText(
                                             context: context,
-                                            text: 'Products sold',
+                                            text: state.userInfo.isService ==
+                                                        false &&
+                                                    state.userInfo.isService ==
+                                                        null
+                                                ? 'Products sold'
+                                                : 'my_services',
                                             icon: Icons
                                                 .production_quantity_limits,
                                           ),
                                           roundedIconText(
                                             context: context,
-                                            text: 'Recovered products',
+                                            text: state.userInfo.isService ==
+                                                        false &&
+                                                    state.userInfo.isService ==
+                                                        null
+                                                ? 'Recovered products'
+                                                : 'popular',
                                             icon: Icons.reset_tv_rounded,
                                           ),
                                           roundedIconText(
@@ -756,6 +766,9 @@ class _MyLocalCompanyProfileScreenState
                                           //       : AppLocalizations.of(context)
                                           //           .translate('No'),
                                           // ),
+                                          SizedBox(
+                                            height: 80.h,
+                                          ),
                                         ],
                                       ),
                                     ],
