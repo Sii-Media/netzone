@@ -681,6 +681,34 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               SizedBox(
                 height: 10.h,
               ),
+              TextSignup(text: AppLocalizations.of(context).translate('slogn')),
+              TextFormField(
+                controller: widget.slognController,
+                style: const TextStyle(color: AppColor.black),
+                decoration: InputDecoration(
+                  filled: true,
+                  //<-- SEE HERE
+                  fillColor: Colors.green.withOpacity(0.1),
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 30)
+                          .flipped,
+
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                keyboardType: TextInputType.text,
+
+                // textInputAction: widget.textInputAction ?? TextInputAction.done,
+
+                onChanged: (text) {
+                  // widget.passwordFormFieldKey.currentState!.validate();
+                },
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
               widget.accountTitle == 'منطقة حرة'
                   ? Padding(
                       padding: const EdgeInsets.only(bottom: 10.0),

@@ -160,80 +160,97 @@ class _VehicleCompaniesProfileScreenState
                                       fontSize: 16.sp,
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () => showRating(context),
-                                    child: RatingBar.builder(
-                                      minRating: 1,
-                                      maxRating: 5,
-                                      initialRating: 4,
-                                      itemSize: 25,
-                                      ignoreGestures: true,
-                                      itemBuilder: (context, _) {
-                                        return const Icon(
-                                          Icons.star,
-                                          color: Colors.amber,
-                                        );
-                                      },
-                                      allowHalfRating: true,
-                                      updateOnDrag: true,
-                                      onRatingUpdate: (rating) {},
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                  BlocBuilder<AuthBloc, AuthState>(
-                                    bloc: authBloc,
-                                    builder: (context, state) {
-                                      if (state is AuthInProgress) {
-                                        return const Center(
-                                          child: CircularProgressIndicator(
-                                            color: AppColor.backgroundColor,
+                                  widget.vehiclesCompany.slogn != null
+                                      ? Text(
+                                          widget.vehiclesCompany.slogn ?? '',
+                                          style: TextStyle(
+                                            color: AppColor.secondGrey,
+                                            fontWeight: FontWeight.w300,
+                                            fontSize: 13.sp,
                                           ),
-                                        );
-                                      } else if (state is Authenticated) {
-                                        // isFollowing = state.user
-                                        //         .userInfo.followings!
-                                        //         .contains(widget
-                                        //             .localCompany.id)
-                                        //     ? true
-                                        //     : false;
-                                        return ElevatedButton(
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    AppColor.backgroundColor),
-                                            shape: MaterialStateProperty.all(
-                                                RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(18.0),
-                                            )),
-                                          ),
-                                          child: Text(
-                                            isFollowing
-                                                ? AppLocalizations.of(context)
-                                                    .translate('unfollow')
-                                                : AppLocalizations.of(context)
-                                                    .translate('follow'),
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              isFollowing = !isFollowing;
-                                            });
-                                            userBloc.add(ToggleFollowEvent(
-                                                otherUserId:
-                                                    widget.vehiclesCompany.id));
+                                        )
+                                      : const SizedBox(),
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () => showRating(context),
+                                        child: RatingBar.builder(
+                                          minRating: 1,
+                                          maxRating: 5,
+                                          initialRating: 3,
+                                          itemSize: 25,
+                                          ignoreGestures: true,
+                                          itemBuilder: (context, _) {
+                                            return const Icon(
+                                              Icons.star,
+                                              color: Colors.amber,
+                                            );
                                           },
-                                        );
-                                      }
-                                      return Container();
-                                    },
-                                  )
+                                          allowHalfRating: true,
+                                          updateOnDrag: true,
+                                          onRatingUpdate: (rating) {},
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 15.w,
+                                      ),
+                                      BlocBuilder<AuthBloc, AuthState>(
+                                        bloc: authBloc,
+                                        builder: (context, state) {
+                                          if (state is AuthInProgress) {
+                                            return const Center(
+                                              child: CircularProgressIndicator(
+                                                color: AppColor.backgroundColor,
+                                              ),
+                                            );
+                                          } else if (state is Authenticated) {
+                                            // isFollowing = state.user
+                                            //         .userInfo.followings!
+                                            //         .contains(widget
+                                            //             .localCompany.id)
+                                            //     ? true
+                                            //     : false;
+                                            return ElevatedButton(
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        AppColor
+                                                            .backgroundColor),
+                                                shape:
+                                                    MaterialStateProperty.all(
+                                                        RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          18.0),
+                                                )),
+                                              ),
+                                              child: Text(
+                                                isFollowing
+                                                    ? AppLocalizations.of(
+                                                            context)
+                                                        .translate('unfollow')
+                                                    : AppLocalizations.of(
+                                                            context)
+                                                        .translate('follow'),
+                                                style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              onPressed: () {
+                                                setState(() {
+                                                  isFollowing = !isFollowing;
+                                                });
+                                                userBloc.add(ToggleFollowEvent(
+                                                    otherUserId: widget
+                                                        .vehiclesCompany.id));
+                                              },
+                                            );
+                                          }
+                                          return Container();
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ],

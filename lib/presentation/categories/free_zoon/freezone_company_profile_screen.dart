@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/link.dart';
 
 import '../../../data/core/constants/constants.dart';
 import '../../../data/models/auth/user/user_model.dart';
@@ -201,56 +202,61 @@ class _FreezoneCompanyProfileScreenState
                                               fontSize: 16.sp,
                                             ),
                                           ),
-                                          SizedBox(
-                                            height: 10.h,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () => showRating(context),
-                                            child: RatingBar.builder(
-                                              minRating: 1,
-                                              maxRating: 5,
-                                              initialRating: 4.5,
-                                              itemSize: 25,
-                                              ignoreGestures: true,
-                                              itemBuilder: (context, _) {
-                                                return const Icon(
-                                                  Icons.star,
-                                                  color: Colors.amber,
-                                                );
-                                              },
-                                              allowHalfRating: true,
-                                              updateOnDrag: true,
-                                              onRatingUpdate: (rating) {},
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 10.h,
-                                          ),
-                                          BlocBuilder<AuthBloc, AuthState>(
-                                            bloc: authBloc,
-                                            builder: (context, state) {
-                                              if (state is AuthInProgress) {
-                                                return const Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    color: AppColor
-                                                        .backgroundColor,
+                                          state.userInfo.slogn != null
+                                              ? Text(
+                                                  state.userInfo.slogn ?? '',
+                                                  style: TextStyle(
+                                                    color: AppColor.secondGrey,
+                                                    fontWeight: FontWeight.w300,
+                                                    fontSize: 13.sp,
                                                   ),
-                                                );
-                                              } else if (state
-                                                  is Authenticated) {
-                                                // isFollowing = state.user
-                                                //         .userInfo.followings!
-                                                //         .contains(widget
-                                                //             .localCompany.id)
-                                                //     ? true
-                                                //     : false;
-                                                return Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    ElevatedButton(
+                                                )
+                                              : const SizedBox(),
+                                          Row(
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () =>
+                                                    showRating(context),
+                                                child: RatingBar.builder(
+                                                  minRating: 1,
+                                                  maxRating: 5,
+                                                  initialRating: 3,
+                                                  itemSize: 25,
+                                                  ignoreGestures: true,
+                                                  itemBuilder: (context, _) {
+                                                    return const Icon(
+                                                      Icons.star,
+                                                      color: Colors.amber,
+                                                    );
+                                                  },
+                                                  allowHalfRating: true,
+                                                  updateOnDrag: true,
+                                                  onRatingUpdate: (rating) {},
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 15.w,
+                                              ),
+                                              BlocBuilder<AuthBloc, AuthState>(
+                                                bloc: authBloc,
+                                                builder: (context, state) {
+                                                  if (state is AuthInProgress) {
+                                                    return const Center(
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        color: AppColor
+                                                            .backgroundColor,
+                                                      ),
+                                                    );
+                                                  } else if (state
+                                                      is Authenticated) {
+                                                    // isFollowing = state.user
+                                                    //         .userInfo.followings!
+                                                    //         .contains(widget
+                                                    //             .localCompany.id)
+                                                    //     ? true
+                                                    //     : false;
+                                                    return ElevatedButton(
                                                       style: ButtonStyle(
                                                         backgroundColor:
                                                             MaterialStateProperty
@@ -291,13 +297,13 @@ class _FreezoneCompanyProfileScreenState
                                                                     widget.user
                                                                         .id));
                                                       },
-                                                    ),
-                                                  ],
-                                                );
-                                              }
-                                              return Container();
-                                            },
-                                          )
+                                                    );
+                                                  }
+                                                  return Container();
+                                                },
+                                              ),
+                                            ],
+                                          ),
                                         ],
                                       ),
                                     ],
@@ -315,6 +321,43 @@ class _FreezoneCompanyProfileScreenState
                                         color: AppColor.mainGrey),
                                   ),
                                 ),
+                                state.userInfo.link != null
+                                    ? Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: Link(
+                                          uri: Uri.parse(
+                                            state.userInfo.link ?? '',
+                                          ),
+                                          builder: ((context, followLink) =>
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.link,
+                                                    color: AppColor.secondGrey,
+                                                    size: 20,
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: followLink,
+                                                    child: Text(
+                                                      state.userInfo.link ?? '',
+                                                      style: TextStyle(
+                                                        color: AppColor
+                                                            .backgroundColor,
+                                                        fontSize: 15.sp,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )),
+                                        ),
+                                      )
+                                    : const SizedBox(),
                                 SizedBox(
                                   height: 12.h,
                                 ),
