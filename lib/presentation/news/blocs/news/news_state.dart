@@ -42,3 +42,17 @@ class GetCompanyNewsSuccess extends NewsState {
 
   const GetCompanyNewsSuccess({required this.news});
 }
+
+class EditNewsInProgress extends NewsState {}
+
+class EditNewsFailure extends NewsState {
+  final String message;
+
+  const EditNewsFailure({required this.message});
+}
+
+class EditNewsSuccess extends NewsState {
+  final List<News> news;
+
+  const EditNewsSuccess({required this.news});
+}

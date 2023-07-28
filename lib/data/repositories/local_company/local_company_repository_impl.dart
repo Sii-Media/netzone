@@ -15,6 +15,7 @@ import 'package:netzoon/domain/categories/repositories/local_company_reponsitory
 import 'package:netzoon/domain/company_service/company_service.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
+import 'package:share_plus/share_plus.dart';
 
 class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
   final NetworkInfo networkInfo;
@@ -79,9 +80,11 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
   Future<Either<Failure, String>> addCompanyService({
     required String title,
     required String description,
-    required int price,
+    int? price,
     required String owner,
     File? image,
+    List<XFile>? serviceImageList,
+    String? whatsAppNumber,
   }) async {
     try {
       if (await networkInfo.isConnected) {
@@ -91,7 +94,6 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
         formData.fields.addAll([
           MapEntry('title', title),
           MapEntry('description', description),
-          MapEntry('price', price.toString()),
           MapEntry('owner', owner),
         ]);
         if (image != null) {
@@ -104,6 +106,31 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
               contentType: MediaType('image', 'jpeg'),
             ),
           ));
+        }
+        if (price != null) {
+          formData.fields.add(
+            MapEntry('price', price.toString()),
+          );
+        }
+        if (whatsAppNumber != null) {
+          formData.fields.add(
+            MapEntry('whatsAppNumber', whatsAppNumber),
+          );
+        }
+
+        if (serviceImageList != null && serviceImageList.isNotEmpty) {
+          for (int i = 0; i < serviceImageList.length; i++) {
+            String fileName = 'image$i.jpg';
+            File file = File(serviceImageList[i].path);
+            formData.files.add(MapEntry(
+              'serviceImageList',
+              await MultipartFile.fromFile(
+                file.path,
+                filename: fileName,
+                contentType: MediaType('image', 'jpeg'),
+              ),
+            ));
+          }
         }
         Response response = await dio.post(
             'https://net-zoon.onrender.com/categories/local-company/add-service',
@@ -139,6 +166,24 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
       }
     } catch (e) {
       return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> rateCompanyService(
+      {required String id,
+      required double rating,
+      required String userId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final result = await localCompanyRemoteDataSource.rateCompanyService(
+            id, rating, userId);
+        return Right(result);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(RatingFailure());
     }
   }
 }

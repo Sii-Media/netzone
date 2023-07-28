@@ -9,8 +9,11 @@ import 'package:netzoon/domain/departments/usecases/edit_product_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_categories_by_departments_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_category_products_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_product_by_id_use_case.dart';
+import 'package:netzoon/domain/departments/usecases/rate_product_use_case.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 
+import '../../../../domain/auth/entities/user.dart';
+import '../../../../domain/auth/usecases/get_signed_in_user_use_case.dart';
 import '../../../../domain/core/usecase/usecase.dart';
 import '../../../../domain/departments/usecases/delete_product_use_case.dart';
 import '../../../../domain/departments/usecases/get_all_products_use_case.dart';
@@ -26,6 +29,9 @@ class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
   final EditProductUseCase editProductUseCase;
   final GetProductByIdUseCase getProductByIdUseCase;
   final GetCountryUseCase getCountryUseCase;
+  final RateProductUseCase rateProductUseCase;
+  final GetSignedInUserUseCase getSignedInUserUseCase;
+
   List<CategoryProducts> filteredProducts = [];
   ElecDevicesBloc({
     required this.deleteProductUseCase,
@@ -35,6 +41,8 @@ class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
     required this.editProductUseCase,
     required this.getProductByIdUseCase,
     required this.getCountryUseCase,
+    required this.rateProductUseCase,
+    required this.getSignedInUserUseCase,
   }) : super(ElecDevicesInitial()) {
     on<GetElcDevicesEvent>((event, emit) async {
       emit(ElecDevicesInProgress());
@@ -154,6 +162,21 @@ class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
           .toList();
 
       emit(ElecCategoryProductSuccess(categoryProducts: filteredProducts));
+    });
+    on<RateProductEvent>((event, emit) async {
+      emit(RateProductInProgress());
+      final result = await getSignedInUserUseCase.call(NoParams());
+      late User user;
+      result.fold((l) => null, (r) => user = r!);
+      final rating = await rateProductUseCase(RateProductParams(
+          id: event.id, rating: event.rating, userId: user.userInfo.id));
+
+      emit(
+        rating.fold(
+          (failure) => RateProductFailure(message: mapFailureToString(failure)),
+          (message) => RateProductSuccess(message: message),
+        ),
+      );
     });
   }
 }

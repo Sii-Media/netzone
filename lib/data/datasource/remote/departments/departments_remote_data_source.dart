@@ -51,6 +51,12 @@ abstract class DepartmentsRemoteDataSource {
 
   Future<String> addToSelectedProducts(String userId, List<String> productIds);
   Future<String> deleteFromSelectedProducts(String userId, String productId);
+
+  Future<String> rateProduct(
+    final String id,
+    final double rating,
+    final String userId,
+  );
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -142,5 +148,13 @@ abstract class DepartmentsRemoteDataSourceImpl
   Future<String> deleteFromSelectedProducts(
     @Path() String userId,
     @Path() String productId,
+  );
+
+  @override
+  @POST('/departments/products/{id}/rate')
+  Future<String> rateProduct(
+    @Path('id') String id,
+    @Part() double rating,
+    @Part() String userId,
   );
 }

@@ -48,7 +48,7 @@ class UserInfo {
   final List<String>? followers;
 
   final String id;
-
+  final double? averageRating;
   UserInfo({
     required this.username,
     required this.email,
@@ -90,5 +90,6 @@ class UserInfo {
     this.deliveryType,
     this.deliveryCarsNum,
     this.deliveryMotorsNum,
+    this.averageRating,
   });
 }

@@ -28,7 +28,7 @@ abstract class NewsRemoteDataSourse {
     final String id,
     final String title,
     final String description,
-    final File image,
+    final File? image,
     final String creator,
   );
 
@@ -85,7 +85,7 @@ abstract class NewsRemoteDataSourseImpl implements NewsRemoteDataSourse {
     @Path('id') String id,
     @Field() String title,
     @Field() String description,
-    @MultiPart() File image,
+    @MultiPart() File? image,
     @Field() String creator,
   );
 

@@ -28,3 +28,19 @@ class GetCompanyNewsEvent extends NewsEvent {
 
   const GetCompanyNewsEvent({required this.id});
 }
+
+class EditNewsEvent extends NewsEvent {
+  final String id;
+  final String title;
+  final String description;
+  final File? image;
+  final String creator;
+
+  const EditNewsEvent({
+    required this.id,
+    required this.title,
+    required this.description,
+    this.image,
+    required this.creator,
+  });
+}

@@ -46,3 +46,17 @@ class AddCompanyServiceSuccess extends LocalCompanyState {
 
   const AddCompanyServiceSuccess({required this.message});
 }
+
+class RateCompanyServiceInProgress extends LocalCompanyState {}
+
+class RateCompanyServiceFailure extends LocalCompanyState {
+  final String message;
+
+  const RateCompanyServiceFailure({required this.message});
+}
+
+class RateCompanyServiceSuccess extends LocalCompanyState {
+  final String message;
+
+  const RateCompanyServiceSuccess({required this.message});
+}

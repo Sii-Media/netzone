@@ -78,4 +78,10 @@ abstract class DepartmentRepository {
     required String userId,
     required String productId,
   });
+
+  Future<Either<Failure, String>> rateProduct({
+    required String id,
+    required double rating,
+    required String userId,
+  });
 }

@@ -75,3 +75,10 @@ class SearchProductsEvent extends ElecDevicesEvent {
   @override
   List<Object> get props => [searchQuery];
 }
+
+class RateProductEvent extends ElecDevicesEvent {
+  final String id;
+  final double rating;
+
+  const RateProductEvent({required this.id, required this.rating});
+}

@@ -71,6 +71,7 @@ import 'package:netzoon/domain/auth/usecases/get_user_accounts_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_user_followers_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_user_followings_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/logout_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/rate_user_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/set_first_time_logged_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/sign_in_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/sign_up_use_case.dart';
@@ -100,6 +101,7 @@ import 'package:netzoon/domain/categories/usecases/local_company/get_all_local_c
 import 'package:netzoon/domain/categories/usecases/local_company/get_company_products_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_company_service_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_local_companies_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/local_company/rate_company_service_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/real_estate/add_real_estate_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/real_estate/get_all_real_estates_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/real_estate/get_company_real_estates_use_case.dart';
@@ -134,6 +136,7 @@ import 'package:netzoon/domain/departments/usecases/get_categories_by_department
 import 'package:netzoon/domain/departments/usecases/get_category_products_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_selected_products_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_user_products_use_case.dart';
+import 'package:netzoon/domain/departments/usecases/rate_product_use_case.dart';
 import 'package:netzoon/domain/favorites/repositories/favorite_repository.dart';
 import 'package:netzoon/domain/favorites/usecases/clear_favorite_use_case.dart';
 import 'package:netzoon/domain/favorites/usecases/get_favorite_items_use_case.dart';
@@ -272,6 +275,8 @@ Future<void> init() async {
         editProductUseCase: sl(),
         getProductByIdUseCase: sl(),
         getCountryUseCase: sl(),
+        rateProductUseCase: sl(),
+        getSignedInUserUseCase: sl(),
       ));
 
   sl.registerFactory(() => AddProductBloc(
@@ -346,6 +351,7 @@ Future<void> init() async {
         getCountryUseCase: sl(),
         addCompanyServiceUseCase: sl(),
         getCompanyServicesUseCase: sl(),
+        rateCompanyServiceUseCase: sl(),
       ));
 
   sl.registerFactory(() => GovermentalBloc(
@@ -382,6 +388,7 @@ Future<void> init() async {
         getUserFollowersUseCase: sl(),
         getUserFollowingsUseCase: sl(),
         toggleFollowUseCase: sl(),
+        rateUserUseCase: sl(),
       ));
 
   sl.registerFactory(() => ChangePasswordBloc(
@@ -652,6 +659,14 @@ Future<void> init() async {
 
   sl.registerLazySingleton(
       () => AddCompanyServiceUseCase(localCompanyRepository: sl()));
+
+  sl.registerLazySingleton(() => RateUserUseCase(authRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => RateProductUseCase(departmentRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => RateCompanyServiceUseCase(localCompanyRepository: sl()));
 
   //! Repositories
 

@@ -7,10 +7,12 @@ import 'package:netzoon/domain/categories/usecases/local_company/add_company_ser
 import 'package:netzoon/domain/categories/usecases/local_company/get_all_local_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_company_products_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_local_companies_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/local_company/rate_company_service_use_case.dart';
 import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../domain/auth/entities/user.dart';
 import '../../../../domain/auth/entities/user_info.dart';
@@ -31,6 +33,7 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
   final GetCountryUseCase getCountryUseCase;
   final AddCompanyServiceUseCase addCompanyServiceUseCase;
   final GetCompanyServicesUseCase getCompanyServicesUseCase;
+  final RateCompanyServiceUseCase rateCompanyServiceUseCase;
   LocalCompanyBloc({
     required this.getLocalCompaniesUseCase,
     required this.getAllLocalCompaniesUseCase,
@@ -40,6 +43,7 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
     required this.getCountryUseCase,
     required this.addCompanyServiceUseCase,
     required this.getCompanyServicesUseCase,
+    required this.rateCompanyServiceUseCase,
   }) : super(LocalCompanyInitial()) {
     on<GetAllLocalCompaniesEvent>((event, emit) async {
       emit(LocalCompanyInProgress());
@@ -136,6 +140,8 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
         price: event.price,
         owner: user?.userInfo.id ?? '',
         image: event.image,
+        serviceImageList: event.serviceImageList,
+        whatsAppNumber: event.whatsAppNumber,
       ));
       emit(
         success.fold(
@@ -168,6 +174,22 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
           (failure) =>
               LocalCompanyFailure(message: mapFailureToString(failure)),
           (services) => GetCompanyServiceSuccess(services: services),
+        ),
+      );
+    });
+    on<RateCompanyServiceEvent>((event, emit) async {
+      emit(RateCompanyServiceInProgress());
+      final result = await getSignedInUser.call(NoParams());
+      late User? user;
+      result.fold((l) => null, (r) => user = r);
+      final rate = await rateCompanyServiceUseCase(RateCompanyServiceParams(
+          id: event.id, rating: event.rating, userId: user?.userInfo.id ?? ''));
+
+      emit(
+        rate.fold(
+          (failure) =>
+              RateCompanyServiceFailure(message: mapFailureToString(failure)),
+          (message) => RateCompanyServiceSuccess(message: message),
         ),
       );
     });

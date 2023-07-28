@@ -25,7 +25,7 @@ class EditNewsParams {
   final String id;
   final String title;
   final String description;
-  final File image;
+  final File? image;
   final String creator;
 
   EditNewsParams(

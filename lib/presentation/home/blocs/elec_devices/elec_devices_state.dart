@@ -61,3 +61,17 @@ class GetProductByIdSuccess extends ElecDevicesState {
 
   const GetProductByIdSuccess({required this.product});
 }
+
+class RateProductInProgress extends ElecDevicesState {}
+
+class RateProductFailure extends ElecDevicesState {
+  final String message;
+
+  const RateProductFailure({required this.message});
+}
+
+class RateProductSuccess extends ElecDevicesState {
+  final String message;
+
+  const RateProductSuccess({required this.message});
+}

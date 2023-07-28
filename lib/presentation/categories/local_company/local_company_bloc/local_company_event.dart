@@ -30,14 +30,17 @@ class GetLocalProductsEvent extends LocalCompanyEvent {
 class AddCompanyServiceEvent extends LocalCompanyEvent {
   final String title;
   final String description;
-  final int price;
+  final int? price;
   final File? image;
-
+  final List<XFile>? serviceImageList;
+  final String? whatsAppNumber;
   const AddCompanyServiceEvent({
     required this.title,
     required this.description,
-    required this.price,
+    this.price,
     this.image,
+    this.serviceImageList,
+    this.whatsAppNumber,
   });
 }
 
@@ -47,4 +50,11 @@ class GetCompanyServicesByIdEvent extends LocalCompanyEvent {
   final String id;
 
   const GetCompanyServicesByIdEvent({required this.id});
+}
+
+class RateCompanyServiceEvent extends LocalCompanyEvent {
+  final String id;
+  final double rating;
+
+  const RateCompanyServiceEvent({required this.id, required this.rating});
 }

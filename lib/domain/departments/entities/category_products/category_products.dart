@@ -25,6 +25,7 @@ class CategoryProducts extends Equatable {
   final double? priceAfterDiscount;
   final String country;
   final String? color;
+  final double? averageRating;
   const CategoryProducts({
     required this.id,
     required this.owner,
@@ -47,6 +48,7 @@ class CategoryProducts extends Equatable {
     this.priceAfterDiscount,
     required this.country,
     this.color,
+    this.averageRating,
   });
   @override
   List<Object?> get props => [

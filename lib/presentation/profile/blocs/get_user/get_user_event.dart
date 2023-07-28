@@ -74,3 +74,10 @@ class IsFollowingEvent extends GetUserEvent {
 
   const IsFollowingEvent({required this.id});
 }
+
+class RateUserEvent extends GetUserEvent {
+  final String id;
+  final double rating;
+
+  const RateUserEvent({required this.id, required this.rating});
+}

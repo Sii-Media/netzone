@@ -65,6 +65,12 @@ abstract class AuthRemoteDataSource {
     final String currentUserId,
     final String otherUserId,
   );
+
+  Future<String> rateUser(
+    final String id,
+    final double rating,
+    final String userId,
+  );
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -174,4 +180,12 @@ abstract class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @PUT('/user/toggleFollow/{otherUserId}')
   Future<String> toggleFollow(
       @Part() String currentUserId, @Path() String otherUserId);
+
+  @override
+  @POST('/user/{id}/rate')
+  Future<String> rateUser(
+    @Path('id') String id,
+    @Part() double rating,
+    @Part() String userId,
+  );
 }

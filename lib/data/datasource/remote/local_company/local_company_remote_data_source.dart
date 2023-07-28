@@ -18,6 +18,12 @@ abstract class LocalCompanyRemoteDataSource {
   Future<List<CompanyServiceModel>> getCompanyServices(String id);
   Future<String> addCompanyService(
       String title, String description, int price, String owner);
+
+  Future<String> rateCompanyService(
+    final String id,
+    final double rating,
+    final String userId,
+  );
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -63,5 +69,13 @@ abstract class LocalCompanyRemoteDataSourceImpl
     @Part() String description,
     @Part() int price,
     @Part() String owner,
+  );
+
+  @override
+  @POST('/categories/local-company/services/{id}/rate')
+  Future<String> rateCompanyService(
+    @Path('id') String id,
+    @Part() double rating,
+    @Part() String userId,
   );
 }

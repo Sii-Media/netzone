@@ -108,3 +108,17 @@ class GetUserFollowsSuccess extends GetUserState {
 
   const GetUserFollowsSuccess({required this.follows});
 }
+
+class RateUserInProgress extends GetUserState {}
+
+class RateUserFailure extends GetUserState {
+  final String message;
+
+  const RateUserFailure({required this.message});
+}
+
+class RateUserSuccess extends GetUserState {
+  final String message;
+
+  const RateUserSuccess({required this.message});
+}

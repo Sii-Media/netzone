@@ -25,7 +25,7 @@ abstract class NewsRepository {
     required String id,
     required String title,
     required String description,
-    required File image,
+    required File? image,
     required String creator,
   });
 

@@ -274,4 +274,23 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, String>> rateProduct(
+      {required String id,
+      required double rating,
+      required String userId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final rate =
+            await departmentsRemoteDataSource.rateProduct(id, rating, userId);
+        return Right(rate);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      print(e);
+      return Left(RatingFailure());
+    }
+  }
 }

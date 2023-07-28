@@ -494,4 +494,23 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(CredintialFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, String>> rateUser(
+      {required String id,
+      required double rating,
+      required String userId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final result = await authRemoteDataSource.rateUser(id, rating, userId);
+
+        return Right(result);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      print(e);
+      return Left(RatingFailure());
+    }
+  }
 }

@@ -11,9 +11,14 @@ CompanyServiceModel _$CompanyServiceModelFromJson(Map<String, dynamic> json) =>
       id: json['_id'] as String,
       title: json['title'] as String,
       description: json['description'] as String,
-      price: json['price'] as int,
+      price: json['price'] as int?,
       owner: UserInfoModel.fromJson(json['owner'] as Map<String, dynamic>),
       imageUrl: json['imageUrl'] as String?,
+      serviceImageList: (json['serviceImageList'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      whatsAppNumber: json['whatsAppNumber'] as String?,
+      averageRating: (json['averageRating'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$CompanyServiceModelToJson(
@@ -25,4 +30,7 @@ Map<String, dynamic> _$CompanyServiceModelToJson(
       'price': instance.price,
       'owner': instance.owner,
       'imageUrl': instance.imageUrl,
+      'serviceImageList': instance.serviceImageList,
+      'whatsAppNumber': instance.whatsAppNumber,
+      'averageRating': instance.averageRating,
     };

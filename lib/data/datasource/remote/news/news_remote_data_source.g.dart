@@ -107,6 +107,7 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = {
       'title': title,

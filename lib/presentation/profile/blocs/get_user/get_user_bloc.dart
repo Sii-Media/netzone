@@ -4,6 +4,7 @@ import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_user_by_id_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_user_followers_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_user_followings_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/rate_user_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/toggle_follow_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/add_to_selected_products_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/delete_from_selected_products_use_case.dart';
@@ -29,6 +30,7 @@ class GetUserBloc extends Bloc<GetUserEvent, GetUserState> {
   final GetUserFollowingsUseCase getUserFollowingsUseCase;
   final GetUserFollowersUseCase getUserFollowersUseCase;
   final ToggleFollowUseCase toggleFollowUseCase;
+  final RateUserUseCase rateUserUseCase;
   GetUserBloc({
     required this.getUserByIdUseCase,
     required this.getUserProductsUseCase,
@@ -39,6 +41,7 @@ class GetUserBloc extends Bloc<GetUserEvent, GetUserState> {
     required this.getUserFollowingsUseCase,
     required this.getUserFollowersUseCase,
     required this.toggleFollowUseCase,
+    required this.rateUserUseCase,
   }) : super(GetUserInitial()) {
     on<GetUserByIdEvent>((event, emit) async {
       emit(GetUserInProgress());
@@ -213,6 +216,21 @@ class GetUserBloc extends Bloc<GetUserEvent, GetUserState> {
       result.fold((l) => null, (r) => user = r!);
       await toggleFollowUseCase(ToggleFollowParams(
           currentUserId: user.userInfo.id, otherUserId: event.otherUserId));
+    });
+    on<RateUserEvent>((event, emit) async {
+      emit(RateUserInProgress());
+      final result = await getSignedInUserUseCase.call(NoParams());
+      late User user;
+      result.fold((l) => null, (r) => user = r!);
+      final rating = await rateUserUseCase(RateUserParams(
+          id: event.id, rating: event.rating, userId: user.userInfo.id));
+
+      emit(
+        rating.fold(
+          (failure) => RateUserFailure(message: mapFailureToString(failure)),
+          (message) => RateUserSuccess(message: message),
+        ),
+      );
     });
   }
 }

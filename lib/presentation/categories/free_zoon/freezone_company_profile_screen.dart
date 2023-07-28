@@ -20,6 +20,7 @@ import '../../core/blocs/country_bloc/country_bloc.dart';
 import '../../core/constant/colors.dart';
 import '../../core/helpers/get_currency_of_country.dart';
 import '../../core/widgets/on_failure_widget.dart';
+import '../../core/widgets/screen_loader.dart';
 import '../../profile/blocs/get_user/get_user_bloc.dart';
 import '../../utils/app_localizations.dart';
 import '../widgets/build_rating.dart';
@@ -37,8 +38,11 @@ class FreezoneCompanyProfileScreen extends StatefulWidget {
 }
 
 class _FreezoneCompanyProfileScreenState
-    extends State<FreezoneCompanyProfileScreen> with TickerProviderStateMixin {
+    extends State<FreezoneCompanyProfileScreen>
+    with TickerProviderStateMixin, ScreenLoader<FreezoneCompanyProfileScreen> {
   final userBloc = sl<GetUserBloc>();
+  final rateBloc = sl<GetUserBloc>();
+
   final productBloc = sl<GetUserBloc>();
   final adsBloc = sl<AdsBlocBloc>();
 
@@ -82,7 +86,7 @@ class _FreezoneCompanyProfileScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget screen(BuildContext context) {
     final TabController tabController = TabController(length: 3, vsync: this);
 
     return DefaultTabController(
@@ -106,318 +110,317 @@ class _FreezoneCompanyProfileScreenState
             ),
           ),
         ),
-        body: BlocBuilder<GetUserBloc, GetUserState>(
-          bloc: userBloc,
-          builder: (context, state) {
-            if (state is GetUserInProgress) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: AppColor.backgroundColor,
-                ),
-              );
-            } else if (state is GetUserFailure) {
+        body: BlocListener<GetUserBloc, GetUserState>(
+          bloc: rateBloc,
+          listener: (context, state) {
+            if (state is RateUserInProgress) {
+              startLoading();
+            } else if (state is RateUserFailure) {
+              stopLoading();
+
               final failure = state.message;
-              return Center(
-                child: Text(
-                  failure,
-                  style: const TextStyle(
-                    color: Colors.red,
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    failure,
+                    style: const TextStyle(
+                      color: AppColor.white,
+                    ),
                   ),
+                  backgroundColor: AppColor.red,
                 ),
               );
-            } else if (state is GetUserSuccess) {
-              return DefaultTabController(
-                length: 3,
-                child: NestedScrollView(
-                  headerSliverBuilder: (context, _) {
-                    return [
-                      SliverList(
-                        delegate: SliverChildListDelegate(
-                          [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  height: 140.h,
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        color: AppColor.secondGrey
-                                            .withOpacity(0.3),
-                                        width: 1,
+            } else if (state is RateUserSuccess) {
+              stopLoading();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                  AppLocalizations.of(context).translate('success'),
+                ),
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+              ));
+            }
+          },
+          child: BlocBuilder<GetUserBloc, GetUserState>(
+            bloc: userBloc,
+            builder: (context, state) {
+              if (state is GetUserInProgress) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: AppColor.backgroundColor,
+                  ),
+                );
+              } else if (state is GetUserFailure) {
+                final failure = state.message;
+                return Center(
+                  child: Text(
+                    failure,
+                    style: const TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                );
+              } else if (state is GetUserSuccess) {
+                return DefaultTabController(
+                  length: 3,
+                  child: NestedScrollView(
+                    headerSliverBuilder: (context, _) {
+                      return [
+                        SliverList(
+                          delegate: SliverChildListDelegate(
+                            [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    height: 140.h,
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: AppColor.secondGrey
+                                              .withOpacity(0.3),
+                                          width: 1,
+                                        ),
                                       ),
                                     ),
+                                    child: CachedNetworkImage(
+                                      imageUrl: state.userInfo.coverPhoto ??
+                                          'https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000',
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                  child: CachedNetworkImage(
-                                    imageUrl: state.userInfo.coverPhoto ??
-                                        'https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000',
-                                    fit: BoxFit.cover,
+                                  SizedBox(
+                                    height: 15.h,
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 15.h,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(100),
-                                          ),
-                                          child: CachedNetworkImage(
-                                            imageUrl:
-                                                state.userInfo.profilePhoto ??
-                                                    '',
-                                            width: 100,
-                                            height: 100,
-                                            fit: BoxFit.fill,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 20.w,
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            state.userInfo.username ?? '',
-                                            style: TextStyle(
-                                              color: AppColor.black,
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 16.sp,
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  state.userInfo.profilePhoto ??
+                                                      '',
+                                              width: 100,
+                                              height: 100,
+                                              fit: BoxFit.fill,
                                             ),
                                           ),
-                                          state.userInfo.slogn != null
-                                              ? Text(
-                                                  state.userInfo.slogn ?? '',
-                                                  style: TextStyle(
-                                                    color: AppColor.secondGrey,
-                                                    fontWeight: FontWeight.w300,
-                                                    fontSize: 13.sp,
-                                                  ),
-                                                )
-                                              : const SizedBox(),
-                                          Row(
-                                            children: [
-                                              GestureDetector(
-                                                onTap: () =>
-                                                    showRating(context),
-                                                child: RatingBar.builder(
-                                                  minRating: 1,
-                                                  maxRating: 5,
-                                                  initialRating: 3,
-                                                  itemSize: 25,
-                                                  ignoreGestures: true,
-                                                  itemBuilder: (context, _) {
-                                                    return const Icon(
-                                                      Icons.star,
-                                                      color: Colors.amber,
-                                                    );
-                                                  },
-                                                  allowHalfRating: true,
-                                                  updateOnDrag: true,
-                                                  onRatingUpdate: (rating) {},
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 15.w,
-                                              ),
-                                              BlocBuilder<AuthBloc, AuthState>(
-                                                bloc: authBloc,
-                                                builder: (context, state) {
-                                                  if (state is AuthInProgress) {
-                                                    return const Center(
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                        color: AppColor
-                                                            .backgroundColor,
-                                                      ),
-                                                    );
-                                                  } else if (state
-                                                      is Authenticated) {
-                                                    // isFollowing = state.user
-                                                    //         .userInfo.followings!
-                                                    //         .contains(widget
-                                                    //             .localCompany.id)
-                                                    //     ? true
-                                                    //     : false;
-                                                    return ElevatedButton(
-                                                      style: ButtonStyle(
-                                                        backgroundColor:
-                                                            MaterialStateProperty
-                                                                .all(AppColor
-                                                                    .backgroundColor),
-                                                        shape: MaterialStateProperty
-                                                            .all(
-                                                                RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      18.0),
-                                                        )),
-                                                      ),
-                                                      child: Text(
-                                                        isFollowing
-                                                            ? AppLocalizations
-                                                                    .of(context)
-                                                                .translate(
-                                                                    'unfollow')
-                                                            : AppLocalizations
-                                                                    .of(context)
-                                                                .translate(
-                                                                    'follow'),
-                                                        style: const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          isFollowing =
-                                                              !isFollowing;
-                                                        });
-                                                        userBloc.add(
-                                                            ToggleFollowEvent(
-                                                                otherUserId:
-                                                                    widget.user
-                                                                        .id));
-                                                      },
-                                                    );
-                                                  }
-                                                  return Container();
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: Text(
-                                    state.userInfo.bio ?? 'BIO',
-                                    style: const TextStyle(
-                                        color: AppColor.mainGrey),
-                                  ),
-                                ),
-                                state.userInfo.link != null
-                                    ? Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        child: Link(
-                                          uri: Uri.parse(
-                                            state.userInfo.link ?? '',
-                                          ),
-                                          builder: ((context, followLink) =>
-                                              Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  const Icon(
-                                                    Icons.link,
-                                                    color: AppColor.secondGrey,
-                                                    size: 20,
-                                                  ),
-                                                  GestureDetector(
-                                                    onTap: followLink,
-                                                    child: Text(
-                                                      state.userInfo.link ?? '',
-                                                      style: TextStyle(
-                                                        color: AppColor
-                                                            .backgroundColor,
-                                                        fontSize: 15.sp,
-                                                        decoration:
-                                                            TextDecoration
-                                                                .underline,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              )),
                                         ),
-                                      )
-                                    : const SizedBox(),
-                                SizedBox(
-                                  height: 12.h,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  // height: 50.h,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: Container(
-                                          height: 50,
-                                          width: 180,
-                                          decoration: const BoxDecoration(
-                                            color: AppColor.backgroundColor,
-                                            // borderRadius: BorderRadius.circular(100),
-                                          ),
-                                          child: Center(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.monetization_on,
-                                                  color: Colors.white,
-                                                  size: 18.sp,
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 4.0),
-                                                  child: Text(
-                                                    AppLocalizations.of(context)
-                                                        .translate(
-                                                            'Live Auction'),
+                                        SizedBox(
+                                          width: 20.w,
+                                        ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              state.userInfo.username ?? '',
+                                              style: TextStyle(
+                                                color: AppColor.black,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16.sp,
+                                              ),
+                                            ),
+                                            state.userInfo.slogn != null
+                                                ? Text(
+                                                    state.userInfo.slogn ?? '',
                                                     style: TextStyle(
-                                                      color: AppColor.white,
+                                                      color:
+                                                          AppColor.secondGrey,
+                                                      fontWeight:
+                                                          FontWeight.w300,
                                                       fontSize: 13.sp,
                                                     ),
+                                                  )
+                                                : const SizedBox(),
+                                            Row(
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () => showRating(
+                                                      context,
+                                                      rateBloc,
+                                                      widget.user.id,
+                                                      widget.user
+                                                              .averageRating ??
+                                                          0),
+                                                  child: RatingBar.builder(
+                                                    minRating: 1,
+                                                    maxRating: 5,
+                                                    initialRating: widget.user
+                                                            .averageRating ??
+                                                        0,
+                                                    itemSize: 25,
+                                                    ignoreGestures: true,
+                                                    itemBuilder: (context, _) {
+                                                      return const Icon(
+                                                        Icons.star,
+                                                        color: Colors.amber,
+                                                      );
+                                                    },
+                                                    allowHalfRating: true,
+                                                    updateOnDrag: true,
+                                                    onRatingUpdate: (rating) {},
                                                   ),
+                                                ),
+                                                SizedBox(
+                                                  width: 15.w,
+                                                ),
+                                                BlocBuilder<AuthBloc,
+                                                    AuthState>(
+                                                  bloc: authBloc,
+                                                  builder: (context, state) {
+                                                    if (state
+                                                        is AuthInProgress) {
+                                                      return const Center(
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          color: AppColor
+                                                              .backgroundColor,
+                                                        ),
+                                                      );
+                                                    } else if (state
+                                                        is Authenticated) {
+                                                      // isFollowing = state.user
+                                                      //         .userInfo.followings!
+                                                      //         .contains(widget
+                                                      //             .localCompany.id)
+                                                      //     ? true
+                                                      //     : false;
+                                                      return ElevatedButton(
+                                                        style: ButtonStyle(
+                                                          backgroundColor:
+                                                              MaterialStateProperty
+                                                                  .all(AppColor
+                                                                      .backgroundColor),
+                                                          shape: MaterialStateProperty
+                                                              .all(
+                                                                  RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        18.0),
+                                                          )),
+                                                        ),
+                                                        child: Text(
+                                                          isFollowing
+                                                              ? AppLocalizations
+                                                                      .of(
+                                                                          context)
+                                                                  .translate(
+                                                                      'unfollow')
+                                                              : AppLocalizations
+                                                                      .of(
+                                                                          context)
+                                                                  .translate(
+                                                                      'follow'),
+                                                          style: const TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            isFollowing =
+                                                                !isFollowing;
+                                                          });
+                                                          userBloc.add(
+                                                              ToggleFollowEvent(
+                                                                  otherUserId:
+                                                                      widget
+                                                                          .user
+                                                                          .id));
+                                                        },
+                                                      );
+                                                    }
+                                                    return Container();
+                                                  },
                                                 ),
                                               ],
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) {
-                                              return const ChatPageScreen();
-                                            }),
-                                          );
-                                        },
-                                        child: ClipRRect(
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20.h,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: Text(
+                                      state.userInfo.bio ?? 'BIO',
+                                      style: const TextStyle(
+                                          color: AppColor.mainGrey),
+                                    ),
+                                  ),
+                                  state.userInfo.link != null
+                                      ? Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Link(
+                                            uri: Uri.parse(
+                                              state.userInfo.link ?? '',
+                                            ),
+                                            builder: ((context, followLink) =>
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.link,
+                                                      color:
+                                                          AppColor.secondGrey,
+                                                      size: 20,
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: followLink,
+                                                      child: Text(
+                                                        state.userInfo.link ??
+                                                            '',
+                                                        style: TextStyle(
+                                                          color: AppColor
+                                                              .backgroundColor,
+                                                          fontSize: 15.sp,
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .underline,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )),
+                                          ),
+                                        )
+                                      : const SizedBox(),
+                                  SizedBox(
+                                    height: 12.h,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    // height: 50.h,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(100),
                                           child: Container(
@@ -432,9 +435,10 @@ class _FreezoneCompanyProfileScreenState
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
                                                 children: [
-                                                  const Icon(
-                                                    Icons.chat,
+                                                  Icon(
+                                                    Icons.monetization_on,
                                                     color: Colors.white,
+                                                    size: 18.sp,
                                                   ),
                                                   Padding(
                                                     padding:
@@ -444,7 +448,7 @@ class _FreezoneCompanyProfileScreenState
                                                       AppLocalizations.of(
                                                               context)
                                                           .translate(
-                                                              'customers service'),
+                                                              'Live Auction'),
                                                       style: TextStyle(
                                                         color: AppColor.white,
                                                         fontSize: 13.sp,
@@ -456,341 +460,394 @@ class _FreezoneCompanyProfileScreenState
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                                return const ChatPageScreen();
+                                              }),
+                                            );
+                                          },
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            child: Container(
+                                              height: 50,
+                                              width: 180,
+                                              decoration: const BoxDecoration(
+                                                color: AppColor.backgroundColor,
+                                                // borderRadius: BorderRadius.circular(100),
+                                              ),
+                                              child: Center(
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.chat,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 4.0),
+                                                      child: Text(
+                                                        AppLocalizations.of(
+                                                                context)
+                                                            .translate(
+                                                                'customers service'),
+                                                        style: TextStyle(
+                                                          color: AppColor.white,
+                                                          fontSize: 13.sp,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 30.h,
-                                ),
-                              ],
+                                  SizedBox(
+                                    height: 30.h,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ];
+                    },
+                    body: Column(
+                      children: [
+                        TabBar(
+                          controller: tabController,
+                          tabs: [
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('Products'),
+                              style: TextStyle(
+                                color: AppColor.black,
+                                fontSize: 11.sp,
+                              ),
+                            ),
+                            Text(
+                              AppLocalizations.of(context).translate('my_ads'),
+                              style: TextStyle(
+                                color: AppColor.black,
+                                fontSize: 11.sp,
+                              ),
+                            ),
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('about_us'),
+                              style: TextStyle(
+                                color: AppColor.black,
+                                fontSize: 11.sp,
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ];
-                  },
-                  body: Column(
-                    children: [
-                      TabBar(
-                        controller: tabController,
-                        tabs: [
-                          Text(
-                            AppLocalizations.of(context).translate('Products'),
-                            style: TextStyle(
-                              color: AppColor.black,
-                              fontSize: 11.sp,
-                            ),
-                          ),
-                          Text(
-                            AppLocalizations.of(context).translate('my_ads'),
-                            style: TextStyle(
-                              color: AppColor.black,
-                              fontSize: 11.sp,
-                            ),
-                          ),
-                          Text(
-                            AppLocalizations.of(context).translate('about_us'),
-                            style: TextStyle(
-                              color: AppColor.black,
-                              fontSize: 11.sp,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      Expanded(
-                        child: TabBarView(
-                          controller: tabController,
-                          children: [
-                            RefreshIndicator(
-                              onRefresh: () async {
-                                productBloc.add(GetUserProductsByIdEvent(
-                                    id: widget.user.id));
-                              },
-                              color: AppColor.white,
-                              backgroundColor: AppColor.backgroundColor,
-                              child: BlocBuilder<GetUserBloc, GetUserState>(
-                                bloc: productBloc,
-                                builder: (context, state) {
-                                  if (state is GetUserProductsInProgress) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(
-                                        color: AppColor.backgroundColor,
-                                      ),
-                                    );
-                                  } else if (state is GetUserProductsFailure) {
-                                    final failure = state.message;
-                                    return Center(
-                                      child: Text(
-                                        failure,
-                                        style: const TextStyle(
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                    );
-                                  } else if (state is GetUserProductsSuccess) {
-                                    return state.products.isEmpty
-                                        ? Center(
-                                            child: Text(
-                                                AppLocalizations.of(context)
-                                                    .translate('no_items'),
-                                                style: const TextStyle(
-                                                    color: AppColor
-                                                        .backgroundColor)),
-                                          )
-                                        : BlocBuilder<CountryBloc,
-                                            CountryState>(
-                                            bloc: countryBloc,
-                                            builder: (context, countryState) {
-                                              if (countryState
-                                                  is CountryInitial) {
-                                                return GridView.builder(
-                                                  gridDelegate:
-                                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                                          crossAxisCount: 3,
-                                                          childAspectRatio:
-                                                              0.95,
-                                                          crossAxisSpacing:
-                                                              10.w,
-                                                          mainAxisSpacing:
-                                                              10.h),
-                                                  shrinkWrap: true,
-                                                  physics:
-                                                      const BouncingScrollPhysics(),
-                                                  itemCount:
-                                                      state.products.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return ClipRRect(
-                                                      borderRadius:
-                                                          const BorderRadius
-                                                                  .all(
-                                                              Radius.circular(
-                                                                  20)),
-                                                      child: GestureDetector(
-                                                        onTap: () {
-                                                          Navigator.of(context)
-                                                              .push(
-                                                            MaterialPageRoute(
-                                                              builder:
-                                                                  (context) {
-                                                                return ProductDetailsScreen(
-                                                                  products: state
-                                                                      .products,
-                                                                  index: index,
-                                                                );
-                                                              },
-                                                            ),
-                                                          );
-                                                        },
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            CachedNetworkImage(
-                                                              imageUrl: state
-                                                                  .products[
-                                                                      index]
-                                                                  .imageUrl,
-                                                              height: 65.h,
-                                                              width: 120.w,
-                                                              fit: BoxFit
-                                                                  .contain,
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceEvenly,
-                                                              children: [
-                                                                Text(
-                                                                  state
-                                                                      .products[
-                                                                          index]
-                                                                      .name,
-                                                                  style: const TextStyle(
-                                                                      color: AppColor
-                                                                          .backgroundColor,
-                                                                      fontSize:
-                                                                          10),
-                                                                ),
-                                                                // Text(
-                                                                //   '${state.products[index].price} \$',
-                                                                //   style: const TextStyle(
-                                                                //       color: AppColor
-                                                                //           .colorTwo,
-                                                                //       fontSize:
-                                                                //           10),
-                                                                // ),
-                                                                RichText(
-                                                                  text: TextSpan(
-                                                                      style: TextStyle(
-                                                                          fontSize: 10
-                                                                              .sp,
-                                                                          color: AppColor
-                                                                              .backgroundColor),
-                                                                      children: <
-                                                                          TextSpan>[
-                                                                        TextSpan(
-                                                                          text:
-                                                                              '${state.products[index].price}',
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            fontWeight:
-                                                                                FontWeight.w700,
-                                                                          ),
-                                                                        ),
-                                                                        TextSpan(
-                                                                          text:
-                                                                              getCurrencyFromCountry(
-                                                                            countryState.selectedCountry,
-                                                                            context,
-                                                                          ),
-                                                                          style: TextStyle(
-                                                                              color: AppColor.backgroundColor,
-                                                                              fontSize: 10.sp),
-                                                                        )
-                                                                      ]),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                );
-                                              }
-                                              return const SizedBox();
-                                            },
-                                          );
-                                  }
-                                  return const SizedBox();
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            controller: tabController,
+                            children: [
+                              RefreshIndicator(
+                                onRefresh: () async {
+                                  productBloc.add(GetUserProductsByIdEvent(
+                                      id: widget.user.id));
                                 },
-                              ),
-                            ),
-                            RefreshIndicator(
-                              onRefresh: () async {
-                                adsBloc.add(
-                                    GetUserAdsEvent(userId: widget.user.id));
-                              },
-                              color: AppColor.white,
-                              backgroundColor: AppColor.backgroundColor,
-                              child: BlocBuilder<AdsBlocBloc, AdsBlocState>(
-                                bloc: adsBloc,
-                                builder: (context, state) {
-                                  if (state is AdsBlocInProgress) {
-                                    return SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height -
-                                              120.h,
-                                      child: const Center(
+                                color: AppColor.white,
+                                backgroundColor: AppColor.backgroundColor,
+                                child: BlocBuilder<GetUserBloc, GetUserState>(
+                                  bloc: productBloc,
+                                  builder: (context, state) {
+                                    if (state is GetUserProductsInProgress) {
+                                      return const Center(
                                         child: CircularProgressIndicator(
                                           color: AppColor.backgroundColor,
                                         ),
-                                      ),
-                                    );
-                                  } else if (state is AdsBlocFailure) {
-                                    final failure = state.message;
-                                    return FailureWidget(
-                                        failure: failure,
-                                        onPressed: () {
-                                          adsBloc.add(GetUserAdsEvent(
-                                              userId: widget.user.id));
-                                        });
-                                  } else if (state is AdsBlocSuccess) {
-                                    return state.ads.isEmpty
-                                        ? Center(
-                                            child: Text(
-                                                AppLocalizations.of(context)
-                                                    .translate('no_items'),
-                                                style: const TextStyle(
-                                                    color: AppColor
-                                                        .backgroundColor)),
-                                          )
-                                        : ListView.builder(
-                                            shrinkWrap: true,
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            itemCount: state.ads.length,
-                                            scrollDirection: Axis.vertical,
-                                            itemBuilder: (context, index) {
-                                              return Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                height: 220.h,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                                20)
-                                                            .w),
-                                                child: Advertising(
-                                                    advertisment:
-                                                        state.ads[index]),
-                                              );
-                                            },
-                                          );
-                                  }
-                                  return Container();
-                                },
-                              ),
-                            ),
-                            ListView(
-                              children: [
-                                Column(
-                                  children: [
-                                    titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('username'),
-                                        input: state.userInfo.username ?? ''),
-                                    titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('email'),
-                                        input: state.userInfo.email ?? ''),
-                                    titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('mobile'),
-                                        input:
-                                            state.userInfo.firstMobile ?? ''),
-                                    state.userInfo.bio != null
-                                        ? titleAndInput(
-                                            title: AppLocalizations.of(context)
-                                                .translate('Bio'),
-                                            input: state.userInfo.bio ?? '')
-                                        : const SizedBox(),
-                                    // titleAndInput(
-                                    //   title: AppLocalizations.of(context)
-                                    //       .translate('Is there delivery'),
-                                    //   input: state.userInfo.deliverable!
-                                    //       ? AppLocalizations.of(context)
-                                    //           .translate('Yes')
-                                    //       : AppLocalizations.of(context)
-                                    //           .translate('No'),
-                                    // ),
-                                  ],
+                                      );
+                                    } else if (state
+                                        is GetUserProductsFailure) {
+                                      final failure = state.message;
+                                      return Center(
+                                        child: Text(
+                                          failure,
+                                          style: const TextStyle(
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      );
+                                    } else if (state
+                                        is GetUserProductsSuccess) {
+                                      return state.products.isEmpty
+                                          ? Center(
+                                              child: Text(
+                                                  AppLocalizations.of(context)
+                                                      .translate('no_items'),
+                                                  style: const TextStyle(
+                                                      color: AppColor
+                                                          .backgroundColor)),
+                                            )
+                                          : BlocBuilder<CountryBloc,
+                                              CountryState>(
+                                              bloc: countryBloc,
+                                              builder: (context, countryState) {
+                                                if (countryState
+                                                    is CountryInitial) {
+                                                  return GridView.builder(
+                                                    gridDelegate:
+                                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                                            crossAxisCount: 3,
+                                                            childAspectRatio:
+                                                                0.95,
+                                                            crossAxisSpacing:
+                                                                10.w,
+                                                            mainAxisSpacing:
+                                                                10.h),
+                                                    shrinkWrap: true,
+                                                    physics:
+                                                        const BouncingScrollPhysics(),
+                                                    itemCount:
+                                                        state.products.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return ClipRRect(
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                    .all(
+                                                                Radius.circular(
+                                                                    20)),
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .push(
+                                                              MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                                  return ProductDetailsScreen(
+                                                                    products: state
+                                                                        .products,
+                                                                    index:
+                                                                        index,
+                                                                  );
+                                                                },
+                                                              ),
+                                                            );
+                                                          },
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              CachedNetworkImage(
+                                                                imageUrl: state
+                                                                    .products[
+                                                                        index]
+                                                                    .imageUrl,
+                                                                height: 65.h,
+                                                                width: 120.w,
+                                                                fit: BoxFit
+                                                                    .contain,
+                                                              ),
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceEvenly,
+                                                                children: [
+                                                                  Text(
+                                                                    state
+                                                                        .products[
+                                                                            index]
+                                                                        .name,
+                                                                    style: const TextStyle(
+                                                                        color: AppColor
+                                                                            .backgroundColor,
+                                                                        fontSize:
+                                                                            10),
+                                                                  ),
+                                                                  // Text(
+                                                                  //   '${state.products[index].price} \$',
+                                                                  //   style: const TextStyle(
+                                                                  //       color: AppColor
+                                                                  //           .colorTwo,
+                                                                  //       fontSize:
+                                                                  //           10),
+                                                                  // ),
+                                                                  RichText(
+                                                                    text: TextSpan(
+                                                                        style: TextStyle(
+                                                                            fontSize: 10
+                                                                                .sp,
+                                                                            color: AppColor
+                                                                                .backgroundColor),
+                                                                        children: <
+                                                                            TextSpan>[
+                                                                          TextSpan(
+                                                                            text:
+                                                                                '${state.products[index].price}',
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              fontWeight: FontWeight.w700,
+                                                                            ),
+                                                                          ),
+                                                                          TextSpan(
+                                                                            text:
+                                                                                getCurrencyFromCountry(
+                                                                              countryState.selectedCountry,
+                                                                              context,
+                                                                            ),
+                                                                            style:
+                                                                                TextStyle(color: AppColor.backgroundColor, fontSize: 10.sp),
+                                                                          )
+                                                                        ]),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+                                                }
+                                                return const SizedBox();
+                                              },
+                                            );
+                                    }
+                                    return const SizedBox();
+                                  },
                                 ),
-                              ],
-                            ),
-                          ],
+                              ),
+                              RefreshIndicator(
+                                onRefresh: () async {
+                                  adsBloc.add(
+                                      GetUserAdsEvent(userId: widget.user.id));
+                                },
+                                color: AppColor.white,
+                                backgroundColor: AppColor.backgroundColor,
+                                child: BlocBuilder<AdsBlocBloc, AdsBlocState>(
+                                  bloc: adsBloc,
+                                  builder: (context, state) {
+                                    if (state is AdsBlocInProgress) {
+                                      return SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height -
+                                                120.h,
+                                        child: const Center(
+                                          child: CircularProgressIndicator(
+                                            color: AppColor.backgroundColor,
+                                          ),
+                                        ),
+                                      );
+                                    } else if (state is AdsBlocFailure) {
+                                      final failure = state.message;
+                                      return FailureWidget(
+                                          failure: failure,
+                                          onPressed: () {
+                                            adsBloc.add(GetUserAdsEvent(
+                                                userId: widget.user.id));
+                                          });
+                                    } else if (state is AdsBlocSuccess) {
+                                      return state.ads.isEmpty
+                                          ? Center(
+                                              child: Text(
+                                                  AppLocalizations.of(context)
+                                                      .translate('no_items'),
+                                                  style: const TextStyle(
+                                                      color: AppColor
+                                                          .backgroundColor)),
+                                            )
+                                          : ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const BouncingScrollPhysics(),
+                                              itemCount: state.ads.length,
+                                              scrollDirection: Axis.vertical,
+                                              itemBuilder: (context, index) {
+                                                return Container(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  height: 220.h,
+                                                  padding: const EdgeInsets
+                                                      .symmetric(horizontal: 8),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                                  20)
+                                                              .w),
+                                                  child: Advertising(
+                                                      advertisment:
+                                                          state.ads[index]),
+                                                );
+                                              },
+                                            );
+                                    }
+                                    return Container();
+                                  },
+                                ),
+                              ),
+                              ListView(
+                                children: [
+                                  Column(
+                                    children: [
+                                      titleAndInput(
+                                          title: AppLocalizations.of(context)
+                                              .translate('username'),
+                                          input: state.userInfo.username ?? ''),
+                                      titleAndInput(
+                                          title: AppLocalizations.of(context)
+                                              .translate('email'),
+                                          input: state.userInfo.email ?? ''),
+                                      titleAndInput(
+                                          title: AppLocalizations.of(context)
+                                              .translate('mobile'),
+                                          input:
+                                              state.userInfo.firstMobile ?? ''),
+                                      state.userInfo.bio != null
+                                          ? titleAndInput(
+                                              title:
+                                                  AppLocalizations.of(context)
+                                                      .translate('Bio'),
+                                              input: state.userInfo.bio ?? '')
+                                          : const SizedBox(),
+                                      // titleAndInput(
+                                      //   title: AppLocalizations.of(context)
+                                      //       .translate('Is there delivery'),
+                                      //   input: state.userInfo.deliverable!
+                                      //       ? AppLocalizations.of(context)
+                                      //           .translate('Yes')
+                                      //       : AppLocalizations.of(context)
+                                      //           .translate('No'),
+                                      // ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }
-            return const SizedBox();
-          },
+                );
+              }
+              return const SizedBox();
+            },
+          ),
         ),
       ),
     );

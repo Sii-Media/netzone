@@ -1161,7 +1161,7 @@ class ProductsListWidget extends StatelessWidget {
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 3,
-                                    childAspectRatio: 0.95,
+                                    childAspectRatio: 0.74,
                                     crossAxisSpacing: 10.w,
                                     mainAxisSpacing: 10.h),
                             shrinkWrap: true,
@@ -1195,7 +1195,7 @@ class ProductsListWidget extends StatelessWidget {
                                     },
                                     child: Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
@@ -1210,25 +1210,33 @@ class ProductsListWidget extends StatelessWidget {
                                           padding: const EdgeInsets.only(
                                               right: 9.0,
                                               left: 9.0,
-                                              bottom: 8.0),
+                                              bottom: 2.0),
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(
-                                                state.products[index].name,
-                                                style: const TextStyle(
-                                                  color:
-                                                      AppColor.backgroundColor,
-                                                ),
-                                              ),
-                                              Text(
-                                                '${state.products[index].price} \$',
-                                                style: const TextStyle(
-                                                  color: AppColor.colorTwo,
+                                              Expanded(
+                                                child: Center(
+                                                  child: Text(
+                                                    state.products[index].name,
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      color: AppColor
+                                                          .backgroundColor,
+                                                      fontSize: 12.sp,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ],
+                                          ),
+                                        ),
+                                        Text(
+                                          '${state.products[index].price} \$',
+                                          style: const TextStyle(
+                                            color: AppColor.colorTwo,
                                           ),
                                         ),
                                       ],

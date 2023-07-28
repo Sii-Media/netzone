@@ -17,6 +17,7 @@ import '../../../auth/blocs/auth_bloc/auth_bloc.dart';
 import '../../../chat/screens/chat_page_screen.dart';
 import '../../../core/blocs/country_bloc/country_bloc.dart';
 import '../../../core/constant/colors.dart';
+import '../../../core/widgets/screen_loader.dart';
 import '../../../profile/blocs/get_user/get_user_bloc.dart';
 import '../../../utils/app_localizations.dart';
 import '../../widgets/build_rating.dart';
@@ -32,8 +33,11 @@ class RealEstateCompanyProfileScreen extends StatefulWidget {
 
 class _RealEstateCompanyProfileScreenState
     extends State<RealEstateCompanyProfileScreen>
-    with TickerProviderStateMixin {
+    with
+        TickerProviderStateMixin,
+        ScreenLoader<RealEstateCompanyProfileScreen> {
   final userBloc = sl<GetUserBloc>();
+  final rateBloc = sl<GetUserBloc>();
 
   final realEstatesBloc = sl<RealEstateBloc>();
   final authBloc = sl<AuthBloc>();
@@ -74,7 +78,7 @@ class _RealEstateCompanyProfileScreenState
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget screen(BuildContext context) {
     final TabController tabController = TabController(length: 2, vsync: this);
 
     return DefaultTabController(
@@ -98,281 +102,278 @@ class _RealEstateCompanyProfileScreenState
             ),
           ),
         ),
-        body: BlocBuilder<GetUserBloc, GetUserState>(
-          bloc: userBloc,
-          builder: (context, state) {
-            if (state is GetUserInProgress) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: AppColor.backgroundColor,
-                ),
-              );
-            } else if (state is GetUserFailure) {
+        body: BlocListener<GetUserBloc, GetUserState>(
+          bloc: rateBloc,
+          listener: (context, state) {
+            if (state is RateUserInProgress) {
+              startLoading();
+            } else if (state is RateUserFailure) {
+              stopLoading();
+
               final failure = state.message;
-              return Center(
-                child: Text(
-                  failure,
-                  style: const TextStyle(
-                    color: Colors.red,
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    failure,
+                    style: const TextStyle(
+                      color: AppColor.white,
+                    ),
                   ),
+                  backgroundColor: AppColor.red,
                 ),
               );
-            } else if (state is GetUserSuccess) {
-              return DefaultTabController(
-                length: 2,
-                child: NestedScrollView(
-                  headerSliverBuilder: (context, _) {
-                    return [
-                      SliverList(
-                        delegate: SliverChildListDelegate(
-                          [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  height: 140.h,
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        color: AppColor.secondGrey
-                                            .withOpacity(0.3),
-                                        width: 1,
-                                      ),
-                                    ),
-                                  ),
-                                  child: CachedNetworkImage(
-                                    imageUrl: state.userInfo.coverPhoto ??
-                                        'https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000',
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15.h,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(100),
-                                          ),
-                                          child: CachedNetworkImage(
-                                            imageUrl:
-                                                state.userInfo.profilePhoto ??
-                                                    '',
-                                            width: 100,
-                                            height: 100,
-                                            fit: BoxFit.fill,
-                                          ),
+            } else if (state is RateUserSuccess) {
+              stopLoading();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                  AppLocalizations.of(context).translate('success'),
+                ),
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+              ));
+            }
+          },
+          child: BlocBuilder<GetUserBloc, GetUserState>(
+            bloc: userBloc,
+            builder: (context, state) {
+              if (state is GetUserInProgress) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: AppColor.backgroundColor,
+                  ),
+                );
+              } else if (state is GetUserFailure) {
+                final failure = state.message;
+                return Center(
+                  child: Text(
+                    failure,
+                    style: const TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                );
+              } else if (state is GetUserSuccess) {
+                return DefaultTabController(
+                  length: 2,
+                  child: NestedScrollView(
+                    headerSliverBuilder: (context, _) {
+                      return [
+                        SliverList(
+                          delegate: SliverChildListDelegate(
+                            [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    height: 140.h,
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: AppColor.secondGrey
+                                              .withOpacity(0.3),
+                                          width: 1,
                                         ),
                                       ),
-                                      SizedBox(
-                                        width: 20.w,
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            state.userInfo.username ?? '',
-                                            style: TextStyle(
-                                              color: AppColor.black,
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 16.sp,
+                                    ),
+                                    child: CachedNetworkImage(
+                                      imageUrl: state.userInfo.coverPhoto ??
+                                          'https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15.h,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  state.userInfo.profilePhoto ??
+                                                      '',
+                                              width: 100,
+                                              height: 100,
+                                              fit: BoxFit.fill,
                                             ),
                                           ),
-                                          state.userInfo.slogn != null
-                                              ? Text(
-                                                  state.userInfo.slogn ?? '',
-                                                  style: TextStyle(
-                                                    color: AppColor.secondGrey,
-                                                    fontWeight: FontWeight.w300,
-                                                    fontSize: 13.sp,
-                                                  ),
-                                                )
-                                              : const SizedBox(),
-                                          Row(
-                                            children: [
-                                              GestureDetector(
-                                                onTap: () =>
-                                                    showRating(context),
-                                                child: RatingBar.builder(
-                                                  minRating: 1,
-                                                  maxRating: 5,
-                                                  initialRating: 3,
-                                                  itemSize: 25,
-                                                  ignoreGestures: true,
-                                                  itemBuilder: (context, _) {
-                                                    return const Icon(
-                                                      Icons.star,
-                                                      color: Colors.amber,
-                                                    );
-                                                  },
-                                                  allowHalfRating: true,
-                                                  updateOnDrag: true,
-                                                  onRatingUpdate: (rating) {},
-                                                ),
+                                        ),
+                                        SizedBox(
+                                          width: 20.w,
+                                        ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              state.userInfo.username ?? '',
+                                              style: TextStyle(
+                                                color: AppColor.black,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16.sp,
                                               ),
-                                              SizedBox(
-                                                width: 15.w,
-                                              ),
-                                              BlocBuilder<AuthBloc, AuthState>(
-                                                bloc: authBloc,
-                                                builder: (context, state) {
-                                                  if (state is AuthInProgress) {
-                                                    return const Center(
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                        color: AppColor
-                                                            .backgroundColor,
-                                                      ),
-                                                    );
-                                                  } else if (state
-                                                      is Authenticated) {
-                                                    // isFollowing = state.user
-                                                    //         .userInfo.followings!
-                                                    //         .contains(widget
-                                                    //             .localCompany.id)
-                                                    //     ? true
-                                                    //     : false;
-                                                    return ElevatedButton(
-                                                      style: ButtonStyle(
-                                                        backgroundColor:
-                                                            MaterialStateProperty
-                                                                .all(AppColor
-                                                                    .backgroundColor),
-                                                        shape: MaterialStateProperty
-                                                            .all(
-                                                                RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      18.0),
-                                                        )),
-                                                      ),
-                                                      child: Text(
-                                                        isFollowing
-                                                            ? AppLocalizations
-                                                                    .of(context)
-                                                                .translate(
-                                                                    'unfollow')
-                                                            : AppLocalizations
-                                                                    .of(context)
-                                                                .translate(
-                                                                    'follow'),
-                                                        style: const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          isFollowing =
-                                                              !isFollowing;
-                                                        });
-                                                        userBloc.add(
-                                                            ToggleFollowEvent(
-                                                                otherUserId:
-                                                                    widget.user
-                                                                        .id));
-                                                      },
-                                                    );
-                                                  }
-                                                  return Container();
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: Text(
-                                    state.userInfo.bio ?? 'BIO',
-                                    style: const TextStyle(
-                                        color: AppColor.mainGrey),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 12.h,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  // height: 50.h,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: Container(
-                                          height: 50,
-                                          width: 180,
-                                          decoration: const BoxDecoration(
-                                            color: AppColor.backgroundColor,
-                                            // borderRadius: BorderRadius.circular(100),
-                                          ),
-                                          child: Center(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.monetization_on,
-                                                  color: Colors.white,
-                                                  size: 18.sp,
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 4.0),
-                                                  child: Text(
-                                                    AppLocalizations.of(context)
-                                                        .translate(
-                                                            'Live Auction'),
+                                            ),
+                                            state.userInfo.slogn != null
+                                                ? Text(
+                                                    state.userInfo.slogn ?? '',
                                                     style: TextStyle(
-                                                      color: AppColor.white,
+                                                      color:
+                                                          AppColor.secondGrey,
+                                                      fontWeight:
+                                                          FontWeight.w300,
                                                       fontSize: 13.sp,
                                                     ),
+                                                  )
+                                                : const SizedBox(),
+                                            Row(
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () => showRating(
+                                                      context,
+                                                      rateBloc,
+                                                      widget.user.id,
+                                                      widget.user
+                                                              .averageRating ??
+                                                          0),
+                                                  child: RatingBar.builder(
+                                                    minRating: 1,
+                                                    maxRating: 5,
+                                                    initialRating: widget.user
+                                                            .averageRating ??
+                                                        0,
+                                                    itemSize: 25,
+                                                    ignoreGestures: true,
+                                                    itemBuilder: (context, _) {
+                                                      return const Icon(
+                                                        Icons.star,
+                                                        color: Colors.amber,
+                                                      );
+                                                    },
+                                                    allowHalfRating: true,
+                                                    updateOnDrag: true,
+                                                    onRatingUpdate: (rating) {},
                                                   ),
+                                                ),
+                                                SizedBox(
+                                                  width: 15.w,
+                                                ),
+                                                BlocBuilder<AuthBloc,
+                                                    AuthState>(
+                                                  bloc: authBloc,
+                                                  builder: (context, state) {
+                                                    if (state
+                                                        is AuthInProgress) {
+                                                      return const Center(
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          color: AppColor
+                                                              .backgroundColor,
+                                                        ),
+                                                      );
+                                                    } else if (state
+                                                        is Authenticated) {
+                                                      // isFollowing = state.user
+                                                      //         .userInfo.followings!
+                                                      //         .contains(widget
+                                                      //             .localCompany.id)
+                                                      //     ? true
+                                                      //     : false;
+                                                      return ElevatedButton(
+                                                        style: ButtonStyle(
+                                                          backgroundColor:
+                                                              MaterialStateProperty
+                                                                  .all(AppColor
+                                                                      .backgroundColor),
+                                                          shape: MaterialStateProperty
+                                                              .all(
+                                                                  RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        18.0),
+                                                          )),
+                                                        ),
+                                                        child: Text(
+                                                          isFollowing
+                                                              ? AppLocalizations
+                                                                      .of(
+                                                                          context)
+                                                                  .translate(
+                                                                      'unfollow')
+                                                              : AppLocalizations
+                                                                      .of(
+                                                                          context)
+                                                                  .translate(
+                                                                      'follow'),
+                                                          style: const TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            isFollowing =
+                                                                !isFollowing;
+                                                          });
+                                                          userBloc.add(
+                                                              ToggleFollowEvent(
+                                                                  otherUserId:
+                                                                      widget
+                                                                          .user
+                                                                          .id));
+                                                        },
+                                                      );
+                                                    }
+                                                    return Container();
+                                                  },
                                                 ),
                                               ],
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) {
-                                              return const ChatPageScreen();
-                                            }),
-                                          );
-                                        },
-                                        child: ClipRRect(
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20.h,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: Text(
+                                      state.userInfo.bio ?? 'BIO',
+                                      style: const TextStyle(
+                                          color: AppColor.mainGrey),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 12.h,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    // height: 50.h,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(100),
                                           child: Container(
@@ -387,9 +388,10 @@ class _RealEstateCompanyProfileScreenState
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
                                                 children: [
-                                                  const Icon(
-                                                    Icons.chat,
+                                                  Icon(
+                                                    Icons.monetization_on,
                                                     color: Colors.white,
+                                                    size: 18.sp,
                                                   ),
                                                   Padding(
                                                     padding:
@@ -399,7 +401,7 @@ class _RealEstateCompanyProfileScreenState
                                                       AppLocalizations.of(
                                                               context)
                                                           .translate(
-                                                              'customers service'),
+                                                              'Live Auction'),
                                                       style: TextStyle(
                                                         color: AppColor.white,
                                                         fontSize: 13.sp,
@@ -411,259 +413,312 @@ class _RealEstateCompanyProfileScreenState
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                                return const ChatPageScreen();
+                                              }),
+                                            );
+                                          },
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            child: Container(
+                                              height: 50,
+                                              width: 180,
+                                              decoration: const BoxDecoration(
+                                                color: AppColor.backgroundColor,
+                                                // borderRadius: BorderRadius.circular(100),
+                                              ),
+                                              child: Center(
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.chat,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 4.0),
+                                                      child: Text(
+                                                        AppLocalizations.of(
+                                                                context)
+                                                            .translate(
+                                                                'customers service'),
+                                                        style: TextStyle(
+                                                          color: AppColor.white,
+                                                          fontSize: 13.sp,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 30.h,
-                                ),
-                              ],
+                                  SizedBox(
+                                    height: 30.h,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      ];
+                    },
+                    body: Column(
+                      children: [
+                        TabBar(
+                          controller: tabController,
+                          tabs: [
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('real_estate'),
+                              style: TextStyle(
+                                color: AppColor.black,
+                                fontSize: 10.sp,
+                              ),
+                            ),
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('about_us'),
+                              style: TextStyle(
+                                color: AppColor.black,
+                                fontSize: 10.sp,
+                              ),
                             ),
                           ],
                         ),
-                      )
-                    ];
-                  },
-                  body: Column(
-                    children: [
-                      TabBar(
-                        controller: tabController,
-                        tabs: [
-                          Text(
-                            AppLocalizations.of(context)
-                                .translate('real_estate'),
-                            style: TextStyle(
-                              color: AppColor.black,
-                              fontSize: 10.sp,
-                            ),
-                          ),
-                          Text(
-                            AppLocalizations.of(context).translate('about_us'),
-                            style: TextStyle(
-                              color: AppColor.black,
-                              fontSize: 10.sp,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        child: TabBarView(
-                          controller: tabController,
-                          children: [
-                            RefreshIndicator(
-                              onRefresh: () async {
-                                realEstatesBloc.add(GetCompanyRealEstatesEvent(
-                                    id: widget.user.id));
-                              },
-                              color: AppColor.white,
-                              backgroundColor: AppColor.backgroundColor,
-                              child:
-                                  BlocBuilder<RealEstateBloc, RealEstateState>(
-                                bloc: realEstatesBloc,
-                                builder: (context, sstate) {
-                                  if (sstate is GetRealEstateInProgress) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(
-                                        color: AppColor.backgroundColor,
-                                      ),
-                                    );
-                                  } else if (sstate is GetRealEstateFailure) {
-                                    final failure = sstate.message;
-                                    return Center(
-                                      child: Text(
-                                        failure,
-                                        style: const TextStyle(
-                                          color: Colors.red,
+                        Expanded(
+                          child: TabBarView(
+                            controller: tabController,
+                            children: [
+                              RefreshIndicator(
+                                onRefresh: () async {
+                                  realEstatesBloc.add(
+                                      GetCompanyRealEstatesEvent(
+                                          id: widget.user.id));
+                                },
+                                color: AppColor.white,
+                                backgroundColor: AppColor.backgroundColor,
+                                child: BlocBuilder<RealEstateBloc,
+                                    RealEstateState>(
+                                  bloc: realEstatesBloc,
+                                  builder: (context, sstate) {
+                                    if (sstate is GetRealEstateInProgress) {
+                                      return const Center(
+                                        child: CircularProgressIndicator(
+                                          color: AppColor.backgroundColor,
                                         ),
-                                      ),
-                                    );
-                                  } else if (sstate
-                                      is GetCompanyRealEstatesSuccess) {
-                                    return sstate.realEstates.isNotEmpty
-                                        ? GridView.builder(
-                                            gridDelegate:
-                                                SliverGridDelegateWithFixedCrossAxisCount(
-                                                    crossAxisCount: 3,
-                                                    childAspectRatio: 0.95,
-                                                    crossAxisSpacing: 10.w,
-                                                    mainAxisSpacing: 10.h),
-                                            shrinkWrap: true,
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            itemCount:
-                                                sstate.realEstates.length,
-                                            itemBuilder: (context, index) {
-                                              return ClipRRect(
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(20)),
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                        builder: (context) {
-                                                          return RealEstateDetailsScreen(
-                                                            realEstate: sstate
-                                                                    .realEstates[
-                                                                index],
-                                                          );
-                                                        },
+                                      );
+                                    } else if (sstate is GetRealEstateFailure) {
+                                      final failure = sstate.message;
+                                      return Center(
+                                        child: Text(
+                                          failure,
+                                          style: const TextStyle(
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      );
+                                    } else if (sstate
+                                        is GetCompanyRealEstatesSuccess) {
+                                      return sstate.realEstates.isNotEmpty
+                                          ? GridView.builder(
+                                              gridDelegate:
+                                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                                      crossAxisCount: 3,
+                                                      childAspectRatio: 0.95,
+                                                      crossAxisSpacing: 10.w,
+                                                      mainAxisSpacing: 10.h),
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const BouncingScrollPhysics(),
+                                              itemCount:
+                                                  sstate.realEstates.length,
+                                              itemBuilder: (context, index) {
+                                                return ClipRRect(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(20)),
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.of(context)
+                                                          .push(
+                                                        MaterialPageRoute(
+                                                          builder: (context) {
+                                                            return RealEstateDetailsScreen(
+                                                              realEstate: sstate
+                                                                      .realEstates[
+                                                                  index],
+                                                            );
+                                                          },
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: Card(
+                                                      elevation: 4.0,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(16.0),
                                                       ),
-                                                    );
-                                                  },
-                                                  child: Card(
-                                                    elevation: 4.0,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              16.0),
-                                                    ),
-                                                    child: SizedBox(
-                                                      height: 100.h,
-                                                      width: 180.w,
-                                                      child: Stack(
-                                                        // fit: StackFit.expand,
-                                                        alignment:
-                                                            AlignmentDirectional
-                                                                .bottomCenter,
-                                                        children: [
-                                                          ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        16.0),
-                                                            child:
-                                                                CachedNetworkImage(
-                                                              imageUrl: sstate
-                                                                  .realEstates[
-                                                                      index]
-                                                                  .imageUrl,
-                                                              height: 200.h,
-                                                              width: double
-                                                                  .maxFinite,
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                          ),
-                                                          Container(
-                                                            decoration:
-                                                                BoxDecoration(
+                                                      child: SizedBox(
+                                                        height: 100.h,
+                                                        width: 180.w,
+                                                        child: Stack(
+                                                          // fit: StackFit.expand,
+                                                          alignment:
+                                                              AlignmentDirectional
+                                                                  .bottomCenter,
+                                                          children: [
+                                                            ClipRRect(
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
                                                                           16.0),
-                                                              gradient:
-                                                                  LinearGradient(
-                                                                begin: Alignment
-                                                                    .topCenter,
-                                                                end: Alignment
-                                                                    .bottomCenter,
-                                                                colors: [
-                                                                  Colors
-                                                                      .transparent,
-                                                                  AppColor
-                                                                      .backgroundColor
-                                                                      .withOpacity(
-                                                                          0.6),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        6.0),
-                                                            child: Align(
-                                                              alignment: Alignment
-                                                                  .bottomCenter,
-                                                              child: Text(
-                                                                sstate
+                                                              child:
+                                                                  CachedNetworkImage(
+                                                                imageUrl: sstate
                                                                     .realEstates[
                                                                         index]
-                                                                    .title,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize:
-                                                                      10.0.sp,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
+                                                                    .imageUrl,
+                                                                height: 200.h,
+                                                                width: double
+                                                                    .maxFinite,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            16.0),
+                                                                gradient:
+                                                                    LinearGradient(
+                                                                  begin: Alignment
+                                                                      .topCenter,
+                                                                  end: Alignment
+                                                                      .bottomCenter,
+                                                                  colors: [
+                                                                    Colors
+                                                                        .transparent,
+                                                                    AppColor
+                                                                        .backgroundColor
+                                                                        .withOpacity(
+                                                                            0.6),
+                                                                  ],
                                                                 ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        ],
+                                                            Padding(
+                                                              padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      6.0),
+                                                              child: Align(
+                                                                alignment: Alignment
+                                                                    .bottomCenter,
+                                                                child: Text(
+                                                                  sstate
+                                                                      .realEstates[
+                                                                          index]
+                                                                      .title,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        10.0.sp,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                              );
-                                            },
-                                          )
-                                        : Center(
-                                            child: Text(
-                                                AppLocalizations.of(context)
-                                                    .translate('no_items'),
-                                                style: const TextStyle(
-                                                    color: AppColor
-                                                        .backgroundColor)),
-                                          );
-                                  }
-                                  return Container();
-                                },
-                              ),
-                            ),
-                            ListView(
-                              children: [
-                                Column(
-                                  children: [
-                                    titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('username'),
-                                        input: state.userInfo.username ?? ''),
-                                    titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('email'),
-                                        input: state.userInfo.email ?? ''),
-                                    titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('mobile'),
-                                        input:
-                                            state.userInfo.firstMobile ?? ''),
-                                    state.userInfo.bio != null
-                                        ? titleAndInput(
-                                            title: AppLocalizations.of(context)
-                                                .translate('Bio'),
-                                            input: state.userInfo.bio ?? '')
-                                        : const SizedBox(),
-                                    // titleAndInput(
-                                    //   title: AppLocalizations.of(context)
-                                    //       .translate('Is there delivery'),
-                                    //   input: state.userInfo.deliverable!
-                                    //       ? AppLocalizations.of(context)
-                                    //           .translate('Yes')
-                                    //       : AppLocalizations.of(context)
-                                    //           .translate('No'),
-                                    // ),
-                                  ],
+                                                );
+                                              },
+                                            )
+                                          : Center(
+                                              child: Text(
+                                                  AppLocalizations.of(context)
+                                                      .translate('no_items'),
+                                                  style: const TextStyle(
+                                                      color: AppColor
+                                                          .backgroundColor)),
+                                            );
+                                    }
+                                    return Container();
+                                  },
                                 ),
-                              ],
-                            ),
-                          ],
+                              ),
+                              ListView(
+                                children: [
+                                  Column(
+                                    children: [
+                                      titleAndInput(
+                                          title: AppLocalizations.of(context)
+                                              .translate('username'),
+                                          input: state.userInfo.username ?? ''),
+                                      titleAndInput(
+                                          title: AppLocalizations.of(context)
+                                              .translate('email'),
+                                          input: state.userInfo.email ?? ''),
+                                      titleAndInput(
+                                          title: AppLocalizations.of(context)
+                                              .translate('mobile'),
+                                          input:
+                                              state.userInfo.firstMobile ?? ''),
+                                      state.userInfo.bio != null
+                                          ? titleAndInput(
+                                              title:
+                                                  AppLocalizations.of(context)
+                                                      .translate('Bio'),
+                                              input: state.userInfo.bio ?? '')
+                                          : const SizedBox(),
+                                      // titleAndInput(
+                                      //   title: AppLocalizations.of(context)
+                                      //       .translate('Is there delivery'),
+                                      //   input: state.userInfo.deliverable!
+                                      //       ? AppLocalizations.of(context)
+                                      //           .translate('Yes')
+                                      //       : AppLocalizations.of(context)
+                                      //           .translate('No'),
+                                      // ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }
-            return Container();
-          },
+                );
+              }
+              return Container();
+            },
+          ),
         ),
       ),
     );

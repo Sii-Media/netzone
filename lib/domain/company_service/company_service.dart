@@ -5,18 +5,32 @@ class CompanyService extends Equatable {
   final String id;
   final String title;
   final String description;
-  final int price;
+  final int? price;
   final UserInfo owner;
   final String? imageUrl;
-
+  final List<String>? serviceImageList;
+  final String? whatsAppNumber;
+  final double? averageRating;
   const CompanyService({
     required this.id,
     required this.title,
     required this.description,
-    required this.price,
+    this.price,
     required this.owner,
     this.imageUrl,
+    this.serviceImageList,
+    this.whatsAppNumber,
+    this.averageRating,
   });
   @override
-  List<Object?> get props => [title, description, price, owner, imageUrl];
+  List<Object?> get props => [
+        title,
+        description,
+        price,
+        owner,
+        imageUrl,
+        serviceImageList,
+        whatsAppNumber,
+        averageRating
+      ];
 }

@@ -27,9 +27,12 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
   late TextEditingController titleController = TextEditingController();
   late TextEditingController descController = TextEditingController();
   late TextEditingController priceController = TextEditingController();
+  late TextEditingController whatsAppNumberController = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final addBloc = sl<LocalCompanyBloc>();
   File? _image;
+  List<XFile> imageFileList = [];
 
   Future getImage(ImageSource imageSource) async {
     final image = await ImagePicker().pickImage(source: imageSource);
@@ -40,6 +43,15 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
     setState(() {
       _image = imageTemporary;
     });
+  }
+
+  final ImagePicker imagePicker = ImagePicker();
+  void selectImages() async {
+    final List<XFile> selectedImages = await imagePicker.pickMultiImage();
+    if (selectedImages.isNotEmpty) {
+      imageFileList.addAll(selectedImages);
+    }
+    setState(() {});
   }
 
   @override
@@ -151,11 +163,18 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
                       title: 'price',
                       isNumber: true,
                       validator: (val) {
-                        if (val!.isEmpty) {
-                          return AppLocalizations.of(context)
-                              .translate('required');
-                        }
-
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    addServiceFormFeild(
+                      context: context,
+                      controller: whatsAppNumberController,
+                      title: 'whatsapp_number',
+                      isNumber: true,
+                      validator: (val) {
                         return null;
                       },
                     ),
@@ -212,6 +231,69 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
                             ),
                           ),
                     SizedBox(
+                      height: 10.h,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('add_service_images'),
+                              style: TextStyle(
+                                color: AppColor.backgroundColor,
+                                fontSize: 15.sp,
+                              ),
+                            ),
+                            Text(
+                              '${AppLocalizations.of(context).translate('maximum images')} : 6',
+                              style: TextStyle(
+                                color: AppColor.secondGrey,
+                                fontSize: 11.sp,
+                              ),
+                            ),
+                          ],
+                        ),
+                        addPhotoButton(
+                            context: context,
+                            text: 'Selecte Images',
+                            onPressed: () {
+                              selectImages();
+                            }),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    SizedBox(
+                      height: imageFileList.isNotEmpty ? 200.h : 10.h,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: imageFileList.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Card(
+                              child: SizedBox(
+                                height: 200.h,
+                                width: MediaQuery.of(context).size.width.w - 85,
+                                child: Image.file(
+                                  File(imageFileList[index].path),
+                                  fit: BoxFit.contain,
+                                  // height: 100,
+                                  // width: 100,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(
                       height: 20.h,
                     ),
                     Center(
@@ -225,8 +307,10 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
                             AddCompanyServiceEvent(
                               title: titleController.text,
                               description: descController.text,
-                              price: int.parse(priceController.text),
+                              price: int.tryParse(priceController.text),
                               image: _image,
+                              serviceImageList: imageFileList,
+                              whatsAppNumber: whatsAppNumberController.text,
                             ),
                           );
                         },
