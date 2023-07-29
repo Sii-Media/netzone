@@ -21,7 +21,6 @@ import '../../../data/core/constants/constants.dart';
 import '../../../data/models/auth/user/user_model.dart';
 import '../../chat/screens/chat_page_screen.dart';
 import '../../core/blocs/country_bloc/country_bloc.dart';
-import '../../core/helpers/get_currency_of_country.dart';
 import '../../core/widgets/on_failure_widget.dart';
 import '../../core/widgets/screen_loader.dart';
 import '../../profile/blocs/get_user/get_user_bloc.dart';

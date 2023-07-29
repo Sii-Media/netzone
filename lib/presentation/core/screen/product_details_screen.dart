@@ -193,7 +193,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                           productId: widget.item));
                                     });
                               } else if (state is GetProductByIdSuccess) {
-                                print(state.product.averageRating);
                                 _videoPlayerController = VideoPlayerController
                                     .network(state.product.vedioUrl ?? '')
                                   ..initialize().then((_) {

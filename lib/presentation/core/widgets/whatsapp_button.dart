@@ -24,7 +24,7 @@ class WhatsAppButton extends StatelessWidget {
           Size.fromWidth(130),
         ),
       ),
-      child: Text('WhatsApp'),
+      child: const Text('WhatsApp'),
     );
   }
 
@@ -33,6 +33,7 @@ class WhatsAppButton extends StatelessWidget {
     if (await canLaunchUrl(whatsapp)) {
       await launchUrl(whatsapp);
     } else {
+      // ignore: avoid_print
       print('Could not launch WhatsApp');
     }
   }

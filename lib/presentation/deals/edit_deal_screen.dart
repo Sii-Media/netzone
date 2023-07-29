@@ -9,7 +9,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:netzoon/domain/deals/entities/dealsItems/deals_items.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dart';
-import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 
 import '../../injection_container.dart';
 import '../core/constant/colors.dart';

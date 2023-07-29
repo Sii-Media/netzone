@@ -5,7 +5,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/company_service/company_service.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../injection_container.dart';
 import '../../auth/blocs/auth_bloc/auth_bloc.dart';
@@ -405,7 +404,7 @@ class _CompanyServiceDetailsScreenState
                   borderRadius: BorderRadius.circular(18.0),
                 )),
                 fixedSize: MaterialStateProperty.all(
-                  Size.fromWidth(100),
+                  const Size.fromWidth(100),
                 ),
               ),
               child: Text(AppLocalizations.of(context).translate('chat')),

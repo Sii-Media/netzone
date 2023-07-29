@@ -509,7 +509,6 @@ class AuthRepositoryImpl implements AuthRepository {
         return Left(OfflineFailure());
       }
     } catch (e) {
-      print(e);
       return Left(RatingFailure());
     }
   }

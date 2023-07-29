@@ -272,7 +272,6 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
         return Left(OfflineFailure());
       }
     } catch (e) {
-      print(e);
       return Left(ServerFailure());
     }
   }

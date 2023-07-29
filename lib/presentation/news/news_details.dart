@@ -13,7 +13,6 @@ import '../core/constant/colors.dart';
 import '../core/widgets/screen_loader.dart';
 import '../utils/app_localizations.dart';
 import 'edit_news_screen.dart';
-import 'news_screen.dart';
 
 class NewsDetails extends StatefulWidget {
   const NewsDetails({super.key, required this.news});
@@ -97,9 +96,6 @@ class _NewsDetailsState extends State<NewsDetails>
                   bloc: authBloc,
                   builder: (context, authState) {
                     if (authState is Authenticated) {
-                      print(authState.user.userInfo.username);
-                      print(widget.news.creator.username);
-
                       if (authState.user.userInfo.id ==
                           widget.news.creator.id) {
                         return Row(

@@ -289,7 +289,6 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
         return Left(OfflineFailure());
       }
     } catch (e) {
-      print(e);
       return Left(RatingFailure());
     }
   }

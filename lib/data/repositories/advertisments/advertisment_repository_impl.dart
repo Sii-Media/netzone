@@ -335,7 +335,6 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
         return Left(OfflineFailure());
       }
     } catch (e) {
-      print(e);
       return Left(ServerFailure());
     }
   }

@@ -26,7 +26,6 @@ class _EditNewsScreenState extends State<EditNewsScreen>
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController titleController = TextEditingController();
   late TextEditingController descController = TextEditingController();
-  File? _image;
 
   final ImagePicker _picker = ImagePicker();
   File? _updatedImage;
@@ -53,7 +52,7 @@ class _EditNewsScreenState extends State<EditNewsScreen>
       body: Form(
         key: _formKey,
         child: Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: BlocListener<NewsBloc, NewsState>(
             bloc: newsBloc,
             listener: (context, state) {

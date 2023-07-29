@@ -6,8 +6,6 @@ import 'package:netzoon/domain/auth/entities/user.dart';
 import 'package:netzoon/domain/auth/entities/user_info.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 
-import '../../rating/entities/rating_response.dart';
-
 abstract class AuthRepository {
   Future<Either<Failure, User>> signUp({
     required String username,
