@@ -78,20 +78,6 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
   }) async {
     try {
       if (await networkInfo.isConnected) {
-        // FormData formData = FormData.fromMap({
-        //   'advertisingTitle': advertisingTitle,
-        //   'advertisingStartDate': advertisingStartDate,
-        //   'advertisingEndDate': advertisingEndDate,
-        //   'advertisingDescription': advertisingDescription,
-        //   'image': await MultipartFile.fromFile(image.path,
-        //       filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
-        //   'advertisingCountryAlphaCode': advertisingCountryAlphaCode,
-        //   'advertisingBrand': advertisingBrand,
-        //   'advertisingYear': advertisingYear,
-        //   'advertisingLocation': advertisingLocation,
-        //   'advertisingPrice': advertisingPrice,
-        //   'advertisingType': advertisingType,
-        // });
         Dio dio = Dio();
         FormData formData = FormData();
         formData.fields.addAll([
@@ -216,6 +202,140 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
         return Left(OfflineFailure());
       }
     } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> deleteAdvertisement(
+      {required String id}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final result =
+            await advertismentRemotDataSource.deleteAdvertisement(id);
+        return Right(result);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> editAdvertisement(
+      {required String id,
+      required String advertisingTitle,
+      required String advertisingStartDate,
+      required String advertisingEndDate,
+      required String advertisingDescription,
+      required File? image,
+      required String advertisingYear,
+      required String advertisingLocation,
+      required double advertisingPrice,
+      required String advertisingType,
+      List<XFile>? advertisingImageList,
+      File? video,
+      required bool purchasable,
+      String? type,
+      String? category,
+      String? color,
+      bool? guarantee,
+      String? contactNumber}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        Dio dio = Dio();
+        FormData formData = FormData();
+        formData.fields.addAll([
+          MapEntry('advertisingTitle', advertisingTitle),
+          MapEntry('advertisingStartDate', advertisingStartDate),
+          MapEntry('advertisingEndDate', advertisingEndDate),
+          MapEntry('advertisingDescription', advertisingDescription),
+          MapEntry('advertisingYear', advertisingYear),
+          MapEntry('advertisingLocation', advertisingLocation),
+          MapEntry('advertisingPrice', advertisingPrice.toString()),
+          MapEntry('advertisingType', advertisingType),
+          MapEntry('purchasable', purchasable.toString()),
+        ]);
+        if (type != null) {
+          formData.fields.add(
+            MapEntry('type', type),
+          );
+        }
+        if (category != null) {
+          formData.fields.add(
+            MapEntry('category', category),
+          );
+        }
+        if (color != null) {
+          formData.fields.add(
+            MapEntry('color', color),
+          );
+        }
+        if (guarantee != null) {
+          formData.fields.add(
+            MapEntry('guarantee', guarantee.toString()),
+          );
+        }
+        if (contactNumber != null) {
+          formData.fields.add(
+            MapEntry('contactNumber', contactNumber),
+          );
+        }
+        // ignore: unnecessary_null_comparison
+        if (image != null) {
+          String fileName = 'image.jpg';
+          formData.files.add(MapEntry(
+            'image',
+            await MultipartFile.fromFile(
+              image.path,
+              filename: fileName,
+              contentType: MediaType('image', 'jpeg'),
+            ),
+          ));
+        }
+
+        if (advertisingImageList != null && advertisingImageList.isNotEmpty) {
+          for (int i = 0; i < advertisingImageList.length; i++) {
+            String fileName = 'image$i.jpg';
+            File file = File(advertisingImageList[i].path);
+            formData.files.add(MapEntry(
+              'advertisingImageList',
+              await MultipartFile.fromFile(
+                file.path,
+                filename: fileName,
+                contentType: MediaType('image', 'jpeg'),
+              ),
+            ));
+          }
+        }
+
+        if (video != null) {
+          String fileName = 'video.mp4';
+          formData.files.add(MapEntry(
+            'video',
+            await MultipartFile.fromFile(
+              video.path,
+              filename: fileName,
+              contentType: MediaType('video', 'mp4'),
+            ),
+          ));
+        }
+
+        Response response = await dio.put(
+            'https://net-zoon.onrender.com/advertisements/$id',
+            data: formData);
+        // Handle the response as needed
+        if (response.statusCode == 200) {
+          return Right(response.data);
+        } else {
+          return Left(ServerFailure());
+        }
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      print(e);
       return Left(ServerFailure());
     }
   }

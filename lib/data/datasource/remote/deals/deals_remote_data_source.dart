@@ -16,6 +16,8 @@ abstract class DealsRemoteDataSource {
   Future<DealsItemsResponseModel> getDealsItems(String country);
 
   Future<DealsItemsModel> getDealById(String id);
+
+  Future<String> deleteDeal(String id);
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -51,5 +53,11 @@ abstract class DealsRemoteDataSourceImpl implements DealsRemoteDataSource {
   @GET('/deals/{id}')
   Future<DealsItemsModel> getDealById(
     @Path() String id,
+  );
+
+  @override
+  @DELETE('/deals/{id}')
+  Future<String> deleteDeal(
+    @Path('id') String id,
   );
 }

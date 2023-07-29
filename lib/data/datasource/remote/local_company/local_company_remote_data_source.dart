@@ -24,6 +24,9 @@ abstract class LocalCompanyRemoteDataSource {
     final double rating,
     final String userId,
   );
+  Future<String> deleteCompanyService(
+    String id,
+  );
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -77,5 +80,11 @@ abstract class LocalCompanyRemoteDataSourceImpl
     @Path('id') String id,
     @Part() double rating,
     @Part() String userId,
+  );
+
+  @override
+  @DELETE('/categories/local-company/{id}')
+  Future<String> deleteCompanyService(
+    @Path('id') String id,
   );
 }

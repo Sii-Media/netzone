@@ -40,4 +40,29 @@ abstract class AdvertismentRepository {
     bool? guarantee,
     String? contactNumber,
   });
+
+  Future<Either<Failure, String>> editAdvertisement({
+    required String id,
+    required String advertisingTitle,
+    required String advertisingStartDate,
+    required String advertisingEndDate,
+    required String advertisingDescription,
+    required File? image,
+    required String advertisingYear,
+    required String advertisingLocation,
+    required double advertisingPrice,
+    required String advertisingType,
+    List<XFile>? advertisingImageList,
+    File? video,
+    required bool purchasable,
+    String? type,
+    String? category,
+    String? color,
+    bool? guarantee,
+    String? contactNumber,
+  });
+
+  Future<Either<Failure, String>> deleteAdvertisement({
+    required String id,
+  });
 }

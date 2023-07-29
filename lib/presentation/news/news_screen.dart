@@ -70,6 +70,7 @@ class _NewsScreenState extends State<NewsScreen> {
                     },
                   );
                 }
+
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(

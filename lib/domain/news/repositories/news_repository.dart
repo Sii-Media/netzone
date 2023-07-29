@@ -21,7 +21,7 @@ abstract class NewsRepository {
     required String creator,
   });
 
-  Future<Either<Failure, News>> editNews({
+  Future<Either<Failure, String>> editNews({
     required String id,
     required String title,
     required String description,

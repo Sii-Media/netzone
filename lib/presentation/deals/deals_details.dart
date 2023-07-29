@@ -10,6 +10,7 @@ import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 
 import '../../injection_container.dart';
 import 'blocs/dealsItems/deals_items_bloc.dart';
+import 'edit_deal_screen.dart';
 
 class DealDetails extends StatefulWidget {
   const DealDetails({super.key, required this.dealsInfoId});
@@ -63,75 +64,111 @@ class _DealDetailsState extends State<DealDetails> {
                       },
                     );
                   } else if (state is GetDealByIdSuccess) {
-                    return ListView(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          height: size.height * 0.30,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(25.0),
-                            child: CachedNetworkImage(
-                              imageUrl: state.deal.imgUrl,
-                              fit: BoxFit.cover,
+                    return RefreshIndicator(
+                      onRefresh: () async {
+                        dealBloc.add(GetDealByIdEvent(id: widget.dealsInfoId));
+                      },
+                      color: AppColor.white,
+                      backgroundColor: AppColor.backgroundColor,
+                      child: ListView(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.all(8),
+                            height: size.height * 0.30,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(25.0),
+                              child: CachedNetworkImage(
+                                imageUrl: state.deal.imgUrl,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
-                        titleAndInput(
-                          title:
-                              "${AppLocalizations.of(context).translate('اسم الصفقة')} : ",
-                          input: state.deal.name,
-                        ),
-                        titleAndInput(
-                          title:
-                              "${AppLocalizations.of(context).translate('اسم البائع')} : ",
-                          input: state.deal.companyName,
-                        ),
-                        titleAndInput(
-                          title:
-                              "${AppLocalizations.of(context).translate('تاريخ بدء الصفقة')} : ",
-                          input: convertDateToString(state.deal.startDate),
-                        ),
-                        titleAndInput(
-                          title:
-                              "${AppLocalizations.of(context).translate('تاريخ انتهاء الصفقة')}: ",
-                          input: convertDateToString(state.deal.endDate),
-                        ),
-                        titleAndInput(
-                          title:
-                              "${AppLocalizations.of(context).translate('السعر قبل')}:",
-                          input: state.deal.prevPrice.toString(),
-                        ),
-                        titleAndInput(
-                          title:
-                              "${AppLocalizations.of(context).translate('السعر بعد')} : ",
-                          input: state.deal.currentPrice.toString(),
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 4.h),
-                          width: MediaQuery.of(context).size.width,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                // Get.to(ViewDetailsDeals(dealsModel: dealsModel));
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColor.backgroundColor,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  //shadowColor: Colors.black,
-                                  //  elevation: 5
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5)),
-                                  textStyle: const TextStyle(fontSize: 15)),
-                              child: Text(AppLocalizations.of(context)
-                                  .translate('اشتري الان'))),
-                        ),
-                        SizedBox(
-                          height: 100.h,
-                        ),
-                      ],
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return EditDealScreen(
+                                      deal: state.deal,
+                                    );
+                                  }));
+                                },
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: AppColor.backgroundColor,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  dealBloc.add(
+                                      DeleteDealEvent(id: state.deal.id ?? ''));
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: AppColor.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                          titleAndInput(
+                            title:
+                                "${AppLocalizations.of(context).translate('اسم الصفقة')} : ",
+                            input: state.deal.name,
+                          ),
+                          titleAndInput(
+                            title:
+                                "${AppLocalizations.of(context).translate('اسم البائع')} : ",
+                            input: state.deal.companyName,
+                          ),
+                          titleAndInput(
+                            title:
+                                "${AppLocalizations.of(context).translate('تاريخ بدء الصفقة')} : ",
+                            input: convertDateToString(state.deal.startDate),
+                          ),
+                          titleAndInput(
+                            title:
+                                "${AppLocalizations.of(context).translate('تاريخ انتهاء الصفقة')}: ",
+                            input: convertDateToString(state.deal.endDate),
+                          ),
+                          titleAndInput(
+                            title:
+                                "${AppLocalizations.of(context).translate('السعر قبل')}:",
+                            input: state.deal.prevPrice.toString(),
+                          ),
+                          titleAndInput(
+                            title:
+                                "${AppLocalizations.of(context).translate('السعر بعد')} : ",
+                            input: state.deal.currentPrice.toString(),
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 4.h),
+                            width: MediaQuery.of(context).size.width,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  // Get.to(ViewDetailsDeals(dealsModel: dealsModel));
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColor.backgroundColor,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    //shadowColor: Colors.black,
+                                    //  elevation: 5
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5)),
+                                    textStyle: const TextStyle(fontSize: 15)),
+                                child: Text(AppLocalizations.of(context)
+                                    .translate('اشتري الان'))),
+                          ),
+                          SizedBox(
+                            height: 100.h,
+                          ),
+                        ],
+                      ),
                     );
                   }
                   return Container();

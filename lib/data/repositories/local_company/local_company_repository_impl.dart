@@ -186,4 +186,94 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
       return Left(RatingFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, String>> deleteCompanyService(
+      {required String id}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final result =
+            await localCompanyRemoteDataSource.deleteCompanyService(id);
+        return Right(result);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> editCompanyService(
+      {required String id,
+      required String title,
+      required String description,
+      int? price,
+      File? image,
+      List<XFile>? serviceImageList,
+      String? whatsAppNumber}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        Dio dio = Dio();
+        FormData formData = FormData();
+        formData.fields.addAll([
+          MapEntry('title', title),
+          MapEntry('description', description),
+        ]);
+        if (price != null) {
+          formData.fields.add(
+            MapEntry('price', price.toString()),
+          );
+        }
+        if (whatsAppNumber != null) {
+          formData.fields.add(
+            MapEntry('whatsAppNumber', whatsAppNumber),
+          );
+        }
+
+        // ignore: unnecessary_null_comparison
+        if (image != null) {
+          String fileName = 'image.jpg';
+          formData.files.add(MapEntry(
+            'image',
+            await MultipartFile.fromFile(
+              image.path,
+              filename: fileName,
+              contentType: MediaType('image', 'jpeg'),
+            ),
+          ));
+        }
+
+        if (serviceImageList != null && serviceImageList.isNotEmpty) {
+          for (int i = 0; i < serviceImageList.length; i++) {
+            String fileName = 'image$i.jpg';
+            File file = File(serviceImageList[i].path);
+            formData.files.add(MapEntry(
+              'serviceImageList',
+              await MultipartFile.fromFile(
+                file.path,
+                filename: fileName,
+                contentType: MediaType('image', 'jpeg'),
+              ),
+            ));
+          }
+        }
+
+        Response response = await dio.put(
+            'https://net-zoon.onrender.com/categories/local-company/$id',
+            data: formData);
+        // Handle the response as needed
+        if (response.statusCode == 200) {
+          return Right(response.data);
+        } else {
+          return Left(ServerFailure());
+        }
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      print(e);
+      return Left(ServerFailure());
+    }
+  }
 }

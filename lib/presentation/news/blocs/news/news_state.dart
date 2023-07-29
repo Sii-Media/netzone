@@ -52,7 +52,24 @@ class EditNewsFailure extends NewsState {
 }
 
 class EditNewsSuccess extends NewsState {
-  final List<News> news;
+  final String news;
 
   const EditNewsSuccess({required this.news});
+}
+
+class DeleteNewsInProgress extends NewsState {}
+
+class DeleteNewsFailure extends NewsState {
+  final String message;
+
+  const DeleteNewsFailure({required this.message});
+}
+
+class DeleteNewsSuccess extends NewsState {
+  final String message;
+  final List<News> updatedNews;
+  const DeleteNewsSuccess({
+    required this.message,
+    required this.updatedNews,
+  });
 }

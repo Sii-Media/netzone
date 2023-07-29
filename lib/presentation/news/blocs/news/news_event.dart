@@ -44,3 +44,9 @@ class EditNewsEvent extends NewsEvent {
     required this.creator,
   });
 }
+
+class DeleteNewsEvent extends NewsEvent {
+  final String id;
+
+  const DeleteNewsEvent({required this.id});
+}

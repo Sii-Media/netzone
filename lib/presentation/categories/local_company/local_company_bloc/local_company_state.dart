@@ -60,3 +60,31 @@ class RateCompanyServiceSuccess extends LocalCompanyState {
 
   const RateCompanyServiceSuccess({required this.message});
 }
+
+class EditCompanyServiceInProgress extends LocalCompanyState {}
+
+class EditCompanyServiceFailure extends LocalCompanyState {
+  final String message;
+
+  const EditCompanyServiceFailure({required this.message});
+}
+
+class EditCompanyServiceSuccess extends LocalCompanyState {
+  final String message;
+
+  const EditCompanyServiceSuccess({required this.message});
+}
+
+class DeleteCompanyServiceInProgress extends LocalCompanyState {}
+
+class DeleteCompanyServiceFailure extends LocalCompanyState {
+  final String message;
+
+  const DeleteCompanyServiceFailure({required this.message});
+}
+
+class DeleteCompanyServiceSuccess extends LocalCompanyState {
+  final String message;
+
+  const DeleteCompanyServiceSuccess({required this.message});
+}

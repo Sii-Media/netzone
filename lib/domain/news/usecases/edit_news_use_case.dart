@@ -6,12 +6,12 @@ import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/domain/news/entities/news_info.dart';
 import 'package:netzoon/domain/news/repositories/news_repository.dart';
 
-class EditNewsUseCase extends UseCase<News, EditNewsParams> {
+class EditNewsUseCase extends UseCase<String, EditNewsParams> {
   final NewsRepository newsRepository;
 
   EditNewsUseCase({required this.newsRepository});
   @override
-  Future<Either<Failure, News>> call(EditNewsParams params) {
+  Future<Either<Failure, String>> call(EditNewsParams params) {
     return newsRepository.editNews(
         id: params.id,
         title: params.title,

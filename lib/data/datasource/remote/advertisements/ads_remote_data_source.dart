@@ -14,6 +14,7 @@ abstract class AdvertismentRemotDataSource {
   Future<AdvertisingModel> getAdvertisementByType(
     final String userAdvertisingType,
   );
+  Future<String> deleteAdvertisement(String id);
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -49,5 +50,10 @@ abstract class AdvertismentRemotDataSourceImpl
   @GET('/advertisements/getUserAds/{userId}')
   Future<AdvertisingModel> getUserAds(
     @Path() String userId,
+  );
+  @override
+  @DELETE('/advertisements/{id}')
+  Future<String> deleteAdvertisement(
+    @Path('id') String id,
   );
 }

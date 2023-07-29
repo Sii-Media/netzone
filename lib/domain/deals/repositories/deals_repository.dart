@@ -31,4 +31,21 @@ abstract class DealsRepository {
     required final String category,
     required final String country,
   });
+
+  Future<Either<Failure, String>> editDeal({
+    required final String id,
+    required final String name,
+    required final String companyName,
+    required File? dealImage,
+    required final int prevPrice,
+    required final int currentPrice,
+    required final DateTime startDate,
+    required final DateTime endDate,
+    required final String location,
+    required final String category,
+    required final String country,
+  });
+  Future<Either<Failure, String>> deleteDeal({
+    required String id,
+  });
 }

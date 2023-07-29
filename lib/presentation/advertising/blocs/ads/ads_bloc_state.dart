@@ -28,3 +28,31 @@ class GetAdsByIdSuccess extends AdsBlocState {
 
   const GetAdsByIdSuccess({required this.ads});
 }
+
+class EditAdsInProgress extends AdsBlocState {}
+
+class EditAdsFailure extends AdsBlocState {
+  final String message;
+
+  const EditAdsFailure({required this.message});
+}
+
+class EditAdsSuccess extends AdsBlocState {
+  final String message;
+
+  const EditAdsSuccess({required this.message});
+}
+
+class DeleteAdsInProgress extends AdsBlocState {}
+
+class DeleteAdsFailure extends AdsBlocState {
+  final String message;
+
+  const DeleteAdsFailure({required this.message});
+}
+
+class DeleteAdsSuccess extends AdsBlocState {
+  final String message;
+
+  const DeleteAdsSuccess({required this.message});
+}

@@ -56,6 +56,8 @@ import 'package:netzoon/data/repositories/users/users_repository_impl.dart';
 import 'package:netzoon/data/repositories/vehicles/vehicle_repository_impl.dart';
 import 'package:netzoon/domain/advertisements/repositories/advertisment_repository.dart';
 import 'package:netzoon/domain/advertisements/usercases/add_ads_use_case.dart';
+import 'package:netzoon/domain/advertisements/usercases/delete_ads_use_case.dart';
+import 'package:netzoon/domain/advertisements/usercases/edit_ads_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_ads_by_type_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_advertisements_usecase.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_user_ads_use_case.dart';
@@ -97,6 +99,8 @@ import 'package:netzoon/domain/categories/usecases/freezone/get_freezone_places_
 import 'package:netzoon/domain/categories/usecases/governmental/get_all_governmental_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/governmental/get_govermental_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/add_company_service_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/local_company/delete_company_service_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/local_company/edit_company_service_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_all_local_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_company_products_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_company_service_use_case.dart';
@@ -123,6 +127,7 @@ import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/domain/core/usecase/set_country_use_case.dart';
 import 'package:netzoon/domain/deals/repositories/deals_repository.dart';
 import 'package:netzoon/domain/deals/usecases/add_deal_use_case.dart';
+import 'package:netzoon/domain/deals/usecases/edit_deal_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_all_deals_items_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_deals_cat_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_deals_items_by_cat_use_case.dart';
@@ -150,6 +155,8 @@ import 'package:netzoon/domain/news/repositories/news_repository.dart';
 import 'package:netzoon/domain/news/usecases/add_comment_use_case.dart';
 import 'package:netzoon/domain/news/usecases/add_like_use_case.dart';
 import 'package:netzoon/domain/news/usecases/add_news_use_case.dart';
+import 'package:netzoon/domain/news/usecases/delete_news_use_case.dart';
+import 'package:netzoon/domain/news/usecases/edit_news_use_case.dart';
 import 'package:netzoon/domain/news/usecases/get_all_news_usecase.dart';
 import 'package:netzoon/domain/news/usecases/get_comments_use_case.dart';
 import 'package:netzoon/domain/notifications/repositories/notification_repository.dart';
@@ -214,6 +221,7 @@ import 'domain/advertisements/usercases/get_ads_by_id_use_case.dart';
 import 'domain/auth/usecases/get_user_by_id_use_case.dart';
 import 'domain/categories/usecases/real_estate/get_real_estate_companies_use_case.dart';
 import 'domain/categories/usecases/vehicles/add_vehicle_use_case.dart';
+import 'domain/deals/usecases/delete_deal_use_case.dart';
 import 'domain/deals/usecases/get_deal_by_id_use_case.dart';
 import 'domain/departments/usecases/get_all_products_use_case.dart';
 import 'domain/departments/usecases/get_product_by_id_use_case.dart';
@@ -240,6 +248,8 @@ Future<void> init() async {
         getAdsByIdUseCase: sl(),
         getSignedInUser: sl(),
         getUserAdsUseCase: sl(),
+        deleteAdsUseCase: sl(),
+        editAdsUseCase: sl(),
       ));
   sl.registerFactory(() => NewsBloc(
         getAllNewsUseCase: sl(),
@@ -247,6 +257,8 @@ Future<void> init() async {
         toggleOnLikeUseCase: sl(),
         getNewsByIdUseCase: sl(),
         getCompanyNewsUseCase: sl(),
+        editNewsUseCase: sl(),
+        deleteNewsUseCase: sl(),
       ));
   sl.registerFactory(
       () => AddNewsBloc(addNewsUseCase: sl(), getSignedInUser: sl()));
@@ -265,6 +277,8 @@ Future<void> init() async {
         addDealUseCase: sl(),
         getDealByIdUseCase: sl(),
         getCountryUseCase: sl(),
+        deleteDealUseCase: sl(),
+        editDealUseCase: sl(),
       ));
 
   sl.registerFactory(() => ElecDevicesBloc(
@@ -352,6 +366,8 @@ Future<void> init() async {
         addCompanyServiceUseCase: sl(),
         getCompanyServicesUseCase: sl(),
         rateCompanyServiceUseCase: sl(),
+        deleteCompanyServiceUseCase: sl(),
+        editCompanyServiceUseCase: sl(),
       ));
 
   sl.registerFactory(() => GovermentalBloc(
@@ -667,6 +683,27 @@ Future<void> init() async {
 
   sl.registerLazySingleton(
       () => RateCompanyServiceUseCase(localCompanyRepository: sl()));
+
+  sl.registerLazySingleton(() => EditNewsUseCase(newsRepository: sl()));
+
+  sl.registerLazySingleton(() => DeleteNewsUseCase(
+        newsRepository: sl(),
+      ));
+
+  sl.registerLazySingleton(() => EditDealUseCase(dealsRepository: sl()));
+
+  sl.registerLazySingleton(() => DeleteDealUseCase(dealsRepository: sl()));
+
+  sl.registerLazySingleton(() => EditAdsUseCase(advertismentRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => DeleteAdsUseCase(advertismentRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => EditCompanyServiceUseCase(localCompanyRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => DeleteCompanyServiceUseCase(localCompanyRepository: sl()));
 
   //! Repositories
 

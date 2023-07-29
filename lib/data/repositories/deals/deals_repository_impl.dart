@@ -137,4 +137,75 @@ class DealsRepositoryImpl implements DealsRepository {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, String>> deleteDeal({required String id}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final result = await dealsRemoteDataSource.deleteDeal(id);
+        return Right(result);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> editDeal(
+      {required String id,
+      required String name,
+      required String companyName,
+      required File? dealImage,
+      required int prevPrice,
+      required int currentPrice,
+      required DateTime startDate,
+      required DateTime endDate,
+      required String location,
+      required String category,
+      required String country}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        Dio dio = Dio();
+        FormData formData = FormData();
+        formData.fields.addAll([
+          MapEntry('id', id),
+          MapEntry('name', name),
+          MapEntry('companyName', companyName),
+          MapEntry('prevPrice', prevPrice.toString()),
+          MapEntry('currentPrice', currentPrice.toString()),
+          MapEntry('startDate', startDate.toString()),
+          MapEntry('endDate', endDate.toString()),
+          MapEntry('location', location.toString()),
+          MapEntry('category', category.toString()),
+          MapEntry('country', country.toString()),
+        ]);
+        if (dealImage != null) {
+          String fileName = 'image.jpg';
+          formData.files.add(MapEntry(
+            'dealImage',
+            await MultipartFile.fromFile(
+              dealImage.path,
+              filename: fileName,
+              contentType: MediaType('image', 'jpeg'),
+            ),
+          ));
+        }
+        Response response = await dio.put(
+          'https://net-zoon.onrender.com/deals/$id',
+          data: formData,
+        );
+        return Right(response.data);
+        // final news = await newsRemoteDataSourse.editNews(
+        //     id, title, description, image, creator);
+        // return Right(news.toDomain());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      print(e);
+      return Left(ServerFailure());
+    }
+  }
 }

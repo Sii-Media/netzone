@@ -168,7 +168,7 @@ class NewsRepositoryImpl implements NewsRepository {
   }
 
   @override
-  Future<Either<Failure, News>> editNews(
+  Future<Either<Failure, String>> editNews(
       {required String id,
       required String title,
       required String description,
@@ -176,13 +176,38 @@ class NewsRepositoryImpl implements NewsRepository {
       required String creator}) async {
     try {
       if (await networkInfo.isConnected) {
-        final news = await newsRemoteDataSourse.editNews(
-            id, title, description, image, creator);
-        return Right(news.toDomain());
+        Dio dio = Dio();
+        FormData formData = FormData();
+        formData.fields.addAll([
+          MapEntry('id', id),
+          MapEntry('title', title),
+          MapEntry('description', description),
+          MapEntry('creator', creator),
+        ]);
+        if (image != null) {
+          String fileName = 'image.jpg';
+          formData.files.add(MapEntry(
+            'image',
+            await MultipartFile.fromFile(
+              image.path,
+              filename: fileName,
+              contentType: MediaType('image', 'jpeg'),
+            ),
+          ));
+        }
+        Response response = await dio.put(
+          'https://net-zoon.onrender.com/news/$id',
+          data: formData,
+        );
+        return Right(response.data);
+        // final news = await newsRemoteDataSourse.editNews(
+        //     id, title, description, image, creator);
+        // return Right(news.toDomain());
       } else {
         return Left(OfflineFailure());
       }
     } catch (e) {
+      print(e);
       return Left(ServerFailure());
     }
   }

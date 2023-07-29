@@ -38,4 +38,17 @@ abstract class LocalCompanyRepository {
     required double rating,
     required String userId,
   });
+
+  Future<Either<Failure, String>> editCompanyService({
+    required String id,
+    required String title,
+    required String description,
+    int? price,
+    File? image,
+    List<XFile>? serviceImageList,
+    String? whatsAppNumber,
+  });
+  Future<Either<Failure, String>> deleteCompanyService({
+    required String id,
+  });
 }

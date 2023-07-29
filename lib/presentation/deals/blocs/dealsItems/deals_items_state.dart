@@ -34,3 +34,31 @@ class GetDealByIdSuccess extends DealsItemsState {
 
   const GetDealByIdSuccess({required this.deal});
 }
+
+class EditDealInProgress extends DealsItemsState {}
+
+class EditDealFailure extends DealsItemsState {
+  final String message;
+
+  const EditDealFailure({required this.message});
+}
+
+class EditDealSuccess extends DealsItemsState {
+  final String message;
+
+  const EditDealSuccess({required this.message});
+}
+
+class DeleteDealInProgress extends DealsItemsState {}
+
+class DeleteDealFailure extends DealsItemsState {
+  final String message;
+
+  const DeleteDealFailure({required this.message});
+}
+
+class DeleteDealSuccess extends DealsItemsState {
+  final String message;
+
+  const DeleteDealSuccess({required this.message});
+}

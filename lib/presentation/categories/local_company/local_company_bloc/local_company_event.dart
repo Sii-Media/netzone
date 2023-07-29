@@ -58,3 +58,28 @@ class RateCompanyServiceEvent extends LocalCompanyEvent {
 
   const RateCompanyServiceEvent({required this.id, required this.rating});
 }
+
+class EditCompanyServiceEvent extends LocalCompanyEvent {
+  final String id;
+  final String title;
+  final String description;
+  final int? price;
+  final File? image;
+  final List<XFile>? serviceImageList;
+  final String? whatsAppNumber;
+
+  const EditCompanyServiceEvent(
+      {required this.id,
+      required this.title,
+      required this.description,
+      this.price,
+      this.image,
+      this.serviceImageList,
+      this.whatsAppNumber});
+}
+
+class DeleteCompanyServiceEvent extends LocalCompanyEvent {
+  final String id;
+
+  const DeleteCompanyServiceEvent({required this.id});
+}

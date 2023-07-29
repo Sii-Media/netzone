@@ -44,3 +44,37 @@ class GetDealByIdEvent extends DealsItemsEvent {
 
   const GetDealByIdEvent({required this.id});
 }
+
+class DeleteDealEvent extends DealsItemsEvent {
+  final String id;
+
+  const DeleteDealEvent({required this.id});
+}
+
+class EditDealEvent extends DealsItemsEvent {
+  final String id;
+  final String name;
+  final String companyName;
+  final File? dealImage;
+  final int prevPrice;
+  final int currentPrice;
+  final DateTime startDate;
+  final DateTime endDate;
+  final String location;
+  final String category;
+  final String country;
+
+  const EditDealEvent({
+    required this.id,
+    required this.name,
+    required this.companyName,
+    required this.dealImage,
+    required this.prevPrice,
+    required this.currentPrice,
+    required this.startDate,
+    required this.endDate,
+    required this.location,
+    required this.category,
+    required this.country,
+  });
+}

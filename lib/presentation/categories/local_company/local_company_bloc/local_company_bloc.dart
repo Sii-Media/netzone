@@ -4,6 +4,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/categories/entities/local_company/local_company.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/add_company_service_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/local_company/delete_company_service_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/local_company/edit_company_service_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_all_local_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_company_products_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_local_companies_use_case.dart';
@@ -34,6 +36,8 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
   final AddCompanyServiceUseCase addCompanyServiceUseCase;
   final GetCompanyServicesUseCase getCompanyServicesUseCase;
   final RateCompanyServiceUseCase rateCompanyServiceUseCase;
+  final EditCompanyServiceUseCase editCompanyServiceUseCase;
+  final DeleteCompanyServiceUseCase deleteCompanyServiceUseCase;
   LocalCompanyBloc({
     required this.getLocalCompaniesUseCase,
     required this.getAllLocalCompaniesUseCase,
@@ -44,6 +48,8 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
     required this.addCompanyServiceUseCase,
     required this.getCompanyServicesUseCase,
     required this.rateCompanyServiceUseCase,
+    required this.editCompanyServiceUseCase,
+    required this.deleteCompanyServiceUseCase,
   }) : super(LocalCompanyInitial()) {
     on<GetAllLocalCompaniesEvent>((event, emit) async {
       emit(LocalCompanyInProgress());
@@ -190,6 +196,36 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
           (failure) =>
               RateCompanyServiceFailure(message: mapFailureToString(failure)),
           (message) => RateCompanyServiceSuccess(message: message),
+        ),
+      );
+    });
+    on<EditCompanyServiceEvent>((event, emit) async {
+      emit(EditCompanyServiceInProgress());
+      final result = await editCompanyServiceUseCase(EditCompanyServiceParams(
+        id: event.id,
+        title: event.title,
+        description: event.description,
+        image: event.image,
+        price: event.price,
+        serviceImageList: event.serviceImageList,
+        whatsAppNumber: event.whatsAppNumber,
+      ));
+      emit(
+        result.fold(
+          (failure) =>
+              EditCompanyServiceFailure(message: mapFailureToString(failure)),
+          (message) => EditCompanyServiceSuccess(message: message),
+        ),
+      );
+    });
+    on<DeleteCompanyServiceEvent>((event, emit) async {
+      emit(DeleteCompanyServiceInProgress());
+      final result = await deleteCompanyServiceUseCase(event.id);
+      emit(
+        result.fold(
+          (failure) =>
+              DeleteCompanyServiceFailure(message: mapFailureToString(failure)),
+          (message) => DeleteCompanyServiceSuccess(message: message),
         ),
       );
     });
