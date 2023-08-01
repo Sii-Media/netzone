@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>746173490441-79dute25ncq0h2rb7v75dfdlm9qngcqu.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.746173490441-79dute25ncq0h2rb7v75dfdlm9qngcqu</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDrg2rRmUG8cKnNPYbHObiKeURS_HWIggU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>746173490441</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.netzain</string>
+	<key>PROJECT_ID</key>
+	<string>netzoon</string>
+	<key>STORAGE_BUCKET</key>
+	<string>netzoon.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:746173490441:ios:348787e12b3f69433d5fd8</string>
+</dict>
+</plist>

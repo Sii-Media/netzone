@@ -64,7 +64,6 @@
 	<string>Take photo from camera</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Used to capture audio for image picker plugen</string>
-	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 	  <key>NSAllowsArbitraryLoads</key>
@@ -74,6 +73,10 @@
 	<array>
    	   <string>UIInterfaceOrientationPortrait</string>
 	</array>
-
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>ar</string>
+	</array>
 </dict>
 </plist>

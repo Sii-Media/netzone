@@ -185,6 +185,243 @@ class _CustomAppBarState extends State<CustomAppBar> {
         return 'USD';
     }
   }
+
+  Widget _buildAppBar() {
+    if (Theme.of(context).platform == TargetPlatform.android) {
+      return AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              "assets/images/netzoon-logo.png",
+              width: 150.w,
+              fit: BoxFit.cover,
+            ),
+            BlocBuilder<CountryBloc, CountryState>(
+              builder: (context, state) {
+                if (state is CountryInitial) {
+                  selectedCountry = state.selectedCountry;
+                  final currency = getCurrency(selectedCountry);
+                  return Row(
+                    children: [
+                      CountryCodePicker(
+                        searchStyle: const TextStyle(color: AppColor.black),
+                        dialogTextStyle: const TextStyle(
+                          color: AppColor.black,
+                        ),
+                        boxDecoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 209, 219, 235)
+                              .withOpacity(0.8),
+                        ),
+                        textStyle: TextStyle(
+                          color: AppColor.white,
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        onChanged: (val) {
+                          setState(() {
+                            selectedCountry = val.code!;
+                            countryBloc
+                                .add(UpdateCountryEvent(selectedCountry));
+                            Navigator.of(context, rootNavigator: true)
+                                .pushReplacement(
+                              MaterialPageRoute(builder: (context) {
+                                return const TestScreen();
+                              }),
+                            );
+                          });
+                        },
+                        initialSelection: selectedCountry,
+                        favorite: const [
+                          'EG',
+                          'JO',
+                          'IQ',
+                          '+971',
+                          'AE',
+                          'SA',
+                        ],
+                        showCountryOnly: true,
+                        showFlag: true,
+                        showFlagMain: true,
+                        hideMainText: true,
+                        showOnlyCountryWhenClosed: true,
+
+                        padding: EdgeInsets.zero, // Remove padding
+                      ),
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                      Text(
+                        currency,
+                        style: TextStyle(
+                          color: AppColor.backgroundColor,
+                          fontSize: 12.sp, // Adjust the font size
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return const NotificatiionScreen();
+                          }));
+                        },
+                        child: const Icon(
+                          Icons.notifications,
+                          color: AppColor.backgroundColor,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(CupertinoPageRoute(builder: (context) {
+                            return const SearchPage();
+                          }));
+                        },
+                        child: const Icon(
+                          Icons.search,
+                          color: AppColor.backgroundColor,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                    ],
+                  );
+                }
+                return Container();
+              },
+            ),
+          ],
+        ),
+      );
+    } else {
+      return CupertinoNavigationBar(
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Icon(
+            CupertinoIcons.back,
+            color: AppColor.backgroundColor,
+          ),
+        ),
+        middle: Image.asset(
+          "assets/images/netzoon-logo.png",
+          width: 150.w,
+          fit: BoxFit.cover,
+        ),
+        trailing: BlocBuilder<CountryBloc, CountryState>(
+          builder: (context, state) {
+            if (state is CountryInitial) {
+              selectedCountry = state.selectedCountry;
+              final currency = getCurrency(selectedCountry);
+              return Row(
+                children: [
+                  CountryCodePicker(
+                    searchStyle: const TextStyle(color: AppColor.black),
+                    dialogTextStyle: const TextStyle(
+                      color: AppColor.black,
+                    ),
+                    boxDecoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 209, 219, 235)
+                          .withOpacity(0.8),
+                    ),
+                    textStyle: TextStyle(
+                      color: AppColor.white,
+                      fontSize: 10.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    onChanged: (val) {
+                      setState(() {
+                        selectedCountry = val.code!;
+                        countryBloc.add(UpdateCountryEvent(selectedCountry));
+                        Navigator.of(context, rootNavigator: true)
+                            .pushReplacement(
+                          MaterialPageRoute(builder: (context) {
+                            return const TestScreen();
+                          }),
+                        );
+                      });
+                    },
+                    initialSelection: selectedCountry,
+                    favorite: const [
+                      'EG',
+                      'JO',
+                      'IQ',
+                      '+971',
+                      'AE',
+                      'SA',
+                    ],
+                    showCountryOnly: true,
+                    showFlag: true,
+                    showFlagMain: true,
+                    hideMainText: true,
+                    showOnlyCountryWhenClosed: true,
+
+                    padding: EdgeInsets.zero, // Remove padding
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  Text(
+                    currency,
+                    style: TextStyle(
+                      color: AppColor.backgroundColor,
+                      fontSize: 12.sp, // Adjust the font size
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return const NotificatiionScreen();
+                      }));
+                    },
+                    child: const Icon(
+                      Icons.notifications,
+                      color: AppColor.backgroundColor,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context)
+                          .push(CupertinoPageRoute(builder: (context) {
+                        return const SearchPage();
+                      }));
+                    },
+                    child: const Icon(
+                      Icons.search,
+                      color: AppColor.backgroundColor,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                ],
+              );
+            }
+            return Container();
+          },
+        ),
+      );
+    }
+  }
 }
 
 

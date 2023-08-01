@@ -789,7 +789,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                                             .imageUrl ??
                                                                         '',
                                                                     height:
-                                                                        120.h,
+                                                                        90.h,
                                                                     width:
                                                                         200.w,
                                                                     fit: BoxFit
@@ -804,51 +804,16 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                                             9.0,
                                                                         bottom:
                                                                             8.0),
-                                                                    child:
-                                                                        Column(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceBetween,
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .start,
-                                                                      children: [
-                                                                        Text(
-                                                                          serviceState
-                                                                              .services[index]
-                                                                              .title,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                AppColor.backgroundColor,
-                                                                          ),
-                                                                        ),
-                                                                        // Text(
-                                                                        //   '${state.companyVehicles[index].price} \$',
-                                                                        //   style:
-                                                                        //       const TextStyle(
-                                                                        //     color: AppColor
-                                                                        //         .colorTwo,
-                                                                        //   ),
-                                                                        // ),
-                                                                        // RichText(
-                                                                        //   text: TextSpan(style: TextStyle(fontSize: 13.sp, color: AppColor.backgroundColor), children: <TextSpan>[
-                                                                        //     TextSpan(
-                                                                        //       text: '${serviceState.services[index].price}',
-                                                                        //       style: const TextStyle(
-                                                                        //         fontWeight: FontWeight.w700,
-                                                                        //       ),
-                                                                        //     ),
-                                                                        //     TextSpan(
-                                                                        //       text: getCurrencyFromCountry(
-                                                                        //         countryState.selectedCountry,
-                                                                        //         context,
-                                                                        //       ),
-                                                                        //       style: const TextStyle(color: AppColor.backgroundColor, fontSize: 10),
-                                                                        //     )
-                                                                        //   ]),
-                                                                        // ),
-                                                                      ],
+                                                                    child: Text(
+                                                                      serviceState
+                                                                          .services[
+                                                                              index]
+                                                                          .title,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: AppColor
+                                                                            .backgroundColor,
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ],

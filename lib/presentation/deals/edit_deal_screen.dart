@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,6 +11,7 @@ import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dar
 
 import '../../injection_container.dart';
 import '../core/constant/colors.dart';
+import '../core/helpers/pick_date_time.dart';
 import '../utils/app_localizations.dart';
 
 class EditDealScreen extends StatefulWidget {
@@ -251,61 +251,141 @@ class _EditDealScreenState extends State<EditDealScreen>
                   //     fontSize: 16.sp,
                   //   ),
                   // ),
-                  DateTimePicker(
-                    initialValue: widget.deal.startDate,
-                    decoration: const InputDecoration(
-                      hintText: 'start_date',
-                      label: Text('start_date'),
+                  // DateTimePicker(
+                  //   initialValue: widget.deal.startDate,
+                  //   decoration: const InputDecoration(
+                  //     hintText: 'start_date',
+                  //     label: Text('start_date'),
+                  //   ),
+                  //   type: DateTimePickerType.dateTime,
+                  //   firstDate: DateTime(2000),
+                  //   lastDate: DateTime(2100),
+                  //   dateLabelText: 'Date And Time',
+                  //   style: const TextStyle(
+                  //     color: AppColor.black,
+                  //   ),
+                  //   onChanged: (selectedDate) {
+                  //     setState(() {
+                  //       _selectedStartDate = DateTime.parse(selectedDate);
+                  //     });
+                  //   },
+                  //   validator: (value) {
+                  //     if (value == null) {
+                  //       return 'Please select a date and time';
+                  //     }
+                  //     return null;
+                  //   },
+                  //   // onSaved: (val) => print(val),
+                  // ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 2, vertical: 10)
+                            .r,
+                    child: TextFormField(
+                      style: const TextStyle(color: Colors.black),
+                      keyboardType: TextInputType.datetime,
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return AppLocalizations.of(context)
+                              .translate('required');
+                        }
+
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        filled: true,
+                        //<-- SEE HERE
+                        fillColor: Colors.green.withOpacity(0.1),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        contentPadding: const EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 30)
+                            .flipped,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      onTap: () async {
+                        final date = await pickDate(
+                            context: context, initialDate: _selectedStartDate);
+                        if (date == null) {
+                          return;
+                        }
+                        setState(() {
+                          _selectedEndDate = date;
+                        });
+                      },
                     ),
-                    type: DateTimePickerType.dateTime,
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100),
-                    dateLabelText: 'Date And Time',
-                    style: const TextStyle(
-                      color: AppColor.black,
-                    ),
-                    onChanged: (selectedDate) {
-                      setState(() {
-                        _selectedStartDate = DateTime.parse(selectedDate);
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Please select a date and time';
-                      }
-                      return null;
-                    },
-                    // onSaved: (val) => print(val),
                   ),
                   SizedBox(
                     height: 10.h,
                   ),
 
-                  DateTimePicker(
-                    initialValue: widget.deal.endDate,
-                    decoration: const InputDecoration(
-                      hintText: 'end_date',
-                      label: Text('end_date'),
+                  // DateTimePicker(
+                  //   initialValue: widget.deal.endDate,
+                  //   decoration: const InputDecoration(
+                  //     hintText: 'end_date',
+                  //     label: Text('end_date'),
+                  //   ),
+                  //   type: DateTimePickerType.dateTime,
+                  //   firstDate: DateTime(2000),
+                  //   lastDate: DateTime(2100),
+                  //   dateLabelText: 'Date And Time',
+                  //   style: const TextStyle(
+                  //     color: AppColor.black,
+                  //   ),
+                  //   onChanged: (selectedDate) {
+                  //     setState(() {
+                  //       _selectedEndDate = DateTime.parse(selectedDate);
+                  //     });
+                  //   },
+                  //   validator: (value) {
+                  //     if (value == null) {
+                  //       return 'Please select a date and time';
+                  //     }
+                  //     return null;
+                  //   },
+                  //   // onSaved: (val) => print(val),
+                  // ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 2, vertical: 10)
+                            .r,
+                    child: TextFormField(
+                      style: const TextStyle(color: Colors.black),
+                      keyboardType: TextInputType.datetime,
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return AppLocalizations.of(context)
+                              .translate('required');
+                        }
+
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        filled: true,
+                        //<-- SEE HERE
+                        fillColor: Colors.green.withOpacity(0.1),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        contentPadding: const EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 30)
+                            .flipped,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      onTap: () async {
+                        final date = await pickDate(
+                            context: context, initialDate: _selectedEndDate);
+                        if (date == null) {
+                          return;
+                        }
+                        setState(() {
+                          _selectedEndDate = date;
+                        });
+                      },
                     ),
-                    type: DateTimePickerType.dateTime,
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100),
-                    dateLabelText: 'Date And Time',
-                    style: const TextStyle(
-                      color: AppColor.black,
-                    ),
-                    onChanged: (selectedDate) {
-                      setState(() {
-                        _selectedEndDate = DateTime.parse(selectedDate);
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Please select a date and time';
-                      }
-                      return null;
-                    },
-                    // onSaved: (val) => print(val),
                   ),
 
                   SizedBox(
