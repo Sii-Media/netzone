@@ -511,6 +511,8 @@
     "slogn": "slogn",
     "my_services": "My services",
     "popular": "Popular",
-    "add_service_images":"Add service images",
-    "whatsapp_number": "Whatsapp number"
+    "add_service_images": "Add service images",
+    "whatsapp_number": "Whatsapp number",
+    "next": "Next",
+    "to_home": "To Home"
 }

@@ -50,21 +50,22 @@ class _CustomAppBarState extends State<CustomAppBar> {
       height: MediaQuery.of(context).size.height * 0.16,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            width: 150.w,
-            padding: const EdgeInsets.only(
-              left: 0,
-              right: 5,
-              bottom: 2,
-            ),
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage("assets/images/netzoon-logo.png"),
-              ),
-            ),
-          ),
+          // Container(
+          //   width: 150.w,
+          //   padding: const EdgeInsets.only(
+          //     left: 0,
+          //     right: 5,
+          //     bottom: 2,
+          //   ),
+          //   decoration: const BoxDecoration(
+          //     image: DecorationImage(
+          //       fit: BoxFit.contain,
+          //       image: AssetImage("assets/images/netzoon-logo.png"),
+          //     ),
+          //   ),
+          // ),
           BlocBuilder<CountryBloc, CountryState>(
             builder: (context, state) {
               if (state is CountryInitial) {
@@ -72,6 +73,46 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 final currency = getCurrency(selectedCountry);
                 return Row(
                   children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(CupertinoPageRoute(builder: (context) {
+                          return const SearchPage();
+                        }));
+                      },
+                      child: const Icon(
+                        Icons.search,
+                        color: AppColor.backgroundColor,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10.w,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return const NotificatiionScreen();
+                        }));
+                      },
+                      child: const Icon(
+                        Icons.notifications,
+                        color: AppColor.backgroundColor,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10.w,
+                    ),
+                    Text(
+                      currency,
+                      style: TextStyle(
+                        color: AppColor.backgroundColor,
+                        fontSize: 12.sp, // Adjust the font size
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10.w,
+                    ),
                     CountryCodePicker(
                       searchStyle: const TextStyle(color: AppColor.black),
                       dialogTextStyle: const TextStyle(
@@ -118,52 +159,17 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     SizedBox(
                       width: 10.w,
                     ),
-                    Text(
-                      currency,
-                      style: TextStyle(
-                        color: AppColor.backgroundColor,
-                        fontSize: 12.sp, // Adjust the font size
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10.w,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return const NotificatiionScreen();
-                        }));
-                      },
-                      child: const Icon(
-                        Icons.notifications,
-                        color: AppColor.backgroundColor,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10.w,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context)
-                            .push(CupertinoPageRoute(builder: (context) {
-                          return const SearchPage();
-                        }));
-                      },
-                      child: const Icon(
-                        Icons.search,
-                        color: AppColor.backgroundColor,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10.w,
-                    ),
                   ],
                 );
               }
               return Container();
             },
-          )
+          ),
+          Image.asset(
+            "assets/images/netzoon-logo.png",
+            fit: BoxFit.cover,
+            width: 150,
+          ),
         ],
       ),
     );

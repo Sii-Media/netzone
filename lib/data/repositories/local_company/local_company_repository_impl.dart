@@ -210,7 +210,7 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
       required String description,
       int? price,
       File? image,
-      List<XFile>? serviceImageList,
+      required List<File?> serviceImageList,
       String? whatsAppNumber}) async {
     try {
       if (await networkInfo.isConnected) {
@@ -243,19 +243,21 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
             ),
           ));
         }
-
         if (serviceImageList != null && serviceImageList.isNotEmpty) {
           for (int i = 0; i < serviceImageList.length; i++) {
             String fileName = 'image$i.jpg';
-            File file = File(serviceImageList[i].path);
-            formData.files.add(MapEntry(
-              'serviceImageList',
-              await MultipartFile.fromFile(
-                file.path,
-                filename: fileName,
-                contentType: MediaType('image', 'jpeg'),
-              ),
-            ));
+            File? file = serviceImageList[i]; // Nullable File
+            if (file != null && file.existsSync()) {
+              // Check if file is not null and exists
+              formData.files.add(MapEntry(
+                'serviceImageList',
+                await MultipartFile.fromFile(
+                  file.path,
+                  filename: fileName,
+                  contentType: MediaType('image', 'jpeg'),
+                ),
+              ));
+            }
           }
         }
 
