@@ -37,6 +37,7 @@ class _CategoriesFreeZoneState extends State<CategoriesFreeZone> {
         color: AppColor.white,
         backgroundColor: AppColor.backgroundColor,
         child: BackgroundWidget(
+          isHome: false,
           widget: SingleChildScrollView(
             child: Padding(
                 padding: const EdgeInsets.only(bottom: 20.0),

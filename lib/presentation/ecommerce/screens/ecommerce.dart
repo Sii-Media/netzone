@@ -30,6 +30,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
           bloc: elcDeviceBloc,
           builder: (context, state) {

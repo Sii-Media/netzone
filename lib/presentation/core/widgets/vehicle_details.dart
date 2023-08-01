@@ -62,6 +62,7 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
     final TextEditingController input = TextEditingController();
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(bottom: 30.0.h),

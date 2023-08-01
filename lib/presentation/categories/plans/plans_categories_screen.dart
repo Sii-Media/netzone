@@ -13,6 +13,7 @@ class PlansCategoriesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

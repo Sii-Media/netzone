@@ -27,6 +27,7 @@ class _QuestionScreenState extends State<QuestionScreen>
   @override
   Widget screen(BuildContext context) {
     return BackgroundWidget(
+      isHome: false,
       widget: Padding(
           padding: const EdgeInsets.all(8.0),
           child: BlocListener<AddQuestionBloc, AddQuestionState>(

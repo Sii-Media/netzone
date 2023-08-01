@@ -30,6 +30,7 @@ class _RealEstateListScreenState extends State<RealEstateListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: BlocBuilder<RealEstateBloc, RealEstateState>(
           bloc: realEstateBloc,
           builder: (context, state) {

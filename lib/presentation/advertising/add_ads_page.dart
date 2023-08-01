@@ -100,6 +100,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
   Widget screen(BuildContext context) {
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: Padding(
             padding: const EdgeInsets.only(
               top: 4.0,

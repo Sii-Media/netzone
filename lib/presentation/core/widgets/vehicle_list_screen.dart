@@ -42,6 +42,7 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: Padding(
           padding: const EdgeInsets.only(
             top: 2.0,

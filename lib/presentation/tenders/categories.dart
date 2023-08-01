@@ -85,6 +85,7 @@ class NoDataWidget extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: BackgroundWidget(
+        isHome: false,
         widget: Scaffold(
           body: Center(
             child: Text(

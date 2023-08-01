@@ -1248,7 +1248,7 @@ class ProductsListWidget extends StatelessWidget {
                           ),
                         ),
                         SizedBox(
-                          height: 70.h,
+                          height: 90.h,
                         ),
                       ],
                     ),

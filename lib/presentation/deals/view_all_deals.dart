@@ -50,6 +50,7 @@ class _ViewAllDealsScreenState extends State<ViewAllDealsScreen> {
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: BackgroundWidget(
+            isHome: false,
             // title: "المناقصات",
             widget: BlocBuilder<DealsItemsBloc, DealsItemsState>(
               bloc: dealsItemBloc,

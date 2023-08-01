@@ -32,6 +32,7 @@ class _AdvertisingScreenState extends State<AdvertisingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BackgroundTwoWidget(
+        isHome: false,
         title: AppLocalizations.of(context).translate('advertiments'),
         selectedValue: selectedValue,
         onChanged: (value) {

@@ -34,6 +34,7 @@ class _DealsCategoriesScreenState extends State<DealsCategoriesScreen> {
       child: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: BackgroundWidget(
+          isHome: false,
           widget: RefreshIndicator(
             onRefresh: () async {
               dealBloc.add(GetDealsCategoryEvent());

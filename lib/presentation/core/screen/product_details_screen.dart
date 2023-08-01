@@ -95,6 +95,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
 
     return Scaffold(
         body: BackgroundWidget(
+          isHome: false,
           widget: RefreshIndicator(
             onRefresh: () async {
               productBloc.add(GetProductByIdEvent(productId: widget.item));
@@ -176,8 +177,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                             builder: (context, state) {
                               if (state is ElecDevicesInProgress) {
                                 return SizedBox(
-                                  height: MediaQuery.of(context).size.height -
-                                      120.h,
+                                  height: MediaQuery.of(context).size.height,
                                   child: const Center(
                                     child: CircularProgressIndicator(
                                       color: AppColor.backgroundColor,
@@ -259,8 +259,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                                       18.sp,
                                                                   color: AppColor
                                                                       .backgroundColor),
-                                                              children: <
-                                                                  TextSpan>[
+                                                              children: <TextSpan>[
                                                                 TextSpan(
                                                                     text:
                                                                         '${state.product.price}',
@@ -396,8 +395,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                                         18.sp,
                                                                     color: AppColor
                                                                         .backgroundColor),
-                                                                children: <
-                                                                    TextSpan>[
+                                                                children: <TextSpan>[
                                                                   TextSpan(
                                                                       text:
                                                                           '${state.product.priceAfterDiscount}',

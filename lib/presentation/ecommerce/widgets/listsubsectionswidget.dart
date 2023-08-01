@@ -51,66 +51,109 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                 ),
               );
             },
-            child: Card(
-              elevation: 3,
-              child: SizedBox(
-                height: 300.h,
-                child: Padding(
-                  padding: EdgeInsets.all(size.height * 0.002),
-                  child: Stack(
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: 12.h,
-                          ),
-                          CachedNetworkImage(
-                            imageUrl: widget.deviceList.imageUrl,
-                            height: 140.h,
-                            width: MediaQuery.of(context).size.width,
-                            fit: BoxFit.contain,
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          SizedBox(
-                            height: 30.h,
-                            child: Text(
-                              widget.deviceList.name,
-                              style: TextStyle(
-                                color: AppColor.black,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
+            child: SizedBox(
+              height: 270.h,
+              child: Padding(
+                padding: EdgeInsets.all(size.height * 0.002),
+                child: Stack(
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // SizedBox(
+                        //   height: 12.h,
+                        // ),
+                        CachedNetworkImage(
+                          imageUrl: widget.deviceList.imageUrl,
+                          height: 140.h,
+                          width: MediaQuery.of(context).size.width,
+                          fit: BoxFit.cover,
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        SizedBox(
+                          // height: 30.h,
+                          child: Text(
+                            widget.deviceList.name,
+                            style: TextStyle(
+                              color: AppColor.black,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(
-                            height: 30.h,
-                            child: Text(
-                              widget.deviceList.description,
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 11.sp,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(
+                          // height: 30.h,
+                          child: Text(
+                            widget.deviceList.description,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 10.sp,
+                              fontWeight: FontWeight.w600,
                             ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 5.0, horizontal: 4.0),
-                            child: SizedBox(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      RichText(
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5.0, horizontal: 4.0),
+                          child: SizedBox(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    RichText(
+                                      text: TextSpan(
+                                          style: TextStyle(
+                                              fontSize: 17.sp,
+                                              color: AppColor.backgroundColor),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                                text:
+                                                    '${widget.deviceList.price}',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  decoration: widget.deviceList
+                                                              .discountPercentage !=
+                                                          null
+                                                      ? TextDecoration
+                                                          .lineThrough
+                                                      : TextDecoration.none,
+                                                )),
+                                            TextSpan(
+                                              text: getCurrencyFromCountry(
+                                                state.selectedCountry,
+                                                context,
+                                              ),
+                                              style: TextStyle(
+                                                  color:
+                                                      AppColor.backgroundColor,
+                                                  fontSize: 13.sp),
+                                            )
+                                          ]),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        await shareImageWithDescription(
+                                          imageUrl: widget.deviceList.imageUrl,
+                                          description: widget.deviceList.name,
+                                        );
+                                      },
+                                      child: const Icon(
+                                        Icons.share,
+                                        color: AppColor.backgroundColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                widget.deviceList.discountPercentage != null
+                                    ? RichText(
                                         text: TextSpan(
                                             style: TextStyle(
                                                 fontSize: 17.sp,
@@ -119,114 +162,62 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                                             children: <TextSpan>[
                                               TextSpan(
                                                   text:
-                                                      '${widget.deviceList.price}',
-                                                  style: TextStyle(
+                                                      '${widget.deviceList.priceAfterDiscount}',
+                                                  style: const TextStyle(
                                                     fontWeight: FontWeight.w700,
-                                                    decoration: widget
-                                                                .deviceList
-                                                                .discountPercentage !=
-                                                            null
-                                                        ? TextDecoration
-                                                            .lineThrough
-                                                        : TextDecoration.none,
                                                   )),
                                               TextSpan(
-                                                text: getCurrencyFromCountry(
-                                                  state.selectedCountry,
-                                                  context,
-                                                ),
+                                                text: '\$ ',
                                                 style: TextStyle(
                                                     color: AppColor
                                                         .backgroundColor,
-                                                    fontSize: 13.sp),
+                                                    fontSize: 10.sp),
+                                              ),
+                                              TextSpan(
+                                                text:
+                                                    '  ${widget.deviceList.discountPercentage?.round().toString()}% ${AppLocalizations.of(context).translate('OFF')}',
+                                                style: TextStyle(
+                                                    color: Colors.green,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 14.sp),
                                               )
                                             ]),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () async {
-                                          await shareImageWithDescription(
-                                            imageUrl:
-                                                widget.deviceList.imageUrl,
-                                            description: widget.deviceList.name,
-                                          );
-                                        },
-                                        child: const Icon(
-                                          Icons.share,
-                                          color: AppColor.backgroundColor,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  widget.deviceList.discountPercentage != null
-                                      ? RichText(
-                                          text: TextSpan(
-                                              style: TextStyle(
-                                                  fontSize: 17.sp,
-                                                  color:
-                                                      AppColor.backgroundColor),
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                    text:
-                                                        '${widget.deviceList.priceAfterDiscount}',
-                                                    style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                    )),
-                                                TextSpan(
-                                                  text: '\$ ',
-                                                  style: TextStyle(
-                                                      color: AppColor
-                                                          .backgroundColor,
-                                                      fontSize: 10.sp),
-                                                ),
-                                                TextSpan(
-                                                  text:
-                                                      '  ${widget.deviceList.discountPercentage?.round().toString()}% ${AppLocalizations.of(context).translate('OFF')}',
-                                                  style: TextStyle(
-                                                      color: Colors.green,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 14.sp),
-                                                )
-                                              ]),
-                                        )
-                                      : Container()
-                                ],
-                              ),
+                                      )
+                                    : Container()
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                      widget.deviceList.condition != null
-                          ? Positioned(
-                              top: -2,
-                              right: 0,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 4, horizontal: 8),
-                                decoration: BoxDecoration(
-                                  color: widget.deviceList.condition == 'new'
-                                      ? Colors.red
-                                      : Colors.yellow,
-                                  borderRadius: const BorderRadius.only(
-                                      bottomLeft: Radius.circular(8)),
-                                ),
-                                child: Text(
-                                  AppLocalizations.of(context).translate(
-                                      widget.deviceList.condition.toString()),
-                                  style: TextStyle(
-                                      color:
-                                          widget.deviceList.condition == 'new'
-                                              ? AppColor.white
-                                              : AppColor.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 10.sp),
-                                ),
+                        ),
+                      ],
+                    ),
+                    widget.deviceList.condition != null
+                        ? Positioned(
+                            top: -2,
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 4, horizontal: 8),
+                              decoration: BoxDecoration(
+                                color: widget.deviceList.condition == 'new'
+                                    ? Colors.red
+                                    : Colors.yellow,
+                                borderRadius: const BorderRadius.only(
+                                    bottomLeft: Radius.circular(8)),
                               ),
-                            )
-                          : const SizedBox(),
-                    ],
-                  ),
+                              child: Text(
+                                AppLocalizations.of(context).translate(
+                                    widget.deviceList.condition.toString()),
+                                style: TextStyle(
+                                    color: widget.deviceList.condition == 'new'
+                                        ? AppColor.white
+                                        : AppColor.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 10.sp),
+                              ),
+                            ),
+                          )
+                        : const SizedBox(),
+                  ],
                 ),
               ),
             ),

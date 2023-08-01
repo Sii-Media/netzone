@@ -428,7 +428,7 @@ class _VehicleCompaniesProfileScreenState
                                               gridDelegate:
                                                   SliverGridDelegateWithFixedCrossAxisCount(
                                                       crossAxisCount: 2,
-                                                      childAspectRatio: 0.95,
+                                                      childAspectRatio: 0.90,
                                                       crossAxisSpacing: 10.w,
                                                       mainAxisSpacing: 10.h),
                                               shrinkWrap: true,
@@ -529,10 +529,9 @@ class _VehicleCompaniesProfileScreenState
                                                                       style: TextStyle(
                                                                           fontSize: 13
                                                                               .sp,
-                                                                          color: AppColor
-                                                                              .backgroundColor),
-                                                                      children: <
-                                                                          TextSpan>[
+                                                                          color:
+                                                                              AppColor.backgroundColor),
+                                                                      children: <TextSpan>[
                                                                         TextSpan(
                                                                           text:
                                                                               '${state.companyVehicles[index].price}',

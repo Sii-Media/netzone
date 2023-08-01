@@ -38,6 +38,7 @@ class _NewsDetailsState extends State<NewsDetails>
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: BlocListener<NewsBloc, NewsState>(
           bloc: newsBloc,
           listener: (context, state) {

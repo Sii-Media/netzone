@@ -17,6 +17,7 @@ class TenderInfoScreen extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: ListView(
           children: [
             Container(

@@ -35,6 +35,7 @@ class _FreeZoneCompaniesListScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: RefreshIndicator(
           onRefresh: () async {
             usersBloc.add(const GetUsersListEvent(userType: 'freezone'));
@@ -208,6 +209,9 @@ class _FreeZoneCompaniesListScreenState
                                       },
                                     ),
                                   ),
+                                  SizedBox(
+                                    height: 80.h,
+                                  )
                                 ],
                               );
                       }

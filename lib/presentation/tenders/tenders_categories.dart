@@ -26,6 +26,7 @@ class _TendersCategoriesScreenState extends State<TendersCategoriesScreen> {
       child: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: BackgroundWidget(
+          isHome: false,
           widget: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

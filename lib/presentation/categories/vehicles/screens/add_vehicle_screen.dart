@@ -98,6 +98,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
   Widget screen(BuildContext context) {
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: Padding(
           padding: const EdgeInsets.only(
             top: 4.0,

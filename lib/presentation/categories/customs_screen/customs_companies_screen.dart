@@ -38,6 +38,7 @@ class _CustomsCompaniesScreenState extends State<CustomsCompaniesScreen> {
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: BackgroundWidget(
+            isHome: false,
             widget: BlocBuilder<CustomsBloc, CustomsState>(
               bloc: customsBloc,
               builder: (context, state) {

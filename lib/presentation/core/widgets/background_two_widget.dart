@@ -8,13 +8,14 @@ import 'package:netzoon/presentation/utils/app_localizations.dart';
 class BackgroundTwoWidget extends StatefulWidget {
   final Widget widget;
   final String title;
-
+  final bool isHome;
   const BackgroundTwoWidget({
     Key? key,
     required this.widget,
     required this.title,
     this.selectedValue,
     this.onChanged,
+    required this.isHome,
   }) : super(key: key);
   final String? selectedValue;
   final void Function(String?)? onChanged;
@@ -73,7 +74,10 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
           //     ),
           //   ),
           // ),
-          CustomAppBar(context: context),
+          CustomAppBar(
+            context: context,
+            isHome: widget.isHome,
+          ),
 
           Positioned(
             top: 147.h,

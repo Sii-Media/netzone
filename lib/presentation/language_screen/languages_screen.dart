@@ -14,6 +14,7 @@ class LanguagesScreen extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: BackgroundWidget(
+        isHome: false,
         widget: Container(
             padding: const EdgeInsets.all(15),
             child: Column(

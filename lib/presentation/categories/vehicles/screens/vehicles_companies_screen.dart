@@ -34,6 +34,7 @@ class _VehiclesCompaniesScreenState extends State<VehiclesCompaniesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: RefreshIndicator(
           onRefresh: () async {
             if (widget.type == 'cars') {

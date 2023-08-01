@@ -41,6 +41,7 @@ class _ComplaintsScreenState extends State<ComplaintsScreen>
   @override
   Widget screen(BuildContext context) {
     return BackgroundWidget(
+      isHome: false,
       widget: Padding(
           padding: const EdgeInsets.all(8.0),
           child: BlocListener<AddComplaintBloc, AddComplaintState>(

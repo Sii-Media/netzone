@@ -37,6 +37,7 @@ class _AddAccountScreenState extends State<AddAccountScreen>
   Widget screen(BuildContext context) {
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: Padding(
             padding: const EdgeInsets.all(
               8.0,

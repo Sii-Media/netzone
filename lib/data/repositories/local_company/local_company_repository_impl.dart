@@ -243,7 +243,7 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
             ),
           ));
         }
-        if (serviceImageList != null && serviceImageList.isNotEmpty) {
+        if (serviceImageList.isNotEmpty) {
           for (int i = 0; i < serviceImageList.length; i++) {
             String fileName = 'image$i.jpg';
             File? file = serviceImageList[i]; // Nullable File

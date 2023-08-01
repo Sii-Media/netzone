@@ -43,6 +43,7 @@ class _ViewAllTendersScreenState extends State<ViewAllTendersScreen> {
     // final tendersList = tendersCategrories;
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: RefreshIndicator(
           onRefresh: () async {
             if (widget.sort == 'min') {

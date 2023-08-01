@@ -44,7 +44,10 @@ class CustomsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            CustomAppBar(context: context),
+            CustomAppBar(
+              context: context,
+              isHome: false,
+            ),
             Positioned(
               top: 202.h,
               right: 0,

@@ -39,6 +39,7 @@ class _TenderCategoriesScreenState extends State<TenderCategoriesScreen> {
       child: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: BackgroundWidget(
+          isHome: false,
           widget: RefreshIndicator(
             onRefresh: () async {
               tenderBloc.add(GetAllTendersCatEvent());

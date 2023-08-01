@@ -608,8 +608,10 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                     tabBuilder: (context, index) {
                       return CupertinoTabView(
                         navigatorKey: listOfKeys[index],
-                        builder: (context) =>
-                            BackgroundWidget(widget: _children[index]),
+                        builder: (context) => BackgroundWidget(
+                          widget: _children[index],
+                          isHome: true,
+                        ),
                       );
                     },
                   ),

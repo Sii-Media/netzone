@@ -43,6 +43,7 @@ class _DealDetailsState extends State<DealDetails> {
           child: SizedBox(
             height: MediaQuery.of(context).size.height,
             child: BackgroundWidget(
+              isHome: false,
               widget: BlocBuilder<DealsItemsBloc, DealsItemsState>(
                 bloc: dealBloc,
                 builder: (context, state) {

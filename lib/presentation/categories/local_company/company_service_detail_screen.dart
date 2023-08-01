@@ -45,6 +45,7 @@ class _CompanyServiceDetailsScreenState
   Widget screen(BuildContext context) {
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: BlocListener<LocalCompanyBloc, LocalCompanyState>(
           bloc: deleteBloc,
           listener: (context, state) {
