@@ -54,7 +54,7 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
             child: Card(
               elevation: 3,
               child: SizedBox(
-                // height: 250.h,
+                height: 300.h,
                 child: Padding(
                   padding: EdgeInsets.all(size.height * 0.002),
                   child: Stack(

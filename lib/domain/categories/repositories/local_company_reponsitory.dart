@@ -45,7 +45,7 @@ abstract class LocalCompanyRepository {
     required String description,
     int? price,
     File? image,
-    List<XFile>? serviceImageList,
+    required List<File?> serviceImageList,
     String? whatsAppNumber,
   });
   Future<Either<Failure, String>> deleteCompanyService({

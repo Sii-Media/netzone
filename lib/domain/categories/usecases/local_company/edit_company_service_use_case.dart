@@ -33,7 +33,7 @@ class EditCompanyServiceParams {
   final String description;
   final int? price;
   final File? image;
-  final List<XFile>? serviceImageList;
+  final List<File?> serviceImageList;
   final String? whatsAppNumber;
 
   EditCompanyServiceParams(
@@ -42,6 +42,6 @@ class EditCompanyServiceParams {
       required this.description,
       this.price,
       this.image,
-      this.serviceImageList,
+      required this.serviceImageList,
       this.whatsAppNumber});
 }

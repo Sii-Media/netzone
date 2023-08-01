@@ -12,6 +12,7 @@ import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import '../../../injection_container.dart';
 import '../../core/constant/colors.dart';
 import '../../utils/app_localizations.dart';
+import '../widgets/image_free_zone_widget.dart';
 
 class EditCompanyServiceScreen extends StatefulWidget {
   final CompanyService companyService;
@@ -32,13 +33,23 @@ class _EditCompanyServiceScreenState extends State<EditCompanyServiceScreen>
 
   final ImagePicker _picker = ImagePicker();
   File? _updatedImage;
+  late List<String> serviceImages;
   final editBloc = sl<LocalCompanyBloc>();
+
+  late List<File?> updatedServiceImages;
+
   @override
   void initState() {
     titleController.text = widget.companyService.title;
     descController.text = widget.companyService.description;
     priceController.text = widget.companyService.price.toString();
     whatsAppNumberController.text = widget.companyService.whatsAppNumber ?? '';
+    serviceImages = widget.companyService.serviceImageList ?? [];
+
+    updatedServiceImages = List.generate(
+      serviceImages.length,
+      (index) => null,
+    );
     super.initState();
   }
 
@@ -207,6 +218,67 @@ class _EditCompanyServiceScreenState extends State<EditCompanyServiceScreen>
                     },
                   ),
                   SizedBox(
+                    height: 10.h,
+                  ),
+                  serviceImages.isNotEmpty
+                      ? GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount:
+                              serviceImages.length, // Use serviceImages length
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2, childAspectRatio: 0.94),
+                          itemBuilder: (BuildContext context, index) {
+                            // Get the image URL from serviceImages list
+                            final imageUrl = serviceImages[index];
+
+                            return Container(
+                              height: 100,
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: updatedServiceImages[index] != null
+                                      ? FileImage(updatedServiceImages[index]!)
+                                      : imageUrl != null
+                                          ? CachedNetworkImageProvider(imageUrl)
+                                          : Image.network(
+                                                  'https://static.vecteezy.com/system/resources/previews/005/544/718/original/profile-icon-design-free-vector.jpg')
+                                              .image,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              child: GestureDetector(
+                                onTap: () async {
+                                  // Allow users to edit the image for this specific index
+                                  final image = await _picker.pickImage(
+                                    source: ImageSource.gallery,
+                                  );
+                                  updatedServiceImages[index] =
+                                      image == null ? null : File(image.path);
+                                  setState(() {});
+                                },
+                                child: Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Container(
+                                    height: 35,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.5),
+                                    ),
+                                    child: const Icon(
+                                      Icons.edit,
+                                      color: AppColor.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                      : const SizedBox(),
+                  SizedBox(
                     height: 20.h,
                   ),
                   SizedBox(
@@ -215,13 +287,13 @@ class _EditCompanyServiceScreenState extends State<EditCompanyServiceScreen>
                       onPressed: () {
                         if (!_formKey.currentState!.validate()) return;
                         editBloc.add(EditCompanyServiceEvent(
-                          id: widget.companyService.id,
-                          title: titleController.text,
-                          description: descController.text,
-                          price: int.tryParse(priceController.text),
-                          whatsAppNumber: whatsAppNumberController.text,
-                          image: _updatedImage,
-                        ));
+                            id: widget.companyService.id,
+                            title: titleController.text,
+                            description: descController.text,
+                            price: int.tryParse(priceController.text),
+                            whatsAppNumber: whatsAppNumberController.text,
+                            image: _updatedImage,
+                            serviceImageList: updatedServiceImages));
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(

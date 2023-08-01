@@ -65,7 +65,7 @@ class EditCompanyServiceEvent extends LocalCompanyEvent {
   final String description;
   final int? price;
   final File? image;
-  final List<XFile>? serviceImageList;
+  final List<File?> serviceImageList;
   final String? whatsAppNumber;
 
   const EditCompanyServiceEvent(
@@ -74,7 +74,7 @@ class EditCompanyServiceEvent extends LocalCompanyEvent {
       required this.description,
       this.price,
       this.image,
-      this.serviceImageList,
+      required this.serviceImageList,
       this.whatsAppNumber});
 }
 
