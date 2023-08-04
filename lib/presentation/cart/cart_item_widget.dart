@@ -89,12 +89,15 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      widget.cart.name,
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                        color: AppColor.backgroundColor,
+                    SizedBox(
+                      width: 120.w,
+                      child: Text(
+                        widget.cart.name,
+                        style: TextStyle(
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.backgroundColor,
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -106,7 +109,9 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                       ),
                     ),
                     Text(
-                      '\$ ${widget.cart.price} ',
+                      widget.cart.priceAfterDiscount != null
+                          ? '\$ ${widget.cart.priceAfterDiscount} '
+                          : '\$ ${widget.cart.price} ',
                       style: TextStyle(
                         color: AppColor.black,
                         fontSize: 15.sp,

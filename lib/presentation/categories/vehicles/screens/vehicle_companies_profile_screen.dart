@@ -14,9 +14,11 @@ import '../../../../data/models/auth/user/user_model.dart';
 import '../../../../domain/auth/entities/user_info.dart';
 import '../../../../injection_container.dart';
 import '../../../auth/blocs/auth_bloc/auth_bloc.dart';
+import '../../../chat/screens/chat_page_screen.dart';
 import '../../../core/blocs/country_bloc/country_bloc.dart';
 import '../../../core/constant/colors.dart';
 import '../../../core/helpers/get_currency_of_country.dart';
+import '../../../core/widgets/phone_call_button.dart';
 import '../../../core/widgets/vehicle_details.dart';
 import '../../../profile/blocs/get_user/get_user_bloc.dart';
 import '../../../utils/app_localizations.dart';
@@ -318,9 +320,10 @@ class _VehicleCompaniesProfileScreenState
                                                       : AppLocalizations.of(
                                                               context)
                                                           .translate('follow'),
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                       fontWeight:
-                                                          FontWeight.bold),
+                                                          FontWeight.bold,
+                                                      fontSize: 10.sp),
                                                 ),
                                                 onPressed: () {
                                                   setState(() {
@@ -353,6 +356,97 @@ class _VehicleCompaniesProfileScreenState
                             child: Text(
                               widget.vehiclesCompany.bio ?? '',
                               style: const TextStyle(color: AppColor.mainGrey),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            // height: 50.h,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: Container(
+                                    height: 50,
+                                    width: 180,
+                                    decoration: const BoxDecoration(
+                                      color: AppColor.backgroundColor,
+                                      // borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.monetization_on,
+                                            color: Colors.white,
+                                            size: 18.sp,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 4.0),
+                                            child: Text(
+                                              AppLocalizations.of(context)
+                                                  .translate('Live Auction'),
+                                              style: TextStyle(
+                                                color: AppColor.white,
+                                                fontSize: 13.sp,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                        return const ChatPageScreen();
+                                      }),
+                                    );
+                                  },
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: Container(
+                                      height: 50,
+                                      width: 180,
+                                      decoration: const BoxDecoration(
+                                        color: AppColor.backgroundColor,
+                                        // borderRadius: BorderRadius.circular(100),
+                                      ),
+                                      child: Center(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Icon(
+                                              Icons.chat,
+                                              color: Colors.white,
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 4.0),
+                                              child: Text(
+                                                AppLocalizations.of(context)
+                                                    .translate(
+                                                        'customers service'),
+                                                style: TextStyle(
+                                                  color: AppColor.white,
+                                                  fontSize: 13.sp,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -599,11 +693,54 @@ class _VehicleCompaniesProfileScreenState
                                     title: AppLocalizations.of(context)
                                         .translate('Bio'),
                                     input: widget.vehiclesCompany.bio ?? ''),
-                                titleAndInput(
-                                    title: AppLocalizations.of(context)
-                                        .translate('mobile'),
-                                    input: widget.vehiclesCompany.firstMobile ??
-                                        ';'),
+                                // titleAndInput(
+                                //     title: AppLocalizations.of(context)
+                                //         .translate('mobile'),
+                                //     input: widget.vehiclesCompany.firstMobile ??
+                                //         ';'),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    // height: 40.h,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.grey.withOpacity(0.4),
+                                          width: 1.0,
+                                        ),
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            AppLocalizations.of(context)
+                                                .translate('mobile'),
+                                            style: TextStyle(
+                                              color: AppColor.black,
+                                              fontSize: 15.sp,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 190,
+                                            child: PhoneCallWidget(
+                                              phonePath: widget.vehiclesCompany
+                                                      .firstMobile ??
+                                                  "",
+                                              title: widget.vehiclesCompany
+                                                      .firstMobile ??
+                                                  AppLocalizations.of(context)
+                                                      .translate('call'),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
                                 titleAndInput(
                                     title: AppLocalizations.of(context)
                                         .translate('email'),

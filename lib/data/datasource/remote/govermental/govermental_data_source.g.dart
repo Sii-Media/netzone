@@ -39,7 +39,11 @@ class _GovermentalRemoteDataSourceImpl
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map(
             (dynamic i) => GovermentalModel.fromJson(i as Map<String, dynamic>))
@@ -48,7 +52,7 @@ class _GovermentalRemoteDataSourceImpl
   }
 
   @override
-  Future<GovermentalCompaniesModel> getGovermentalCompanies(id) async {
+  Future<GovermentalCompaniesModel> getGovermentalCompanies(String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -65,7 +69,11 @@ class _GovermentalRemoteDataSourceImpl
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = GovermentalCompaniesModel.fromJson(_result.data!);
     return value;
   }
@@ -81,5 +89,22 @@ class _GovermentalRemoteDataSourceImpl
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

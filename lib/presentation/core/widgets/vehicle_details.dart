@@ -570,7 +570,9 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            PhoneCallWidget(phonePath: widget.vehicle.contactNumber ?? ""),
+            PhoneCallWidget(
+                phonePath: widget.vehicle.contactNumber ?? "",
+                title: AppLocalizations.of(context).translate('call')),
             ElevatedButton(
                 onPressed: () {},
                 style: ButtonStyle(

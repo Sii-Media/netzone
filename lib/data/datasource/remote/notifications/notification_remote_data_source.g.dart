@@ -39,7 +39,11 @@ class _NotificationRemoteDataSourceImpl
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) =>
             MyNotificationsModel.fromJson(i as Map<String, dynamic>))
@@ -49,12 +53,12 @@ class _NotificationRemoteDataSourceImpl
 
   @override
   Future<MyNotificationsModel> sendNotification(
-    fcmtoken,
-    username,
-    imageUrl,
-    text,
-    category,
-    itemId,
+    String fcmtoken,
+    String username,
+    String imageUrl,
+    String text,
+    String category,
+    String itemId,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -96,7 +100,11 @@ class _NotificationRemoteDataSourceImpl
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = MyNotificationsModel.fromJson(_result.data!);
     return value;
   }
@@ -112,5 +120,22 @@ class _NotificationRemoteDataSourceImpl
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

@@ -21,7 +21,7 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
   String? baseUrl;
 
   @override
-  Future<VehicleResponseModel> getAllCars(country) async {
+  Future<VehicleResponseModel> getAllCars(String country) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
@@ -38,13 +38,17 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = VehicleResponseModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<VehicleResponseModel> getLatestCarByCreator(country) async {
+  Future<VehicleResponseModel> getLatestCarByCreator(String country) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
@@ -61,13 +65,17 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = VehicleResponseModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<VehicleResponseModel> getAllUsedPlanes(country) async {
+  Future<VehicleResponseModel> getAllUsedPlanes(String country) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
@@ -84,13 +92,17 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = VehicleResponseModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<VehicleResponseModel> getAllNewPlanes(country) async {
+  Future<VehicleResponseModel> getAllNewPlanes(String country) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
@@ -107,13 +119,17 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = VehicleResponseModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<List<UserInfoModel>> getCarsCompanies(country) async {
+  Future<List<UserInfoModel>> getCarsCompanies(String country) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
@@ -130,7 +146,11 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) => UserInfoModel.fromJson(i as Map<String, dynamic>))
         .toList();
@@ -138,7 +158,7 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
   }
 
   @override
-  Future<List<UserInfoModel>> getPlanesCompanies(country) async {
+  Future<List<UserInfoModel>> getPlanesCompanies(String country) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
@@ -155,7 +175,11 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) => UserInfoModel.fromJson(i as Map<String, dynamic>))
         .toList();
@@ -163,7 +187,7 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
   }
 
   @override
-  Future<List<VehicleModel>> getCompanyVehicles(id) async {
+  Future<List<VehicleModel>> getCompanyVehicles(String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -180,7 +204,11 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) => VehicleModel.fromJson(i as Map<String, dynamic>))
         .toList();
@@ -188,7 +216,7 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
   }
 
   @override
-  Future<VehicleResponseModel> getAllPlanes(country) async {
+  Future<VehicleResponseModel> getAllPlanes(String country) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
@@ -205,7 +233,11 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = VehicleResponseModel.fromJson(_result.data!);
     return value;
   }
@@ -221,5 +253,22 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

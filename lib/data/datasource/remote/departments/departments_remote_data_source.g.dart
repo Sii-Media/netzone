@@ -23,7 +23,7 @@ class _DepartmentsRemoteDataSourceImpl
 
   @override
   Future<DepartmentCategoryResponseModel> getCategoriesByDepartment(
-      department) async {
+      String department) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'department': department};
     final _headers = <String, dynamic>{};
@@ -40,20 +40,24 @@ class _DepartmentsRemoteDataSourceImpl
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = DepartmentCategoryResponseModel.fromJson(_result.data!);
     return value;
   }
 
   @override
   Future<CategoryProductsResponseModel> getProductsByCategory(
-    country,
-    department,
-    category,
-    priceMin,
-    priceMax,
-    owner,
-    condition,
+    String country,
+    String department,
+    String category,
+    int? priceMin,
+    int? priceMax,
+    String? owner,
+    String? condition,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -80,24 +84,28 @@ class _DepartmentsRemoteDataSourceImpl
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = CategoryProductsResponseModel.fromJson(_result.data!);
     return value;
   }
 
   @override
   Future<String> addProduct(
-    departmentName,
-    categoryName,
-    name,
-    description,
-    price,
-    images,
-    videoUrl,
-    guarantee,
-    property,
-    madeIn,
-    image,
+    String departmentName,
+    String categoryName,
+    String name,
+    String description,
+    int price,
+    List<String>? images,
+    String? videoUrl,
+    String? guarantee,
+    String? property,
+    String? madeIn,
+    File image,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -170,13 +178,17 @@ class _DepartmentsRemoteDataSourceImpl
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data!;
     return value;
   }
 
   @override
-  Future<List<CategoryProductsModel>> getAllProducts(country) async {
+  Future<List<CategoryProductsModel>> getAllProducts(String country) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
@@ -193,7 +205,11 @@ class _DepartmentsRemoteDataSourceImpl
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) =>
             CategoryProductsModel.fromJson(i as Map<String, dynamic>))
@@ -202,7 +218,7 @@ class _DepartmentsRemoteDataSourceImpl
   }
 
   @override
-  Future<List<CategoryProductsModel>> getUserProducts(userId) async {
+  Future<List<CategoryProductsModel>> getUserProducts(String userId) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -219,7 +235,11 @@ class _DepartmentsRemoteDataSourceImpl
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) =>
             CategoryProductsModel.fromJson(i as Map<String, dynamic>))
@@ -228,7 +248,7 @@ class _DepartmentsRemoteDataSourceImpl
   }
 
   @override
-  Future<String> deleteProduct(productId) async {
+  Future<String> deleteProduct(String productId) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -244,13 +264,17 @@ class _DepartmentsRemoteDataSourceImpl
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data!;
     return value;
   }
 
   @override
-  Future<CategoryProductsModel> getProductById(productId) async {
+  Future<CategoryProductsModel> getProductById(String productId) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -267,13 +291,17 @@ class _DepartmentsRemoteDataSourceImpl
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = CategoryProductsModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<List<CategoryProductsModel>> getSelectedProducts(userId) async {
+  Future<List<CategoryProductsModel>> getSelectedProducts(String userId) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -290,7 +318,11 @@ class _DepartmentsRemoteDataSourceImpl
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) =>
             CategoryProductsModel.fromJson(i as Map<String, dynamic>))
@@ -300,8 +332,8 @@ class _DepartmentsRemoteDataSourceImpl
 
   @override
   Future<String> addToSelectedProducts(
-    userId,
-    productIds,
+    String userId,
+    List<String> productIds,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -321,15 +353,19 @@ class _DepartmentsRemoteDataSourceImpl
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data!;
     return value;
   }
 
   @override
   Future<String> deleteFromSelectedProducts(
-    userId,
-    productId,
+    String userId,
+    String productId,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -346,16 +382,20 @@ class _DepartmentsRemoteDataSourceImpl
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data!;
     return value;
   }
 
   @override
   Future<String> rateProduct(
-    id,
-    rating,
-    userId,
+    String id,
+    double rating,
+    String userId,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -380,7 +420,11 @@ class _DepartmentsRemoteDataSourceImpl
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data!;
     return value;
   }
@@ -396,5 +440,22 @@ class _DepartmentsRemoteDataSourceImpl
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

@@ -38,13 +38,17 @@ class _TendersRemoteDataSourceImpl implements TendersRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = TenderResponseModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<TendersItemResponseModel> getTendersItemsByMin(category) async {
+  Future<TendersItemResponseModel> getTendersItemsByMin(String category) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -65,13 +69,17 @@ class _TendersRemoteDataSourceImpl implements TendersRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = TendersItemResponseModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<TendersItemResponseModel> getTendersItemsByMax(category) async {
+  Future<TendersItemResponseModel> getTendersItemsByMax(String category) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -92,7 +100,11 @@ class _TendersRemoteDataSourceImpl implements TendersRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = TendersItemResponseModel.fromJson(_result.data!);
     return value;
   }
@@ -115,7 +127,11 @@ class _TendersRemoteDataSourceImpl implements TendersRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = TendersItemResponseModel.fromJson(_result.data!);
     return value;
   }
@@ -131,5 +147,22 @@ class _TendersRemoteDataSourceImpl implements TendersRemoteDataSourceImpl {
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

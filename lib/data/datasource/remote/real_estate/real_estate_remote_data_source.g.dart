@@ -22,7 +22,7 @@ class _RealEstateRemoteDataSourceImpl
   String? baseUrl;
 
   @override
-  Future<List<RealEstateModel>> getAllRealEstates(country) async {
+  Future<List<RealEstateModel>> getAllRealEstates(String country) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
@@ -39,7 +39,11 @@ class _RealEstateRemoteDataSourceImpl
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) => RealEstateModel.fromJson(i as Map<String, dynamic>))
         .toList();
@@ -47,7 +51,7 @@ class _RealEstateRemoteDataSourceImpl
   }
 
   @override
-  Future<List<UserInfoModel>> getRealEstateCompanies(country) async {
+  Future<List<UserInfoModel>> getRealEstateCompanies(String country) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
@@ -64,7 +68,11 @@ class _RealEstateRemoteDataSourceImpl
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) => UserInfoModel.fromJson(i as Map<String, dynamic>))
         .toList();
@@ -72,7 +80,7 @@ class _RealEstateRemoteDataSourceImpl
   }
 
   @override
-  Future<List<RealEstateModel>> getCompanyRealEstates(id) async {
+  Future<List<RealEstateModel>> getCompanyRealEstates(String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -89,7 +97,11 @@ class _RealEstateRemoteDataSourceImpl
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) => RealEstateModel.fromJson(i as Map<String, dynamic>))
         .toList();
@@ -107,5 +119,22 @@ class _RealEstateRemoteDataSourceImpl
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

@@ -38,7 +38,11 @@ class _CustomsRemoteDataSourceImpl implements CustomsRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) => CustomModel.fromJson(i as Map<String, dynamic>))
         .toList();
@@ -46,7 +50,7 @@ class _CustomsRemoteDataSourceImpl implements CustomsRemoteDataSourceImpl {
   }
 
   @override
-  Future<CustomsCompaniesModel> getCustomsCompanies(id) async {
+  Future<CustomsCompaniesModel> getCustomsCompanies(String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -63,7 +67,11 @@ class _CustomsRemoteDataSourceImpl implements CustomsRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = CustomsCompaniesModel.fromJson(_result.data!);
     return value;
   }
@@ -79,5 +87,22 @@ class _CustomsRemoteDataSourceImpl implements CustomsRemoteDataSourceImpl {
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

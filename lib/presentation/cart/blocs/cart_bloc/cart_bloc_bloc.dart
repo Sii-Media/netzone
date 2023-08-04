@@ -82,14 +82,33 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
         );
       },
     );
+    on<ClearCart>(
+      (event, emit) {
+        emit(
+          const CartLoaded(
+            items: [],
+            totalPrice: 0,
+            totalQuantity: 0,
+          ),
+        );
+      },
+    );
   }
   double calculateTotalPrice(List<CategoryProducts> cartItems) {
     double totalPrice = 0;
     for (var item in cartItems) {
-      if (item.quantity == null) {
-        totalPrice += item.price * 1;
+      if (item.priceAfterDiscount == null) {
+        if (item.quantity == null) {
+          totalPrice += item.price * 1;
+        } else {
+          totalPrice += item.price * item.quantity!;
+        }
       } else {
-        totalPrice += item.price * item.quantity!;
+        if (item.quantity == null) {
+          totalPrice += item.priceAfterDiscount! * 1;
+        } else {
+          totalPrice += item.priceAfterDiscount! * item.quantity!;
+        }
       }
     }
     return totalPrice;

@@ -393,7 +393,8 @@ class _CompanyServiceDetailsScreenState
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             PhoneCallWidget(
-                phonePath: widget.companyService.whatsAppNumber ?? ""),
+                phonePath: widget.companyService.whatsAppNumber ?? "",
+                title: AppLocalizations.of(context).translate('call')),
             ElevatedButton(
               onPressed: () {},
               style: ButtonStyle(

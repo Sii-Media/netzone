@@ -461,56 +461,56 @@ class _StartScreenState extends State<StartScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 18.0),
-                      // child: ElevatedButton(
-                      //   onPressed: () {
-                      //     Navigator.of(context).pushReplacement(
-                      //       MaterialPageRoute(builder: (context) {
-                      //         return const TestScreen();
-                      //       }),
-                      //     );
-                      //   },
-                      //   style: ButtonStyle(
-                      //       side: MaterialStatePropertyAll(
-                      //         BorderSide(
-                      //           color: AppColor.white,
-                      //         ),
-                      //       ),
-                      //       backgroundColor:
-                      //           MaterialStatePropertyAll(Colors.transparent),
-                      //       fixedSize:
-                      //           MaterialStatePropertyAll(Size.fromWidth(100))),
-                      //   child: Text(
-                      //     AppLocalizations.of(context).translate('next'),
-                      //   ),
-                      // ),
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                        width: 150.w,
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            top: BorderSide(width: 2.0, color: AppColor.white),
-                            bottom:
-                                BorderSide(width: 2.0, color: AppColor.white),
-                          ),
-                        ),
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(builder: (context) {
-                                return const TestScreen();
-                              }),
-                            );
-                          },
-                          child: Text(
-                            AppLocalizations.of(context).translate('next'),
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: AppColor.white,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (context) {
+                              return const TestScreen();
+                            }),
+                          );
+                        },
+                        style: ButtonStyle(
+                            side: MaterialStatePropertyAll(
+                              BorderSide(
+                                color: AppColor.white,
+                              ),
                             ),
-                          ),
+                            backgroundColor: MaterialStatePropertyAll(
+                                AppColor.backgroundColor),
+                            fixedSize:
+                                MaterialStatePropertyAll(Size.fromWidth(100))),
+                        child: Text(
+                          AppLocalizations.of(context).translate('next'),
                         ),
                       ),
+                      // child: Container(
+                      //   margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                      //   width: 150.w,
+                      //   decoration: const BoxDecoration(
+                      //     border: Border(
+                      //       top: BorderSide(width: 2.0, color: AppColor.white),
+                      //       bottom:
+                      //           BorderSide(width: 2.0, color: AppColor.white),
+                      //     ),
+                      //   ),
+                      //   child: TextButton(
+                      //     onPressed: () {
+                      //       Navigator.of(context).pushReplacement(
+                      //         MaterialPageRoute(builder: (context) {
+                      //           return const TestScreen();
+                      //         }),
+                      //       );
+                      //     },
+                      //     child: Text(
+                      //       AppLocalizations.of(context).translate('next'),
+                      //       style: const TextStyle(
+                      //         fontSize: 14,
+                      //         fontWeight: FontWeight.w600,
+                      //         color: AppColor.white,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                     )
                   ],
                 )

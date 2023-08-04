@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/helpers/calculate_fee.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
@@ -150,7 +151,48 @@ class _DealDetailsState extends State<DealDetails> {
                             width: MediaQuery.of(context).size.width,
                             child: ElevatedButton(
                                 onPressed: () {
-                                  // Get.to(ViewDetailsDeals(dealsModel: dealsModel));
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text(
+                                            'Service Fee',
+                                            style: TextStyle(
+                                                color: AppColor.backgroundColor,
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                          content: Text(
+                                            'you should pay ${calculateDealsFee(price: state.deal.currentPrice)} AED',
+                                            style: TextStyle(
+                                              color: AppColor.backgroundColor,
+                                            ),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pop(false);
+                                              },
+                                              child: Text(
+                                                AppLocalizations.of(context)
+                                                    .translate('cancel'),
+                                                style: TextStyle(
+                                                    color: AppColor.red),
+                                              ),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {},
+                                              child: Text(
+                                                AppLocalizations.of(context)
+                                                    .translate('submit'),
+                                                style: TextStyle(
+                                                    color: AppColor
+                                                        .backgroundColor),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      });
                                 },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColor.backgroundColor,

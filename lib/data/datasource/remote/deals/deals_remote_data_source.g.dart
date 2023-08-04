@@ -38,15 +38,19 @@ class _DealsRemoteDataSourceImpl implements DealsRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = DealsResponseModel.fromJson(_result.data!);
     return value;
   }
 
   @override
   Future<DealsItemsResponseModel> getDealsByCategory(
-    country,
-    category,
+    String country,
+    String category,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -67,13 +71,17 @@ class _DealsRemoteDataSourceImpl implements DealsRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = DealsItemsResponseModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<DealsItemsResponseModel> getDealsItems(country) async {
+  Future<DealsItemsResponseModel> getDealsItems(String country) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
@@ -90,13 +98,17 @@ class _DealsRemoteDataSourceImpl implements DealsRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = DealsItemsResponseModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<DealsItemsModel> getDealById(id) async {
+  Future<DealsItemsModel> getDealById(String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -113,13 +125,17 @@ class _DealsRemoteDataSourceImpl implements DealsRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = DealsItemsModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<String> deleteDeal(id) async {
+  Future<String> deleteDeal(String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -135,7 +151,11 @@ class _DealsRemoteDataSourceImpl implements DealsRemoteDataSourceImpl {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data!;
     return value;
   }
@@ -151,5 +171,22 @@ class _DealsRemoteDataSourceImpl implements DealsRemoteDataSourceImpl {
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

@@ -22,8 +22,8 @@ class _RequestsRemoteDataSourceImpl implements RequestsRemoteDataSourceImpl {
 
   @override
   Future<RequestsResponseModel> addRequest(
-    address,
-    text,
+    String address,
+    String text,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -49,7 +49,11 @@ class _RequestsRemoteDataSourceImpl implements RequestsRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = RequestsResponseModel.fromJson(_result.data!);
     return value;
   }
@@ -65,5 +69,22 @@ class _RequestsRemoteDataSourceImpl implements RequestsRemoteDataSourceImpl {
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

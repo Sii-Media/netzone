@@ -488,6 +488,9 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                                                           },
                                                                           onChanged:
                                                                               (int? val) {
+                                                                            final cartBloc =
+                                                                                context.read<CartBlocBloc>();
+                                                                            cartBloc.add(ClearCart());
                                                                             getAccountsBloc.add(
                                                                               OnChangeAccountEvent(
                                                                                 email: accountstate.users[index].email!,

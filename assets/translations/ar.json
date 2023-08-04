@@ -83,7 +83,7 @@
     "password_forget": "هل نسيت كلمة المرور ؟!",
     "or_continue_with": "أو تسجيل الدخول عبر",
     "who_are_you": "من أنت",
-    "choose_user_type": "الرجاء اخيار نوع المستخدم",
+    "choose_user_type": "الرجاء اختيار نوع المستخدم",
     "back": "رجوع",
     "email": "البريد الإلكتروني",
     "username": "اسم المستخدم",
@@ -514,5 +514,6 @@
     "add_service_images": "إضافة صور للخدمة",
     "whatsapp_number": "رقم واتساب",
     "next": "التالي",
-    "to_home": "الى الرئيسية"
+    "to_home": "الى الرئيسية",
+    "service_fee": "رسوم الخدمة"
 }

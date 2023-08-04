@@ -19,6 +19,8 @@ import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../core/helpers/calculate_fee.dart';
+
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
 
@@ -767,24 +769,78 @@ class _AddProductScreenState extends State<AddProductScreen>
                                     );
                                     return;
                                   }
-                                  addBloc.add(AddProductRequestedEvent(
-                                    departmentName: selectedValue,
-                                    categoryName: selectCat?.name ?? '',
-                                    name: productName.text,
-                                    condition: _selectedCondition,
-                                    description: productDesc.text,
-                                    price: int.parse(productPrice.text),
-                                    quantity: int.parse(productQuantity.text),
-                                    guarantee: _isGuarantee,
-                                    productimages: imageFileList,
-                                    madeIn: madeInController.text,
-                                    address: productAddress.text,
-                                    video: _video,
-                                    image: _image!,
-                                    discountPercentage:
-                                        _discountPercentage.round(),
-                                    color: colorController.text,
-                                  ));
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text(
+                                            'Service Fee',
+                                            style: TextStyle(
+                                                color: AppColor.backgroundColor,
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                          content: Text(
+                                            'you should pay ${calulateAddProductFee(
+                                              isNew: _selectedCondition,
+                                              price:
+                                                  int.parse(productPrice.text),
+                                              quantity: int.parse(
+                                                  productQuantity.text),
+                                            )} AED',
+                                            style: TextStyle(
+                                              color: AppColor.backgroundColor,
+                                            ),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pop(false);
+                                              },
+                                              child: Text(
+                                                AppLocalizations.of(context)
+                                                    .translate('cancel'),
+                                                style: TextStyle(
+                                                    color: AppColor.red),
+                                              ),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                addBloc.add(
+                                                    AddProductRequestedEvent(
+                                                  departmentName: selectedValue,
+                                                  categoryName:
+                                                      selectCat?.name ?? '',
+                                                  name: productName.text,
+                                                  condition: _selectedCondition,
+                                                  description: productDesc.text,
+                                                  price: int.parse(
+                                                      productPrice.text),
+                                                  quantity: int.parse(
+                                                      productQuantity.text),
+                                                  guarantee: _isGuarantee,
+                                                  productimages: imageFileList,
+                                                  madeIn: madeInController.text,
+                                                  address: productAddress.text,
+                                                  video: _video,
+                                                  image: _image!,
+                                                  discountPercentage:
+                                                      _discountPercentage
+                                                          .round(),
+                                                  color: colorController.text,
+                                                ));
+                                              },
+                                              child: Text(
+                                                AppLocalizations.of(context)
+                                                    .translate('submit'),
+                                                style: TextStyle(
+                                                    color: AppColor
+                                                        .backgroundColor),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      });
                                 }),
                           ),
                           SizedBox(

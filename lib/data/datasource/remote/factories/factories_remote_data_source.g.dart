@@ -38,7 +38,11 @@ class _FactoriesRemoteDataSourceImpl implements FactoriesRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) => FactoriesModel.fromJson(i as Map<String, dynamic>))
         .toList();
@@ -47,8 +51,8 @@ class _FactoriesRemoteDataSourceImpl implements FactoriesRemoteDataSourceImpl {
 
   @override
   Future<FactoryCompaniesResponseModel> getFactoryCompanies(
-    id,
-    country,
+    String id,
+    String country,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};
@@ -66,7 +70,11 @@ class _FactoriesRemoteDataSourceImpl implements FactoriesRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = FactoryCompaniesResponseModel.fromJson(_result.data!);
     return value;
   }
@@ -82,5 +90,22 @@ class _FactoriesRemoteDataSourceImpl implements FactoriesRemoteDataSourceImpl {
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

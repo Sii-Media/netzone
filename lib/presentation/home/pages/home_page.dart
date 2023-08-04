@@ -42,6 +42,7 @@ import '../../chat/screens/chat_home_screen.dart';
 import '../../core/widgets/no_data_widget.dart';
 import '../../core/widgets/on_failure_widget.dart';
 import '../../core/widgets/vehicle_details.dart';
+import '../widgets/build_section.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -172,769 +173,315 @@ class _HomePageState extends State<HomePage> {
                     categories: categories,
                   ),
                 ),
-                // const SizedBox(
-                //   height: 10.0,
-                // ),
+
+                const SizedBox(
+                  height: 10.0,
+                ),
                 // TitleAndButton(
-                //   title: AppLocalizations.of(context).translate('ecommerce'),
+                //   title: AppLocalizations.of(context).translate('elec'),
                 //   icon: true,
-                //   onPress: () {},
+                //   onPress: () {
+                //     Navigator.of(context).push(
+                //       MaterialPageRoute(builder: (context) {
+                //         return CategoriesScreen(
+                //           items: elecDevices,
+                //           filter: 'الكترونيات',
+                //         );
+                //       }),
+                //     );
+                //   },
                 // ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                TitleAndButton(
-                  title: AppLocalizations.of(context).translate('elec'),
-                  icon: true,
-                  onPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return CategoriesScreen(
-                          items: elecDevices,
-                          filter: 'الكترونيات',
-                        );
-                      }),
-                    );
-                  },
-                ),
-                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                // BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                //   bloc: elcDeviceBloc,
+                //   builder: (context, state) {
+                //     if (state is ElecDevicesInProgress) {
+                //       return const Center(
+                //         child: CircularProgressIndicator(
+                //           color: AppColor.backgroundColor,
+                //         ),
+                //       );
+                //     } else if (state is ElecDevicesFailure) {
+                //       final failure = state.message;
+                //       return FailureWidget(
+                //         failure: failure,
+                //         onPressed: () {
+                //           elcDeviceBloc.add(const GetElcDevicesEvent(
+                //               department: 'الكترونيات'));
+                //         },
+                //       );
+                //     } else if (state is ElecDevicesSuccess) {
+                //       return Container(
+                //         padding: const EdgeInsets.symmetric(
+                //           vertical: 3.0,
+                //         ),
+                //         width: MediaQuery.of(context).size.width,
+                //         decoration: BoxDecoration(
+                //           color: const Color.fromARGB(255, 209, 219, 235)
+                //               .withOpacity(0.8),
+                //         ),
+                //         height: 110.h,
+                //         child: ListofItems(
+                //           filter: 'الكترونيات',
+                //           // devices: elecDevices,
+                //           elec: state.elecDevices,
+                //         ),
+                //       );
+                //     }
+                //     return Container();
+                //   },
+                // ),
+                buildSection(
+                  filter: 'الكترونيات',
+                  title: 'elec',
                   bloc: elcDeviceBloc,
-                  builder: (context, state) {
-                    if (state is ElecDevicesInProgress) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColor.backgroundColor,
-                        ),
-                      );
-                    } else if (state is ElecDevicesFailure) {
-                      final failure = state.message;
-                      return FailureWidget(
-                        failure: failure,
-                        onPressed: () {
-                          elcDeviceBloc.add(const GetElcDevicesEvent(
-                              department: 'الكترونيات'));
-                        },
-                      );
-                    } else if (state is ElecDevicesSuccess) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 3.0,
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 209, 219, 235)
-                              .withOpacity(0.8),
-                        ),
-                        height: 110.h,
-                        child: ListofItems(
-                          filter: 'الكترونيات',
-                          // devices: elecDevices,
-                          elec: state.elecDevices,
-                        ),
-                      );
-                    }
-                    return Container();
-                  },
+                  context: context,
                 ),
+
                 const SizedBox(
                   height: 10.0,
                 ),
-                TitleAndButton(
-                  title:
-                      AppLocalizations.of(context).translate('officeDevices'),
-                  icon: true,
-                  onPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return CategoriesScreen(
-                          filter: 'أجهزة المنزل والمكتب',
-                          items: devices,
-                        );
-                      }),
-                    );
-                  },
-                ),
-                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+
+                buildSection(
+                  filter: 'أجهزة المنزل والمكتب',
+                  title: 'officeDevices',
                   bloc: deviceBloc,
-                  builder: (context, state) {
-                    if (state is ElecDevicesInProgress) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColor.backgroundColor,
-                        ),
-                      );
-                    } else if (state is ElecDevicesFailure) {
-                      final failure = state.message;
-                      return FailureWidget(
-                        failure: failure,
-                        onPressed: () {
-                          deviceBloc.add(const GetElcDevicesEvent(
-                              department: 'أجهزة المنزل والمكتب'));
-                        },
-                      );
-                    } else if (state is ElecDevicesSuccess) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 3.0,
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 209, 219, 235)
-                              .withOpacity(0.8),
-                        ),
-                        height: 110.h,
-                        child: ListofItems(
-                          filter: 'أجهزة المنزل والمكتب',
-                          // devices: elecDevices,
-                          elec: state.elecDevices,
-                        ),
-                      );
-                    }
-                    return Container();
-                  },
+                  context: context,
                 ),
                 const SizedBox(
                   height: 10.0,
                 ),
-                TitleAndButton(
-                  title: AppLocalizations.of(context).translate('menFashion'),
-                  icon: true,
-                  onPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return CategoriesScreen(
-                          filter: 'موضة رجالية',
-                          items: menfasion,
-                        );
-                      }),
-                    );
-                  },
-                ),
-                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+
+                buildSection(
+                  filter: 'موضة رجالية',
+                  title: 'menFashion',
                   bloc: manFashionBloc,
-                  builder: (context, state) {
-                    if (state is ElecDevicesInProgress) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColor.backgroundColor,
-                        ),
-                      );
-                    } else if (state is ElecDevicesFailure) {
-                      final failure = state.message;
-                      return FailureWidget(
-                        failure: failure,
-                        onPressed: () {
-                          manFashionBloc.add(const GetElcDevicesEvent(
-                              department: 'موضة رجالية'));
-                        },
-                      );
-                    } else if (state is ElecDevicesSuccess) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 3.0,
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 209, 219, 235)
-                              .withOpacity(0.8),
-                        ),
-                        height: 110.h,
-                        child: ListofItems(
-                          filter: 'موضة رجالية',
-                          // devices: elecDevices,
-                          elec: state.elecDevices,
-                        ),
-                      );
-                    }
-                    return Container();
-                  },
+                  context: context,
                 ),
                 const SizedBox(
                   height: 10.0,
                 ),
-                TitleAndButton(
-                  title: AppLocalizations.of(context).translate('womanFashion'),
-                  icon: true,
-                  onPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return CategoriesScreen(
-                          filter: 'موضة نسائية',
-                          items: womanFashion,
-                        );
-                      }),
-                    );
-                  },
-                ),
-                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+
+                buildSection(
+                  filter: 'موضة نسائية',
+                  title: 'womanFashion',
                   bloc: womanFashionBloc,
-                  builder: (context, state) {
-                    if (state is ElecDevicesInProgress) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColor.backgroundColor,
-                        ),
-                      );
-                    } else if (state is ElecDevicesFailure) {
-                      final failure = state.message;
-                      return FailureWidget(
-                        failure: failure,
-                        onPressed: () {
-                          womanFashionBloc.add(const GetElcDevicesEvent(
-                              department: 'موضة نسائية'));
-                        },
-                      );
-                    } else if (state is ElecDevicesSuccess) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 3.0,
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 209, 219, 235)
-                              .withOpacity(0.8),
-                        ),
-                        height: 110.h,
-                        child: ListofItems(
-                          filter: 'موضة نسائية',
-                          // devices: elecDevices,
-                          elec: state.elecDevices,
-                        ),
-                      );
-                    }
-                    return Container();
-                  },
+                  context: context,
                 ),
                 const SizedBox(
                   height: 10.0,
                 ),
-                TitleAndButton(
-                  title: AppLocalizations.of(context).translate('foods'),
-                  icon: true,
-                  onPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return CategoriesScreen(
-                          filter: 'منتجات غذائية',
-                          items: foodProducts,
-                        );
-                      }),
-                    );
-                  },
-                ),
-                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+
+                buildSection(
+                  filter: 'منتجات غذائية',
+                  title: 'foods',
                   bloc: foodsBloc,
-                  builder: (context, state) {
-                    if (state is ElecDevicesInProgress) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColor.backgroundColor,
-                        ),
-                      );
-                    } else if (state is ElecDevicesFailure) {
-                      final failure = state.message;
-                      return FailureWidget(
-                        failure: failure,
-                        onPressed: () {
-                          foodsBloc.add(const GetElcDevicesEvent(
-                              department: 'منتجات غذائية'));
-                        },
-                      );
-                    } else if (state is ElecDevicesSuccess) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 3.0,
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 209, 219, 235)
-                              .withOpacity(0.8),
-                        ),
-                        height: 110.h,
-                        child: ListofItems(
-                          filter: 'منتجات غذائية',
-                          // devices: elecDevices,
-                          elec: state.elecDevices,
-                        ),
-                      );
-                    }
-                    return Container();
-                  },
+                  context: context,
                 ),
                 const SizedBox(
                   height: 10.0,
                 ),
-                TitleAndButton(
-                  title: AppLocalizations.of(context).translate('perfumes'),
-                  icon: true,
-                  onPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return CategoriesScreen(
-                          filter: 'عطور',
-                          items: perfumeslist,
-                        );
-                      }),
-                    );
-                  },
-                ),
-                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+
+                buildSection(
+                  filter: 'عطور',
+                  title: 'perfumes',
                   bloc: perfumesBloc,
-                  builder: (context, state) {
-                    if (state is ElecDevicesInProgress) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColor.backgroundColor,
-                        ),
-                      );
-                    } else if (state is ElecDevicesFailure) {
-                      final failure = state.message;
-                      return FailureWidget(
-                        failure: failure,
-                        onPressed: () {
-                          perfumesBloc.add(
-                              const GetElcDevicesEvent(department: 'عطور'));
-                        },
-                      );
-                    } else if (state is ElecDevicesSuccess) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 3.0,
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 209, 219, 235)
-                              .withOpacity(0.8),
-                        ),
-                        height: 110.h,
-                        child: ListofItems(
-                          filter: 'عطور',
-                          // devices: elecDevices,
-                          elec: state.elecDevices,
-                        ),
-                      );
-                    }
-                    return Container();
-                  },
+                  context: context,
                 ),
                 const SizedBox(
                   height: 10.0,
                 ),
-                TitleAndButton(
-                  title: AppLocalizations.of(context).translate('watches'),
-                  icon: true,
-                  onPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return CategoriesScreen(
-                          filter: 'ساعات',
-                          items: watches,
-                        );
-                      }),
-                    );
-                  },
-                ),
-                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+
+                buildSection(
+                  filter: 'ساعات',
+                  title: 'watches',
                   bloc: watchesBloc,
-                  builder: (context, state) {
-                    if (state is ElecDevicesInProgress) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColor.backgroundColor,
-                        ),
-                      );
-                    } else if (state is ElecDevicesFailure) {
-                      final failure = state.message;
-                      return FailureWidget(
-                        failure: failure,
-                        onPressed: () {
-                          watchesBloc.add(
-                              const GetElcDevicesEvent(department: 'ساعات'));
-                        },
-                      );
-                    } else if (state is ElecDevicesSuccess) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 3.0,
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 209, 219, 235)
-                              .withOpacity(0.8),
-                        ),
-                        height: 110.h,
-                        child: ListofItems(
-                          filter: 'ساعات',
-                          // devices: elecDevices,
-                          elec: state.elecDevices,
-                        ),
-                      );
-                    }
-                    return Container();
-                  },
+                  context: context,
                 ),
                 const SizedBox(
                   height: 10.0,
                 ),
-                TitleAndButton(
-                  title: AppLocalizations.of(context).translate('حيوانات'),
-                  icon: true,
-                  onPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return CategoriesScreen(
-                          filter: 'حيوانات',
-                          items: watches,
-                        );
-                      }),
-                    );
-                  },
-                ),
-                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+
+                buildSection(
+                  filter: 'حيوانات',
+                  title: 'حيوانات',
                   bloc: animalBloc,
-                  builder: (context, state) {
-                    if (state is ElecDevicesInProgress) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColor.backgroundColor,
-                        ),
-                      );
-                    } else if (state is ElecDevicesFailure) {
-                      final failure = state.message;
-                      return FailureWidget(
-                        failure: failure,
-                        onPressed: () {
-                          animalBloc.add(
-                              const GetElcDevicesEvent(department: 'حيوانات'));
-                        },
-                      );
-                    } else if (state is ElecDevicesSuccess) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 3.0,
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 209, 219, 235)
-                              .withOpacity(0.8),
-                        ),
-                        height: 110.h,
-                        child: ListofItems(
-                          filter: 'حيوانات',
-                          // devices: elecDevices,
-                          elec: state.elecDevices,
-                        ),
-                      );
-                    }
-                    return Container();
-                  },
+                  context: context,
                 ),
                 const SizedBox(
                   height: 10.0,
                 ),
-                TitleAndButton(
-                  title: AppLocalizations.of(context).translate('آلات موسيقية'),
-                  icon: true,
-                  onPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return CategoriesScreen(
-                          filter: 'آلات موسيقية',
-                          items: watches,
-                        );
-                      }),
-                    );
-                  },
-                ),
-                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+
+                buildSection(
+                  filter: 'آلات موسيقية',
+                  title: 'آلات موسيقية',
                   bloc: musicBloc,
-                  builder: (context, state) {
-                    if (state is ElecDevicesInProgress) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColor.backgroundColor,
-                        ),
-                      );
-                    } else if (state is ElecDevicesFailure) {
-                      final failure = state.message;
-                      return FailureWidget(
-                        failure: failure,
-                        onPressed: () {
-                          musicBloc.add(const GetElcDevicesEvent(
-                              department: 'آلات موسيقية'));
-                        },
-                      );
-                    } else if (state is ElecDevicesSuccess) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 3.0,
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 209, 219, 235)
-                              .withOpacity(0.8),
-                        ),
-                        height: 110.h,
-                        child: ListofItems(
-                          filter: 'آلات موسيقية',
-                          // devices: elecDevices,
-                          elec: state.elecDevices,
-                        ),
-                      );
-                    }
-                    return Container();
-                  },
+                  context: context,
                 ),
                 const SizedBox(
                   height: 10.0,
                 ),
-                TitleAndButton(
-                  title: AppLocalizations.of(context).translate('أجهزة رياضية'),
-                  icon: true,
-                  onPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return CategoriesScreen(
-                          filter: 'أجهزة رياضية',
-                          items: watches,
-                        );
-                      }),
-                    );
-                  },
-                ),
-                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                buildSection(
+                  filter: 'أجهزة رياضية',
+                  title: 'أجهزة رياضية',
                   bloc: sportBloc,
-                  builder: (context, state) {
-                    if (state is ElecDevicesInProgress) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColor.backgroundColor,
-                        ),
-                      );
-                    } else if (state is ElecDevicesFailure) {
-                      final failure = state.message;
-                      return FailureWidget(
-                        failure: failure,
-                        onPressed: () {
-                          sportBloc.add(const GetElcDevicesEvent(
-                              department: 'أجهزة رياضية'));
-                        },
-                      );
-                    } else if (state is ElecDevicesSuccess) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 3.0,
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 209, 219, 235)
-                              .withOpacity(0.8),
-                        ),
-                        height: 110.h,
-                        child: ListofItems(
-                          filter: 'أجهزة رياضية',
-                          // devices: elecDevices,
-                          elec: state.elecDevices,
-                        ),
-                      );
-                    }
-                    return Container();
-                  },
+                  context: context,
                 ),
                 const SizedBox(
                   height: 10.0,
                 ),
-                TitleAndButton(
-                  title: AppLocalizations.of(context).translate('الزراعة'),
-                  icon: true,
-                  onPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return CategoriesScreen(
-                          filter: 'الزراعة',
-                          items: watches,
-                        );
-                      }),
-                    );
-                  },
-                ),
-                BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
+                buildSection(
+                  filter: 'الزراعة',
+                  title: 'الزراعة',
                   bloc: agricultureBloc,
-                  builder: (context, state) {
-                    if (state is ElecDevicesInProgress) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColor.backgroundColor,
-                        ),
-                      );
-                    } else if (state is ElecDevicesFailure) {
-                      final failure = state.message;
-                      return FailureWidget(
-                        failure: failure,
-                        onPressed: () {
-                          agricultureBloc.add(
-                              const GetElcDevicesEvent(department: 'الزراعة'));
-                        },
-                      );
-                    } else if (state is ElecDevicesSuccess) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 3.0,
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 209, 219, 235)
-                              .withOpacity(0.8),
-                        ),
-                        height: 110.h,
-                        child: ListofItems(
-                          filter: 'الزراعة',
-                          // devices: elecDevices,
-                          elec: state.elecDevices,
-                        ),
-                      );
-                    }
-                    return Container();
-                  },
+                  context: context,
                 ),
                 const SizedBox(
                   height: 10.0,
                 ),
-                TitleAndButton(
-                  title: AppLocalizations.of(context).translate('سيارات'),
-                  icon: true,
-                  onPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return const VehicleListScreen(
-                          vehicleType: 'cars',
-                        );
-                      }),
-                    );
-                  },
-                ),
-                BlocBuilder<VehicleBloc, VehicleState>(
-                  bloc: carsBloc,
-                  builder: (context, state) {
-                    if (state is VehicleInProgress) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColor.backgroundColor,
-                        ),
-                      );
-                    } else if (state is VehicleFailure) {
-                      final failure = state.message;
-                      return FailureWidget(
-                        failure: failure,
-                        onPressed: () {
-                          carsBloc.add(GetLatestCarByCreatorEvent());
-                        },
-                      );
-                    } else if (state is VehicleSuccess) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 3.0,
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        // decoration: BoxDecoration(
-                        //   color: const Color.fromARGB(255, 209, 219, 235)
-                        //       .withOpacity(0.8),
-                        // ),
-                        height: 130.h,
-                        child: state.vehilces.isNotEmpty
-                            ? ListView.builder(
-                                shrinkWrap: true,
-                                physics: const BouncingScrollPhysics(),
-                                itemCount: state.vehilces.length,
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) {
-                                            return VehicleDetailsScreen(
-                                              vehicle: state.vehilces[index],
-                                            );
-                                          },
-                                        ),
-                                      );
-                                    },
-                                    child: Card(
-                                      elevation: 10.0,
-                                      shadowColor: AppColor.mainGrey,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(16.0),
-                                      ),
-                                      child: SizedBox(
-                                        height: 100.h,
-                                        width: 180.w,
-                                        child: Stack(
-                                          // fit: StackFit.expand,
-                                          alignment:
-                                              AlignmentDirectional.bottomCenter,
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(16.0),
-                                              child: CachedNetworkImage(
-                                                imageUrl: state
-                                                    .vehilces[index].imageUrl,
-                                                height: 200.h,
-                                                width: double.maxFinite,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(16.0),
-                                                gradient: LinearGradient(
-                                                  begin: Alignment.topCenter,
-                                                  end: Alignment.bottomCenter,
-                                                  colors: [
-                                                    Colors.transparent,
-                                                    AppColor.backgroundColor
-                                                        .withOpacity(0.6),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.bottomCenter,
-                                              child: Text(
-                                                state.vehilces[index].name,
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14.0.sp,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                textAlign: TextAlign.right,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              )
-                            : Center(
-                                child: Text(
-                                  AppLocalizations.of(context).translate(
-                                      'there_is_no_cars_in_this_country'),
-                                  style: TextStyle(
-                                    color: AppColor.backgroundColor,
-                                    fontSize: 15.sp,
-                                  ),
-                                ),
-                              ),
-                      );
-                    }
-                    return Container();
-                  },
-                ),
+                // TitleAndButton(
+                //   title: AppLocalizations.of(context).translate('سيارات'),
+                //   icon: true,
+                //   onPress: () {
+                //     Navigator.of(context).push(
+                //       MaterialPageRoute(builder: (context) {
+                //         return const VehicleListScreen(
+                //           vehicleType: 'cars',
+                //         );
+                //       }),
+                //     );
+                //   },
+                // ),
+                // BlocBuilder<VehicleBloc, VehicleState>(
+                //   bloc: carsBloc,
+                //   builder: (context, state) {
+                //     if (state is VehicleInProgress) {
+                //       return const Center(
+                //         child: CircularProgressIndicator(
+                //           color: AppColor.backgroundColor,
+                //         ),
+                //       );
+                //     } else if (state is VehicleFailure) {
+                //       final failure = state.message;
+                //       return FailureWidget(
+                //         failure: failure,
+                //         onPressed: () {
+                //           carsBloc.add(GetLatestCarByCreatorEvent());
+                //         },
+                //       );
+                //     } else if (state is VehicleSuccess) {
+                //       return Container(
+                //         padding: const EdgeInsets.symmetric(
+                //           vertical: 3.0,
+                //         ),
+                //         width: MediaQuery.of(context).size.width,
+                //         // decoration: BoxDecoration(
+                //         //   color: const Color.fromARGB(255, 209, 219, 235)
+                //         //       .withOpacity(0.8),
+                //         // ),
+                //         height: 130.h,
+                //         child: state.vehilces.isNotEmpty
+                //             ? ListView.builder(
+                //                 shrinkWrap: true,
+                //                 physics: const BouncingScrollPhysics(),
+                //                 itemCount: state.vehilces.length,
+                //                 scrollDirection: Axis.horizontal,
+                //                 itemBuilder: (context, index) {
+                //                   return GestureDetector(
+                //                     onTap: () {
+                //                       Navigator.of(context).push(
+                //                         MaterialPageRoute(
+                //                           builder: (context) {
+                //                             return VehicleDetailsScreen(
+                //                               vehicle: state.vehilces[index],
+                //                             );
+                //                           },
+                //                         ),
+                //                       );
+                //                     },
+                //                     child: Card(
+                //                       elevation: 10.0,
+                //                       shadowColor: AppColor.mainGrey,
+                //                       shape: RoundedRectangleBorder(
+                //                         borderRadius:
+                //                             BorderRadius.circular(16.0),
+                //                       ),
+                //                       child: SizedBox(
+                //                         height: 100.h,
+                //                         width: 180.w,
+                //                         child: Stack(
+                //                           // fit: StackFit.expand,
+                //                           alignment:
+                //                               AlignmentDirectional.bottomCenter,
+                //                           children: [
+                //                             ClipRRect(
+                //                               borderRadius:
+                //                                   BorderRadius.circular(16.0),
+                //                               child: CachedNetworkImage(
+                //                                 imageUrl: state
+                //                                     .vehilces[index].imageUrl,
+                //                                 height: 200.h,
+                //                                 width: double.maxFinite,
+                //                                 fit: BoxFit.cover,
+                //                               ),
+                //                             ),
+                //                             Container(
+                //                               decoration: BoxDecoration(
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(16.0),
+                //                                 gradient: LinearGradient(
+                //                                   begin: Alignment.topCenter,
+                //                                   end: Alignment.bottomCenter,
+                //                                   colors: [
+                //                                     Colors.transparent,
+                //                                     AppColor.backgroundColor
+                //                                         .withOpacity(0.6),
+                //                                   ],
+                //                                 ),
+                //                               ),
+                //                             ),
+                //                             Align(
+                //                               alignment: Alignment.bottomCenter,
+                //                               child: Text(
+                //                                 state.vehilces[index].name,
+                //                                 style: TextStyle(
+                //                                   color: Colors.white,
+                //                                   fontSize: 14.0.sp,
+                //                                   fontWeight: FontWeight.bold,
+                //                                 ),
+                //                                 textAlign: TextAlign.right,
+                //                               ),
+                //                             ),
+                //                           ],
+                //                         ),
+                //                       ),
+                //                     ),
+                //                   );
+                //                 },
+                //               )
+                //             : Center(
+                //                 child: Text(
+                //                   AppLocalizations.of(context).translate(
+                //                       'there_is_no_cars_in_this_country'),
+                //                   style: TextStyle(
+                //                     color: AppColor.backgroundColor,
+                //                     fontSize: 15.sp,
+                //                   ),
+                //                 ),
+                //               ),
+                //       );
+                //     }
+                //     return Container();
+                //   },
+                // ),
+                buildVehicleSection(
+                    vehicleType: 'cars',
+                    title: 'سيارات',
+                    emptyText: 'there_is_no_cars_in_this_country',
+                    bloc: carsBloc,
+                    context: context,
+                    onFailurePressed: () {
+                      carsBloc.add(GetLatestCarByCreatorEvent());
+                    }),
                 const SizedBox(
                   height: 10.0,
                 ),
@@ -1075,141 +622,15 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 10.0,
                 ),
-                TitleAndButton(
-                  title: AppLocalizations.of(context).translate('طائرات'),
-                  icon: true,
-                  onPress: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return const VehicleListScreen(
-                          vehicleType: 'planes',
-                        );
-                      }),
-                    );
-                  },
-                ),
-                BlocBuilder<VehicleBloc, VehicleState>(
-                  bloc: planesBloc,
-                  builder: (context, state) {
-                    if (state is VehicleInProgress) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColor.backgroundColor,
-                        ),
-                      );
-                    } else if (state is VehicleFailure) {
-                      final failure = state.message;
-                      return FailureWidget(
-                        failure: failure,
-                        onPressed: () {
-                          planesBloc.add(GetAllPlanesEvent());
-                        },
-                      );
-                    } else if (state is VehicleSuccess) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 3.0,
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        // decoration: BoxDecoration(
-                        //   color: const Color.fromARGB(255, 209, 219, 235)
-                        //       .withOpacity(0.8),
-                        // ),
-                        height: 130.h,
-                        child: state.vehilces.isNotEmpty
-                            ? ListView.builder(
-                                shrinkWrap: true,
-                                physics: const BouncingScrollPhysics(),
-                                itemCount: state.vehilces.length,
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) {
-                                            return VehicleDetailsScreen(
-                                              vehicle: state.vehilces[index],
-                                            );
-                                          },
-                                        ),
-                                      );
-                                    },
-                                    child: Card(
-                                      elevation: 10.0,
-                                      shadowColor: AppColor.mainGrey,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(16.0),
-                                      ),
-                                      child: SizedBox(
-                                        height: 100.h,
-                                        width: 180.w,
-                                        child: Stack(
-                                          // fit: StackFit.expand,
-                                          alignment:
-                                              AlignmentDirectional.bottomCenter,
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(16.0),
-                                              child: CachedNetworkImage(
-                                                imageUrl: state
-                                                    .vehilces[index].imageUrl,
-                                                height: 200.h,
-                                                width: double.maxFinite,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(16.0),
-                                                gradient: LinearGradient(
-                                                  begin: Alignment.topCenter,
-                                                  end: Alignment.bottomCenter,
-                                                  colors: [
-                                                    Colors.transparent,
-                                                    AppColor.backgroundColor
-                                                        .withOpacity(0.6),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.bottomCenter,
-                                              child: Text(
-                                                state.vehilces[index].name,
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14.0.sp,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                textAlign: TextAlign.right,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              )
-                            : Center(
-                                child: Text(
-                                  AppLocalizations.of(context).translate(
-                                      'there is no airplanes in this country'),
-                                  style: TextStyle(
-                                    color: AppColor.backgroundColor,
-                                    fontSize: 15.sp,
-                                  ),
-                                ),
-                              ),
-                      );
-                    }
-                    return Container();
-                  },
-                ),
+                buildVehicleSection(
+                    vehicleType: 'planes',
+                    title: 'طائرات',
+                    emptyText: 'there is no airplanes in this country',
+                    bloc: planesBloc,
+                    context: context,
+                    onFailurePressed: () {
+                      planesBloc.add(GetAllPlanesEvent());
+                    }),
                 const SizedBox(
                   height: 10.0,
                 ),
@@ -1279,59 +700,11 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                       );
-                      // return DealsListWidget(
-                      //   deals: state.dealsItems,
-                      //   buttonText:
-                      //       AppLocalizations.of(context).translate('buy_deal'),
-                      //   subTitle:
-                      //       AppLocalizations.of(context).translate('saller'),
-                      //   desTitle1: AppLocalizations.of(context)
-                      //       .translate('prev_price'),
-                      //   desTitle2: AppLocalizations.of(context)
-                      //       .translate('curr_price'),
-                      // );
                     }
                     return Container();
                   },
                 ),
-                // SizedBox(
-                //   height: MediaQuery.of(context).size.height * 0.38,
-                //   child: BlocBuilder<DealsItemsBloc, DealsItemsState>(
-                //     bloc: dealsItemBloc,
-                //     builder: (context, state) {
-                //       if (state is DealsItemsInProgress) {
-                //         return const Center(
-                //           child: CircularProgressIndicator(
-                //             color: AppColor.backgroundColor,
-                //           ),
-                //         );
-                //       } else if (state is DealsItemsFailure) {
-                //         final failure = state.message;
-                //         return Center(
-                //           child: Text(
-                //             failure,
-                //             style: const TextStyle(
-                //               color: Colors.red,
-                //             ),
-                //           ),
-                //         );
-                //       } else if (state is DealsItemsSuccess) {
-                //         return DealsListWidget(
-                //           deals: state.dealsItems,
-                //           buttonText: AppLocalizations.of(context)
-                //               .translate('buy_deal'),
-                //           subTitle:
-                //               AppLocalizations.of(context).translate('saller'),
-                //           desTitle1: AppLocalizations.of(context)
-                //               .translate('prev_price'),
-                //           desTitle2: AppLocalizations.of(context)
-                //               .translate('curr_price'),
-                //         );
-                //       }
-                //       return Container();
-                //     },
-                //   ),
-                // ),
+
                 const SizedBox(
                   height: 10.0,
                 ),

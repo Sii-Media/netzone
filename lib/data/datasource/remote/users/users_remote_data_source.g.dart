@@ -22,8 +22,8 @@ class _UsersRemoteDataSourceImpl implements UsersRemoteDataSourceImpl {
 
   @override
   Future<List<UserInfoModel>> getUsersList(
-    country,
-    userType,
+    String country,
+    String userType,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -44,7 +44,11 @@ class _UsersRemoteDataSourceImpl implements UsersRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) => UserInfoModel.fromJson(i as Map<String, dynamic>))
         .toList();
@@ -62,5 +66,22 @@ class _UsersRemoteDataSourceImpl implements UsersRemoteDataSourceImpl {
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

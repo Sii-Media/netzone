@@ -8,10 +8,11 @@ class PhoneCallWidget extends StatelessWidget {
   const PhoneCallWidget({
     super.key,
     required this.phonePath,
+    required this.title,
   });
 
   final String phonePath;
-
+  final String title;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -36,7 +37,7 @@ class PhoneCallWidget extends StatelessWidget {
         ),
       ),
       child: Text(
-        AppLocalizations.of(context).translate('call'),
+        title,
       ),
     );
   }

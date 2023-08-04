@@ -41,7 +41,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   void scrollToIndex(int index) {
     _scrollController.animateTo(
-      530.0 * index, // Replace with your desired item height
+      550.0 * index, // Replace with your desired item height
       duration: const Duration(
           milliseconds: 500), // Replace with your desired duration
       curve: Curves.easeInOut, // Replace with your desired curve

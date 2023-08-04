@@ -22,12 +22,12 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
 
   @override
   Future<UserModel> signUp(
-    username,
-    email,
-    password,
-    userType,
-    firstMobile,
-    isFreeZoon,
+    String username,
+    String email,
+    String password,
+    String userType,
+    String firstMobile,
+    bool isFreeZoon,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -69,15 +69,19 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = UserModel.fromJson(_result.data!);
     return value;
   }
 
   @override
   Future<UserModel> signIn(
-    email,
-    password,
+    String email,
+    String password,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -103,15 +107,19 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = UserModel.fromJson(_result.data!);
     return value;
   }
 
   @override
   Future<UserModel> changeAccount(
-    email,
-    password,
+    String email,
+    String password,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -137,13 +145,17 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = UserModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<OtpLoginResponseModel> getOtpCode(phone) async {
+  Future<OtpLoginResponseModel> getOtpCode(String phone) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -164,16 +176,20 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = OtpLoginResponseModel.fromJson(_result.data!);
     return value;
   }
 
   @override
   Future<OtpLoginResponseModel> verifyOtpCode(
-    phone,
-    otp,
-    hash,
+    String phone,
+    String otp,
+    String hash,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -203,13 +219,17 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = OtpLoginResponseModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<UserInfoModel> getUserById(userId) async {
+  Future<UserInfoModel> getUserById(String userId) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -226,16 +246,20 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = UserInfoModel.fromJson(_result.data!);
     return value;
   }
 
   @override
   Future<String> changePassword(
-    userId,
-    currentPassword,
-    newPassword,
+    String userId,
+    String currentPassword,
+    String newPassword,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -260,16 +284,20 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data!;
     return value;
   }
 
   @override
   Future<UserInfoModel> addAccount(
-    email,
-    username,
-    password,
+    String email,
+    String username,
+    String password,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -299,13 +327,17 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = UserInfoModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<List<UserInfoModel>> getUserAccounts(email) async {
+  Future<List<UserInfoModel>> getUserAccounts(String email) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'email': email};
     final _headers = <String, dynamic>{};
@@ -322,7 +354,11 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) => UserInfoModel.fromJson(i as Map<String, dynamic>))
         .toList();
@@ -330,7 +366,7 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
   }
 
   @override
-  Future<List<UserInfoModel>> getUserFollowings(userId) async {
+  Future<List<UserInfoModel>> getUserFollowings(String userId) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -347,7 +383,11 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) => UserInfoModel.fromJson(i as Map<String, dynamic>))
         .toList();
@@ -355,7 +395,7 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
   }
 
   @override
-  Future<List<UserInfoModel>> getUserFollowers(userId) async {
+  Future<List<UserInfoModel>> getUserFollowers(String userId) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -372,7 +412,11 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) => UserInfoModel.fromJson(i as Map<String, dynamic>))
         .toList();
@@ -381,8 +425,8 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
 
   @override
   Future<String> toggleFollow(
-    currentUserId,
-    otherUserId,
+    String currentUserId,
+    String otherUserId,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -403,16 +447,20 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data!;
     return value;
   }
 
   @override
   Future<String> rateUser(
-    id,
-    rating,
-    userId,
+    String id,
+    double rating,
+    String userId,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -437,7 +485,11 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data!;
     return value;
   }
@@ -453,5 +505,22 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

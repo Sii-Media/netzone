@@ -22,7 +22,8 @@ class _DeliveryServiceRemoteDataSourceImpl
   String? baseUrl;
 
   @override
-  Future<List<DeliveryServiceModel>> getDeliveryCompanyServices(id) async {
+  Future<List<DeliveryServiceModel>> getDeliveryCompanyServices(
+      String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -39,7 +40,11 @@ class _DeliveryServiceRemoteDataSourceImpl
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) =>
             DeliveryServiceModel.fromJson(i as Map<String, dynamic>))
@@ -49,12 +54,12 @@ class _DeliveryServiceRemoteDataSourceImpl
 
   @override
   Future<String> addDeliveryService(
-    title,
-    description,
-    from,
-    to,
-    price,
-    owner,
+    String title,
+    String description,
+    String from,
+    String to,
+    int price,
+    String owner,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -78,7 +83,11 @@ class _DeliveryServiceRemoteDataSourceImpl
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data!;
     return value;
   }
@@ -94,5 +103,22 @@ class _DeliveryServiceRemoteDataSourceImpl
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

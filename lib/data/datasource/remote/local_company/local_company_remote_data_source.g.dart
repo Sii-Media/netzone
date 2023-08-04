@@ -39,7 +39,11 @@ class _LocalCompanyRemoteDataSourceImpl
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) =>
             LocalCompanyModel.fromJson(i as Map<String, dynamic>))
@@ -48,7 +52,7 @@ class _LocalCompanyRemoteDataSourceImpl
   }
 
   @override
-  Future<List<CategoryProductsModel>> getCompanyProducts(id) async {
+  Future<List<CategoryProductsModel>> getCompanyProducts(String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -65,7 +69,11 @@ class _LocalCompanyRemoteDataSourceImpl
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) =>
             CategoryProductsModel.fromJson(i as Map<String, dynamic>))
@@ -75,8 +83,8 @@ class _LocalCompanyRemoteDataSourceImpl
 
   @override
   Future<List<UserInfoModel>> getLocalCompanies(
-    country,
-    userType,
+    String country,
+    String userType,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -97,7 +105,11 @@ class _LocalCompanyRemoteDataSourceImpl
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) => UserInfoModel.fromJson(i as Map<String, dynamic>))
         .toList();
@@ -105,7 +117,7 @@ class _LocalCompanyRemoteDataSourceImpl
   }
 
   @override
-  Future<List<CompanyServiceModel>> getCompanyServices(id) async {
+  Future<List<CompanyServiceModel>> getCompanyServices(String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -122,7 +134,11 @@ class _LocalCompanyRemoteDataSourceImpl
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) =>
             CompanyServiceModel.fromJson(i as Map<String, dynamic>))
@@ -132,10 +148,10 @@ class _LocalCompanyRemoteDataSourceImpl
 
   @override
   Future<String> addCompanyService(
-    title,
-    description,
-    price,
-    owner,
+    String title,
+    String description,
+    int price,
+    String owner,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -168,16 +184,20 @@ class _LocalCompanyRemoteDataSourceImpl
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data!;
     return value;
   }
 
   @override
   Future<String> rateCompanyService(
-    id,
-    rating,
-    userId,
+    String id,
+    double rating,
+    String userId,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -202,13 +222,17 @@ class _LocalCompanyRemoteDataSourceImpl
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data!;
     return value;
   }
 
   @override
-  Future<String> deleteCompanyService(id) async {
+  Future<String> deleteCompanyService(String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -224,7 +248,11 @@ class _LocalCompanyRemoteDataSourceImpl
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data!;
     return value;
   }
@@ -240,5 +268,22 @@ class _LocalCompanyRemoteDataSourceImpl
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

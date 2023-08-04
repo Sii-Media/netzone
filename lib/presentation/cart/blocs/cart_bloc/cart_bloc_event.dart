@@ -35,3 +35,5 @@ class ChangeQuantity extends CartBlocEvent {
   @override
   List<Object> get props => [product, quantity];
 }
+
+class ClearCart extends CartBlocEvent {}

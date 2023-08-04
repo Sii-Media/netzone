@@ -13,6 +13,7 @@ import 'package:netzoon/presentation/legal_advice/legal_advice_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../cart/blocs/cart_bloc/cart_bloc_bloc.dart';
 import '../start_screen.dart';
 
 class MoreScreen extends StatefulWidget {
@@ -186,6 +187,8 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
                   name: AppLocalizations.of(context).translate('logout'),
                   icon: Icons.logout,
                   onTap: () {
+                    final cartBloc = context.read<CartBlocBloc>();
+                    cartBloc.add(ClearCart());
                     authBloc.add(AuthLogout());
 
                     Navigator.of(context, rootNavigator: true)

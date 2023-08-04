@@ -7,10 +7,8 @@ import 'package:netzoon/presentation/ecommerce/widgets/list_categories.dart';
 import 'package:netzoon/presentation/home/blocs/elec_devices/elec_devices_bloc.dart';
 
 class CategoriesScreen extends StatefulWidget {
-  const CategoriesScreen(
-      {super.key, required this.items, required this.filter});
+  const CategoriesScreen({super.key, required this.filter});
 
-  final List<dynamic> items;
   final String filter;
   @override
   State<CategoriesScreen> createState() => _CategoriesScreenState();

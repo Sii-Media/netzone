@@ -38,13 +38,17 @@ class _FreeZoneRemoteDataSourceImpl implements FreeZoneRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = FreeZoneResponseModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<FreeZoneCompanyResponseModel> getFreeZonePlacesById(id) async {
+  Future<FreeZoneCompanyResponseModel> getFreeZonePlacesById(String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -61,7 +65,11 @@ class _FreeZoneRemoteDataSourceImpl implements FreeZoneRemoteDataSourceImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = FreeZoneCompanyResponseModel.fromJson(_result.data!);
     return value;
   }
@@ -77,5 +85,22 @@ class _FreeZoneRemoteDataSourceImpl implements FreeZoneRemoteDataSourceImpl {
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

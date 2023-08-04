@@ -921,6 +921,73 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                           state.product.owner.username) {
                     return const SizedBox();
                   }
+                  print(state.product.owner.username);
+                  if (state.product.owner.userType == 'factory' ||
+                      state.product.owner.userType == 'freezone') {
+                    print(state.product.owner.userType);
+                    if (authState is Authenticated) {
+                      if (authState.user.userInfo.userType == 'local_company' ||
+                          authState.user.userInfo.userType == 'trader') {
+                        return BottomAppBar(
+                          height: 60.h,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                    AppColor.backgroundColor,
+                                  ),
+                                  shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                  )),
+                                  fixedSize: const MaterialStatePropertyAll(
+                                    Size.fromWidth(200),
+                                  ),
+                                ),
+                                child: Text(AppLocalizations.of(context)
+                                    .translate('add_to_cart')),
+                                onPressed: () {
+                                  // final cartBloc = sl<CartBlocBloc>();
+                                  _togglePressed();
+                                  final cartBloc = context.read<CartBlocBloc>();
+                                  final cartItems = cartBloc.state.props;
+                                  if (cartItems.any(
+                                      (elm) => elm.id == state.product.id)) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text(
+                                        AppLocalizations.of(context).translate(
+                                            'Product_Already_added_to_cart'),
+                                        style: const TextStyle(
+                                            color: AppColor.white),
+                                      ),
+                                      backgroundColor: AppColor.red,
+                                      duration: const Duration(seconds: 2),
+                                    ));
+                                  } else {
+                                    cartBloc
+                                        .add(AddToCart(product: state.product));
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text(AppLocalizations.of(context)
+                                          .translate('Product_added_to_cart')),
+                                      backgroundColor: AppColor.backgroundColor,
+                                      duration: const Duration(seconds: 2),
+                                    ));
+                                  }
+                                },
+                              ),
+                              PriceSuggestionButton(input: input),
+                            ],
+                          ),
+                        );
+                      }
+                      return SizedBox();
+                    }
+                  }
                   return BottomAppBar(
                     height: 60.h,
                     child: Row(

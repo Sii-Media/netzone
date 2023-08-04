@@ -38,19 +38,23 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = NewsModel.fromJson(_result.data!);
     return value;
   }
 
   @override
   Future<AddNewsModel> addNews(
-    title,
-    description,
-    imgUrl,
-    ownerName,
-    ownerImage,
-    creator,
+    String title,
+    String description,
+    String imgUrl,
+    String ownerName,
+    String ownerImage,
+    String creator,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -92,18 +96,22 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = AddNewsModel.fromJson(_result.data!);
     return value;
   }
 
   @override
   Future<NewsInfoModel> editNews(
-    id,
-    title,
-    description,
-    image,
-    creator,
+    String id,
+    String title,
+    String description,
+    File? image,
+    String creator,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -126,13 +134,17 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = NewsInfoModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<String> deleteNews(id) async {
+  Future<String> deleteNews(String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -148,13 +160,17 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data!;
     return value;
   }
 
   @override
-  Future<List<NewsCommentModel>> getComments(newsId) async {
+  Future<List<NewsCommentModel>> getComments(String newsId) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -171,7 +187,11 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map(
             (dynamic i) => NewsCommentModel.fromJson(i as Map<String, dynamic>))
@@ -181,9 +201,9 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
 
   @override
   Future<String> addComment(
-    newsId,
-    userId,
-    text,
+    String newsId,
+    String userId,
+    String text,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -208,15 +228,19 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data!;
     return value;
   }
 
   @override
   Future<String> toggleOnLike(
-    newsId,
-    userId,
+    String newsId,
+    String userId,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -237,13 +261,17 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
           queryParameters: queryParameters,
           data: _data,
         )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
     final value = _result.data!;
     return value;
   }
 
   @override
-  Future<NewsInfoModel> getNewsById(id) async {
+  Future<NewsInfoModel> getNewsById(String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -260,13 +288,17 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = NewsInfoModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<List<NewsInfoModel>> getCompanyNews(id) async {
+  Future<List<NewsInfoModel>> getCompanyNews(String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -283,7 +315,11 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     var value = _result.data!
         .map((dynamic i) => NewsInfoModel.fromJson(i as Map<String, dynamic>))
         .toList();
@@ -301,5 +337,22 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }
