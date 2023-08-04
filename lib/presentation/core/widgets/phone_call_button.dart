@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../constant/colors.dart';

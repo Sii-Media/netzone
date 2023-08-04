@@ -8,7 +8,6 @@ import '../../../injection_container.dart';
 import '../../categories/vehicles/blocs/bloc/vehicle_bloc.dart';
 import '../../chat/screens/chat_home_screen.dart';
 import '../../core/constant/colors.dart';
-import '../../core/widgets/on_failure_widget.dart';
 import '../../core/widgets/screen_loader.dart';
 import '../../core/widgets/vehicle_details.dart';
 import '../../home/test.dart';
@@ -17,7 +16,6 @@ import '../blocs/add_account/add_account_bloc.dart';
 import '../blocs/get_user/get_user_bloc.dart';
 import '../methods/show_change_account_bottom_sheet.dart';
 import '../widgets/rounded_icon_text.dart';
-import 'add_account_screen.dart';
 import 'edit_local_company_profile_screen.dart';
 import 'followings_list_screen.dart';
 

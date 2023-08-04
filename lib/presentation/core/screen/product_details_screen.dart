@@ -921,10 +921,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                           state.product.owner.username) {
                     return const SizedBox();
                   }
-                  print(state.product.owner.username);
                   if (state.product.owner.userType == 'factory' ||
                       state.product.owner.userType == 'freezone') {
-                    print(state.product.owner.userType);
                     if (authState is Authenticated) {
                       if (authState.user.userInfo.userType == 'local_company' ||
                           authState.user.userInfo.userType == 'trader') {
@@ -985,7 +983,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                           ),
                         );
                       }
-                      return SizedBox();
+                      return const SizedBox();
                     }
                   }
                   return BottomAppBar(

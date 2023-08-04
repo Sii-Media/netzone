@@ -9,7 +9,6 @@ import '../../categories/real_estate/blocs/real_estate/real_estate_bloc.dart';
 import '../../categories/real_estate/screens/real_estate_details_screen.dart';
 import '../../chat/screens/chat_home_screen.dart';
 import '../../core/constant/colors.dart';
-import '../../core/widgets/on_failure_widget.dart';
 import '../../core/widgets/screen_loader.dart';
 import '../../home/test.dart';
 import '../../utils/app_localizations.dart';
@@ -18,7 +17,6 @@ import '../blocs/get_user/get_user_bloc.dart';
 import '../methods/show_change_account_bottom_sheet.dart';
 import '../widgets/rounded_icon_text.dart';
 import '../widgets/top_profile.dart';
-import 'add_account_screen.dart';
 import 'edit_local_company_profile_screen.dart';
 import 'followings_list_screen.dart';
 

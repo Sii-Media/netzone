@@ -21,11 +21,9 @@ import 'package:netzoon/presentation/data/woman_fashion.dart';
 import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/deals_list_widget.dart';
 import 'package:netzoon/presentation/deals/deals_screen.dart';
-import 'package:netzoon/presentation/ecommerce/screens/ecommerce.dart';
 import 'package:netzoon/presentation/home/blocs/elec_devices/elec_devices_bloc.dart';
 import 'package:netzoon/presentation/home/widgets/images_slider.dart';
 import 'package:netzoon/presentation/home/widgets/list_of_categories.dart';
-import 'package:netzoon/presentation/home/widgets/list_of_items.dart';
 import 'package:netzoon/presentation/home/widgets/slider_news_widget.dart';
 import 'package:netzoon/presentation/home/widgets/title_and_button.dart';
 import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
@@ -37,11 +35,9 @@ import '../../categories/real_estate/blocs/real_estate/real_estate_bloc.dart';
 import '../../categories/real_estate/screens/real_estate_details_screen.dart';
 import '../../categories/real_estate/screens/real_estate_list_screen.dart';
 import '../../categories/vehicles/blocs/bloc/vehicle_bloc.dart';
-import '../../categories/vehicles/screens/vehicle_list_screen.dart';
 import '../../chat/screens/chat_home_screen.dart';
 import '../../core/widgets/no_data_widget.dart';
 import '../../core/widgets/on_failure_widget.dart';
-import '../../core/widgets/vehicle_details.dart';
 import '../widgets/build_section.dart';
 
 class HomePage extends StatefulWidget {

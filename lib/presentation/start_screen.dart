@@ -469,7 +469,7 @@ class _StartScreenState extends State<StartScreen> {
                             }),
                           );
                         },
-                        style: ButtonStyle(
+                        style: const ButtonStyle(
                             side: MaterialStatePropertyAll(
                               BorderSide(
                                 color: AppColor.white,

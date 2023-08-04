@@ -12,7 +12,6 @@ import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import '../../../injection_container.dart';
 import '../../core/constant/colors.dart';
 import '../../utils/app_localizations.dart';
-import '../widgets/image_free_zone_widget.dart';
 
 class EditCompanyServiceScreen extends StatefulWidget {
   final CompanyService companyService;
@@ -235,12 +234,13 @@ class _EditCompanyServiceScreenState extends State<EditCompanyServiceScreen>
 
                             return Container(
                               height: 100,
-                              margin: EdgeInsets.symmetric(
+                              margin: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 5),
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: updatedServiceImages[index] != null
                                       ? FileImage(updatedServiceImages[index]!)
+                                      // ignore: unnecessary_null_comparison
                                       : imageUrl != null
                                           ? CachedNetworkImageProvider(imageUrl)
                                           : Image.network(

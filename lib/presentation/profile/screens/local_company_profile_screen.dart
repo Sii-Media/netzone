@@ -19,7 +19,6 @@ import '../blocs/add_account/add_account_bloc.dart';
 import '../blocs/get_user/get_user_bloc.dart';
 import '../methods/show_change_account_bottom_sheet.dart';
 import '../widgets/rounded_icon_text.dart';
-import 'add_account_screen.dart';
 import 'edit_local_company_profile_screen.dart';
 import 'followings_list_screen.dart';
 

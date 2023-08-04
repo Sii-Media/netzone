@@ -155,7 +155,7 @@ class _DealDetailsState extends State<DealDetails> {
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
-                                          title: Text(
+                                          title: const Text(
                                             'Service Fee',
                                             style: TextStyle(
                                                 color: AppColor.backgroundColor,
@@ -163,7 +163,7 @@ class _DealDetailsState extends State<DealDetails> {
                                           ),
                                           content: Text(
                                             'you should pay ${calculateDealsFee(price: state.deal.currentPrice)} AED',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: AppColor.backgroundColor,
                                             ),
                                           ),
@@ -176,7 +176,7 @@ class _DealDetailsState extends State<DealDetails> {
                                               child: Text(
                                                 AppLocalizations.of(context)
                                                     .translate('cancel'),
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: AppColor.red),
                                               ),
                                             ),
@@ -185,7 +185,7 @@ class _DealDetailsState extends State<DealDetails> {
                                               child: Text(
                                                 AppLocalizations.of(context)
                                                     .translate('submit'),
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: AppColor
                                                         .backgroundColor),
                                               ),

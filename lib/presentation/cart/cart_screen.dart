@@ -145,7 +145,7 @@ class _CartScreenState extends State<CartScreen> {
                         vertical: 10,
                       ),
                       height: 200.h,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           color: AppColor.backgroundColor,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(30),
@@ -205,7 +205,7 @@ class _CartScreenState extends State<CartScreen> {
                               ),
                             ],
                           ),
-                          Divider(
+                          const Divider(
                             color: AppColor.mainGrey,
                             thickness: 1,
                           ),

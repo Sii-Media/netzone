@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:dartz/dartz.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../repositories/local_company_reponsitory.dart';
 

@@ -10,8 +10,6 @@ import 'package:netzoon/presentation/profile/screens/my_producrs_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../../injection_container.dart';
-import '../../cart/blocs/cart_bloc/cart_bloc_bloc.dart';
-import '../../core/widgets/on_failure_widget.dart';
 import '../../favorites/favorite_screen.dart';
 import '../../home/test.dart';
 import '../../orders/screens/order_screen.dart';
@@ -19,7 +17,6 @@ import '../blocs/add_account/add_account_bloc.dart';
 import '../blocs/get_user/get_user_bloc.dart';
 import '../methods/show_change_account_bottom_sheet.dart';
 import '../widgets/rounded_icon_text.dart';
-import 'add_account_screen.dart';
 import 'credits_screen.dart';
 import 'edit_profile_screen.dart';
 import 'followings_list_screen.dart';
