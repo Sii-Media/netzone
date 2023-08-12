@@ -71,6 +71,15 @@ abstract class AuthRemoteDataSource {
     final double rating,
     final String userId,
   );
+
+  Future<String> addVisitor(
+    final String userId,
+    final String viewerUserId,
+  );
+
+  Future<List<UserInfoModel>> getVisitors(
+    final String id,
+  );
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -187,5 +196,18 @@ abstract class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     @Path('id') String id,
     @Part() double rating,
     @Part() String userId,
+  );
+
+  @override
+  @POST('/user/{userId}/addvisitor')
+  Future<String> addVisitor(
+    @Path('userId') String userId,
+    @Part() String viewerUserId,
+  );
+
+  @override
+  @GET('/user/{id}/visitors')
+  Future<List<UserInfoModel>> getVisitors(
+    @Path('id') String id,
   );
 }

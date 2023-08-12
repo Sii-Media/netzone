@@ -388,7 +388,8 @@ class _StartScreenState extends State<StartScreen> {
                           showLanguageDialog(context);
                         },
                         child: Text(
-                          currentLanguage,
+                          AppLocalizations.of(context)
+                              .translate(currentLanguage),
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -550,7 +551,8 @@ class _StartScreenState extends State<StartScreen> {
                     RadioListTile<String>(
                       activeColor: AppColor.backgroundColor,
                       title: Text(
-                        language['name']!,
+                        AppLocalizations.of(context)
+                            .translate(language['name']!),
                         style: const TextStyle(color: AppColor.backgroundColor),
                       ),
                       value: language['code'] ?? '',

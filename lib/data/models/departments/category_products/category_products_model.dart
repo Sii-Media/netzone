@@ -32,6 +32,8 @@ class CategoryProductsModel {
   final String country;
   final String? color;
   final double? averageRating;
+  final double? totalRatings;
+
   CategoryProductsModel({
     required this.id,
     required this.owner,
@@ -55,6 +57,7 @@ class CategoryProductsModel {
     required this.country,
     this.color,
     this.averageRating,
+    this.totalRatings,
   });
 
   factory CategoryProductsModel.fromJson(Map<String, dynamic> json) =>
@@ -87,5 +90,6 @@ extension MapToDomain on CategoryProductsModel {
         country: country,
         color: color,
         averageRating: averageRating,
+        totalRatings: totalRatings,
       );
 }

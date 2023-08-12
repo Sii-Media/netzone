@@ -122,3 +122,29 @@ class RateUserSuccess extends GetUserState {
 
   const RateUserSuccess({required this.message});
 }
+
+class AddVisitorFailure extends GetUserState {
+  final String message;
+
+  const AddVisitorFailure({required this.message});
+}
+
+class AddVisitorSuccess extends GetUserState {
+  final String message;
+
+  const AddVisitorSuccess({required this.message});
+}
+
+class GetUserVisitorsInProgress extends GetUserState {}
+
+class GetUserVisitorsFailure extends GetUserState {
+  final String message;
+
+  const GetUserVisitorsFailure({required this.message});
+}
+
+class GetUserVisitorsSuccess extends GetUserState {
+  final List<UserInfo> visitors;
+
+  const GetUserVisitorsSuccess({required this.visitors});
+}

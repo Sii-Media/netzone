@@ -21,9 +21,22 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
   String? baseUrl;
 
   @override
-  Future<VehicleResponseModel> getAllCars(String country) async {
+  Future<VehicleResponseModel> getAllCars(
+    String country,
+    String? creator,
+    int? priceMin,
+    int? priceMax,
+    String? type,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'country': country};
+    final queryParameters = <String, dynamic>{
+      r'country': country,
+      r'creator': creator,
+      r'priceMin': priceMin,
+      r'priceMax': priceMax,
+      r'type': type,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -216,9 +229,22 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
   }
 
   @override
-  Future<VehicleResponseModel> getAllPlanes(String country) async {
+  Future<VehicleResponseModel> getAllPlanes(
+    String country,
+    String? creator,
+    int? priceMin,
+    int? priceMax,
+    String? type,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'country': country};
+    final queryParameters = <String, dynamic>{
+      r'country': country,
+      r'creator': creator,
+      r'priceMin': priceMin,
+      r'priceMax': priceMax,
+      r'type': type,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(

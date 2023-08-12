@@ -31,7 +31,7 @@ class Vehicle extends Equatable {
   final String? technicalFeatures;
   final String? steeringSide;
   final bool? guarantee;
-
+  final String? forWhat;
   const Vehicle({
     required this.name,
     required this.imageUrl,
@@ -62,6 +62,7 @@ class Vehicle extends Equatable {
     this.technicalFeatures,
     this.steeringSide,
     this.guarantee,
+    this.forWhat,
   });
   @override
   List<Object?> get props => [
@@ -92,5 +93,6 @@ class Vehicle extends Equatable {
         technicalFeatures,
         steeringSide,
         guarantee,
+        forWhat,
       ];
 }

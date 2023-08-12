@@ -7,7 +7,13 @@ import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:share_plus/share_plus.dart';
 
 abstract class AdvertismentRepository {
-  Future<Either<Failure, Advertising>> getAllAds();
+  Future<Either<Failure, Advertising>> getAllAds({
+    String? owner,
+    int? priceMin,
+    int? priceMax,
+    bool? purchasable,
+    String? year,
+  });
 
   Future<Either<Failure, Advertising>> getUserAds({
     required String userId,

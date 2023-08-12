@@ -7,6 +7,7 @@ import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 
 import '../../../../injection_container.dart';
 import '../../../core/constant/colors.dart';
+import '../../../utils/app_localizations.dart';
 import '../blocs/bloc/vehicle_bloc.dart';
 
 class VehiclesCompaniesScreen extends StatefulWidget {
@@ -19,6 +20,7 @@ class VehiclesCompaniesScreen extends StatefulWidget {
 
 class _VehiclesCompaniesScreenState extends State<VehiclesCompaniesScreen> {
   final vehicleBloc = sl<VehicleBloc>();
+  final controller = TextEditingController();
 
   @override
   void initState() {
@@ -64,13 +66,42 @@ class _VehiclesCompaniesScreenState extends State<VehiclesCompaniesScreen> {
                     ),
                   );
                 } else if (state is VehiclesCompaniesSuccess) {
+                  final filteredUsers = state.vehiclesCompanies
+                      .where((user) => user.username!
+                          .toLowerCase()
+                          .contains(controller.text.toLowerCase()))
+                      .toList();
                   return Column(
                     children: [
+                      TextFormField(
+                        controller: controller,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(
+                            Icons.search,
+                          ),
+                          hintText:
+                              AppLocalizations.of(context).translate('search'),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                              20,
+                            ),
+                            borderSide: const BorderSide(
+                              color: AppColor.backgroundColor,
+                            ),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                      ),
+                      SizedBox(
+                        height: 4.h,
+                      ),
                       Expanded(
                         child: ListView.builder(
                             shrinkWrap: true,
                             physics: const BouncingScrollPhysics(),
-                            itemCount: state.vehiclesCompanies.length,
+                            itemCount: filteredUsers.length,
                             itemBuilder: (context, index) {
                               return SizedBox(
                                 width: MediaQuery.of(context).size.width,
@@ -83,8 +114,7 @@ class _VehiclesCompaniesScreenState extends State<VehiclesCompaniesScreen> {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(builder: (context) {
                                         return VehicleCompaniesProfileScreen(
-                                          vehiclesCompany:
-                                              state.vehiclesCompanies[index],
+                                          vehiclesCompany: filteredUsers[index],
                                         );
                                       }));
                                     },

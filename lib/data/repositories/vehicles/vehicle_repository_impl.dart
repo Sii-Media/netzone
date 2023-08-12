@@ -22,11 +22,17 @@ class VehicleRepositoryImpl implements VehicleRepository {
   VehicleRepositoryImpl(
       {required this.networkInfo, required this.vehicleRemoteDataSource});
   @override
-  Future<Either<Failure, VehicleResponse>> getAllCars(
-      {required String country}) async {
+  Future<Either<Failure, VehicleResponse>> getAllCars({
+    required String country,
+    required String? creator,
+    required int? priceMin,
+    required int? priceMax,
+    required String? type,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
-        final cars = await vehicleRemoteDataSource.getAllCars(country);
+        final cars = await vehicleRemoteDataSource.getAllCars(
+            country, creator, priceMin, priceMax, type);
         return Right(cars.toDomain());
       } else {
         return Left(OfflineFailure());
@@ -133,11 +139,17 @@ class VehicleRepositoryImpl implements VehicleRepository {
   }
 
   @override
-  Future<Either<Failure, VehicleResponse>> getAllPlanes(
-      {required String country}) async {
+  Future<Either<Failure, VehicleResponse>> getAllPlanes({
+    required String country,
+    required String? creator,
+    required int? priceMin,
+    required int? priceMax,
+    required String? type,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
-        final planes = await vehicleRemoteDataSource.getAllPlanes(country);
+        final planes = await vehicleRemoteDataSource.getAllPlanes(
+            country, creator, priceMin, priceMax, type);
         return Right(planes.toDomain());
       } else {
         return Left(OfflineFailure());
@@ -178,6 +190,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
     String? technicalFeatures,
     String? steeringSide,
     bool? guarantee,
+    String? forWhat,
   }) async {
     try {
       if (await networkInfo.isConnected) {
@@ -269,6 +282,11 @@ class VehicleRepositoryImpl implements VehicleRepository {
         if (guarantee != null) {
           formData.fields.add(
             MapEntry('guarantee', guarantee.toString()),
+          );
+        }
+        if (forWhat != null) {
+          formData.fields.add(
+            MapEntry('forWhat', forWhat),
           );
         }
         String fileName = 'image.jpg';

@@ -15,6 +15,7 @@ import '../../../../injection_container.dart';
 import '../../../core/constant/colors.dart';
 import '../../../core/widgets/add_photo_button.dart';
 import '../../../core/widgets/background_widget.dart';
+import '../../../data/cars.dart';
 import '../../../notifications/blocs/notifications/notifications_bloc.dart';
 import '../../../utils/app_localizations.dart';
 import '../blocs/bloc/vehicle_bloc.dart';
@@ -58,10 +59,12 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
       TextEditingController();
   late TextEditingController steeringSideController = TextEditingController();
   late TextEditingController guaranteeController = TextEditingController();
+  late TextEditingController forWhatController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isGuarantee = false;
-
+  String? selectedCarType;
+  String? selectedCategory;
   File? _image;
   Future getImage(ImageSource imageSource) async {
     final image = await ImagePicker().pickImage(source: imageSource);
@@ -172,21 +175,101 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                     SizedBox(
                       height: 10.h,
                     ),
-                    addVehicleFormFeild(
-                      context: context,
-                      controller: nameController,
-                      title: widget.category == 'cars'
-                          ? 'car_name'
-                          : 'airplane_name',
-                      isNumber: false,
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return 'هذا الحقل مطلوب';
-                        }
+                    widget.category == 'cars'
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${AppLocalizations.of(context).translate('department')} :',
+                                style: TextStyle(
+                                  color: AppColor.backgroundColor,
+                                  fontSize: 16.sp,
+                                ),
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                margin: const EdgeInsets.symmetric(
+                                        horizontal: 2, vertical: 10)
+                                    .r,
+                                // Add some padding and a background color
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                decoration: BoxDecoration(
+                                    color: Colors.green.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: AppColor.black,
+                                    )),
+                                child: DropdownButton<String>(
+                                  value: selectedCarType,
+                                  hint: const Text('Select car type'),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedCarType = value;
+                                      selectedCategory =
+                                          null; // Reset the selected category when the car type changes
+                                    });
+                                  },
+                                  items: carTypes.map((carType) {
+                                    return DropdownMenuItem<String>(
+                                      value: carType.name,
+                                      child: Text(carType.name),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                              const SizedBox(height: 16.0),
+                              if (selectedCarType != null)
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin: const EdgeInsets.symmetric(
+                                          horizontal: 2, vertical: 10)
+                                      .r,
+                                  // Add some padding and a background color
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  decoration: BoxDecoration(
+                                      color: Colors.green.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: AppColor.black,
+                                      )),
+                                  child: DropdownButton<String>(
+                                    value: selectedCategory,
+                                    hint: const Text('Select category'),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedCategory = value;
+                                      });
+                                    },
+                                    items: carTypes
+                                        .firstWhere((carType) =>
+                                            carType.name == selectedCarType)
+                                        .categories
+                                        .map((category) {
+                                      return DropdownMenuItem<String>(
+                                        value: category,
+                                        child: Text(category),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                            ],
+                          )
+                        : addVehicleFormFeild(
+                            context: context,
+                            controller: nameController,
+                            title: 'airplane_name',
+                            isNumber: false,
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return 'هذا الحقل مطلوب';
+                              }
 
-                        return null;
-                      },
-                    ),
+                              return null;
+                            },
+                          ),
                     SizedBox(
                       height: 10.h,
                     ),
@@ -555,6 +638,18 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                     SizedBox(
                       height: 10.h,
                     ),
+                    addVehicleFormFeild(
+                      context: context,
+                      controller: forWhatController,
+                      title: 'for_what',
+                      isNumber: false,
+                      validator: (val) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
                     CheckboxListTile(
                       title: Text(
                         AppLocalizations.of(context).translate('is_guarantee'),
@@ -752,7 +847,9 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                               return;
                             }
                             addBloc.add(AddVehicleEvent(
-                              name: nameController.text,
+                              name: widget.category == 'cars'
+                                  ? '$selectedCarType $selectedCategory'
+                                  : nameController.text,
                               description: descController.text,
                               price: int.parse(priceController.text),
                               kilometers: int.parse(killometersController.text),
@@ -783,6 +880,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                               technicalFeatures:
                                   technicalFeaturesController.text,
                               transmissionType: transmissionTypeController.text,
+                              forWhat: forWhatController.text,
                             ));
                           }),
                     ),

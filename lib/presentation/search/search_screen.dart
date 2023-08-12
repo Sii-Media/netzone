@@ -12,6 +12,7 @@ import '../categories/local_company/local_company_profile.dart';
 import '../categories/vehicles/blocs/bloc/vehicle_bloc.dart';
 import '../core/constant/colors.dart';
 import '../core/widgets/vehicle_details.dart';
+import '../data/cars.dart';
 import '../home/blocs/elec_devices/elec_devices_bloc.dart';
 import '../utils/app_localizations.dart';
 
@@ -32,7 +33,9 @@ class _SearchPageState extends State<SearchPage> {
   ];
   late String selectedCategory;
   late String searchText;
-
+  String? selectedCarType;
+  String? selectedCat;
+  String? data = '';
   List<dynamic> items = [
     // Add more items as needed
   ];
@@ -54,6 +57,11 @@ class _SearchPageState extends State<SearchPage> {
         filteredItems = items
             .where((item) =>
                 item.username.toLowerCase().contains(searchText.toLowerCase()))
+            .toList();
+      } else if (cat == 'cars') {
+        filteredItems = items
+            .where((item) =>
+                item.name.toLowerCase().contains(searchText.toLowerCase()))
             .toList();
       } else {
         filteredItems = items
@@ -87,211 +95,213 @@ class _SearchPageState extends State<SearchPage> {
           style: const TextStyle(color: AppColor.backgroundColor),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Text(
-              AppLocalizations.of(context)
-                  .translate('Choose what you want to search for'),
-              style: const TextStyle(
-                color: AppColor.backgroundColor,
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Container(
-              height: 60.h,
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom:
-                      BorderSide(color: AppColor.secondGrey.withOpacity(0.3)),
+      body: SingleChildScrollView(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Text(
+                  AppLocalizations.of(context)
+                      .translate('Choose what you want to search for'),
+                  style: const TextStyle(
+                    color: AppColor.backgroundColor,
+                  ),
                 ),
-              ),
-              width: double.infinity,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: categories.length,
-                itemBuilder: (BuildContext context, int index) {
-                  String cat = categories[index];
-                  bool isSelected = selectedCategory == cat;
-
-                  return SizedBox(
-                    width: 105.w,
-                    // margin: EdgeInsets.symmetric(horizontal: 1),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedCategory = (isSelected ? null : cat)!;
-                          if (cat == 'Products') {
-                            productBloc.add(GetAllProductsEvent());
-                          } else if (cat == 'local_companies') {
-                            localCompanyBloc.add(const GetLocalCompaniesEvent(
-                                userType: 'local_company'));
-                          } else if (cat == 'advertiments') {
-                            adsBloc.add(GetAllAdsEvent());
-                          } else if (cat == 'cars') {
-                            vehicleBloc.add(GetAllCarsEvent());
-                          } else if (cat == 'civil_aircraft') {
-                            vehicleBloc.add(GetAllNewPlanesEvent());
-                          }
-                        });
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context).translate(cat),
-                            style: TextStyle(
-                              fontSize: isSelected ? 13.sp : 12.sp,
-                              color: isSelected
-                                  ? AppColor.backgroundColor
-                                  : AppColor.secondGrey,
-                              fontWeight: isSelected
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                            ),
-                          ),
-                          Divider(
-                            color: isSelected
-                                ? AppColor.backgroundColor
-                                : AppColor.secondGrey.withOpacity(0.3),
-                            thickness: isSelected ? 2 : 1,
-                            endIndent: 40,
-                            indent: 40,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            // DropdownButtonFormField(
-            //   // value: selectedCategory,
-            //   onChanged: (value) {
-            //     if (value == 'Products') {
-            //       productBloc.add(GetAllProductsEvent());
-            //     } else if (value == 'local_companies') {
-            //       localCompanyBloc.add(GetAllLocalCompaniesEvent());
-            //     } else if (value == 'advertiments') {
-            //       adsBloc.add(GetAllAdsEvent());
-            //     } else if (value == 'cars') {
-            //       vehicleBloc.add(GetAllCarsEvent());
-            //     } else if (value == 'civil_aircraft') {
-            //       vehicleBloc.add(GetAllNewPlanesEvent());
-            //     }
-            //     setState(() {
-            //       selectedCategory = value as String;
-            //     });
-            //   },
-            //   items: categories.map((category) {
-            //     return DropdownMenuItem(
-            //       value: category,
-            //       child: Text(AppLocalizations.of(context).translate(category)),
-            //     );
-            //   }).toList(),
-            //   decoration: InputDecoration(
-            //     labelText: 'Category',
-            //   ),
-            // ),
-            const SizedBox(height: 16.0),
-            if (selectedCategory == 'Products') productBlocWidget(),
-            if (selectedCategory == 'local_companies') localCompanyBlocWidget(),
-            if (selectedCategory == 'advertiments') adsBlocWidget(),
-            if (selectedCategory == 'cars') carsBlocWidget(),
-            if (selectedCategory == 'civil_aircraft') aircraftBlocWidget(),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
-                  AppColor.backgroundColor,
+                const SizedBox(
+                  height: 20,
                 ),
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                )),
-              ),
-              onPressed: () {
-                filterItems(selectedCategory);
-              },
-              child: Text(AppLocalizations.of(context).translate('Search')),
-            ),
-            const SizedBox(height: 16.0),
-            Expanded(
-              child: ListView.builder(
-                itemCount: filteredItems.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      if (selectedCategory == 'Products') {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return ProductDetailScreen(
-                              item: filteredItems[index].id);
-                        }));
-                      } else if (selectedCategory == 'local_companies') {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return LocalCompanyProfileScreen(
-                              localCompany: filteredItems[index]);
-                        }));
-                      } else if (selectedCategory == 'advertiments') {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return AdvertismentDetalsScreen(
-                              adsId: filteredItems[index].id);
-                        }));
-                      } else if (selectedCategory == 'cars') {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return VehicleDetailsScreen(
-                              vehicle: filteredItems[index]);
-                        }));
-                      } else if (selectedCategory == 'civil_aircraft') {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return VehicleDetailsScreen(
-                              vehicle: filteredItems[index]);
-                        }));
-                      }
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 5.0),
+                Column(
+                  children: [
+                    Container(
+                      height: 60.h,
                       decoration: BoxDecoration(
-                        color: AppColor.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            offset: const Offset(0, 5),
-                            color: AppColor.backgroundColor.withOpacity(0.3),
-                            spreadRadius: 2,
-                            blurRadius: 10,
-                          ),
-                        ],
+                        border: Border(
+                          bottom: BorderSide(
+                              color: AppColor.secondGrey.withOpacity(0.3)),
+                        ),
                       ),
-                      child: ListTile(
-                        title: Text(
-                          selectedCategory == 'local_companies'
-                              ? filteredItems[index].username
-                              : filteredItems[index].name,
-                          style: TextStyle(
-                              color: AppColor.backgroundColor,
-                              fontSize: 17.sp,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        leading: const Icon(
-                          Icons.arrow_forward_ios,
-                          size: 22,
-                        ),
+                      width: double.infinity,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: categories.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          String cat = categories[index];
+                          bool isSelected = selectedCategory == cat;
+
+                          return SizedBox(
+                            width: 105.w,
+                            // margin: EdgeInsets.symmetric(horizontal: 1),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedCategory = (isSelected ? null : cat)!;
+                                  filteredItems = [];
+                                  if (cat == 'Products') {
+                                    productBloc.add(GetAllProductsEvent());
+                                  } else if (cat == 'local_companies') {
+                                    localCompanyBloc.add(
+                                        const GetLocalCompaniesEvent(
+                                            userType: 'local_company'));
+                                  } else if (cat == 'advertiments') {
+                                    adsBloc.add(const GetAllAdsEvent());
+                                  } else if (cat == 'cars') {
+                                    vehicleBloc.add(const GetAllCarsEvent());
+                                  } else if (cat == 'civil_aircraft') {
+                                    vehicleBloc.add(GetAllNewPlanesEvent());
+                                  }
+                                });
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context).translate(cat),
+                                    style: TextStyle(
+                                      fontSize: isSelected ? 13.sp : 12.sp,
+                                      color: isSelected
+                                          ? AppColor.backgroundColor
+                                          : AppColor.secondGrey,
+                                      fontWeight: isSelected
+                                          ? FontWeight.bold
+                                          : FontWeight.normal,
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: isSelected
+                                        ? AppColor.backgroundColor
+                                        : AppColor.secondGrey.withOpacity(0.3),
+                                    thickness: isSelected ? 2 : 1,
+                                    endIndent: 40,
+                                    indent: 40,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  );
-                },
-              ),
+                  ],
+                ),
+
+                const SizedBox(height: 16.0),
+                if (selectedCategory == 'Products') productBlocWidget(),
+                if (selectedCategory == 'local_companies')
+                  localCompanyBlocWidget(),
+                if (selectedCategory == 'advertiments') adsBlocWidget(),
+                // if (selectedCategory == 'cars') carsBlocWidget(),
+                if (selectedCategory == 'cars') carsWidget(),
+
+                if (selectedCategory == 'civil_aircraft') aircraftBlocWidget(),
+                const SizedBox(height: 16.0),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      AppColor.backgroundColor,
+                    ),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    )),
+                  ),
+                  onPressed: () {
+                    filterItems(selectedCategory);
+                  },
+                  child: Text(AppLocalizations.of(context).translate('Search')),
+                ),
+                const SizedBox(height: 16.0),
+                filteredItems.isEmpty
+                    // ? Text(
+                    //     searchText.isEmpty ? '' : 'no_data',
+                    //     style: TextStyle(color: Colors.red),
+                    //   )
+                    ? Text(
+                        searchText.isEmpty
+                            ? ''
+                            : AppLocalizations.of(context)
+                                .translate('no_items'),
+                        style: const TextStyle(color: AppColor.backgroundColor))
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: filteredItems.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                if (selectedCategory == 'Products') {
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return ProductDetailScreen(
+                                        item: filteredItems[index].id);
+                                  }));
+                                } else if (selectedCategory ==
+                                    'local_companies') {
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return LocalCompanyProfileScreen(
+                                        localCompany: filteredItems[index]);
+                                  }));
+                                } else if (selectedCategory == 'advertiments') {
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return AdvertismentDetalsScreen(
+                                        adsId: filteredItems[index].id);
+                                  }));
+                                } else if (selectedCategory == 'cars') {
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return VehicleDetailsScreen(
+                                        vehicle: filteredItems[index]);
+                                  }));
+                                } else if (selectedCategory ==
+                                    'civil_aircraft') {
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return VehicleDetailsScreen(
+                                        vehicle: filteredItems[index]);
+                                  }));
+                                }
+                              },
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 5.0),
+                                decoration: BoxDecoration(
+                                  color: AppColor.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      offset: const Offset(0, 5),
+                                      color: AppColor.backgroundColor
+                                          .withOpacity(0.3),
+                                      spreadRadius: 2,
+                                      blurRadius: 10,
+                                    ),
+                                  ],
+                                ),
+                                child: ListTile(
+                                  title: Text(
+                                    selectedCategory == 'local_companies'
+                                        ? filteredItems[index].username
+                                        : filteredItems[index].name,
+                                    style: TextStyle(
+                                        color: AppColor.backgroundColor,
+                                        fontSize: 17.sp,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  leading: const Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 22,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -353,6 +363,113 @@ class _SearchPageState extends State<SearchPage> {
         }
         return Container();
       },
+    );
+  }
+
+  Widget carsWidget() {
+    return Column(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width,
+          margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 10).r,
+          // Add some padding and a background color
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: AppColor.backgroundColor.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: AppColor.black,
+            ),
+          ),
+          child: DropdownButton<String>(
+            value: selectedCarType,
+            hint: const Text('Select car type'),
+            onChanged: (value) {
+              setState(() {
+                selectedCarType = value;
+                selectedCat =
+                    null; // Reset the selected category when the car type changes
+              });
+            },
+            items: carTypes.map((carType) {
+              return DropdownMenuItem<String>(
+                enabled: true,
+                value: carType.name,
+                child: Text(carType.name),
+              );
+            }).toList(),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        BlocBuilder<VehicleBloc, VehicleState>(
+          bloc: vehicleBloc,
+          builder: (context, state) {
+            if (state is VehicleInProgress) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: AppColor.backgroundColor,
+                ),
+              );
+            } else if (state is VehicleFailure) {
+              final failure = state.message;
+              return Center(
+                child: Text(
+                  failure,
+                  style: const TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
+              );
+            } else if (state is VehicleSuccess) {
+              items = state.vehilces;
+
+              return selectedCarType != null
+                  ? TypeAheadField(
+                      textFieldConfiguration: TextFieldConfiguration(
+                        controller: controller,
+                        onChanged: (value) {
+                          setState(() {
+                            searchText = value;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Search',
+                        ),
+                      ),
+                      suggestionsCallback: (pattern) {
+                        // return state.vehilces.where((item) =>
+                        //     item.name.toLowerCase().contains(pattern.toLowerCase()));
+
+                        List<String> c = carTypes
+                            .firstWhere(
+                                (carType) => carType.name == selectedCarType)
+                            .categories;
+                        return c.where((item) =>
+                            item.toLowerCase().contains(pattern.toLowerCase()));
+                      },
+                      itemBuilder: (context, suggestion) {
+                        return ListTile(
+                          title: Text(suggestion),
+                        );
+                      },
+                      onSuggestionSelected: (suggestion) {
+                        setState(() {
+                          searchText = suggestion;
+                        });
+                        controller.text = searchText;
+                        controller.selection = TextSelection.fromPosition(
+                          TextPosition(offset: controller.text.length),
+                        );
+                      },
+                    )
+                  : const SizedBox();
+            }
+            return Container();
+          },
+        ),
+      ],
     );
   }
 

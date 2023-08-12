@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/presentation/profile/screens/visitors_screen.dart';
 
 import '../../../domain/news/entities/news_comment.dart';
 import '../../../injection_container.dart';
@@ -248,6 +249,38 @@ class _MyNewsProfileScreenState extends State<MyNewsProfileScreen>
                                           Text(
                                             AppLocalizations.of(context)
                                                 .translate('Followers'),
+                                            style: TextStyle(
+                                                color: AppColor.secondGrey,
+                                                fontSize: 15.sp),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return const VisitorsScreen();
+                                        }));
+                                      },
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '${state.userInfo.profileViews ?? 0}',
+                                            style: TextStyle(
+                                              color: AppColor.mainGrey,
+                                              fontSize: 18.sp,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            AppLocalizations.of(context)
+                                                .translate('visitors'),
                                             style: TextStyle(
                                                 color: AppColor.secondGrey,
                                                 fontSize: 15.sp),

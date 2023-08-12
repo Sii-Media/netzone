@@ -40,182 +40,179 @@ class _DealDetailsState extends State<DealDetails> {
         },
         color: AppColor.white,
         backgroundColor: AppColor.backgroundColor,
-        child: SingleChildScrollView(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: BackgroundWidget(
-              widget: BlocBuilder<DealsItemsBloc, DealsItemsState>(
-                bloc: dealBloc,
-                builder: (context, state) {
-                  if (state is DealsItemsInProgress) {
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColor.backgroundColor,
-                        ),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: BackgroundWidget(
+            widget: BlocBuilder<DealsItemsBloc, DealsItemsState>(
+              bloc: dealBloc,
+              builder: (context, state) {
+                if (state is DealsItemsInProgress) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.backgroundColor,
                       ),
-                    );
-                  } else if (state is DealsItemsFailure) {
-                    final failure = state.message;
-                    return FailureWidget(
-                      failure: failure,
-                      onPressed: () {
-                        dealBloc.add(GetDealByIdEvent(id: widget.dealsInfoId));
-                      },
-                    );
-                  } else if (state is GetDealByIdSuccess) {
-                    return RefreshIndicator(
-                      onRefresh: () async {
-                        dealBloc.add(GetDealByIdEvent(id: widget.dealsInfoId));
-                      },
-                      color: AppColor.white,
-                      backgroundColor: AppColor.backgroundColor,
-                      child: ListView(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.all(8),
-                            height: size.height * 0.30,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(25.0),
-                              child: CachedNetworkImage(
-                                imageUrl: state.deal.imgUrl,
-                                fit: BoxFit.cover,
-                              ),
+                    ),
+                  );
+                } else if (state is DealsItemsFailure) {
+                  final failure = state.message;
+                  return FailureWidget(
+                    failure: failure,
+                    onPressed: () {
+                      dealBloc.add(GetDealByIdEvent(id: widget.dealsInfoId));
+                    },
+                  );
+                } else if (state is GetDealByIdSuccess) {
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      dealBloc.add(GetDealByIdEvent(id: widget.dealsInfoId));
+                    },
+                    color: AppColor.white,
+                    backgroundColor: AppColor.backgroundColor,
+                    child: ListView(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.all(8),
+                          height: size.height * 0.30,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(25.0),
+                            child: CachedNetworkImage(
+                              imageUrl: state.deal.imgUrl,
+                              fit: BoxFit.cover,
                             ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) {
-                                    return EditDealScreen(
-                                      deal: state.deal,
-                                    );
-                                  }));
-                                },
-                                icon: const Icon(
-                                  Icons.edit,
-                                  color: AppColor.backgroundColor,
-                                ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(builder: (context) {
+                                  return EditDealScreen(
+                                    deal: state.deal,
+                                  );
+                                }));
+                              },
+                              icon: const Icon(
+                                Icons.edit,
+                                color: AppColor.backgroundColor,
                               ),
-                              IconButton(
-                                onPressed: () {
-                                  dealBloc.add(
-                                      DeleteDealEvent(id: state.deal.id ?? ''));
-                                },
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: AppColor.red,
-                                ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                dealBloc.add(
+                                    DeleteDealEvent(id: state.deal.id ?? ''));
+                              },
+                              icon: const Icon(
+                                Icons.delete,
+                                color: AppColor.red,
                               ),
-                            ],
-                          ),
-                          titleAndInput(
-                            title:
-                                "${AppLocalizations.of(context).translate('اسم الصفقة')} : ",
-                            input: state.deal.name,
-                          ),
-                          titleAndInput(
-                            title:
-                                "${AppLocalizations.of(context).translate('اسم البائع')} : ",
-                            input: state.deal.companyName,
-                          ),
-                          titleAndInput(
-                            title:
-                                "${AppLocalizations.of(context).translate('تاريخ بدء الصفقة')} : ",
-                            input: convertDateToString(state.deal.startDate),
-                          ),
-                          titleAndInput(
-                            title:
-                                "${AppLocalizations.of(context).translate('تاريخ انتهاء الصفقة')}: ",
-                            input: convertDateToString(state.deal.endDate),
-                          ),
-                          titleAndInput(
-                            title:
-                                "${AppLocalizations.of(context).translate('السعر قبل')}:",
-                            input: state.deal.prevPrice.toString(),
-                          ),
-                          titleAndInput(
-                            title:
-                                "${AppLocalizations.of(context).translate('السعر بعد')} : ",
-                            input: state.deal.currentPrice.toString(),
-                          ),
-                          SizedBox(
-                            height: 20.h,
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 4.h),
-                            width: MediaQuery.of(context).size.width,
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text(
-                                            'Service Fee',
-                                            style: TextStyle(
-                                                color: AppColor.backgroundColor,
-                                                fontWeight: FontWeight.w700),
-                                          ),
-                                          content: Text(
-                                            'you should pay ${calculateDealsFee(price: state.deal.currentPrice)} AED',
-                                            style: const TextStyle(
+                            ),
+                          ],
+                        ),
+                        titleAndInput(
+                          title:
+                              "${AppLocalizations.of(context).translate('اسم الصفقة')} : ",
+                          input: state.deal.name,
+                        ),
+                        titleAndInput(
+                          title:
+                              "${AppLocalizations.of(context).translate('اسم البائع')} : ",
+                          input: state.deal.companyName,
+                        ),
+                        titleAndInput(
+                          title:
+                              "${AppLocalizations.of(context).translate('تاريخ بدء الصفقة')} : ",
+                          input: convertDateToString(state.deal.startDate),
+                        ),
+                        titleAndInput(
+                          title:
+                              "${AppLocalizations.of(context).translate('تاريخ انتهاء الصفقة')}: ",
+                          input: convertDateToString(state.deal.endDate),
+                        ),
+                        titleAndInput(
+                          title:
+                              "${AppLocalizations.of(context).translate('السعر قبل')}:",
+                          input: state.deal.prevPrice.toString(),
+                        ),
+                        titleAndInput(
+                          title:
+                              "${AppLocalizations.of(context).translate('السعر بعد')} : ",
+                          input: state.deal.currentPrice.toString(),
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 4.h),
+                          width: MediaQuery.of(context).size.width,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text(
+                                          'Service Fee',
+                                          style: TextStyle(
                                               color: AppColor.backgroundColor,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        content: Text(
+                                          'you should pay ${calculateDealsFee(price: state.deal.currentPrice)} AED',
+                                          style: const TextStyle(
+                                            color: AppColor.backgroundColor,
+                                          ),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop(false);
+                                            },
+                                            child: Text(
+                                              AppLocalizations.of(context)
+                                                  .translate('cancel'),
+                                              style: const TextStyle(
+                                                  color: AppColor.red),
                                             ),
                                           ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context)
-                                                    .pop(false);
-                                              },
-                                              child: Text(
-                                                AppLocalizations.of(context)
-                                                    .translate('cancel'),
-                                                style: const TextStyle(
-                                                    color: AppColor.red),
-                                              ),
+                                          TextButton(
+                                            onPressed: () {},
+                                            child: Text(
+                                              AppLocalizations.of(context)
+                                                  .translate('submit'),
+                                              style: const TextStyle(
+                                                  color:
+                                                      AppColor.backgroundColor),
                                             ),
-                                            TextButton(
-                                              onPressed: () {},
-                                              child: Text(
-                                                AppLocalizations.of(context)
-                                                    .translate('submit'),
-                                                style: const TextStyle(
-                                                    color: AppColor
-                                                        .backgroundColor),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColor.backgroundColor,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
-                                    //shadowColor: Colors.black,
-                                    //  elevation: 5
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5)),
-                                    textStyle: const TextStyle(fontSize: 15)),
-                                child: Text(AppLocalizations.of(context)
-                                    .translate('اشتري الان'))),
-                          ),
-                          SizedBox(
-                            height: 100.h,
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                  return Container();
-                },
-              ),
+                                          ),
+                                        ],
+                                      );
+                                    });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColor.backgroundColor,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  //shadowColor: Colors.black,
+                                  //  elevation: 5
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  textStyle: const TextStyle(fontSize: 15)),
+                              child: Text(AppLocalizations.of(context)
+                                  .translate('اشتري الان'))),
+                        ),
+                        SizedBox(
+                          height: 100.h,
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                return Container();
+              },
             ),
           ),
         ),

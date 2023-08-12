@@ -50,7 +50,7 @@
     "ads_desc": "تفاصيل الإعلان",
     "num_of_viewers": "عدد الزائرين",
     "empty_cart": "السلة فارغة",
-    "order_total": "التكلفة الكلية",
+    "order_total": "تكلفة الطلبية",
     "check_out": "استمر",
     "success": "تمت العملية بنجاح",
     "add_product": "إضافة منتج",
@@ -488,7 +488,7 @@
     "body_type": "نوع الجسم",
     "mechanical_condition": "الحالة الميكانيكية",
     "seating_capacity": "سعة الجلوس",
-    "num_of_cylinders": "Number of Cylinders",
+    "num_of_cylinders": "عدد ال Cylinders",
     "transmission_type": "Transmission Type",
     "horsepower": "قوة الحصان",
     "fuelType": "نوع الوقود",
@@ -515,5 +515,12 @@
     "whatsapp_number": "رقم واتساب",
     "next": "التالي",
     "to_home": "الى الرئيسية",
-    "service_fee": "رسوم الخدمة"
+    "service_fee": "رسوم الخدمة",
+    "Arabic": "العربية",
+    "English": "الانكليزية",
+    "review": "تقييم",
+    "visitors": "الزائرون",
+    "search_by_company_name": "البحث عن طريق اسم الشركة",
+    "مفروشات": "مفروشات",
+    "for_what": "For what"
 }

@@ -512,4 +512,35 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(RatingFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, String>> addVisitor(
+      {required String userId, required String viewerUserId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final result =
+            await authRemoteDataSource.addVisitor(userId, viewerUserId);
+        return Right(result);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<UserInfo>>> getVisitors(
+      {required String id}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final visitors = await authRemoteDataSource.getVisitors(id);
+        return Right(visitors.map((e) => e.toDomain()).toList());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
 }

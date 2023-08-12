@@ -49,6 +49,8 @@ UserInfoModel _$UserInfoModelFromJson(Map<String, dynamic> json) =>
       deliveryCarsNum: json['deliveryCarsNum'] as int?,
       deliveryMotorsNum: json['deliveryMotorsNum'] as int?,
       averageRating: (json['averageRating'] as num?)?.toDouble(),
+      totalRatings: json['totalRatings'] as int?,
+      profileViews: json['profileViews'] as int?,
     );
 
 Map<String, dynamic> _$UserInfoModelToJson(UserInfoModel instance) =>
@@ -90,4 +92,6 @@ Map<String, dynamic> _$UserInfoModelToJson(UserInfoModel instance) =>
       'followers': instance.followers,
       '_id': instance.id,
       'averageRating': instance.averageRating,
+      'totalRatings': instance.totalRatings,
+      'profileViews': instance.profileViews,
     };

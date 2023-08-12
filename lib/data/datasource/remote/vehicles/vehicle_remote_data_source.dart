@@ -8,12 +8,24 @@ import 'package:retrofit/http.dart';
 part 'vehicle_remote_data_source.g.dart';
 
 abstract class VehicleRemoteDataSource {
-  Future<VehicleResponseModel> getAllCars(String country);
+  Future<VehicleResponseModel> getAllCars(
+    String country,
+    String? creator,
+    int? priceMin,
+    int? priceMax,
+    String? type,
+  );
   Future<VehicleResponseModel> getLatestCarByCreator(String country);
 
   Future<VehicleResponseModel> getAllUsedPlanes(String country);
   Future<VehicleResponseModel> getAllNewPlanes(String country);
-  Future<VehicleResponseModel> getAllPlanes(String country);
+  Future<VehicleResponseModel> getAllPlanes(
+    String country,
+    String? creator,
+    int? priceMin,
+    int? priceMax,
+    String? type,
+  );
 
   Future<List<UserInfoModel>> getCarsCompanies(String country);
   Future<List<UserInfoModel>> getPlanesCompanies(String country);
@@ -37,6 +49,10 @@ abstract class VehicleRemoteDataSourceImpl implements VehicleRemoteDataSource {
   @GET('/categories/cars')
   Future<VehicleResponseModel> getAllCars(
     @Query('country') String country,
+    @Query('creator') String? creator,
+    @Query('priceMin') int? priceMin,
+    @Query('priceMax') int? priceMax,
+    @Query('type') String? type,
   );
 
   @override
@@ -78,5 +94,9 @@ abstract class VehicleRemoteDataSourceImpl implements VehicleRemoteDataSource {
   @GET('/categories/planes')
   Future<VehicleResponseModel> getAllPlanes(
     @Query('country') String country,
+    @Query('creator') String? creator,
+    @Query('priceMin') int? priceMin,
+    @Query('priceMax') int? priceMax,
+    @Query('type') String? type,
   );
 }

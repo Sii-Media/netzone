@@ -9,8 +9,15 @@ abstract class DealsItemsEvent extends Equatable {
 
 class DealsItemsByCatEvent extends DealsItemsEvent {
   final String category;
-
-  const DealsItemsByCatEvent({required this.category});
+  final String? companyName;
+  final int? minPrice;
+  final int? maxPrice;
+  const DealsItemsByCatEvent({
+    required this.category,
+    this.companyName,
+    this.minPrice,
+    this.maxPrice,
+  });
 }
 
 class GetDealsItemEvent extends DealsItemsEvent {}

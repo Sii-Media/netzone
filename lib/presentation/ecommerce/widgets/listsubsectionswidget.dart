@@ -87,7 +87,7 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                             ),
                           ),
                           SizedBox(
-                            height: 30.h,
+                            height: 43.h,
                             child: Text(
                               widget.deviceList.description,
                               style: TextStyle(
@@ -95,8 +95,9 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                                 fontSize: 11.sp,
                                 fontWeight: FontWeight.w600,
                               ),
-                              maxLines: 1,
+                              maxLines: 2,
                               overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
                             ),
                           ),
                           Padding(

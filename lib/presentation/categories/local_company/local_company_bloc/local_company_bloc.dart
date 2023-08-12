@@ -27,6 +27,7 @@ part 'local_company_event.dart';
 part 'local_company_state.dart';
 
 class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
+  List<UserInfo> users = [];
   final GetAllLocalCompaniesUseCase getAllLocalCompaniesUseCase;
   final GetCompanyProductsUseCase getCompanyProductsUseCase;
   final GetLocalCompaniesUseCase getLocalCompaniesUseCase;
@@ -228,6 +229,14 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
           (message) => DeleteCompanyServiceSuccess(message: message),
         ),
       );
+    });
+    on<SearchOnCompanyEvent>((event, emit) {
+      final searchResults = event.users
+          .where((user) => user.username!
+              .toLowerCase()
+              .contains(event.searchQuery.toLowerCase()))
+          .toList();
+      emit(GetLocalCompaniesSuccess(companies: searchResults));
     });
   }
 }

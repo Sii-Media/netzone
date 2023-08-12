@@ -515,5 +515,12 @@
     "whatsapp_number": "Whatsapp number",
     "next": "Next",
     "to_home": "To Home",
-    "service_fee": "Service Fee"
+    "service_fee": "Service Fee",
+    "Arabic": "Arabic",
+    "English": "English",
+    "review": "Review",
+    "visitors": "Visitors",
+    "search_by_company_name": "Search by Company Name",
+    "مفروشات": "Furniture",
+    "for_what": "For what"
 }

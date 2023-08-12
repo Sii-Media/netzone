@@ -142,37 +142,6 @@ class _CompanyServiceDetailsScreenState
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                // Row(
-                                //   children: [
-                                //     IconButton(
-                                //       onPressed: () {},
-                                //       icon: const Icon(
-                                //         Icons.favorite_border,
-                                //       ),
-                                //     ),
-                                //     SizedBox(
-                                //       width: 10.w,
-                                //     ),
-                                //     IconButton(
-                                //       onPressed: () async {
-                                //         // final urlImage = product.imageUrl;
-                                //         // final url = Uri.parse(urlImage);
-                                //         // final response = await http.get(url);
-                                //         // final bytes = response.bodyBytes;
-
-                                //         // final temp = await getTemporaryDirectory();
-                                //         // final path = '${temp.path}/image.jpg';
-                                //         // File(path).writeAsBytesSync(bytes);
-                                //         // // ignore: deprecated_member_use
-                                //         // await Share.shareFiles([path],
-                                //         //     text: 'This is Amazing');
-                                //       },
-                                //       icon: const Icon(
-                                //         Icons.share,
-                                //       ),
-                                //     )
-                                //   ],
-                                // ),
                                 SizedBox(
                                   width:
                                       MediaQuery.of(context).size.width - 16.w,
@@ -222,9 +191,14 @@ class _CompanyServiceDetailsScreenState
                                   width:
                                       MediaQuery.of(context).size.width - 16.w,
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
                                     children: [
+                                      Text(
+                                        '${widget.companyService.averageRating}',
+                                        style: const TextStyle(
+                                            color: AppColor.secondGrey,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600),
+                                      ),
                                       GestureDetector(
                                         onTap: () => showServiceRating(
                                             context: context,
@@ -239,7 +213,7 @@ class _CompanyServiceDetailsScreenState
                                           initialRating: widget.companyService
                                                   .averageRating ??
                                               0,
-                                          itemSize: 25,
+                                          itemSize: 18,
                                           ignoreGestures: true,
                                           itemBuilder: (context, _) {
                                             return const Icon(
@@ -250,6 +224,13 @@ class _CompanyServiceDetailsScreenState
                                           allowHalfRating: true,
                                           updateOnDrag: true,
                                           onRatingUpdate: (rating) {},
+                                        ),
+                                      ),
+                                      Text(
+                                        '(${widget.companyService.totalRatings} ${AppLocalizations.of(context).translate('review')})',
+                                        style: const TextStyle(
+                                          color: AppColor.secondGrey,
+                                          fontSize: 14,
                                         ),
                                       ),
                                       BlocBuilder<AuthBloc, AuthState>(

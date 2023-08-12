@@ -33,6 +33,7 @@ CategoryProductsModel _$CategoryProductsModelFromJson(
       country: json['country'] as String,
       color: json['color'] as String?,
       averageRating: (json['averageRating'] as num?)?.toDouble(),
+      totalRatings: (json['totalRatings'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$CategoryProductsModelToJson(
@@ -60,4 +61,5 @@ Map<String, dynamic> _$CategoryProductsModelToJson(
       'country': instance.country,
       'color': instance.color,
       'averageRating': instance.averageRating,
+      'totalRatings': instance.totalRatings,
     };

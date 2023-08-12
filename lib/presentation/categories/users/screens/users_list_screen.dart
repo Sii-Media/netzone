@@ -8,6 +8,7 @@ import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 
 import '../../../../injection_container.dart';
 import '../../../core/constant/colors.dart';
+import '../../../utils/app_localizations.dart';
 
 class UsersListScreen extends StatefulWidget {
   const UsersListScreen({super.key});
@@ -18,6 +19,7 @@ class UsersListScreen extends StatefulWidget {
 
 class _UsersListScreenState extends State<UsersListScreen> {
   final usersBloc = sl<UsersBloc>();
+  final controller = TextEditingController();
 
   @override
   void initState() {
@@ -62,81 +64,123 @@ class _UsersListScreenState extends State<UsersListScreen> {
                           ),
                         );
                       } else if (state is GetUsersSuccess) {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: state.users.length,
-                          itemBuilder: (BuildContext context, index) {
-                            return SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.40,
-                              child: InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) {
-                                          return UsersProfileScreen(
-                                              user: state.users[index]);
-                                        }),
-                                      );
-                                    },
-                                    child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(25.0),
-                                        child: Card(
-                                          child: Stack(
-                                            children: [
-                                              Positioned(
-                                                left: 0,
-                                                bottom: 0,
-                                                top: 0,
-                                                right: 0,
-                                                child: CachedNetworkImage(
-                                                  imageUrl: state.users[index]
-                                                          .profilePhoto ??
-                                                      'https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg',
-                                                  fit: BoxFit.contain,
-                                                ),
-                                              ),
-                                              Positioned(
-                                                bottom: 0,
-                                                left: 0,
-                                                right: 0,
-                                                child: Container(
-                                                  alignment: Alignment.center,
-                                                  height: 50.h,
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
-                                                  color: AppColor
-                                                      .backgroundColor
-                                                      .withOpacity(0.8),
-                                                  child: Center(
-                                                    child: Text(
-                                                      state.users[index]
-                                                              .username ??
-                                                          '',
-                                                      style: TextStyle(
-                                                          fontSize: 18.sp,
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        )),
+                        final filteredUsers = state.users
+                            .where((user) => user.username!
+                                .toLowerCase()
+                                .contains(controller.text.toLowerCase()))
+                            .toList();
+                        return Column(
+                          children: [
+                            TextFormField(
+                              controller: controller,
+                              decoration: InputDecoration(
+                                prefixIcon: const Icon(
+                                  Icons.search,
+                                ),
+                                hintText: AppLocalizations.of(context)
+                                    .translate('search'),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    20,
+                                  ),
+                                  borderSide: const BorderSide(
+                                    color: AppColor.backgroundColor,
                                   ),
                                 ),
                               ),
-                            );
-                          },
+                              onChanged: (value) {
+                                setState(() {});
+                              },
+                            ),
+                            SizedBox(
+                              height: 4.h,
+                            ),
+                            Expanded(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: filteredUsers.length,
+                                itemBuilder: (BuildContext context, index) {
+                                  return SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.40,
+                                    child: InkWell(
+                                      onTap: () {},
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 10),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                                return UsersProfileScreen(
+                                                    user: filteredUsers[index]);
+                                              }),
+                                            );
+                                          },
+                                          child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(25.0),
+                                              child: Card(
+                                                child: Stack(
+                                                  children: [
+                                                    Positioned(
+                                                      left: 0,
+                                                      bottom: 0,
+                                                      top: 0,
+                                                      right: 0,
+                                                      child: CachedNetworkImage(
+                                                        imageUrl: filteredUsers[
+                                                                    index]
+                                                                .profilePhoto ??
+                                                            'https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg',
+                                                        fit: BoxFit.contain,
+                                                      ),
+                                                    ),
+                                                    Positioned(
+                                                      bottom: 0,
+                                                      left: 0,
+                                                      right: 0,
+                                                      child: Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        height: 50.h,
+                                                        width: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width,
+                                                        color: AppColor
+                                                            .backgroundColor
+                                                            .withOpacity(0.8),
+                                                        child: Center(
+                                                          child: Text(
+                                                            filteredUsers[index]
+                                                                    .username ??
+                                                                '',
+                                                            style: TextStyle(
+                                                                fontSize: 18.sp,
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              )),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         );
                       }
                       return Container();

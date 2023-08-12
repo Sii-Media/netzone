@@ -7,7 +7,16 @@ abstract class AdsBlocEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetAllAdsEvent extends AdsBlocEvent {}
+class GetAllAdsEvent extends AdsBlocEvent {
+  final String? owner;
+  final int? priceMin;
+  final int? priceMax;
+  final bool? purchasable;
+  final String? year;
+
+  const GetAllAdsEvent(
+      {this.owner, this.priceMin, this.priceMax, this.purchasable, this.year});
+}
 
 class GetAdsByType extends AdsBlocEvent {
   final String userAdvertisingType;

@@ -7,11 +7,27 @@ abstract class VehicleEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetAllCarsEvent extends VehicleEvent {}
+class GetAllCarsEvent extends VehicleEvent {
+  final String? creator;
+  final int? priceMin;
+  final int? priceMax;
+  final String? type;
+
+  const GetAllCarsEvent(
+      {this.creator, this.priceMin, this.priceMax, this.type});
+}
 
 class GetLatestCarByCreatorEvent extends VehicleEvent {}
 
-class GetAllPlanesEvent extends VehicleEvent {}
+class GetAllPlanesEvent extends VehicleEvent {
+  final String? creator;
+  final int? priceMin;
+  final int? priceMax;
+  final String? type;
+
+  const GetAllPlanesEvent(
+      {this.creator, this.priceMin, this.priceMax, this.type});
+}
 
 class GetAllUsedPlanesEvent extends VehicleEvent {}
 
@@ -56,6 +72,7 @@ class AddVehicleEvent extends VehicleEvent {
   final String? technicalFeatures;
   final String? steeringSide;
   final bool? guarantee;
+  final String? forWhat;
   const AddVehicleEvent({
     required this.name,
     required this.description,
@@ -84,5 +101,6 @@ class AddVehicleEvent extends VehicleEvent {
     this.technicalFeatures,
     this.steeringSide,
     this.guarantee,
+    this.forWhat,
   });
 }

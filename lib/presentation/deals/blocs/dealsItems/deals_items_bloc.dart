@@ -40,8 +40,13 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
       final result = await getCountryUseCase(NoParams());
       result.fold((l) => null, (r) => country = r ?? 'AE');
 
-      final failureOrDealsItems = await getDealsItemsByCat(
-          DealsItemsParams(category: event.category, country: country));
+      final failureOrDealsItems = await getDealsItemsByCat(DealsItemsParams(
+        category: event.category,
+        country: country,
+        companyName: event.companyName,
+        maxPrice: event.maxPrice,
+        minPrice: event.minPrice,
+      ));
       emit(
         failureOrDealsItems.fold(
           (failure) => DealsItemsFailure(message: mapFailureToString(failure)),

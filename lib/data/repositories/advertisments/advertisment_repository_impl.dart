@@ -23,10 +23,22 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
   });
 
   @override
-  Future<Either<Failure, Advertising>> getAllAds() async {
+  Future<Either<Failure, Advertising>> getAllAds({
+    String? owner,
+    int? priceMin,
+    int? priceMax,
+    bool? purchasable,
+    String? year,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
-        final ads = await advertismentRemotDataSource.getAllAdvertisment();
+        final ads = await advertismentRemotDataSource.getAllAdvertisment(
+          owner,
+          priceMin,
+          priceMax,
+          purchasable,
+          year,
+        );
 
         return Right(ads.toDomain());
       } else {

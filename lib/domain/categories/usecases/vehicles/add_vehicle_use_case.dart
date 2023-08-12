@@ -76,6 +76,7 @@ class AddVehicleParams {
   final String? technicalFeatures;
   final String? steeringSide;
   final bool? guarantee;
+  final String? forWhat;
   AddVehicleParams({
     required this.name,
     required this.description,
@@ -106,5 +107,6 @@ class AddVehicleParams {
     this.technicalFeatures,
     this.steeringSide,
     this.guarantee,
+    this.forWhat,
   });
 }

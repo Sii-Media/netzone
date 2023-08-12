@@ -9,6 +9,7 @@ import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import '../../../../injection_container.dart';
 import '../../../core/constant/colors.dart';
 import '../../../core/widgets/on_failure_widget.dart';
+import '../../../utils/app_localizations.dart';
 
 class RealEstateListScreen extends StatefulWidget {
   const RealEstateListScreen({super.key});
@@ -19,7 +20,7 @@ class RealEstateListScreen extends StatefulWidget {
 
 class _RealEstateListScreenState extends State<RealEstateListScreen> {
   final realEstateBloc = sl<RealEstateBloc>();
-
+  final controller = TextEditingController();
   @override
   void initState() {
     realEstateBloc.add(GetAllRealEstatesEvent());
@@ -29,39 +30,74 @@ class _RealEstateListScreenState extends State<RealEstateListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BackgroundWidget(
-        widget: BlocBuilder<RealEstateBloc, RealEstateState>(
-          bloc: realEstateBloc,
-          builder: (context, state) {
-            if (state is GetRealEstateInProgress) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: AppColor.backgroundColor,
-                ),
-              );
-            } else if (state is GetRealEstateFailure) {
-              final failure = state.message;
-              return FailureWidget(
-                failure: failure,
-                onPressed: () {
-                  realEstateBloc.add(GetAllRealEstatesEvent());
-                },
-              );
-            } else if (state is GetAllRealEstatesSuccess) {
-              return RefreshIndicator(
-                onRefresh: () async {
-                  realEstateBloc.add(GetAllRealEstatesEvent());
-                },
-                color: AppColor.white,
-                backgroundColor: AppColor.backgroundColor,
-                child: Column(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          realEstateBloc.add(GetAllRealEstatesEvent());
+        },
+        color: AppColor.white,
+        backgroundColor: AppColor.backgroundColor,
+        child: BackgroundWidget(
+          widget: BlocBuilder<RealEstateBloc, RealEstateState>(
+            bloc: realEstateBloc,
+            builder: (context, state) {
+              if (state is GetRealEstateInProgress) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: AppColor.backgroundColor,
+                  ),
+                );
+              } else if (state is GetRealEstateFailure) {
+                final failure = state.message;
+                return FailureWidget(
+                  failure: failure,
+                  onPressed: () {
+                    realEstateBloc.add(GetAllRealEstatesEvent());
+                  },
+                );
+              } else if (state is GetAllRealEstatesSuccess) {
+                final filteredRealEstate = state.realEstates
+                    .where((realEstate) => realEstate.title
+                        .toLowerCase()
+                        .contains(controller.text.toLowerCase()))
+                    .toList();
+                return Column(
                   children: [
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: TextFormField(
+                        controller: controller,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(
+                            Icons.search,
+                          ),
+                          hintText:
+                              AppLocalizations.of(context).translate('search'),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                              20,
+                            ),
+                            borderSide: const BorderSide(
+                              color: AppColor.backgroundColor,
+                            ),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 2,
+                    ),
                     Expanded(
                       child: GridView.builder(
                         padding: const EdgeInsets.all(16.0),
                         shrinkWrap: true,
                         physics: const BouncingScrollPhysics(),
-                        itemCount: state.realEstates.length,
+                        itemCount: filteredRealEstate.length,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
@@ -76,7 +112,7 @@ class _RealEstateListScreenState extends State<RealEstateListScreen> {
                                 MaterialPageRoute(
                                   builder: (context) {
                                     return RealEstateDetailsScreen(
-                                        realEstate: state.realEstates[index]);
+                                        realEstate: filteredRealEstate[index]);
                                   },
                                 ),
                               );
@@ -93,7 +129,7 @@ class _RealEstateListScreenState extends State<RealEstateListScreen> {
                                     borderRadius: BorderRadius.circular(16.0),
                                     child: CachedNetworkImage(
                                       imageUrl:
-                                          state.realEstates[index].imageUrl,
+                                          filteredRealEstate[index].imageUrl,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -114,7 +150,7 @@ class _RealEstateListScreenState extends State<RealEstateListScreen> {
                                   Align(
                                     alignment: Alignment.bottomCenter,
                                     child: Text(
-                                      state.realEstates[index].title,
+                                      filteredRealEstate[index].title,
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 14.0.sp,
@@ -134,11 +170,11 @@ class _RealEstateListScreenState extends State<RealEstateListScreen> {
                       height: 80.h,
                     ),
                   ],
-                ),
-              );
-            }
-            return Container();
-          },
+                );
+              }
+              return Container();
+            },
+          ),
         ),
       ),
     );

@@ -29,7 +29,7 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
   @override
   void initState() {
     if (widget.category == 'cars') {
-      vehilceBloc.add(GetAllCarsEvent());
+      vehilceBloc.add(const GetAllCarsEvent());
     } else if (widget.category == 'plans' && widget.type == 'new') {
       vehilceBloc.add(GetAllNewPlanesEvent());
     } else if (widget.category == 'plans' && widget.type == 'used') {
@@ -52,7 +52,7 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
           child: RefreshIndicator(
             onRefresh: () async {
               if (widget.category == 'cars') {
-                vehilceBloc.add(GetAllCarsEvent());
+                vehilceBloc.add(const GetAllCarsEvent());
               } else if (widget.category == 'plans' && widget.type == 'new') {
                 vehilceBloc.add(GetAllNewPlanesEvent());
               } else if (widget.category == 'plans' && widget.type == 'used') {

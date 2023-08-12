@@ -81,3 +81,11 @@ class RateUserEvent extends GetUserEvent {
 
   const RateUserEvent({required this.id, required this.rating});
 }
+
+class AddVisitorEvent extends GetUserEvent {
+  final String userId;
+
+  const AddVisitorEvent({required this.userId});
+}
+
+class GetUserVisitorsEvent extends GetUserEvent {}

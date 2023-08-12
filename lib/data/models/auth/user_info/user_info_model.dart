@@ -50,7 +50,8 @@ class UserInfoModel {
   @JsonKey(name: '_id')
   final String id;
   final double? averageRating;
-
+  final int? totalRatings;
+  final int? profileViews;
   UserInfoModel({
     required this.username,
     required this.email,
@@ -89,6 +90,8 @@ class UserInfoModel {
     this.deliveryCarsNum,
     this.deliveryMotorsNum,
     this.averageRating,
+    this.totalRatings,
+    this.profileViews,
   });
 
   factory UserInfoModel.fromJson(Map<String, dynamic> json) =>
@@ -136,5 +139,7 @@ extension MapToDomain on UserInfoModel {
         isThereFoodsDelivery: isThereFoodsDelivery,
         isThereWarehouse: isThereWarehouse,
         averageRating: averageRating,
+        totalRatings: totalRatings,
+        profileViews: profileViews,
       );
 }

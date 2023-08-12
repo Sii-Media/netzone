@@ -11,7 +11,6 @@ import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
 import 'package:netzoon/presentation/categories/local_company/company_service_detail_screen.dart';
 import 'package:netzoon/presentation/categories/local_company/local_company_bloc/local_company_bloc.dart';
-import 'package:netzoon/presentation/categories/widgets/product_details.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,6 +22,7 @@ import '../../chat/screens/chat_page_screen.dart';
 import '../../core/blocs/country_bloc/country_bloc.dart';
 import '../../core/widgets/on_failure_widget.dart';
 import '../../core/widgets/screen_loader.dart';
+import '../../ecommerce/widgets/listsubsectionswidget.dart';
 import '../../profile/blocs/get_user/get_user_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -46,6 +46,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
     with TickerProviderStateMixin, ScreenLoader<LocalCompanyProfileScreen> {
   final productsBloc = sl<LocalCompanyBloc>();
   final userBloc = sl<GetUserBloc>();
+  final visitorBloc = sl<GetUserBloc>();
   final rateBloc = sl<GetUserBloc>();
   final prodBloc = sl<LocalCompanyBloc>();
   final adsBloc = sl<AdsBlocBloc>();
@@ -60,6 +61,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
     // productsBloc.add(GetLocalCompanyProductsEvent(id: widget.localCompany.id));
 
     userBloc.add(GetUserByIdEvent(userId: widget.localCompany.id));
+    visitorBloc.add(AddVisitorEvent(userId: widget.localCompany.id));
     prodBloc.add(GetLocalProductsEvent(username: widget.localCompany.id));
     adsBloc.add(GetUserAdsEvent(userId: widget.localCompany.id));
     authBloc.add(AuthCheckRequested());
@@ -94,7 +96,6 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
   Widget screen(BuildContext context) {
     // final TextEditingController search = TextEditingController();
     final TabController tabController = TabController(length: 3, vsync: this);
-
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -115,6 +116,17 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
               color: AppColor.backgroundColor,
             ),
           ),
+          actions: [
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: .0),
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.share,
+                    color: AppColor.backgroundColor,
+                  ),
+                )),
+          ],
         ),
         body: BlocListener<GetUserBloc, GetUserState>(
           bloc: rateBloc,
@@ -242,12 +254,101 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              state.userInfo.username ?? '',
-                                              style: TextStyle(
-                                                color: AppColor.black,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 16.sp,
+                                            SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                  133.w,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      widget.localCompany
+                                                              .username ??
+                                                          '',
+                                                      style: TextStyle(
+                                                        color: AppColor.black,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 16.sp,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 15.w,
+                                                  ),
+                                                  BlocBuilder<AuthBloc,
+                                                      AuthState>(
+                                                    bloc: authBloc,
+                                                    builder: (context, state) {
+                                                      if (state
+                                                          is AuthInProgress) {
+                                                        return const Center(
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            color: AppColor
+                                                                .backgroundColor,
+                                                          ),
+                                                        );
+                                                      } else if (state
+                                                          is Authenticated) {
+                                                        // isFollowing = state.user
+                                                        //         .userInfo.followings!
+                                                        //         .contains(widget
+                                                        //             .localCompany.id)
+                                                        //     ? true
+                                                        //     : false;
+                                                        return ElevatedButton(
+                                                          style: ButtonStyle(
+                                                            backgroundColor:
+                                                                MaterialStateProperty
+                                                                    .all(AppColor
+                                                                        .backgroundColor),
+                                                            shape: MaterialStateProperty
+                                                                .all(
+                                                                    RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          18.0),
+                                                            )),
+                                                          ),
+                                                          child: Text(
+                                                            isFollowing
+                                                                ? AppLocalizations.of(
+                                                                        context)
+                                                                    .translate(
+                                                                        'unfollow')
+                                                                : AppLocalizations.of(
+                                                                        context)
+                                                                    .translate(
+                                                                        'follow'),
+                                                            style: const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              isFollowing =
+                                                                  !isFollowing;
+                                                            });
+                                                            userBloc.add(
+                                                                ToggleFollowEvent(
+                                                                    otherUserId:
+                                                                        widget
+                                                                            .localCompany
+                                                                            .id));
+                                                          },
+                                                        );
+                                                      }
+                                                      return Container();
+                                                    },
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                             state.userInfo.slogn != null
@@ -262,27 +363,35 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                     ),
                                                   )
                                                 : const SizedBox(),
-                                            // SizedBox(
-                                            //   height: 10.h,
-                                            // ),
                                             Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
                                               children: [
+                                                Text(
+                                                  '${state.userInfo.averageRating}',
+                                                  style: const TextStyle(
+                                                      color:
+                                                          AppColor.secondGrey,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
                                                 GestureDetector(
                                                   onTap: () => showRating(
                                                       context,
-                                                      rateBloc,
-                                                      widget.localCompany.id,
-                                                      widget.localCompany
+                                                      userBloc,
+                                                      state.userInfo.id,
+                                                      state.userInfo
                                                               .averageRating ??
                                                           0),
                                                   child: RatingBar.builder(
                                                     minRating: 1,
                                                     maxRating: 5,
-                                                    initialRating: widget
-                                                            .localCompany
+                                                    initialRating: state
+                                                            .userInfo
                                                             .averageRating ??
                                                         0,
-                                                    itemSize: 25,
+                                                    itemSize: 18,
                                                     ignoreGestures: true,
                                                     itemBuilder: (context, _) {
                                                       return const Icon(
@@ -295,78 +404,15 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                     onRatingUpdate: (rating) {},
                                                   ),
                                                 ),
+                                                Text(
+                                                  '(${state.userInfo.totalRatings} ${AppLocalizations.of(context).translate('review')})',
+                                                  style: const TextStyle(
+                                                    color: AppColor.secondGrey,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
                                                 SizedBox(
                                                   width: 15.w,
-                                                ),
-                                                BlocBuilder<AuthBloc,
-                                                    AuthState>(
-                                                  bloc: authBloc,
-                                                  builder: (context, state) {
-                                                    if (state
-                                                        is AuthInProgress) {
-                                                      return const Center(
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                          color: AppColor
-                                                              .backgroundColor,
-                                                        ),
-                                                      );
-                                                    } else if (state
-                                                        is Authenticated) {
-                                                      // isFollowing = state.user
-                                                      //         .userInfo.followings!
-                                                      //         .contains(widget
-                                                      //             .localCompany.id)
-                                                      //     ? true
-                                                      //     : false;
-                                                      return ElevatedButton(
-                                                        style: ButtonStyle(
-                                                          backgroundColor:
-                                                              MaterialStateProperty
-                                                                  .all(AppColor
-                                                                      .backgroundColor),
-                                                          shape: MaterialStateProperty
-                                                              .all(
-                                                                  RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        18.0),
-                                                          )),
-                                                        ),
-                                                        child: Text(
-                                                          isFollowing
-                                                              ? AppLocalizations
-                                                                      .of(
-                                                                          context)
-                                                                  .translate(
-                                                                      'unfollow')
-                                                              : AppLocalizations
-                                                                      .of(
-                                                                          context)
-                                                                  .translate(
-                                                                      'follow'),
-                                                          style: const TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        ),
-                                                        onPressed: () {
-                                                          setState(() {
-                                                            isFollowing =
-                                                                !isFollowing;
-                                                          });
-                                                          userBloc.add(
-                                                              ToggleFollowEvent(
-                                                                  otherUserId:
-                                                                      widget
-                                                                          .localCompany
-                                                                          .id));
-                                                        },
-                                                      );
-                                                    }
-                                                    return Container();
-                                                  },
                                                 ),
                                               ],
                                             ),
@@ -462,7 +508,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                     .translate('Followings'),
                                                 style: TextStyle(
                                                     color: AppColor.secondGrey,
-                                                    fontSize: 12.sp),
+                                                    fontSize: 10.sp),
                                               ),
                                             ],
                                           ),
@@ -498,10 +544,33 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                     .translate('Followers'),
                                                 style: TextStyle(
                                                     color: AppColor.secondGrey,
-                                                    fontSize: 12.sp),
+                                                    fontSize: 10.sp),
                                               ),
                                             ],
                                           ),
+                                        ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '${state.userInfo.profileViews ?? 0}',
+                                              style: TextStyle(
+                                                color: AppColor.mainGrey,
+                                                fontSize: 15.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              AppLocalizations.of(context)
+                                                  .translate('visitors'),
+                                              style: TextStyle(
+                                                  color: AppColor.secondGrey,
+                                                  fontSize: 10.sp),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -1145,91 +1214,16 @@ class ProductListWidget extends StatelessWidget {
                         return GridView.builder(
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  childAspectRatio: 0.80,
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 0.68,
                                   crossAxisSpacing: 10.w,
                                   mainAxisSpacing: 10.h),
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
                           itemCount: state.products.length,
                           itemBuilder: (context, index) {
-                            return Container(
-                              margin: const EdgeInsets.symmetric(vertical: 8),
-                              decoration: BoxDecoration(
-                                  color: AppColor.white,
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color:
-                                          AppColor.secondGrey.withOpacity(0.5),
-                                      blurRadius: 10,
-                                      spreadRadius: 2,
-                                      offset: const Offset(0, 3),
-                                    ),
-                                  ]),
-                              child: ClipRRect(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(20)),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return ProductDetailsScreen(
-                                            products: state.products,
-                                            index: index,
-                                          );
-                                        },
-                                      ),
-                                    );
-                                  },
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      CachedNetworkImage(
-                                        imageUrl:
-                                            state.products[index].imageUrl,
-                                        height: 65.h,
-                                        width: 160.w,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            right: 9.0, left: 9.0, bottom: 2.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Expanded(
-                                              child: Center(
-                                                child: Text(
-                                                  state.products[index].name,
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    color: AppColor
-                                                        .backgroundColor,
-                                                    fontSize: 12.sp,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Text(
-                                        '${state.products[index].price} \$',
-                                        style: const TextStyle(
-                                          color: AppColor.colorTwo,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                            return ListSubSectionsWidget(
+                              deviceList: state.products[index],
                             );
                           },
                         );

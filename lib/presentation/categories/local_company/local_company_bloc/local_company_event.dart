@@ -83,3 +83,14 @@ class DeleteCompanyServiceEvent extends LocalCompanyEvent {
 
   const DeleteCompanyServiceEvent({required this.id});
 }
+
+class SearchOnCompanyEvent extends LocalCompanyEvent {
+  final String searchQuery;
+  final List<UserInfo> users;
+  const SearchOnCompanyEvent({
+    required this.searchQuery,
+    required this.users,
+  });
+  @override
+  List<Object> get props => [searchQuery];
+}

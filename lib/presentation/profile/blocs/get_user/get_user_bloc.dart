@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:netzoon/domain/auth/usecases/add_visitor_to_profile_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_user_by_id_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_user_followers_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_user_followings_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/get_user_visitors_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/rate_user_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/toggle_follow_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/add_to_selected_products_use_case.dart';
@@ -31,6 +33,8 @@ class GetUserBloc extends Bloc<GetUserEvent, GetUserState> {
   final GetUserFollowersUseCase getUserFollowersUseCase;
   final ToggleFollowUseCase toggleFollowUseCase;
   final RateUserUseCase rateUserUseCase;
+  final AddVisitorProfileUseCase addVisitorProfileUseCase;
+  final GetUserVisitorsUseCase getUserVisitorsUseCase;
   GetUserBloc({
     required this.getUserByIdUseCase,
     required this.getUserProductsUseCase,
@@ -42,6 +46,8 @@ class GetUserBloc extends Bloc<GetUserEvent, GetUserState> {
     required this.getUserFollowersUseCase,
     required this.toggleFollowUseCase,
     required this.rateUserUseCase,
+    required this.addVisitorProfileUseCase,
+    required this.getUserVisitorsUseCase,
   }) : super(GetUserInitial()) {
     on<GetUserByIdEvent>((event, emit) async {
       emit(GetUserInProgress());
@@ -230,6 +236,30 @@ class GetUserBloc extends Bloc<GetUserEvent, GetUserState> {
           (failure) => RateUserFailure(message: mapFailureToString(failure)),
           (message) => RateUserSuccess(message: message),
         ),
+      );
+    });
+    on<AddVisitorEvent>((event, emit) async {
+      final result = await getSignedInUserUseCase.call(NoParams());
+      late User user;
+      result.fold((l) => null, (r) => user = r!);
+      final success = await addVisitorProfileUseCase(AddVisitorParams(
+          userId: event.userId, viewerUserId: user.userInfo.id));
+      success.fold(
+          (failure) =>
+              emit(AddVisitorFailure(message: mapFailureToString(failure))),
+          (message) => emit(AddVisitorSuccess(message: message)));
+    });
+    on<GetUserVisitorsEvent>((event, emit) async {
+      emit(GetUserVisitorsInProgress());
+      final result = await getSignedInUserUseCase.call(NoParams());
+      late User user;
+      result.fold((l) => null, (r) => user = r!);
+      final visitors = await getUserVisitorsUseCase(user.userInfo.id);
+      emit(
+        visitors.fold(
+            (failure) =>
+                GetUserVisitorsFailure(message: mapFailureToString(failure)),
+            (visitors) => GetUserVisitorsSuccess(visitors: visitors)),
       );
     });
   }

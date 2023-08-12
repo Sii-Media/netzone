@@ -22,9 +22,22 @@ class _AdvertismentRemotDataSourceImpl
   String? baseUrl;
 
   @override
-  Future<AdvertisingModel> getAllAdvertisment() async {
+  Future<AdvertisingModel> getAllAdvertisment(
+    String? owner,
+    int? priceMin,
+    int? priceMax,
+    bool? purchasable,
+    String? year,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'owner': owner,
+      r'priceMin': priceMin,
+      r'priceMax': priceMax,
+      r'purchasable': purchasable,
+      r'year': year,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio

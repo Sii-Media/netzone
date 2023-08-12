@@ -11,6 +11,10 @@ import '../entities/vehicles/vehicle.dart';
 abstract class VehicleRepository {
   Future<Either<Failure, VehicleResponse>> getAllCars({
     required String country,
+    required String? creator,
+    required int? priceMin,
+    required int? priceMax,
+    required String? type,
   });
   Future<Either<Failure, VehicleResponse>> getLatestCarByCreator({
     required String country,
@@ -23,6 +27,10 @@ abstract class VehicleRepository {
   });
   Future<Either<Failure, VehicleResponse>> getAllPlanes({
     required String country,
+    required String? creator,
+    required int? priceMin,
+    required int? priceMax,
+    required String? type,
   });
   Future<Either<Failure, List<UserInfo>>> getCarsCompanies({
     required String country,
@@ -63,5 +71,6 @@ abstract class VehicleRepository {
     String? technicalFeatures,
     String? steeringSide,
     bool? guarantee,
+    String? forWhat,
   });
 }

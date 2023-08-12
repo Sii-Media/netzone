@@ -35,18 +35,23 @@ class DealsRepositoryImpl implements DealsRepository {
   }
 
   @override
-  Future<Either<Failure, DealsItemsResponse>> getDealsByCategory(
-      {required String category, required String country}) async {
+  Future<Either<Failure, DealsItemsResponse>> getDealsByCategory({
+    required String category,
+    required String country,
+    String? companyName,
+    int? minPrice,
+    int? maxPrice,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
-        final dealsItem =
-            await dealsRemoteDataSource.getDealsByCategory(country, category);
+        final dealsItem = await dealsRemoteDataSource.getDealsByCategory(
+            country, category, companyName, minPrice, maxPrice);
         return Right(dealsItem.toDomain());
       } else {
         return Left(OfflineFailure());
       }
     } catch (e) {
-      return Left(ServerFailure());
+      return Left(FilteredFailure());
     }
   }
 

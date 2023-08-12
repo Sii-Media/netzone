@@ -11,7 +11,7 @@ final List<Category> cat = [
   const Category(url: 'assets/images/ships.png', name: 'sea_companies'),
   const Category(url: 'assets/images/cars.png', name: 'cars'),
   const Category(url: 'assets/images/plan.jpg', name: 'civil_aircraft'),
-  const Category(url: 'assets/images/governmental.jpg', name: 'customs'),
+  // const Category(url: 'assets/images/governmental.jpg', name: 'customs'),
   const Category(url: 'assets/images/users.png', name: 'users'),
   const Category(url: 'assets/images/real_estate.jpg', name: 'real_estate'),
   const Category(url: 'assets/images/seller.jpg', name: 'traders'),

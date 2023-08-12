@@ -36,80 +36,237 @@ class _ViewAllDealsScreenState extends State<ViewAllDealsScreen> {
     super.initState();
   }
 
+  TextEditingController searchController = TextEditingController();
+  String? companyName;
+  double priceMin = 0;
+  double priceMax = 1000000;
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
-        body: SingleChildScrollView(
-      child: RefreshIndicator(
-        onRefresh: () async {
-          dealsItemBloc.add(DealsItemsByCatEvent(category: widget.category));
-        },
-        color: AppColor.white,
-        backgroundColor: AppColor.backgroundColor,
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: BackgroundWidget(
-            // title: "المناقصات",
-            widget: BlocBuilder<DealsItemsBloc, DealsItemsState>(
-              bloc: dealsItemBloc,
-              builder: (context, state) {
-                if (state is DealsItemsInProgress) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColor.backgroundColor,
-                    ),
-                  );
-                } else if (state is DealsItemsFailure) {
-                  final failure = state.message;
-                  return Center(
-                    child: Text(
-                      failure,
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 25.sp,
-                      ),
-                    ),
-                  );
-                } else if (state is DealsItemsSuccess) {
-                  return SizedBox(
-                    height: size.height,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: state.dealsItems.length,
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                width: MediaQuery.of(context).size.width,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Deals(
-                                  dealsInfo: state.dealsItems[index],
-                                ),
-                              );
-                            },
+        body: BackgroundWidget(
+      // title: "المناقصات",
+      widget: BlocBuilder<DealsItemsBloc, DealsItemsState>(
+        bloc: dealsItemBloc,
+        builder: (context, state) {
+          if (state is DealsItemsInProgress) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: AppColor.backgroundColor,
+              ),
+            );
+          } else if (state is DealsItemsFailure) {
+            final failure = state.message;
+            return Center(
+              child: Text(
+                failure,
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 25.sp,
+                ),
+              ),
+            );
+          } else if (state is DealsItemsSuccess) {
+            final filteredUsers = state.dealsItems
+                .where((prod) => prod.name
+                    .toLowerCase()
+                    .contains(searchController.text.toLowerCase()))
+                .toList();
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0, top: 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: searchController,
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                          style: const TextStyle(color: AppColor.black),
+                          decoration: InputDecoration(
+                            // filled: true,
+                            hintText: AppLocalizations.of(context)
+                                .translate('search'),
+                            hintStyle:
+                                const TextStyle(color: AppColor.secondGrey),
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 30)
+                                .flipped,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: AppColor
+                                      .backgroundColor), //<-- Set border color for focused state
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: AppColor
+                                      .backgroundColor), //<-- Set border color for enabled state
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
                         ),
-                        SizedBox(
-                          height: 80.h,
+                      ),
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          _showFilterBottomSheet(context);
+                        },
+                        icon: const Icon(
+                          Icons.filter_alt,
+                          color: AppColor.backgroundColor,
+                          size: 30,
                         ),
-                      ],
-                    ),
-                  );
-                }
-                return Container();
-              },
-            ),
-          ),
-        ),
+                      )
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: filteredUsers.length,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Deals(
+                          dealsInfo: filteredUsers[index],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 80.h,
+                ),
+              ],
+            );
+          }
+          return Container();
+        },
       ),
     ));
+  }
+
+  void _showFilterBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColor.backgroundColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30),
+        ),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.all(26),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Text field to write owner name
+                    TextFormField(
+                      onChanged: (value) {
+                        setState(() {
+                          companyName = value;
+                        });
+                      },
+                      style: const TextStyle(color: AppColor.white),
+                      decoration: InputDecoration(
+                        filled: true,
+                        hintText: AppLocalizations.of(context)
+                            .translate('search_by_company_name'),
+                        hintStyle: const TextStyle(color: AppColor.white),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        contentPadding: const EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 30)
+                            .flipped,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: AppColor
+                                  .white), //<-- Set border color for focused state
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Colors
+                                  .white), //<-- Set border color for enabled state
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 16),
+                    // Slider range for price
+                    Text(
+                      '${AppLocalizations.of(context).translate('price')} :',
+                      style: const TextStyle(
+                        color: AppColor.white,
+                      ),
+                    ),
+                    RangeSlider(
+                      values: RangeValues(priceMin, priceMax),
+                      min: priceMin,
+                      max: priceMax,
+                      onChanged: (RangeValues values) {
+                        setState(() {
+                          priceMin = values.start;
+                          priceMax = values.end;
+                        });
+                      },
+                      activeColor: AppColor.white,
+                      divisions: priceMax.toInt(),
+                      labels:
+                          RangeLabels(priceMin.toString(), priceMax.toString()),
+                    ),
+
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                          AppColor.white,
+                        ),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        )),
+                      ),
+                      onPressed: () {
+                        dealsItemBloc.add(DealsItemsByCatEvent(
+                          category: widget.category,
+                          companyName: companyName,
+                          minPrice: priceMin.toInt(),
+                          maxPrice: priceMax.toInt(),
+                        ));
+
+                        // Close the bottom sheet after applying filters
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('apply_filters'),
+                        style: const TextStyle(
+                            color: AppColor.backgroundColor,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }
 

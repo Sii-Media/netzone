@@ -49,6 +49,9 @@ class UserInfo {
 
   final String id;
   final double? averageRating;
+  final int? totalRatings;
+  final int? profileViews;
+
   UserInfo({
     required this.username,
     required this.email,
@@ -91,5 +94,7 @@ class UserInfo {
     this.deliveryCarsNum,
     this.deliveryMotorsNum,
     this.averageRating,
+    this.totalRatings,
+    this.profileViews,
   });
 }

@@ -16,6 +16,8 @@ class CompanyServiceModel {
   final List<String>? serviceImageList;
   final String? whatsAppNumber;
   final double? averageRating;
+  final double? totalRatings;
+
   CompanyServiceModel({
     required this.id,
     required this.title,
@@ -26,6 +28,7 @@ class CompanyServiceModel {
     this.serviceImageList,
     this.whatsAppNumber,
     this.averageRating,
+    this.totalRatings,
   });
 
   factory CompanyServiceModel.fromJson(Map<String, dynamic> json) =>
@@ -45,5 +48,6 @@ extension MapToDomain on CompanyServiceModel {
         serviceImageList: serviceImageList,
         whatsAppNumber: whatsAppNumber,
         averageRating: averageRating,
+        totalRatings: totalRatings,
       );
 }

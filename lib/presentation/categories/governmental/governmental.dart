@@ -117,7 +117,7 @@ class _GovernmentInstitutionScreenState
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
-                                    childAspectRatio: 0.95,
+                                    childAspectRatio: 0.91,
                                     crossAxisSpacing: 10.w,
                                     mainAxisSpacing: 10.h),
                             shrinkWrap: true,
@@ -140,12 +140,39 @@ class _GovernmentInstitutionScreenState
                                   },
                                   child: Card(
                                     shadowColor: Colors.grey,
-                                    child: CachedNetworkImage(
-                                      imageUrl: state.companies
-                                          .govermentalCompanies[index].imgurl,
-                                      height: 60,
-                                      width: 60,
-                                      fit: BoxFit.fill,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        CachedNetworkImage(
+                                          imageUrl: state
+                                              .companies
+                                              .govermentalCompanies[index]
+                                              .imgurl,
+                                          height: 120,
+                                          width: 160,
+                                          fit: BoxFit.fill,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 3.0),
+                                          child: Text(
+                                            state
+                                                .companies
+                                                .govermentalCompanies[index]
+                                                .name,
+                                            style: TextStyle(
+                                                color: AppColor.backgroundColor,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 10.sp),
+                                            textAlign: TextAlign.center,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   ),
                                 ),

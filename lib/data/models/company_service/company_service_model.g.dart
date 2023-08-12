@@ -19,6 +19,7 @@ CompanyServiceModel _$CompanyServiceModelFromJson(Map<String, dynamic> json) =>
           .toList(),
       whatsAppNumber: json['whatsAppNumber'] as String?,
       averageRating: (json['averageRating'] as num?)?.toDouble(),
+      totalRatings: (json['totalRatings'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$CompanyServiceModelToJson(
@@ -33,4 +34,5 @@ Map<String, dynamic> _$CompanyServiceModelToJson(
       'serviceImageList': instance.serviceImageList,
       'whatsAppNumber': instance.whatsAppNumber,
       'averageRating': instance.averageRating,
+      'totalRatings': instance.totalRatings,
     };

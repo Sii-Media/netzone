@@ -50,7 +50,8 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
                     RadioListTile<String>(
                       activeColor: AppColor.backgroundColor,
                       title: Text(
-                        language['name']!,
+                        AppLocalizations.of(context)
+                            .translate(language['name']!),
                         style: const TextStyle(color: AppColor.backgroundColor),
                       ),
                       value: language['code'] ?? '',

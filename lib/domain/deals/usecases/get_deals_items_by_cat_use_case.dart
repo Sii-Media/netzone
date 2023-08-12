@@ -12,12 +12,26 @@ class GetDealsItemsByCatUseCase
   @override
   Future<Either<Failure, DealsItemsResponse>> call(params) {
     return dealsRepository.getDealsByCategory(
-        category: params.category, country: params.country);
+      category: params.category,
+      country: params.country,
+      companyName: params.companyName,
+      minPrice: params.minPrice,
+      maxPrice: params.maxPrice,
+    );
   }
 }
 
 class DealsItemsParams {
   final String category;
   final String country;
-  DealsItemsParams({required this.category, required this.country});
+  final String? companyName;
+  final int? minPrice;
+  final int? maxPrice;
+  DealsItemsParams({
+    required this.category,
+    required this.country,
+    this.companyName,
+    this.minPrice,
+    this.maxPrice,
+  });
 }

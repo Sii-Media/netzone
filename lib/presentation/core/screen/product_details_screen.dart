@@ -505,32 +505,60 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                     )
                                                   ],
                                                 ),
-                                                GestureDetector(
-                                                  onTap: () => showProductRating(
-                                                      context: context,
-                                                      productBloc: rateBloc,
-                                                      id: state.product.id,
-                                                      userRate: state.product
-                                                              .averageRating ??
-                                                          0),
-                                                  child: RatingBar.builder(
-                                                    minRating: 1,
-                                                    maxRating: 5,
-                                                    initialRating: state.product
-                                                            .averageRating ??
-                                                        0,
-                                                    itemSize: 25,
-                                                    ignoreGestures: true,
-                                                    itemBuilder: (context, _) {
-                                                      return const Icon(
-                                                        Icons.star,
-                                                        color: Colors.amber,
-                                                      );
-                                                    },
-                                                    allowHalfRating: true,
-                                                    updateOnDrag: true,
-                                                    onRatingUpdate: (rating) {},
-                                                  ),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      '${state.product.averageRating}',
+                                                      style: const TextStyle(
+                                                          color: AppColor
+                                                              .secondGrey,
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () =>
+                                                          showProductRating(
+                                                              context: context,
+                                                              productBloc:
+                                                                  rateBloc,
+                                                              id: state
+                                                                  .product.id,
+                                                              userRate: state
+                                                                      .product
+                                                                      .averageRating ??
+                                                                  0),
+                                                      child: RatingBar.builder(
+                                                        minRating: 1,
+                                                        maxRating: 5,
+                                                        initialRating: state
+                                                                .product
+                                                                .averageRating ??
+                                                            0,
+                                                        itemSize: 25,
+                                                        ignoreGestures: true,
+                                                        itemBuilder:
+                                                            (context, _) {
+                                                          return const Icon(
+                                                            Icons.star,
+                                                            color: Colors.amber,
+                                                          );
+                                                        },
+                                                        allowHalfRating: true,
+                                                        updateOnDrag: true,
+                                                        onRatingUpdate:
+                                                            (rating) {},
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      '(${state.product.totalRatings} ${AppLocalizations.of(context).translate('review')})',
+                                                      style: const TextStyle(
+                                                        color:
+                                                            AppColor.secondGrey,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ],
                                             ),

@@ -122,4 +122,13 @@ abstract class AuthRepository {
     required double rating,
     required String userId,
   });
+
+  Future<Either<Failure, String>> addVisitor({
+    required String userId,
+    required String viewerUserId,
+  });
+
+  Future<Either<Failure, List<UserInfo>>> getVisitors({
+    required String id,
+  });
 }

@@ -37,7 +37,7 @@ class VehicleModel {
   final String? technicalFeatures;
   final String? steeringSide;
   final bool? guarantee;
-
+  final String? forWhat;
   VehicleModel({
     this.id,
     required this.name,
@@ -69,6 +69,7 @@ class VehicleModel {
     this.technicalFeatures,
     this.steeringSide,
     this.guarantee,
+    this.forWhat,
   });
 
   factory VehicleModel.fromJson(Map<String, dynamic> json) =>
@@ -108,5 +109,6 @@ extension MapToDomain on VehicleModel {
         technicalFeatures: technicalFeatures,
         transmissionType: transmissionType,
         guarantee: guarantee,
+        forWhat: forWhat,
       );
 }

@@ -9,15 +9,6 @@ import 'package:netzoon/presentation/categories/main_categories.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/data/advertisments.dart';
 import 'package:netzoon/presentation/data/categories.dart';
-import 'package:netzoon/presentation/data/deals.dart';
-import 'package:netzoon/presentation/data/devices.dart';
-import 'package:netzoon/presentation/data/electronic_devices.dart';
-import 'package:netzoon/presentation/data/food_products.dart';
-import 'package:netzoon/presentation/data/men_fashion.dart';
-import 'package:netzoon/presentation/data/perfumes.dart';
-import 'package:netzoon/presentation/data/tenders.dart';
-import 'package:netzoon/presentation/data/watches.dart';
-import 'package:netzoon/presentation/data/woman_fashion.dart';
 import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/deals_list_widget.dart';
 import 'package:netzoon/presentation/deals/deals_screen.dart';
@@ -49,22 +40,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final categories = cat;
-  final electronicDevices = elecDevices;
-  final homeDevices = devices;
-  final menfasion = menFashion;
-  final womanfashion = womanFashion;
-  final foodproduct = foodProducts;
-  final perfumeslist = perfumes;
-  final tendersList = tenders;
-  final dealslist = deals;
-  // final newsList = news;
-  final watchesList = watches;
+
   final advertismentList = advertisments;
-  final List<String> images = [
-    'https://media.istockphoto.com/id/1311148884/vector/abstract-globe-background.jpg?s=612x612&w=0&k=20&c=9rVQfrUGNtR5Q0ygmuQ9jviVUfrnYHUHcfiwaH5-WFE=',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoY6ZAIPLpK4ibf35Va-S-MsDM2NM8AHocfOxHrj3C&s',
-    'https://static.vecteezy.com/system/resources/thumbnails/004/216/831/original/3d-world-news-background-loop-free-video.jpg',
-  ];
+
   final PageController controller = PageController(initialPage: 0);
 
   final newsBloc = sl<NewsBloc>();
@@ -103,7 +81,7 @@ class _HomePageState extends State<HomePage> {
     musicBloc.add(const GetElcDevicesEvent(department: 'آلات موسيقية'));
     sportBloc.add(const GetElcDevicesEvent(department: 'أجهزة رياضية'));
     agricultureBloc.add(const GetElcDevicesEvent(department: 'الزراعة'));
-    planesBloc.add(GetAllPlanesEvent());
+    planesBloc.add(const GetAllPlanesEvent());
     carsBloc.add(GetLatestCarByCreatorEvent());
     realEstateBloc.add(GetAllRealEstatesEvent());
     // _animationController = AnimationController(
@@ -140,7 +118,7 @@ class _HomePageState extends State<HomePage> {
           musicBloc.add(const GetElcDevicesEvent(department: 'آلات موسيقية'));
           sportBloc.add(const GetElcDevicesEvent(department: 'أجهزة رياضية'));
           agricultureBloc.add(const GetElcDevicesEvent(department: 'الزراعة'));
-          planesBloc.add(GetAllPlanesEvent());
+          planesBloc.add(const GetAllPlanesEvent());
           carsBloc.add(GetLatestCarByCreatorEvent());
           realEstateBloc.add(GetAllRealEstatesEvent());
         },
@@ -334,141 +312,6 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 10.0,
                 ),
-                // TitleAndButton(
-                //   title: AppLocalizations.of(context).translate('سيارات'),
-                //   icon: true,
-                //   onPress: () {
-                //     Navigator.of(context).push(
-                //       MaterialPageRoute(builder: (context) {
-                //         return const VehicleListScreen(
-                //           vehicleType: 'cars',
-                //         );
-                //       }),
-                //     );
-                //   },
-                // ),
-                // BlocBuilder<VehicleBloc, VehicleState>(
-                //   bloc: carsBloc,
-                //   builder: (context, state) {
-                //     if (state is VehicleInProgress) {
-                //       return const Center(
-                //         child: CircularProgressIndicator(
-                //           color: AppColor.backgroundColor,
-                //         ),
-                //       );
-                //     } else if (state is VehicleFailure) {
-                //       final failure = state.message;
-                //       return FailureWidget(
-                //         failure: failure,
-                //         onPressed: () {
-                //           carsBloc.add(GetLatestCarByCreatorEvent());
-                //         },
-                //       );
-                //     } else if (state is VehicleSuccess) {
-                //       return Container(
-                //         padding: const EdgeInsets.symmetric(
-                //           vertical: 3.0,
-                //         ),
-                //         width: MediaQuery.of(context).size.width,
-                //         // decoration: BoxDecoration(
-                //         //   color: const Color.fromARGB(255, 209, 219, 235)
-                //         //       .withOpacity(0.8),
-                //         // ),
-                //         height: 130.h,
-                //         child: state.vehilces.isNotEmpty
-                //             ? ListView.builder(
-                //                 shrinkWrap: true,
-                //                 physics: const BouncingScrollPhysics(),
-                //                 itemCount: state.vehilces.length,
-                //                 scrollDirection: Axis.horizontal,
-                //                 itemBuilder: (context, index) {
-                //                   return GestureDetector(
-                //                     onTap: () {
-                //                       Navigator.of(context).push(
-                //                         MaterialPageRoute(
-                //                           builder: (context) {
-                //                             return VehicleDetailsScreen(
-                //                               vehicle: state.vehilces[index],
-                //                             );
-                //                           },
-                //                         ),
-                //                       );
-                //                     },
-                //                     child: Card(
-                //                       elevation: 10.0,
-                //                       shadowColor: AppColor.mainGrey,
-                //                       shape: RoundedRectangleBorder(
-                //                         borderRadius:
-                //                             BorderRadius.circular(16.0),
-                //                       ),
-                //                       child: SizedBox(
-                //                         height: 100.h,
-                //                         width: 180.w,
-                //                         child: Stack(
-                //                           // fit: StackFit.expand,
-                //                           alignment:
-                //                               AlignmentDirectional.bottomCenter,
-                //                           children: [
-                //                             ClipRRect(
-                //                               borderRadius:
-                //                                   BorderRadius.circular(16.0),
-                //                               child: CachedNetworkImage(
-                //                                 imageUrl: state
-                //                                     .vehilces[index].imageUrl,
-                //                                 height: 200.h,
-                //                                 width: double.maxFinite,
-                //                                 fit: BoxFit.cover,
-                //                               ),
-                //                             ),
-                //                             Container(
-                //                               decoration: BoxDecoration(
-                //                                 borderRadius:
-                //                                     BorderRadius.circular(16.0),
-                //                                 gradient: LinearGradient(
-                //                                   begin: Alignment.topCenter,
-                //                                   end: Alignment.bottomCenter,
-                //                                   colors: [
-                //                                     Colors.transparent,
-                //                                     AppColor.backgroundColor
-                //                                         .withOpacity(0.6),
-                //                                   ],
-                //                                 ),
-                //                               ),
-                //                             ),
-                //                             Align(
-                //                               alignment: Alignment.bottomCenter,
-                //                               child: Text(
-                //                                 state.vehilces[index].name,
-                //                                 style: TextStyle(
-                //                                   color: Colors.white,
-                //                                   fontSize: 14.0.sp,
-                //                                   fontWeight: FontWeight.bold,
-                //                                 ),
-                //                                 textAlign: TextAlign.right,
-                //                               ),
-                //                             ),
-                //                           ],
-                //                         ),
-                //                       ),
-                //                     ),
-                //                   );
-                //                 },
-                //               )
-                //             : Center(
-                //                 child: Text(
-                //                   AppLocalizations.of(context).translate(
-                //                       'there_is_no_cars_in_this_country'),
-                //                   style: TextStyle(
-                //                     color: AppColor.backgroundColor,
-                //                     fontSize: 15.sp,
-                //                   ),
-                //                 ),
-                //               ),
-                //       );
-                //     }
-                //     return Container();
-                //   },
-                // ),
                 buildVehicleSection(
                     vehicleType: 'cars',
                     title: 'سيارات',
@@ -625,7 +468,7 @@ class _HomePageState extends State<HomePage> {
                     bloc: planesBloc,
                     context: context,
                     onFailurePressed: () {
-                      planesBloc.add(GetAllPlanesEvent());
+                      planesBloc.add(const GetAllPlanesEvent());
                     }),
                 const SizedBox(
                   height: 10.0,
@@ -711,9 +554,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) {
-                          return AdvertisingScreen(
-                            advertisment: advertismentList,
-                          );
+                          return const AdvertisingScreen();
                         },
                       ),
                     );

@@ -8,6 +8,7 @@ import 'package:netzoon/presentation/chat/screens/chat_home_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
+import 'package:netzoon/presentation/profile/screens/visitors_screen.dart';
 
 import '../../../injection_container.dart';
 import '../../categories/local_company/company_service_detail_screen.dart';
@@ -287,7 +288,7 @@ class _MyLocalCompanyProfileScreenState
                                           roundedIconText(
                                             context: context,
                                             text: state.userInfo.isService ==
-                                                        false &&
+                                                        false ||
                                                     state.userInfo.isService ==
                                                         null
                                                 ? 'Recovered products'
@@ -390,6 +391,39 @@ class _MyLocalCompanyProfileScreenState
                                                 Text(
                                                   AppLocalizations.of(context)
                                                       .translate('Followers'),
+                                                  style: TextStyle(
+                                                      color:
+                                                          AppColor.secondGrey,
+                                                      fontSize: 15.sp),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) {
+                                                return const VisitorsScreen();
+                                              }));
+                                            },
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  '${state.userInfo.profileViews ?? 0}',
+                                                  style: TextStyle(
+                                                    color: AppColor.mainGrey,
+                                                    fontSize: 18.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  AppLocalizations.of(context)
+                                                      .translate('visitors'),
                                                   style: TextStyle(
                                                       color:
                                                           AppColor.secondGrey,

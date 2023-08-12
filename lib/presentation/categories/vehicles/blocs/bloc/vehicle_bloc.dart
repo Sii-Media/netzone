@@ -55,7 +55,13 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
       late String country;
       final countryresult = await getCountryUseCase(NoParams());
       countryresult.fold((l) => null, (r) => country = r ?? 'AE');
-      final failureOrCars = await getAllCarsUseCase(country);
+      final failureOrCars = await getAllCarsUseCase(GetAllCarsParams(
+        country: country,
+        creator: event.creator,
+        priceMax: event.priceMax,
+        priceMin: event.priceMin,
+        type: event.type,
+      ));
 
       emit(
         failureOrCars.fold(
@@ -83,7 +89,13 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
       late String country;
       final countryresult = await getCountryUseCase(NoParams());
       countryresult.fold((l) => null, (r) => country = r ?? 'AE');
-      final failureOrPlanes = await getAllPlanesUseCase(country);
+      final failureOrPlanes = await getAllPlanesUseCase(GetAllPlanesParams(
+        country: country,
+        creator: event.creator,
+        priceMax: event.priceMax,
+        priceMin: event.priceMin,
+        type: event.type,
+      ));
 
       emit(
         failureOrPlanes.fold(
@@ -208,6 +220,7 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
         steeringSide: event.steeringSide,
         technicalFeatures: event.technicalFeatures,
         transmissionType: event.transmissionType,
+        forWhat: event.forWhat,
       ));
       emit(
         response.fold(

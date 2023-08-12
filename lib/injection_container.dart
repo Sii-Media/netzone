@@ -63,6 +63,7 @@ import 'package:netzoon/domain/advertisements/usercases/get_advertisements_useca
 import 'package:netzoon/domain/advertisements/usercases/get_user_ads_use_case.dart';
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
 import 'package:netzoon/domain/auth/usecases/add_account_to_user_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/add_visitor_to_profile_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/change_account_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/change_password_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/edit_profile_use_case.dart';
@@ -72,6 +73,7 @@ import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_user_accounts_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_user_followers_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_user_followings_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/get_user_visitors_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/logout_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/rate_user_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/set_first_time_logged_use_case.dart';
@@ -405,6 +407,8 @@ Future<void> init() async {
         getUserFollowingsUseCase: sl(),
         toggleFollowUseCase: sl(),
         rateUserUseCase: sl(),
+        addVisitorProfileUseCase: sl(),
+        getUserVisitorsUseCase: sl(),
       ));
 
   sl.registerFactory(() => ChangePasswordBloc(
@@ -704,6 +708,11 @@ Future<void> init() async {
 
   sl.registerLazySingleton(
       () => DeleteCompanyServiceUseCase(localCompanyRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => AddVisitorProfileUseCase(authRepository: sl()));
+
+  sl.registerLazySingleton(() => GetUserVisitorsUseCase(authRepository: sl()));
 
   //! Repositories
 

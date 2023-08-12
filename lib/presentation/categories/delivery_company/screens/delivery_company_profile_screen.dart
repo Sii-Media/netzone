@@ -226,12 +226,91 @@ class _DeliveryCompanyProfileScreenState
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      widget.deliveryCompany.username ?? '',
-                                      style: TextStyle(
-                                        color: AppColor.black,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16.sp,
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width -
+                                          133.w,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              widget.deliveryCompany.username ??
+                                                  '',
+                                              style: TextStyle(
+                                                color: AppColor.black,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16.sp,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 15.w,
+                                          ),
+                                          BlocBuilder<AuthBloc, AuthState>(
+                                            bloc: authBloc,
+                                            builder: (context, state) {
+                                              if (state is AuthInProgress) {
+                                                return const Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: AppColor
+                                                        .backgroundColor,
+                                                  ),
+                                                );
+                                              } else if (state
+                                                  is Authenticated) {
+                                                // isFollowing = state.user
+                                                //         .userInfo.followings!
+                                                //         .contains(widget
+                                                //             .localCompany.id)
+                                                //     ? true
+                                                //     : false;
+                                                return ElevatedButton(
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all(AppColor
+                                                                .backgroundColor),
+                                                    shape: MaterialStateProperty
+                                                        .all(
+                                                            RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              18.0),
+                                                    )),
+                                                  ),
+                                                  child: Text(
+                                                    isFollowing
+                                                        ? AppLocalizations.of(
+                                                                context)
+                                                            .translate(
+                                                                'unfollow')
+                                                        : AppLocalizations.of(
+                                                                context)
+                                                            .translate(
+                                                                'follow'),
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      isFollowing =
+                                                          !isFollowing;
+                                                    });
+                                                    userBloc.add(
+                                                        ToggleFollowEvent(
+                                                            otherUserId: widget
+                                                                .deliveryCompany
+                                                                .id));
+                                                  },
+                                                );
+                                              }
+                                              return Container();
+                                            },
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     widget.deliveryCompany.slogn != null
@@ -245,7 +324,16 @@ class _DeliveryCompanyProfileScreenState
                                           )
                                         : const SizedBox(),
                                     Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
+                                        Text(
+                                          '${widget.deliveryCompany.averageRating}',
+                                          style: const TextStyle(
+                                              color: AppColor.secondGrey,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600),
+                                        ),
                                         GestureDetector(
                                           onTap: () => showRating(
                                               context,
@@ -261,7 +349,7 @@ class _DeliveryCompanyProfileScreenState
                                                     .deliveryCompany
                                                     .averageRating ??
                                                 0,
-                                            itemSize: 25,
+                                            itemSize: 18,
                                             ignoreGestures: true,
                                             itemBuilder: (context, _) {
                                               return const Icon(
@@ -274,67 +362,15 @@ class _DeliveryCompanyProfileScreenState
                                             onRatingUpdate: (rating) {},
                                           ),
                                         ),
+                                        Text(
+                                          '(${widget.deliveryCompany.totalRatings} ${AppLocalizations.of(context).translate('review')})',
+                                          style: const TextStyle(
+                                            color: AppColor.secondGrey,
+                                            fontSize: 14,
+                                          ),
+                                        ),
                                         SizedBox(
                                           width: 15.w,
-                                        ),
-                                        BlocBuilder<AuthBloc, AuthState>(
-                                          bloc: authBloc,
-                                          builder: (context, state) {
-                                            if (state is AuthInProgress) {
-                                              return const Center(
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  color:
-                                                      AppColor.backgroundColor,
-                                                ),
-                                              );
-                                            } else if (state is Authenticated) {
-                                              // isFollowing = state.user
-                                              //         .userInfo.followings!
-                                              //         .contains(widget
-                                              //             .localCompany.id)
-                                              //     ? true
-                                              //     : false;
-                                              return ElevatedButton(
-                                                style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          AppColor
-                                                              .backgroundColor),
-                                                  shape:
-                                                      MaterialStateProperty.all(
-                                                          RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            18.0),
-                                                  )),
-                                                ),
-                                                child: Text(
-                                                  isFollowing
-                                                      ? AppLocalizations.of(
-                                                              context)
-                                                          .translate('unfollow')
-                                                      : AppLocalizations.of(
-                                                              context)
-                                                          .translate('follow'),
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                onPressed: () {
-                                                  setState(() {
-                                                    isFollowing = !isFollowing;
-                                                  });
-                                                  userBloc.add(
-                                                      ToggleFollowEvent(
-                                                          otherUserId: widget
-                                                              .deliveryCompany
-                                                              .id));
-                                                },
-                                              );
-                                            }
-                                            return Container();
-                                          },
                                         ),
                                       ],
                                     ),

@@ -90,14 +90,6 @@ class _SubSectionsScreenState extends State<SubSectionsScreen> {
                               child: Row(
                                 children: [
                                   Expanded(
-                                    // child: TextFormField(
-                                    //   controller: searchController,
-                                    //   onChanged: (value) {},
-                                    //   decoration: InputDecoration(
-                                    //     labelText: 'Search by Owner Name',
-                                    //     border: OutlineInputBorder(),
-                                    //   ),
-                                    // ),
                                     child: TextFormField(
                                       controller: searchController,
                                       onChanged: (value) {
@@ -148,7 +140,7 @@ class _SubSectionsScreenState extends State<SubSectionsScreen> {
                                       color: AppColor.backgroundColor,
                                       size: 30,
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),

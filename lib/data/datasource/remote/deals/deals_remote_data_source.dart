@@ -12,6 +12,9 @@ abstract class DealsRemoteDataSource {
   Future<DealsItemsResponseModel> getDealsByCategory(
     final String country,
     final String category,
+    String? companyName,
+    int? minPrice,
+    int? maxPrice,
   );
   Future<DealsItemsResponseModel> getDealsItems(String country);
 
@@ -41,6 +44,9 @@ abstract class DealsRemoteDataSourceImpl implements DealsRemoteDataSource {
   Future<DealsItemsResponseModel> getDealsByCategory(
     @Query('country') String country,
     @Query('category') String category,
+    @Query('companyName') String? companyName,
+    @Query('minPrice') int? minPrice,
+    @Query('maxPrice') int? maxPrice,
   );
 
   @override

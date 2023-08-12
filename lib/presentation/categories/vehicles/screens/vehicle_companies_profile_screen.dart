@@ -17,12 +17,11 @@ import '../../../auth/blocs/auth_bloc/auth_bloc.dart';
 import '../../../chat/screens/chat_page_screen.dart';
 import '../../../core/blocs/country_bloc/country_bloc.dart';
 import '../../../core/constant/colors.dart';
-import '../../../core/helpers/get_currency_of_country.dart';
 import '../../../core/widgets/phone_call_button.dart';
-import '../../../core/widgets/vehicle_details.dart';
 import '../../../profile/blocs/get_user/get_user_bloc.dart';
 import '../../../utils/app_localizations.dart';
 import '../../widgets/build_rating.dart';
+import '../widgets/vehicle_widget.dart';
 
 class VehicleCompaniesProfileScreen extends StatefulWidget {
   const VehicleCompaniesProfileScreen(
@@ -229,12 +228,91 @@ class _VehicleCompaniesProfileScreenState
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      widget.vehiclesCompany.username ?? '',
-                                      style: TextStyle(
-                                        color: AppColor.black,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16.sp,
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width -
+                                          133.w,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              widget.vehiclesCompany.username ??
+                                                  '',
+                                              style: TextStyle(
+                                                color: AppColor.black,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16.sp,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 15.w,
+                                          ),
+                                          BlocBuilder<AuthBloc, AuthState>(
+                                            bloc: authBloc,
+                                            builder: (context, state) {
+                                              if (state is AuthInProgress) {
+                                                return const Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: AppColor
+                                                        .backgroundColor,
+                                                  ),
+                                                );
+                                              } else if (state
+                                                  is Authenticated) {
+                                                // isFollowing = state.user
+                                                //         .userInfo.followings!
+                                                //         .contains(widget
+                                                //             .localCompany.id)
+                                                //     ? true
+                                                //     : false;
+                                                return ElevatedButton(
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all(AppColor
+                                                                .backgroundColor),
+                                                    shape: MaterialStateProperty
+                                                        .all(
+                                                            RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              18.0),
+                                                    )),
+                                                  ),
+                                                  child: Text(
+                                                    isFollowing
+                                                        ? AppLocalizations.of(
+                                                                context)
+                                                            .translate(
+                                                                'unfollow')
+                                                        : AppLocalizations.of(
+                                                                context)
+                                                            .translate(
+                                                                'follow'),
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      isFollowing =
+                                                          !isFollowing;
+                                                    });
+                                                    userBloc.add(
+                                                        ToggleFollowEvent(
+                                                            otherUserId: widget
+                                                                .vehiclesCompany
+                                                                .id));
+                                                  },
+                                                );
+                                              }
+                                              return Container();
+                                            },
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     widget.vehiclesCompany.slogn != null
@@ -248,7 +326,16 @@ class _VehicleCompaniesProfileScreenState
                                           )
                                         : const SizedBox(),
                                     Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
+                                        Text(
+                                          '${widget.vehiclesCompany.averageRating}',
+                                          style: const TextStyle(
+                                              color: AppColor.secondGrey,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600),
+                                        ),
                                         GestureDetector(
                                           onTap: () => showRating(
                                               context,
@@ -264,7 +351,7 @@ class _VehicleCompaniesProfileScreenState
                                                     .vehiclesCompany
                                                     .averageRating ??
                                                 0,
-                                            itemSize: 25,
+                                            itemSize: 18,
                                             ignoreGestures: true,
                                             itemBuilder: (context, _) {
                                               return const Icon(
@@ -277,68 +364,15 @@ class _VehicleCompaniesProfileScreenState
                                             onRatingUpdate: (rating) {},
                                           ),
                                         ),
+                                        Text(
+                                          '(${widget.vehiclesCompany.totalRatings} ${AppLocalizations.of(context).translate('review')})',
+                                          style: const TextStyle(
+                                            color: AppColor.secondGrey,
+                                            fontSize: 14,
+                                          ),
+                                        ),
                                         SizedBox(
                                           width: 15.w,
-                                        ),
-                                        BlocBuilder<AuthBloc, AuthState>(
-                                          bloc: authBloc,
-                                          builder: (context, state) {
-                                            if (state is AuthInProgress) {
-                                              return const Center(
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  color:
-                                                      AppColor.backgroundColor,
-                                                ),
-                                              );
-                                            } else if (state is Authenticated) {
-                                              // isFollowing = state.user
-                                              //         .userInfo.followings!
-                                              //         .contains(widget
-                                              //             .localCompany.id)
-                                              //     ? true
-                                              //     : false;
-                                              return ElevatedButton(
-                                                style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          AppColor
-                                                              .backgroundColor),
-                                                  shape:
-                                                      MaterialStateProperty.all(
-                                                          RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            18.0),
-                                                  )),
-                                                ),
-                                                child: Text(
-                                                  isFollowing
-                                                      ? AppLocalizations.of(
-                                                              context)
-                                                          .translate('unfollow')
-                                                      : AppLocalizations.of(
-                                                              context)
-                                                          .translate('follow'),
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 10.sp),
-                                                ),
-                                                onPressed: () {
-                                                  setState(() {
-                                                    isFollowing = !isFollowing;
-                                                  });
-                                                  userBloc.add(
-                                                      ToggleFollowEvent(
-                                                          otherUserId: widget
-                                                              .vehiclesCompany
-                                                              .id));
-                                                },
-                                              );
-                                            }
-                                            return Container();
-                                          },
                                         ),
                                       ],
                                     ),
@@ -522,7 +556,7 @@ class _VehicleCompaniesProfileScreenState
                                               gridDelegate:
                                                   SliverGridDelegateWithFixedCrossAxisCount(
                                                       crossAxisCount: 2,
-                                                      childAspectRatio: 0.95,
+                                                      childAspectRatio: 0.85,
                                                       crossAxisSpacing: 10.w,
                                                       mainAxisSpacing: 10.h),
                                               shrinkWrap: true,
@@ -531,130 +565,10 @@ class _VehicleCompaniesProfileScreenState
                                               itemCount:
                                                   state.companyVehicles.length,
                                               itemBuilder: (context, index) {
-                                                return Container(
-                                                  margin: const EdgeInsets
-                                                      .symmetric(vertical: 8),
-                                                  decoration: BoxDecoration(
-                                                      color: AppColor.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20),
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                          color: AppColor
-                                                              .secondGrey
-                                                              .withOpacity(0.5),
-                                                          blurRadius: 10,
-                                                          spreadRadius: 2,
-                                                          offset: const Offset(
-                                                              0, 3),
-                                                        ),
-                                                      ]),
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                            Radius.circular(
-                                                                20)),
-                                                    child: GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.of(context)
-                                                            .push(
-                                                          MaterialPageRoute(
-                                                            builder: (context) {
-                                                              return VehicleDetailsScreen(
-                                                                  vehicle: state
-                                                                          .companyVehicles[
-                                                                      index]);
-                                                            },
-                                                          ),
-                                                        );
-                                                      },
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          CachedNetworkImage(
-                                                            imageUrl: state
-                                                                .companyVehicles[
-                                                                    index]
-                                                                .imageUrl,
-                                                            height: 120.h,
-                                                            width: 200.w,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    right: 9.0,
-                                                                    left: 9.0,
-                                                                    bottom:
-                                                                        8.0),
-                                                            child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Text(
-                                                                  state
-                                                                      .companyVehicles[
-                                                                          index]
-                                                                      .name,
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    color: AppColor
-                                                                        .backgroundColor,
-                                                                  ),
-                                                                ),
-                                                                // Text(
-                                                                //   '${state.companyVehicles[index].price} \$',
-                                                                //   style:
-                                                                //       const TextStyle(
-                                                                //     color: AppColor
-                                                                //         .colorTwo,
-                                                                //   ),
-                                                                // ),
-                                                                RichText(
-                                                                  text: TextSpan(
-                                                                      style: TextStyle(
-                                                                          fontSize: 13
-                                                                              .sp,
-                                                                          color: AppColor
-                                                                              .backgroundColor),
-                                                                      children: <
-                                                                          TextSpan>[
-                                                                        TextSpan(
-                                                                          text:
-                                                                              '${state.companyVehicles[index].price}',
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            fontWeight:
-                                                                                FontWeight.w700,
-                                                                          ),
-                                                                        ),
-                                                                        TextSpan(
-                                                                          text:
-                                                                              getCurrencyFromCountry(
-                                                                            countryState.selectedCountry,
-                                                                            context,
-                                                                          ),
-                                                                          style: const TextStyle(
-                                                                              color: AppColor.backgroundColor,
-                                                                              fontSize: 10),
-                                                                        )
-                                                                      ]),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
+                                                return VehicleWidget(
+                                                  vehicle: state
+                                                      .companyVehicles[index],
+                                                  countryState: countryState,
                                                 );
                                               },
                                             );

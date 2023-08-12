@@ -17,6 +17,9 @@ abstract class DealsRepository {
   Future<Either<Failure, DealsItemsResponse>> getDealsByCategory({
     required final String category,
     required final String country,
+    String? companyName,
+    int? minPrice,
+    int? maxPrice,
   });
 
   Future<Either<Failure, String>> addDeal({
