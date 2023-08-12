@@ -9,6 +9,8 @@ import 'package:netzoon/presentation/ecommerce/widgets/listsubsectionswidget.dar
 import 'package:netzoon/presentation/home/blocs/elec_devices/elec_devices_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../../core/screen/product_details_screen.dart';
+
 class SubSectionsScreen extends StatefulWidget {
   const SubSectionsScreen({
     super.key,
@@ -155,6 +157,17 @@ class _SubSectionsScreenState extends State<SubSectionsScreen> {
                                       deviceList: filteredUsers[index],
                                       department: state.department,
                                       category: state.category,
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) {
+                                              return ProductDetailScreen(
+                                                item: filteredUsers[index].id,
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      },
                                     );
 
                                     /// return your widget here.

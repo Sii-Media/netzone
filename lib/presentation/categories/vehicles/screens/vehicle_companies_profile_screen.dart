@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dynamic_height_grid_view/dynamic_height_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -552,26 +553,21 @@ class _VehicleCompaniesProfileScreenState
                                         bloc: countryBloc,
                                         builder: (context, countryState) {
                                           if (countryState is CountryInitial) {
-                                            return GridView.builder(
-                                              gridDelegate:
-                                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                                      crossAxisCount: 2,
-                                                      childAspectRatio: 0.85,
-                                                      crossAxisSpacing: 10.w,
-                                                      mainAxisSpacing: 10.h),
-                                              shrinkWrap: true,
-                                              physics:
-                                                  const BouncingScrollPhysics(),
-                                              itemCount:
-                                                  state.companyVehicles.length,
-                                              itemBuilder: (context, index) {
-                                                return VehicleWidget(
-                                                  vehicle: state
-                                                      .companyVehicles[index],
-                                                  countryState: countryState,
-                                                );
-                                              },
-                                            );
+                                            return DynamicHeightGridView(
+                                                itemCount: state
+                                                    .companyVehicles.length,
+                                                crossAxisCount: 2,
+                                                crossAxisSpacing: 10,
+                                                mainAxisSpacing: 10,
+                                                builder: (ctx, index) {
+                                                  return VehicleWidget(
+                                                    vehicle: state
+                                                        .companyVehicles[index],
+                                                    countryState: countryState,
+                                                  );
+
+                                                  /// return your widget here.
+                                                });
                                           }
                                           return Container();
                                         },

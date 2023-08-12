@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dynamic_height_grid_view/dynamic_height_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,6 +12,7 @@ import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
 import 'package:netzoon/presentation/categories/local_company/company_service_detail_screen.dart';
 import 'package:netzoon/presentation/categories/local_company/local_company_bloc/local_company_bloc.dart';
+import 'package:netzoon/presentation/categories/widgets/product_details.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -1211,22 +1213,29 @@ class ProductListWidget extends StatelessWidget {
                     bloc: countryBloc,
                     builder: (context, countryState) {
                       if (countryState is CountryInitial) {
-                        return GridView.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 0.68,
-                                  crossAxisSpacing: 10.w,
-                                  mainAxisSpacing: 10.h),
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: state.products.length,
-                          itemBuilder: (context, index) {
-                            return ListSubSectionsWidget(
-                              deviceList: state.products[index],
-                            );
-                          },
-                        );
+                        return DynamicHeightGridView(
+                            itemCount: state.products.length,
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            builder: (ctx, index) {
+                              return ListSubSectionsWidget(
+                                deviceList: state.products[index],
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return ProductDetailsScreen(
+                                            products: state.products,
+                                            index: index);
+                                      },
+                                    ),
+                                  );
+                                },
+                              );
+
+                              /// return your widget here.
+                            });
                       }
                       return Container();
                     },

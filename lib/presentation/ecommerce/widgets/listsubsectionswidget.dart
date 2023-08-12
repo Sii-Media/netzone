@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
-import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../core/blocs/country_bloc/country_bloc.dart';
@@ -13,11 +12,15 @@ import '../../core/helpers/share_image_function.dart';
 
 class ListSubSectionsWidget extends StatefulWidget {
   const ListSubSectionsWidget(
-      {super.key, required this.deviceList, this.department, this.category});
+      {super.key,
+      required this.deviceList,
+      this.department,
+      this.category,
+      this.onTap});
   final CategoryProducts deviceList;
   final String? department;
   final String? category;
-
+  final void Function()? onTap;
   @override
   State<ListSubSectionsWidget> createState() => _ListSubSectionsWidgetState();
 }
@@ -40,17 +43,7 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
       builder: (context, state) {
         if (state is CountryInitial) {
           return InkWell(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return ProductDetailScreen(
-                      item: widget.deviceList.id,
-                    );
-                  },
-                ),
-              );
-            },
+            onTap: widget.onTap,
             child: Card(
               elevation: 3,
               child: SizedBox(
