@@ -149,6 +149,8 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
         image: event.image,
         serviceImageList: event.serviceImageList,
         whatsAppNumber: event.whatsAppNumber,
+        bio: event.bio,
+        video: event.video,
       ));
       emit(
         success.fold(

@@ -34,6 +34,8 @@ class AddCompanyServiceEvent extends LocalCompanyEvent {
   final File? image;
   final List<XFile>? serviceImageList;
   final String? whatsAppNumber;
+  final String? bio;
+  final File? video;
   const AddCompanyServiceEvent({
     required this.title,
     required this.description,
@@ -41,6 +43,8 @@ class AddCompanyServiceEvent extends LocalCompanyEvent {
     this.image,
     this.serviceImageList,
     this.whatsAppNumber,
+    this.bio,
+    this.video,
   });
 }
 

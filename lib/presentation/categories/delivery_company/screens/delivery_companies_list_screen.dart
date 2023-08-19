@@ -141,6 +141,31 @@ class _DeliveryCompaniesListScreenState
                                                                 .profilePhoto ??
                                                             'https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg',
                                                         fit: BoxFit.contain,
+                                                        progressIndicatorBuilder:
+                                                            (context, url,
+                                                                    downloadProgress) =>
+                                                                Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      70.0,
+                                                                  vertical: 50),
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            value:
+                                                                downloadProgress
+                                                                    .progress,
+                                                            color: AppColor
+                                                                .backgroundColor,
+
+                                                            // strokeWidth: 10,
+                                                          ),
+                                                        ),
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            const Icon(
+                                                                Icons.error),
                                                       ),
                                                     ),
                                                     Positioned(

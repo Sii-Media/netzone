@@ -130,7 +130,7 @@ class _NotificatiionScreenState extends State<NotificatiionScreen> {
                                           .userProfileImage),
                                 ),
                                 title: Text(
-                                    '${state.notifications[index].username} added a ${state.notifications[index].text} to ${AppLocalizations.of(context).translate(state.notifications[index].category)}'),
+                                    '${state.notifications[index].username} ${AppLocalizations.of(context).translate('added a')} ${state.notifications[index].text} ${AppLocalizations.of(context).translate('to')} ${AppLocalizations.of(context).translate(state.notifications[index].category)}'),
                                 subtitle: Text(
                                   formatDateTime(
                                       state.notifications[index].createdAt ??

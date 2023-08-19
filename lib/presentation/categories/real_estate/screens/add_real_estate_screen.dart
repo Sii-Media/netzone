@@ -110,7 +110,8 @@ class _AddRealEstateScreenState extends State<AddRealEstateScreen>
                   children: [
                     Center(
                       child: Text(
-                        'add_real_estate',
+                        AppLocalizations.of(context)
+                            .translate('add_real_estate'),
                         style: TextStyle(
                           color: AppColor.backgroundColor,
                           fontSize: 20.sp,
@@ -131,7 +132,7 @@ class _AddRealEstateScreenState extends State<AddRealEstateScreen>
                       context: context,
                       controller: titleController,
                       title:
-                          '${AppLocalizations.of(context).translate('product_name')} :',
+                          '${AppLocalizations.of(context).translate('real_estate_name')} :',
                       isNumber: false,
                     ),
                     SizedBox(
@@ -233,6 +234,19 @@ class _AddRealEstateScreenState extends State<AddRealEstateScreen>
                               width: 250.w,
                               height: 250.h,
                               fit: BoxFit.cover,
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 70.0, vertical: 50),
+                                child: CircularProgressIndicator(
+                                  value: downloadProgress.progress,
+                                  color: AppColor.backgroundColor,
+
+                                  // strokeWidth: 10,
+                                ),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
                             ),
                           ),
                     SizedBox(
@@ -246,7 +260,7 @@ class _AddRealEstateScreenState extends State<AddRealEstateScreen>
                           children: [
                             Text(
                               AppLocalizations.of(context)
-                                  .translate('add product images'),
+                                  .translate('add_real_estate_images'),
                               style: TextStyle(
                                 color: AppColor.backgroundColor,
                                 fontSize: 15.sp,

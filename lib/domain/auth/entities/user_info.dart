@@ -6,6 +6,7 @@ class UserInfo {
   final String? firstMobile;
   final bool? isFreeZoon;
   final bool? isService;
+  final bool? isSelectable;
 
   final String? freezoneCity;
   final bool? deliverable;
@@ -64,6 +65,7 @@ class UserInfo {
     this.address,
     required this.isFreeZoon,
     this.isService,
+    this.isSelectable,
     this.freezoneCity,
     this.deliverable,
     this.businessLicense,

@@ -218,6 +218,37 @@ class _DepartmentsRemoteDataSourceImpl
   }
 
   @override
+  Future<List<CategoryProductsModel>> getSelectableProducts(
+      String country) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'country': country};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<List<dynamic>>(
+        _setStreamType<List<CategoryProductsModel>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/departments/getSelectableProducts',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) =>
+            CategoryProductsModel.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
   Future<List<CategoryProductsModel>> getUserProducts(String userId) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

@@ -6,6 +6,7 @@ import 'package:netzoon/domain/departments/entities/category_products/category_p
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../../cart/blocs/cart_bloc/cart_bloc_bloc.dart';
 import '../../core/blocs/country_bloc/country_bloc.dart';
 import '../../core/helpers/get_currency_of_country.dart';
 import '../../core/helpers/share_image_function.dart';
@@ -47,7 +48,7 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
             child: Card(
               elevation: 3,
               child: SizedBox(
-                height: 300.h,
+                height: 302.h,
                 child: Padding(
                   padding: EdgeInsets.all(size.height * 0.002),
                   child: Stack(
@@ -61,6 +62,19 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                           ),
                           CachedNetworkImage(
                             imageUrl: widget.deviceList.imageUrl,
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) => Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 70.0, vertical: 50),
+                              child: CircularProgressIndicator(
+                                value: downloadProgress.progress,
+                                color: AppColor.backgroundColor,
+
+                                // strokeWidth: 10,
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
                             height: 140.h,
                             width: MediaQuery.of(context).size.width,
                             fit: BoxFit.contain,
@@ -72,6 +86,9 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                             height: 30.h,
                             child: Text(
                               widget.deviceList.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: AppColor.black,
                                 fontSize: 14.sp,
@@ -136,18 +153,67 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                                               )
                                             ]),
                                       ),
-                                      GestureDetector(
-                                        onTap: () async {
-                                          await shareImageWithDescription(
-                                            imageUrl:
-                                                widget.deviceList.imageUrl,
-                                            description: widget.deviceList.name,
-                                          );
-                                        },
-                                        child: const Icon(
-                                          Icons.share,
-                                          color: AppColor.backgroundColor,
-                                        ),
+                                      Row(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              final cartBloc =
+                                                  context.read<CartBlocBloc>();
+                                              final cartItems =
+                                                  cartBloc.state.props;
+                                              if (cartItems.any((elm) =>
+                                                  elm.id ==
+                                                  widget.deviceList.id)) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                    AppLocalizations.of(context)
+                                                        .translate(
+                                                            'Product_Already_added_to_cart'),
+                                                    style: const TextStyle(
+                                                        color: AppColor.white),
+                                                  ),
+                                                  backgroundColor: AppColor.red,
+                                                  duration: const Duration(
+                                                      seconds: 2),
+                                                ));
+                                              } else {
+                                                cartBloc.add(AddToCart(
+                                                    product:
+                                                        widget.deviceList));
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                  content: Text(AppLocalizations
+                                                          .of(context)
+                                                      .translate(
+                                                          'Product_added_to_cart')),
+                                                  backgroundColor:
+                                                      AppColor.backgroundColor,
+                                                  duration: const Duration(
+                                                      seconds: 2),
+                                                ));
+                                              }
+                                            },
+                                            child: const Icon(
+                                              Icons.shopping_cart_outlined,
+                                              color: AppColor.backgroundColor,
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () async {
+                                              await shareImageWithDescription(
+                                                imageUrl:
+                                                    widget.deviceList.imageUrl,
+                                                description:
+                                                    widget.deviceList.name,
+                                              );
+                                            },
+                                            child: const Icon(
+                                              Icons.share,
+                                              color: AppColor.backgroundColor,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
@@ -167,7 +233,10 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                                                           FontWeight.w700,
                                                     )),
                                                 TextSpan(
-                                                  text: '\$ ',
+                                                  text: getCurrencyFromCountry(
+                                                    state.selectedCountry,
+                                                    context,
+                                                  ),
                                                   style: TextStyle(
                                                       color: AppColor
                                                           .backgroundColor,

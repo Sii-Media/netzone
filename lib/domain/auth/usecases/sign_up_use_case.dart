@@ -20,6 +20,7 @@ class SignUpUseCase extends UseCase<User, SignUpUseCaseParams> {
       firstMobile: params.firstMobile,
       isFreeZoon: params.isFreeZoon,
       isService: params.isService,
+      isSelectable: params.isSelectable,
       freezoneCity: params.freezoneCity,
       country: params.country,
       secondMobile: params.secondMobile,
@@ -69,6 +70,7 @@ class SignUpUseCaseParams {
 
   final bool isFreeZoon;
   final bool? isService;
+  final bool? isSelectable;
   final String? freezoneCity;
 
   final bool? deliverable;
@@ -98,6 +100,7 @@ class SignUpUseCaseParams {
     required this.firstMobile,
     required this.isFreeZoon,
     this.isService,
+    this.isSelectable,
     this.freezoneCity,
     required this.deliverable,
     required this.country,

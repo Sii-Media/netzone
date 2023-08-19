@@ -33,6 +33,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required String firstMobile,
     required bool isFreeZoon,
     bool? isService,
+    bool? isSelectable,
     String? freezoneCity,
     required String country,
     String? secondMobile,
@@ -111,6 +112,10 @@ class AuthRepositoryImpl implements AuthRepository {
         }
         if (isService != null) {
           formData.fields.add(MapEntry('isService', isService.toString()));
+        }
+        if (isSelectable != null) {
+          formData.fields
+              .add(MapEntry('isSelectable', isSelectable.toString()));
         }
         if (slogn != null) {
           formData.fields.add(MapEntry('slogn', slogn));
@@ -197,6 +202,7 @@ class AuthRepositoryImpl implements AuthRepository {
             ),
           ));
         }
+
         Response response = await dio.post(
             'https://net-zoon.onrender.com/user/register',
             data: formData);
@@ -308,14 +314,20 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, String>> editProfile(
-      {required String userId,
-      required String username,
-      required String email,
-      required String firstMobile,
-      required String secondeMobile,
-      required String thirdMobile,
-      required File? profilePhoto}) async {
+  Future<Either<Failure, String>> editProfile({
+    required String userId,
+    required String username,
+    required String email,
+    required String firstMobile,
+    required String secondeMobile,
+    required String thirdMobile,
+    required File? profilePhoto,
+    String? bio,
+    String? description,
+    String? website,
+    String? link,
+    String? slogn,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
         Dio dio = Dio();
@@ -326,6 +338,22 @@ class AuthRepositoryImpl implements AuthRepository {
           'secondMobile': secondeMobile,
           'thirdMobile': thirdMobile,
         });
+        if (bio != null) {
+          formData.fields.add(MapEntry('bio', bio));
+        }
+        if (description != null) {
+          formData.fields.add(MapEntry('description', description));
+        }
+        if (website != null) {
+          formData.fields.add(MapEntry('website', website));
+        }
+        if (slogn != null) {
+          formData.fields.add(MapEntry('slogn', slogn));
+        }
+        if (link != null) {
+          formData.fields.add(MapEntry('link', link));
+        }
+
         if (profilePhoto != null) {
           String fileName = profilePhoto.path.split('/').last;
           formData.files.add(

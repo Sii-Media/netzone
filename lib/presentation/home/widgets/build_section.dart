@@ -166,6 +166,20 @@ Widget buildVehicleSection(
                                       height: 200.h,
                                       width: double.maxFinite,
                                       fit: BoxFit.cover,
+                                      progressIndicatorBuilder:
+                                          (context, url, downloadProgress) =>
+                                              Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 70.0, vertical: 50),
+                                        child: CircularProgressIndicator(
+                                          value: downloadProgress.progress,
+                                          color: AppColor.backgroundColor,
+
+                                          // strokeWidth: 10,
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
                                     ),
                                   ),
                                   Container(

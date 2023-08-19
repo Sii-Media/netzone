@@ -154,6 +154,20 @@ class _GovernmentInstitutionScreenState
                                           height: 120,
                                           width: 160,
                                           fit: BoxFit.fill,
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 70.0, vertical: 50),
+                                            child: CircularProgressIndicator(
+                                              value: downloadProgress.progress,
+                                              color: AppColor.backgroundColor,
+
+                                              // strokeWidth: 10,
+                                            ),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.only(

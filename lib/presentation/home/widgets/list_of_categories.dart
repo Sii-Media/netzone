@@ -171,6 +171,17 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                 ),
                               );
                             } else if (widget.categories[index].name ==
+                                'sea_companies') {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const VehiclesCompaniesScreen(
+                                      type: 'sea_companies',
+                                    );
+                                  },
+                                ),
+                              );
+                            } else if (widget.categories[index].name ==
                                 'users') {
                               Navigator.of(context).push(
                                 MaterialPageRoute(

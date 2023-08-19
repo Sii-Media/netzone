@@ -51,7 +51,7 @@ class DealsRepositoryImpl implements DealsRepository {
         return Left(OfflineFailure());
       }
     } catch (e) {
-      return Left(FilteredFailure());
+      return Left(EmpltyDataFailure());
     }
   }
 

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/categories/vehicles/screens/vehicle_companies_profile_screen.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
+import 'package:netzoon/presentation/core/widgets/no_data_widget.dart';
 
 import '../../../../injection_container.dart';
 import '../../../core/constant/colors.dart';
@@ -28,6 +29,8 @@ class _VehiclesCompaniesScreenState extends State<VehiclesCompaniesScreen> {
       vehicleBloc.add(GetCarsCompaniesEvent());
     } else if (widget.type == 'planes') {
       vehicleBloc.add(GetPlanesCompaniesEvent());
+    } else if (widget.type == 'sea_companies') {
+      vehicleBloc.add(GetSeaCompaniesEvent());
     }
     super.initState();
   }
@@ -42,6 +45,8 @@ class _VehiclesCompaniesScreenState extends State<VehiclesCompaniesScreen> {
               vehicleBloc.add(GetCarsCompaniesEvent());
             } else if (widget.type == 'planes') {
               vehicleBloc.add(GetPlanesCompaniesEvent());
+            } else if (widget.type == 'sea_companies') {
+              vehicleBloc.add(GetSeaCompaniesEvent());
             }
           },
           child: Padding(
@@ -98,85 +103,125 @@ class _VehiclesCompaniesScreenState extends State<VehiclesCompaniesScreen> {
                         height: 4.h,
                       ),
                       Expanded(
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: filteredUsers.length,
-                            itemBuilder: (context, index) {
-                              return SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(builder: (context) {
-                                        return VehicleCompaniesProfileScreen(
-                                          vehiclesCompany: filteredUsers[index],
-                                        );
-                                      }));
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(25.0),
-                                        child: SizedBox(
-                                          height: 210.h,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          child: Stack(
-                                            children: [
-                                              Positioned(
-                                                left: 0,
-                                                right: 0,
-                                                top: 0,
-                                                bottom: 0,
-                                                child: CachedNetworkImage(
-                                                  imageUrl: state
-                                                          .vehiclesCompanies[
-                                                              index]
-                                                          .profilePhoto ??
-                                                      '',
-                                                  fit: BoxFit.fill,
-                                                ),
-                                              ),
-                                              Positioned(
-                                                bottom: 0,
-                                                left: 0,
-                                                right: 0,
-                                                child: Container(
-                                                  alignment: Alignment.center,
-                                                  height: 60.h,
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
-                                                  color: AppColor
-                                                      .backgroundColor
-                                                      .withOpacity(0.8),
-                                                  child: Text(
-                                                    state
-                                                            .vehiclesCompanies[
-                                                                index]
-                                                            .username ??
-                                                        '',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20.sp),
+                        child: filteredUsers.isEmpty
+                            ? NoDataWidget(onPressed: () {
+                                if (widget.type == 'cars') {
+                                  vehicleBloc.add(GetCarsCompaniesEvent());
+                                } else if (widget.type == 'planes') {
+                                  vehicleBloc.add(GetPlanesCompaniesEvent());
+                                } else if (widget.type == 'sea_companies') {
+                                  vehicleBloc.add(GetSeaCompaniesEvent());
+                                }
+                              })
+                            : ListView.builder(
+                                shrinkWrap: true,
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: filteredUsers.length,
+                                itemBuilder: (context, index) {
+                                  return SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                            return VehicleCompaniesProfileScreen(
+                                              vehiclesCompany:
+                                                  filteredUsers[index],
+                                            );
+                                          }));
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(25.0),
+                                            child: SizedBox(
+                                              height: 210.h,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              child: Stack(
+                                                children: [
+                                                  Positioned(
+                                                    left: 0,
+                                                    right: 0,
+                                                    top: 0,
+                                                    bottom: 0,
+                                                    child: CachedNetworkImage(
+                                                      imageUrl: state
+                                                              .vehiclesCompanies[
+                                                                  index]
+                                                              .profilePhoto ??
+                                                          '',
+                                                      fit: BoxFit.fill,
+                                                      progressIndicatorBuilder:
+                                                          (context, url,
+                                                                  downloadProgress) =>
+                                                              Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal:
+                                                                    70.0,
+                                                                vertical: 50),
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          value:
+                                                              downloadProgress
+                                                                  .progress,
+                                                          color: AppColor
+                                                              .backgroundColor,
+
+                                                          // strokeWidth: 10,
+                                                        ),
+                                                      ),
+                                                      errorWidget: (context,
+                                                              url, error) =>
+                                                          const Icon(
+                                                              Icons.error),
+                                                    ),
                                                   ),
-                                                ),
-                                              )
-                                            ],
+                                                  Positioned(
+                                                    bottom: 0,
+                                                    left: 0,
+                                                    right: 0,
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      height: 60.h,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      color: AppColor
+                                                          .backgroundColor
+                                                          .withOpacity(0.8),
+                                                      child: Text(
+                                                        state
+                                                                .vehiclesCompanies[
+                                                                    index]
+                                                                .username ??
+                                                            '',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 20.sp),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              );
-                            }),
+                                  );
+                                }),
                       ),
                       const SizedBox(
                         height: 70,

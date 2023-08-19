@@ -823,6 +823,18 @@ class _MyLocalCompanyProfileScreenState
                                                                                 200.w,
                                                                             fit:
                                                                                 BoxFit.cover,
+                                                                            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                                                                Padding(
+                                                                              padding: const EdgeInsets.symmetric(horizontal: 70.0, vertical: 50),
+                                                                              child: CircularProgressIndicator(
+                                                                                value: downloadProgress.progress,
+                                                                                color: AppColor.backgroundColor,
+
+                                                                                // strokeWidth: 10,
+                                                                              ),
+                                                                            ),
+                                                                            errorWidget: (context, url, error) =>
+                                                                                const Icon(Icons.error),
                                                                           ),
                                                                           Padding(
                                                                             padding: const EdgeInsets.only(
@@ -997,6 +1009,20 @@ class ProductsListWidget extends StatelessWidget {
                                           height: 65.h,
                                           width: 160.w,
                                           fit: BoxFit.contain,
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 70.0, vertical: 50),
+                                            child: CircularProgressIndicator(
+                                              value: downloadProgress.progress,
+                                              color: AppColor.backgroundColor,
+
+                                              // strokeWidth: 10,
+                                            ),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.only(

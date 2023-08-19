@@ -123,6 +123,23 @@ class VehicleRepositoryImpl implements VehicleRepository {
   }
 
   @override
+  Future<Either<Failure, List<UserInfo>>> getSeaCompanies(
+      {required String country}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final planesCompanies =
+            await vehicleRemoteDataSource.getSeaCompanies(country);
+
+        return Right(planesCompanies.map((e) => e.toDomain()).toList());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
   Future<Either<Failure, List<Vehicle>>> getCompanyVehicles(
       {required String id}) async {
     try {

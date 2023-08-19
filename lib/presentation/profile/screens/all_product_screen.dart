@@ -27,7 +27,7 @@ class _AllProductsScreenState extends State<AllProductsScreen>
   List<CategoryProducts> selectedProducts = [];
   @override
   void initState() {
-    producBloc.add(GetAllProductsEvent());
+    producBloc.add(GetSelectableProductsEvent());
     super.initState();
   }
 

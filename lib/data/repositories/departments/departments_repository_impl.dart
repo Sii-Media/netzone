@@ -57,7 +57,7 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
         return Left(OfflineFailure());
       }
     } catch (e) {
-      return Left(FilteredFailure());
+      return Left(EmpltyDataFailure());
     }
   }
 
@@ -109,6 +109,22 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
       if (await networkInfo.isConnected) {
         final products =
             await departmentsRemoteDataSource.getAllProducts(country);
+        return Right(products.map((e) => e.toDomain()).toList());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<CategoryProducts>>> getSelectableProducts(
+      {required String country}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final products =
+            await departmentsRemoteDataSource.getSelectableProducts(country);
         return Right(products.map((e) => e.toDomain()).toList());
       } else {
         return Left(OfflineFailure());

@@ -128,16 +128,18 @@ class _EditAdsScreenState extends State<EditAdsScreen>
                     height: MediaQuery.of(context).size.height * 0.3,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: _updatedImage != null
-                              ? FileImage(_updatedImage!)
-                              // ignore: unnecessary_null_comparison
-                              : widget.ads.advertisingImage != null
-                                  ? CachedNetworkImageProvider(
-                                      widget.ads.advertisingImage)
-                                  : Image.network(
-                                          'https://static.vecteezy.com/system/resources/previews/005/544/718/original/profile-icon-design-free-vector.jpg')
-                                      .image,
-                          fit: BoxFit.cover),
+                        image: _updatedImage != null
+                            ? FileImage(_updatedImage!)
+                            // ignore: unnecessary_null_comparison
+                            : widget.ads.advertisingImage != null
+                                ? CachedNetworkImageProvider(
+                                    widget.ads.advertisingImage,
+                                  )
+                                : Image.network(
+                                        'https://static.vecteezy.com/system/resources/previews/005/544/718/original/profile-icon-design-free-vector.jpg')
+                                    .image,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                     child: GestureDetector(
                       onTap: () async {

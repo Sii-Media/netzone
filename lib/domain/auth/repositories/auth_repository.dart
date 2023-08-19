@@ -15,6 +15,7 @@ abstract class AuthRepository {
     required String firstMobile,
     required bool isFreeZoon,
     bool? isService,
+    bool? isSelectable,
     String? freezoneCity,
     required String country,
     String? secondMobile,
@@ -89,6 +90,11 @@ abstract class AuthRepository {
     required String secondeMobile,
     required String thirdMobile,
     required File? profilePhoto,
+    String? bio,
+    String? description,
+    String? website,
+    String? link,
+    String? slogn,
   });
 
   Future<Either<Failure, UserInfo>> addAcccess({

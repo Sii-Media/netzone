@@ -38,6 +38,10 @@ abstract class VehicleRepository {
   Future<Either<Failure, List<UserInfo>>> getPlanesCompanies({
     required String country,
   });
+  Future<Either<Failure, List<UserInfo>>> getSeaCompanies({
+    required String country,
+  });
+
   Future<Either<Failure, List<Vehicle>>> getCompanyVehicles(
       {required String id});
 

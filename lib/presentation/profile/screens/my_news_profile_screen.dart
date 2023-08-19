@@ -447,6 +447,31 @@ class _MyNewsProfileScreenState extends State<MyNewsProfileScreen>
                                                                         .imgUrl,
                                                                     fit: BoxFit
                                                                         .cover,
+                                                                    progressIndicatorBuilder: (context,
+                                                                            url,
+                                                                            downloadProgress) =>
+                                                                        Padding(
+                                                                      padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                          horizontal:
+                                                                              70.0,
+                                                                          vertical:
+                                                                              50),
+                                                                      child:
+                                                                          CircularProgressIndicator(
+                                                                        value: downloadProgress
+                                                                            .progress,
+                                                                        color: AppColor
+                                                                            .backgroundColor,
+
+                                                                        // strokeWidth: 10,
+                                                                      ),
+                                                                    ),
+                                                                    errorWidget: (context,
+                                                                            url,
+                                                                            error) =>
+                                                                        const Icon(
+                                                                            Icons.error),
                                                                   ),
                                                                 ),
                                                                 Positioned(

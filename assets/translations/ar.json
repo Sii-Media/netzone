@@ -436,6 +436,9 @@
     "Bedrooms": "غرف النوم",
     "my_ads": "إعلاناتي",
     "real_estate": "عقارات",
+    "real_estate_name": "اسم العقار",
+    "add_real_estate_images": "اضافة صور للعقار",
+    "production services": "خدمات الانتاج",
     "select_from_our_products": "إختيار من منتجات نت زوون",
     "traders": "التجار",
     "my_info": "معلوماتي",
@@ -522,5 +525,7 @@
     "visitors": "الزائرون",
     "search_by_company_name": "البحث عن طريق اسم الشركة",
     "مفروشات": "مفروشات",
-    "for_what": "For what"
+    "for_what": "For what",
+    "are_your_products_shareable_by_the_customer": "هل منتجاتك قابلة للمشاركة من قبل الزبون؟",
+    "added a": "أضاف"
 }

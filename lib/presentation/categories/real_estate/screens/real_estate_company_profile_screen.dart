@@ -41,6 +41,8 @@ class _RealEstateCompanyProfileScreenState
 
   final realEstatesBloc = sl<RealEstateBloc>();
   final authBloc = sl<AuthBloc>();
+  final visitorBloc = sl<GetUserBloc>();
+
   bool isFollowing = false;
   late final CountryBloc countryBloc;
   @override
@@ -50,6 +52,7 @@ class _RealEstateCompanyProfileScreenState
     userBloc.add(GetUserByIdEvent(userId: widget.user.id));
     realEstatesBloc.add(GetCompanyRealEstatesEvent(id: widget.user.id));
     authBloc.add(AuthCheckRequested());
+    visitorBloc.add(AddVisitorEvent(userId: widget.user.id));
 
     checkFollowStatus();
     super.initState();
@@ -179,6 +182,20 @@ class _RealEstateCompanyProfileScreenState
                                       imageUrl: state.userInfo.coverPhoto ??
                                           'https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000',
                                       fit: BoxFit.cover,
+                                      progressIndicatorBuilder:
+                                          (context, url, downloadProgress) =>
+                                              Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 70.0, vertical: 50),
+                                        child: CircularProgressIndicator(
+                                          value: downloadProgress.progress,
+                                          color: AppColor.backgroundColor,
+
+                                          // strokeWidth: 10,
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
                                     ),
                                   ),
                                   SizedBox(
@@ -209,6 +226,27 @@ class _RealEstateCompanyProfileScreenState
                                               width: 100,
                                               height: 100,
                                               fit: BoxFit.fill,
+                                              progressIndicatorBuilder:
+                                                  (context, url,
+                                                          downloadProgress) =>
+                                                      Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 70.0,
+                                                        vertical: 50),
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  value:
+                                                      downloadProgress.progress,
+                                                  color:
+                                                      AppColor.backgroundColor,
+
+                                                  // strokeWidth: 10,
+                                                ),
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      const Icon(Icons.error),
                                             ),
                                           ),
                                         ),
@@ -634,6 +672,32 @@ class _RealEstateCompanyProfileScreenState
                                                                     .maxFinite,
                                                                 fit: BoxFit
                                                                     .cover,
+                                                                progressIndicatorBuilder:
+                                                                    (context,
+                                                                            url,
+                                                                            downloadProgress) =>
+                                                                        Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                      horizontal:
+                                                                          70.0,
+                                                                      vertical:
+                                                                          50),
+                                                                  child:
+                                                                      CircularProgressIndicator(
+                                                                    value: downloadProgress
+                                                                        .progress,
+                                                                    color: AppColor
+                                                                        .backgroundColor,
+
+                                                                    // strokeWidth: 10,
+                                                                  ),
+                                                                ),
+                                                                errorWidget: (context,
+                                                                        url,
+                                                                        error) =>
+                                                                    const Icon(Icons
+                                                                        .error),
                                                               ),
                                                             ),
                                                             Container(

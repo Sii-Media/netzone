@@ -41,6 +41,10 @@ abstract class DepartmentRepository {
     required String country,
   });
 
+  Future<Either<Failure, List<CategoryProducts>>> getSelectableProducts({
+    required String country,
+  });
+
   Future<Either<Failure, CategoryProducts>> getProductById({
     required String productId,
   });

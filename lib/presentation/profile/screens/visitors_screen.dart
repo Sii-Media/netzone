@@ -90,7 +90,7 @@ class _VisitorsScreenState extends State<VisitorsScreen> {
                                     localCompany: state.visitors[index]);
                               } else if (state.visitors[index].userType ==
                                       'car' ||
-                                  state.visitors[index].userType == 'plans') {
+                                  state.visitors[index].userType == 'planes') {
                                 return VehicleCompaniesProfileScreen(
                                     vehiclesCompany: state.visitors[index]);
                               } else if (state.visitors[index].userType ==
@@ -137,6 +137,20 @@ class _VisitorsScreenState extends State<VisitorsScreen> {
                                     height: 50.h,
                                     width: 45.w,
                                     fit: BoxFit.cover,
+                                    progressIndicatorBuilder:
+                                        (context, url, downloadProgress) =>
+                                            Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 70.0, vertical: 50),
+                                      child: CircularProgressIndicator(
+                                        value: downloadProgress.progress,
+                                        color: AppColor.backgroundColor,
+
+                                        // strokeWidth: 10,
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
                                   ),
                                 ),
                                 Padding(

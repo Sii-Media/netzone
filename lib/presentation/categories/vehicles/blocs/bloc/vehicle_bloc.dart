@@ -13,6 +13,7 @@ import 'package:netzoon/domain/categories/usecases/vehicles/get_cars_companies_u
 import 'package:netzoon/domain/categories/usecases/vehicles/get_company_vehicles_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_latest_car_by_creator_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_planes_companies_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/vehicles/get_sea_companies_use_case.dart';
 import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 
 import 'package:netzoon/domain/core/usecase/usecase.dart';
@@ -32,6 +33,7 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
   final GetAllNewPlanesUseCase getAllNewPlanesUseCase;
   final GetCarsCompaniesUseCase getCarsCompaniesUseCase;
   final GetPlanesCompaniesUseCase getPlanesCompaniesUseCase;
+  final GetSeaCompaniesUseCase getSeaCompaniesUseCase;
   final GetCompanyVehiclesUseCase getCompanyVehiclesUseCase;
   final GetAllPlanesUseCase getAllPlanesUseCase;
   final AddVehicleUseCase addVehicleUseCase;
@@ -49,6 +51,7 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
     required this.addVehicleUseCase,
     required this.getSignedInUserUseCase,
     required this.getCountryUseCase,
+    required this.getSeaCompaniesUseCase,
   }) : super(VehicleInitial()) {
     on<GetAllCarsEvent>((event, emit) async {
       emit(VehicleInProgress());
@@ -166,6 +169,24 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
         ),
       );
     });
+
+    on<GetSeaCompaniesEvent>((event, emit) async {
+      emit(VehicleInProgress());
+      late String country;
+      final countryresult = await getCountryUseCase(NoParams());
+      countryresult.fold((l) => null, (r) => country = r ?? 'AE');
+
+      final failureOrcarsCompanies = await getSeaCompaniesUseCase(country);
+
+      emit(
+        failureOrcarsCompanies.fold(
+          (failure) => VehicleFailure(message: mapFailureToString(failure)),
+          (vehiclesCompanies) =>
+              VehiclesCompaniesSuccess(vehiclesCompanies: vehiclesCompanies),
+        ),
+      );
+    });
+
     on<GetCompanyVehiclesEvent>((event, emit) async {
       emit(VehicleInProgress());
       final failureOrVehicles = await getCompanyVehiclesUseCase(

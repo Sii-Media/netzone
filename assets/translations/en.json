@@ -436,12 +436,15 @@
     "Bedrooms": "Bedrooms",
     "my_ads": "My Ads",
     "real_estate": "Real Estate",
+    "real_estate_name": "real estate name",
     "select_from_our_products": "Select from our products",
     "traders": "Traders",
     "my_info": "My Info",
     "add_car": "Add Car",
     "add_airplane": "Add Airplane",
     "add_real_estate": "Add Realestate",
+    "add_real_estate_images": "Add Realestate Images",
+    "production services": "production services",
     "car_name": "Car Name",
     "airplane_name": "Aircraft Name",
     "add_images": "Add Images",
@@ -522,5 +525,7 @@
     "visitors": "Visitors",
     "search_by_company_name": "Search by Company Name",
     "مفروشات": "Furniture",
-    "for_what": "For what"
+    "for_what": "For what",
+    "are_your_products_shareable_by_the_customer": "Are your products shareable by the customer?",
+    "added a": "added a"
 }

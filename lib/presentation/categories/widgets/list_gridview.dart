@@ -196,13 +196,6 @@ class GridCategory extends StatelessWidget {
                 },
               ),
             );
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) {
-            //       return const PlansCategoriesScreen();
-            //     },
-            //   ),
-            // );
           } else if (category.name == 'cars') {
             Navigator.of(context).push(
               MaterialPageRoute(
@@ -213,15 +206,16 @@ class GridCategory extends StatelessWidget {
                 },
               ),
             );
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) {
-            //       return const VehicleListScreen(
-            //         category: 'cars',
-            //       );
-            //     },
-            //   ),
-            // );
+          } else if (category.name == 'sea_companies') {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return const VehiclesCompaniesScreen(
+                    type: 'sea_companies',
+                  );
+                },
+              ),
+            );
           } else if (category.name == 'users') {
             Navigator.of(context).push(
               MaterialPageRoute(

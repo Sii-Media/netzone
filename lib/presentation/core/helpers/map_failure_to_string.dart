@@ -14,6 +14,8 @@ String mapFailureToString(Failure failure) {
       return 'InValid OTP';
     case FilteredFailure:
       return 'No products found with the provided filters';
+    case EmpltyDataFailure:
+      return 'No data founded';
     case RatingFailure:
       return 'You have already rated this';
     default:

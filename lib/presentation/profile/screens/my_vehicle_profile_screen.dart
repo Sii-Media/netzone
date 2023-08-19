@@ -517,6 +517,31 @@ class _MyVehicleProfileScreenState extends State<MyVehicleProfileScreen>
                                                               height: 120.h,
                                                               width: 200.w,
                                                               fit: BoxFit.cover,
+                                                              progressIndicatorBuilder:
+                                                                  (context, url,
+                                                                          downloadProgress) =>
+                                                                      Padding(
+                                                                padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        70.0,
+                                                                    vertical:
+                                                                        50),
+                                                                child:
+                                                                    CircularProgressIndicator(
+                                                                  value: downloadProgress
+                                                                      .progress,
+                                                                  color: AppColor
+                                                                      .backgroundColor,
+
+                                                                  // strokeWidth: 10,
+                                                                ),
+                                                              ),
+                                                              errorWidget: (context,
+                                                                      url,
+                                                                      error) =>
+                                                                  const Icon(Icons
+                                                                      .error),
                                                             ),
                                                             Padding(
                                                               padding:

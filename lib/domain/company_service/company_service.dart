@@ -12,7 +12,8 @@ class CompanyService extends Equatable {
   final String? whatsAppNumber;
   final double? averageRating;
   final double? totalRatings;
-
+  final String? bio;
+  final String? vedioUrl;
   const CompanyService({
     required this.id,
     required this.title,
@@ -24,6 +25,8 @@ class CompanyService extends Equatable {
     this.whatsAppNumber,
     this.averageRating,
     this.totalRatings,
+    this.bio,
+    this.vedioUrl,
   });
   @override
   List<Object?> get props => [
@@ -36,5 +39,7 @@ class CompanyService extends Equatable {
         whatsAppNumber,
         averageRating,
         totalRatings,
+        bio,
+        vedioUrl,
       ];
 }

@@ -9,6 +9,7 @@ import 'package:netzoon/domain/departments/usecases/edit_product_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_categories_by_departments_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_category_products_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_product_by_id_use_case.dart';
+import 'package:netzoon/domain/departments/usecases/get_selectable_products_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/rate_product_use_case.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 
@@ -25,6 +26,7 @@ class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
   final GetCategoriesByDepartmentUsecase getCategoriesByDepartmentUsecase;
   final GetCategoryProductsUseCase getCategoryProductsUseCase;
   final GetAllProductsUseCase getAllProductsUseCase;
+  final GetSelectableProductsUseCase getSelectableProductsUseCase;
   final DeleteProductUseCase deleteProductUseCase;
   final EditProductUseCase editProductUseCase;
   final GetProductByIdUseCase getProductByIdUseCase;
@@ -43,6 +45,7 @@ class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
     required this.getCountryUseCase,
     required this.rateProductUseCase,
     required this.getSignedInUserUseCase,
+    required this.getSelectableProductsUseCase,
   }) : super(ElecDevicesInitial()) {
     on<GetElcDevicesEvent>((event, emit) async {
       emit(ElecDevicesInProgress());
@@ -107,6 +110,24 @@ class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
         }),
       );
     });
+    on<GetSelectableProductsEvent>((event, emit) async {
+      emit(ElecDevicesInProgress());
+      late String country;
+      final result = await getCountryUseCase(NoParams());
+      result.fold((l) => null, (r) => country = r ?? 'AE');
+
+      final products = await getSelectableProductsUseCase(country);
+
+      emit(
+        products.fold(
+            (failure) =>
+                ElecDevicesFailure(message: mapFailureToString(failure)),
+            (categoryProducts) {
+          return ElecCategoryProductSuccess(categoryProducts: categoryProducts);
+        }),
+      );
+    });
+
     on<DeleteProductEvent>((event, emit) async {
       emit(DeleteProductInProgress());
 

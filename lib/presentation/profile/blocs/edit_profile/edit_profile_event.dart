@@ -14,12 +14,22 @@ class OnEditProfileEvent extends EditProfileEvent {
   final String secondeMobile;
   final String thirdMobile;
   final File? profilePhoto;
-
-  const OnEditProfileEvent(
-      {required this.username,
-      required this.email,
-      required this.firstMobile,
-      required this.secondeMobile,
-      required this.thirdMobile,
-      this.profilePhoto});
+  final String? bio;
+  final String? description;
+  final String? website;
+  final String? link;
+  final String? slogn;
+  const OnEditProfileEvent({
+    required this.username,
+    required this.email,
+    required this.firstMobile,
+    required this.secondeMobile,
+    required this.thirdMobile,
+    this.profilePhoto,
+    this.bio,
+    this.description,
+    this.website,
+    this.link,
+    this.slogn,
+  });
 }

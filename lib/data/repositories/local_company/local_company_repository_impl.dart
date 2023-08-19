@@ -85,6 +85,8 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
     File? image,
     List<XFile>? serviceImageList,
     String? whatsAppNumber,
+    String? bio,
+    File? video,
   }) async {
     try {
       if (await networkInfo.isConnected) {
@@ -117,6 +119,11 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
             MapEntry('whatsAppNumber', whatsAppNumber),
           );
         }
+        if (bio != null) {
+          formData.fields.add(
+            MapEntry('bio', bio),
+          );
+        }
 
         if (serviceImageList != null && serviceImageList.isNotEmpty) {
           for (int i = 0; i < serviceImageList.length; i++) {
@@ -131,6 +138,17 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
               ),
             ));
           }
+        }
+        if (video != null) {
+          String fileName = 'video.mp4';
+          formData.files.add(MapEntry(
+            'video',
+            await MultipartFile.fromFile(
+              video.path,
+              filename: fileName,
+              contentType: MediaType('video', 'mp4'),
+            ),
+          ));
         }
         Response response = await dio.post(
             'https://net-zoon.onrender.com/categories/local-company/add-service',

@@ -33,6 +33,15 @@ class _EditProfileScreenState extends State<EditProfileScreen>
 
   final TextEditingController _emailController = TextEditingController();
 
+  final TextEditingController _bioController = TextEditingController();
+
+  final TextEditingController _descController = TextEditingController();
+
+  final TextEditingController _websiteController = TextEditingController();
+
+  final TextEditingController _linkController = TextEditingController();
+  final TextEditingController _slognController = TextEditingController();
+
   final ImagePicker _picker = ImagePicker();
 
   File? _updatedImage;
@@ -44,7 +53,11 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     _secondeMobileController.text = widget.userInfo.secondeMobile ?? '';
     _thirdMobileController.text = widget.userInfo.thirdMobile ?? '';
     _emailController.text = widget.userInfo.email ?? '';
-
+    _bioController.text = widget.userInfo.bio ?? '';
+    _descController.text = widget.userInfo.description ?? '';
+    _websiteController.text = widget.userInfo.website ?? '';
+    _linkController.text = widget.userInfo.link ?? '';
+    _slognController.text = widget.userInfo.slogn ?? '';
     super.initState();
   }
 
@@ -297,6 +310,117 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       textInputAction: TextInputAction.next,
                     ),
                     const SizedBox(height: 25),
+                    TextFormField(
+                      controller: _bioController,
+                      style: const TextStyle(
+                        color: AppColor.backgroundColor,
+                      ),
+                      decoration: const InputDecoration(
+                        hintText: 'Bio',
+                        prefixIcon: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(Icons.add_outlined)),
+                      ),
+                      keyboardType: TextInputType.name,
+                      textInputAction: TextInputAction.next,
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return 'field_required_message';
+                        }
+
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 25),
+                    TextFormField(
+                      controller: _bioController,
+                      style: const TextStyle(
+                        color: AppColor.backgroundColor,
+                      ),
+                      decoration: const InputDecoration(
+                        hintText: 'Description',
+                        prefixIcon: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(Icons.add_outlined)),
+                      ),
+                      keyboardType: TextInputType.text,
+                      maxLines: 3,
+                      textInputAction: TextInputAction.next,
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return 'field_required_message';
+                        }
+
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 25),
+                    TextFormField(
+                      controller: _bioController,
+                      style: const TextStyle(
+                        color: AppColor.backgroundColor,
+                      ),
+                      decoration: const InputDecoration(
+                        hintText: 'Website',
+                        prefixIcon: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(Icons.app_registration_sharp)),
+                      ),
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return 'field_required_message';
+                        }
+
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 25),
+                    TextFormField(
+                      controller: _linkController,
+                      style: const TextStyle(
+                        color: AppColor.backgroundColor,
+                      ),
+                      decoration: const InputDecoration(
+                        hintText: 'Link',
+                        prefixIcon: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(Icons.link)),
+                      ),
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return 'field_required_message';
+                        }
+
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 25),
+                    TextFormField(
+                      controller: _slognController,
+                      style: const TextStyle(
+                        color: AppColor.backgroundColor,
+                      ),
+                      decoration: const InputDecoration(
+                        hintText: 'Slogn',
+                        prefixIcon: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(Icons.add_outlined)),
+                      ),
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return 'field_required_message';
+                        }
+
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 25),
                     ElevatedButton(
                       onPressed: () {
                         Navigator.of(context)
@@ -352,12 +476,18 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                         onPressed: () {
                           if (!_formKey.currentState!.validate()) return;
                           editBloc.add(OnEditProfileEvent(
-                              username: _userNameController.text,
-                              email: _emailController.text,
-                              firstMobile: _firstMobileController.text,
-                              secondeMobile: _secondeMobileController.text,
-                              thirdMobile: _thirdMobileController.text,
-                              profilePhoto: _updatedImage));
+                            username: _userNameController.text,
+                            email: _emailController.text,
+                            firstMobile: _firstMobileController.text,
+                            secondeMobile: _secondeMobileController.text,
+                            thirdMobile: _thirdMobileController.text,
+                            profilePhoto: _updatedImage,
+                            bio: _bioController.text,
+                            description: _descController.text,
+                            link: _linkController.text,
+                            slogn: _slognController.text,
+                            website: _websiteController.text,
+                          ));
                         },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(

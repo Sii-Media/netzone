@@ -32,6 +32,8 @@ class GetElcCategoryProductsEvent extends ElecDevicesEvent {
 
 class GetAllProductsEvent extends ElecDevicesEvent {}
 
+class GetSelectableProductsEvent extends ElecDevicesEvent {}
+
 class DeleteProductEvent extends ElecDevicesEvent {
   final String productId;
 

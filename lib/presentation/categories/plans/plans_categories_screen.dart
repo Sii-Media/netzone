@@ -25,7 +25,7 @@ class PlansCategoriesScreen extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) {
                           return const VehicleListScreen(
-                            category: 'plans',
+                            category: 'planes',
                             type: 'new',
                           );
                         },
@@ -56,7 +56,7 @@ class PlansCategoriesScreen extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) {
                           return const VehicleListScreen(
-                            category: 'plans',
+                            category: 'planes',
                             type: 'used',
                           );
                         },

@@ -39,7 +39,14 @@ class _EditLocalCompanyprofileScreenState
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _sellTypeController = TextEditingController();
   final TextEditingController _toCountryController = TextEditingController();
+  final TextEditingController _bioController = TextEditingController();
 
+  final TextEditingController _descController = TextEditingController();
+
+  final TextEditingController _websiteController = TextEditingController();
+
+  final TextEditingController _linkController = TextEditingController();
+  final TextEditingController _slognController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
 
   File? _updatedImage;
@@ -56,6 +63,11 @@ class _EditLocalCompanyprofileScreenState
     _addressController.text = widget.userInfo.address ?? '';
     _sellTypeController.text = widget.userInfo.sellType ?? '';
     _toCountryController.text = widget.userInfo.toCountry ?? '';
+    _bioController.text = widget.userInfo.bio ?? '';
+    _descController.text = widget.userInfo.description ?? '';
+    _websiteController.text = widget.userInfo.website ?? '';
+    _linkController.text = widget.userInfo.link ?? '';
+    _slognController.text = widget.userInfo.slogn ?? '';
     super.initState();
   }
 
@@ -274,6 +286,7 @@ class _EditLocalCompanyprofileScreenState
                       color: AppColor.backgroundColor,
                     ),
                     decoration: const InputDecoration(
+                      label: Text('first_name'),
                       hintText: 'first_name',
                       prefixIcon: Padding(
                           padding: EdgeInsets.all(8.0),
@@ -296,6 +309,7 @@ class _EditLocalCompanyprofileScreenState
                       color: AppColor.backgroundColor,
                     ),
                     decoration: const InputDecoration(
+                      label: Text('first mobile number'),
                       hintText: 'first mobile number',
                       prefixIcon: Padding(
                           padding: EdgeInsets.all(8.0),
@@ -318,6 +332,7 @@ class _EditLocalCompanyprofileScreenState
                       color: AppColor.backgroundColor,
                     ),
                     decoration: const InputDecoration(
+                      label: Text('second mobile number'),
                       hintText: 'second mobile number',
                       prefixIcon: Padding(
                           padding: EdgeInsets.all(8.0),
@@ -333,6 +348,7 @@ class _EditLocalCompanyprofileScreenState
                       color: AppColor.backgroundColor,
                     ),
                     decoration: const InputDecoration(
+                      label: Text('third mobile number'),
                       hintText: 'third mobile number',
                       prefixIcon: Padding(
                           padding: EdgeInsets.all(8.0),
@@ -348,6 +364,7 @@ class _EditLocalCompanyprofileScreenState
                       color: AppColor.backgroundColor,
                     ),
                     decoration: const InputDecoration(
+                      label: Text('sub category'),
                       hintText: 'sub category',
                       prefixIcon: Padding(
                           padding: EdgeInsets.all(8.0),
@@ -363,6 +380,7 @@ class _EditLocalCompanyprofileScreenState
                       color: AppColor.backgroundColor,
                     ),
                     decoration: const InputDecoration(
+                      label: Text('address'),
                       hintText: 'address',
                       prefixIcon: Padding(
                           padding: EdgeInsets.all(8.0),
@@ -378,6 +396,7 @@ class _EditLocalCompanyprofileScreenState
                       color: AppColor.backgroundColor,
                     ),
                     decoration: const InputDecoration(
+                      label: Text('To Country'),
                       hintText: 'To Country',
                       prefixIcon: Padding(
                           padding: EdgeInsets.all(8.0),
@@ -393,6 +412,7 @@ class _EditLocalCompanyprofileScreenState
                       color: AppColor.backgroundColor,
                     ),
                     decoration: const InputDecoration(
+                      label: Text('Sell Type'),
                       hintText: 'Sell Type',
                       prefixIcon: Padding(
                           padding: EdgeInsets.all(8.0),
@@ -400,6 +420,122 @@ class _EditLocalCompanyprofileScreenState
                     ),
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
+                  ),
+                  const SizedBox(height: 25),
+                  TextFormField(
+                    controller: _bioController,
+                    style: const TextStyle(
+                      color: AppColor.backgroundColor,
+                    ),
+                    decoration: const InputDecoration(
+                      label: Text('Bio'),
+                      hintText: 'Bio',
+                      prefixIcon: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(Icons.add_outlined)),
+                    ),
+                    keyboardType: TextInputType.name,
+                    textInputAction: TextInputAction.next,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'field_required_message';
+                      }
+
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 25),
+                  TextFormField(
+                    controller: _descController,
+                    style: const TextStyle(
+                      color: AppColor.backgroundColor,
+                    ),
+                    decoration: const InputDecoration(
+                      label: Text('Description'),
+                      hintText: 'Description',
+                      prefixIcon: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(Icons.add_outlined)),
+                    ),
+                    keyboardType: TextInputType.text,
+                    maxLines: 3,
+                    textInputAction: TextInputAction.next,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'field_required_message';
+                      }
+
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 25),
+                  TextFormField(
+                    controller: _bioController,
+                    style: const TextStyle(
+                      color: AppColor.backgroundColor,
+                    ),
+                    decoration: const InputDecoration(
+                      label: Text('Website'),
+                      hintText: 'Website',
+                      prefixIcon: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(Icons.app_registration_sharp)),
+                    ),
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'field_required_message';
+                      }
+
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 25),
+                  TextFormField(
+                    controller: _linkController,
+                    style: const TextStyle(
+                      color: AppColor.backgroundColor,
+                    ),
+                    decoration: const InputDecoration(
+                      label: Text('Link'),
+                      hintText: 'Link',
+                      prefixIcon: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(Icons.link)),
+                    ),
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'field_required_message';
+                      }
+
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 25),
+                  TextFormField(
+                    controller: _slognController,
+                    style: const TextStyle(
+                      color: AppColor.backgroundColor,
+                    ),
+                    decoration: const InputDecoration(
+                      label: Text('Slogn'),
+                      hintText: 'Slogn',
+                      prefixIcon: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(Icons.add_outlined)),
+                    ),
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.done,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'field_required_message';
+                      }
+
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 25),
                   ElevatedButton(

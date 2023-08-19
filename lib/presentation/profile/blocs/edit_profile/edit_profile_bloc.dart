@@ -35,6 +35,11 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
           secondeMobile: event.secondeMobile,
           thirdMobile: event.thirdMobile,
           profilePhoto: event.profilePhoto,
+          bio: event.bio,
+          description: event.description,
+          link: event.link,
+          slogn: event.slogn,
+          website: event.website,
         ),
       );
       emit(

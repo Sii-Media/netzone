@@ -1,0 +1,112 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../core/constant/colors.dart';
+import '../../utils/app_localizations.dart';
+
+Widget infoListWidget({
+  required BuildContext context,
+  String? username,
+  String? description,
+  required String firstMobile,
+  required String email,
+  String? bio,
+  String? address,
+  String? website,
+  String? link,
+  bool? deliverable,
+}) {
+  return ListView(
+    children: [
+      Column(
+        children: [
+          titleAndInput(
+              title: AppLocalizations.of(context).translate('company_name'),
+              input: username ?? ''),
+          description != null
+              ? titleAndInput(
+                  title: AppLocalizations.of(context).translate('desc'),
+                  input: description)
+              : const SizedBox(),
+          titleAndInput(
+              title: AppLocalizations.of(context).translate('mobile'),
+              input: firstMobile),
+          titleAndInput(
+              title: AppLocalizations.of(context).translate('email'),
+              input: email),
+          bio != null && bio != ''
+              ? titleAndInput(
+                  title: AppLocalizations.of(context).translate('Bio'),
+                  input: bio)
+              : const SizedBox(),
+          address != null && address != ''
+              ? titleAndInput(
+                  title: AppLocalizations.of(context).translate('address'),
+                  input: address)
+              : const SizedBox(),
+          website != null && website != ''
+              ? titleAndInput(
+                  title: AppLocalizations.of(context).translate('website'),
+                  input: website)
+              : const SizedBox(),
+          link != null && link != ''
+              ? titleAndInput(
+                  title: AppLocalizations.of(context).translate('link'),
+                  input: link)
+              : const SizedBox(),
+          deliverable != null
+              ? titleAndInput(
+                  title: AppLocalizations.of(context)
+                      .translate('Is there delivery'),
+                  input: deliverable
+                      ? AppLocalizations.of(context).translate('Yes')
+                      : AppLocalizations.of(context).translate('No'),
+                )
+              : const SizedBox(),
+        ],
+      ),
+    ],
+  );
+}
+
+Padding titleAndInput({required String title, required String input}) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Container(
+      // height: 40.h,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey.withOpacity(0.4),
+            width: 1.0,
+          ),
+        ),
+      ),
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                color: AppColor.black,
+                fontSize: 15.sp,
+              ),
+            ),
+            SizedBox(
+              width: 190,
+              child: Text(
+                input,
+                style: TextStyle(
+                  color: AppColor.mainGrey,
+                  fontSize: 15.sp,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}

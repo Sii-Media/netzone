@@ -39,6 +39,9 @@ abstract class DepartmentsRemoteDataSource {
 
   Future<List<CategoryProductsModel>> getAllProducts(final String country);
 
+  Future<List<CategoryProductsModel>> getSelectableProducts(
+      final String country);
+
   Future<CategoryProductsModel> getProductById(
     String productId,
   );
@@ -109,6 +112,12 @@ abstract class DepartmentsRemoteDataSourceImpl
   @override
   @GET('/departments/allProducts')
   Future<List<CategoryProductsModel>> getAllProducts(
+    @Query('country') String country,
+  );
+
+  @override
+  @GET('/departments/getSelectableProducts')
+  Future<List<CategoryProductsModel>> getSelectableProducts(
     @Query('country') String country,
   );
 

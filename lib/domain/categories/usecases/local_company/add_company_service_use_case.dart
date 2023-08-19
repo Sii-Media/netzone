@@ -21,6 +21,8 @@ class AddCompanyServiceUseCase
       image: params.image,
       serviceImageList: params.serviceImageList,
       whatsAppNumber: params.whatsAppNumber,
+      bio: params.bio,
+      video: params.video,
     );
   }
 }
@@ -33,6 +35,8 @@ class AddCompanyServiceParams {
   File? image;
   List<XFile>? serviceImageList;
   String? whatsAppNumber;
+  String? bio;
+  File? video;
   AddCompanyServiceParams({
     required this.title,
     required this.description,
@@ -41,5 +45,7 @@ class AddCompanyServiceParams {
     this.image,
     this.serviceImageList,
     this.whatsAppNumber,
+    this.bio,
+    this.video,
   });
 }

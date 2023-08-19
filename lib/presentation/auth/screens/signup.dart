@@ -222,6 +222,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   bool _isThereWarehouse = false;
   bool _isThereFoodsDelivery = false;
   bool _isFreeZone = false;
+  bool _isSelectable = false;
   bool _isService = false;
   String? deliveryType;
   Future getProfileImage(ImageSource imageSource) async {
@@ -976,6 +977,26 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   : CheckboxListTile(
                       title: Text(
                         AppLocalizations.of(context).translate(
+                            'are_your_products_shareable_by_the_customer'),
+                        style: TextStyle(
+                          color: AppColor.backgroundColor,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                      activeColor: AppColor.backgroundColor,
+                      value: _isSelectable,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _isSelectable = value ?? false;
+                        });
+                      },
+                    ),
+              widget.accountTitle != 'الشركات المحلية' &&
+                      widget.accountTitle != 'المصانع'
+                  ? Container()
+                  : CheckboxListTile(
+                      title: Text(
+                        AppLocalizations.of(context).translate(
                             'Do you offer services rather than products'),
                         style: TextStyle(
                           color: AppColor.backgroundColor,
@@ -1582,6 +1603,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           toCountry: widget.toCountry.text,
                           isFreeZoon: _isFreeZone,
                           isService: _isService,
+                          isSelectable: _isSelectable,
                           freezoneCity: widget.freezoneCityController.text,
                           deliverable: _isDeliverable,
                           profilePhoto: profileImage,

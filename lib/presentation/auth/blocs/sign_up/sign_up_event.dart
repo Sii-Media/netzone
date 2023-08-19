@@ -23,6 +23,8 @@ class SignUpRequested extends SignUpEvent {
 
   final bool isFreeZoon;
   final bool? isService;
+  final bool? isSelectable;
+
   final String? freezoneCity;
 
   final bool? deliverable;
@@ -60,6 +62,7 @@ class SignUpRequested extends SignUpEvent {
     this.toCountry,
     required this.isFreeZoon,
     this.isService,
+    this.isSelectable,
     this.freezoneCity,
     this.deliverable,
     this.profilePhoto,

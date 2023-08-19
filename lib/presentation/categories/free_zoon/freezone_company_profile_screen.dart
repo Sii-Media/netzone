@@ -45,6 +45,7 @@ class _FreezoneCompanyProfileScreenState
 
   final productBloc = sl<GetUserBloc>();
   final adsBloc = sl<AdsBlocBloc>();
+  final visitorBloc = sl<GetUserBloc>();
 
   final authBloc = sl<AuthBloc>();
   late final CountryBloc countryBloc;
@@ -58,6 +59,7 @@ class _FreezoneCompanyProfileScreenState
     adsBloc.add(GetUserAdsEvent(userId: widget.user.id));
     countryBloc = BlocProvider.of<CountryBloc>(context);
     countryBloc.add(GetCountryEvent());
+    visitorBloc.add(AddVisitorEvent(userId: widget.user.id));
 
     checkFollowStatus();
     super.initState();
@@ -187,6 +189,20 @@ class _FreezoneCompanyProfileScreenState
                                       imageUrl: state.userInfo.coverPhoto ??
                                           'https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000',
                                       fit: BoxFit.cover,
+                                      progressIndicatorBuilder:
+                                          (context, url, downloadProgress) =>
+                                              Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 70.0, vertical: 50),
+                                        child: CircularProgressIndicator(
+                                          value: downloadProgress.progress,
+                                          color: AppColor.backgroundColor,
+
+                                          // strokeWidth: 10,
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
                                     ),
                                   ),
                                   SizedBox(
@@ -217,6 +233,27 @@ class _FreezoneCompanyProfileScreenState
                                               width: 100,
                                               height: 100,
                                               fit: BoxFit.fill,
+                                              progressIndicatorBuilder:
+                                                  (context, url,
+                                                          downloadProgress) =>
+                                                      Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 70.0,
+                                                        vertical: 50),
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  value:
+                                                      downloadProgress.progress,
+                                                  color:
+                                                      AppColor.backgroundColor,
+
+                                                  // strokeWidth: 10,
+                                                ),
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      const Icon(Icons.error),
                                             ),
                                           ),
                                         ),
@@ -697,6 +734,32 @@ class _FreezoneCompanyProfileScreenState
                                                                 width: 120.w,
                                                                 fit: BoxFit
                                                                     .contain,
+                                                                progressIndicatorBuilder:
+                                                                    (context,
+                                                                            url,
+                                                                            downloadProgress) =>
+                                                                        Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                      horizontal:
+                                                                          70.0,
+                                                                      vertical:
+                                                                          50),
+                                                                  child:
+                                                                      CircularProgressIndicator(
+                                                                    value: downloadProgress
+                                                                        .progress,
+                                                                    color: AppColor
+                                                                        .backgroundColor,
+
+                                                                    // strokeWidth: 10,
+                                                                  ),
+                                                                ),
+                                                                errorWidget: (context,
+                                                                        url,
+                                                                        error) =>
+                                                                    const Icon(Icons
+                                                                        .error),
                                                               ),
                                                               Row(
                                                                 mainAxisAlignment:

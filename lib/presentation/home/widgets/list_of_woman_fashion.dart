@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/woman_fashion/entities/woman_fashion_list.dart';
 import 'package:netzoon/presentation/ecommerce/screens/subsection_screen.dart';
 
+import '../../core/constant/colors.dart';
+
 class ListOfWomanFashion extends StatelessWidget {
   const ListOfWomanFashion({super.key, required this.womanFashion});
 
@@ -57,6 +59,19 @@ class ListOfWomanFashion extends StatelessWidget {
                             imageUrl: womanFashion[index].imgUrl,
                             fit: BoxFit.contain,
                             height: MediaQuery.of(context).size.height,
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) => Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 70.0, vertical: 50),
+                              child: CircularProgressIndicator(
+                                value: downloadProgress.progress,
+                                color: AppColor.backgroundColor,
+
+                                // strokeWidth: 10,
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
                           ),
                           // Image.network(
                           //   womanFashion[index].imgUrl,

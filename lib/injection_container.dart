@@ -141,6 +141,7 @@ import 'package:netzoon/domain/departments/usecases/delete_product_use_case.dart
 import 'package:netzoon/domain/departments/usecases/edit_product_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_categories_by_departments_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_category_products_use_case.dart';
+import 'package:netzoon/domain/departments/usecases/get_selectable_products_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_selected_products_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_user_products_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/rate_product_use_case.dart';
@@ -223,6 +224,7 @@ import 'domain/advertisements/usercases/get_ads_by_id_use_case.dart';
 import 'domain/auth/usecases/get_user_by_id_use_case.dart';
 import 'domain/categories/usecases/real_estate/get_real_estate_companies_use_case.dart';
 import 'domain/categories/usecases/vehicles/add_vehicle_use_case.dart';
+import 'domain/categories/usecases/vehicles/get_sea_companies_use_case.dart';
 import 'domain/deals/usecases/delete_deal_use_case.dart';
 import 'domain/deals/usecases/get_deal_by_id_use_case.dart';
 import 'domain/departments/usecases/get_all_products_use_case.dart';
@@ -293,6 +295,7 @@ Future<void> init() async {
         getCountryUseCase: sl(),
         rateProductUseCase: sl(),
         getSignedInUserUseCase: sl(),
+        getSelectableProductsUseCase: sl(),
       ));
 
   sl.registerFactory(() => AddProductBloc(
@@ -347,6 +350,7 @@ Future<void> init() async {
         addVehicleUseCase: sl(),
         getSignedInUserUseCase: sl(),
         getCountryUseCase: sl(),
+        getSeaCompaniesUseCase: sl(),
       ));
 
   sl.registerFactory(() => FreezoneBloc(
@@ -713,6 +717,12 @@ Future<void> init() async {
       () => AddVisitorProfileUseCase(authRepository: sl()));
 
   sl.registerLazySingleton(() => GetUserVisitorsUseCase(authRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => GetSelectableProductsUseCase(departmentRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => GetSeaCompaniesUseCase(vehicleRepository: sl()));
 
   //! Repositories
 

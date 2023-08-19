@@ -35,6 +35,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       result.fold((l) => null, (r) => user = r);
       // ignore: unused_local_variable
       // late List<UserInfo> filteredUsers;
+
       filteredUsers = users.fold(
         (failure) => [],
         (usersList) => usersList

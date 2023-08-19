@@ -32,6 +32,8 @@ abstract class LocalCompanyRepository {
     File? image,
     List<XFile>? serviceImageList,
     String? whatsAppNumber,
+    String? bio,
+    File? video,
   });
   Future<Either<Failure, String>> rateCompanyService({
     required String id,

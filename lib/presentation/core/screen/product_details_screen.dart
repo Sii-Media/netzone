@@ -177,7 +177,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                               if (state is ElecDevicesInProgress) {
                                 return SizedBox(
                                   height: MediaQuery.of(context).size.height -
-                                      120.h,
+                                      170.h,
                                   child: const Center(
                                     child: CircularProgressIndicator(
                                       color: AppColor.backgroundColor,
@@ -226,6 +226,24 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                             width: 700.w,
                                             height: 200.h,
                                             fit: BoxFit.contain,
+                                            progressIndicatorBuilder: (context,
+                                                    url, downloadProgress) =>
+                                                Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 70.0,
+                                                      vertical: 50),
+                                              child: CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress,
+                                                color: AppColor.backgroundColor,
+
+                                                // strokeWidth: 10,
+                                              ),
+                                            ),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Icon(Icons.error),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -925,7 +943,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
           builder: (context, state) {
             if (state is ElecDevicesInProgress) {
               return SizedBox(
-                height: MediaQuery.of(context).size.height - 120.h,
+                height: MediaQuery.of(context).size.height - 170.h,
                 child: const Center(
                   child: CircularProgressIndicator(
                     color: AppColor.backgroundColor,

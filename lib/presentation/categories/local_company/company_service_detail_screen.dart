@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/company_service/company_service.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../../injection_container.dart';
 import '../../auth/blocs/auth_bloc/auth_bloc.dart';
@@ -21,7 +23,9 @@ import 'local_company_bloc/local_company_bloc.dart';
 
 class CompanyServiceDetailsScreen extends StatefulWidget {
   final CompanyService companyService;
-  const CompanyServiceDetailsScreen({super.key, required this.companyService});
+  final String? callNumber;
+  const CompanyServiceDetailsScreen(
+      {super.key, required this.companyService, this.callNumber});
 
   @override
   State<CompanyServiceDetailsScreen> createState() =>
@@ -34,11 +38,29 @@ class _CompanyServiceDetailsScreenState
   final rateBloc = sl<LocalCompanyBloc>();
   final authBloc = sl<AuthBloc>();
   final deleteBloc = sl<LocalCompanyBloc>();
+  late VideoPlayerController _videoPlayerController;
+  late ChewieController _chewieController;
   @override
   void initState() {
     authBloc.add(AuthCheckRequested());
-
+    _videoPlayerController =
+        VideoPlayerController.network(widget.companyService.vedioUrl ?? '')
+          ..initialize().then((_) {
+            setState(() {});
+          });
+    _chewieController = ChewieController(
+      videoPlayerController: _videoPlayerController,
+      aspectRatio: 16 / 9,
+    );
+    _videoPlayerController.setLooping(true);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _videoPlayerController.dispose();
+    _chewieController.dispose();
+    super.dispose();
   }
 
   @override
@@ -119,6 +141,19 @@ class _CompanyServiceDetailsScreenState
                         child: CachedNetworkImage(
                           imageUrl: widget.companyService.imageUrl ?? '',
                           fit: BoxFit.contain,
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) => Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 70.0, vertical: 50),
+                            child: CircularProgressIndicator(
+                              value: downloadProgress.progress,
+                              color: AppColor.backgroundColor,
+
+                              // strokeWidth: 10,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
                         ),
                       ),
                       SizedBox(
@@ -354,6 +389,29 @@ class _CompanyServiceDetailsScreenState
                                     ),
                                   ),
                                 ),
+                          const Divider(),
+                          Text(
+                            '${AppLocalizations.of(context).translate('vedio')} :',
+                            style: TextStyle(
+                              color: AppColor.black,
+                              fontSize: 17.sp,
+                            ),
+                          ),
+                          widget.companyService.vedioUrl != null
+                              ? AspectRatio(
+                                  aspectRatio: 16 / 9,
+                                  child: Chewie(
+                                    controller: _chewieController,
+                                  ),
+                                )
+                              : Text(
+                                  AppLocalizations.of(context)
+                                      .translate('no_vedio'),
+                                  style: TextStyle(
+                                    color: AppColor.mainGrey,
+                                    fontSize: 15.sp,
+                                  ),
+                                ),
                         ],
                       ),
                       SizedBox(
@@ -374,7 +432,9 @@ class _CompanyServiceDetailsScreenState
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             PhoneCallWidget(
-                phonePath: widget.companyService.whatsAppNumber ?? "",
+                phonePath: widget.callNumber ??
+                    widget.companyService.whatsAppNumber ??
+                    '',
                 title: AppLocalizations.of(context).translate('call')),
             ElevatedButton(
               onPressed: () {},

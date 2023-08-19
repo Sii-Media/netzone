@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/ecommerce/screens/subsection_screen.dart';
 
+import '../../core/constant/colors.dart';
+
 class ListOfWatches extends StatelessWidget {
   const ListOfWatches({super.key, required this.watches});
 
@@ -56,6 +58,19 @@ class ListOfWatches extends StatelessWidget {
                             imageUrl: watches[index].imgUrl,
                             fit: BoxFit.contain,
                             height: MediaQuery.of(context).size.height,
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) => Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 70.0, vertical: 50),
+                              child: CircularProgressIndicator(
+                                value: downloadProgress.progress,
+                                color: AppColor.backgroundColor,
+
+                                // strokeWidth: 10,
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
                           ),
                           // Image.network(
                           //   watches[index].imgUrl,

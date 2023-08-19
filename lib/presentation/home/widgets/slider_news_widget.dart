@@ -49,6 +49,20 @@ class SliderNewsWidget extends StatelessWidget {
                                     width: 35.w,
                                     height: 35.h,
                                     fit: BoxFit.cover,
+                                    progressIndicatorBuilder:
+                                        (context, url, downloadProgress) =>
+                                            Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 70.0, vertical: 50),
+                                      child: CircularProgressIndicator(
+                                        value: downloadProgress.progress,
+                                        color: AppColor.backgroundColor,
+
+                                        // strokeWidth: 10,
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
                                     imageUrl: news[index]
                                             .creator
                                             .profilePhoto ??
@@ -98,6 +112,20 @@ class SliderNewsWidget extends StatelessWidget {
                                         height: 90,
                                         width:
                                             MediaQuery.of(context).size.width,
+                                        progressIndicatorBuilder:
+                                            (context, url, downloadProgress) =>
+                                                Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 70.0, vertical: 50),
+                                          child: CircularProgressIndicator(
+                                            value: downloadProgress.progress,
+                                            color: AppColor.backgroundColor,
+
+                                            // strokeWidth: 10,
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            const Icon(Icons.error),
                                       ),
                                       // Image.network(
                                       //   news[index].imgUrl,

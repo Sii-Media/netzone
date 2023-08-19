@@ -37,6 +37,8 @@ class GetCarsCompaniesEvent extends VehicleEvent {}
 
 class GetPlanesCompaniesEvent extends VehicleEvent {}
 
+class GetSeaCompaniesEvent extends VehicleEvent {}
+
 class GetCompanyVehiclesEvent extends VehicleEvent {
   final String type;
   final String id;

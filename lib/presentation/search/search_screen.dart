@@ -7,8 +7,12 @@ import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 
 import '../../injection_container.dart';
 import '../advertising/advertising_details.dart';
+import '../categories/factories/factory_profile_screen.dart';
 import '../categories/local_company/local_company_bloc/local_company_bloc.dart';
 import '../categories/local_company/local_company_profile.dart';
+import '../categories/real_estate/blocs/real_estate/real_estate_bloc.dart';
+import '../categories/real_estate/screens/real_estate_company_profile_screen.dart';
+import '../categories/users/blocs/users_bloc/users_bloc.dart';
 import '../categories/vehicles/blocs/bloc/vehicle_bloc.dart';
 import '../core/constant/colors.dart';
 import '../core/widgets/vehicle_details.dart';
@@ -30,15 +34,15 @@ class _SearchPageState extends State<SearchPage> {
     'cars',
     'advertiments',
     'civil_aircraft',
+    'factories',
+    'real_estate',
   ];
   late String selectedCategory;
   late String searchText;
   String? selectedCarType;
   String? selectedCat;
   String? data = '';
-  List<dynamic> items = [
-    // Add more items as needed
-  ];
+  List<dynamic> items = [];
 
   List<dynamic> filteredItems = [];
   final TextEditingController controller = TextEditingController();
@@ -53,7 +57,9 @@ class _SearchPageState extends State<SearchPage> {
 
   void filterItems(String cat) {
     setState(() {
-      if (cat == 'local_companies') {
+      if (cat == 'local_companies' ||
+          cat == 'factories' ||
+          cat == 'real_estate') {
         filteredItems = items
             .where((item) =>
                 item.username.toLowerCase().contains(searchText.toLowerCase()))
@@ -72,10 +78,12 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
+  final factoryBloc = sl<UsersBloc>();
   final productBloc = sl<ElecDevicesBloc>();
   final localCompanyBloc = sl<LocalCompanyBloc>();
   final adsBloc = sl<AdsBlocBloc>();
   final vehicleBloc = sl<VehicleBloc>();
+  final estateBloc = sl<RealEstateBloc>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,6 +152,12 @@ class _SearchPageState extends State<SearchPage> {
                                     localCompanyBloc.add(
                                         const GetLocalCompaniesEvent(
                                             userType: 'local_company'));
+                                  } else if (cat == 'real_estate') {
+                                    estateBloc
+                                        .add(GetRealEstateCompaniesEvent());
+                                  } else if (cat == 'factories') {
+                                    factoryBloc.add(const GetUsersListEvent(
+                                        userType: 'factory'));
                                   } else if (cat == 'advertiments') {
                                     adsBloc.add(const GetAllAdsEvent());
                                   } else if (cat == 'cars') {
@@ -191,6 +205,9 @@ class _SearchPageState extends State<SearchPage> {
                 if (selectedCategory == 'Products') productBlocWidget(),
                 if (selectedCategory == 'local_companies')
                   localCompanyBlocWidget(),
+                if (selectedCategory == 'real_estate')
+                  realEstateCompanyBlocWidget(),
+                if (selectedCategory == 'factories') factoryBlocWidget(),
                 if (selectedCategory == 'advertiments') adsBlocWidget(),
                 // if (selectedCategory == 'cars') carsBlocWidget(),
                 if (selectedCategory == 'cars') carsWidget(),
@@ -242,6 +259,18 @@ class _SearchPageState extends State<SearchPage> {
                                     return LocalCompanyProfileScreen(
                                         localCompany: filteredItems[index]);
                                   }));
+                                } else if (selectedCategory == 'real_estate') {
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return RealEstateCompanyProfileScreen(
+                                        user: filteredItems[index]);
+                                  }));
+                                } else if (selectedCategory == 'factories') {
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return FactoryProfileScreen(
+                                        user: filteredItems[index]);
+                                  }));
                                 } else if (selectedCategory == 'advertiments') {
                                   Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) {
@@ -281,7 +310,9 @@ class _SearchPageState extends State<SearchPage> {
                                 ),
                                 child: ListTile(
                                   title: Text(
-                                    selectedCategory == 'local_companies'
+                                    selectedCategory == 'local_companies' ||
+                                            selectedCategory == 'factories' ||
+                                            selectedCategory == 'real_estate'
                                         ? filteredItems[index].username
                                         : filteredItems[index].name,
                                     style: TextStyle(
@@ -612,6 +643,124 @@ class _SearchPageState extends State<SearchPage> {
             ),
           );
         } else if (state is GetLocalCompaniesSuccess) {
+          items = state.companies;
+          return TypeAheadField(
+            textFieldConfiguration: TextFieldConfiguration(
+              controller: controller,
+              onChanged: (value) {
+                setState(() {
+                  searchText = value;
+                });
+              },
+              decoration: const InputDecoration(
+                labelText: 'Search',
+              ),
+            ),
+            suggestionsCallback: (pattern) {
+              return state.companies.where((item) =>
+                  item.username!.toLowerCase().contains(pattern.toLowerCase()));
+            },
+            itemBuilder: (context, suggestion) {
+              return ListTile(
+                title: Text(suggestion.username ?? ''),
+              );
+            },
+            onSuggestionSelected: (suggestion) {
+              setState(() {
+                searchText = suggestion.username ?? '';
+              });
+              controller.text = searchText;
+              controller.selection = TextSelection.fromPosition(
+                TextPosition(offset: controller.text.length),
+              );
+            },
+          );
+        }
+        return Container();
+      },
+    );
+  }
+
+  BlocBuilder<UsersBloc, UsersState> factoryBlocWidget() {
+    return BlocBuilder<UsersBloc, UsersState>(
+      bloc: factoryBloc,
+      builder: (context, state) {
+        if (state is GetUsersInProgress) {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: AppColor.backgroundColor,
+            ),
+          );
+        } else if (state is GetUsersFailure) {
+          final failure = state.message;
+          return Center(
+            child: Text(
+              failure,
+              style: const TextStyle(
+                color: Colors.red,
+              ),
+            ),
+          );
+        } else if (state is GetUsersSuccess) {
+          items = state.users;
+          return TypeAheadField(
+            textFieldConfiguration: TextFieldConfiguration(
+              controller: controller,
+              onChanged: (value) {
+                setState(() {
+                  searchText = value;
+                });
+              },
+              decoration: const InputDecoration(
+                labelText: 'Search',
+              ),
+            ),
+            suggestionsCallback: (pattern) {
+              return state.users.where((item) =>
+                  item.username!.toLowerCase().contains(pattern.toLowerCase()));
+            },
+            itemBuilder: (context, suggestion) {
+              return ListTile(
+                title: Text(suggestion.username ?? ''),
+              );
+            },
+            onSuggestionSelected: (suggestion) {
+              setState(() {
+                searchText = suggestion.username ?? '';
+              });
+              controller.text = searchText;
+              controller.selection = TextSelection.fromPosition(
+                TextPosition(offset: controller.text.length),
+              );
+            },
+          );
+        }
+        return Container();
+      },
+    );
+  }
+
+  BlocBuilder<RealEstateBloc, RealEstateState> realEstateCompanyBlocWidget() {
+    return BlocBuilder<RealEstateBloc, RealEstateState>(
+      bloc: estateBloc,
+      builder: (context, state) {
+        if (state is GetRealEstateInProgress) {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: AppColor.backgroundColor,
+            ),
+          );
+        } else if (state is GetRealEstateFailure) {
+          final failure = state.message;
+          return Center(
+            child: Text(
+              failure,
+              style: const TextStyle(
+                color: Colors.red,
+              ),
+            ),
+          );
+        } else if (state is GetRealEstateCompaniesSuccess) {
           items = state.companies;
           return TypeAheadField(
             textFieldConfiguration: TextFieldConfiguration(

@@ -38,6 +38,8 @@ class _VehicleCompaniesProfileScreenState
     with ScreenLoader<VehicleCompaniesProfileScreen> {
   final bloc = sl<VehicleBloc>();
   final authBloc = sl<AuthBloc>();
+  final visitorBloc = sl<GetUserBloc>();
+
   final userBloc = sl<GetUserBloc>();
   late final CountryBloc countryBloc;
   bool isFollowing = false;
@@ -51,6 +53,8 @@ class _VehicleCompaniesProfileScreenState
     checkFollowStatus();
     countryBloc = BlocProvider.of<CountryBloc>(context);
     countryBloc.add(GetCountryEvent());
+    visitorBloc.add(AddVisitorEvent(userId: widget.vehiclesCompany.id));
+
     super.initState();
   }
 
@@ -193,6 +197,19 @@ class _VehicleCompaniesProfileScreenState
                               imageUrl: widget.vehiclesCompany.coverPhoto ??
                                   'https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000',
                               fit: BoxFit.contain,
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 70.0, vertical: 50),
+                                child: CircularProgressIndicator(
+                                  value: downloadProgress.progress,
+                                  color: AppColor.backgroundColor,
+
+                                  // strokeWidth: 10,
+                                ),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
                             ),
                           ),
                           SizedBox(
@@ -219,6 +236,20 @@ class _VehicleCompaniesProfileScreenState
                                       width: 100,
                                       height: 100,
                                       fit: BoxFit.fill,
+                                      progressIndicatorBuilder:
+                                          (context, url, downloadProgress) =>
+                                              Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 70.0, vertical: 50),
+                                        child: CircularProgressIndicator(
+                                          value: downloadProgress.progress,
+                                          color: AppColor.backgroundColor,
+
+                                          // strokeWidth: 10,
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
                                     ),
                                   ),
                                 ),

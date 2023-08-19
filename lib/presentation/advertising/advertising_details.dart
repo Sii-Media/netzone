@@ -190,7 +190,21 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                                       imageUrl: state.ads.advertisingImage,
                                       width: 700.w,
                                       height: 200.h,
-                                      fit: BoxFit.cover,
+                                      fit: BoxFit.contain,
+                                      progressIndicatorBuilder:
+                                          (context, url, downloadProgress) =>
+                                              Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 70.0, vertical: 50),
+                                        child: CircularProgressIndicator(
+                                          value: downloadProgress.progress,
+                                          color: AppColor.backgroundColor,
+
+                                          // strokeWidth: 10,
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -421,13 +435,13 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                                         title: 'year',
                                         input: state.ads.advertisingYear,
                                       ),
-                                      SizedBox(
-                                        height: 7.h,
-                                      ),
-                                      titleAndInput(
-                                        title: 'kilometers',
-                                        input: '123',
-                                      ),
+                                      // SizedBox(
+                                      //   height: 7.h,
+                                      // ),
+                                      // titleAndInput(
+                                      //   title: 'kilometers',
+                                      //   input: '123',
+                                      // ),
                                       SizedBox(
                                         height: 7.h,
                                       ),

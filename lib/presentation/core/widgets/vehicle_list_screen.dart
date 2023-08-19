@@ -30,9 +30,9 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
   void initState() {
     if (widget.category == 'cars') {
       vehilceBloc.add(const GetAllCarsEvent());
-    } else if (widget.category == 'plans' && widget.type == 'new') {
+    } else if (widget.category == 'planes' && widget.type == 'new') {
       vehilceBloc.add(GetAllNewPlanesEvent());
-    } else if (widget.category == 'plans' && widget.type == 'used') {
+    } else if (widget.category == 'planes' && widget.type == 'used') {
       vehilceBloc.add(GetAllUsedPlanesEvent());
     }
     super.initState();
@@ -53,9 +53,9 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
             onRefresh: () async {
               if (widget.category == 'cars') {
                 vehilceBloc.add(const GetAllCarsEvent());
-              } else if (widget.category == 'plans' && widget.type == 'new') {
+              } else if (widget.category == 'planes' && widget.type == 'new') {
                 vehilceBloc.add(GetAllNewPlanesEvent());
-              } else if (widget.category == 'plans' && widget.type == 'used') {
+              } else if (widget.category == 'planes' && widget.type == 'used') {
                 vehilceBloc.add(GetAllUsedPlanesEvent());
               }
             },
@@ -149,6 +149,19 @@ class VehicleWidget extends StatelessWidget {
                     width: 700.w,
                     height: 200.h,
                     fit: BoxFit.cover,
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 70.0, vertical: 50),
+                      child: CircularProgressIndicator(
+                        value: downloadProgress.progress,
+                        color: AppColor.backgroundColor,
+
+                        // strokeWidth: 10,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                   ),
                 ),
                 Row(

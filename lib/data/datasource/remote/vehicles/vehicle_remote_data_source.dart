@@ -29,6 +29,7 @@ abstract class VehicleRemoteDataSource {
 
   Future<List<UserInfoModel>> getCarsCompanies(String country);
   Future<List<UserInfoModel>> getPlanesCompanies(String country);
+  Future<List<UserInfoModel>> getSeaCompanies(String country);
 
   Future<List<VehicleModel>> getCompanyVehicles(String id);
 }
@@ -82,6 +83,12 @@ abstract class VehicleRemoteDataSourceImpl implements VehicleRemoteDataSource {
   @override
   @GET('/categories/planes-companies')
   Future<List<UserInfoModel>> getPlanesCompanies(
+    @Query('country') String country,
+  );
+
+  @override
+  @GET('/categories/sea-companies')
+  Future<List<UserInfoModel>> getSeaCompanies(
     @Query('country') String country,
   );
 

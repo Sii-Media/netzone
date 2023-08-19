@@ -355,6 +355,18 @@ class CompanyProfile extends StatelessWidget {
                 imageUrl: companies.image,
                 fit: BoxFit.contain,
                 height: 80.h,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 70.0, vertical: 50),
+                  child: CircularProgressIndicator(
+                    value: downloadProgress.progress,
+                    color: AppColor.backgroundColor,
+
+                    // strokeWidth: 10,
+                  ),
+                ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),
             GestureDetector(

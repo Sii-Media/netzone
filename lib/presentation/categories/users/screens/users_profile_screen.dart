@@ -35,6 +35,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
     with TickerProviderStateMixin, ScreenLoader<UsersProfileScreen> {
   final userBloc = sl<GetUserBloc>();
   final rateBloc = sl<GetUserBloc>();
+  final visitorBloc = sl<GetUserBloc>();
 
   final productBloc = sl<GetUserBloc>();
   final myProductBloc = sl<GetUserBloc>();
@@ -49,6 +50,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
     authBloc.add(AuthCheckRequested());
     countryBloc = BlocProvider.of<CountryBloc>(context);
     countryBloc.add(GetCountryEvent());
+    visitorBloc.add(AddVisitorEvent(userId: widget.user.id));
 
     checkFollowStatus();
     super.initState();
@@ -177,6 +179,20 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                       imageUrl: state.userInfo.coverPhoto ??
                                           'https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000',
                                       fit: BoxFit.cover,
+                                      progressIndicatorBuilder:
+                                          (context, url, downloadProgress) =>
+                                              Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 70.0, vertical: 50),
+                                        child: CircularProgressIndicator(
+                                          value: downloadProgress.progress,
+                                          color: AppColor.backgroundColor,
+
+                                          // strokeWidth: 10,
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
                                     ),
                                   ),
                                   SizedBox(
@@ -207,6 +223,27 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                               width: 100,
                                               height: 100,
                                               fit: BoxFit.fill,
+                                              progressIndicatorBuilder:
+                                                  (context, url,
+                                                          downloadProgress) =>
+                                                      Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 70.0,
+                                                        vertical: 50),
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  value:
+                                                      downloadProgress.progress,
+                                                  color:
+                                                      AppColor.backgroundColor,
+
+                                                  // strokeWidth: 10,
+                                                ),
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      const Icon(Icons.error),
                                             ),
                                           ),
                                         ),
@@ -517,21 +554,29 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                               TabBar(
                                 controller: tabController,
                                 tabs: [
-                                  Text(
-                                    AppLocalizations.of(context)
-                                        .translate('my_products'),
-                                    style: TextStyle(
-                                      color: AppColor.black,
-                                      fontSize: 10.sp,
-                                    ),
+                                  BlocBuilder<GetUserBloc, GetUserState>(
+                                    bloc: productBloc,
+                                    builder: (context, productState) {
+                                      return Text(
+                                        '${AppLocalizations.of(context).translate('my_products')} (${productState is GetUserProductsSuccess ? productState.products.length : 0})',
+                                        style: TextStyle(
+                                          color: AppColor.black,
+                                          fontSize: 10.sp,
+                                        ),
+                                      );
+                                    },
                                   ),
-                                  Text(
-                                    AppLocalizations.of(context)
-                                        .translate('companies_products'),
-                                    style: TextStyle(
-                                      color: AppColor.black,
-                                      fontSize: 10.sp,
-                                    ),
+                                  BlocBuilder<GetUserBloc, GetUserState>(
+                                    bloc: myProductBloc,
+                                    builder: (context, myProdState) {
+                                      return Text(
+                                        '${AppLocalizations.of(context).translate('companies_products')} (${myProdState is GetSelectedProductsSuccess ? myProdState.products.length : 0})',
+                                        style: TextStyle(
+                                          color: AppColor.black,
+                                          fontSize: 9.sp,
+                                        ),
+                                      );
+                                    },
                                   ),
                                   Text(
                                     AppLocalizations.of(context)
@@ -672,6 +717,20 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                                               160.w,
                                                                           fit: BoxFit
                                                                               .contain,
+                                                                          progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                                                              Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.symmetric(horizontal: 70.0, vertical: 50),
+                                                                            child:
+                                                                                CircularProgressIndicator(
+                                                                              value: downloadProgress.progress,
+                                                                              color: AppColor.backgroundColor,
+
+                                                                              // strokeWidth: 10,
+                                                                            ),
+                                                                          ),
+                                                                          errorWidget: (context, url, error) =>
+                                                                              const Icon(Icons.error),
                                                                         ),
                                                                         Padding(
                                                                           padding: const EdgeInsets.only(
@@ -865,6 +924,20 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                                               160.w,
                                                                           fit: BoxFit
                                                                               .contain,
+                                                                          progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                                                              Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.symmetric(horizontal: 70.0, vertical: 50),
+                                                                            child:
+                                                                                CircularProgressIndicator(
+                                                                              value: downloadProgress.progress,
+                                                                              color: AppColor.backgroundColor,
+
+                                                                              // strokeWidth: 10,
+                                                                            ),
+                                                                          ),
+                                                                          errorWidget: (context, url, error) =>
+                                                                              const Icon(Icons.error),
                                                                         ),
                                                                         Padding(
                                                                           padding: const EdgeInsets.only(

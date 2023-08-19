@@ -11,9 +11,10 @@ class CartItemWidget extends StatefulWidget {
   const CartItemWidget({
     super.key,
     required this.cart,
+    required this.currency,
   });
   final CategoryProducts cart;
-
+  final String currency;
   @override
   State<CartItemWidget> createState() => _CartItemWidgetState();
 }
@@ -80,6 +81,18 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                 child: CachedNetworkImage(
                   imageUrl: widget.cart.imageUrl,
                   fit: BoxFit.cover,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 70.0, vertical: 50),
+                    child: CircularProgressIndicator(
+                      value: downloadProgress.progress,
+                      color: AppColor.backgroundColor,
+
+                      // strokeWidth: 10,
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
               Padding(
@@ -108,15 +121,36 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                             color: AppColor.mainGrey, fontSize: 12.sp),
                       ),
                     ),
-                    Text(
-                      widget.cart.priceAfterDiscount != null
-                          ? '\$ ${widget.cart.priceAfterDiscount} '
-                          : '\$ ${widget.cart.price} ',
-                      style: TextStyle(
-                        color: AppColor.black,
-                        fontSize: 15.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    // Text(
+                    //   widget.cart.priceAfterDiscount != null
+                    //       ? '\$ ${widget.cart.priceAfterDiscount} '
+                    //       : '\$ ${widget.cart.price} ',
+                    //   style: TextStyle(
+                    //     color: AppColor.black,
+                    //     fontSize: 15.sp,
+                    //     fontWeight: FontWeight.bold,
+                    //   ),
+                    // ),
+                    RichText(
+                      text: TextSpan(
+                          style: TextStyle(
+                              fontSize: 10.sp, color: AppColor.backgroundColor),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: widget.cart.priceAfterDiscount != null
+                                  ? '${widget.cart.priceAfterDiscount}'
+                                  : '${widget.cart.price}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            TextSpan(
+                              text: widget.currency,
+                              style: TextStyle(
+                                  color: AppColor.backgroundColor,
+                                  fontSize: 10.sp),
+                            )
+                          ]),
                     ),
                   ],
                 ),
@@ -145,24 +179,25 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                       ),
                       Row(
                         children: [
-                          Container(
-                            padding: const EdgeInsets.all(4.0),
-                            decoration: BoxDecoration(
-                                color: AppColor.white,
-                                borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      spreadRadius: 3,
-                                      blurRadius: 10,
-                                      offset: const Offset(0, 3)),
-                                ]),
-                            child: InkWell(
-                              onTap: () {
-                                _incrementQuantity();
-                                cartBloc.add(ChangeQuantity(
-                                    product: widget.cart, quantity: _quantity));
-                              },
+                          InkWell(
+                            onTap: () {
+                              _incrementQuantity();
+                              cartBloc.add(ChangeQuantity(
+                                  product: widget.cart, quantity: _quantity));
+                            },
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              padding: const EdgeInsets.all(4.0),
+                              decoration: BoxDecoration(
+                                  color: AppColor.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 3,
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 3)),
+                                  ]),
                               child: Icon(
                                 Icons.add,
                                 color: AppColor.red.withOpacity(0.6),

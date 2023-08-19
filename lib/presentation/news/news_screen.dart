@@ -169,6 +169,20 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
                                   width: 35.w,
                                   height: 35.h,
                                   fit: BoxFit.cover,
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 70.0, vertical: 50),
+                                    child: CircularProgressIndicator(
+                                      value: downloadProgress.progress,
+                                      color: AppColor.backgroundColor,
+
+                                      // strokeWidth: 10,
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
                                   imageUrl: widget
                                           .news[index].creator.profilePhoto ??
                                       'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
@@ -212,6 +226,20 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
                                         child: CachedNetworkImage(
                                           imageUrl: widget.news[index].imgUrl,
                                           fit: BoxFit.cover,
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 70.0, vertical: 50),
+                                            child: CircularProgressIndicator(
+                                              value: downloadProgress.progress,
+                                              color: AppColor.backgroundColor,
+
+                                              // strokeWidth: 10,
+                                            ),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
                                         ),
                                       ),
                                       Positioned(

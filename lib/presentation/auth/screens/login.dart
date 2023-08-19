@@ -149,7 +149,8 @@ class _LogInScreenState extends State<LogInScreen> {
             );
           } else if (state.user.userInfo.userType == 'local_company' ||
               state.user.userInfo.userType == 'trader' ||
-              state.user.userInfo.userType == 'freezone') {
+              state.user.userInfo.userType == 'freezone' ||
+              state.user.userInfo.userType == 'factory') {
             return MyLocalCompanyProfileScreen(
               userId: state.user.userInfo.id,
             );
@@ -157,7 +158,7 @@ class _LogInScreenState extends State<LogInScreen> {
             return MyRealEstateCompanyProfileScreen(
                 userId: state.user.userInfo.id);
           } else if (state.user.userInfo.userType == 'car' ||
-              state.user.userInfo.userType == 'plans') {
+              state.user.userInfo.userType == 'planes') {
             return MyVehicleProfileScreen(
                 userId: state.user.userInfo.id,
                 type: state.user.userInfo.userType ?? '');

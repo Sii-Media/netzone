@@ -345,6 +345,20 @@ class _AddTenderScreenState extends State<AddTenderScreen>
                                     width: 250.w,
                                     height: 250.h,
                                     fit: BoxFit.cover,
+                                    progressIndicatorBuilder:
+                                        (context, url, downloadProgress) =>
+                                            Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 70.0, vertical: 50),
+                                      child: CircularProgressIndicator(
+                                        value: downloadProgress.progress,
+                                        color: AppColor.backgroundColor,
+
+                                        // strokeWidth: 10,
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
                                   ),
                                 ),
                           SizedBox(

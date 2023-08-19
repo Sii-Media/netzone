@@ -1,12 +1,15 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:netzoon/presentation/categories/local_company/local_company_bloc/local_company_bloc.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../injection_container.dart';
 import '../core/constant/colors.dart';
@@ -28,12 +31,14 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
   late TextEditingController descController = TextEditingController();
   late TextEditingController priceController = TextEditingController();
   late TextEditingController whatsAppNumberController = TextEditingController();
+  late TextEditingController bioController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final addBloc = sl<LocalCompanyBloc>();
   File? _image;
   List<XFile> imageFileList = [];
-
+  File? _video;
+  String videoName = '';
   Future getImage(ImageSource imageSource) async {
     final image = await ImagePicker().pickImage(source: imageSource);
 
@@ -181,6 +186,18 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
                     SizedBox(
                       height: 7.h,
                     ),
+                    addServiceFormFeild(
+                      context: context,
+                      controller: bioController,
+                      title: 'Bio',
+                      isNumber: true,
+                      validator: (val) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 7.h,
+                    ),
                     Text(
                       AppLocalizations.of(context)
                           .translate('add_service_image'),
@@ -228,6 +245,19 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
                               width: 250.w,
                               height: 250.h,
                               fit: BoxFit.cover,
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 70.0, vertical: 50),
+                                child: CircularProgressIndicator(
+                                  value: downloadProgress.progress,
+                                  color: AppColor.backgroundColor,
+
+                                  // strokeWidth: 10,
+                                ),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
                             ),
                           ),
                     SizedBox(
@@ -266,6 +296,58 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
                     ),
                     SizedBox(
                       height: 10.h,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(250.0).w,
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: <Color>[
+                                Colors.greenAccent.withOpacity(0.9),
+                                AppColor.backgroundColor
+                              ],
+                            ),
+                          ),
+                          child: RawMaterialButton(
+                            onPressed: () async {
+                              final result =
+                                  await FilePicker.platform.pickFiles(
+                                type: FileType.custom,
+                                allowedExtensions: ['mp4'],
+                              );
+
+                              if (result == null) return;
+                              //Open Single File
+                              final file = result.files.first;
+                              // openFile(file);
+                              setState(() {
+                                videoName = file.name;
+                              });
+                              final newFile = await saveFilePermanently(file);
+
+                              setState(() {
+                                _video = newFile;
+                              });
+                            },
+                            child: const Text(
+                              'pick video',
+                              style: TextStyle(color: AppColor.white),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          videoName,
+                          style: const TextStyle(
+                            color: AppColor.backgroundColor,
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: imageFileList.isNotEmpty ? 200.h : 10.h,
@@ -311,6 +393,8 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
                               image: _image,
                               serviceImageList: imageFileList,
                               whatsAppNumber: whatsAppNumberController.text,
+                              bio: bioController.text,
+                              video: _video,
                             ),
                           );
                         },
@@ -369,5 +453,15 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
         ),
       ],
     );
+  }
+
+  void openFile(PlatformFile file) {
+    OpenFile.open(file.path);
+  }
+
+  Future<File> saveFilePermanently(PlatformFile file) async {
+    final appStorage = await getApplicationDocumentsDirectory();
+    final newFile = File('${appStorage.path}/${file.name}');
+    return File(file.path!).copy(newFile.path);
   }
 }

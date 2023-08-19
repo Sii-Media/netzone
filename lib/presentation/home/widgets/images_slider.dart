@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:netzoon/domain/advertisements/entities/advertisement.dart';
 
+import '../../core/constant/colors.dart';
+
 class SliderImages extends StatelessWidget {
   const SliderImages({
     super.key,
@@ -23,6 +25,16 @@ class SliderImages extends StatelessWidget {
         return CachedNetworkImage(
           imageUrl: ads.advertisingImage,
           fit: BoxFit.cover,
+          progressIndicatorBuilder: (context, url, downloadProgress) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 70.0, vertical: 50),
+            child: CircularProgressIndicator(
+              value: downloadProgress.progress,
+              color: AppColor.backgroundColor,
+
+              // strokeWidth: 10,
+            ),
+          ),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
         );
       }).toList(),
       options: CarouselOptions(

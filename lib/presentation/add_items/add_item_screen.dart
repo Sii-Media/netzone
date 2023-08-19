@@ -74,7 +74,10 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
                     state.user.userInfo.userType == 'user'
                         ? const SizedBox()
-                        : state.user.userInfo.isService == false ||
+                        : state.user.userInfo.userType == 'factory' ||
+                                state.user.userInfo.userType ==
+                                        'local_company' &&
+                                    state.user.userInfo.isService == false ||
                                 state.user.userInfo.isService == null
                             ? addWidget(
                                 title: AppLocalizations.of(context)
@@ -87,7 +90,10 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                 })
                             : const SizedBox(),
                     state.user.userInfo.userType == 'local_company' &&
-                            state.user.userInfo.isService == true
+                                state.user.userInfo.isService == true ||
+                            state.user.userInfo.userType == 'factory'
+                        // state.user.userInfo.userType == 'factory' &&
+                        //     state.user.userInfo.isService == true
                         ? addWidget(
                             title: AppLocalizations.of(context)
                                 .translate('add_service'),
@@ -141,7 +147,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               );
                             })
                         : const SizedBox(),
-                    state.user.userInfo.userType == 'plans'
+                    state.user.userInfo.userType == 'planes'
                         ? addWidget(
                             title: AppLocalizations.of(context)
                                 .translate('add_airplane'),
@@ -150,7 +156,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                 MaterialPageRoute(
                                   builder: (context) {
                                     return const AddVehicleScreen(
-                                      category: 'plans',
+                                      category: 'planes',
                                     );
                                   },
                                 ),
