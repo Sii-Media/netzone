@@ -71,4 +71,8 @@ abstract class AdvertismentRepository {
   Future<Either<Failure, String>> deleteAdvertisement({
     required String id,
   });
+  Future<Either<Failure, String>> addAdsVisitor({
+    required String adsId,
+    required String viewerUserId,
+  });
 }

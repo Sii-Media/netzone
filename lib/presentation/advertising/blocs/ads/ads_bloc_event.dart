@@ -82,3 +82,9 @@ class DeleteAdsEvent extends AdsBlocEvent {
 
   const DeleteAdsEvent({required this.id});
 }
+
+class AddAdsVisitorEvent extends AdsBlocEvent {
+  final String adsId;
+
+  const AddAdsVisitorEvent({required this.adsId});
+}

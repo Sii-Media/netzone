@@ -21,6 +21,11 @@ abstract class AdvertismentRemotDataSource {
     final String userAdvertisingType,
   );
   Future<String> deleteAdvertisement(String id);
+
+  Future<String> addAdsVisitor(
+    final String adsId,
+    final String viewerUserId,
+  );
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -67,5 +72,12 @@ abstract class AdvertismentRemotDataSourceImpl
   @DELETE('/advertisements/{id}')
   Future<String> deleteAdvertisement(
     @Path('id') String id,
+  );
+
+  @override
+  @PUT('/advertisements/{adsId}/addvisitor')
+  Future<String> addAdsVisitor(
+    @Path('adsId') String adsId,
+    @Part() String viewerUserId,
   );
 }

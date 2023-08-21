@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../auth/entities/user_info.dart';
+
 class DealsItems extends Equatable {
   final String? id;
   final String name;
@@ -12,9 +14,10 @@ class DealsItems extends Equatable {
   final String location;
   final String category;
   final String country;
-
+  final UserInfo owner;
   const DealsItems({
     this.id,
+    required this.owner,
     required this.name,
     required this.imgUrl,
     required this.companyName,
@@ -29,6 +32,7 @@ class DealsItems extends Equatable {
   @override
   List<Object?> get props => [
         id,
+        owner,
         name,
         imgUrl,
         companyName,

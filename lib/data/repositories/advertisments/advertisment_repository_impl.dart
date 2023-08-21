@@ -350,4 +350,20 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, String>> addAdsVisitor(
+      {required String adsId, required String viewerUserId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final result = await advertismentRemotDataSource.addAdsVisitor(
+            adsId, viewerUserId);
+        return Right(result);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
 }

@@ -140,7 +140,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
             // productsBloc.add(GetLocalCompanyProductsEvent(id: widget.localCompany.id));
 
             userBloc.add(GetUserByIdEvent(userId: widget.localCompany.id));
-            visitorBloc.add(AddVisitorEvent(userId: widget.localCompany.id));
+
             prodBloc
                 .add(GetLocalProductsEvent(username: widget.localCompany.id));
             adsBloc.add(GetUserAdsEvent(userId: widget.localCompany.id));

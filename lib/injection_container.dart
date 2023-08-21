@@ -56,6 +56,7 @@ import 'package:netzoon/data/repositories/users/users_repository_impl.dart';
 import 'package:netzoon/data/repositories/vehicles/vehicle_repository_impl.dart';
 import 'package:netzoon/domain/advertisements/repositories/advertisment_repository.dart';
 import 'package:netzoon/domain/advertisements/usercases/add_ads_use_case.dart';
+import 'package:netzoon/domain/advertisements/usercases/add_ads_visitor_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/delete_ads_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/edit_ads_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_ads_by_type_use_case.dart';
@@ -254,6 +255,7 @@ Future<void> init() async {
         getUserAdsUseCase: sl(),
         deleteAdsUseCase: sl(),
         editAdsUseCase: sl(),
+        addAdsVisitorUseCase: sl(),
       ));
   sl.registerFactory(() => NewsBloc(
         getAllNewsUseCase: sl(),
@@ -276,6 +278,7 @@ Future<void> init() async {
 
   sl.registerFactory(() => DealsCategotyBloc(getDealsCategoriesUseCase: sl()));
   sl.registerFactory(() => DealsItemsBloc(
+        getSignedInUser: sl(),
         getDealsItemsByCat: sl(),
         getDealsItemUsecase: sl(),
         addDealUseCase: sl(),
@@ -723,6 +726,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton(
       () => GetSeaCompaniesUseCase(vehicleRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => AddAdsVisitorUseCase(advertismentRepository: sl()));
 
   //! Repositories
 

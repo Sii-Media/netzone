@@ -23,6 +23,7 @@ abstract class DealsRepository {
   });
 
   Future<Either<Failure, String>> addDeal({
+    required final String owner,
     required final String name,
     required final String companyName,
     required File dealImage,

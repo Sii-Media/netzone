@@ -27,12 +27,13 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
 
   // final List<String> list = <String>['One', 'Two', 'Three', 'Four', 'Five'];
   final List<String> items = [
-    'عرض الكل',
-    'مناطق حرة',
-    'سيارات',
-    'عقارات',
-    'زبائن',
-    'شركات',
+    'show_all',
+    'company',
+    'car',
+    'planes',
+    'real_estate',
+    'product',
+    'service'
   ];
 
   @override
@@ -114,7 +115,7 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
                       ),
                       Expanded(
                         child: Text(
-                          AppLocalizations.of(context).translate('عرض الكل'),
+                          AppLocalizations.of(context).translate('show_all'),
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.black,

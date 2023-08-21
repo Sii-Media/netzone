@@ -56,3 +56,15 @@ class DeleteAdsSuccess extends AdsBlocState {
 
   const DeleteAdsSuccess({required this.message});
 }
+
+class AddAdsVisitorFailure extends AdsBlocState {
+  final String message;
+
+  const AddAdsVisitorFailure({required this.message});
+}
+
+class AddAdsVisitorSuccess extends AdsBlocState {
+  final String message;
+
+  const AddAdsVisitorSuccess({required this.message});
+}

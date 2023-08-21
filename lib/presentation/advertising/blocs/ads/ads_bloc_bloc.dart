@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/advertisements/entities/advertisement.dart';
+import 'package:netzoon/domain/advertisements/usercases/add_ads_visitor_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/delete_ads_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/edit_ads_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_ads_by_id_use_case.dart';
@@ -12,7 +13,9 @@ import 'package:netzoon/domain/advertisements/usercases/get_user_ads_use_case.da
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../../domain/auth/entities/user.dart';
 import '../../../../domain/auth/usecases/get_signed_in_user_use_case.dart';
+import '../../../../domain/core/usecase/usecase.dart';
 
 part 'ads_bloc_event.dart';
 part 'ads_bloc_state.dart';
@@ -25,6 +28,7 @@ class AdsBlocBloc extends Bloc<AdsBlocEvent, AdsBlocState> {
   final GetSignedInUserUseCase getSignedInUser;
   final EditAdsUseCase editAdsUseCase;
   final DeleteAdsUseCase deleteAdsUseCase;
+  final AddAdsVisitorUseCase addAdsVisitorUseCase;
   AdsBlocBloc({
     required this.getAdvertismentsUseCase,
     required this.getAdsByTypeUseCase,
@@ -33,6 +37,7 @@ class AdsBlocBloc extends Bloc<AdsBlocEvent, AdsBlocState> {
     required this.getSignedInUser,
     required this.editAdsUseCase,
     required this.deleteAdsUseCase,
+    required this.addAdsVisitorUseCase,
   }) : super(AdsBlocInitial()) {
     on<GetAllAdsEvent>(
       (event, emit) async {
@@ -121,6 +126,17 @@ class AdsBlocBloc extends Bloc<AdsBlocEvent, AdsBlocState> {
           (message) => DeleteAdsSuccess(message: message),
         ),
       );
+    });
+    on<AddAdsVisitorEvent>((event, emit) async {
+      final result = await getSignedInUser.call(NoParams());
+      late User user;
+      result.fold((l) => null, (r) => user = r!);
+      final success = await addAdsVisitorUseCase(AddAdsVisitorParams(
+          adsId: event.adsId, viewerUserId: user.userInfo.id));
+      success.fold(
+          (failure) =>
+              emit(AddAdsVisitorFailure(message: mapFailureToString(failure))),
+          (message) => emit(AddAdsVisitorSuccess(message: message)));
     });
   }
 }

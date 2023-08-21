@@ -19,6 +19,7 @@ DealsItemsModel _$DealsItemsModelFromJson(Map<String, dynamic> json) =>
       location: json['location'] as String,
       category: json['category'] as String,
       country: json['country'] as String,
+      owner: UserInfoModel.fromJson(json['owner'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$DealsItemsModelToJson(DealsItemsModel instance) =>
@@ -34,4 +35,5 @@ Map<String, dynamic> _$DealsItemsModelToJson(DealsItemsModel instance) =>
       'location': instance.location,
       'category': instance.category,
       'country': instance.country,
+      'owner': instance.owner,
     };

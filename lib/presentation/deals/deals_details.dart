@@ -10,6 +10,7 @@ import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 
 import '../../injection_container.dart';
+import '../auth/blocs/auth_bloc/auth_bloc.dart';
 import 'blocs/dealsItems/deals_items_bloc.dart';
 import 'edit_deal_screen.dart';
 
@@ -24,9 +25,12 @@ class DealDetails extends StatefulWidget {
 
 class _DealDetailsState extends State<DealDetails> {
   final dealBloc = sl<DealsItemsBloc>();
+  final authBloc = sl<AuthBloc>();
+
   @override
   void initState() {
     dealBloc.add(GetDealByIdEvent(id: widget.dealsInfoId));
+    authBloc.add(AuthCheckRequested());
     super.initState();
   }
 
@@ -96,35 +100,75 @@ class _DealDetailsState extends State<DealDetails> {
                             ),
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.of(context)
-                                    .push(MaterialPageRoute(builder: (context) {
-                                  return EditDealScreen(
-                                    deal: state.deal,
-                                  );
-                                }));
-                              },
-                              icon: const Icon(
-                                Icons.edit,
-                                color: AppColor.backgroundColor,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                dealBloc.add(
-                                    DeleteDealEvent(id: state.deal.id ?? ''));
-                              },
-                              icon: const Icon(
-                                Icons.delete,
-                                color: AppColor.red,
-                              ),
-                            ),
-                          ],
+                        BlocBuilder<AuthBloc, AuthState>(
+                          bloc: authBloc,
+                          builder: (context, authState) {
+                            if (authState is Authenticated) {
+                              if (authState.user.userInfo.id ==
+                                  state.deal.owner.id) {
+                                return Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return EditDealScreen(
+                                            deal: state.deal,
+                                          );
+                                        }));
+                                      },
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: AppColor.backgroundColor,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        dealBloc.add(DeleteDealEvent(
+                                            id: state.deal.id ?? ''));
+                                      },
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: AppColor.red,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }
+                            }
+                            return Container();
+                          },
                         ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.end,
+                        //   children: [
+                        //     IconButton(
+                        //       onPressed: () {
+                        //         Navigator.of(context)
+                        //             .push(MaterialPageRoute(builder: (context) {
+                        //           return EditDealScreen(
+                        //             deal: state.deal,
+                        //           );
+                        //         }));
+                        //       },
+                        //       icon: const Icon(
+                        //         Icons.edit,
+                        //         color: AppColor.backgroundColor,
+                        //       ),
+                        //     ),
+                        //     IconButton(
+                        //       onPressed: () {
+                        //         dealBloc.add(
+                        //             DeleteDealEvent(id: state.deal.id ?? ''));
+                        //       },
+                        //       icon: const Icon(
+                        //         Icons.delete,
+                        //         color: AppColor.red,
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         titleAndInput(
                           title:
                               "${AppLocalizations.of(context).translate('اسم الصفقة')} : ",

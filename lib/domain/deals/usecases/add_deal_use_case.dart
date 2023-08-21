@@ -14,6 +14,7 @@ class AddDealUseCase extends UseCase<String, AddDealParams> {
   @override
   Future<Either<Failure, String>> call(AddDealParams params) {
     return dealsRepository.addDeal(
+      owner: params.owner,
       name: params.name,
       companyName: params.companyName,
       dealImage: params.dealImage,
@@ -29,6 +30,7 @@ class AddDealUseCase extends UseCase<String, AddDealParams> {
 }
 
 class AddDealParams {
+  final String owner;
   final String name;
   final String companyName;
   final File dealImage;
@@ -40,6 +42,7 @@ class AddDealParams {
   final String category;
   final String country;
   AddDealParams({
+    required this.owner,
     required this.name,
     required this.companyName,
     required this.dealImage,

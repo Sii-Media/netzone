@@ -23,6 +23,7 @@ class Advertisement extends Equatable {
   final String? color;
   final bool? guarantee;
   final String? contactNumber;
+  final int? adsViews;
   const Advertisement({
     required this.owner,
     required this.id,
@@ -44,6 +45,7 @@ class Advertisement extends Equatable {
     this.color,
     this.guarantee,
     this.contactNumber,
+    this.adsViews,
   });
 
   @override
@@ -64,5 +66,6 @@ class Advertisement extends Equatable {
         color,
         guarantee,
         contactNumber,
+        adsViews,
       ];
 }

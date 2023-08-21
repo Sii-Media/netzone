@@ -58,13 +58,14 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
   }
 
   final items = [
-    'مناطق حرة',
-    'سيارات',
-    'عقارات',
-    'زبائن',
-    'شركات',
+    'company',
+    'car',
+    'planes',
+    'real_estate',
+    'product',
+    'service'
   ];
-  String selectedValue = 'مناطق حرة';
+  String selectedValue = 'company';
   File? _video;
   String videoName = '';
 
@@ -341,7 +342,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                       SizedBox(
                         height: 10.h,
                       ),
-                      selectedValue == 'سيارات'
+                      selectedValue == 'car'
                           ? Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -427,7 +428,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                       SizedBox(
                         height: 10.h,
                       ),
-                      selectedValue == 'سيارات'
+                      selectedValue == 'car'
                           ? addAdsFormFeild(
                               context: context,
                               controller: colorController,

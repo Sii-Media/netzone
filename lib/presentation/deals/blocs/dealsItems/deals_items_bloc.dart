@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
 import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/domain/deals/entities/dealsItems/deals_items.dart';
@@ -13,10 +14,14 @@ import 'package:netzoon/domain/deals/usecases/get_deal_by_id_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_deals_items_by_cat_use_case.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 
+import '../../../../domain/auth/entities/user.dart';
+
 part 'deals_items_event.dart';
 part 'deals_items_state.dart';
 
 class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
+  final GetSignedInUserUseCase getSignedInUser;
+
   final GetDealsItemsByCatUseCase getDealsItemsByCat;
   final GetDealsItemUsecase getDealsItemUsecase;
   final AddDealUseCase addDealUseCase;
@@ -25,6 +30,7 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
   final EditDealUseCase editDealUseCase;
   final DeleteDealUseCase deleteDealUseCase;
   DealsItemsBloc({
+    required this.getSignedInUser,
     required this.addDealUseCase,
     required this.getDealsItemsByCat,
     required this.getDealsItemUsecase,
@@ -78,7 +84,13 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
       late String country;
       final result = await getCountryUseCase(NoParams());
       result.fold((l) => null, (r) => country = r ?? 'AE');
+
+      final result2 = await getSignedInUser.call(NoParams());
+      late User user;
+      result2.fold((l) => null, (r) => user = r!);
+
       final failureOrDealsItems = await addDealUseCase(AddDealParams(
+        owner: user.userInfo.id,
         name: event.name,
         companyName: event.companyName,
         dealImage: event.dealImage,

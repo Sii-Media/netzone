@@ -72,6 +72,7 @@ class DealsRepositoryImpl implements DealsRepository {
 
   @override
   Future<Either<Failure, String>> addDeal({
+    required String owner,
     required String name,
     required String companyName,
     required File dealImage,
@@ -89,6 +90,7 @@ class DealsRepositoryImpl implements DealsRepository {
         FormData formData = FormData();
 
         formData.fields.addAll([
+          MapEntry('owner', owner),
           MapEntry('name', name),
           MapEntry('companyName', companyName),
           MapEntry('prevPrice', prevPrice.toString()),

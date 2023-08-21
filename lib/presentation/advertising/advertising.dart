@@ -10,6 +10,8 @@ import 'package:netzoon/presentation/core/widgets/background_two_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import 'another_ads_details.dart';
+
 class AdvertisingScreen extends StatefulWidget {
   const AdvertisingScreen({
     super.key,
@@ -44,7 +46,7 @@ class _AdvertisingScreenState extends State<AdvertisingScreen> {
           setState(() {
             selectedValue = value as String;
           });
-          if (selectedValue == 'عرض الكل') {
+          if (selectedValue == 'show_all') {
             adsBloc.add(const GetAllAdsEvent());
           } else {
             adsBloc.add(
@@ -436,9 +438,13 @@ class Advertising extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
-                      return AdvertismentDetalsScreen(
-                        adsId: advertisment.id,
-                      );
+                      return advertisment.advertisingType == 'car' ||
+                              advertisment.advertisingType == 'planes' ||
+                              advertisment.advertisingType == 'real_estate'
+                          ? AdvertismentDetalsScreen(adsId: advertisment.id)
+                          : AnotherAdsDetails(
+                              adsId: advertisment.id,
+                            );
                     }),
                   );
                 },
