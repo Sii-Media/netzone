@@ -169,15 +169,15 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                           ),
                         ),
                         ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(50),
-                            bottomRight: Radius.circular(50),
-                          ),
+                          // borderRadius: const BorderRadius.only(
+                          //   bottomLeft: Radius.circular(50),
+                          //   bottomRight: Radius.circular(50),
+                          // ),
                           child: CachedNetworkImage(
                             height: MediaQuery.of(context).size.height / 2.2,
                             width: MediaQuery.of(context).size.width,
                             imageUrl: state.ads.advertisingImage,
-                            fit: BoxFit.fill,
+                            fit: BoxFit.contain,
                             progressIndicatorBuilder:
                                 (context, url, downloadProgress) => Padding(
                               padding: const EdgeInsets.symmetric(

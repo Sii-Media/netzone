@@ -314,7 +314,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 buildVehicleSection(
                     vehicleType: 'cars',
-                    title: 'سيارات',
+                    title: 'cars',
                     emptyText: 'there_is_no_cars_in_this_country',
                     bloc: carsBloc,
                     context: context,

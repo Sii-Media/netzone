@@ -86,6 +86,7 @@ class NewsRepositoryImpl implements NewsRepository {
         return Left(OfflineFailure());
       }
     } catch (e) {
+      print(e);
       return Left(ServerFailure());
     }
   }

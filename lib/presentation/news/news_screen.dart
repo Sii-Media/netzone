@@ -443,9 +443,9 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
     final likeCount = likes?.length ?? 0;
 
     if (isLiked) {
-      if (likeCount == 2) {
+      if (likeCount == 1) {
         return 'You and 1 other person like this';
-      } else if (likeCount > 2) {
+      } else if (likeCount > 1) {
         return '${AppLocalizations.of(context).translate('You and')} $likeCount ${AppLocalizations.of(context).translate('others like this')}';
       }
     }
