@@ -217,8 +217,8 @@ class _ViewAllDealsScreenState extends State<ViewAllDealsScreen> {
                     ),
                     RangeSlider(
                       values: RangeValues(priceMin, priceMax),
-                      min: priceMin,
-                      max: priceMax,
+                      min: 0,
+                      max: 1000000,
                       onChanged: (RangeValues values) {
                         setState(() {
                           priceMin = values.start;
@@ -226,7 +226,7 @@ class _ViewAllDealsScreenState extends State<ViewAllDealsScreen> {
                         });
                       },
                       activeColor: AppColor.white,
-                      divisions: priceMax.toInt(),
+                      divisions: 1000,
                       labels:
                           RangeLabels(priceMin.toString(), priceMax.toString()),
                     ),

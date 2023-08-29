@@ -15,6 +15,7 @@ import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../domain/auth/entities/user.dart';
+import '../auth/blocs/auth_bloc/auth_bloc.dart';
 import '../core/widgets/no_data_widget.dart';
 import '../core/widgets/on_failure_widget.dart';
 import 'comments_page.dart';
@@ -31,8 +32,8 @@ class _NewsScreenState extends State<NewsScreen> {
 
   @override
   void initState() {
-    newsBloc.add(GetAllNewsEvent());
     super.initState();
+    newsBloc.add(GetAllNewsEvent());
   }
 
   @override
@@ -129,6 +130,8 @@ class AllNewsWidget extends StatefulWidget {
 
 class _AllNewsWidgetState extends State<AllNewsWidget> {
   List<bool> isLikedList = [];
+  final authBloc = sl<AuthBloc>();
+
   @override
   void initState() {
     super.initState();
@@ -139,6 +142,7 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
           widget.news[index].likes?.contains(widget.currentUser?.userInfo.id) ??
           false,
     );
+    authBloc.add(AuthCheckRequested());
   }
 
   @override
@@ -303,81 +307,98 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      isLikedList[index] = !isLikedList[index];
-                                    });
+                          BlocBuilder<AuthBloc, AuthState>(
+                            bloc: authBloc,
+                            builder: (context, authState) {
+                              if (authState is AuthInProgress) {
+                                return const Center(
+                                  child: CircularProgressIndicator(
+                                    color: AppColor.backgroundColor,
+                                  ),
+                                );
+                              } else if (authState is Authenticated) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            isLikedList[index] =
+                                                !isLikedList[index];
+                                          });
 
-                                    widget.newsBloc.add(
-                                      ToggleonlikeEvent(
-                                          newsId: newsItem.id ?? ''),
-                                    );
-                                  },
-                                  child: Icon(
-                                    isLikedList[index]
-                                        ? Icons.favorite
-                                        : Icons.favorite_border,
-                                    color: isLikedList[index]
-                                        ? AppColor.red
-                                        : AppColor.black,
-                                  ),
-                                ),
-                                // IconButton(
-                                //   icon: Icon(
-                                //     isLikedList[index]
-                                //         ? Icons.favorite
-                                //         : Icons.favorite_border,
-                                //   ),
-                                //   onPressed: () {
-                                //     setState(() {
-                                //       isLikedList[index] = !isLikedList[index];
-                                //     });
+                                          widget.newsBloc.add(
+                                            ToggleonlikeEvent(
+                                                newsId: newsItem.id ?? ''),
+                                          );
+                                        },
+                                        child: Icon(
+                                          isLikedList[index]
+                                              ? Icons.favorite
+                                              : Icons.favorite_border,
+                                          color: isLikedList[index]
+                                              ? AppColor.red
+                                              : AppColor.black,
+                                        ),
+                                      ),
+                                      // IconButton(
+                                      //   icon: Icon(
+                                      //     isLikedList[index]
+                                      //         ? Icons.favorite
+                                      //         : Icons.favorite_border,
+                                      //   ),
+                                      //   onPressed: () {
+                                      //     setState(() {
+                                      //       isLikedList[index] = !isLikedList[index];
+                                      //     });
 
-                                //     widget.newsBloc.add(
-                                //       ToggleonlikeEvent(newsId: newsItem.id ?? ''),
-                                //     );
-                                //   },
-                                // ),
-                                SizedBox(
-                                  width: 5.w,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) {
-                                        return CommentsPage(
-                                          newsId: widget.news[index].id ?? '',
-                                        );
-                                      }),
-                                    );
-                                  },
-                                  child: const Icon(
-                                    Feather.message_circle,
+                                      //     widget.newsBloc.add(
+                                      //       ToggleonlikeEvent(newsId: newsItem.id ?? ''),
+                                      //     );
+                                      //   },
+                                      // ),
+                                      SizedBox(
+                                        width: 5.w,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                              return CommentsPage(
+                                                newsId:
+                                                    widget.news[index].id ?? '',
+                                              );
+                                            }),
+                                          );
+                                        },
+                                        child: const Icon(
+                                          Feather.message_circle,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 5.w,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          await shareImageWithDescription(
+                                            imageUrl: widget.news[index].imgUrl,
+                                            description:
+                                                widget.news[index].description,
+                                          );
+                                        },
+                                        child: const Icon(
+                                          Feather.send,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 5.w,
-                                ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    await shareImageWithDescription(
-                                      imageUrl: widget.news[index].imgUrl,
-                                      description:
-                                          widget.news[index].description,
-                                    );
-                                  },
-                                  child: const Icon(
-                                    Feather.send,
-                                  ),
-                                ),
-                              ],
-                            ),
+                                );
+                              }
+                              return Container();
+                            },
                           ),
                           Text(
                             getLikeText(

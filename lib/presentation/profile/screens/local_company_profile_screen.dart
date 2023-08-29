@@ -13,6 +13,7 @@ import 'package:netzoon/presentation/profile/screens/visitors_screen.dart';
 import '../../../injection_container.dart';
 import '../../categories/local_company/company_service_detail_screen.dart';
 import '../../core/blocs/country_bloc/country_bloc.dart';
+import '../../core/helpers/get_currency_of_country.dart';
 import '../../core/widgets/on_failure_widget.dart';
 import '../../home/test.dart';
 import '../../utils/app_localizations.dart';
@@ -41,6 +42,7 @@ class _MyLocalCompanyProfileScreenState
   final productBloc = sl<GetUserBloc>();
   final getAccountsBloc = sl<AddAccountBloc>();
   final serviceBloc = sl<LocalCompanyBloc>();
+
   late final CountryBloc countryBloc;
   @override
   void initState() {
@@ -277,7 +279,7 @@ class _MyLocalCompanyProfileScreenState
                                           roundedIconText(
                                             context: context,
                                             text: state.userInfo.isService ==
-                                                        false &&
+                                                        false ||
                                                     state.userInfo.isService ==
                                                         null
                                                 ? 'Products sold'
@@ -568,8 +570,16 @@ class _MyLocalCompanyProfileScreenState
                                 ),
                                 state.userInfo.isService == false ||
                                         state.userInfo.isService == null
-                                    ? ProductsListWidget(
-                                        productBloc: productBloc)
+                                    ? BlocBuilder<CountryBloc, CountryState>(
+                                        bloc: countryBloc,
+                                        builder: (context, countryState) {
+                                          return ProductsListWidget(
+                                            productBloc: productBloc,
+                                            selectedCountry:
+                                                countryState.selectedCountry,
+                                          );
+                                        },
+                                      )
                                     : RefreshIndicator(
                                         onRefresh: () async {
                                           serviceBloc
@@ -923,9 +933,11 @@ class ProductsListWidget extends StatelessWidget {
   const ProductsListWidget({
     super.key,
     required this.productBloc,
+    required this.selectedCountry,
   });
 
   final GetUserBloc productBloc;
+  final String selectedCountry;
 
   @override
   Widget build(BuildContext context) {
@@ -1051,11 +1063,31 @@ class ProductsListWidget extends StatelessWidget {
                                             ],
                                           ),
                                         ),
-                                        Text(
-                                          '${state.products[index].price} \$',
-                                          style: const TextStyle(
-                                            color: AppColor.colorTwo,
-                                          ),
+                                        RichText(
+                                          text: TextSpan(
+                                              style: TextStyle(
+                                                  fontSize: 10.sp,
+                                                  color:
+                                                      AppColor.backgroundColor),
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                  text:
+                                                      '${state.products[index].price}',
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      color: AppColor.colorTwo),
+                                                ),
+                                                TextSpan(
+                                                  text: getCurrencyFromCountry(
+                                                    selectedCountry,
+                                                    context,
+                                                  ),
+                                                  style: TextStyle(
+                                                      color: AppColor.colorTwo,
+                                                      fontSize: 10.sp),
+                                                )
+                                              ]),
                                         ),
                                       ],
                                     ),

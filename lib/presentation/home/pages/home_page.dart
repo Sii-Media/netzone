@@ -22,6 +22,7 @@ import 'package:netzoon/presentation/news/news_screen.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersItem/tenders_item_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
+import '../../advertising/blocs/ads/ads_bloc_bloc.dart';
 import '../../categories/real_estate/blocs/real_estate/real_estate_bloc.dart';
 import '../../categories/real_estate/screens/real_estate_details_screen.dart';
 import '../../categories/real_estate/screens/real_estate_list_screen.dart';
@@ -46,6 +47,8 @@ class _HomePageState extends State<HomePage> {
   final PageController controller = PageController(initialPage: 0);
 
   final newsBloc = sl<NewsBloc>();
+  final adsBloc = sl<AdsBlocBloc>();
+
   final tenderItemBloc = sl<TendersItemBloc>();
   final dealsItemBloc = sl<DealsItemsBloc>();
   final elcDeviceBloc = sl<ElecDevicesBloc>();
@@ -67,6 +70,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     newsBloc.add(GetAllNewsEvent());
+    adsBloc.add(const GetAllAdsEvent());
     // tenderItemBloc.add(const GetTendersItemEvent());
     dealsItemBloc.add(GetDealsItemEvent());
     elcDeviceBloc.add(const GetElcDevicesEvent(department: 'الكترونيات'));
@@ -102,6 +106,7 @@ class _HomePageState extends State<HomePage> {
       child: RefreshIndicator(
         onRefresh: () async {
           newsBloc.add(GetAllNewsEvent());
+          adsBloc.add(const GetAllAdsEvent());
           // tenderItemBloc.add(const GetTendersItemEvent());
           dealsItemBloc.add(GetDealsItemEvent());
           elcDeviceBloc.add(const GetElcDevicesEvent(department: 'الكترونيات'));
@@ -581,9 +586,31 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.25,
-                  child: SliderImages(advertisments: advertismentList),
+                BlocBuilder<AdsBlocBloc, AdsBlocState>(
+                  bloc: adsBloc,
+                  builder: (context, state) {
+                    if (state is AdsBlocInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (state is AdsBlocFailure) {
+                      final failure = state.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          adsBloc.add(const GetAllAdsEvent());
+                        },
+                      );
+                    } else if (state is AdsBlocSuccess) {
+                      return SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.25,
+                        child: SliderImages(advertisments: state.ads),
+                      );
+                    }
+                    return Container();
+                  },
                 ),
                 const SizedBox(
                   height: 10.0,

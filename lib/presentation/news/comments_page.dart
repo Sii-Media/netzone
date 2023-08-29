@@ -7,6 +7,7 @@ import 'package:netzoon/presentation/news/widgets/comment_bottom_sheet.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../injection_container.dart';
+import '../auth/blocs/auth_bloc/auth_bloc.dart';
 import '../core/widgets/on_failure_widget.dart';
 import 'blocs/comments/comments_bloc.dart';
 
@@ -19,11 +20,13 @@ class CommentsPage extends StatefulWidget {
 
 class _CommentsPageState extends State<CommentsPage> {
   final commentBloc = sl<CommentsBloc>();
+  final authBloc = sl<AuthBloc>();
 
   @override
   void initState() {
-    commentBloc.add(GetCommentsEvent(newsId: widget.newsId));
     super.initState();
+    commentBloc.add(GetCommentsEvent(newsId: widget.newsId));
+    authBloc.add(AuthCheckRequested());
   }
 
   @override
@@ -106,9 +109,26 @@ class _CommentsPageState extends State<CommentsPage> {
               },
             )),
       ),
-      bottomSheet: CommentBottomSheet(
-        commentBloc: commentBloc,
-        newsId: widget.newsId,
+      bottomSheet: BlocBuilder<AuthBloc, AuthState>(
+        bloc: authBloc,
+        builder: (context, authState) {
+          if (authState is AuthInProgress) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: AppColor.backgroundColor,
+              ),
+            );
+          } else if (authState is Authenticated) {
+            return CommentBottomSheet(
+              commentBloc: commentBloc,
+              newsId: widget.newsId,
+            );
+          }
+          return const SizedBox(
+            height: 1,
+            width: 1,
+          );
+        },
       ),
     );
   }

@@ -69,12 +69,16 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                               child: CircularProgressIndicator(
                                 value: downloadProgress.progress,
                                 color: AppColor.backgroundColor,
-
                                 // strokeWidth: 10,
                               ),
                             ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
+                            maxHeightDiskCache: 400,
+                            maxWidthDiskCache: 400,
+                            matchTextDirection: true,
+                            errorWidget: (context, url, error) => const Icon(
+                              Icons.error,
+                              color: AppColor.red,
+                            ),
                             height: 140.h,
                             width: MediaQuery.of(context).size.width,
                             fit: BoxFit.contain,

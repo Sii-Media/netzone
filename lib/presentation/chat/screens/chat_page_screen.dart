@@ -21,16 +21,16 @@ class ChatPageScreen extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(30),
                 child: Image.network(
-                  'https://static.vecteezy.com/system/resources/previews/005/544/718/original/profile-icon-design-free-vector.jpg',
+                  'https://imgv3.fotor.com/images/gallery/Realistic-Male-Profile-Picture.jpg',
                   height: 35.h,
                   width: 35.w,
                   fit: BoxFit.cover,
                 ),
               ),
               const Padding(
-                padding: EdgeInsets.only(left: 10),
+                padding: EdgeInsets.only(right: 10),
                 child: Text(
-                  'Programmer',
+                  'Mohammad',
                   style: TextStyle(
                     color: AppColor.white,
                   ),

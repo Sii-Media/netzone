@@ -117,22 +117,26 @@ class _CartScreenState extends State<CartScreen> {
               ),
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                      AppColor.backgroundColor,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                        AppColor.backgroundColor,
+                      ),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      )),
                     ),
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    )),
+                    child:
+                        Text(AppLocalizations.of(context).translate('login')),
+                    onPressed: () async {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return const SignInScreen();
+                      }));
+                    },
                   ),
-                  child: Text(AppLocalizations.of(context).translate('login')),
-                  onPressed: () async {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) {
-                      return const SignInScreen();
-                    }));
-                  },
                 ),
               ),
             ],

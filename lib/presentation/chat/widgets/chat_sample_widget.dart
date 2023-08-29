@@ -14,7 +14,7 @@ class ChatSample extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(
-            right: 80,
+            right: 130,
           ),
           child: ClipPath(
             clipper: UpperNipMessageClipper(MessageType.receive),

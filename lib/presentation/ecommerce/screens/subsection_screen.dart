@@ -78,102 +78,112 @@ class _SubSectionsScreenState extends State<SubSectionsScreen> {
                       ),
                     ),
                   )
-                : Container(
-                    height: MediaQuery.of(context).size.height,
-                    padding: const EdgeInsets.all(15),
-                    child: SizedBox(
+                : RefreshIndicator(
+                    onRefresh: () async {
+                      elcDeviceBloc.add(GetElcCategoryProductsEvent(
+                          department: widget.filter,
+                          category: widget.category));
+                    },
+                    backgroundColor: AppColor.backgroundColor,
+                    color: AppColor.white,
+                    child: Container(
                       height: MediaQuery.of(context).size.height,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 70.0),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: TextFormField(
-                                      controller: searchController,
-                                      onChanged: (value) {
-                                        elcDeviceBloc.add(SearchProductsEvent(
-                                            searchQuery: value));
-                                        setState(() {});
-                                      },
-                                      style: const TextStyle(
-                                          color: AppColor.black),
-                                      decoration: InputDecoration(
-                                        // filled: true,
-                                        hintText: AppLocalizations.of(context)
-                                            .translate('search'),
-                                        hintStyle: const TextStyle(
-                                            color: AppColor.secondGrey),
-                                        floatingLabelBehavior:
-                                            FloatingLabelBehavior.always,
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                    vertical: 5, horizontal: 30)
-                                                .flipped,
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                              color: AppColor
-                                                  .backgroundColor), //<-- Set border color for focused state
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                              color: AppColor
-                                                  .backgroundColor), //<-- Set border color for enabled state
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                      padding: const EdgeInsets.all(15),
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 70.0),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextFormField(
+                                        controller: searchController,
+                                        onChanged: (value) {
+                                          elcDeviceBloc.add(SearchProductsEvent(
+                                              searchQuery: value));
+                                          setState(() {});
+                                        },
+                                        style: const TextStyle(
+                                            color: AppColor.black),
+                                        decoration: InputDecoration(
+                                          // filled: true,
+                                          hintText: AppLocalizations.of(context)
+                                              .translate('search'),
+                                          hintStyle: const TextStyle(
+                                              color: AppColor.secondGrey),
+                                          floatingLabelBehavior:
+                                              FloatingLabelBehavior.always,
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 30)
+                                                  .flipped,
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: AppColor
+                                                    .backgroundColor), //<-- Set border color for focused state
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: AppColor
+                                                    .backgroundColor), //<-- Set border color for enabled state
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 10.w,
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      _showFilterBottomSheet(context);
-                                    },
-                                    icon: const Icon(
-                                      Icons.filter_alt,
-                                      color: AppColor.backgroundColor,
-                                      size: 30,
+                                    SizedBox(
+                                      width: 10.w,
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: DynamicHeightGridView(
-                                  itemCount: filteredUsers.length,
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 10,
-                                  mainAxisSpacing: 10,
-                                  builder: (ctx, index) {
-                                    return ListSubSectionsWidget(
-                                      deviceList: filteredUsers[index],
-                                      department: state.department,
-                                      category: state.category,
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return ProductDetailScreen(
-                                                item: filteredUsers[index].id,
-                                              );
-                                            },
-                                          ),
-                                        );
+                                    IconButton(
+                                      onPressed: () {
+                                        _showFilterBottomSheet(context);
                                       },
-                                    );
+                                      icon: const Icon(
+                                        Icons.filter_alt,
+                                        color: AppColor.backgroundColor,
+                                        size: 30,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: DynamicHeightGridView(
+                                    itemCount: filteredUsers.length,
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 10,
+                                    builder: (ctx, index) {
+                                      return ListSubSectionsWidget(
+                                        deviceList: filteredUsers[index],
+                                        department: state.department,
+                                        category: state.category,
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) {
+                                                return ProductDetailScreen(
+                                                  item: filteredUsers[index].id,
+                                                );
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      );
 
-                                    /// return your widget here.
-                                  }),
-                            ),
-                          ],
+                                      /// return your widget here.
+                                    }),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
