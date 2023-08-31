@@ -213,6 +213,7 @@
     "موضة نسائية": "Women's fashion",
     "منتجات غذائية": "food products",
     "ساعات": "Watches",
+    "عطور": "perfumes",
     "mobiles": "Mobiles",
     "tvs": "TVs",
     "headphones": "headphones",
@@ -528,5 +529,6 @@
     "added a": "added a",
     "company": "company",
     "product": "product",
-    "service": "service"
+    "service": "service",
+    "properties":"properties"
 }

@@ -245,8 +245,11 @@ class _AddProductScreenState extends State<AddProductScreen>
                                     menuMaxHeight: 300.h,
                                     // Handle the value change
                                     onChanged: (String? newValue) {
-                                      setState(
-                                          () => selectedValue = newValue ?? '');
+                                      setState(() {
+                                        selectedValue = newValue ?? '';
+                                        selectCat = null;
+                                      });
+
                                       catBloc.add(GetElcDevicesEvent(
                                           department: selectedValue));
                                     },

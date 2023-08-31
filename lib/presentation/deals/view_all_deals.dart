@@ -78,33 +78,37 @@ class _ViewAllDealsScreenState extends State<ViewAllDealsScreen> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: TextFormField(
-                          controller: searchController,
-                          onChanged: (value) {
-                            setState(() {});
-                          },
-                          style: const TextStyle(color: AppColor.black),
-                          decoration: InputDecoration(
-                            // filled: true,
-                            hintText: AppLocalizations.of(context)
-                                .translate('search'),
-                            hintStyle:
-                                const TextStyle(color: AppColor.secondGrey),
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 30)
-                                .flipped,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: AppColor
-                                      .backgroundColor), //<-- Set border color for focused state
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: AppColor
-                                      .backgroundColor), //<-- Set border color for enabled state
-                              borderRadius: BorderRadius.circular(10),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 3.0),
+                          child: TextFormField(
+                            controller: searchController,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            style: const TextStyle(color: AppColor.black),
+                            decoration: InputDecoration(
+                              // filled: true,
+                              hintText: AppLocalizations.of(context)
+                                  .translate('search'),
+                              hintStyle:
+                                  const TextStyle(color: AppColor.secondGrey),
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 30)
+                                  .flipped,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: AppColor
+                                        .backgroundColor), //<-- Set border color for focused state
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: AppColor
+                                        .backgroundColor), //<-- Set border color for enabled state
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
                           ),
                         ),

@@ -150,7 +150,10 @@ class _MyRealEstateCompanyProfileScreenState
                                         context: context,
                                         text: state.userInfo.userType == 'car'
                                             ? 'sold_cars'
-                                            : 'sold_airplanes',
+                                            : state.userInfo.userType ==
+                                                    'real_estate'
+                                                ? 'properties'
+                                                : 'sold_airplanes',
                                         icon: Icons.production_quantity_limits,
                                       ),
                                       // roundedIconText(
