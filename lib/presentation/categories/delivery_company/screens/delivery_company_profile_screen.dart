@@ -417,7 +417,7 @@ class _DeliveryCompanyProfileScreenState
                                                   CrossAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  '${widget.deliveryCompany.averageRating}',
+                                                  '${widget.deliveryCompany.averageRating?.toStringAsFixed(3)}',
                                                   style: const TextStyle(
                                                       color:
                                                           AppColor.secondGrey,

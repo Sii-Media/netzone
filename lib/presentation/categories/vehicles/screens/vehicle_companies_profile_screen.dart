@@ -362,7 +362,7 @@ class _VehicleCompaniesProfileScreenState
                                           CrossAxisAlignment.center,
                                       children: [
                                         Text(
-                                          '${widget.vehiclesCompany.averageRating}',
+                                          '${widget.vehiclesCompany.averageRating?.toStringAsFixed(3)}',
                                           style: const TextStyle(
                                               color: AppColor.secondGrey,
                                               fontSize: 18,

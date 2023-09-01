@@ -372,7 +372,7 @@ class _RealEstateCompanyProfileScreenState
                                                   CrossAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  '${widget.user.averageRating}',
+                                                  '${widget.user.averageRating?.toStringAsFixed(3)}',
                                                   style: const TextStyle(
                                                       color:
                                                           AppColor.secondGrey,
