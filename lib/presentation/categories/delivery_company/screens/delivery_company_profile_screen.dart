@@ -45,6 +45,8 @@ class _DeliveryCompanyProfileScreenState
   @override
   void initState() {
     authBloc.add(AuthCheckRequested());
+    userBloc.add(GetUserByIdEvent(userId: widget.deliveryCompany.id));
+
     checkFollowStatus();
     countryBloc = BlocProvider.of<CountryBloc>(context);
     countryBloc.add(GetCountryEvent());
@@ -168,71 +170,60 @@ class _DeliveryCompanyProfileScreenState
             ));
           }
         },
-        child: DefaultTabController(
-          length: 2,
-          child: NestedScrollView(
-            headerSliverBuilder: (context, _) {
-              return [
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: 160.h,
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: AppColor.secondGrey.withOpacity(0.3),
-                                  width: 1,
-                                ),
-                              ),
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl: widget.deliveryCompany.coverPhoto ??
-                                  'https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000',
-                              fit: BoxFit.contain,
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) => Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 70.0, vertical: 50),
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  color: AppColor.backgroundColor,
-
-                                  // strokeWidth: 10,
-                                ),
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: Container(
+        child: RefreshIndicator(
+          onRefresh: () async {
+            userBloc.add(GetUserByIdEvent(userId: widget.deliveryCompany.id));
+          },
+          backgroundColor: AppColor.backgroundColor,
+          color: AppColor.white,
+          child: BlocBuilder<GetUserBloc, GetUserState>(
+            bloc: userBloc,
+            builder: (context, state) {
+              if (state is GetUserInProgress) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: AppColor.backgroundColor,
+                  ),
+                );
+              } else if (state is GetUserFailure) {
+                final failure = state.message;
+                return Center(
+                  child: Text(
+                    failure,
+                    style: const TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                );
+              } else if (state is GetUserSuccess) {
+                return DefaultTabController(
+                  length: 2,
+                  child: NestedScrollView(
+                    headerSliverBuilder: (context, _) {
+                      return [
+                        SliverList(
+                          delegate: SliverChildListDelegate(
+                            [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    height: 160.h,
                                     decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(100),
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: AppColor.secondGrey
+                                              .withOpacity(0.3),
+                                          width: 1,
+                                        ),
+                                      ),
                                     ),
                                     child: CachedNetworkImage(
-                                      imageUrl:
-                                          widget.deliveryCompany.profilePhoto ??
-                                              '',
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.fill,
+                                      imageUrl: widget
+                                              .deliveryCompany.coverPhoto ??
+                                          'https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000',
+                                      fit: BoxFit.contain,
                                       progressIndicatorBuilder:
                                           (context, url, downloadProgress) =>
                                               Padding(
@@ -249,452 +240,557 @@ class _DeliveryCompanyProfileScreenState
                                           const Icon(Icons.error),
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 20.w,
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width -
-                                          133.w,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              widget.deliveryCompany.username ??
-                                                  '',
-                                              style: TextStyle(
-                                                color: AppColor.black,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 16.sp,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 15.w,
-                                          ),
-                                          BlocBuilder<AuthBloc, AuthState>(
-                                            bloc: authBloc,
-                                            builder: (context, state) {
-                                              if (state is AuthInProgress) {
-                                                return const Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    color: AppColor
-                                                        .backgroundColor,
-                                                  ),
-                                                );
-                                              } else if (state
-                                                  is Authenticated) {
-                                                // isFollowing = state.user
-                                                //         .userInfo.followings!
-                                                //         .contains(widget
-                                                //             .localCompany.id)
-                                                //     ? true
-                                                //     : false;
-                                                return ElevatedButton(
-                                                  style: ButtonStyle(
-                                                    backgroundColor:
-                                                        MaterialStateProperty
-                                                            .all(AppColor
-                                                                .backgroundColor),
-                                                    shape: MaterialStateProperty
-                                                        .all(
-                                                            RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              18.0),
-                                                    )),
-                                                  ),
-                                                  child: Text(
-                                                    isFollowing
-                                                        ? AppLocalizations.of(
-                                                                context)
-                                                            .translate(
-                                                                'unfollow')
-                                                        : AppLocalizations.of(
-                                                                context)
-                                                            .translate(
-                                                                'follow'),
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      isFollowing =
-                                                          !isFollowing;
-                                                    });
-                                                    userBloc.add(
-                                                        ToggleFollowEvent(
-                                                            otherUserId: widget
-                                                                .deliveryCompany
-                                                                .id));
-                                                  },
-                                                );
-                                              }
-                                              return Container();
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    widget.deliveryCompany.slogn != null
-                                        ? Text(
-                                            widget.deliveryCompany.slogn ?? '',
-                                            style: TextStyle(
-                                              color: AppColor.secondGrey,
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 13.sp,
-                                            ),
-                                          )
-                                        : const SizedBox(),
-                                    Row(
+                                  SizedBox(
+                                    height: 15.h,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          '${widget.deliveryCompany.averageRating}',
-                                          style: const TextStyle(
-                                              color: AppColor.secondGrey,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () => showRating(
-                                              context,
-                                              userBloc,
-                                              widget.deliveryCompany.id,
-                                              widget.deliveryCompany
-                                                      .averageRating ??
-                                                  0),
-                                          child: RatingBar.builder(
-                                            minRating: 1,
-                                            maxRating: 5,
-                                            initialRating: widget
-                                                    .deliveryCompany
-                                                    .averageRating ??
-                                                0,
-                                            itemSize: 18,
-                                            ignoreGestures: true,
-                                            itemBuilder: (context, _) {
-                                              return const Icon(
-                                                Icons.star,
-                                                color: Colors.amber,
-                                              );
-                                            },
-                                            allowHalfRating: true,
-                                            updateOnDrag: true,
-                                            onRatingUpdate: (rating) {},
-                                          ),
-                                        ),
-                                        Text(
-                                          '(${widget.deliveryCompany.totalRatings} ${AppLocalizations.of(context).translate('review')})',
-                                          style: const TextStyle(
-                                            color: AppColor.secondGrey,
-                                            fontSize: 14,
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            child: CachedNetworkImage(
+                                              imageUrl: widget.deliveryCompany
+                                                      .profilePhoto ??
+                                                  '',
+                                              width: 100,
+                                              height: 100,
+                                              fit: BoxFit.fill,
+                                              progressIndicatorBuilder:
+                                                  (context, url,
+                                                          downloadProgress) =>
+                                                      Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 70.0,
+                                                        vertical: 50),
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  value:
+                                                      downloadProgress.progress,
+                                                  color:
+                                                      AppColor.backgroundColor,
+
+                                                  // strokeWidth: 10,
+                                                ),
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      const Icon(Icons.error),
+                                            ),
                                           ),
                                         ),
                                         SizedBox(
-                                          width: 15.w,
+                                          width: 20.w,
                                         ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 14.h,
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Text(
-                              widget.deliveryCompany.bio ?? '',
-                              style: const TextStyle(color: AppColor.mainGrey),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ];
-            },
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Material(
-                    color: AppColor.white,
-                    child: TabBar(
-                      labelColor: AppColor.backgroundColor,
-                      unselectedLabelColor:
-                          AppColor.secondGrey.withOpacity(0.4),
-                      indicatorWeight: 1,
-                      indicatorColor: AppColor.backgroundColor,
-                      tabs: [
-                        Tab(
-                          icon: Text(
-                            AppLocalizations.of(context).translate('services'),
-                          ),
-                        ),
-                        Tab(
-                          icon: Text(AppLocalizations.of(context)
-                              .translate('about_us')),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: TabBarView(
-                      children: [
-                        RefreshIndicator(
-                          onRefresh: () async {
-                            deliveryBloc.add(GetDeliveryCompanyServicesEvent(
-                                id: widget.deliveryCompany.id));
-                          },
-                          color: AppColor.white,
-                          backgroundColor: AppColor.backgroundColor,
-                          child: BlocBuilder<DeliveryServiceBloc,
-                              DeliveryServiceState>(
-                            bloc: deliveryBloc,
-                            builder: (context, sstate) {
-                              if (sstate is DeliveryServiceInProgress) {
-                                return const Center(
-                                  child: CircularProgressIndicator(
-                                    color: AppColor.backgroundColor,
-                                  ),
-                                );
-                              } else if (sstate is DeliveryServiceFailure) {
-                                final failure = sstate.message;
-                                return Center(
-                                  child: Text(
-                                    failure,
-                                    style: const TextStyle(
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                );
-                              } else if (sstate
-                                  is GetDeliveryCompanyServicesSuccess) {
-                                return BlocBuilder<CountryBloc, CountryState>(
-                                  bloc: countryBloc,
-                                  builder: (context, countryState) {
-                                    if (countryState is CountryInitial) {
-                                      return ListView.builder(
-                                        itemCount: sstate.services.length,
-                                        shrinkWrap: true,
-                                        physics: const BouncingScrollPhysics(),
-                                        itemBuilder: (context, index) {
-                                          return Card(
-                                            elevation: 3,
-                                            margin: const EdgeInsets.symmetric(
-                                                horizontal: 16, vertical: 8),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(16),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                  133.w,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
-                                                  Text(
-                                                    sstate
-                                                        .services[index].title,
-                                                    style: TextStyle(
-                                                        fontSize: 18.sp,
+                                                  Expanded(
+                                                    child: Text(
+                                                      widget.deliveryCompany
+                                                              .username ??
+                                                          '',
+                                                      style: TextStyle(
+                                                        color: AppColor.black,
                                                         fontWeight:
-                                                            FontWeight.bold,
-                                                        color: AppColor
-                                                            .backgroundColor),
-                                                  ),
-                                                  SizedBox(height: 8.h),
-                                                  Text(
-                                                    sstate.services[index]
-                                                        .description,
-                                                    style: TextStyle(
+                                                            FontWeight.w600,
                                                         fontSize: 16.sp,
-                                                        color: AppColor
-                                                            .secondGrey),
-                                                  ),
-                                                  SizedBox(height: 8.h),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        'From: ${sstate.services[index].from}',
-                                                        style: TextStyle(
-                                                            fontSize: 16.sp,
-                                                            color: AppColor
-                                                                .colorOne),
                                                       ),
-                                                      Text(
-                                                        'To: ${sstate.services[index].to}',
-                                                        style: TextStyle(
-                                                            fontSize: 16.sp,
-                                                            color: AppColor
-                                                                .colorOne),
-                                                      ),
-                                                    ],
+                                                    ),
                                                   ),
-                                                  SizedBox(height: 8.h),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                        style: const TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color:
-                                                                AppColor.black),
-                                                        children: <TextSpan>[
-                                                          TextSpan(
-                                                            text:
-                                                                '${sstate.services[index].price}',
-                                                            style:
-                                                                const TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                            ),
+                                                  SizedBox(
+                                                    width: 15.w,
+                                                  ),
+                                                  BlocBuilder<AuthBloc,
+                                                      AuthState>(
+                                                    bloc: authBloc,
+                                                    builder: (context, state) {
+                                                      if (state
+                                                          is AuthInProgress) {
+                                                        return const Center(
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            color: AppColor
+                                                                .backgroundColor,
                                                           ),
-                                                          TextSpan(
-                                                            text:
-                                                                getCurrencyFromCountry(
-                                                              countryState
-                                                                  .selectedCountry,
-                                                              context,
-                                                            ),
+                                                        );
+                                                      } else if (state
+                                                          is Authenticated) {
+                                                        // isFollowing = state.user
+                                                        //         .userInfo.followings!
+                                                        //         .contains(widget
+                                                        //             .localCompany.id)
+                                                        //     ? true
+                                                        //     : false;
+                                                        return ElevatedButton(
+                                                          style: ButtonStyle(
+                                                            backgroundColor:
+                                                                MaterialStateProperty
+                                                                    .all(AppColor
+                                                                        .backgroundColor),
+                                                            shape: MaterialStateProperty
+                                                                .all(
+                                                                    RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          18.0),
+                                                            )),
+                                                          ),
+                                                          child: Text(
+                                                            isFollowing
+                                                                ? AppLocalizations.of(
+                                                                        context)
+                                                                    .translate(
+                                                                        'unfollow')
+                                                                : AppLocalizations.of(
+                                                                        context)
+                                                                    .translate(
+                                                                        'follow'),
                                                             style: const TextStyle(
-                                                                color: AppColor
-                                                                    .backgroundColor,
-                                                                fontSize: 10),
-                                                          )
-                                                        ]),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              isFollowing =
+                                                                  !isFollowing;
+                                                            });
+                                                            userBloc.add(
+                                                                ToggleFollowEvent(
+                                                                    otherUserId:
+                                                                        widget
+                                                                            .deliveryCompany
+                                                                            .id));
+                                                          },
+                                                        );
+                                                      }
+                                                      return Container();
+                                                    },
                                                   ),
                                                 ],
                                               ),
                                             ),
-                                          );
-                                        },
-                                      );
-                                    }
-                                    return Container();
-                                  },
-                                );
-                              }
-                              return Container();
-                            },
+                                            widget.deliveryCompany.slogn != null
+                                                ? Text(
+                                                    widget.deliveryCompany
+                                                            .slogn ??
+                                                        '',
+                                                    style: TextStyle(
+                                                      color:
+                                                          AppColor.secondGrey,
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                      fontSize: 13.sp,
+                                                    ),
+                                                  )
+                                                : const SizedBox(),
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  '${widget.deliveryCompany.averageRating}',
+                                                  style: const TextStyle(
+                                                      color:
+                                                          AppColor.secondGrey,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () => showRating(
+                                                      context,
+                                                      userBloc,
+                                                      widget.deliveryCompany.id,
+                                                      widget.deliveryCompany
+                                                              .averageRating ??
+                                                          0),
+                                                  child: RatingBar.builder(
+                                                    minRating: 1,
+                                                    maxRating: 5,
+                                                    initialRating: widget
+                                                            .deliveryCompany
+                                                            .averageRating ??
+                                                        0,
+                                                    itemSize: 18,
+                                                    ignoreGestures: true,
+                                                    itemBuilder: (context, _) {
+                                                      return const Icon(
+                                                        Icons.star,
+                                                        color: Colors.amber,
+                                                      );
+                                                    },
+                                                    allowHalfRating: true,
+                                                    updateOnDrag: true,
+                                                    onRatingUpdate: (rating) {},
+                                                  ),
+                                                ),
+                                                Text(
+                                                  '(${widget.deliveryCompany.totalRatings} ${AppLocalizations.of(context).translate('review')})',
+                                                  style: const TextStyle(
+                                                    color: AppColor.secondGrey,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 15.w,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 14.h,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: Text(
+                                      widget.deliveryCompany.bio ?? '',
+                                      style: const TextStyle(
+                                          color: AppColor.mainGrey),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                        infoListWidget(
-                          context: context,
-                          username: widget.deliveryCompany.username,
-                          firstMobile: widget.deliveryCompany.firstMobile ?? '',
-                          email: widget.deliveryCompany.email ?? '',
-                          address: widget.deliveryCompany.address,
-                          bio: widget.deliveryCompany.bio,
-                          deliverable: widget.deliveryCompany.deliverable,
-                          description: widget.deliveryCompany.description,
-                          link: widget.deliveryCompany.link,
-                          website: widget.deliveryCompany.website,
-                          deliveryType: widget.deliveryCompany.deliveryType,
-                          deliveryCarsNum:
-                              widget.deliveryCompany.deliveryCarsNum,
-                          deliveryMotorsNum:
-                              widget.deliveryCompany.deliveryMotorsNum,
-                          isThereFoodsDelivery:
-                              widget.deliveryCompany.isThereFoodsDelivery,
-                          isThereWarehouse:
-                              widget.deliveryCompany.isThereWarehouse,
-                        ),
-                        // ListView(
-                        //   children: [
-                        //     Column(
-                        //       children: [
-                        //         titleAndInput(
-                        //             title: AppLocalizations.of(context)
-                        //                 .translate('company_name'),
-                        //             input:
-                        //                 widget.deliveryCompany.username ?? ''),
-                        //         titleAndInput(
-                        //             title: AppLocalizations.of(context)
-                        //                 .translate('desc'),
-                        //             input: widget.deliveryCompany.description ??
-                        //                 ''),
-                        //         titleAndInput(
-                        //             title: AppLocalizations.of(context)
-                        //                 .translate('Bio'),
-                        //             input: widget.deliveryCompany.bio ?? ''),
-                        //         titleAndInput(
-                        //             title: AppLocalizations.of(context)
-                        //                 .translate('mobile'),
-                        //             input: widget.deliveryCompany.firstMobile ??
-                        //                 ';'),
-                        //         titleAndInput(
-                        //             title: AppLocalizations.of(context)
-                        //                 .translate('email'),
-                        //             input: widget.deliveryCompany.email ?? ''),
-                        //         titleAndInput(
-                        //             title: AppLocalizations.of(context)
-                        //                 .translate('website'),
-                        //             input:
-                        //                 widget.deliveryCompany.website ?? ''),
-                        //         titleAndInput(
-                        //             title: AppLocalizations.of(context)
-                        //                 .translate('delivery_type'),
-                        //             input:
-                        //                 widget.deliveryCompany.deliveryType ??
-                        //                     ''),
-                        //         titleAndInput(
-                        //             title: AppLocalizations.of(context)
-                        //                 .translate('deliveryCarsNum'),
-                        //             input: widget
-                        //                 .deliveryCompany.deliveryCarsNum
-                        //                 .toString()),
-                        //         titleAndInput(
-                        //             title: AppLocalizations.of(context)
-                        //                 .translate('deliveryMotorsNum'),
-                        //             input: widget
-                        //                 .deliveryCompany.deliveryMotorsNum
-                        //                 .toString()),
-                        //         titleAndInput(
-                        //             title: AppLocalizations.of(context)
-                        //                 .translate('is_there_food_delivery'),
-                        //             input: widget.deliveryCompany
-                        //                         .isThereFoodsDelivery ==
-                        //                     true
-                        //                 ? 'yes'
-                        //                 : 'no'),
-                        //         titleAndInput(
-                        //             title: AppLocalizations.of(context)
-                        //                 .translate('is_there_warehouse'),
-                        //             input: widget.deliveryCompany
-                        //                         .isThereWarehouse ==
-                        //                     true
-                        //                 ? 'yes'
-                        //                 : 'no'),
-                        //       ],
-                        //     ),
-                        //   ],
-                        // ),
-                      ],
+                      ];
+                    },
+                    body: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Material(
+                            color: AppColor.white,
+                            child: TabBar(
+                              labelColor: AppColor.backgroundColor,
+                              unselectedLabelColor:
+                                  AppColor.secondGrey.withOpacity(0.4),
+                              indicatorWeight: 1,
+                              indicatorColor: AppColor.backgroundColor,
+                              tabs: [
+                                Tab(
+                                  icon: Text(
+                                    AppLocalizations.of(context)
+                                        .translate('services'),
+                                  ),
+                                ),
+                                Tab(
+                                  icon: Text(AppLocalizations.of(context)
+                                      .translate('about_us')),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: TabBarView(
+                              children: [
+                                RefreshIndicator(
+                                  onRefresh: () async {
+                                    userBloc.add(GetUserByIdEvent(
+                                        userId: widget.deliveryCompany.id));
+
+                                    // deliveryBloc.add(
+                                    //     GetDeliveryCompanyServicesEvent(
+                                    //         id: widget.deliveryCompany.id));
+                                  },
+                                  color: AppColor.white,
+                                  backgroundColor: AppColor.backgroundColor,
+                                  child: BlocBuilder<DeliveryServiceBloc,
+                                      DeliveryServiceState>(
+                                    bloc: deliveryBloc,
+                                    builder: (context, sstate) {
+                                      if (sstate is DeliveryServiceInProgress) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(
+                                            color: AppColor.backgroundColor,
+                                          ),
+                                        );
+                                      } else if (sstate
+                                          is DeliveryServiceFailure) {
+                                        final failure = sstate.message;
+                                        return Center(
+                                          child: Text(
+                                            failure,
+                                            style: const TextStyle(
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                        );
+                                      } else if (sstate
+                                          is GetDeliveryCompanyServicesSuccess) {
+                                        return BlocBuilder<CountryBloc,
+                                            CountryState>(
+                                          bloc: countryBloc,
+                                          builder: (context, countryState) {
+                                            if (countryState
+                                                is CountryInitial) {
+                                              return ListView.builder(
+                                                itemCount:
+                                                    sstate.services.length,
+                                                shrinkWrap: true,
+                                                physics:
+                                                    const BouncingScrollPhysics(),
+                                                itemBuilder: (context, index) {
+                                                  return Card(
+                                                    elevation: 3,
+                                                    margin: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 16,
+                                                        vertical: 8),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
+                                                    ),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              16),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            sstate
+                                                                .services[index]
+                                                                .title,
+                                                            style: TextStyle(
+                                                                fontSize: 18.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: AppColor
+                                                                    .backgroundColor),
+                                                          ),
+                                                          SizedBox(height: 8.h),
+                                                          Text(
+                                                            sstate
+                                                                .services[index]
+                                                                .description,
+                                                            style: TextStyle(
+                                                                fontSize: 16.sp,
+                                                                color: AppColor
+                                                                    .secondGrey),
+                                                          ),
+                                                          SizedBox(height: 8.h),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                'From: ${sstate.services[index].from}',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        16.sp,
+                                                                    color: AppColor
+                                                                        .colorOne),
+                                                              ),
+                                                              Text(
+                                                                'To: ${sstate.services[index].to}',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        16.sp,
+                                                                    color: AppColor
+                                                                        .colorOne),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          SizedBox(height: 8.h),
+                                                          RichText(
+                                                            text: TextSpan(
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        16,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color: AppColor
+                                                                        .black),
+                                                                children: <
+                                                                    TextSpan>[
+                                                                  TextSpan(
+                                                                    text:
+                                                                        '${sstate.services[index].price}',
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                    ),
+                                                                  ),
+                                                                  TextSpan(
+                                                                    text:
+                                                                        getCurrencyFromCountry(
+                                                                      countryState
+                                                                          .selectedCountry,
+                                                                      context,
+                                                                    ),
+                                                                    style: const TextStyle(
+                                                                        color: AppColor
+                                                                            .backgroundColor,
+                                                                        fontSize:
+                                                                            10),
+                                                                  )
+                                                                ]),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            }
+                                            return Container();
+                                          },
+                                        );
+                                      }
+                                      return Container();
+                                    },
+                                  ),
+                                ),
+                                infoListWidget(
+                                  context: context,
+                                  username: widget.deliveryCompany.username,
+                                  firstMobile:
+                                      widget.deliveryCompany.firstMobile ?? '',
+                                  email: widget.deliveryCompany.email ?? '',
+                                  address: widget.deliveryCompany.address,
+                                  bio: widget.deliveryCompany.bio,
+                                  deliverable:
+                                      widget.deliveryCompany.deliverable,
+                                  description:
+                                      widget.deliveryCompany.description,
+                                  link: widget.deliveryCompany.link,
+                                  website: widget.deliveryCompany.website,
+                                  deliveryType:
+                                      widget.deliveryCompany.deliveryType,
+                                  deliveryCarsNum:
+                                      widget.deliveryCompany.deliveryCarsNum,
+                                  deliveryMotorsNum:
+                                      widget.deliveryCompany.deliveryMotorsNum,
+                                  isThereFoodsDelivery: widget
+                                      .deliveryCompany.isThereFoodsDelivery,
+                                  isThereWarehouse:
+                                      widget.deliveryCompany.isThereWarehouse,
+                                ),
+                                // ListView(
+                                //   children: [
+                                //     Column(
+                                //       children: [
+                                //         titleAndInput(
+                                //             title: AppLocalizations.of(context)
+                                //                 .translate('company_name'),
+                                //             input:
+                                //                 widget.deliveryCompany.username ?? ''),
+                                //         titleAndInput(
+                                //             title: AppLocalizations.of(context)
+                                //                 .translate('desc'),
+                                //             input: widget.deliveryCompany.description ??
+                                //                 ''),
+                                //         titleAndInput(
+                                //             title: AppLocalizations.of(context)
+                                //                 .translate('Bio'),
+                                //             input: widget.deliveryCompany.bio ?? ''),
+                                //         titleAndInput(
+                                //             title: AppLocalizations.of(context)
+                                //                 .translate('mobile'),
+                                //             input: widget.deliveryCompany.firstMobile ??
+                                //                 ';'),
+                                //         titleAndInput(
+                                //             title: AppLocalizations.of(context)
+                                //                 .translate('email'),
+                                //             input: widget.deliveryCompany.email ?? ''),
+                                //         titleAndInput(
+                                //             title: AppLocalizations.of(context)
+                                //                 .translate('website'),
+                                //             input:
+                                //                 widget.deliveryCompany.website ?? ''),
+                                //         titleAndInput(
+                                //             title: AppLocalizations.of(context)
+                                //                 .translate('delivery_type'),
+                                //             input:
+                                //                 widget.deliveryCompany.deliveryType ??
+                                //                     ''),
+                                //         titleAndInput(
+                                //             title: AppLocalizations.of(context)
+                                //                 .translate('deliveryCarsNum'),
+                                //             input: widget
+                                //                 .deliveryCompany.deliveryCarsNum
+                                //                 .toString()),
+                                //         titleAndInput(
+                                //             title: AppLocalizations.of(context)
+                                //                 .translate('deliveryMotorsNum'),
+                                //             input: widget
+                                //                 .deliveryCompany.deliveryMotorsNum
+                                //                 .toString()),
+                                //         titleAndInput(
+                                //             title: AppLocalizations.of(context)
+                                //                 .translate('is_there_food_delivery'),
+                                //             input: widget.deliveryCompany
+                                //                         .isThereFoodsDelivery ==
+                                //                     true
+                                //                 ? 'yes'
+                                //                 : 'no'),
+                                //         titleAndInput(
+                                //             title: AppLocalizations.of(context)
+                                //                 .translate('is_there_warehouse'),
+                                //             input: widget.deliveryCompany
+                                //                         .isThereWarehouse ==
+                                //                     true
+                                //                 ? 'yes'
+                                //                 : 'no'),
+                                //       ],
+                                //     ),
+                                //   ],
+                                // ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ],
-              ),
-            ),
+                );
+              }
+              return const SizedBox();
+            },
           ),
         ),
       ),

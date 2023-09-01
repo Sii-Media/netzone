@@ -383,7 +383,7 @@ class _RealEstateCompanyProfileScreenState
                                                 GestureDetector(
                                                   onTap: () => showRating(
                                                       context,
-                                                      userBloc,
+                                                      rateBloc,
                                                       widget.user.id,
                                                       widget.user
                                                               .averageRating ??

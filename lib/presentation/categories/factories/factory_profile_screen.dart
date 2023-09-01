@@ -432,7 +432,7 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                 GestureDetector(
                                                   onTap: () => showRating(
                                                       context,
-                                                      userBloc,
+                                                      rateBloc,
                                                       widget.user.id,
                                                       widget.user
                                                               .averageRating ??

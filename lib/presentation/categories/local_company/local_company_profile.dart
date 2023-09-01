@@ -152,13 +152,13 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
           backgroundColor: AppColor.backgroundColor,
           child: BlocListener<GetUserBloc, GetUserState>(
             bloc: rateBloc,
-            listener: (context, state) {
-              if (state is RateUserInProgress) {
+            listener: (context, rateState) {
+              if (rateState is RateUserInProgress) {
                 startLoading();
-              } else if (state is RateUserFailure) {
+              } else if (rateState is RateUserFailure) {
                 stopLoading();
 
-                final failure = state.message;
+                final failure = rateState.message;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
@@ -170,7 +170,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                     backgroundColor: AppColor.red,
                   ),
                 );
-              } else if (state is RateUserSuccess) {
+              } else if (rateState is RateUserSuccess) {
                 stopLoading();
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text(
@@ -420,7 +420,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                     CrossAxisAlignment.center,
                                                 children: [
                                                   Text(
-                                                    '${state.userInfo.averageRating}',
+                                                    '${state.userInfo.averageRating?.toStringAsFixed(3)}',
                                                     style: const TextStyle(
                                                         color:
                                                             AppColor.secondGrey,
@@ -431,7 +431,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                   GestureDetector(
                                                     onTap: () => showRating(
                                                         context,
-                                                        userBloc,
+                                                        rateBloc,
                                                         state.userInfo.id,
                                                         state.userInfo
                                                                 .averageRating ??

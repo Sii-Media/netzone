@@ -380,7 +380,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                 GestureDetector(
                                                   onTap: () => showRating(
                                                       context,
-                                                      userBloc,
+                                                      rateBloc,
                                                       widget.user.id,
                                                       widget.user
                                                               .averageRating ??
