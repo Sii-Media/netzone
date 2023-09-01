@@ -149,6 +149,17 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                 ),
                               );
                             } else if (widget.categories[index].name ==
+                                'traders') {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const GovernmentalCompanies(
+                                      userType: 'trader',
+                                    );
+                                  },
+                                ),
+                              );
+                            } else if (widget.categories[index].name ==
                                 'civil_aircraft') {
                               Navigator.of(context).push(
                                 MaterialPageRoute(

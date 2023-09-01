@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../core/constant/colors.dart';
+import '../../core/widgets/phone_call_button.dart';
 import '../../utils/app_localizations.dart';
 
 Widget infoListWidget({
@@ -15,6 +16,11 @@ Widget infoListWidget({
   String? website,
   String? link,
   bool? deliverable,
+  String? deliveryType,
+  int? deliveryCarsNum,
+  int? deliveryMotorsNum,
+  bool? isThereFoodsDelivery,
+  bool? isThereWarehouse,
 }) {
   return ListView(
     children: [
@@ -28,9 +34,45 @@ Widget infoListWidget({
                   title: AppLocalizations.of(context).translate('desc'),
                   input: description)
               : const SizedBox(),
-          titleAndInput(
-              title: AppLocalizations.of(context).translate('mobile'),
-              input: firstMobile),
+          // titleAndInput(
+          //     title: AppLocalizations.of(context).translate('mobile'),
+          //     input: firstMobile),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              // height: 40.h,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Colors.grey.withOpacity(0.4),
+                    width: 1.0,
+                  ),
+                ),
+              ),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context).translate('mobile'),
+                      style: TextStyle(
+                        color: AppColor.black,
+                        fontSize: 15.sp,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 190,
+                      child: PhoneCallWidget(
+                        phonePath: firstMobile,
+                        title: firstMobile,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           titleAndInput(
               title: AppLocalizations.of(context).translate('email'),
               input: email),
@@ -59,6 +101,45 @@ Widget infoListWidget({
                   title: AppLocalizations.of(context)
                       .translate('Is there delivery'),
                   input: deliverable
+                      ? AppLocalizations.of(context).translate('Yes')
+                      : AppLocalizations.of(context).translate('No'),
+                )
+              : const SizedBox(),
+          deliveryType != null
+              ? titleAndInput(
+                  title:
+                      AppLocalizations.of(context).translate('delivery_type'),
+                  input: deliveryType,
+                )
+              : const SizedBox(),
+          deliveryCarsNum != null
+              ? titleAndInput(
+                  title:
+                      AppLocalizations.of(context).translate('deliveryCarsNum'),
+                  input: deliveryCarsNum.toString(),
+                )
+              : const SizedBox(),
+          deliveryMotorsNum != null
+              ? titleAndInput(
+                  title: AppLocalizations.of(context)
+                      .translate('deliveryMotorsNum'),
+                  input: deliveryMotorsNum.toString(),
+                )
+              : const SizedBox(),
+          isThereFoodsDelivery != null
+              ? titleAndInput(
+                  title: AppLocalizations.of(context)
+                      .translate('is_there_food_delivery'),
+                  input: isThereFoodsDelivery
+                      ? AppLocalizations.of(context).translate('Yes')
+                      : AppLocalizations.of(context).translate('No'),
+                )
+              : const SizedBox(),
+          isThereWarehouse != null
+              ? titleAndInput(
+                  title: AppLocalizations.of(context)
+                      .translate('is_there_warehouse'),
+                  input: isThereWarehouse
                       ? AppLocalizations.of(context).translate('Yes')
                       : AppLocalizations.of(context).translate('No'),
                 )

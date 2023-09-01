@@ -19,6 +19,7 @@ import '../../../core/widgets/screen_loader.dart';
 import '../../../profile/blocs/get_user/get_user_bloc.dart';
 import '../../../utils/app_localizations.dart';
 import '../../widgets/build_rating.dart';
+import '../../widgets/info_list_widget.dart';
 import '../blocs/delivery_service/delivery_service_bloc.dart';
 
 class DeliveryCompanyProfileScreen extends StatefulWidget {
@@ -597,76 +598,97 @@ class _DeliveryCompanyProfileScreenState
                             },
                           ),
                         ),
-                        ListView(
-                          children: [
-                            Column(
-                              children: [
-                                titleAndInput(
-                                    title: AppLocalizations.of(context)
-                                        .translate('company_name'),
-                                    input:
-                                        widget.deliveryCompany.username ?? ''),
-                                titleAndInput(
-                                    title: AppLocalizations.of(context)
-                                        .translate('desc'),
-                                    input: widget.deliveryCompany.description ??
-                                        ''),
-                                titleAndInput(
-                                    title: AppLocalizations.of(context)
-                                        .translate('Bio'),
-                                    input: widget.deliveryCompany.bio ?? ''),
-                                titleAndInput(
-                                    title: AppLocalizations.of(context)
-                                        .translate('mobile'),
-                                    input: widget.deliveryCompany.firstMobile ??
-                                        ';'),
-                                titleAndInput(
-                                    title: AppLocalizations.of(context)
-                                        .translate('email'),
-                                    input: widget.deliveryCompany.email ?? ''),
-                                titleAndInput(
-                                    title: AppLocalizations.of(context)
-                                        .translate('website'),
-                                    input:
-                                        widget.deliveryCompany.website ?? ''),
-                                titleAndInput(
-                                    title: AppLocalizations.of(context)
-                                        .translate('delivery_type'),
-                                    input:
-                                        widget.deliveryCompany.deliveryType ??
-                                            ''),
-                                titleAndInput(
-                                    title: AppLocalizations.of(context)
-                                        .translate('deliveryCarsNum'),
-                                    input: widget
-                                        .deliveryCompany.deliveryCarsNum
-                                        .toString()),
-                                titleAndInput(
-                                    title: AppLocalizations.of(context)
-                                        .translate('deliveryMotorsNum'),
-                                    input: widget
-                                        .deliveryCompany.deliveryMotorsNum
-                                        .toString()),
-                                titleAndInput(
-                                    title: AppLocalizations.of(context)
-                                        .translate('is_there_food_delivery'),
-                                    input: widget.deliveryCompany
-                                                .isThereFoodsDelivery ==
-                                            true
-                                        ? 'yes'
-                                        : 'no'),
-                                titleAndInput(
-                                    title: AppLocalizations.of(context)
-                                        .translate('is_there_warehouse'),
-                                    input: widget.deliveryCompany
-                                                .isThereWarehouse ==
-                                            true
-                                        ? 'yes'
-                                        : 'no'),
-                              ],
-                            ),
-                          ],
+                        infoListWidget(
+                          context: context,
+                          username: widget.deliveryCompany.username,
+                          firstMobile: widget.deliveryCompany.firstMobile ?? '',
+                          email: widget.deliveryCompany.email ?? '',
+                          address: widget.deliveryCompany.address,
+                          bio: widget.deliveryCompany.bio,
+                          deliverable: widget.deliveryCompany.deliverable,
+                          description: widget.deliveryCompany.description,
+                          link: widget.deliveryCompany.link,
+                          website: widget.deliveryCompany.website,
+                          deliveryType: widget.deliveryCompany.deliveryType,
+                          deliveryCarsNum:
+                              widget.deliveryCompany.deliveryCarsNum,
+                          deliveryMotorsNum:
+                              widget.deliveryCompany.deliveryMotorsNum,
+                          isThereFoodsDelivery:
+                              widget.deliveryCompany.isThereFoodsDelivery,
+                          isThereWarehouse:
+                              widget.deliveryCompany.isThereWarehouse,
                         ),
+                        // ListView(
+                        //   children: [
+                        //     Column(
+                        //       children: [
+                        //         titleAndInput(
+                        //             title: AppLocalizations.of(context)
+                        //                 .translate('company_name'),
+                        //             input:
+                        //                 widget.deliveryCompany.username ?? ''),
+                        //         titleAndInput(
+                        //             title: AppLocalizations.of(context)
+                        //                 .translate('desc'),
+                        //             input: widget.deliveryCompany.description ??
+                        //                 ''),
+                        //         titleAndInput(
+                        //             title: AppLocalizations.of(context)
+                        //                 .translate('Bio'),
+                        //             input: widget.deliveryCompany.bio ?? ''),
+                        //         titleAndInput(
+                        //             title: AppLocalizations.of(context)
+                        //                 .translate('mobile'),
+                        //             input: widget.deliveryCompany.firstMobile ??
+                        //                 ';'),
+                        //         titleAndInput(
+                        //             title: AppLocalizations.of(context)
+                        //                 .translate('email'),
+                        //             input: widget.deliveryCompany.email ?? ''),
+                        //         titleAndInput(
+                        //             title: AppLocalizations.of(context)
+                        //                 .translate('website'),
+                        //             input:
+                        //                 widget.deliveryCompany.website ?? ''),
+                        //         titleAndInput(
+                        //             title: AppLocalizations.of(context)
+                        //                 .translate('delivery_type'),
+                        //             input:
+                        //                 widget.deliveryCompany.deliveryType ??
+                        //                     ''),
+                        //         titleAndInput(
+                        //             title: AppLocalizations.of(context)
+                        //                 .translate('deliveryCarsNum'),
+                        //             input: widget
+                        //                 .deliveryCompany.deliveryCarsNum
+                        //                 .toString()),
+                        //         titleAndInput(
+                        //             title: AppLocalizations.of(context)
+                        //                 .translate('deliveryMotorsNum'),
+                        //             input: widget
+                        //                 .deliveryCompany.deliveryMotorsNum
+                        //                 .toString()),
+                        //         titleAndInput(
+                        //             title: AppLocalizations.of(context)
+                        //                 .translate('is_there_food_delivery'),
+                        //             input: widget.deliveryCompany
+                        //                         .isThereFoodsDelivery ==
+                        //                     true
+                        //                 ? 'yes'
+                        //                 : 'no'),
+                        //         titleAndInput(
+                        //             title: AppLocalizations.of(context)
+                        //                 .translate('is_there_warehouse'),
+                        //             input: widget.deliveryCompany
+                        //                         .isThereWarehouse ==
+                        //                     true
+                        //                 ? 'yes'
+                        //                 : 'no'),
+                        //       ],
+                        //     ),
+                        //   ],
+                        // ),
                       ],
                     ),
                   ),
