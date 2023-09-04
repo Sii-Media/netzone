@@ -36,3 +36,31 @@ class SendNotificationsFailure extends NotificationsState {
 
   const SendNotificationsFailure({required this.message});
 }
+
+class GetUnreadNotificationsInProgress extends NotificationsState {}
+
+class GetUnreadNotificationsFailure extends NotificationsState {
+  final String message;
+
+  const GetUnreadNotificationsFailure({required this.message});
+}
+
+class GetUnreadNotificationsSuccess extends NotificationsState {
+  final List<MyNotification> notifications;
+
+  const GetUnreadNotificationsSuccess({required this.notifications});
+}
+
+class MarkAllNotificationsAsReadInProgress extends NotificationsState {}
+
+class MarkAllNotificationsAsReadFailure extends NotificationsState {
+  final String message;
+
+  const MarkAllNotificationsAsReadFailure({required this.message});
+}
+
+class MarkAllNotificationsAsReadSuccess extends NotificationsState {
+  final String message;
+
+  const MarkAllNotificationsAsReadSuccess({required this.message});
+}

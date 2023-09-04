@@ -22,3 +22,7 @@ class SendNotificationEvent extends NotificationsEvent {
     required this.itemId,
   });
 }
+
+class GetUnreadNotificationsEvent extends NotificationsEvent {}
+
+class MarkAllNotificationsAsReadEvent extends NotificationsEvent {}

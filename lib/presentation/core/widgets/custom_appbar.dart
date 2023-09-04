@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/search/search_screen.dart';
 
 import '../../home/test.dart';
+import '../../notifications/blocs/notifications/notifications_bloc.dart';
 import '../../notifications/screens/notification_screen.dart';
 import '../blocs/country_bloc/country_bloc.dart';
 import '../constant/colors.dart';
@@ -36,6 +37,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
   };
   // final countryBloc = sl<CountryBloc>();
   late final CountryBloc countryBloc;
+  late final NotificationsBloc notiBloc;
+
   @override
   void initState() {
     countryBloc = BlocProvider.of<CountryBloc>(context);
@@ -46,6 +49,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     // final countryBloc = BlocProvider.of<CountryBloc>(context);
+    final notiBloc = context.read<NotificationsBloc>();
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.16,
       child: Row(
@@ -95,9 +99,52 @@ class _CustomAppBarState extends State<CustomAppBar> {
                           return const NotificatiionScreen();
                         }));
                       },
-                      child: const Icon(
-                        Icons.notifications,
-                        color: AppColor.backgroundColor,
+                      child: Stack(
+                        children: [
+                          const Icon(
+                            Icons.notifications,
+                            color: AppColor.backgroundColor,
+                          ),
+                          BlocBuilder<NotificationsBloc, NotificationsState>(
+                            bloc: notiBloc,
+                            builder: (context, notiState) {
+                              if (notiState
+                                  is GetUnreadNotificationsInProgress) {
+                              } else if (notiState
+                                  is GetUnreadNotificationsFailure) {
+                              } else if (notiState
+                                  is GetUnreadNotificationsSuccess) {
+                                return notiState.notifications.isEmpty
+                                    ? const SizedBox()
+                                    : Positioned(
+                                        top: -5,
+                                        right: -1,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(2.0),
+                                          decoration: const BoxDecoration(
+                                            color: AppColor.red,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          constraints: const BoxConstraints(
+                                            minWidth: 12.0,
+                                            minHeight: 12.0,
+                                          ),
+                                          child: Text(
+                                            '${notiState.notifications.length}',
+                                            style: const TextStyle(
+                                              color: AppColor.white,
+                                              fontSize: 10.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      );
+                              }
+                              return const SizedBox();
+                            },
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(

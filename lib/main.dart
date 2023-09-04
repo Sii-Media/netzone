@@ -14,12 +14,14 @@ import 'package:netzoon/presentation/core/blocs/country_bloc/country_bloc.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/favorites/favorite_blocs/favorites_bloc.dart';
 import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
+import 'package:netzoon/presentation/notifications/blocs/notifications/notifications_bloc.dart';
 import 'package:netzoon/presentation/notifications/screens/notification_screen.dart';
 import 'package:netzoon/presentation/splash/splash_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:netzoon/presentation/utils/constants.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
 import 'injection_container.dart' as di;
+import 'injection_container.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,6 +54,8 @@ Future<void> main() async {
 
   FirebaseMessaging.onMessage.listen((message) {
     final notification = message.notification;
+    final notiBloc = sl<NotificationsBloc>();
+
     if (notification == null) return;
     _localNotifications.show(
       notification.hashCode,
@@ -65,6 +69,7 @@ Future<void> main() async {
       ),
       payload: jsonEncode(message.toMap()),
     );
+    notiBloc.add(GetUnreadNotificationsEvent());
   });
   initLocalNotifications();
 }
@@ -126,6 +131,9 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (_) => di.sl<SignUpBloc>()),
           BlocProvider(create: (_) => di.sl<CountryBloc>()),
           BlocProvider(create: (_) => di.sl<CartBlocBloc>()..add(LoadCart())),
+          BlocProvider(
+              create: (_) => di.sl<NotificationsBloc>()
+                ..add(GetUnreadNotificationsEvent())),
           BlocProvider(
               create: (_) => di.sl<LanguageBloc>()..add(GetLanguage())),
           BlocProvider(

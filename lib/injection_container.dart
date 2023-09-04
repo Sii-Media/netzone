@@ -165,6 +165,8 @@ import 'package:netzoon/domain/news/usecases/get_all_news_usecase.dart';
 import 'package:netzoon/domain/news/usecases/get_comments_use_case.dart';
 import 'package:netzoon/domain/notifications/repositories/notification_repository.dart';
 import 'package:netzoon/domain/notifications/use_cases/get_all_notifications_use_case.dart';
+import 'package:netzoon/domain/notifications/use_cases/get_unread_notification_usecase.dart';
+import 'package:netzoon/domain/notifications/use_cases/make_all_notification_as_read_usecase.dart';
 import 'package:netzoon/domain/openions/repositories/openion_repository.dart';
 import 'package:netzoon/domain/openions/usecases/add_openion_use_case.dart';
 import 'package:netzoon/domain/questions/repositories/question_repository.dart';
@@ -430,9 +432,12 @@ Future<void> init() async {
       ));
 
   sl.registerFactory(() => NotificationsBloc(
-      getAllNotificationsUseCase: sl(),
-      sendNotificationUseCase: sl(),
-      getSignedInUser: sl()));
+        getAllNotificationsUseCase: sl(),
+        sendNotificationUseCase: sl(),
+        getSignedInUser: sl(),
+        getUnReadNotificationUseCase: sl(),
+        markAllNotificationsAsReadUseCase: sl(),
+      ));
 
   sl.registerFactory(() => UsersBloc(
         getSignedInUser: sl(),
@@ -729,6 +734,12 @@ Future<void> init() async {
 
   sl.registerLazySingleton(
       () => AddAdsVisitorUseCase(advertismentRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => MarkAllNotificationsAsReadUseCase(notificationRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => GetUnReadNotificationUseCase(notificationRepository: sl()));
 
   //! Repositories
 

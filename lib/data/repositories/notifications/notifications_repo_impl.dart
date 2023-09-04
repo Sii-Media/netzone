@@ -54,4 +54,36 @@ class NotificationRepositoryImpl implements NotificationRepository {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, List<MyNotification>>> getUnreadNotifications(
+      {required String userId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final unReadNotifications =
+            await notificationRemoteDataSource.getUnreadNotifications(userId);
+        return Right(unReadNotifications.map((e) => e.toDomain()).toList());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> markAllNotificationsAsRead(
+      {required String userId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final notification = await notificationRemoteDataSource
+            .markAllNotificationsAsRead(userId);
+        return Right(notification);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
 }

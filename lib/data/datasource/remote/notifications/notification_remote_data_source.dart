@@ -16,6 +16,10 @@ abstract class NotificationRemoteDataSource {
     String category,
     String itemId,
   );
+
+  Future<List<MyNotificationsModel>> getUnreadNotifications(String userId);
+
+  Future<String> markAllNotificationsAsRead(String userId);
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -44,5 +48,17 @@ abstract class NotificationRemoteDataSourceImpl
     @Part() String text,
     @Part() String category,
     @Part() String itemId,
+  );
+
+  @override
+  @GET('/notifications/get-unread-notifications/{userId}')
+  Future<List<MyNotificationsModel>> getUnreadNotifications(
+    @Path('userId') String userId,
+  );
+
+  @override
+  @PUT('/notifications/markAllNotificationsAsRead/{userId}')
+  Future<String> markAllNotificationsAsRead(
+    @Path('userId') String userId,
   );
 }

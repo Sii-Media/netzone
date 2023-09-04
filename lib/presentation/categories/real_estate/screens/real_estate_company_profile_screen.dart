@@ -104,6 +104,17 @@ class _RealEstateCompanyProfileScreenState
               color: AppColor.backgroundColor,
             ),
           ),
+          actions: [
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: .0),
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.share,
+                    color: AppColor.backgroundColor,
+                  ),
+                )),
+          ],
         ),
         body: BlocListener<GetUserBloc, GetUserState>(
           bloc: rateBloc,

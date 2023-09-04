@@ -331,6 +331,8 @@ Widget changeAccountText(
                                       ),
                                       ListView.builder(
                                         shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
                                         itemCount: accountstate.users.length,
                                         scrollDirection: Axis.vertical,
                                         itemBuilder: (context, index) {

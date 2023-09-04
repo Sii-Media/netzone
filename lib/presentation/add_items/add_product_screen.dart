@@ -837,6 +837,8 @@ class _AddProductScreenState extends State<AddProductScreen>
                                             ),
                                             TextButton(
                                               onPressed: () {
+                                                Navigator.of(context)
+                                                    .pop(false);
                                                 addBloc.add(
                                                     AddProductRequestedEvent(
                                                   departmentName: selectedValue,

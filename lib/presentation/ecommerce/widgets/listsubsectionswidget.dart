@@ -138,9 +138,12 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w700,
                                                     decoration: widget
-                                                                .deviceList
-                                                                .discountPercentage !=
-                                                            null
+                                                                    .deviceList
+                                                                    .discountPercentage !=
+                                                                null &&
+                                                            widget.deviceList
+                                                                    .discountPercentage !=
+                                                                0
                                                         ? TextDecoration
                                                             .lineThrough
                                                         : TextDecoration.none,
@@ -221,7 +224,11 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                                       ),
                                     ],
                                   ),
-                                  widget.deviceList.discountPercentage != null
+                                  widget.deviceList.discountPercentage !=
+                                              null &&
+                                          widget.deviceList
+                                                  .discountPercentage !=
+                                              0
                                       ? RichText(
                                           text: TextSpan(
                                               style: TextStyle(

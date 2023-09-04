@@ -242,7 +242,7 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                   child: Container(
                                     padding: const EdgeInsets.all(2.0),
                                     decoration: const BoxDecoration(
-                                      color: AppColor.backgroundColor,
+                                      color: AppColor.red,
                                       shape: BoxShape.circle,
                                     ),
                                     constraints: const BoxConstraints(
@@ -463,6 +463,8 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                                                         accountstate
                                                                             .users
                                                                             .length,
+                                                                    physics:
+                                                                        const NeverScrollableScrollPhysics(),
                                                                     scrollDirection:
                                                                         Axis.vertical,
                                                                     itemBuilder:

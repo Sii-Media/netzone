@@ -287,8 +287,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w700,
-                                                                      decoration: state.product.discountPercentage !=
-                                                                              null
+                                                                      decoration: state.product.discountPercentage != null &&
+                                                                              state.product.discountPercentage !=
+                                                                                  0
                                                                           ? TextDecoration
                                                                               .lineThrough
                                                                           : TextDecoration
@@ -389,9 +390,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                 SizedBox(
                                                   height: 7.h,
                                                 ),
-                                                state.product
-                                                            .discountPercentage !=
-                                                        null
+                                                state.product.discountPercentage !=
+                                                            null &&
+                                                        state.product
+                                                                .discountPercentage !=
+                                                            0
                                                     ? Row(
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment

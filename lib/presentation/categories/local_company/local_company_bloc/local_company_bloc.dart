@@ -85,32 +85,41 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
       countryresult.fold((l) => null, (r) => country = r ?? 'AE');
       final companies = await getLocalCompaniesUseCase(
           GetLocalCompaniesParams(country: country, userType: event.userType));
-      final result = await getSignedInUser.call(NoParams());
-      late User? user;
-      result.fold((l) => null, (r) => user = r);
+      // final result = await getSignedInUser.call(NoParams());
+      // late User? user;
+      // result.fold((l) => null, (r) => user = r);
       // ignore: unused_local_variable
       late List<UserInfo> filteredCompanies;
-      filteredCompanies = companies.fold(
-        (failure) => [],
-        (companies) => companies
-            .where((company) => company.username != user?.userInfo.username)
-            .toList(),
-      );
+      // filteredCompanies = companies.fold(
+      //   (failure) => [],
+      //   (companies) => companies
+      //       .where((company) => company.username != user?.userInfo.username)
+      //       .toList(),
+      // );
       // emit(
       //   filteredCompanies.isEmpty
       //       ? const LocalCompanyFailure(message: 'No Companies Founded')
       //       : GetLocalCompaniesSuccess(companies: filteredCompanies),
       // );
 
+      // emit(
+      //   companies.fold(
+      //     (failure) =>
+      //         LocalCompanyFailure(message: mapFailureToString(failure)),
+      //     (companies) {
+      //       filteredCompanies = companies
+      //           .where((company) => company.username != user?.userInfo.username)
+      //           .toList();
+      //       return GetLocalCompaniesSuccess(companies: filteredCompanies);
+      //     },
+      //   ),
+      // );
       emit(
         companies.fold(
           (failure) =>
               LocalCompanyFailure(message: mapFailureToString(failure)),
           (companies) {
-            filteredCompanies = companies
-                .where((company) => company.username != user?.userInfo.username)
-                .toList();
-            return GetLocalCompaniesSuccess(companies: filteredCompanies);
+            return GetLocalCompaniesSuccess(companies: companies);
           },
         ),
       );
