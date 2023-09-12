@@ -49,6 +49,7 @@ class SignUpUseCase extends UseCase<User, SignUpUseCaseParams> {
       deliveryType: params.deliveryType,
       isThereFoodsDelivery: params.isThereFoodsDelivery,
       isThereWarehouse: params.isThereWarehouse,
+      profitRatio: params.profitRatio,
     );
   }
 }
@@ -92,6 +93,7 @@ class SignUpUseCaseParams {
   final String? deliveryType;
   final int? deliveryCarsNum;
   final int? deliveryMotorsNum;
+  final double? profitRatio;
   SignUpUseCaseParams({
     required this.username,
     required this.email,
@@ -129,5 +131,6 @@ class SignUpUseCaseParams {
     this.deliveryType,
     this.deliveryCarsNum,
     this.deliveryMotorsNum,
+    this.profitRatio,
   });
 }

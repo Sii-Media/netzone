@@ -63,6 +63,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
           isThereFoodsDelivery: event.isThereFoodsDelivery,
           isThereWarehouse: event.isThereWarehouse,
           tradeLicensePhoto: event.tradeLicensePhoto,
+          profitRatio: event.profitRatio,
         ));
 
         emit(failureOrUser.fold(

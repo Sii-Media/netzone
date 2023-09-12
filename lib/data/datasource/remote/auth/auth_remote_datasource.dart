@@ -61,6 +61,8 @@ abstract class AuthRemoteDataSource {
 
   Future<List<UserInfoModel>> getUserFollowings(final String userId);
   Future<List<UserInfoModel>> getUserFollowers(final String userId);
+  Future<List<UserInfoModel>> getAllUsers();
+
   Future<String> toggleFollow(
     final String currentUserId,
     final String otherUserId,
@@ -86,8 +88,8 @@ abstract class AuthRemoteDataSource {
 abstract class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   factory AuthRemoteDataSourceImpl(Dio dio, {required String baseUrl}) {
     dio.options = BaseOptions(
-      receiveTimeout: const Duration(seconds: 10),
-      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 20),
+      connectTimeout: const Duration(seconds: 20),
       contentType: 'application/json',
       headers: {'Content-Type': 'application/json'},
     );
@@ -210,4 +212,7 @@ abstract class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<List<UserInfoModel>> getVisitors(
     @Path('id') String id,
   );
+  @override
+  @GET('/user/get-all-users')
+  Future<List<UserInfoModel>> getAllUsers();
 }

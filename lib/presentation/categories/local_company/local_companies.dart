@@ -108,9 +108,16 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
                                     height: 4.h,
                                   ),
                                   Expanded(
-                                    child: ListView.builder(
+                                    child: GridView.builder(
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2,
+                                              childAspectRatio: 0.85,
+                                              crossAxisSpacing: 10.w,
+                                              mainAxisSpacing: 10.h),
                                       shrinkWrap: true,
-                                      itemCount: filteredUsers.length,
+                                      physics: const BouncingScrollPhysics(),
+                                      itemCount: state.companies.length,
                                       itemBuilder:
                                           (BuildContext context, index) {
                                         return SizedBox(

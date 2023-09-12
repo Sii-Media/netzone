@@ -15,6 +15,14 @@
         <action android:name="android.intent.action.VIEW" />
         <data android:scheme="tel" />
       </intent>
+              <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="http" />
+        </intent>
     </queries>
    <application
         android:label="netzoon"
@@ -33,15 +41,27 @@
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
                  to determine the Window background behind the Flutter UI. -->
-            <meta-data
+          
+              <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
+               android:resource="@style/Theme.AppCompat"
+               />
+                <meta-data
+              android:name="com.google.android.gms.wallet.api.enabled"
+                android:value="true" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <service
+      android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+     android:enabled="false"
+     android:exported="false">
+      <meta-data
+      android:name="autoStoreLocales"
+      android:value="true" />
+      </service>
         <meta-data
         android:name="com.google.firebase.messaging.default_notification_channel_id"
         android:value="high_importance_channel" />

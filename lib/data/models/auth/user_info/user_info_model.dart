@@ -52,6 +52,13 @@ class UserInfoModel {
   final double? averageRating;
   final int? totalRatings;
   final int? profileViews;
+  final double? profitRatio;
+
+  final DateTime? subscriptionExpireDate;
+  final int? realEstateListingsRemaining;
+  final int? advertisementsRemaining;
+  final int? carsListingsRemaining;
+  final int? planesListingsRemaining;
   UserInfoModel({
     required this.username,
     required this.email,
@@ -92,6 +99,12 @@ class UserInfoModel {
     this.averageRating,
     this.totalRatings,
     this.profileViews,
+    this.profitRatio,
+    this.subscriptionExpireDate,
+    this.realEstateListingsRemaining,
+    this.advertisementsRemaining,
+    this.carsListingsRemaining,
+    this.planesListingsRemaining,
   });
 
   factory UserInfoModel.fromJson(Map<String, dynamic> json) =>
@@ -141,5 +154,11 @@ extension MapToDomain on UserInfoModel {
         averageRating: averageRating,
         totalRatings: totalRatings,
         profileViews: profileViews,
+        profitRatio: profitRatio,
+        subscriptionExpireDate: subscriptionExpireDate,
+        advertisementsRemaining: advertisementsRemaining,
+        carsListingsRemaining: carsListingsRemaining,
+        planesListingsRemaining: planesListingsRemaining,
+        realEstateListingsRemaining: realEstateListingsRemaining,
       );
 }

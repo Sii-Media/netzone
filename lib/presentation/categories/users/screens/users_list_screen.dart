@@ -96,8 +96,15 @@ class _UsersListScreenState extends State<UsersListScreen> {
                               height: 4.h,
                             ),
                             Expanded(
-                              child: ListView.builder(
+                              child: GridView.builder(
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        childAspectRatio: 0.85,
+                                        crossAxisSpacing: 10.w,
+                                        mainAxisSpacing: 10.h),
                                 shrinkWrap: true,
+                                physics: const BouncingScrollPhysics(),
                                 itemCount: filteredUsers.length,
                                 itemBuilder: (BuildContext context, index) {
                                   return SizedBox(

@@ -8,6 +8,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/categories/vehicles/blocs/bloc/vehicle_bloc.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
+import 'package:netzoon/presentation/home/widgets/auth_alert.dart';
+import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../data/core/constants/constants.dart';
@@ -435,96 +437,121 @@ class _VehicleCompaniesProfileScreenState
                               style: const TextStyle(color: AppColor.mainGrey),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            // height: 50.h,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: Container(
-                                    height: 50,
-                                    width: 180,
-                                    decoration: const BoxDecoration(
-                                      color: AppColor.backgroundColor,
-                                      // borderRadius: BorderRadius.circular(100),
-                                    ),
-                                    child: Center(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.monetization_on,
-                                            color: Colors.white,
-                                            size: 18.sp,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 4.0),
-                                            child: Text(
-                                              AppLocalizations.of(context)
-                                                  .translate('Live Auction'),
-                                              style: TextStyle(
-                                                color: AppColor.white,
-                                                fontSize: 13.sp,
-                                              ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: Container(
+                                  height: 50,
+                                  width: 150,
+                                  decoration: const BoxDecoration(
+                                    color: AppColor.backgroundColor,
+                                    // borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.monetization_on,
+                                          color: Colors.white,
+                                          size: 14.sp,
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 4.0),
+                                          child: Text(
+                                            AppLocalizations.of(context)
+                                                .translate('Live Auction'),
+                                            style: TextStyle(
+                                              color: AppColor.white,
+                                              fontSize: 11.sp,
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) {
-                                        return const ChatPageScreen();
-                                      }),
-                                    );
-                                  },
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: Container(
-                                      height: 50,
-                                      width: 180,
-                                      decoration: const BoxDecoration(
-                                        color: AppColor.backgroundColor,
-                                        // borderRadius: BorderRadius.circular(100),
-                                      ),
-                                      child: Center(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Icon(
-                                              Icons.chat,
-                                              color: Colors.white,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 4.0),
-                                              child: Text(
-                                                AppLocalizations.of(context)
-                                                    .translate(
-                                                        'customers service'),
-                                                style: TextStyle(
-                                                  color: AppColor.white,
-                                                  fontSize: 13.sp,
+                              ),
+                              SizedBox(
+                                width: 8.w,
+                              ),
+                              BlocBuilder<AuthBloc, AuthState>(
+                                bloc: authBloc,
+                                builder: (context, authState) {
+                                  return InkWell(
+                                    onTap: () async {
+                                      if (authState is Authenticated) {
+                                        await SendbirdChat.connect(
+                                            authState.user.userInfo.username ??
+                                                '');
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (context) {
+                                            return ChatPageScreen(
+                                              userId: authState
+                                                      .user.userInfo.username ??
+                                                  '',
+                                              otherUserId: widget
+                                                      .vehiclesCompany
+                                                      .username ??
+                                                  '',
+                                              title: widget.vehiclesCompany
+                                                      .username ??
+                                                  '',
+                                              image: widget.vehiclesCompany
+                                                      .profilePhoto ??
+                                                  '',
+                                            );
+                                          }),
+                                        );
+                                      } else {
+                                        authAlert(context);
+                                      }
+                                    },
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: Container(
+                                        height: 50,
+                                        width: 150,
+                                        decoration: const BoxDecoration(
+                                          color: AppColor.backgroundColor,
+                                          // borderRadius: BorderRadius.circular(100),
+                                        ),
+                                        child: Center(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.chat,
+                                                color: Colors.white,
+                                                size: 14.sp,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 4.0),
+                                                child: Text(
+                                                  AppLocalizations.of(context)
+                                                      .translate(
+                                                          'customers service'),
+                                                  style: TextStyle(
+                                                    color: AppColor.white,
+                                                    fontSize: 11.sp,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),

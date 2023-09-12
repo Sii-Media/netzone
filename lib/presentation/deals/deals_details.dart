@@ -204,14 +204,15 @@ class _DealDetailsState extends State<DealDetails> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      title: const Text(
-                                        'Service Fee',
-                                        style: TextStyle(
+                                      title: Text(
+                                        AppLocalizations.of(context)
+                                            .translate('service_fee'),
+                                        style: const TextStyle(
                                             color: AppColor.backgroundColor,
                                             fontWeight: FontWeight.w700),
                                       ),
                                       content: Text(
-                                        'you should pay ${calculateDealsFee(price: state.deal.currentPrice)} AED',
+                                        '${AppLocalizations.of(context).translate('you_should_pay')} ${calculateDealsFee(price: state.deal.currentPrice)} ${AppLocalizations.of(context).translate('AED')}',
                                         style: const TextStyle(
                                           color: AppColor.backgroundColor,
                                         ),
@@ -229,7 +230,67 @@ class _DealDetailsState extends State<DealDetails> {
                                           ),
                                         ),
                                         TextButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: Text(
+                                                      AppLocalizations.of(
+                                                              context)
+                                                          .translate(
+                                                              'service_fee'),
+                                                      style: const TextStyle(
+                                                          color: AppColor
+                                                              .backgroundColor,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                    content: Text(
+                                                      '${AppLocalizations.of(context).translate('you_should_pay')} ${calculateDealsFee(price: state.deal.currentPrice)} ${AppLocalizations.of(context).translate('AED')}',
+                                                      style: const TextStyle(
+                                                        color: AppColor
+                                                            .backgroundColor,
+                                                      ),
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop(false);
+                                                        },
+                                                        child: Text(
+                                                          AppLocalizations.of(
+                                                                  context)
+                                                              .translate(
+                                                                  'cancel'),
+                                                          style:
+                                                              const TextStyle(
+                                                                  color:
+                                                                      AppColor
+                                                                          .red),
+                                                        ),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop(false);
+                                                        },
+                                                        child: Text(
+                                                          AppLocalizations.of(
+                                                                  context)
+                                                              .translate(
+                                                                  'submit'),
+                                                          style: const TextStyle(
+                                                              color: AppColor
+                                                                  .backgroundColor),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                });
+                                          },
                                           child: Text(
                                             AppLocalizations.of(context)
                                                 .translate('submit'),
@@ -246,8 +307,6 @@ class _DealDetailsState extends State<DealDetails> {
                                 backgroundColor: AppColor.backgroundColor,
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),
-                                //shadowColor: Colors.black,
-                                //  elevation: 5
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5)),
                                 textStyle: const TextStyle(fontSize: 15)),

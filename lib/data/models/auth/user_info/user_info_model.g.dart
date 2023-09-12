@@ -51,6 +51,14 @@ UserInfoModel _$UserInfoModelFromJson(Map<String, dynamic> json) =>
       averageRating: (json['averageRating'] as num?)?.toDouble(),
       totalRatings: json['totalRatings'] as int?,
       profileViews: json['profileViews'] as int?,
+      profitRatio: (json['profitRatio'] as num?)?.toDouble(),
+      subscriptionExpireDate: json['subscriptionExpireDate'] == null
+          ? null
+          : DateTime.parse(json['subscriptionExpireDate'] as String),
+      realEstateListingsRemaining: json['realEstateListingsRemaining'] as int?,
+      advertisementsRemaining: json['advertisementsRemaining'] as int?,
+      carsListingsRemaining: json['carsListingsRemaining'] as int?,
+      planesListingsRemaining: json['planesListingsRemaining'] as int?,
     );
 
 Map<String, dynamic> _$UserInfoModelToJson(UserInfoModel instance) =>
@@ -94,4 +102,11 @@ Map<String, dynamic> _$UserInfoModelToJson(UserInfoModel instance) =>
       'averageRating': instance.averageRating,
       'totalRatings': instance.totalRatings,
       'profileViews': instance.profileViews,
+      'profitRatio': instance.profitRatio,
+      'subscriptionExpireDate':
+          instance.subscriptionExpireDate?.toIso8601String(),
+      'realEstateListingsRemaining': instance.realEstateListingsRemaining,
+      'advertisementsRemaining': instance.advertisementsRemaining,
+      'carsListingsRemaining': instance.carsListingsRemaining,
+      'planesListingsRemaining': instance.planesListingsRemaining,
     };

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,6 +16,7 @@ import '../../categories/governmental/govermental_category_screen.dart';
 import '../../categories/users/screens/users_list_screen.dart';
 import '../../categories/vehicles/screens/vehicles_companies_screen.dart';
 import '../../core/blocs/country_bloc/country_bloc.dart';
+import 'not_now_alert.dart';
 
 class ListOfCategories extends StatefulWidget {
   const ListOfCategories({
@@ -132,13 +134,17 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                               );
                             } else if (widget.categories[index].name ==
                                 'government_institutions') {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return const GovermentalCategoryScreen();
-                                  },
-                                ),
-                              );
+                              if (state.selectedCountry == 'AE') {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return const GovermentalCategoryScreen();
+                                    },
+                                  ),
+                                );
+                              } else {
+                                notNowAlert(context);
+                              }
                             } else if (widget.categories[index].name ==
                                 'factories') {
                               Navigator.of(context).push(
@@ -235,11 +241,30 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                             height: 300.h,
                             child: Stack(
                               children: [
-                                Image.asset(
-                                  widget.categories[index].url,
-                                  fit: BoxFit.fill,
-                                  height: MediaQuery.of(context).size.height,
-                                ),
+                                widget.categories[index].name ==
+                                        'government_institutions'
+                                    ? state.selectedCountry == 'AE'
+                                        ? Image.asset(
+                                            widget.categories[index].url,
+                                            fit: BoxFit.fill,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height,
+                                          )
+                                        : CachedNetworkImage(
+                                            imageUrl:
+                                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxLJx8scm0s4QuXRS-OO2LgaJz3zrQT2qVgE9kvAc&s',
+                                            fit: BoxFit.fill,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height,
+                                          )
+                                    : Image.asset(
+                                        widget.categories[index].url,
+                                        fit: BoxFit.fill,
+                                        height:
+                                            MediaQuery.of(context).size.height,
+                                      ),
                                 // CachedNetworkImage(
                                 //   imageUrl: categories[index].url,
                                 //   fit: BoxFit.fill,

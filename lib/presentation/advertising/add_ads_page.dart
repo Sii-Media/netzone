@@ -87,7 +87,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
       DateTime startDate = DateTime.parse(_selectedStartDate!);
       DateTime endDate = DateTime.parse(_selectedEndDate!);
       Duration difference = endDate.difference(startDate);
-      int totalPrice = difference.inDays * 6;
+      int totalPrice = difference.inDays * 5;
       setState(() {
         _totalPrice = totalPrice;
       });
@@ -716,13 +716,17 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      title: const Text(
-                                        'No Image Selected',
-                                        style: TextStyle(color: AppColor.red),
+                                      title: Text(
+                                        AppLocalizations.of(context)
+                                            .translate('no_image_selected'),
+                                        style: const TextStyle(
+                                            color: AppColor.red),
                                       ),
-                                      content: const Text(
-                                        'Please select an image before uploading.',
-                                        style: TextStyle(color: AppColor.red),
+                                      content: Text(
+                                        AppLocalizations.of(context).translate(
+                                            'please_select_an_image_before_uploading'),
+                                        style: const TextStyle(
+                                            color: AppColor.red),
                                       ),
                                       actions: [
                                         ElevatedButton(

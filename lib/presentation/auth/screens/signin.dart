@@ -12,6 +12,7 @@ import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/home/test.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
+import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -40,7 +41,7 @@ class _SignInScreenState extends State<SignInScreen>
   Widget screen(BuildContext context) {
     return BlocListener<SignInBloc, SignInState>(
       bloc: signInBloc,
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is SignInInProgress) {
           startLoading();
         } else if (state is SignInFailure) {
@@ -59,6 +60,11 @@ class _SignInScreenState extends State<SignInScreen>
             ),
           );
         } else if (state is SignInSuccess) {
+          await SendbirdChat.connect(state.user.userInfo.username ?? '');
+          await SendbirdChat.updateCurrentUserInfo(
+              nickname: state.user.userInfo.username,
+              profileFileInfo: FileInfo.fromFileUrl(
+                  fileUrl: state.user.userInfo.profilePhoto));
           stopLoading();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
@@ -66,7 +72,6 @@ class _SignInScreenState extends State<SignInScreen>
             ),
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ));
-
           Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
               CupertinoPageRoute(builder: (context) {
             return const TestScreen();

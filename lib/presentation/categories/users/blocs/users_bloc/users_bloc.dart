@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:netzoon/domain/auth/usecases/get_all_users_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/users/get_users_list_use_case.dart';
 import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 
+import '../../../../../domain/auth/entities/user.dart';
 import '../../../../../domain/auth/entities/user_info.dart';
 import '../../../../../domain/auth/usecases/get_signed_in_user_use_case.dart';
 import '../../../../../domain/core/usecase/usecase.dart';
@@ -16,11 +18,13 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
   final GetSignedInUserUseCase getSignedInUser;
   final GetUsersListUseCase getUsersListUseCase;
   final GetCountryUseCase getCountryUseCase;
-  UsersBloc(
-      {required this.getSignedInUser,
-      required this.getUsersListUseCase,
-      required this.getCountryUseCase})
-      : super(UsersInitial()) {
+  final GetAllUsersUseCase getAllUsersUseCase;
+  UsersBloc({
+    required this.getSignedInUser,
+    required this.getUsersListUseCase,
+    required this.getCountryUseCase,
+    required this.getAllUsersUseCase,
+  }) : super(UsersInitial()) {
     on<GetUsersListEvent>((event, emit) async {
       emit(GetUsersInProgress());
       late String country;
@@ -58,6 +62,24 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
               .contains(event.searchQuery.toLowerCase()))
           .toList();
       emit(GetUsersSuccess(users: searchResults));
+    });
+    on<GetAllUsersEvent>((event, emit) async {
+      emit(GetAllUsersInProgress());
+      final users = await getAllUsersUseCase(NoParams());
+      final result = await getSignedInUser.call(NoParams());
+      late User? user;
+
+      result.fold((l) => null, (r) => user = r);
+      filteredUsers = users.fold(
+        (failure) => [],
+        (usersList) => usersList
+            .where(
+                (singleUser) => singleUser.username != user?.userInfo.username)
+            .toList(),
+      );
+      emit(filteredUsers.isEmpty
+          ? const GetAllUsersFailure(message: 'no data available')
+          : GetAllUsersSuccess(users: filteredUsers));
     });
   }
 }

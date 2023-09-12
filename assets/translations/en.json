@@ -530,5 +530,20 @@
     "company": "company",
     "product": "product",
     "service": "service",
-    "properties":"properties"
+    "properties": "properties",
+    "profitRatio": "profitRatio",
+    "share_netzoon_app": "Share Netzoon App",
+    "أخرى": "others",
+    "Building materials and real estate": "Building materials and real estate",
+    "Renewable Energy": "Renewable Energy",
+    "Electrical Equipment & Supplies": "Electrical Equipment & Supplies",
+    "Chemicals": "Chemicals",
+    "Metals & Alloys": "Metals & Alloys",
+    "Rubber & Plastics": "Rubber & Plastics",
+    "Fabric & Textile Raw Material": "Fabric & Textile Raw Material",
+    "Packaging & Printing": "Packaging & Printing",
+    "privacy_policy": "Privacy policy",
+    "you_should_pay": "You should pay",
+    "You_are_not_authenticated": "You are not authenticated",
+    "please_login_first": "Please login first"
 }

@@ -20,11 +20,15 @@ import 'package:netzoon/presentation/splash/splash_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:netzoon/presentation/utils/constants.dart';
 import 'package:quickblox_sdk/quickblox_sdk.dart';
+import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 import 'injection_container.dart' as di;
 import 'injection_container.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey =
+      'pk_test_51NcotDFDslnmTEHTC1GIVWyuc6ZGAfhWvQFlyE7v6Pno2VZeZ8gAHlwFPP1Euj5Rqdxyo58LMdOuLTQKIazuD13G00cUhvtJLe';
   // await initializeQuickBlox();
   await Firebase.initializeApp();
   await FirebaseMessaging.instance.subscribeToTopic('Netzoon');
@@ -50,7 +54,7 @@ Future<void> main() async {
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await di.init();
-  runApp(const MyApp());
+  runApp(MyApp());
 
   FirebaseMessaging.onMessage.listen((message) {
     final notification = message.notification;
@@ -122,7 +126,9 @@ Future<void> initializeQuickBlox() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key}) {
+    SendbirdChat.init(appId: 'D27C6110-9DB9-4EBE-AA85-CF39E2AF562E');
+  }
 
   @override
   Widget build(BuildContext context) {

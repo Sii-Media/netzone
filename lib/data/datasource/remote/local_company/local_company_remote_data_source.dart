@@ -34,8 +34,8 @@ abstract class LocalCompanyRemoteDataSourceImpl
     implements LocalCompanyRemoteDataSource {
   factory LocalCompanyRemoteDataSourceImpl(Dio dio, {required String baseUrl}) {
     dio.options = BaseOptions(
-      receiveTimeout: const Duration(seconds: 10),
-      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 20),
+      connectTimeout: const Duration(seconds: 20),
       contentType: 'application/json',
       headers: {'Content-Type': 'application/json'},
     );

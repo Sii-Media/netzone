@@ -245,6 +245,8 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
                               width: 250.w,
                               height: 250.h,
                               fit: BoxFit.cover,
+                              maxHeightDiskCache: 400,
+                              maxWidthDiskCache: 400,
                               progressIndicatorBuilder:
                                   (context, url, downloadProgress) => Padding(
                                 padding: const EdgeInsets.symmetric(

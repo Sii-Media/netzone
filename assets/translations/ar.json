@@ -530,5 +530,21 @@
     "company": "شركة",
     "product": "منتج",
     "service": "خدمة",
-    "properties": "properties"
+    "properties": "properties",
+    "profitRatio": "نسبة الربح",
+    "share_netzoon_app":"مشاركة تطبيق نت زوون",
+    "أخرى":"أخرى",
+    "Building materials and real estate":"مواد البناء والعقارات",
+    "Renewable Energy":"طاقة متجددة",
+    "Electrical Equipment & Supplies":"المعدات واللوازم الكهربائية",
+    "Chemicals":"مواد كيميائية",
+    "Metals & Alloys":"المعادن والسبائك",
+    "Rubber & Plastics":"المطاط والبلاستيك",
+    "Fabric & Textile Raw Material":"المواد الخام للنسيج والنسيج",
+    "Packaging & Printing":"التعبئة والتغليف والطباعة",
+    "privacy_policy":"سياسة الخصوصية",
+    "you_should_pay":"يجب عليك دفع",
+    "You_are_not_authenticated":"لست مسجلا",
+    "please_login_first":"الرجاء تسجيل الدخول أولا"
+   
 }

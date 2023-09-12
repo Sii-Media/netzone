@@ -838,13 +838,17 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: const Text(
-                                      'No Image Selected',
-                                      style: TextStyle(color: AppColor.red),
+                                    title: Text(
+                                      AppLocalizations.of(context)
+                                          .translate('no_image_selected'),
+                                      style:
+                                          const TextStyle(color: AppColor.red),
                                     ),
-                                    content: const Text(
-                                      'Please select an image before uploading.',
-                                      style: TextStyle(color: AppColor.red),
+                                    content: Text(
+                                      AppLocalizations.of(context).translate(
+                                          'please_select_an_image_before_uploading'),
+                                      style:
+                                          const TextStyle(color: AppColor.red),
                                     ),
                                     actions: [
                                       ElevatedButton(

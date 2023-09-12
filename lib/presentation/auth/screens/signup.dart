@@ -17,6 +17,7 @@ import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/injection_container.dart' as di;
 import 'package:netzoon/presentation/home/test.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
+import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 
 import '../../../injection_container.dart';
 import '../../categories/factories/blocs/factories_bloc/factories_bloc.dart';
@@ -60,6 +61,7 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
   final TextEditingController deliveryMotorsNumController =
       TextEditingController();
 
+  final TextEditingController profitRatioController = TextEditingController();
   final factoryBloc = sl<FactoriesBloc>();
 
   File? profileImage;
@@ -80,7 +82,7 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
   Widget screen(BuildContext context) {
     return BlocListener(
       bloc: bloc,
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is SignUpInProgress) {
           startLoading();
         } else if (state is SignUpFailure) {
@@ -99,6 +101,11 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
             ),
           );
         } else if (state is SignUpSuccess) {
+          await SendbirdChat.connect(state.user.userInfo.username ?? '');
+          await SendbirdChat.updateCurrentUserInfo(
+              nickname: state.user.userInfo.username,
+              profileFileInfo: FileInfo.fromFileUrl(
+                  fileUrl: state.user.userInfo.profilePhoto));
           stopLoading();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
@@ -140,6 +147,7 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
         factoriesBloc: factoryBloc,
         deliveryCarsNumController: deliveryCarsNumController,
         deliveryMotorsNumController: deliveryMotorsNumController,
+        profitRatioController: profitRatioController,
       ),
     );
   }
@@ -175,6 +183,7 @@ class SignUpWidget extends StatefulWidget {
     required this.factoriesBloc,
     required this.deliveryCarsNumController,
     required this.deliveryMotorsNumController,
+    required this.profitRatioController,
   });
   final GlobalKey<FormState> formKey;
   final GlobalKey<FormFieldState> emailFormFieldKey;
@@ -201,6 +210,7 @@ class SignUpWidget extends StatefulWidget {
   final TextEditingController freezoneCityController;
   final TextEditingController deliveryCarsNumController;
   final TextEditingController deliveryMotorsNumController;
+  final TextEditingController profitRatioController;
 
   final SignUpBloc bloc;
   final FactoriesBloc factoriesBloc;
@@ -991,6 +1001,31 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         });
                       },
                     ),
+              _isSelectable == true
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextSignup(
+                              text: AppLocalizations.of(context)
+                                  .translate('profitRatio')),
+                          TextFormSignupWidget(
+                            password: false,
+                            isNumber: true,
+                            valid: (val) {
+                              return null;
+
+                              // return validInput(val!, 5, 100, "password");
+                            },
+                            myController: widget.profitRatioController,
+                          ),
+                        ],
+                      ),
+                    )
+                  : const SizedBox(),
+
               widget.accountTitle != 'الشركات المحلية' &&
                       widget.accountTitle != 'المصانع'
                   ? Container()
@@ -1587,46 +1622,50 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         }
                         if (!widget.formKey.currentState!.validate()) return;
 
-                        widget.bloc.add(SignUpRequested(
-                          username: widget.username.text,
-                          email: widget.emailSignup.text,
-                          password: widget.passwordSignup.text,
-                          userType: userType,
-                          firstMobile: widget.numberPhoneOne.text,
-                          secondMobile: widget.numberPhoneTow.text,
-                          thirdMobile: widget.numberPhoneThree.text,
-                          address: widget.address.text,
-                          companyProductsNumber:
-                              int.tryParse(widget.companyProductsNumber.text),
-                          sellType: widget.sellType.text,
-                          subcategory: widget.subcategory.text,
-                          toCountry: widget.toCountry.text,
-                          isFreeZoon: _isFreeZone,
-                          isService: _isService,
-                          isSelectable: _isSelectable,
-                          freezoneCity: widget.freezoneCityController.text,
-                          deliverable: _isDeliverable,
-                          profilePhoto: profileImage,
-                          coverPhoto: coverImage,
-                          // banerPhoto: banerImage,
-                          frontIdPhoto: frontIdPhoto,
-                          backIdPhoto: backIdPhoto,
-                          bio: widget.bioController.text,
-                          description: widget.descriptionController.text,
-                          website: widget.websiteController.text,
-                          link: widget.linkController.text,
-                          slogn: widget.slognController.text,
-                          title: selectCat?.title,
-                          deliveryCarsNum: int.tryParse(
-                              widget.deliveryCarsNumController.text),
-                          deliveryMotorsNum: int.tryParse(
-                              widget.deliveryMotorsNumController.text),
-                          deliveryPermitPhoto: deliveryPermitPhoto,
-                          deliveryType: deliveryType,
-                          isThereFoodsDelivery: _isThereFoodsDelivery,
-                          isThereWarehouse: _isThereWarehouse,
-                          tradeLicensePhoto: tradeLicensePhoto,
-                        ));
+                        widget.bloc.add(
+                          SignUpRequested(
+                            username: widget.username.text,
+                            email: widget.emailSignup.text,
+                            password: widget.passwordSignup.text,
+                            userType: userType,
+                            firstMobile: widget.numberPhoneOne.text,
+                            secondMobile: widget.numberPhoneTow.text,
+                            thirdMobile: widget.numberPhoneThree.text,
+                            address: widget.address.text,
+                            companyProductsNumber:
+                                int.tryParse(widget.companyProductsNumber.text),
+                            sellType: widget.sellType.text,
+                            subcategory: widget.subcategory.text,
+                            toCountry: widget.toCountry.text,
+                            isFreeZoon: _isFreeZone,
+                            isService: _isService,
+                            isSelectable: _isSelectable,
+                            freezoneCity: widget.freezoneCityController.text,
+                            deliverable: _isDeliverable,
+                            profilePhoto: profileImage,
+                            coverPhoto: coverImage,
+                            // banerPhoto: banerImage,
+                            frontIdPhoto: frontIdPhoto,
+                            backIdPhoto: backIdPhoto,
+                            bio: widget.bioController.text,
+                            description: widget.descriptionController.text,
+                            website: widget.websiteController.text,
+                            link: widget.linkController.text,
+                            slogn: widget.slognController.text,
+                            title: selectCat?.title,
+                            deliveryCarsNum: int.tryParse(
+                                widget.deliveryCarsNumController.text),
+                            deliveryMotorsNum: int.tryParse(
+                                widget.deliveryMotorsNumController.text),
+                            deliveryPermitPhoto: deliveryPermitPhoto,
+                            deliveryType: deliveryType,
+                            isThereFoodsDelivery: _isThereFoodsDelivery,
+                            isThereWarehouse: _isThereWarehouse,
+                            tradeLicensePhoto: tradeLicensePhoto,
+                            profitRatio: double.tryParse(
+                                widget.profitRatioController.text),
+                          ),
+                        );
                       },
                       child: Text(
                         AppLocalizations.of(context)

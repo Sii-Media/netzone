@@ -21,6 +21,7 @@ import '../blocs/add_account/add_account_bloc.dart';
 import '../blocs/get_user/get_user_bloc.dart';
 import '../methods/show_change_account_bottom_sheet.dart';
 import '../widgets/rounded_icon_text.dart';
+import 'credits_screen.dart';
 import 'edit_local_company_profile_screen.dart';
 import 'followings_list_screen.dart';
 
@@ -272,54 +273,83 @@ class _MyLocalCompanyProfileScreenState
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
+                                      child: Column(
                                         children: [
-                                          roundedIconText(
-                                            context: context,
-                                            text: state.userInfo.isService ==
-                                                        false ||
-                                                    state.userInfo.isService ==
-                                                        null
-                                                ? 'Products sold'
-                                                : 'my_services',
-                                            icon: Icons
-                                                .production_quantity_limits,
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              roundedIconText(
+                                                context: context,
+                                                text: state.userInfo
+                                                                .isService ==
+                                                            false ||
+                                                        state.userInfo
+                                                                .isService ==
+                                                            null
+                                                    ? 'Products sold'
+                                                    : 'my_services',
+                                                icon: Icons
+                                                    .production_quantity_limits,
+                                              ),
+                                              roundedIconText(
+                                                context: context,
+                                                text: state.userInfo
+                                                                .isService ==
+                                                            false ||
+                                                        state.userInfo
+                                                                .isService ==
+                                                            null
+                                                    ? 'Recovered products'
+                                                    : 'popular',
+                                                icon: Icons.reset_tv_rounded,
+                                              ),
+                                              roundedIconText(
+                                                  context: context,
+                                                  text: 'chat',
+                                                  icon: Icons.chat,
+                                                  onTap: () {
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
+                                                      return const ChatHomeScreen();
+                                                    }));
+                                                  }),
+                                            ],
                                           ),
-                                          roundedIconText(
-                                            context: context,
-                                            text: state.userInfo.isService ==
-                                                        false ||
-                                                    state.userInfo.isService ==
-                                                        null
-                                                ? 'Recovered products'
-                                                : 'popular',
-                                            icon: Icons.reset_tv_rounded,
+                                          const SizedBox(
+                                            height: 8,
                                           ),
-                                          roundedIconText(
-                                              context: context,
-                                              text: 'chat',
-                                              icon: Icons.chat,
-                                              onTap: () {
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) {
-                                                  return const ChatHomeScreen();
-                                                }));
-                                              }),
-                                          roundedIconText(
-                                              context: context,
-                                              text: 'edit_profile',
-                                              icon: Icons.edit,
-                                              onTap: () {
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) {
-                                                  return EditLocalCompanyprofileScreen(
-                                                      userInfo: state.userInfo);
-                                                }));
-                                              }),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              roundedIconText(
+                                                  context: context,
+                                                  text: 'edit_profile',
+                                                  icon: Icons.edit,
+                                                  onTap: () {
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
+                                                      return EditLocalCompanyprofileScreen(
+                                                          userInfo:
+                                                              state.userInfo);
+                                                    }));
+                                                  }),
+                                              roundedIconText(
+                                                  context: context,
+                                                  text: 'NetZoon Credits',
+                                                  icon: Icons.wallet_outlined,
+                                                  onTap: () {
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
+                                                      return const CreditScreen();
+                                                    }));
+                                                  }),
+                                            ],
+                                          )
                                         ],
                                       ),
                                     ),

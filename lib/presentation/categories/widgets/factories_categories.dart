@@ -13,7 +13,12 @@ class ViewFactoriesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
-      child: ListView.builder(
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.85,
+            crossAxisSpacing: 10.w,
+            mainAxisSpacing: 10.h),
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
         itemCount: factory.length,

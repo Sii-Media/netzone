@@ -322,6 +322,8 @@ class Deals extends StatelessWidget {
                             fit: BoxFit.fill,
                             width: 160.w,
                             height: 150.h,
+                            maxHeightDiskCache: 400,
+                            maxWidthDiskCache: 400,
                             progressIndicatorBuilder:
                                 (context, url, downloadProgress) => Padding(
                               padding: const EdgeInsets.symmetric(

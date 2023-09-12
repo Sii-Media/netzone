@@ -22,3 +22,17 @@ class GetUsersSuccess extends UsersState {
 
   const GetUsersSuccess({required this.users});
 }
+
+class GetAllUsersInProgress extends UsersState {}
+
+class GetAllUsersFailure extends UsersState {
+  final String message;
+
+  const GetAllUsersFailure({required this.message});
+}
+
+class GetAllUsersSuccess extends UsersState {
+  final List<UserInfo> users;
+
+  const GetAllUsersSuccess({required this.users});
+}

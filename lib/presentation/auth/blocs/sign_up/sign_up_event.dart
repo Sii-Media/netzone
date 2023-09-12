@@ -47,6 +47,7 @@ class SignUpRequested extends SignUpEvent {
   final String? deliveryType;
   final int? deliveryCarsNum;
   final int? deliveryMotorsNum;
+  final double? profitRatio;
   const SignUpRequested({
     required this.username,
     required this.email,
@@ -83,5 +84,6 @@ class SignUpRequested extends SignUpEvent {
     this.deliveryType,
     this.deliveryCarsNum,
     this.deliveryMotorsNum,
+    this.profitRatio,
   });
 }

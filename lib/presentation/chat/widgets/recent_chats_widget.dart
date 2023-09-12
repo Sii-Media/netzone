@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 
-import '../screens/chat_page_screen.dart';
-
 class RecentChats extends StatelessWidget {
   const RecentChats({super.key});
 
@@ -34,10 +32,10 @@ class RecentChats extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 15),
               child: InkWell(
                 onTap: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return const ChatPageScreen();
-                  }));
+                  // Navigator.of(context)
+                  //     .push(MaterialPageRoute(builder: (context) {
+                  //   return const ChatPageScreen();
+                  // }));
                 },
                 child: SizedBox(
                   height: 65.h,

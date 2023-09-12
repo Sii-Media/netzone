@@ -319,81 +319,87 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
                               } else if (authState is Authenticated) {
                                 return Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            isLikedList[index] =
-                                                !isLikedList[index];
-                                          });
+                                  child: SizedBox(
+                                    width: 90.w,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              isLikedList[index] =
+                                                  !isLikedList[index];
+                                            });
 
-                                          widget.newsBloc.add(
-                                            ToggleonlikeEvent(
-                                                newsId: newsItem.id ?? ''),
-                                          );
-                                        },
-                                        child: Icon(
-                                          isLikedList[index]
-                                              ? Icons.favorite
-                                              : Icons.favorite_border,
-                                          color: isLikedList[index]
-                                              ? AppColor.red
-                                              : AppColor.black,
+                                            widget.newsBloc.add(
+                                              ToggleonlikeEvent(
+                                                  newsId: newsItem.id ?? ''),
+                                            );
+                                          },
+                                          child: Icon(
+                                            isLikedList[index]
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color: isLikedList[index]
+                                                ? AppColor.red
+                                                : AppColor.black,
+                                          ),
                                         ),
-                                      ),
-                                      // IconButton(
-                                      //   icon: Icon(
-                                      //     isLikedList[index]
-                                      //         ? Icons.favorite
-                                      //         : Icons.favorite_border,
-                                      //   ),
-                                      //   onPressed: () {
-                                      //     setState(() {
-                                      //       isLikedList[index] = !isLikedList[index];
-                                      //     });
+                                        // IconButton(
+                                        //   icon: Icon(
+                                        //     isLikedList[index]
+                                        //         ? Icons.favorite
+                                        //         : Icons.favorite_border,
+                                        //   ),
+                                        //   onPressed: () {
+                                        //     setState(() {
+                                        //       isLikedList[index] = !isLikedList[index];
+                                        //     });
 
-                                      //     widget.newsBloc.add(
-                                      //       ToggleonlikeEvent(newsId: newsItem.id ?? ''),
-                                      //     );
-                                      //   },
-                                      // ),
-                                      SizedBox(
-                                        width: 5.w,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) {
-                                              return CommentsPage(
-                                                newsId:
-                                                    widget.news[index].id ?? '',
-                                              );
-                                            }),
-                                          );
-                                        },
-                                        child: const Icon(
-                                          Feather.message_circle,
+                                        //     widget.newsBloc.add(
+                                        //       ToggleonlikeEvent(newsId: newsItem.id ?? ''),
+                                        //     );
+                                        //   },
+                                        // ),
+                                        SizedBox(
+                                          width: 5.w,
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: 5.w,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () async {
-                                          await shareImageWithDescription(
-                                            imageUrl: widget.news[index].imgUrl,
-                                            description:
-                                                widget.news[index].description,
-                                          );
-                                        },
-                                        child: const Icon(
-                                          Feather.send,
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                                return CommentsPage(
+                                                  newsId:
+                                                      widget.news[index].id ??
+                                                          '',
+                                                );
+                                              }),
+                                            );
+                                          },
+                                          child: const Icon(
+                                            Feather.message_square,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        SizedBox(
+                                          width: 5.w,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () async {
+                                            await shareImageWithDescription(
+                                              imageUrl:
+                                                  widget.news[index].imgUrl,
+                                              description: widget
+                                                  .news[index].description,
+                                            );
+                                          },
+                                          child: const Icon(
+                                            Feather.share_2,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 );
                               }

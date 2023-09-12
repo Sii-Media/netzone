@@ -42,6 +42,7 @@ class _AddProductScreenState extends State<AddProductScreen>
     'آلات موسيقية',
     'أجهزة رياضية',
     'الزراعة',
+    'أخرى'
   ];
   String selectedValue = 'الكترونيات';
 
@@ -804,20 +805,21 @@ class _AddProductScreenState extends State<AddProductScreen>
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
-                                          title: const Text(
-                                            'Service Fee',
-                                            style: TextStyle(
+                                          title: Text(
+                                            AppLocalizations.of(context)
+                                                .translate('service_fee'),
+                                            style: const TextStyle(
                                                 color: AppColor.backgroundColor,
                                                 fontWeight: FontWeight.w700),
                                           ),
                                           content: Text(
-                                            'you should pay ${calulateAddProductFee(
+                                            '${AppLocalizations.of(context).translate('you_should_pay')} ${calulateAddProductFee(
                                               isNew: _selectedCondition,
                                               price:
                                                   int.parse(productPrice.text),
                                               quantity: int.parse(
                                                   productQuantity.text),
-                                            )} AED',
+                                            )} ${AppLocalizations.of(context).translate('AED')}',
                                             style: const TextStyle(
                                               color: AppColor.backgroundColor,
                                             ),

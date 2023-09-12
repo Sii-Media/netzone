@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,6 +13,7 @@ import 'package:netzoon/presentation/data/categories.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../core/blocs/country_bloc/country_bloc.dart';
+import '../../home/widgets/not_now_alert.dart';
 import '../delivery_company/screens/delivery_companies_list_screen.dart';
 import '../free_zoon/freezone_companies_list_screen.dart';
 import '../users/screens/users_list_screen.dart';
@@ -171,13 +173,17 @@ class GridCategory extends StatelessWidget {
               ),
             );
           } else if (category.name == 'government_institutions') {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) {
-                  return const GovermentalCategoryScreen();
-                },
-              ),
-            );
+            if (state.selectedCountry == 'AE') {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const GovermentalCategoryScreen();
+                  },
+                ),
+              );
+            } else {
+              notNowAlert(context);
+            }
           } else if (category.name == 'factories') {
             Navigator.of(context).push(
               MaterialPageRoute(
@@ -255,17 +261,31 @@ class GridCategory extends StatelessWidget {
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
-            Image.asset(
-              category.url,
-              fit: BoxFit.fitHeight,
-              height: 160.h,
-            ),
+            category.name == 'government_institutions'
+                ? state.selectedCountry == 'AE'
+                    ? Image.asset(
+                        category.url,
+                        fit: BoxFit.fitHeight,
+                        height: 160.h,
+                      )
+                    : CachedNetworkImage(
+                        imageUrl:
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxLJx8scm0s4QuXRS-OO2LgaJz3zrQT2qVgE9kvAc&s',
+                        fit: BoxFit.fitHeight,
+                        height: 160.h,
+                      )
+                : Image.asset(
+                    category.url,
+                    fit: BoxFit.fitHeight,
+                    height: 160.h,
+                  ),
             Container(
               height: 50.h,
               width: double.infinity,
               color: AppColor.backgroundColor.withOpacity(0.8),
               alignment: Alignment.center,
               child: Text(
+                textAlign: TextAlign.center,
                 AppLocalizations.of(context).translate(category.name),
                 style: TextStyle(fontSize: 15.sp, color: AppColor.white),
               ),

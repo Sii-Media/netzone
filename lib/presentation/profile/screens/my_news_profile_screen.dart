@@ -21,6 +21,7 @@ import '../blocs/get_user/get_user_bloc.dart';
 import '../methods/show_change_account_bottom_sheet.dart';
 import '../widgets/rounded_icon_text.dart';
 import '../widgets/top_profile.dart';
+import 'credits_screen.dart';
 import 'edit_local_company_profile_screen.dart';
 import 'followings_list_screen.dart';
 
@@ -142,18 +143,29 @@ class _MyNewsProfileScreenState extends State<MyNewsProfileScreen>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    roundedIconText(
-                                      context: context,
-                                      text: state.userInfo.userType == 'car'
-                                          ? 'sold_cars'
-                                          : 'sold_airplanes',
-                                      icon: Icons.production_quantity_limits,
-                                    ),
+                                    // roundedIconText(
+                                    //   context: context,
+                                    //   text: state.userInfo.userType == 'car'
+                                    //       ? 'sold_cars'
+                                    //       : 'sold_airplanes',
+                                    //   icon: Icons.production_quantity_limits,
+                                    // ),
                                     // roundedIconText(
                                     //   context: context,
                                     //   text: 'Recovered products',
                                     //   icon: Icons.reset_tv_rounded,
                                     // ),
+                                    roundedIconText(
+                                        context: context,
+                                        text: 'NetZoon Credits',
+                                        icon: Icons.wallet_outlined,
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                            return const CreditScreen();
+                                          }));
+                                        }),
                                     roundedIconText(
                                         context: context,
                                         text: 'chat',

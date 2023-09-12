@@ -71,4 +71,5 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation('com.revesoft.revechatsdk:revechatsdk:1.0.14.3.2')
     implementation platform('com.google.firebase:firebase-bom:32.1.1')
+    implementation 'com.stripe:stripe-android:17.1.1'
 }

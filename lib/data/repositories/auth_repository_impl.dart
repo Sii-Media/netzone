@@ -62,6 +62,7 @@ class AuthRepositoryImpl implements AuthRepository {
     String? deliveryType,
     int? deliveryCarsNum,
     int? deliveryMotorsNum,
+    double? profitRatio,
   }) async {
     try {
       if (await networkInfo.isConnected) {
@@ -123,7 +124,9 @@ class AuthRepositoryImpl implements AuthRepository {
         if (link != null) {
           formData.fields.add(MapEntry('link', link));
         }
-
+        if (profitRatio != null) {
+          formData.fields.add(MapEntry('profitRatio', profitRatio.toString()));
+        }
         if (profilePhoto != null) {
           String fileName = 'image.jpg';
           formData.files.add(MapEntry(
@@ -564,6 +567,20 @@ class AuthRepositoryImpl implements AuthRepository {
       if (await networkInfo.isConnected) {
         final visitors = await authRemoteDataSource.getVisitors(id);
         return Right(visitors.map((e) => e.toDomain()).toList());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<UserInfo>>> getAllUsers() async {
+    try {
+      if (await networkInfo.isConnected) {
+        final users = await authRemoteDataSource.getAllUsers();
+        return Right(users.map((e) => e.toDomain()).toList());
       } else {
         return Left(OfflineFailure());
       }

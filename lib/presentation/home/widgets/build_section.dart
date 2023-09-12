@@ -165,6 +165,8 @@ Widget buildVehicleSection(
                                       imageUrl: state.vehilces[index].imageUrl,
                                       height: 200.h,
                                       width: double.maxFinite,
+                                      maxHeightDiskCache: 400,
+                                      maxWidthDiskCache: 400,
                                       fit: BoxFit.cover,
                                       progressIndicatorBuilder:
                                           (context, url, downloadProgress) =>

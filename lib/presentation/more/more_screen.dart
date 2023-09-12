@@ -9,11 +9,12 @@ import 'package:netzoon/presentation/contact/screens/contact_us_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
-import 'package:netzoon/presentation/legal_advice/legal_advice_screen.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../cart/blocs/cart_bloc/cart_bloc_bloc.dart';
+import '../legal_advice/legal_advice_screen.dart';
 import '../start_screen.dart';
 
 class MoreScreen extends StatefulWidget {
@@ -103,13 +104,14 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
       child: Column(
         children: [
           SettingsCategory(
-            name: AppLocalizations.of(context).translate('legal_advices'),
-            icon: Icons.gavel_rounded,
+            name: AppLocalizations.of(context).translate('privacy_policy'),
+            icon: Icons.policy_outlined,
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) {
                     return const LegalAdviceScreen();
+                    // return const StripeTestScreen();
                   },
                 ),
               );
@@ -178,6 +180,16 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
                   },
                 ),
               );
+            },
+          ),
+          SizedBox(
+            height: 10.h,
+          ),
+          SettingsCategory(
+            name: AppLocalizations.of(context).translate('share_netzoon_app'),
+            icon: Icons.share,
+            onTap: () async {
+              await Share.share('share netzoon app link');
             },
           ),
           SizedBox(

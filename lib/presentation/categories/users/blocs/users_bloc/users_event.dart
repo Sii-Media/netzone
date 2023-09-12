@@ -21,3 +21,5 @@ class SearchUsersEvent extends UsersEvent {
   @override
   List<Object> get props => [searchQuery];
 }
+
+class GetAllUsersEvent extends UsersEvent {}

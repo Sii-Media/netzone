@@ -165,6 +165,7 @@ class _SearchPageState extends State<SearchPage> {
                                   } else if (cat == 'civil_aircraft') {
                                     vehicleBloc.add(GetAllNewPlanesEvent());
                                   }
+                                  controller.text = '';
                                 });
                               },
                               child: Column(
@@ -361,6 +362,7 @@ class _SearchPageState extends State<SearchPage> {
         } else if (state is VehicleSuccess) {
           items = state.vehilces;
           return TypeAheadField(
+            hideSuggestionsOnKeyboardHide: false,
             textFieldConfiguration: TextFieldConfiguration(
               controller: controller,
               onChanged: (value) {
@@ -458,6 +460,7 @@ class _SearchPageState extends State<SearchPage> {
 
               return selectedCarType != null
                   ? TypeAheadField(
+                      hideSuggestionsOnKeyboardHide: false,
                       textFieldConfiguration: TextFieldConfiguration(
                         controller: controller,
                         onChanged: (value) {
@@ -527,6 +530,7 @@ class _SearchPageState extends State<SearchPage> {
         } else if (state is VehicleSuccess) {
           items = state.vehilces;
           return TypeAheadField(
+            hideSuggestionsOnKeyboardHide: false,
             textFieldConfiguration: TextFieldConfiguration(
               controller: controller,
               onChanged: (value) {
@@ -586,6 +590,7 @@ class _SearchPageState extends State<SearchPage> {
         } else if (state is AdsBlocSuccess) {
           items = state.ads;
           return TypeAheadField(
+            hideSuggestionsOnKeyboardHide: false,
             textFieldConfiguration: TextFieldConfiguration(
               controller: controller,
               onChanged: (value) {
@@ -645,6 +650,7 @@ class _SearchPageState extends State<SearchPage> {
         } else if (state is GetLocalCompaniesSuccess) {
           items = state.companies;
           return TypeAheadField(
+            hideSuggestionsOnKeyboardHide: false,
             textFieldConfiguration: TextFieldConfiguration(
               controller: controller,
               onChanged: (value) {
@@ -704,6 +710,7 @@ class _SearchPageState extends State<SearchPage> {
         } else if (state is GetUsersSuccess) {
           items = state.users;
           return TypeAheadField(
+            hideSuggestionsOnKeyboardHide: false,
             textFieldConfiguration: TextFieldConfiguration(
               controller: controller,
               onChanged: (value) {
@@ -763,6 +770,7 @@ class _SearchPageState extends State<SearchPage> {
         } else if (state is GetRealEstateCompaniesSuccess) {
           items = state.companies;
           return TypeAheadField(
+            hideSuggestionsOnKeyboardHide: false,
             textFieldConfiguration: TextFieldConfiguration(
               controller: controller,
               onChanged: (value) {
@@ -822,6 +830,7 @@ class _SearchPageState extends State<SearchPage> {
         } else if (state is ElecCategoryProductSuccess) {
           items = state.categoryProducts;
           return TypeAheadField(
+            hideSuggestionsOnKeyboardHide: false,
             textFieldConfiguration: TextFieldConfiguration(
               controller: controller,
               onChanged: (value) {

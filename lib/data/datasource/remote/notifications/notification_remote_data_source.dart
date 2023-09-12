@@ -27,8 +27,8 @@ abstract class NotificationRemoteDataSourceImpl
     implements NotificationRemoteDataSource {
   factory NotificationRemoteDataSourceImpl(Dio dio, {required String baseUrl}) {
     dio.options = BaseOptions(
-      receiveTimeout: const Duration(seconds: 10),
-      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 20),
+      connectTimeout: const Duration(seconds: 20),
       contentType: 'application/json',
       headers: {'Content-Type': 'application/json'},
     );

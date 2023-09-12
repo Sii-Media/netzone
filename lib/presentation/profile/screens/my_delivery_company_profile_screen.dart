@@ -18,6 +18,7 @@ import '../blocs/add_account/add_account_bloc.dart';
 import '../blocs/get_user/get_user_bloc.dart';
 import '../methods/show_change_account_bottom_sheet.dart';
 import '../widgets/rounded_icon_text.dart';
+import 'credits_screen.dart';
 import 'edit_profile_screen.dart';
 import 'followings_list_screen.dart';
 
@@ -328,6 +329,17 @@ class _MyDeliveryCompanyProfileScreenState
                                                       MaterialPageRoute(
                                                           builder: (context) {
                                                     return const ChatHomeScreen();
+                                                  }));
+                                                }),
+                                            roundedIconText(
+                                                context: context,
+                                                text: 'NetZoon Credits',
+                                                icon: Icons.wallet_outlined,
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) {
+                                                    return const CreditScreen();
                                                   }));
                                                 }),
                                             roundedIconText(

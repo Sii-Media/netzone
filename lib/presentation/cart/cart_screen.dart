@@ -12,6 +12,9 @@ import '../auth/blocs/auth_bloc/auth_bloc.dart';
 import '../auth/screens/signin.dart';
 import '../core/blocs/country_bloc/country_bloc.dart';
 import '../core/helpers/calculate_fee.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -21,6 +24,8 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  Map<String, dynamic>? paymentIntent;
+
   final authBloc = sl<AuthBloc>();
   late final CountryBloc countryBloc;
 
@@ -352,15 +357,28 @@ class _CartScreenState extends State<CartScreen> {
                                   ),
                                 ],
                               ),
-                              Container(
-                                alignment: Alignment.center,
-                                width: double.infinity,
-                                height: 50.h,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(color: AppColor.white)),
-                                child: GestureDetector(
-                                  onTap: () {},
+                              InkWell(
+                                onTap: () {
+                                  if (state is CartLoaded) {
+                                    String amount =
+                                        (state.totalPrice.toInt() * 100)
+                                            .toString();
+                                    makePayment(
+                                      amount: amount,
+                                      currency: 'AED',
+                                    );
+                                  } else {
+                                    print('asd');
+                                  }
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: double.infinity,
+                                  height: 50.h,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      border:
+                                          Border.all(color: AppColor.white)),
                                   child: Text(
                                     AppLocalizations.of(context)
                                         .translate('check_out'),
@@ -386,5 +404,67 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> makePayment(
+      {required String amount, required String currency}) async {
+    try {
+      paymentIntent = await createPaymentIntent(amount, currency);
+
+      var gpay = const PaymentSheetGooglePay(
+        merchantCountryCode: "GP",
+        currencyCode: "GBP",
+        testEnv: true,
+      );
+
+      //STEP 2: Initialize Payment Sheet
+      await Stripe.instance
+          .initPaymentSheet(
+              paymentSheetParameters: SetupPaymentSheetParameters(
+            paymentIntentClientSecret:
+                paymentIntent!['client_secret'], //Gotten from payment intent
+            style: ThemeMode.light,
+            merchantDisplayName: 'Netzoon',
+            // googlePay: gpay,
+          ))
+          .then((value) {});
+
+      //STEP 3: Display Payment sheet
+      displayPaymentSheet();
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  displayPaymentSheet() async {
+    try {
+      await Stripe.instance.presentPaymentSheet().then((value) {
+        print("Payment Successfully");
+      });
+    } catch (e) {
+      print('$e');
+    }
+  }
+
+  createPaymentIntent(String amount, String currency) async {
+    try {
+      Map<String, dynamic> body = {
+        'amount': amount,
+        'currency': currency,
+      };
+
+      var response = await http.post(
+        Uri.parse('https://api.stripe.com/v1/payment_intents'),
+        headers: {
+          'Authorization':
+              'Bearer sk_test_51NcotDFDslnmTEHTPCFTKNDMtYwf06E9qZ0Ch3rHa8kI6wbx6LPPTuD0qmN3JG2MF9MtoSr8JjmAfwcxNECDaBvZ00yMpBm3f1',
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: body,
+      );
+      return json.decode(response.body);
+    } catch (err) {
+      throw Exception(err.toString());
+    }
   }
 }

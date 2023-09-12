@@ -113,7 +113,13 @@ class _VehiclesCompaniesScreenState extends State<VehiclesCompaniesScreen> {
                                   vehicleBloc.add(GetSeaCompaniesEvent());
                                 }
                               })
-                            : ListView.builder(
+                            : GridView.builder(
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        childAspectRatio: 0.85,
+                                        crossAxisSpacing: 10.w,
+                                        mainAxisSpacing: 10.h),
                                 shrinkWrap: true,
                                 physics: const BouncingScrollPhysics(),
                                 itemCount: filteredUsers.length,
@@ -202,6 +208,8 @@ class _VehiclesCompaniesScreenState extends State<VehiclesCompaniesScreen> {
                                                           .backgroundColor
                                                           .withOpacity(0.8),
                                                       child: Text(
+                                                        textAlign:
+                                                            TextAlign.center,
                                                         state
                                                                 .vehiclesCompanies[
                                                                     index]
@@ -209,7 +217,7 @@ class _VehiclesCompaniesScreenState extends State<VehiclesCompaniesScreen> {
                                                             '',
                                                         style: TextStyle(
                                                             color: Colors.white,
-                                                            fontSize: 20.sp),
+                                                            fontSize: 18.sp),
                                                       ),
                                                     ),
                                                   )

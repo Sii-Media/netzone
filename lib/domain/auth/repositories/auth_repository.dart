@@ -44,6 +44,7 @@ abstract class AuthRepository {
     String? deliveryType,
     int? deliveryCarsNum,
     int? deliveryMotorsNum,
+    double? profitRatio,
   });
 
   Future<Either<Failure, User>> signIn({
@@ -137,4 +138,6 @@ abstract class AuthRepository {
   Future<Either<Failure, List<UserInfo>>> getVisitors({
     required String id,
   });
+
+  Future<Either<Failure, List<UserInfo>>> getAllUsers();
 }

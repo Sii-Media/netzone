@@ -30,7 +30,7 @@ class _SubSectionsScreenState extends State<SubSectionsScreen> {
   TextEditingController searchController = TextEditingController();
   String? ownerName;
   double priceMin = 0;
-  double priceMax = 1000;
+  double priceMax = 1000000;
   String? condition;
   @override
   void initState() {
@@ -257,7 +257,7 @@ class _SubSectionsScreenState extends State<SubSectionsScreen> {
                     RangeSlider(
                       values: RangeValues(priceMin, priceMax),
                       min: 0,
-                      max: 1000,
+                      max: 1000000,
                       onChanged: (RangeValues values) {
                         setState(() {
                           priceMin = values.start;

@@ -68,6 +68,7 @@ import 'package:netzoon/domain/auth/usecases/add_visitor_to_profile_use_case.dar
 import 'package:netzoon/domain/auth/usecases/change_account_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/change_password_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/edit_profile_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/get_all_users_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_first_time_logged_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_otpcode_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
@@ -443,6 +444,7 @@ Future<void> init() async {
         getSignedInUser: sl(),
         getUsersListUseCase: sl(),
         getCountryUseCase: sl(),
+        getAllUsersUseCase: sl(),
       ));
 
   sl.registerFactory(() => RealEstateBloc(
@@ -740,6 +742,8 @@ Future<void> init() async {
 
   sl.registerLazySingleton(
       () => GetUnReadNotificationUseCase(notificationRepository: sl()));
+
+  sl.registerLazySingleton(() => GetAllUsersUseCase(authRepository: sl()));
 
   //! Repositories
 

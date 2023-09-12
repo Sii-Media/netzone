@@ -50,6 +50,8 @@ class ListCategoriesEcommerce extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(16.0),
                       child: CachedNetworkImage(
+                        maxHeightDiskCache: 400,
+                        maxWidthDiskCache: 400,
                         imageUrl: items[index].imageUrl,
                         fit: BoxFit.contain,
                         progressIndicatorBuilder:

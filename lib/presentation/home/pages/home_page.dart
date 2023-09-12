@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/advertising/advertising.dart';
+import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
 import 'package:netzoon/presentation/categories/main_categories.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/data/advertisments.dart';
@@ -21,7 +24,11 @@ import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
 import 'package:netzoon/presentation/news/news_screen.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersItem/tenders_item_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
+import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../data/core/constants/constants.dart';
+import '../../../data/models/auth/user/user_model.dart';
 import '../../advertising/blocs/ads/ads_bloc_bloc.dart';
 import '../../categories/real_estate/blocs/real_estate/real_estate_bloc.dart';
 import '../../categories/real_estate/screens/real_estate_details_screen.dart';
@@ -30,6 +37,7 @@ import '../../categories/vehicles/blocs/bloc/vehicle_bloc.dart';
 import '../../chat/screens/chat_home_screen.dart';
 import '../../core/widgets/no_data_widget.dart';
 import '../../core/widgets/on_failure_widget.dart';
+import '../widgets/auth_alert.dart';
 import '../widgets/build_section.dart';
 
 class HomePage extends StatefulWidget {
@@ -62,13 +70,54 @@ class _HomePageState extends State<HomePage> {
   final musicBloc = sl<ElecDevicesBloc>();
   final sportBloc = sl<ElecDevicesBloc>();
   final agricultureBloc = sl<ElecDevicesBloc>();
+  final otherBloc = sl<ElecDevicesBloc>();
   final planesBloc = sl<VehicleBloc>();
   final carsBloc = sl<VehicleBloc>();
   final realEstateBloc = sl<RealEstateBloc>();
   // late AnimationController _animationController;
+  final authBloc = sl<AuthBloc>();
+  int totalUnreadMessageCount = 0;
+  void connectToSendbird({required String id}) async {
+    await SendbirdChat.connect(id);
+  }
 
   @override
   void initState() {
+    callApi();
+    getTotalUnreadMessages();
+    super.initState();
+  }
+
+  Future<int> getTotalUnreadMessages() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      if (!prefs.containsKey(SharedPreferencesKeys.user)) {
+        return 0;
+      }
+
+      final user = UserModel.fromJson(
+        json.decode(prefs.getString(SharedPreferencesKeys.user)!)
+            as Map<String, dynamic>,
+      );
+      await SendbirdChat.connect(user.userInfo.username);
+      int t = await SendbirdChat.getTotalUnreadMessageCount();
+
+      totalUnreadMessageCount = t;
+    } catch (e) {
+      // Handle error.
+    }
+    setState(() {});
+    return totalUnreadMessageCount;
+  }
+
+  // @override
+  // void dispose() {
+  //   _animationController.dispose();
+  //   super.dispose();
+  // }
+  void callApi() {
+    authBloc.add(AuthCheckRequested());
     newsBloc.add(GetAllNewsEvent());
     adsBloc.add(const GetAllAdsEvent());
     // tenderItemBloc.add(const GetTendersItemEvent());
@@ -85,47 +134,20 @@ class _HomePageState extends State<HomePage> {
     musicBloc.add(const GetElcDevicesEvent(department: 'آلات موسيقية'));
     sportBloc.add(const GetElcDevicesEvent(department: 'أجهزة رياضية'));
     agricultureBloc.add(const GetElcDevicesEvent(department: 'الزراعة'));
+    otherBloc.add(const GetElcDevicesEvent(department: 'أخرى'));
+
     planesBloc.add(const GetAllPlanesEvent());
     carsBloc.add(GetLatestCarByCreatorEvent());
     realEstateBloc.add(GetAllRealEstatesEvent());
-    // _animationController = AnimationController(
-    //     vsync: this, duration: const Duration(milliseconds: 750));
-    // _animationController.repeat(reverse: true);
-    super.initState();
   }
-
-  // @override
-  // void dispose() {
-  //   _animationController.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       child: RefreshIndicator(
         onRefresh: () async {
-          newsBloc.add(GetAllNewsEvent());
-          adsBloc.add(const GetAllAdsEvent());
-          // tenderItemBloc.add(const GetTendersItemEvent());
-          dealsItemBloc.add(GetDealsItemEvent());
-          elcDeviceBloc.add(const GetElcDevicesEvent(department: 'الكترونيات'));
-          deviceBloc.add(
-              const GetElcDevicesEvent(department: 'أجهزة المنزل والمكتب'));
-          manFashionBloc
-              .add(const GetElcDevicesEvent(department: 'موضة رجالية'));
-          womanFashionBloc
-              .add(const GetElcDevicesEvent(department: 'موضة نسائية'));
-          foodsBloc.add(const GetElcDevicesEvent(department: 'منتجات غذائية'));
-          perfumesBloc.add(const GetElcDevicesEvent(department: 'عطور'));
-          watchesBloc.add(const GetElcDevicesEvent(department: 'ساعات'));
-          animalBloc.add(const GetElcDevicesEvent(department: 'حيوانات'));
-          musicBloc.add(const GetElcDevicesEvent(department: 'آلات موسيقية'));
-          sportBloc.add(const GetElcDevicesEvent(department: 'أجهزة رياضية'));
-          agricultureBloc.add(const GetElcDevicesEvent(department: 'الزراعة'));
-          planesBloc.add(const GetAllPlanesEvent());
-          carsBloc.add(GetLatestCarByCreatorEvent());
-          realEstateBloc.add(GetAllRealEstatesEvent());
+          callApi();
+          getTotalUnreadMessages();
         },
         color: AppColor.white,
         backgroundColor: AppColor.backgroundColor,
@@ -312,6 +334,15 @@ class _HomePageState extends State<HomePage> {
                   filter: 'الزراعة',
                   title: 'الزراعة',
                   bloc: agricultureBloc,
+                  context: context,
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                buildSection(
+                  filter: 'أخرى',
+                  title: 'أخرى',
+                  bloc: otherBloc,
                   context: context,
                 ),
                 const SizedBox(
@@ -720,76 +751,121 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 3.0,
                 ),
-
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return const ChatHomeScreen();
-                      }),
-                    );
-                  },
-                  child: Directionality(
-                    textDirection: TextDirection.ltr,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 3.0),
-                      child: Container(
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height * 0.12,
-                        transform: Matrix4.identity(),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: AppColor.backgroundColor,
-                              width: 2,
-                            ),
-                            borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(30),
-                              bottomRight: Radius.circular(30),
-                            )),
-                        child: Row(
-                          // mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Expanded(
+                BlocBuilder<AuthBloc, AuthState>(
+                  bloc: authBloc,
+                  builder: (context, authState) {
+                    return Stack(
+                      children: [
+                        GestureDetector(
+                          onTap: () async {
+                            if (authState is Authenticated) {
+                              connectToSendbird(
+                                  id: authState.user.userInfo.username ?? '');
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) {
+                                  return const ChatHomeScreen();
+                                }),
+                              ).then((value) {
+                                setState(() {
+                                  totalUnreadMessageCount = 0;
+                                });
+                              });
+                            } else {
+                              authAlert(context);
+                            }
+                          },
+                          child: Directionality(
+                            textDirection: TextDirection.ltr,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 3.0),
                               child: Container(
-                                padding: const EdgeInsets.only(left: 3),
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .translate('chat_home'),
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                      color: AppColor.backgroundColor,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                            ),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(25),
-                              child: Container(
+                                width: double.infinity,
                                 height:
                                     MediaQuery.of(context).size.height * 0.12,
-                                width: 80.w,
-                                decoration: const BoxDecoration(
-                                  color: AppColor.backgroundColor,
-                                ),
-                                child: Image.asset(
-                                  'assets/images/vedio call2.png',
+                                transform: Matrix4.identity(),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: AppColor.backgroundColor,
+                                      width: 2,
+                                    ),
+                                    borderRadius: const BorderRadius.only(
+                                      topRight: Radius.circular(30),
+                                      bottomRight: Radius.circular(30),
+                                    )),
+                                child: Row(
+                                  // mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        padding: const EdgeInsets.only(left: 3),
+                                        child: Text(
+                                          AppLocalizations.of(context)
+                                              .translate('chat_home'),
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              color: AppColor.backgroundColor,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ),
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(25),
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.12,
+                                        width: 80.w,
+                                        decoration: const BoxDecoration(
+                                          color: AppColor.backgroundColor,
+                                        ),
+                                        child: Image.asset(
+                                          'assets/images/vedio call2.png',
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                          ],
+                          ),
+                          // child: SizedBox(
+                          //   height: MediaQuery.of(context).size.height * 0.16,
+                          //   width: double.infinity,
+                          //   child: Image.asset(
+                          //     'assets/images/chat.png',
+                          //     fit: BoxFit.cover,
+                          //   ),
+                          // ),
                         ),
-                      ),
-                    ),
-                  ),
-                  // child: SizedBox(
-                  //   height: MediaQuery.of(context).size.height * 0.16,
-                  //   width: double.infinity,
-                  //   child: Image.asset(
-                  //     'assets/images/chat.png',
-                  //     fit: BoxFit.cover,
-                  //   ),
-                  // ),
+                        Positioned(
+                          top: -2,
+                          right: 4,
+                          child: Container(
+                            padding: const EdgeInsets.all(2.0),
+                            decoration: const BoxDecoration(
+                              color: AppColor.red,
+                              shape: BoxShape.circle,
+                            ),
+                            constraints: BoxConstraints(
+                              minWidth: 30.0.w,
+                              minHeight: 30.0.h,
+                            ),
+                            child: Text(
+                              '$totalUnreadMessageCount',
+                              style: TextStyle(
+                                color: AppColor.white,
+                                fontSize: 14.0.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
                 const SizedBox(
                   height: 80.0,

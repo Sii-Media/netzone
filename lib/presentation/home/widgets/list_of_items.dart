@@ -68,6 +68,8 @@ class _ListofItemsState extends State<ListofItems> {
                           CachedNetworkImage(
                             imageUrl: widget.elec[index].imageUrl ?? '',
                             fit: BoxFit.cover,
+                            maxHeightDiskCache: 400,
+                            maxWidthDiskCache: 400,
                             height: MediaQuery.of(context).size.height,
                             // placeholder: (context, url) =>
                             //     CircularProgressIndicator(),

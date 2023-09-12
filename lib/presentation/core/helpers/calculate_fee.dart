@@ -30,9 +30,11 @@ double calulateAddProductFee(
     {required int price, required int quantity, required String? isNew}) {
   double fee;
   if (isNew == 'new') {
-    fee = ((7 * price) / 100) * quantity;
+    //fee = ((7 * price) / 100) * quantity;
+    fee = 5.0 * quantity;
   } else {
-    fee = (((7 * price) / 100) + 10) * quantity;
+    // fee = (((7 * price) / 100) + 10) * quantity;
+    fee = 10.0 * quantity;
   }
   return fee;
 }

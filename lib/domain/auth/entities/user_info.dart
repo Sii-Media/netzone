@@ -52,6 +52,13 @@ class UserInfo {
   final double? averageRating;
   final int? totalRatings;
   final int? profileViews;
+  final double? profitRatio;
+
+  final DateTime? subscriptionExpireDate;
+  final int? realEstateListingsRemaining;
+  final int? advertisementsRemaining;
+  final int? carsListingsRemaining;
+  final int? planesListingsRemaining;
 
   UserInfo({
     required this.username,
@@ -98,5 +105,11 @@ class UserInfo {
     this.averageRating,
     this.totalRatings,
     this.profileViews,
+    this.profitRatio,
+    this.subscriptionExpireDate,
+    this.realEstateListingsRemaining,
+    this.advertisementsRemaining,
+    this.carsListingsRemaining,
+    this.planesListingsRemaining,
   });
 }

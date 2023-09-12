@@ -8,8 +8,13 @@ class LegalAdviceModel {
   @JsonKey(name: '_id')
   final String? id;
   final String text;
+  final String textEn;
 
-  LegalAdviceModel({this.id, required this.text});
+  LegalAdviceModel({
+    this.id,
+    required this.text,
+    required this.textEn,
+  });
 
   factory LegalAdviceModel.fromJson(Map<String, dynamic> json) =>
       _$LegalAdviceModelFromJson(json);
@@ -20,5 +25,6 @@ class LegalAdviceModel {
 extension MapToDomain on LegalAdviceModel {
   LegalAdvice toDomain() => LegalAdvice(
         text: text,
+        textEn: textEn,
       );
 }
