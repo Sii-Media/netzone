@@ -48,6 +48,10 @@ class SignUpRequested extends SignUpEvent {
   final int? deliveryCarsNum;
   final int? deliveryMotorsNum;
   final double? profitRatio;
+  final String? city;
+  final String? addressDetails;
+  final int? floorNum;
+  final String? locationType;
   const SignUpRequested({
     required this.username,
     required this.email,
@@ -85,5 +89,9 @@ class SignUpRequested extends SignUpEvent {
     this.deliveryCarsNum,
     this.deliveryMotorsNum,
     this.profitRatio,
+    this.city,
+    this.addressDetails,
+    this.floorNum,
+    this.locationType,
   });
 }

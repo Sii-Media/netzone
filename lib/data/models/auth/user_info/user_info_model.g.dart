@@ -59,6 +59,10 @@ UserInfoModel _$UserInfoModelFromJson(Map<String, dynamic> json) =>
       advertisementsRemaining: json['advertisementsRemaining'] as int?,
       carsListingsRemaining: json['carsListingsRemaining'] as int?,
       planesListingsRemaining: json['planesListingsRemaining'] as int?,
+      city: json['city'] as String?,
+      addressDetails: json['addressDetails'] as String?,
+      floorNum: json['floorNum'] as int?,
+      locationType: json['locationType'] as String?,
     );
 
 Map<String, dynamic> _$UserInfoModelToJson(UserInfoModel instance) =>
@@ -109,4 +113,8 @@ Map<String, dynamic> _$UserInfoModelToJson(UserInfoModel instance) =>
       'advertisementsRemaining': instance.advertisementsRemaining,
       'carsListingsRemaining': instance.carsListingsRemaining,
       'planesListingsRemaining': instance.planesListingsRemaining,
+      'city': instance.city,
+      'addressDetails': instance.addressDetails,
+      'floorNum': instance.floorNum,
+      'locationType': instance.locationType,
     };

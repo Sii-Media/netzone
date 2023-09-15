@@ -59,7 +59,10 @@ class UserInfo {
   final int? advertisementsRemaining;
   final int? carsListingsRemaining;
   final int? planesListingsRemaining;
-
+  final String? city;
+  final String? addressDetails;
+  final int? floorNum;
+  final String? locationType;
   UserInfo({
     required this.username,
     required this.email,
@@ -111,5 +114,9 @@ class UserInfo {
     this.advertisementsRemaining,
     this.carsListingsRemaining,
     this.planesListingsRemaining,
+    this.city,
+    this.addressDetails,
+    this.floorNum,
+    this.locationType,
   });
 }

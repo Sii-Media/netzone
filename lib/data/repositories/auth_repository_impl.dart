@@ -63,6 +63,10 @@ class AuthRepositoryImpl implements AuthRepository {
     int? deliveryCarsNum,
     int? deliveryMotorsNum,
     double? profitRatio,
+    String? city,
+    String? addressDetails,
+    int? floorNum,
+    String? locationType,
   }) async {
     try {
       if (await networkInfo.isConnected) {
@@ -126,6 +130,20 @@ class AuthRepositoryImpl implements AuthRepository {
         }
         if (profitRatio != null) {
           formData.fields.add(MapEntry('profitRatio', profitRatio.toString()));
+        }
+        if (city != null) {
+          formData.fields.add(MapEntry('city', city.toString()));
+        }
+        if (addressDetails != null) {
+          formData.fields
+              .add(MapEntry('addressDetails', addressDetails.toString()));
+        }
+        if (floorNum != null) {
+          formData.fields.add(MapEntry('floorNum', floorNum.toString()));
+        }
+        if (locationType != null) {
+          formData.fields
+              .add(MapEntry('locationType', locationType.toString()));
         }
         if (profilePhoto != null) {
           String fileName = 'image.jpg';

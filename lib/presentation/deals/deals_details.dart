@@ -13,6 +13,9 @@ import '../../injection_container.dart';
 import '../auth/blocs/auth_bloc/auth_bloc.dart';
 import 'blocs/dealsItems/deals_items_bloc.dart';
 import 'edit_deal_screen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 class DealDetails extends StatefulWidget {
   const DealDetails({super.key, required this.dealsInfoId});
@@ -24,6 +27,8 @@ class DealDetails extends StatefulWidget {
 }
 
 class _DealDetailsState extends State<DealDetails> {
+  Map<String, dynamic>? paymentIntent;
+  late String email;
   final dealBloc = sl<DealsItemsBloc>();
   final authBloc = sl<AuthBloc>();
 
@@ -32,6 +37,97 @@ class _DealDetailsState extends State<DealDetails> {
     dealBloc.add(GetDealByIdEvent(id: widget.dealsInfoId));
     authBloc.add(AuthCheckRequested());
     super.initState();
+  }
+
+  Future<void> makePayment(
+      {required String amount,
+      required String currency,
+      required String email}) async {
+    try {
+      final customerId = await createcustomer(email: email);
+      paymentIntent = await createPaymentIntent(amount, currency);
+
+      var gpay = const PaymentSheetGooglePay(
+        merchantCountryCode: "GP",
+        currencyCode: "GBP",
+        testEnv: true,
+      );
+
+      //STEP 2: Initialize Payment Sheet
+      await Stripe.instance
+          .initPaymentSheet(
+              paymentSheetParameters: SetupPaymentSheetParameters(
+            paymentIntentClientSecret:
+                paymentIntent!['client_secret'], //Gotten from payment intent
+            style: ThemeMode.light,
+            merchantDisplayName: 'Netzoon',
+            customerId: customerId['id'],
+            // googlePay: gpay,
+          ))
+          .then((value) {});
+
+      //STEP 3: Display Payment sheet
+      displayPaymentSheet();
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  displayPaymentSheet() async {
+    try {
+      await Stripe.instance.presentPaymentSheet().then((value) {
+        print("Payment Successfully");
+        Navigator.of(context).pop();
+      });
+    } catch (e) {
+      print('$e');
+    }
+  }
+
+  createPaymentIntent(String amount, String currency) async {
+    try {
+      Map<String, dynamic> body = {
+        'amount': amount,
+        'currency': currency,
+      };
+
+      var response = await http.post(
+        Uri.parse('https://api.stripe.com/v1/payment_intents'),
+        headers: {
+          'Authorization':
+              'Bearer sk_test_51NcotDFDslnmTEHTPCFTKNDMtYwf06E9qZ0Ch3rHa8kI6wbx6LPPTuD0qmN3JG2MF9MtoSr8JjmAfwcxNECDaBvZ00yMpBm3f1',
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: body,
+      );
+      return json.decode(response.body);
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future createcustomer({required String email}) async {
+    try {
+      Map<String, dynamic> body = {
+        'email': email,
+        'description': 'this is first charge',
+      };
+
+      //final response  = await http.post(Uri.parse("https://api.stripe.com/v1/customers"),
+      final response = await http.post(
+        Uri.parse("https://api.stripe.com/v1/customers"),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Authorization":
+              "Bearer sk_test_51NcotDFDslnmTEHTPCFTKNDMtYwf06E9qZ0Ch3rHa8kI6wbx6LPPTuD0qmN3JG2MF9MtoSr8JjmAfwcxNECDaBvZ00yMpBm3f1",
+        },
+        body: body,
+      );
+      print('resvfdg: ${jsonDecode(response.body)}');
+      return json.decode(response.body);
+    } catch (err) {
+      print('err charging user: ${err.toString()}');
+    }
   }
 
   @override
@@ -98,6 +194,7 @@ class _DealDetailsState extends State<DealDetails> {
                         bloc: authBloc,
                         builder: (context, authState) {
                           if (authState is Authenticated) {
+                            email = authState.user.userInfo.email ?? '';
                             if (authState.user.userInfo.id ==
                                 state.deal.owner.id) {
                               return Row(
@@ -133,35 +230,6 @@ class _DealDetailsState extends State<DealDetails> {
                           return Container();
                         },
                       ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.end,
-                      //   children: [
-                      //     IconButton(
-                      //       onPressed: () {
-                      //         Navigator.of(context)
-                      //             .push(MaterialPageRoute(builder: (context) {
-                      //           return EditDealScreen(
-                      //             deal: state.deal,
-                      //           );
-                      //         }));
-                      //       },
-                      //       icon: const Icon(
-                      //         Icons.edit,
-                      //         color: AppColor.backgroundColor,
-                      //       ),
-                      //     ),
-                      //     IconButton(
-                      //       onPressed: () {
-                      //         dealBloc.add(
-                      //             DeleteDealEvent(id: state.deal.id ?? ''));
-                      //       },
-                      //       icon: const Icon(
-                      //         Icons.delete,
-                      //         color: AppColor.red,
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
                       titleAndInput(
                         title:
                             "${AppLocalizations.of(context).translate('اسم الصفقة')} : ",
@@ -231,65 +299,21 @@ class _DealDetailsState extends State<DealDetails> {
                                         ),
                                         TextButton(
                                           onPressed: () {
-                                            showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return AlertDialog(
-                                                    title: Text(
-                                                      AppLocalizations.of(
-                                                              context)
-                                                          .translate(
-                                                              'service_fee'),
-                                                      style: const TextStyle(
-                                                          color: AppColor
-                                                              .backgroundColor,
-                                                          fontWeight:
-                                                              FontWeight.w700),
-                                                    ),
-                                                    content: Text(
-                                                      '${AppLocalizations.of(context).translate('you_should_pay')} ${calculateDealsFee(price: state.deal.currentPrice)} ${AppLocalizations.of(context).translate('AED')}',
-                                                      style: const TextStyle(
-                                                        color: AppColor
-                                                            .backgroundColor,
-                                                      ),
-                                                    ),
-                                                    actions: [
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .pop(false);
-                                                        },
-                                                        child: Text(
-                                                          AppLocalizations.of(
-                                                                  context)
-                                                              .translate(
-                                                                  'cancel'),
-                                                          style:
-                                                              const TextStyle(
-                                                                  color:
-                                                                      AppColor
-                                                                          .red),
-                                                        ),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .pop(false);
-                                                        },
-                                                        child: Text(
-                                                          AppLocalizations.of(
-                                                                  context)
-                                                              .translate(
-                                                                  'submit'),
-                                                          style: const TextStyle(
-                                                              color: AppColor
-                                                                  .backgroundColor),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  );
-                                                });
+                                            Navigator.of(context).pop();
+                                            double serviceFee =
+                                                calculateDealsFee(
+                                                    price: state
+                                                        .deal.currentPrice);
+                                            double total = serviceFee +
+                                                state.deal.currentPrice;
+                                            String amount =
+                                                (total.toInt() * 100)
+                                                    .toString();
+                                            makePayment(
+                                              amount: amount,
+                                              currency: 'aed',
+                                              email: email,
+                                            );
                                           },
                                           child: Text(
                                             AppLocalizations.of(context)

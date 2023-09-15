@@ -16,7 +16,6 @@ dependencies:
   cupertino_icons: ^1.0.5
   flutter_bloc: ^8.1.2
   flutter_screenutil: ^5.7.0
-  dartz: ^0.10.1
   equatable: ^2.0.5
   retrofit: ^4.0.1
   get_it: ^7.2.0
@@ -74,6 +73,7 @@ dependencies:
   sendbird_chat_sdk: ^4.0.4
   dash_chat_2: ^0.0.15
   flutter_stripe: ^9.4.0
+  dartz: ^0.10.1
 
 
 dev_dependencies:

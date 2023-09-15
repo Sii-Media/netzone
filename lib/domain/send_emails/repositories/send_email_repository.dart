@@ -8,4 +8,21 @@ abstract class SendEmailRepository {
     required final String subject,
     required final String message,
   });
+  Future<Either<Failure, String>> sendEmailOnPayment(
+      {required String toName,
+      required String toEmail,
+      required String userMobile,
+      required String productsNames,
+      required String grandTotal,
+      required String serviceFee});
+  Future<Either<Failure, String>> sendEmailOnDelivery({
+    required final String toName,
+    required final String toEmail,
+    required final String mobile,
+    required final String city,
+    required final String addressDetails,
+    required final String floorNum,
+    required final String subject,
+    required String from,
+  });
 }

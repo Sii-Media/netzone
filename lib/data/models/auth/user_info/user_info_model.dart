@@ -59,6 +59,10 @@ class UserInfoModel {
   final int? advertisementsRemaining;
   final int? carsListingsRemaining;
   final int? planesListingsRemaining;
+  final String? city;
+  final String? addressDetails;
+  final int? floorNum;
+  final String? locationType;
   UserInfoModel({
     required this.username,
     required this.email,
@@ -105,6 +109,10 @@ class UserInfoModel {
     this.advertisementsRemaining,
     this.carsListingsRemaining,
     this.planesListingsRemaining,
+    this.city,
+    this.addressDetails,
+    this.floorNum,
+    this.locationType,
   });
 
   factory UserInfoModel.fromJson(Map<String, dynamic> json) =>
@@ -160,5 +168,9 @@ extension MapToDomain on UserInfoModel {
         carsListingsRemaining: carsListingsRemaining,
         planesListingsRemaining: planesListingsRemaining,
         realEstateListingsRemaining: realEstateListingsRemaining,
+        city: city,
+        addressDetails: addressDetails,
+        floorNum: floorNum,
+        locationType: locationType,
       );
 }

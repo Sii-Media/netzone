@@ -22,3 +22,15 @@ class SendEmailFailure extends SendEmailState {
 
   const SendEmailFailure({required this.message});
 }
+
+class SendEmailPaymentSuccess extends SendEmailState {
+  final String response;
+
+  const SendEmailPaymentSuccess({required this.response});
+}
+
+class SendEmailDeliverySuccess extends SendEmailState {
+  final String response;
+
+  const SendEmailDeliverySuccess({required this.response});
+}

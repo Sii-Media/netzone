@@ -45,6 +45,10 @@ abstract class AuthRepository {
     int? deliveryCarsNum,
     int? deliveryMotorsNum,
     double? profitRatio,
+    String? city,
+    String? addressDetails,
+    int? floorNum,
+    String? locationType,
   });
 
   Future<Either<Failure, User>> signIn({

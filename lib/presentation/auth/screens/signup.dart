@@ -64,6 +64,15 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
   final TextEditingController profitRatioController = TextEditingController();
   final factoryBloc = sl<FactoriesBloc>();
 
+  final TextEditingController cityController = TextEditingController();
+
+  final TextEditingController addressDetailsController =
+      TextEditingController();
+
+  final TextEditingController floorNumController = TextEditingController();
+
+  String? _selectedLocationType;
+
   File? profileImage;
   File? coverImage;
   final GlobalKey<FormFieldState> _emailFormFieldKey =
@@ -148,6 +157,9 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
         deliveryCarsNumController: deliveryCarsNumController,
         deliveryMotorsNumController: deliveryMotorsNumController,
         profitRatioController: profitRatioController,
+        cityController: cityController,
+        addressDetailsController: addressDetailsController,
+        floorNumController: floorNumController,
       ),
     );
   }
@@ -184,6 +196,9 @@ class SignUpWidget extends StatefulWidget {
     required this.deliveryCarsNumController,
     required this.deliveryMotorsNumController,
     required this.profitRatioController,
+    required this.cityController,
+    required this.addressDetailsController,
+    required this.floorNumController,
   });
   final GlobalKey<FormState> formKey;
   final GlobalKey<FormFieldState> emailFormFieldKey;
@@ -211,6 +226,9 @@ class SignUpWidget extends StatefulWidget {
   final TextEditingController deliveryCarsNumController;
   final TextEditingController deliveryMotorsNumController;
   final TextEditingController profitRatioController;
+  final TextEditingController cityController;
+  final TextEditingController addressDetailsController;
+  final TextEditingController floorNumController;
 
   final SignUpBloc bloc;
   final FactoriesBloc factoriesBloc;
@@ -317,7 +335,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   }
 
   Factories? selectCat;
-
+  String? _selectedLocationType;
   @override
   Widget build(BuildContext context) {
     return BackgroundAuthWidget(
@@ -1131,6 +1149,114 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       },
                       myController: widget.toCountry,
                     ),
+              const TextSignup(
+                text: 'Location Info :',
+              ),
+              const Divider(),
+              const TextSignup(
+                text: 'City',
+              ),
+              TextFormSignupWidget(
+                password: false,
+                isNumber: false,
+                valid: (val) {
+                  if (val!.isEmpty) {
+                    return AppLocalizations.of(context).translate('required');
+                  }
+                  return null;
+
+                  // return validInput(val!, 5, 100, "password");
+                },
+                myController: widget.cityController,
+              ),
+              const TextSignup(
+                text: 'Address Details',
+              ),
+              TextFormSignupWidget(
+                password: false,
+                isNumber: false,
+                valid: (val) {
+                  if (val!.isEmpty) {
+                    return AppLocalizations.of(context).translate('required');
+                  }
+                  return null;
+
+                  // return validInput(val!, 5, 100, "password");
+                },
+                myController: widget.addressDetailsController,
+              ),
+              const TextSignup(
+                text: 'Floor Number',
+              ),
+              TextFormSignupWidget(
+                password: false,
+                isNumber: true,
+                valid: (val) {
+                  if (val!.isEmpty) {
+                    return AppLocalizations.of(context).translate('required');
+                  }
+                  return null;
+
+                  // return validInput(val!, 5, 100, "password");
+                },
+                myController: widget.floorNumController,
+              ),
+              const TextSignup(
+                text: 'Location Type',
+              ),
+              Row(
+                children: [
+                  Row(
+                    children: [
+                      Radio(
+                        value: 'work',
+                        groupValue: _selectedLocationType,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedLocationType = value ?? '';
+                          });
+                        },
+                        activeColor: AppColor.backgroundColor,
+                      ),
+                      Row(
+                        children: const [
+                          Icon(
+                            Icons.work_outline_outlined,
+                            color: AppColor.backgroundColor,
+                          ),
+                          Text('Work')
+                        ],
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    width: 20.w,
+                  ),
+                  Row(
+                    children: [
+                      Radio(
+                        value: 'home',
+                        groupValue: _selectedLocationType,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedLocationType = value ?? "";
+                          });
+                        },
+                        activeColor: AppColor.backgroundColor,
+                      ),
+                      Row(
+                        children: const [
+                          Icon(
+                            Icons.home,
+                            color: AppColor.backgroundColor,
+                          ),
+                          Text('Home'),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
               widget.accountTitle == 'المستهلك'
                   ? Container()
                   : TextSignup(
@@ -1664,6 +1790,12 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                             tradeLicensePhoto: tradeLicensePhoto,
                             profitRatio: double.tryParse(
                                 widget.profitRatioController.text),
+                            city: widget.cityController.text,
+                            addressDetails:
+                                widget.addressDetailsController.text,
+                            floorNum:
+                                int.tryParse(widget.floorNumController.text),
+                            locationType: _selectedLocationType,
                           ),
                         );
                       },

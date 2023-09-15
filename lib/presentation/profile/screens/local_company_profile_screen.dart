@@ -16,6 +16,7 @@ import '../../core/blocs/country_bloc/country_bloc.dart';
 import '../../core/helpers/get_currency_of_country.dart';
 import '../../core/widgets/on_failure_widget.dart';
 import '../../home/test.dart';
+import '../../orders/screens/order_screen.dart';
 import '../../utils/app_localizations.dart';
 import '../blocs/add_account/add_account_bloc.dart';
 import '../blocs/get_user/get_user_bloc.dart';
@@ -313,6 +314,18 @@ class _MyLocalCompanyProfileScreenState
                                                         MaterialPageRoute(
                                                             builder: (context) {
                                                       return const ChatHomeScreen();
+                                                    }));
+                                                  }),
+                                              roundedIconText(
+                                                  context: context,
+                                                  text: 'Orders',
+                                                  icon: Icons
+                                                      .wallet_giftcard_outlined,
+                                                  onTap: () {
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
+                                                      return const OrdersScreen();
                                                     }));
                                                   }),
                                             ],
