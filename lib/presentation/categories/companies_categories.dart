@@ -33,6 +33,7 @@ class _CompaniesCategoriesState extends State<CompaniesCategories> {
       child: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: BackgroundWidget(
+          isHome: false,
           widget: BlocBuilder<FreezoneBloc, FreezoneState>(
             bloc: freezoneBloc,
             builder: (context, state) {

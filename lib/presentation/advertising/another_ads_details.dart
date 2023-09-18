@@ -55,6 +55,7 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
   Widget screen(BuildContext context) {
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: RefreshIndicator(
           onRefresh: () async {
             adsBloc.add(GetAdsByIdEvent(id: widget.adsId));

@@ -38,85 +38,86 @@ class _FactoriesCategoryScreenState extends State<FactoriesCategoryScreen> {
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: BackgroundWidget(
+              isHome: false,
               widget: BlocBuilder<FactoriesBloc, FactoriesState>(
-            bloc: factoryBloc,
-            builder: (context, state) {
-              if (state is FactoriesInProgress) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColor.backgroundColor,
-                  ),
-                );
-              } else if (state is FactoriesFailure) {
-                final failure = state.message;
-                return Center(
-                  child: Text(
-                    failure,
-                    style: const TextStyle(
-                      color: Colors.red,
-                    ),
-                  ),
-                );
-              } else if (state is FactoriesSuccess) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: state.factories.length,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 20),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) {
-                                    return FactoryScreen(
-                                      id: state.factories[index].id,
+                bloc: factoryBloc,
+                builder: (context, state) {
+                  if (state is FactoriesInProgress) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.backgroundColor,
+                      ),
+                    );
+                  } else if (state is FactoriesFailure) {
+                    final failure = state.message;
+                    return Center(
+                      child: Text(
+                        failure,
+                        style: const TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                    );
+                  } else if (state is FactoriesSuccess) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: state.factories.length,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 20),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                        return FactoryScreen(
+                                          id: state.factories[index].id,
+                                        );
+                                      }),
                                     );
-                                  }),
-                                );
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.only(
-                                    right: 5.0, top: 10.0),
-                                width: MediaQuery.of(context).size.width,
-                                height: 40.h,
-                                decoration: BoxDecoration(
-                                  color:
-                                      AppColor.backgroundColor.withOpacity(0.1),
-                                  border: const Border(
-                                    bottom: BorderSide(
-                                      color: AppColor.black,
-                                      width: 1.0,
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.only(
+                                        right: 5.0, top: 10.0),
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 40.h,
+                                    decoration: BoxDecoration(
+                                      color: AppColor.backgroundColor
+                                          .withOpacity(0.1),
+                                      border: const Border(
+                                        bottom: BorderSide(
+                                          color: AppColor.black,
+                                          width: 1.0,
+                                        ),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      AppLocalizations.of(context).translate(
+                                          state.factories[index].title),
+                                      style: TextStyle(
+                                          color: AppColor.black,
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w600),
                                     ),
                                   ),
                                 ),
-                                child: Text(
-                                  AppLocalizations.of(context)
-                                      .translate(state.factories[index].title),
-                                  style: TextStyle(
-                                      color: AppColor.black,
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
+                              );
+                            },
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                );
-              }
-              return Container();
-            },
-          )),
+                    );
+                  }
+                  return Container();
+                },
+              )),
         ),
       ),
     ));

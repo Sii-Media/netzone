@@ -99,6 +99,7 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: BackgroundWidget(
+          isHome: false,
           widget: RefreshIndicator(
             onRefresh: () async {
               adsBloc.add(GetAdsByIdEvent(id: widget.adsId));

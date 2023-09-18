@@ -499,8 +499,7 @@ class _FreezoneCompanyProfileScreenState
                                     height: 12.h,
                                   ),
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       ClipRRect(
                                         borderRadius:

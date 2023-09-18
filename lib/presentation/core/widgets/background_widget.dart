@@ -6,10 +6,11 @@ import 'custom_appbar.dart';
 
 class BackgroundWidget extends StatelessWidget {
   final Widget widget;
-
+  final bool isHome;
   BackgroundWidget({
     Key? key,
     required this.widget,
+    required this.isHome,
   }) : super(key: key);
   final TextEditingController search = TextEditingController();
 
@@ -52,7 +53,7 @@ class BackgroundWidget extends StatelessWidget {
             //     ),
             //   ),
             // ),
-            CustomAppBar(context: context),
+            CustomAppBar(context: context, isHome: isHome),
             Positioned(
               top: 57.h,
               right: 0,

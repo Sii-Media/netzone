@@ -32,7 +32,7 @@ class PriceSuggestionButton extends StatelessWidget {
         AppLocalizations.of(context).translate('price_sug'),
         style: const TextStyle(
           color: AppColor.backgroundColor,
-          // fontSize: 10,
+          fontSize: 13,
         ),
       ),
       onPressed: () {

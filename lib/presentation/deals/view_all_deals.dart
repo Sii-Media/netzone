@@ -44,6 +44,7 @@ class _ViewAllDealsScreenState extends State<ViewAllDealsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: BackgroundWidget(
+      isHome: false,
       // title: "المناقصات",
       widget: BlocBuilder<DealsItemsBloc, DealsItemsState>(
         bloc: dealsItemBloc,

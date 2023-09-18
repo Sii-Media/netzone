@@ -41,6 +41,7 @@ class _SendEmailScreenState extends State<SendEmailScreen>
   @override
   Widget screen(BuildContext context) {
     return BackgroundWidget(
+      isHome: false,
       widget: Padding(
           padding: const EdgeInsets.all(8.0),
           child: BlocListener<SendEmailBloc, SendEmailState>(

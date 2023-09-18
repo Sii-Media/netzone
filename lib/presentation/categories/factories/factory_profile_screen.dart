@@ -224,8 +224,6 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                     productBloc
                         .add(GetUserProductsByIdEvent(id: widget.user.id));
                     authBloc.add(AuthCheckRequested());
-                    countryBloc = BlocProvider.of<CountryBloc>(context);
-                    countryBloc.add(GetCountryEvent());
                     adsBloc.add(GetUserAdsEvent(userId: widget.user.id));
                     visitorBloc.add(AddVisitorEvent(userId: widget.user.id));
                   },
@@ -624,7 +622,7 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                     ),
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.center,
                                       children: [
                                         ClipRRect(
                                           borderRadius:

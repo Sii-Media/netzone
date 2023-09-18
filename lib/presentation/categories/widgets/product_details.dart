@@ -58,6 +58,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: Padding(
           padding: EdgeInsets.only(bottom: 20.0.h),
           child: Column(

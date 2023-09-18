@@ -54,181 +54,183 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
         color: AppColor.white,
         backgroundColor: AppColor.backgroundColor,
         child: BackgroundWidget(
+            isHome: false,
             widget: BlocBuilder<VehicleBloc, VehicleState>(
-          bloc: vehicleBloc,
-          builder: (context, state) {
-            if (state is VehicleInProgress) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: AppColor.backgroundColor,
-                ),
-              );
-            } else if (state is VehicleFailure) {
-              final failure = state.message;
-              return FailureWidget(
-                failure: failure,
-                onPressed: () {
-                  if (widget.vehicleType == 'planes') {
-                    vehicleBloc.add(const GetAllPlanesEvent());
-                  } else {
-                    vehicleBloc.add(const GetAllCarsEvent());
-                  }
-                },
-              );
-            } else if (state is VehicleSuccess) {
-              final filteredCars = state.vehilces
-                  .where((vehicle) => vehicle.name
-                      .toLowerCase()
-                      .contains(controller.text.toLowerCase()))
-                  .toList();
-              return Column(
-                children: [
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: controller,
-                            decoration: InputDecoration(
-                              prefixIcon: const Icon(
-                                Icons.search,
-                              ),
-                              hintText: AppLocalizations.of(context)
-                                  .translate('search'),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                  20,
+              bloc: vehicleBloc,
+              builder: (context, state) {
+                if (state is VehicleInProgress) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColor.backgroundColor,
+                    ),
+                  );
+                } else if (state is VehicleFailure) {
+                  final failure = state.message;
+                  return FailureWidget(
+                    failure: failure,
+                    onPressed: () {
+                      if (widget.vehicleType == 'planes') {
+                        vehicleBloc.add(const GetAllPlanesEvent());
+                      } else {
+                        vehicleBloc.add(const GetAllCarsEvent());
+                      }
+                    },
+                  );
+                } else if (state is VehicleSuccess) {
+                  final filteredCars = state.vehilces
+                      .where((vehicle) => vehicle.name
+                          .toLowerCase()
+                          .contains(controller.text.toLowerCase()))
+                      .toList();
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: controller,
+                                decoration: InputDecoration(
+                                  prefixIcon: const Icon(
+                                    Icons.search,
+                                  ),
+                                  hintText: AppLocalizations.of(context)
+                                      .translate('search'),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      20,
+                                    ),
+                                    borderSide: const BorderSide(
+                                      color: AppColor.backgroundColor,
+                                    ),
+                                  ),
                                 ),
-                                borderSide: const BorderSide(
-                                  color: AppColor.backgroundColor,
-                                ),
+                                onChanged: (value) {
+                                  setState(() {});
+                                },
                               ),
                             ),
-                            onChanged: (value) {
-                              setState(() {});
-                            },
-                          ),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                _showFilterBottomSheet(context);
+                              },
+                              icon: const Icon(
+                                Icons.filter_alt,
+                                color: AppColor.backgroundColor,
+                                size: 30,
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            _showFilterBottomSheet(context);
-                          },
-                          icon: const Icon(
-                            Icons.filter_alt,
-                            color: AppColor.backgroundColor,
-                            size: 30,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 2,
-                  ),
-                  Expanded(
-                    child: GridView.builder(
-                      padding: const EdgeInsets.all(16.0),
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: filteredCars.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 1.2,
-                        crossAxisSpacing: 16.0,
-                        mainAxisSpacing: 16.0,
                       ),
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return VehicleDetailsScreen(
-                                    vehicle: filteredCars[index],
-                                  );
-                                },
+                      const SizedBox(
+                        height: 2,
+                      ),
+                      Expanded(
+                        child: GridView.builder(
+                          padding: const EdgeInsets.all(16.0),
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: filteredCars.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 1.2,
+                            crossAxisSpacing: 16.0,
+                            mainAxisSpacing: 16.0,
+                          ),
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return VehicleDetailsScreen(
+                                        vehicle: filteredCars[index],
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                              child: Card(
+                                elevation: 4.0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                ),
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(16.0),
+                                      child: CachedNetworkImage(
+                                        imageUrl: filteredCars[index].imageUrl,
+                                        fit: BoxFit.cover,
+                                        progressIndicatorBuilder:
+                                            (context, url, downloadProgress) =>
+                                                Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 70.0, vertical: 50),
+                                          child: CircularProgressIndicator(
+                                            value: downloadProgress.progress,
+                                            color: AppColor.backgroundColor,
+
+                                            // strokeWidth: 10,
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            const Icon(Icons.error),
+                                      ),
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Colors.transparent,
+                                            AppColor.backgroundColor
+                                                .withOpacity(0.6),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: Text(
+                                        filteredCars[index].name,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14.0.sp,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           },
-                          child: Card(
-                            elevation: 4.0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16.0),
-                            ),
-                            child: Stack(
-                              fit: StackFit.expand,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                  child: CachedNetworkImage(
-                                    imageUrl: filteredCars[index].imageUrl,
-                                    fit: BoxFit.cover,
-                                    progressIndicatorBuilder:
-                                        (context, url, downloadProgress) =>
-                                            Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 70.0, vertical: 50),
-                                      child: CircularProgressIndicator(
-                                        value: downloadProgress.progress,
-                                        color: AppColor.backgroundColor,
-
-                                        // strokeWidth: 10,
-                                      ),
-                                    ),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
-                                  ),
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16.0),
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        Colors.transparent,
-                                        AppColor.backgroundColor
-                                            .withOpacity(0.6),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Text(
-                                    filteredCars[index].name,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14.0.sp,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    height: 80.h,
-                  ),
-                ],
-              );
-            }
-            return Container();
-          },
-        )),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 80.h,
+                      ),
+                    ],
+                  );
+                }
+                return Container();
+              },
+            )),
       ),
     );
   }

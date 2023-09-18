@@ -37,6 +37,7 @@ class _RealEstateListScreenState extends State<RealEstateListScreen> {
         color: AppColor.white,
         backgroundColor: AppColor.backgroundColor,
         child: BackgroundWidget(
+          isHome: false,
           widget: BlocBuilder<RealEstateBloc, RealEstateState>(
             bloc: realEstateBloc,
             builder: (context, state) {

@@ -95,6 +95,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
 
     return Scaffold(
         body: BackgroundWidget(
+          isHome: false,
           widget: RefreshIndicator(
             onRefresh: () async {
               productBloc.add(GetProductByIdEvent(productId: widget.item));

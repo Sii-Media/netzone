@@ -31,6 +31,7 @@ class _UsersListScreenState extends State<UsersListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: RefreshIndicator(
           onRefresh: () async {
             usersBloc.add(const GetUsersListEvent(userType: 'user'));

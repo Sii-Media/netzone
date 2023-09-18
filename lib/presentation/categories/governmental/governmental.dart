@@ -88,7 +88,10 @@ class _GovernmentInstitutionScreenState
                       ),
                     ),
                   ),
-                  CustomAppBar(context: context),
+                  CustomAppBar(
+                    context: context,
+                    isHome: false,
+                  ),
                   Positioned(
                     left: 0,
                     right: 0,

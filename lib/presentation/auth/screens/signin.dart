@@ -82,6 +82,7 @@ class _SignInScreenState extends State<SignInScreen>
         body: Form(
           key: _formKey,
           child: BackgroundWidget(
+            isHome: false,
             widget: Padding(
               padding: const EdgeInsets.all(8.0),
               child: SingleChildScrollView(

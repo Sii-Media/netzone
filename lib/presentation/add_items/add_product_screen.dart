@@ -127,6 +127,7 @@ class _AddProductScreenState extends State<AddProductScreen>
         color: AppColor.white,
         backgroundColor: AppColor.backgroundColor,
         child: BackgroundWidget(
+          isHome: false,
           widget: Padding(
             padding: const EdgeInsets.only(
                 top: 4.0, bottom: 20, right: 8.0, left: 8.0),

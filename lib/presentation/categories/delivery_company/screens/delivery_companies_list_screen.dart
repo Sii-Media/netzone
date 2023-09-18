@@ -34,6 +34,7 @@ class _DeliveryCompaniesListScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: RefreshIndicator(
           onRefresh: () async {
             usersBloc

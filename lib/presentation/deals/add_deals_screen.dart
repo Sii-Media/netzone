@@ -72,6 +72,7 @@ class _AddDealScreenState extends State<AddDealScreen>
           dealsCatBloc.add(GetDealsCategoryEvent());
         },
         child: BackgroundWidget(
+          isHome: false,
           widget: Padding(
             padding: const EdgeInsets.only(
               top: 4.0,

@@ -37,6 +37,7 @@ class _RealEstateDetailsScreenState extends State<RealEstateDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BackgroundWidget(
+        isHome: false,
         widget: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
