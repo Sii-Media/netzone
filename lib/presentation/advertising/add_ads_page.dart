@@ -111,7 +111,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
       required String email,
       required String name}) async {
     try {
-      final customerId = await createcustomer(email: email, name: name);
+      // final customerId = await createcustomer(email: email, name: name);
       paymentIntent = await createPaymentIntent(amount, currency);
 
       var gpay = const flutter_stripe.PaymentSheetGooglePay(
@@ -129,7 +129,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                 paymentIntent!['client_secret'], //Gotten from payment intent
             style: ThemeMode.light,
             merchantDisplayName: 'Netzoon',
-            customerId: customerId['id'],
+            // customerId: customerId['id'],
 
             // googlePay: gpay,
           ))

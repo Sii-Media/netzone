@@ -64,26 +64,35 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
     required String serviceFee,
   }) async {
     try {
-      final customerId = await createcustomer(email: toEmail, name: toName);
+      // final customerId = await createcustomer(email: toEmail, name: toName);
       paymentIntent = await createPaymentIntent(amount, currency);
 
       var gpay = const PaymentSheetGooglePay(
-        merchantCountryCode: "GP",
-        currencyCode: "GBP",
+        merchantCountryCode: "UAE",
+        currencyCode: "aed",
         testEnv: true,
       );
       print(paymentIntent!['client_secret']);
       //STEP 2: Initialize Payment Sheet
       await Stripe.instance
           .initPaymentSheet(
-              paymentSheetParameters: SetupPaymentSheetParameters(
-            paymentIntentClientSecret:
-                paymentIntent!['client_secret'], //Gotten from payment intent
-            style: ThemeMode.light,
-            merchantDisplayName: 'Netzoon',
-            customerId: customerId['id'],
-            // googlePay: gpay,
-          ))
+            paymentSheetParameters: SetupPaymentSheetParameters(
+              paymentIntentClientSecret:
+                  paymentIntent!['client_secret'], //Gotten from payment intent
+              style: ThemeMode.light,
+              merchantDisplayName: 'Netzoon',
+              // customerId: customerId['id'],
+              // googlePay: gpay,
+              allowsDelayedPaymentMethods: true,
+              // billingDetails: const BillingDetails(
+              //   name: 'adams',
+              // ),
+              // billingDetailsCollectionConfiguration:
+              //     const BillingDetailsCollectionConfiguration(
+              //   name: CollectionMode.always,
+              // ),
+            ),
+          )
           .then((value) {});
 
       //STEP 3: Display Payment sheet

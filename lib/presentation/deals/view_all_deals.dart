@@ -406,13 +406,40 @@ class Deals extends StatelessWidget {
                                   color: Colors.grey, fontSize: 13.sp),
                               textAlign: TextAlign.start,
                             ),
-                            Text(
-                              '${AppLocalizations.of(context).translate('remaining')} : ${calculateRemainingDays(dealsInfo.endDate).toString()}',
-                              style: TextStyle(
-                                  color: AppColor.backgroundColor,
-                                  fontSize: 13.sp,
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
+                            // Text(
+                            //   '${AppLocalizations.of(context).translate('remaining')} : ${calculateRemainingDays(dealsInfo.endDate) >= 0 ? calculateRemainingDays(dealsInfo.endDate).toString() : 'finished'}',
+                            //   style: TextStyle(
+                            //       color: AppColor.backgroundColor,
+                            //       fontSize: 13.sp,
+                            //       fontWeight: FontWeight.bold),
+                            //   textAlign: TextAlign.center,
+                            // ),
+                            RichText(
+                              text: TextSpan(
+                                  style: TextStyle(
+                                      fontSize: 13.sp,
+                                      color: AppColor.backgroundColor),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text:
+                                          '${AppLocalizations.of(context).translate('remaining')} :',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: calculateRemainingDays(
+                                                  dealsInfo.endDate) >=
+                                              0
+                                          ? calculateRemainingDays(
+                                                  dealsInfo.endDate)
+                                              .toString()
+                                          : 'finished',
+                                      style: const TextStyle(
+                                          color: AppColor.primaryColor,
+                                          fontWeight: FontWeight.w400),
+                                    )
+                                  ]),
                             ),
                           ],
                         ),
@@ -425,7 +452,13 @@ class Deals extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   child: ElevatedButton(
                       onPressed: () {
-                        // Get.to(ViewDetailsDeals(dealsModel: dealsModel));
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) {
+                            return DealDetails(
+                              dealsInfoId: dealsInfo.id ?? '',
+                            );
+                          }),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.backgroundColor,
@@ -435,8 +468,8 @@ class Deals extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5)),
                           textStyle: const TextStyle(fontSize: 15)),
-                      child: Text(AppLocalizations.of(context)
-                          .translate("اشتري الان"))),
+                      child: Text(
+                          AppLocalizations.of(context).translate("buy_deal"))),
                 )
               ],
             ),

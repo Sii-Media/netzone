@@ -12,6 +12,7 @@ import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 
 import '../../injection_container.dart';
 import '../auth/blocs/auth_bloc/auth_bloc.dart';
+import '../utils/remaining_date.dart';
 import 'blocs/dealsItems/deals_items_bloc.dart';
 import 'edit_deal_screen.dart';
 import 'package:http/http.dart' as http;
@@ -49,7 +50,7 @@ class _DealDetailsState extends State<DealDetails> {
       required String email,
       required String name}) async {
     try {
-      final customerId = await createcustomer(email: email, name: name);
+      // final customerId = await createcustomer(email: email, name: name);
       paymentIntent = await createPaymentIntent(amount, currency);
 
       var gpay = const PaymentSheetGooglePay(
@@ -66,7 +67,7 @@ class _DealDetailsState extends State<DealDetails> {
                 paymentIntent!['client_secret'], //Gotten from payment intent
             style: ThemeMode.light,
             merchantDisplayName: 'Netzoon',
-            customerId: customerId['id'],
+            // customerId: customerId['id'],
             // googlePay: gpay,
           ))
           .then((value) {});
@@ -272,65 +273,96 @@ class _DealDetailsState extends State<DealDetails> {
                         width: MediaQuery.of(context).size.width,
                         child: ElevatedButton(
                             onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text(
-                                        AppLocalizations.of(context)
-                                            .translate('service_fee'),
-                                        style: const TextStyle(
-                                            color: AppColor.backgroundColor,
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                      content: Text(
-                                        '${AppLocalizations.of(context).translate('you_should_pay')} ${calculateDealsFee(price: state.deal.currentPrice)} ${AppLocalizations.of(context).translate('AED')}',
-                                        style: const TextStyle(
-                                          color: AppColor.backgroundColor,
-                                        ),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop(false);
-                                          },
-                                          child: Text(
+                              calculateRemainingDays(state.deal.endDate) >= 0
+                                  ? showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text(
                                             AppLocalizations.of(context)
-                                                .translate('cancel'),
+                                                .translate('service_fee'),
                                             style: const TextStyle(
-                                                color: AppColor.red),
+                                                color: AppColor.backgroundColor,
+                                                fontWeight: FontWeight.w700),
                                           ),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                            double serviceFee =
-                                                calculateDealsFee(
-                                                    price: state
-                                                        .deal.currentPrice);
-                                            double total = serviceFee +
-                                                state.deal.currentPrice;
-                                            String amount =
-                                                (total.toInt() * 100)
-                                                    .toString();
-                                            makePayment(
-                                              amount: amount,
-                                              currency: 'aed',
-                                              email: email,
-                                              name: name,
-                                            );
-                                          },
-                                          child: Text(
-                                            AppLocalizations.of(context)
-                                                .translate('submit'),
+                                          content: Text(
+                                            '${AppLocalizations.of(context).translate('you_should_pay')} ${calculateDealsFee(price: state.deal.currentPrice)} ${AppLocalizations.of(context).translate('AED')}',
                                             style: const TextStyle(
+                                              color: AppColor.backgroundColor,
+                                            ),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pop(false);
+                                              },
+                                              child: Text(
+                                                AppLocalizations.of(context)
+                                                    .translate('cancel'),
+                                                style: const TextStyle(
+                                                    color: AppColor.red),
+                                              ),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                                double serviceFee =
+                                                    calculateDealsFee(
+                                                        price: state
+                                                            .deal.currentPrice);
+                                                double total = serviceFee +
+                                                    state.deal.currentPrice;
+                                                String amount =
+                                                    (total.toInt() * 100)
+                                                        .toString();
+                                                makePayment(
+                                                  amount: amount,
+                                                  currency: 'aed',
+                                                  email: email,
+                                                  name: name,
+                                                );
+                                              },
+                                              child: Text(
+                                                AppLocalizations.of(context)
+                                                    .translate('submit'),
+                                                style: const TextStyle(
+                                                    color: AppColor
+                                                        .backgroundColor),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      })
+                                  : showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text(
+                                            'Sorry, You can not buy this deal',
+                                            style: TextStyle(
                                                 color:
                                                     AppColor.backgroundColor),
                                           ),
-                                        ),
-                                      ],
+                                          content: const Text(
+                                            'Someone else bought the deal',
+                                            style: TextStyle(
+                                                color: AppColor.secondGrey),
+                                          ),
+                                          actions: [
+                                            ElevatedButton(
+                                              child: Text(
+                                                AppLocalizations.of(context)
+                                                    .translate('ok'),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
                                     );
-                                  });
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColor.backgroundColor,
