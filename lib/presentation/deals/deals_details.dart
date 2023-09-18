@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/helpers/calculate_fee.dart';
@@ -27,8 +28,11 @@ class DealDetails extends StatefulWidget {
 }
 
 class _DealDetailsState extends State<DealDetails> {
+  String secretKey = dotenv.get('STRIPE_SEC_KEY', fallback: '');
+
   Map<String, dynamic>? paymentIntent;
   late String email;
+  late String name;
   final dealBloc = sl<DealsItemsBloc>();
   final authBloc = sl<AuthBloc>();
 
@@ -42,9 +46,10 @@ class _DealDetailsState extends State<DealDetails> {
   Future<void> makePayment(
       {required String amount,
       required String currency,
-      required String email}) async {
+      required String email,
+      required String name}) async {
     try {
-      final customerId = await createcustomer(email: email);
+      final customerId = await createcustomer(email: email, name: name);
       paymentIntent = await createPaymentIntent(amount, currency);
 
       var gpay = const PaymentSheetGooglePay(
@@ -94,8 +99,7 @@ class _DealDetailsState extends State<DealDetails> {
       var response = await http.post(
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
-          'Authorization':
-              'Bearer sk_test_51NcotDFDslnmTEHTPCFTKNDMtYwf06E9qZ0Ch3rHa8kI6wbx6LPPTuD0qmN3JG2MF9MtoSr8JjmAfwcxNECDaBvZ00yMpBm3f1',
+          'Authorization': 'Bearer $secretKey',
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: body,
@@ -106,11 +110,11 @@ class _DealDetailsState extends State<DealDetails> {
     }
   }
 
-  Future createcustomer({required String email}) async {
+  Future createcustomer({required String email, required String name}) async {
     try {
       Map<String, dynamic> body = {
         'email': email,
-        'description': 'this is first charge',
+        'description': name,
       };
 
       //final response  = await http.post(Uri.parse("https://api.stripe.com/v1/customers"),
@@ -118,8 +122,7 @@ class _DealDetailsState extends State<DealDetails> {
         Uri.parse("https://api.stripe.com/v1/customers"),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
-          "Authorization":
-              "Bearer sk_test_51NcotDFDslnmTEHTPCFTKNDMtYwf06E9qZ0Ch3rHa8kI6wbx6LPPTuD0qmN3JG2MF9MtoSr8JjmAfwcxNECDaBvZ00yMpBm3f1",
+          "Authorization": "Bearer $secretKey",
         },
         body: body,
       );
@@ -195,6 +198,7 @@ class _DealDetailsState extends State<DealDetails> {
                         builder: (context, authState) {
                           if (authState is Authenticated) {
                             email = authState.user.userInfo.email ?? '';
+                            name = authState.user.userInfo.username ?? '';
                             if (authState.user.userInfo.id ==
                                 state.deal.owner.id) {
                               return Row(
@@ -313,6 +317,7 @@ class _DealDetailsState extends State<DealDetails> {
                                               amount: amount,
                                               currency: 'aed',
                                               email: email,
+                                              name: name,
                                             );
                                           },
                                           child: Text(

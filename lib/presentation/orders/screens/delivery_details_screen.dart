@@ -1,22 +1,35 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
 
 import '../../../domain/auth/entities/user_info.dart';
+import '../../../domain/departments/entities/category_products/category_products.dart';
+import '../../../domain/order/entities/order_input.dart';
 import '../../../injection_container.dart';
 import '../../contact/blocs/send_email/send_email_bloc.dart';
 import '../../core/constant/colors.dart';
 import '../../core/widgets/screen_loader.dart';
-import '../../home/test.dart';
 import '../../utils/app_localizations.dart';
+import '../blocs/bloc/my_order_bloc.dart';
+import 'congs_screen.dart';
 
 class DeliveryDetailsScreen extends StatefulWidget {
   const DeliveryDetailsScreen(
-      {super.key, required this.userInfo, required this.from});
+      {super.key,
+      required this.userInfo,
+      required this.from,
+      required this.products,
+      required this.totalAmount,
+      required this.subTotal,
+      required this.serviceFee});
   final UserInfo userInfo;
   final String from;
+  final List<CategoryProducts> products;
+  final double totalAmount;
+
+  final double subTotal;
+  final double serviceFee;
   @override
   State<DeliveryDetailsScreen> createState() => _DeliveryDetailsScreenState();
 }
@@ -47,7 +60,10 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
   final sendBloc = sl<SendEmailBloc>();
   @override
   void initState() {
-    print(widget.from);
+    print('1111111 ${widget.totalAmount}');
+    print('222 ${widget.subTotal}');
+    print('333 ${widget.serviceFee}');
+
     super.initState();
     authBloc.add(AuthCheckRequested());
     nameController.text = widget.userInfo.username ?? '';
@@ -60,6 +76,8 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
     _selectedLocationType = widget.userInfo.locationType ?? '';
   }
 
+  final orderBloc = sl<OrderBloc>();
+
   @override
   Widget screen(BuildContext context) {
     return Scaffold(
@@ -67,6 +85,9 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
         title: const Text(
           'Delivery details',
         ),
+        leading: const SizedBox(),
+        leadingWidth: 0,
+        centerTitle: true,
         backgroundColor: AppColor.backgroundColor,
       ),
       body: BlocListener<SendEmailBloc, SendEmailState>(
@@ -97,10 +118,23 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
               ),
               backgroundColor: Theme.of(context).colorScheme.secondary,
             ));
-            Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-                CupertinoPageRoute(builder: (context) {
-              return const TestScreen();
-            }), (route) => false);
+            orderBloc.add(SaveOrderEvent(
+                products: widget.products
+                    .map((e) => OrderInput(
+                        product: e.id,
+                        amount: e.price.toDouble(),
+                        qty: e.quantity?.toInt() ?? 1))
+                    .toList(),
+                orderStatus: 'pending',
+                grandTotal: widget.totalAmount,
+                mobile: mobileController.text,
+                serviceFee: widget.serviceFee,
+                subTotal: widget.subTotal,
+                shippingAddress:
+                    '${cityController.text} - ${addressDetailsController.text} - ${floorNumController.text}'));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return const CongsScreen();
+            }));
           }
         },
         child: BlocBuilder<AuthBloc, AuthState>(

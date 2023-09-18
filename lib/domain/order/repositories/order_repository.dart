@@ -14,5 +14,9 @@ abstract class OrderRepository {
     required final List<OrderInput> products,
     required final String orderStatus,
     required final double grandTotal,
+    required final String? shippingAddress,
+    required final String? mobile,
+    required final double? subTotal,
+    required final double? serviceFee,
   });
 }

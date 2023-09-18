@@ -11,11 +11,19 @@ class SaveOrderEvent extends OrderEvent {
   final List<OrderInput> products;
   final String orderStatus;
   final double grandTotal;
-
-  const SaveOrderEvent(
-      {required this.products,
-      required this.orderStatus,
-      required this.grandTotal});
+  final String? shippingAddress;
+  final String? mobile;
+  final double? subTotal;
+  final double? serviceFee;
+  const SaveOrderEvent({
+    required this.products,
+    required this.orderStatus,
+    required this.grandTotal,
+    this.shippingAddress,
+    this.mobile,
+    this.subTotal,
+    this.serviceFee,
+  });
 }
 
 class GetUserOrdersEvent extends OrderEvent {}

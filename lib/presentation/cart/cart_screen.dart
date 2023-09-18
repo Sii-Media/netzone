@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/auth/entities/user_info.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
-import 'package:netzoon/domain/order/entities/order_input.dart';
 import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
 import 'package:netzoon/presentation/cart/cart_item_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/helpers/get_currency_of_country.dart';
-import 'package:netzoon/presentation/orders/blocs/bloc/my_order_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../injection_container.dart';
@@ -32,10 +31,11 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
+  String secretKey = dotenv.get('STRIPE_SEC_KEY', fallback: '');
+
   Map<String, dynamic>? paymentIntent;
 
   final authBloc = sl<AuthBloc>();
-  final orderBloc = sl<OrderBloc>();
   final sendBloc = sl<SendEmailBloc>();
   late final CountryBloc countryBloc;
   late final CartBlocBloc cartBloc;
@@ -64,7 +64,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
     required String serviceFee,
   }) async {
     try {
-      final customerId = await createcustomer(email: toEmail);
+      final customerId = await createcustomer(email: toEmail, name: toName);
       paymentIntent = await createPaymentIntent(amount, currency);
 
       var gpay = const PaymentSheetGooglePay(
@@ -72,7 +72,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
         currencyCode: "GBP",
         testEnv: true,
       );
-
+      print(paymentIntent!['client_secret']);
       //STEP 2: Initialize Payment Sheet
       await Stripe.instance
           .initPaymentSheet(
@@ -110,16 +110,11 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
     try {
       await Stripe.instance.presentPaymentSheet().then((value) {
         print("Payment Successfully");
-        orderBloc.add(SaveOrderEvent(
-            products: products
-                .map((e) => OrderInput(
-                    product: e.id,
-                    amount: e.price.toDouble(),
-                    qty: e.quantity?.toInt() ?? 1))
-                .toList(),
-            orderStatus: 'pending',
-            grandTotal: totalAmount));
+
         cartBloc.add(ClearCart());
+        double g = double.parse(grandTotal);
+        double s = double.parse(serviceFee);
+
         sendBloc.add(SendEmailPaymentRequestEvent(
           toName: toName,
           toEmail: toEmail,
@@ -127,6 +122,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
           productsNames: productsNames,
           grandTotal: grandTotal,
           serviceFee: serviceFee,
+          subTotal: g - s,
         ));
       });
     } catch (e) {
@@ -144,8 +140,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
       var response = await http.post(
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
-          'Authorization':
-              'Bearer sk_test_51NcotDFDslnmTEHTPCFTKNDMtYwf06E9qZ0Ch3rHa8kI6wbx6LPPTuD0qmN3JG2MF9MtoSr8JjmAfwcxNECDaBvZ00yMpBm3f1',
+          'Authorization': 'Bearer $secretKey',
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: body,
@@ -156,11 +151,11 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
     }
   }
 
-  Future createcustomer({required String email}) async {
+  Future createcustomer({required String email, required String name}) async {
     try {
       Map<String, dynamic> body = {
         'email': email,
-        'description': 'this is first charge',
+        'description': name,
       };
 
       //final response  = await http.post(Uri.parse("https://api.stripe.com/v1/customers"),
@@ -168,8 +163,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
         Uri.parse("https://api.stripe.com/v1/customers"),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
-          "Authorization":
-              "Bearer sk_test_51NcotDFDslnmTEHTPCFTKNDMtYwf06E9qZ0Ch3rHa8kI6wbx6LPPTuD0qmN3JG2MF9MtoSr8JjmAfwcxNECDaBvZ00yMpBm3f1",
+          "Authorization": "Bearer $secretKey",
         },
         body: body,
       );
@@ -216,6 +210,10 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
               return DeliveryDetailsScreen(
                 userInfo: userInfo,
                 from: from.join(' / '),
+                products: products,
+                serviceFee: emailState.serviceFee,
+                subTotal: emailState.subtotal,
+                totalAmount: emailState.grandTotal,
               );
             }));
           }
@@ -236,10 +234,9 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                 builder: (context, state) {
                   if (state is CartLoaded) {
                     if (state.props.isEmpty) {
+                      totalPrice = state.totalPrice;
                       totalAmount = state.totalPrice;
-                      // setState(() {
-                      //   totalPrice = state.totalPrice;
-                      // });
+
                       return Center(
                         child: Text(
                           AppLocalizations.of(context).translate('empty_cart'),
@@ -251,6 +248,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                       );
                     }
                     products = state.props;
+
                     for (var product in products) {
                       from.add(product.owner.username ?? '');
                     }

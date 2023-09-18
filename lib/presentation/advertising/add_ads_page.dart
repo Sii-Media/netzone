@@ -15,10 +15,15 @@ import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter_stripe/flutter_stripe.dart' as flutter_stripe;
 
+import '../auth/blocs/auth_bloc/auth_bloc.dart';
 import '../data/cars.dart';
 import '../notifications/blocs/notifications/notifications_bloc.dart';
 import '../utils/app_localizations.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AddAdsPage extends StatefulWidget {
   const AddAdsPage({super.key});
@@ -28,6 +33,8 @@ class AddAdsPage extends StatefulWidget {
 }
 
 class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
+  Map<String, dynamic>? paymentIntent;
+
   late TextEditingController titleController = TextEditingController();
   late TextEditingController descController = TextEditingController();
 
@@ -97,6 +104,124 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
   final addAdsbloc = sl<AddAdsBloc>();
   final notifiBloc = sl<NotificationsBloc>();
   bool _purchasable = false;
+  final authBloc = sl<AuthBloc>();
+  Future<void> makePayment(
+      {required String amount,
+      required String currency,
+      required String email,
+      required String name}) async {
+    try {
+      final customerId = await createcustomer(email: email, name: name);
+      paymentIntent = await createPaymentIntent(amount, currency);
+
+      var gpay = const flutter_stripe.PaymentSheetGooglePay(
+        merchantCountryCode: "GP",
+        currencyCode: "GBP",
+        testEnv: true,
+      );
+
+      //STEP 2: Initialize Payment Sheet
+      await flutter_stripe.Stripe.instance
+          .initPaymentSheet(
+              paymentSheetParameters:
+                  flutter_stripe.SetupPaymentSheetParameters(
+            paymentIntentClientSecret:
+                paymentIntent!['client_secret'], //Gotten from payment intent
+            style: ThemeMode.light,
+            merchantDisplayName: 'Netzoon',
+            customerId: customerId['id'],
+
+            // googlePay: gpay,
+          ))
+          .then((value) {});
+
+      //STEP 3: Display Payment sheet
+      displayPaymentSheet();
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  displayPaymentSheet() async {
+    try {
+      await flutter_stripe.Stripe.instance.presentPaymentSheet().then((value) {
+        print("Payment Successfully");
+        addAdsbloc.add(AddAdsRequestedEvent(
+          advertisingTitle: titleController.text,
+          advertisingStartDate: _selectedStartDate ?? '',
+          advertisingEndDate: _selectedEndDate ?? '',
+          advertisingDescription: descController.text,
+          image: _image!,
+          advertisingYear: yearController.text,
+          advertisingLocation: locController.text,
+          advertisingPrice: double.tryParse(priceController.text) ?? 0,
+          advertisingType: selectedValue,
+          advertisingImageList: imageFileList,
+          video: _video,
+          purchasable: _purchasable,
+          type: selectedCarType,
+          category: selectedCategory,
+          color: colorController.text,
+          contactNumber: contactNumberController.text,
+          guarantee: _isGuarantee,
+        ));
+      });
+    } catch (e) {
+      print('$e');
+    }
+  }
+
+  createPaymentIntent(String amount, String currency) async {
+    try {
+      Map<String, dynamic> body = {
+        'amount': amount,
+        'currency': currency,
+      };
+      String secretKey = dotenv.get('STRIPE_SEC_KEY', fallback: '');
+
+      var response = await http.post(
+        Uri.parse('https://api.stripe.com/v1/payment_intents'),
+        headers: {
+          'Authorization': 'Bearer $secretKey',
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: body,
+      );
+      return json.decode(response.body);
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  Future createcustomer({required String email, required String name}) async {
+    try {
+      Map<String, dynamic> body = {
+        'email': email,
+        'description': name,
+      };
+      String secretKey = dotenv.get('STRIPE_SEC_KEY', fallback: '');
+      //final response  = await http.post(Uri.parse("https://api.stripe.com/v1/customers"),
+      final response = await http.post(
+        Uri.parse("https://api.stripe.com/v1/customers"),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Authorization": "Bearer $secretKey",
+        },
+        body: body,
+      );
+      print('resvfdg: ${jsonDecode(response.body)}');
+      return json.decode(response.body);
+    } catch (err) {
+      print('err charging user: ${err.toString()}');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    authBloc.add(AuthCheckRequested());
+  }
+
   @override
   Widget screen(BuildContext context) {
     return Scaffold(
@@ -741,26 +866,78 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                                 );
                                 return;
                               }
-                              addAdsbloc.add(AddAdsRequestedEvent(
-                                advertisingTitle: titleController.text,
-                                advertisingStartDate: _selectedStartDate ?? '',
-                                advertisingEndDate: _selectedEndDate ?? '',
-                                advertisingDescription: descController.text,
-                                image: _image!,
-                                advertisingYear: yearController.text,
-                                advertisingLocation: locController.text,
-                                advertisingPrice:
-                                    double.tryParse(priceController.text) ?? 0,
-                                advertisingType: selectedValue,
-                                advertisingImageList: imageFileList,
-                                video: _video,
-                                purchasable: _purchasable,
-                                type: selectedCarType,
-                                category: selectedCategory,
-                                color: colorController.text,
-                                contactNumber: contactNumberController.text,
-                                guarantee: _isGuarantee,
-                              ));
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                        AppLocalizations.of(context)
+                                            .translate('service_fee'),
+                                        style: const TextStyle(
+                                            color: AppColor.backgroundColor,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                      content: Text(
+                                        '${AppLocalizations.of(context).translate('you_should_pay')} $_totalPrice',
+                                        style: const TextStyle(
+                                          color: AppColor.backgroundColor,
+                                        ),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop(false);
+                                          },
+                                          child: Text(
+                                            AppLocalizations.of(context)
+                                                .translate('cancel'),
+                                            style: const TextStyle(
+                                                color: AppColor.red),
+                                          ),
+                                        ),
+                                        BlocBuilder<AuthBloc, AuthState>(
+                                          bloc: authBloc,
+                                          builder: (context, authState) {
+                                            return TextButton(
+                                              onPressed: () {
+                                                String amount =
+                                                    (_totalPrice * 100)
+                                                        .toString();
+                                                makePayment(
+                                                  amount: amount,
+                                                  currency: 'aed',
+                                                  email:
+                                                      authState is Authenticated
+                                                          ? authState
+                                                                  .user
+                                                                  .userInfo
+                                                                  .email ??
+                                                              ''
+                                                          : '',
+                                                  name:
+                                                      authState is Authenticated
+                                                          ? authState
+                                                                  .user
+                                                                  .userInfo
+                                                                  .username ??
+                                                              ''
+                                                          : '',
+                                                );
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text(
+                                                AppLocalizations.of(context)
+                                                    .translate('submit'),
+                                                style: const TextStyle(
+                                                    color: AppColor
+                                                        .backgroundColor),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  });
                             }),
                       ),
                       SizedBox(

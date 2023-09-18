@@ -17,6 +17,10 @@ class SaveOrderUseCase extends UseCase<MyOrder, SaveOrderParams> {
       products: params.products,
       orderStatus: params.orderStatus,
       grandTotal: params.grandTotal,
+      shippingAddress: params.shippingAddress,
+      mobile: params.mobile,
+      serviceFee: params.serviceFee,
+      subTotal: params.subTotal,
     );
   }
 }
@@ -26,10 +30,19 @@ class SaveOrderParams {
   final List<OrderInput> products;
   final String orderStatus;
   final double grandTotal;
+  final String? shippingAddress;
+  final String? mobile;
+  final double? subTotal;
+  final double? serviceFee;
 
-  SaveOrderParams(
-      {required this.userId,
-      required this.products,
-      required this.orderStatus,
-      required this.grandTotal});
+  SaveOrderParams({
+    required this.userId,
+    required this.products,
+    required this.orderStatus,
+    required this.grandTotal,
+    this.shippingAddress,
+    this.mobile,
+    this.subTotal,
+    this.serviceFee,
+  });
 }

@@ -13,6 +13,10 @@ class MyOrderModel {
   final List<OrderProductsModel> products;
   final double grandTotal;
   final String? orderStatus;
+  final String? shippingAddress;
+  final String? mobile;
+  final double? subTotal;
+  final double? serviceFee;
   final String? createdAt;
   final String? updatedAt;
 
@@ -22,6 +26,10 @@ class MyOrderModel {
       required this.products,
       required this.grandTotal,
       this.orderStatus,
+      this.shippingAddress,
+      this.mobile,
+      this.subTotal,
+      this.serviceFee,
       this.createdAt,
       this.updatedAt});
 
@@ -38,6 +46,10 @@ extension MapToDomain on MyOrderModel {
         products: products.map((e) => e.toDomain()).toList(),
         grandTotal: grandTotal,
         orderStatus: orderStatus,
+        shippingAddress: shippingAddress,
+        mobile: mobile,
+        subTotal: subTotal,
+        serviceFee: serviceFee,
         createdAt: createdAt,
         updatedAt: updatedAt,
       );

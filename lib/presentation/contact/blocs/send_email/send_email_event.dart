@@ -27,6 +27,7 @@ class SendEmailPaymentRequestEvent extends SendEmailEvent {
   final String productsNames;
   final String grandTotal;
   final String serviceFee;
+  final double subTotal;
 
   const SendEmailPaymentRequestEvent({
     required this.toName,
@@ -35,6 +36,7 @@ class SendEmailPaymentRequestEvent extends SendEmailEvent {
     required this.productsNames,
     required this.grandTotal,
     required this.serviceFee,
+    required this.subTotal,
   });
 }
 

@@ -47,7 +47,12 @@ class SendEmailBloc extends Bloc<SendEmailEvent, SendEmailState> {
       emit(
         response.fold(
           (failure) => SendEmailFailure(message: mapFailureToString(failure)),
-          (response) => SendEmailPaymentSuccess(response: response),
+          (response) => SendEmailPaymentSuccess(
+            response: response,
+            grandTotal: double.parse(event.grandTotal),
+            subtotal: event.subTotal,
+            serviceFee: double.parse(event.serviceFee),
+          ),
         ),
       );
     });

@@ -14,6 +14,10 @@ MyOrderModel _$MyOrderModelFromJson(Map<String, dynamic> json) => MyOrderModel(
           .toList(),
       grandTotal: (json['grandTotal'] as num).toDouble(),
       orderStatus: json['orderStatus'] as String?,
+      shippingAddress: json['shippingAddress'] as String?,
+      mobile: json['mobile'] as String?,
+      subTotal: (json['subTotal'] as num?)?.toDouble(),
+      serviceFee: (json['serviceFee'] as num?)?.toDouble(),
       createdAt: json['createdAt'] as String?,
       updatedAt: json['updatedAt'] as String?,
     );
@@ -25,6 +29,10 @@ Map<String, dynamic> _$MyOrderModelToJson(MyOrderModel instance) =>
       'products': instance.products,
       'grandTotal': instance.grandTotal,
       'orderStatus': instance.orderStatus,
+      'shippingAddress': instance.shippingAddress,
+      'mobile': instance.mobile,
+      'subTotal': instance.subTotal,
+      'serviceFee': instance.serviceFee,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
     };

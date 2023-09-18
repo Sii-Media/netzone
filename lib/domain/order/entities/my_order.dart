@@ -8,6 +8,11 @@ class MyOrder extends Equatable {
   final List<OrderProducts> products;
   final double grandTotal;
   final String? orderStatus;
+  final String? shippingAddress;
+  final String? mobile;
+  final double? subTotal;
+  final double? serviceFee;
+
   final String? createdAt;
   final String? updatedAt;
 
@@ -17,6 +22,10 @@ class MyOrder extends Equatable {
       required this.products,
       required this.grandTotal,
       this.orderStatus,
+      this.shippingAddress,
+      this.mobile,
+      this.subTotal,
+      this.serviceFee,
       this.createdAt,
       this.updatedAt});
 

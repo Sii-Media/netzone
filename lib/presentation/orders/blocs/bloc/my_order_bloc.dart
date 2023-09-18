@@ -34,6 +34,10 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           products: event.products,
           orderStatus: event.orderStatus,
           grandTotal: event.grandTotal,
+          shippingAddress: event.shippingAddress,
+          mobile: event.mobile,
+          serviceFee: event.serviceFee,
+          subTotal: event.subTotal,
         ),
       );
       emit(

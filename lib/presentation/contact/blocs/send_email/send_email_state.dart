@@ -25,8 +25,16 @@ class SendEmailFailure extends SendEmailState {
 
 class SendEmailPaymentSuccess extends SendEmailState {
   final String response;
+  final double grandTotal;
+  final double subtotal;
+  final double serviceFee;
 
-  const SendEmailPaymentSuccess({required this.response});
+  const SendEmailPaymentSuccess({
+    required this.response,
+    required this.grandTotal,
+    required this.subtotal,
+    required this.serviceFee,
+  });
 }
 
 class SendEmailDeliverySuccess extends SendEmailState {

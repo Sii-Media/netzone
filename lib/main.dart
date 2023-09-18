@@ -24,11 +24,13 @@ import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 import 'injection_container.dart' as di;
 import 'injection_container.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
+  await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
-  Stripe.publishableKey =
-      'pk_test_51NcotDFDslnmTEHTC1GIVWyuc6ZGAfhWvQFlyE7v6Pno2VZeZ8gAHlwFPP1Euj5Rqdxyo58LMdOuLTQKIazuD13G00cUhvtJLe';
+  String stripePubKey = dotenv.get('STRIPE_PUB_KEY', fallback: '');
+  Stripe.publishableKey = stripePubKey;
   // await initializeQuickBlox();
   await Firebase.initializeApp();
   await FirebaseMessaging.instance.subscribeToTopic('Netzoon');
@@ -127,7 +129,7 @@ Future<void> initializeQuickBlox() async {
 
 class MyApp extends StatelessWidget {
   MyApp({super.key}) {
-    SendbirdChat.init(appId: 'D27C6110-9DB9-4EBE-AA85-CF39E2AF562E');
+    SendbirdChat.init(appId: dotenv.get('SENDBIRD_APP_ID', fallback: ''));
   }
 
   @override

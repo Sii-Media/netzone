@@ -35,11 +35,16 @@ class OrderRepositoryImpl implements OrderRepository {
   }
 
   @override
-  Future<Either<Failure, MyOrder>> saveOrder(
-      {required String userId,
-      required List<OrderInput> products,
-      required String orderStatus,
-      required double grandTotal}) async {
+  Future<Either<Failure, MyOrder>> saveOrder({
+    required String userId,
+    required List<OrderInput> products,
+    required String orderStatus,
+    required double grandTotal,
+    required final String? shippingAddress,
+    required final String? mobile,
+    required final double? subTotal,
+    required final double? serviceFee,
+  }) async {
     try {
       Dio dio = Dio();
       if (await networkInfo.isConnected) {
@@ -60,6 +65,10 @@ class OrderRepositoryImpl implements OrderRepository {
           }).toList(),
           "orderStatus": orderStatus,
           "grandTotal": grandTotal,
+          'shippingAddress': shippingAddress,
+          'mobile': mobile,
+          'subTotal': subTotal,
+          'serviceFee': serviceFee,
         };
         final requestDataJson = jsonEncode(requestData);
         final response = await dio.post(
@@ -70,10 +79,11 @@ class OrderRepositoryImpl implements OrderRepository {
           // Request was successful
           print("Order saved successfully!");
           final MyOrder order = MyOrder(
-              id: response.data['_id'],
-              userId: response.data['userId'],
-              products: response.data['products'],
-              grandTotal: grandTotal);
+            id: response.data['_id'],
+            userId: response.data['userId'],
+            products: response.data['products'],
+            grandTotal: grandTotal,
+          );
           print(response.data);
           return Right(order);
         } else {
