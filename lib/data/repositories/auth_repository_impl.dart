@@ -224,9 +224,8 @@ class AuthRepositoryImpl implements AuthRepository {
           ));
         }
 
-        Response response = await dio.post(
-            'https://net-zoon.onrender.com/user/register',
-            data: formData);
+        Response response = await dio
+            .post('http://145.14.158.175/user/register', data: formData);
 
         if (response.statusCode == 201) {
           final UserModel user = UserModel.fromJson(response.data!);
@@ -389,9 +388,8 @@ class AuthRepositoryImpl implements AuthRepository {
           );
         }
 
-        Response response = await dio.put(
-            'https://net-zoon.onrender.com/user/editUser/$userId',
-            data: formData);
+        Response response = await dio
+            .put('http://145.14.158.175/user/editUser/$userId', data: formData);
 
         if (response.statusCode == 200) {
           final user = local.getSignedInUser();

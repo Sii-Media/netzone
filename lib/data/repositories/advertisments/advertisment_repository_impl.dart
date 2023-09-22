@@ -170,7 +170,7 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
         }
 
         Response response = await dio.post(
-            'https://net-zoon.onrender.com/advertisements/createAds',
+            'http://145.14.158.175/advertisements/createAds',
             data: formData);
         // Handle the response as needed
         if (response.statusCode == 201) {
@@ -334,9 +334,8 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
           ));
         }
 
-        Response response = await dio.put(
-            'https://net-zoon.onrender.com/advertisements/$id',
-            data: formData);
+        Response response = await dio
+            .put('http://145.14.158.175/advertisements/$id', data: formData);
         // Handle the response as needed
         if (response.statusCode == 200) {
           return Right(response.data);

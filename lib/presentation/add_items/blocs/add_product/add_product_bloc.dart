@@ -120,7 +120,7 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
 //     });
 
 //     Response response = await dio.post(
-//         'https://net-zoon.onrender.com/departments/addProduct',
+//         'http://145.14.158.175/departments/addProduct',
 //         data: formData);
 //     // Handle the response as needed
 
@@ -232,7 +232,7 @@ Future<Response<dynamic>> _uploadFile({
     }
 
     Response response = await dio.post(
-      'https://net-zoon.onrender.com/departments/addProduct',
+      'http://145.14.158.175/departments/addProduct',
       data: formData,
     );
 

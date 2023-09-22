@@ -215,7 +215,7 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
           ));
         }
         Response response = await dio.put(
-          'https://net-zoon.onrender.com/departments/editProduct/$productId',
+          'http://145.14.158.175/departments/editProduct/$productId',
           data: formData,
         );
         return Right(response.data);

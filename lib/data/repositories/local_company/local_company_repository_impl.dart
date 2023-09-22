@@ -151,7 +151,7 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
           ));
         }
         Response response = await dio.post(
-            'https://net-zoon.onrender.com/categories/local-company/add-service',
+            'http://145.14.158.175/categories/local-company/add-service',
             data: formData);
 
         if (response.statusCode == 201) {
@@ -280,7 +280,7 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
         }
 
         Response response = await dio.put(
-            'https://net-zoon.onrender.com/categories/local-company/$id',
+            'http://145.14.158.175/categories/local-company/$id',
             data: formData);
         // Handle the response as needed
         if (response.statusCode == 200) {

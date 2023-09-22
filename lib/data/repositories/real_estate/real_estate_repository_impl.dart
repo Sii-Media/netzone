@@ -130,7 +130,7 @@ class RealEstateRepositoryImpl implements RealEstateRepository {
           }
         }
         Response response = await dio.post(
-            'https://net-zoon.onrender.com/real-estate/add-real-estate',
+            'http://145.14.158.175/real-estate/add-real-estate',
             data: formData);
         if (response.statusCode == 201) {
           return Right(response.data);

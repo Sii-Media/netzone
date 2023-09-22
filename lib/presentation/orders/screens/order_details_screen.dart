@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 
 import '../../../domain/order/entities/my_order.dart';
+import '../../utils/app_localizations.dart';
 import '../../utils/convert_date_to_string.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
@@ -18,8 +19,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Order Details',
+        title: Text(
+          AppLocalizations.of(context).translate('order_details'),
         ),
         backgroundColor: AppColor.backgroundColor,
       ),
@@ -39,7 +40,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           fontWeight: FontWeight.bold, fontSize: 15.sp),
                     ),
                     Text(
-                      'placed On ${formatDateTime(widget.order.createdAt ?? '')}',
+                      '${AppLocalizations.of(context).translate('placed_on')} ${formatDateTime(widget.order.createdAt ?? '')}',
                       style: TextStyle(
                           color: AppColor.secondGrey,
                           fontSize: 13.sp,
@@ -50,7 +51,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               ),
               const Divider(),
               Text(
-                'Shipping Address',
+                AppLocalizations.of(context).translate('shipping_address'),
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.sp),
               ),
               Row(
@@ -72,7 +73,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 height: 12,
               ),
               Text(
-                'Mobile Number',
+                AppLocalizations.of(context).translate('mobile_number'),
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.sp),
               ),
               Row(
@@ -134,7 +135,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Products',
+                    AppLocalizations.of(context).translate('products'),
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 15.sp),
                   ),
@@ -236,7 +237,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                             ),
                                           ),
                                           TextSpan(
-                                            text: 'AED',
+                                            text: AppLocalizations.of(context)
+                                                .translate('AED'),
                                             style: TextStyle(
                                                 color: AppColor.red,
                                                 fontSize: 12.sp),
@@ -259,7 +261,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Order Summery',
+                    AppLocalizations.of(context).translate('order_summery'),
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 15.sp),
                   ),
@@ -273,7 +275,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const Text('subtotal'),
+                              Text(AppLocalizations.of(context)
+                                  .translate('order_total')),
                               Text('${widget.order.subTotal}'),
                             ],
                           ),
@@ -281,7 +284,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const Text('Service fee'),
+                              Text(AppLocalizations.of(context)
+                                  .translate('service_fee')),
                               Text('${widget.order.serviceFee}'),
                             ],
                           ),
@@ -289,9 +293,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const Text(
-                                'Total ',
-                                style: TextStyle(
+                              Text(
+                                AppLocalizations.of(context)
+                                    .translate('total_amount'),
+                                style: const TextStyle(
                                   color: AppColor.black,
                                   fontWeight: FontWeight.bold,
                                 ),

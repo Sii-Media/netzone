@@ -341,7 +341,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
           ));
         }
         Response response = await dio.post(
-            'https://net-zoon.onrender.com/categories/vehicle/create-vehicle',
+            'http://145.14.158.175/categories/vehicle/create-vehicle',
             data: formData);
         if (response.statusCode == 201) {
           return Right(response.data);

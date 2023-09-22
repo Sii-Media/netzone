@@ -48,13 +48,6 @@ class OrderRepositoryImpl implements OrderRepository {
     try {
       Dio dio = Dio();
       if (await networkInfo.isConnected) {
-        // final requestData = {
-        //   "products": [
-        //     {"product": "64536be8bd73ddb6a0826902", "amount": 25, "qty": 2}
-        //   ],
-        //   "orderStatus": "pending",
-        //   "grandTotal": 80
-        // };
         final requestData = {
           "products": products.map((product) {
             return {
@@ -72,7 +65,7 @@ class OrderRepositoryImpl implements OrderRepository {
         };
         final requestDataJson = jsonEncode(requestData);
         final response = await dio.post(
-            'https://net-zoon.onrender.com/order/save/$userId',
+            'http://145.14.158.175/order/save/$userId',
             data: requestDataJson);
         // Handle the response as needed
         if (response.statusCode == 200) {
@@ -91,22 +84,6 @@ class OrderRepositoryImpl implements OrderRepository {
           return Left(response.data);
           // Handle other status codes if necessary
         }
-        // final productsModelList = products
-        //     .map(
-        //       (input) => OrderInputModel(
-        //         product: input.product,
-        //         amount: input.amount,
-        //         qty: input.qty,
-        //       ),
-        //     )
-        //     .toList();
-        // final result = await orderRemoteDataSource.saveOrder(
-        //   userId,
-        //   productsModelList,
-        //   orderStatus,
-        //   grandTotal,
-        // );
-        // return Right(result.toDomain());
       } else {
         return Left(OfflineFailure());
       }

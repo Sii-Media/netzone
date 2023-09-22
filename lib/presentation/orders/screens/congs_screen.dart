@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../home/test.dart';
 
@@ -12,7 +13,7 @@ class CongsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Congratulations'),
+        title: Text(AppLocalizations.of(context).translate('Congratulations')),
         backgroundColor: AppColor.backgroundColor,
         leading: const SizedBox(),
         leadingWidth: 0.0,
@@ -28,14 +29,16 @@ class CongsScreen extends StatelessWidget {
                 width: 150.w,
               ),
               const SizedBox(height: 20),
-              const Text(
-                'Congratulations!',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              Text(
+                '${AppLocalizations.of(context).translate('Congratulations')}!',
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              const Text(
-                'Your order has been successfully placed.',
-                style: TextStyle(fontSize: 16),
+              Text(
+                AppLocalizations.of(context)
+                    .translate('your_order_has_been_successfully_placed'),
+                style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 40),
               ElevatedButton(
@@ -48,9 +51,9 @@ class CongsScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColor.backgroundColor,
                 ),
-                child: const Text(
-                  'Go to Home',
-                  style: TextStyle(fontSize: 18),
+                child: Text(
+                  AppLocalizations.of(context).translate('go_to_home'),
+                  style: const TextStyle(fontSize: 18),
                 ),
               ),
             ],

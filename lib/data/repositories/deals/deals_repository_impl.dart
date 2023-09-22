@@ -114,7 +114,7 @@ class DealsRepositoryImpl implements DealsRepository {
           ));
         }
         Response response = await dio.post(
-          'https://net-zoon.onrender.com/deals/addDeal',
+          'http://145.14.158.175/deals/addDeal',
           data: formData,
         );
         if (response.statusCode == 200) {
@@ -200,7 +200,7 @@ class DealsRepositoryImpl implements DealsRepository {
           ));
         }
         Response response = await dio.put(
-          'https://net-zoon.onrender.com/deals/$id',
+          'http://145.14.158.175/deals/$id',
           data: formData,
         );
         return Right(response.data);

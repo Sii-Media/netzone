@@ -13,7 +13,7 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://net-zoon.onrender.com';
+    baseUrl ??= 'http://145.14.158.175';
   }
 
   final Dio _dio;

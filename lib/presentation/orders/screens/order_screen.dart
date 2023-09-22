@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/orders/blocs/bloc/my_order_bloc.dart';
+import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 
 import '../../../domain/order/entities/my_order.dart';
@@ -45,9 +46,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
             color: AppColor.backgroundColor,
           ),
         ),
-        title: const Text(
-          'Orders',
-          style: TextStyle(color: AppColor.backgroundColor),
+        title: Text(
+          AppLocalizations.of(context).translate('Orders'),
+          style: const TextStyle(color: AppColor.backgroundColor),
         ),
       ),
       body: BlocBuilder<CountryBloc, CountryState>(
@@ -116,13 +117,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Order ${orders.length - (index)}',
+                    '${AppLocalizations.of(context).translate('Order')} ${orders.length - (index)}',
                     style: const TextStyle(
                         fontSize: 18.0, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8.0),
                   Text(
-                    'Date: ${formatDateTime(orders[index].createdAt ?? '')}',
+                    '${AppLocalizations.of(context).translate('Date')}: ${formatDateTime(orders[index].createdAt ?? '')}',
                     style: const TextStyle(fontSize: 16.0),
                   ),
                   const SizedBox(height: 16.0),
@@ -185,7 +186,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        'Total Amount:',
+                        '${AppLocalizations.of(context).translate('total_amount')}:',
                         style: TextStyle(
                           color: AppColor.backgroundColor,
                           fontSize: 17.sp,
@@ -242,7 +243,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
             size: 70,
           ),
           Text(
-            'You don\'t have any orders yet',
+            AppLocalizations.of(context)
+                .translate('you_dont_have_any_orders_yet'),
             style: TextStyle(
               color: AppColor.backgroundColor.withOpacity(0.5),
               fontSize: 23.sp,
@@ -250,7 +252,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
             ),
           ),
           Text(
-            'Start shopping!',
+            '${AppLocalizations.of(context).translate('start_shopping')}!',
             style: TextStyle(
               color: AppColor.backgroundColor.withOpacity(0.3),
               fontSize: 20.sp,

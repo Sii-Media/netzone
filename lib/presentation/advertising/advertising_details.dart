@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/categories/widgets/image_free_zone_widget.dart';
@@ -9,6 +10,7 @@ import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
+import 'package:netzoon/presentation/orders/screens/congs_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:video_player/video_player.dart';
 
@@ -17,6 +19,9 @@ import '../auth/blocs/auth_bloc/auth_bloc.dart';
 import '../core/helpers/share_image_function.dart';
 import '../core/widgets/screen_loader.dart';
 import 'edit_ads_screen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 class AdvertismentDetalsScreen extends StatefulWidget {
   const AdvertismentDetalsScreen({super.key, required this.adsId});
@@ -30,6 +35,9 @@ class AdvertismentDetalsScreen extends StatefulWidget {
 
 class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
     with ScreenLoader<AdvertismentDetalsScreen> {
+  String secretKey = dotenv.get('STRIPE_SEC_KEY', fallback: '');
+
+  Map<String, dynamic>? paymentIntent;
   final adsBloc = sl<AdsBlocBloc>();
   final visitorBloc = sl<AdsBlocBloc>();
 
@@ -89,6 +97,90 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
         ),
       ),
     );
+  }
+
+  Future<void> makePayment({
+    required String amount,
+    required String currency,
+  }) async {
+    try {
+      // final customerId = await createcustomer(email: toEmail, name: toName);
+      paymentIntent = await createPaymentIntent(amount, currency);
+
+      var gpay = const PaymentSheetGooglePay(
+        merchantCountryCode: "UAE",
+        currencyCode: "aed",
+        testEnv: true,
+      );
+      var applePay = const PaymentSheetApplePay(
+        merchantCountryCode: 'UAE',
+        buttonType: PlatformButtonType.pay,
+      );
+      print(paymentIntent!['client_secret']);
+      print(paymentIntent);
+
+      //STEP 2: Initialize Payment Sheet
+      await Stripe.instance
+          .initPaymentSheet(
+            paymentSheetParameters: SetupPaymentSheetParameters(
+              paymentIntentClientSecret:
+                  paymentIntent!['client_secret'], //Gotten from payment intent
+              style: ThemeMode.light,
+              merchantDisplayName: 'Netzoon',
+              applePay: applePay,
+              // customerId: customerId['id'],
+              // googlePay: gpay,
+              // allowsDelayedPaymentMethods: true,
+              // billingDetails: const BillingDetails(
+              //   name: 'adams',
+              // ),
+              // billingDetailsCollectionConfiguration:
+              //     const BillingDetailsCollectionConfiguration(
+              //   name: CollectionMode.always,
+              // ),
+            ),
+          )
+          .then((value) {});
+
+      //STEP 3: Display Payment sheet
+      displayPaymentSheet();
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  displayPaymentSheet() async {
+    try {
+      await Stripe.instance.presentPaymentSheet().then((value) {
+        print("Payment Successfully");
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return const CongsScreen();
+        }));
+      });
+    } catch (e) {
+      print('$e');
+    }
+  }
+
+  createPaymentIntent(String amount, String currency) async {
+    try {
+      Map<String, dynamic> body = {
+        'amount': amount,
+        'currency': currency,
+      };
+
+      var response = await http.post(
+        Uri.parse('https://api.stripe.com/v1/payment_intents'),
+        headers: {
+          'Authorization': 'Bearer $secretKey',
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: body,
+      );
+      return json.decode(response.body);
+    } catch (err) {
+      throw Exception(err.toString());
+    }
   }
 
   @override
@@ -648,7 +740,12 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                             ),
                             child: Text(AppLocalizations.of(context)
                                 .translate('شراء المنتج')),
-                            onPressed: () {},
+                            onPressed: () {
+                              String amount =
+                                  (int.parse(state.ads.advertisingPrice) * 100)
+                                      .toString();
+                              makePayment(amount: amount, currency: 'aed');
+                            },
                           )
                         : Container(),
                     PriceSuggestionButton(input: input),

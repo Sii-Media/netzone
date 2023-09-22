@@ -114,7 +114,7 @@ class TendersRepositoryImpl implements TenderRepository {
           ),
         ));
         Response response = await dio.post(
-          'https://net-zoon.onrender.com/tenders/add-tender',
+          'http://145.14.158.175/tenders/add-tender',
           data: formData,
         );
         if (response.statusCode == 200) {

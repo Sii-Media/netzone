@@ -545,6 +545,26 @@
     "privacy_policy":"سياسة الخصوصية",
     "you_should_pay":"يجب عليك دفع",
     "You_are_not_authenticated":"لست مسجلا",
-    "please_login_first":"الرجاء تسجيل الدخول أولا"
+    "please_login_first":"الرجاء تسجيل الدخول أولا",
+    "order_details":"تفاصيل الطلبية",
+    "placed_on":"تمت بتاريخ",
+    "shipping_address":"موقع التوصيل",
+    "mobile_number":"رقم الجوال",
+    "order_summery":"ملخص الطلبية",
+    "Congratulations": "تهانينا",
+    "your_order_has_been_successfully_placed": "تمت الطلبية بنجاح",
+    "go_to_home":"عودة الى الصفحة الرئيسية",
+    "Order":"طلبية",
+    "Date":"بتاريخ",
+    "you_dont_have_any_orders_yet":"لا يوجد لديك طلبات بعد",
+    "start_shopping":"تسوق الان",
+    "delivery_details":"تفاصيل الشحن",
+    "input_your_location_for_delivery_service":"الرجاء ادخال عنوانك من أجل الشحن",
+    "your_city":"المدينة",
+    "your_address_details":"العنوان بالتفصيل",
+    "floor_number":"رقم الطابق",
+    "location_type":"نوع العنوان",
+    "work":"عمل",
+    "home":"منزل"
    
 }
