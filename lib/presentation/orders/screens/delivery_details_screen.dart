@@ -60,10 +60,6 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
   final sendBloc = sl<SendEmailBloc>();
   @override
   void initState() {
-    print('1111111 ${widget.totalAmount}');
-    print('222 ${widget.subTotal}');
-    print('333 ${widget.serviceFee}');
-
     super.initState();
     authBloc.add(AuthCheckRequested());
     nameController.text = widget.userInfo.username ?? '';
