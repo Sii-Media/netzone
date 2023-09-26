@@ -10,10 +10,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/advertising/blocs/add_ads/add_ads_bloc.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/helpers/pick_date_time.dart';
 import 'package:netzoon/presentation/core/widgets/add_photo_button.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
-import 'package:date_time_picker/date_time_picker.dart';
+// import 'package:date_time_picker/date_time_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -24,6 +25,8 @@ import '../data/cars.dart';
 import '../notifications/blocs/notifications/notifications_bloc.dart';
 import '../utils/app_localizations.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import '../utils/convert_date_to_string.dart';
 
 class AddAdsPage extends StatefulWidget {
   const AddAdsPage({super.key});
@@ -43,6 +46,8 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
   late TextEditingController yearController = TextEditingController();
   late TextEditingController colorController = TextEditingController();
   late TextEditingController contactNumberController = TextEditingController();
+  late TextEditingController startDateController = TextEditingController();
+  late TextEditingController endDateController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? _selectedStartDate;
@@ -380,40 +385,83 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                           fontSize: 16.sp,
                         ),
                       ),
-                      DateTimePicker(
-                        decoration: InputDecoration(
-                          filled: true,
-                          //<-- SEE HERE
-                          fillColor: Colors.green.withOpacity(0.1),
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                          contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 30)
-                              .flipped,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(2),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 2),
+                        child: TextFormField(
+                          controller: startDateController,
+                          style: const TextStyle(color: Colors.black),
+                          keyboardType: TextInputType.datetime,
+                          validator: (val) {
+                            if (val!.isEmpty) {
+                              return 'Please select a date';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            filled: true,
+                            //<-- SEE HERE
+                            fillColor: Colors.green.withOpacity(0.1),
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 30)
+                                .flipped,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(2),
+                            ),
                           ),
+                          onTap: () async {
+                            final date = await pickDate(
+                              context: context,
+                              initialDate: DateTime.now(),
+                            );
+                            if (date == null) {
+                              return;
+                            }
+                            setState(() {
+                              _selectedStartDate = date.toIso8601String();
+                              startDateController.text =
+                                  convertDateToString(date.toString());
+                              _calculateTotalPrice();
+                            });
+                          },
                         ),
-                        type: DateTimePickerType.date,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
-                        dateLabelText: 'Date',
-                        style: const TextStyle(
-                          color: AppColor.black,
-                        ),
-                        onChanged: (selectedDate) {
-                          setState(() {
-                            _selectedStartDate = selectedDate;
-                            _calculateTotalPrice();
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Please select a date';
-                          }
-                          return null;
-                        },
-                        // onSaved: (val) => print(val),
                       ),
+                      // DateTimePicker(
+                      //   decoration: InputDecoration(
+                      //     filled: true,
+                      //     //<-- SEE HERE
+                      //     fillColor: Colors.green.withOpacity(0.1),
+                      //     floatingLabelBehavior: FloatingLabelBehavior.always,
+                      //     contentPadding: const EdgeInsets.symmetric(
+                      //             vertical: 5, horizontal: 30)
+                      //         .flipped,
+                      //     border: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.circular(2),
+                      //     ),
+                      //   ),
+                      //   type: DateTimePickerType.date,
+                      //   firstDate: DateTime(2000),
+                      //   lastDate: DateTime(2100),
+                      //   dateLabelText: 'Date',
+                      //   style: const TextStyle(
+                      //     color: AppColor.black,
+                      //   ),
+                      //   onChanged: (selectedDate) {
+                      //     setState(() {
+                      //       _selectedStartDate = selectedDate;
+                      //       _calculateTotalPrice();
+                      //     });
+                      //   },
+                      //   validator: (value) {
+                      //     if (value == null) {
+                      //       return 'Please select a date';
+                      //     }
+                      //     return null;
+                      //   },
+                      //   // onSaved: (val) => print(val),
+                      // ),
                       SizedBox(
                         height: 10.h,
                       ),
@@ -424,40 +472,84 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                           fontSize: 16.sp,
                         ),
                       ),
-                      DateTimePicker(
-                        decoration: InputDecoration(
-                          filled: true,
-                          //<-- SEE HERE
-                          fillColor: Colors.green.withOpacity(0.1),
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                          contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 30)
-                              .flipped,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(2),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 2),
+                        child: TextFormField(
+                          controller: endDateController,
+                          style: const TextStyle(color: Colors.black),
+                          keyboardType: TextInputType.datetime,
+                          validator: (val) {
+                            if (val!.isEmpty) {
+                              return 'Please select a date';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            filled: true,
+                            //<-- SEE HERE
+                            fillColor: Colors.green.withOpacity(0.1),
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 30)
+                                .flipped,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(2),
+                            ),
                           ),
+                          onTap: () async {
+                            final date = await pickDate(
+                              context: context,
+                              initialDate: DateTime.parse(_selectedEndDate ??
+                                  DateTime.now().toIso8601String()),
+                            );
+                            if (date == null) {
+                              return;
+                            }
+                            setState(() {
+                              _selectedEndDate = date.toIso8601String();
+                              endDateController.text =
+                                  convertDateToString(date.toString());
+                              _calculateTotalPrice();
+                            });
+                          },
                         ),
-                        type: DateTimePickerType.date,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
-                        dateLabelText: 'Date',
-                        style: const TextStyle(
-                          color: AppColor.black,
-                        ),
-                        onChanged: (selectedDate) {
-                          setState(() {
-                            _selectedEndDate = selectedDate;
-                            _calculateTotalPrice();
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Please select a date';
-                          }
-                          return null;
-                        },
-                        // onSaved: (val) => print(val),
                       ),
+                      // DateTimePicker(
+                      //   decoration: InputDecoration(
+                      //     filled: true,
+                      //     //<-- SEE HERE
+                      //     fillColor: Colors.green.withOpacity(0.1),
+                      //     floatingLabelBehavior: FloatingLabelBehavior.always,
+                      //     contentPadding: const EdgeInsets.symmetric(
+                      //             vertical: 5, horizontal: 30)
+                      //         .flipped,
+                      //     border: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.circular(2),
+                      //     ),
+                      //   ),
+                      //   type: DateTimePickerType.date,
+                      //   firstDate: DateTime(2000),
+                      //   lastDate: DateTime(2100),
+                      //   dateLabelText: 'Date',
+                      //   style: const TextStyle(
+                      //     color: AppColor.black,
+                      //   ),
+                      //   onChanged: (selectedDate) {
+                      //     setState(() {
+                      //       _selectedEndDate = selectedDate;
+                      //       _calculateTotalPrice();
+                      //     });
+                      //   },
+                      //   validator: (value) {
+                      //     if (value == null) {
+                      //       return 'Please select a date';
+                      //     }
+                      //     return null;
+                      //   },
+                      //   // onSaved: (val) => print(val),
+                      // ),
                       Text(
                         '${AppLocalizations.of(context).translate('total_amount')}: $_totalPrice AED',
                         style: TextStyle(

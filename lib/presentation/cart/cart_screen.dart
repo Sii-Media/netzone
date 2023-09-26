@@ -345,7 +345,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(bottom: 80.0),
+        padding: EdgeInsets.only(bottom: 90.h),
         child: BlocBuilder<AuthBloc, AuthState>(
           bloc: authBloc,
           builder: (context, authState) {

@@ -867,8 +867,8 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                 ),
-                const SizedBox(
-                  height: 80.0,
+                SizedBox(
+                  height: 85.0.h,
                 ),
               ],
             ),

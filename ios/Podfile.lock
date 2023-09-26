@@ -1,4 +1,7 @@
 PODS:
+  - connectivity_plus (0.0.1):
+    - Flutter
+    - ReachabilitySwift
   - DKImagePickerController/Core (4.3.4):
     - DKImagePickerController/ImageDataManager
     - DKImagePickerController/Resource
@@ -121,6 +124,7 @@ PODS:
     - Flutter
     - FlutterMacOS
   - PromisesObjC (2.3.1)
+  - ReachabilitySwift (5.0.0)
   - SDWebImage (5.17.0):
     - SDWebImage/Core (= 5.17.0)
   - SDWebImage/Core (5.17.0)
@@ -134,6 +138,42 @@ PODS:
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
+  - Stripe (23.12.0):
+    - StripeApplePay (= 23.12.0)
+    - StripeCore (= 23.12.0)
+    - StripePayments (= 23.12.0)
+    - StripePaymentsUI (= 23.12.0)
+    - StripeUICore (= 23.12.0)
+  - stripe_ios (0.0.1):
+    - Flutter
+    - Stripe (~> 23.12.0)
+    - StripeApplePay (~> 23.12.0)
+    - StripeFinancialConnections (~> 23.12.0)
+    - StripePayments (~> 23.12.0)
+    - StripePaymentSheet (~> 23.12.0)
+    - StripePaymentsUI (~> 23.12.0)
+  - StripeApplePay (23.12.0):
+    - StripeCore (= 23.12.0)
+  - StripeCore (23.12.0)
+  - StripeFinancialConnections (23.12.0):
+    - StripeCore (= 23.12.0)
+    - StripeUICore (= 23.12.0)
+  - StripePayments (23.12.0):
+    - StripeCore (= 23.12.0)
+    - StripePayments/Stripe3DS2 (= 23.12.0)
+  - StripePayments/Stripe3DS2 (23.12.0):
+    - StripeCore (= 23.12.0)
+  - StripePaymentSheet (23.12.0):
+    - StripeApplePay (= 23.12.0)
+    - StripeCore (= 23.12.0)
+    - StripePayments (= 23.12.0)
+    - StripePaymentsUI (= 23.12.0)
+  - StripePaymentsUI (23.12.0):
+    - StripeCore (= 23.12.0)
+    - StripePayments (= 23.12.0)
+    - StripeUICore (= 23.12.0)
+  - StripeUICore (23.12.0):
+    - StripeCore (= 23.12.0)
   - SwiftyGif (5.4.4)
   - url_launcher_ios (0.0.1):
     - Flutter
@@ -143,6 +183,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
@@ -160,6 +201,7 @@ DEPENDENCIES:
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sms_autofill (from `.symlinks/plugins/sms_autofill/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - stripe_ios (from `.symlinks/plugins/stripe_ios/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
   - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
@@ -179,10 +221,21 @@ SPEC REPOS:
     - nanopb
     - OrderedSet
     - PromisesObjC
+    - ReachabilitySwift
     - SDWebImage
+    - Stripe
+    - StripeApplePay
+    - StripeCore
+    - StripeFinancialConnections
+    - StripePayments
+    - StripePaymentSheet
+    - StripePaymentsUI
+    - StripeUICore
     - SwiftyGif
 
 EXTERNAL SOURCES:
+  connectivity_plus:
+    :path: ".symlinks/plugins/connectivity_plus/ios"
   file_picker:
     :path: ".symlinks/plugins/file_picker/ios"
   firebase_core:
@@ -217,6 +270,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sms_autofill/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
+  stripe_ios:
+    :path: ".symlinks/plugins/stripe_ios/ios"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
   video_player_avfoundation:
@@ -225,6 +280,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock_plus/ios"
 
 SPEC CHECKSUMS:
+  connectivity_plus: 07c49e96d7fc92bc9920617b83238c4d178b446a
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   file_picker: ce3938a0df3cc1ef404671531facef740d03f920
@@ -251,16 +307,26 @@ SPEC CHECKSUMS:
   package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
   path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   SDWebImage: 750adf017a315a280c60fde706ab1e552a3ae4e9
   share_plus: 599aa54e4ea31d4b4c0e9c911bcc26c55e791028
   shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
   sms_autofill: c461043483362c3f1709ee76eaae6eb570b31686
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
+  Stripe: 15fad81ffb8d553d77ff504a6d50d47b9028bed0
+  stripe_ios: 872ce75ce051b4070d061a185c8b7b67323c9f30
+  StripeApplePay: 871274acfa7a96650ea8a697c288c54b8288fb6e
+  StripeCore: 7b08fd286e8f8f5336eb725bc7ed1d2a4705cdc4
+  StripeFinancialConnections: 561831507db3d383be3933a3979f1b9d287a15e7
+  StripePayments: 081e01e73762852ccf3e662202d5dd4107634058
+  StripePaymentSheet: ec04397e9223c86a87be8b348cdbcf2075dd7a16
+  StripePaymentsUI: 3dae7fed9b148b2749dff622ece45f9b441b88ce
+  StripeUICore: 4a76fa59cab679e1b2fe1ad37d6b08c5bf2ada54
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
   video_player_avfoundation: 81e49bb3d9fb63dccf9fa0f6d877dc3ddbeac126
   wakelock_plus: 8b09852c8876491e4b6d179e17dfe2a0b5f60d47
 
-PODFILE CHECKSUM: fff3348f19d060f45045a9c9fbca3a264147c2f7
+PODFILE CHECKSUM: 351dbda8241c6ae667acbc7bc0353a0d9978d7f1
 
 COCOAPODS: 1.12.1

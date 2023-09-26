@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:date_time_picker/date_time_picker.dart';
+// import 'package:date_time_picker/date_time_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +13,13 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../../../injection_container.dart';
 import '../../../core/constant/colors.dart';
+import '../../../core/helpers/pick_date_time.dart';
 import '../../../core/widgets/add_photo_button.dart';
 import '../../../core/widgets/background_widget.dart';
 import '../../../data/cars.dart';
 import '../../../notifications/blocs/notifications/notifications_bloc.dart';
 import '../../../utils/app_localizations.dart';
+import '../../../utils/convert_date_to_string.dart';
 import '../blocs/bloc/vehicle_bloc.dart';
 
 class AddVehicleScreen extends StatefulWidget {
@@ -60,7 +62,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
   late TextEditingController steeringSideController = TextEditingController();
   late TextEditingController guaranteeController = TextEditingController();
   late TextEditingController forWhatController = TextEditingController();
-
+  late TextEditingController dateController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isGuarantee = false;
   String? selectedCarType;
@@ -345,40 +347,83 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                         fontSize: 16.sp,
                       ),
                     ),
-                    DateTimePicker(
-                      initialValue: '',
-                      decoration: InputDecoration(
-                        filled: true,
-                        //<-- SEE HERE
-                        fillColor: Colors.green.withOpacity(0.1),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 30)
-                            .flipped,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(2),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 2),
+                      child: TextFormField(
+                        controller: dateController,
+                        style: const TextStyle(color: Colors.black),
+                        keyboardType: TextInputType.datetime,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return 'هذا الحقل مطلوب';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          //<-- SEE HERE
+                          fillColor: Colors.green.withOpacity(0.1),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 30)
+                              .flipped,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(2),
+                          ),
                         ),
+                        onTap: () async {
+                          final date = await pickDate(
+                            context: context,
+                            initialDate: DateTime.parse(_selectedDate ??
+                                DateTime.now().toIso8601String()),
+                          );
+                          if (date == null) {
+                            return;
+                          }
+                          setState(() {
+                            _selectedDate = date.toIso8601String();
+                            dateController.text =
+                                convertDateToString(date.toString());
+                          });
+                        },
                       ),
-                      type: DateTimePickerType.date,
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
-                      dateLabelText: 'Date',
-                      style: const TextStyle(
-                        color: AppColor.black,
-                      ),
-                      onChanged: (selectedDate) {
-                        setState(() {
-                          _selectedDate = selectedDate;
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Please select a date';
-                        }
-                        return null;
-                      },
-                      // onSaved: (val) => print(val),
                     ),
+                    // DateTimePicker(
+                    //   initialValue: '',
+                    //   decoration: InputDecoration(
+                    //     filled: true,
+                    //     //<-- SEE HERE
+                    //     fillColor: Colors.green.withOpacity(0.1),
+                    //     floatingLabelBehavior: FloatingLabelBehavior.always,
+                    //     contentPadding: const EdgeInsets.symmetric(
+                    //             vertical: 5, horizontal: 30)
+                    //         .flipped,
+                    //     border: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(2),
+                    //     ),
+                    //   ),
+                    //   type: DateTimePickerType.date,
+                    //   firstDate: DateTime(2000),
+                    //   lastDate: DateTime(2100),
+                    //   dateLabelText: 'Date',
+                    //   style: const TextStyle(
+                    //     color: AppColor.black,
+                    //   ),
+                    //   onChanged: (selectedDate) {
+                    //     setState(() {
+                    //       _selectedDate = selectedDate;
+                    //     });
+                    //   },
+                    //   validator: (value) {
+                    //     if (value == null) {
+                    //       return 'Please select a date';
+                    //     }
+                    //     return null;
+                    //   },
+                    //   // onSaved: (val) => print(val),
+                    // ),
                     // SizedBox(
                     //   height: 10.h,
                     // ),
