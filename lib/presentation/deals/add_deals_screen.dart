@@ -304,7 +304,7 @@ class _AddDealScreenState extends State<AddDealScreen>
                                     onTap: () async {
                                       final date = await pickDate(
                                         context: context,
-                                        initialDate: _selectedStartDate,
+                                        initialDate: DateTime.now(),
                                       );
                                       if (date == null) {
                                         return;
@@ -395,7 +395,7 @@ class _AddDealScreenState extends State<AddDealScreen>
                                     onTap: () async {
                                       final date = await pickDate(
                                         context: context,
-                                        initialDate: _selectedEndDate,
+                                        initialDate: DateTime.now(),
                                       );
                                       if (date == null) {
                                         return;

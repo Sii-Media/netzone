@@ -75,6 +75,9 @@ class _EditAdsScreenState extends State<EditAdsScreen>
     _purchasable = widget.ads.purchasable;
     videoName = widget.ads.advertisingVedio ?? '';
     images = widget.ads.advertisingImageList;
+    startDateController.text =
+        convertDateToString(widget.ads.advertisingStartDate);
+    endDateController.text = convertDateToString(widget.ads.advertisingEndDate);
     super.initState();
   }
 
@@ -125,7 +128,7 @@ class _EditAdsScreenState extends State<EditAdsScreen>
             padding: const EdgeInsets.all(8.0),
             child: SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
@@ -213,6 +216,7 @@ class _EditAdsScreenState extends State<EditAdsScreen>
                     },
                   ),
                   SizedBox(height: 25.h),
+
                   Container(
                     width: MediaQuery.of(context).size.width,
                     margin:
@@ -228,17 +232,21 @@ class _EditAdsScreenState extends State<EditAdsScreen>
                         return null;
                       },
                       decoration: InputDecoration(
-                        filled: true,
-                        //<-- SEE HERE
-                        fillColor: Colors.green.withOpacity(0.1),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 30)
-                            .flipped,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
+                          label: Text(
+                              '${AppLocalizations.of(context).translate('start_date')} :'),
+                          hintText:
+                              '${AppLocalizations.of(context).translate('start_date')} :'
+                          // filled: true,
+                          // //<-- SEE HERE
+                          // fillColor: Colors.green.withOpacity(0.1),
+                          // floatingLabelBehavior: FloatingLabelBehavior.always,
+                          // contentPadding: const EdgeInsets.symmetric(
+                          //         vertical: 5, horizontal: 30)
+                          //     .flipped,
+                          // border: OutlineInputBorder(
+                          //   borderRadius: BorderRadius.circular(2),
+                          // ),
+                          ),
                       onTap: () async {
                         final date = await pickDate(
                           context: context,
@@ -310,6 +318,7 @@ class _EditAdsScreenState extends State<EditAdsScreen>
                   //   },
                   //   // onSaved: (val) => print(val),
                   // ),
+
                   Container(
                     width: MediaQuery.of(context).size.width,
                     margin:
@@ -325,16 +334,11 @@ class _EditAdsScreenState extends State<EditAdsScreen>
                         return null;
                       },
                       decoration: InputDecoration(
-                        filled: true,
-                        //<-- SEE HERE
-                        fillColor: Colors.green.withOpacity(0.1),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 30)
-                            .flipped,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(2),
+                        label: Text(
+                          '${AppLocalizations.of(context).translate('end_date')} :',
                         ),
+                        hintText:
+                            '${AppLocalizations.of(context).translate('end_date')} :',
                       ),
                       onTap: () async {
                         final date = await pickDate(

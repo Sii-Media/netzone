@@ -50,7 +50,8 @@ class _EditDealScreenState extends State<EditDealScreen>
     locationController.text = widget.deal.location;
     _selectedStartDate = DateTime.parse(widget.deal.startDate);
     _selectedEndDate = DateTime.parse(widget.deal.endDate);
-
+    startDateController.text = convertDateToString(widget.deal.startDate);
+    endDateController.text = convertDateToString(widget.deal.endDate);
     super.initState();
   }
 
@@ -247,13 +248,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                     },
                   ),
                   SizedBox(height: 25.h),
-                  Text(
-                    '${AppLocalizations.of(context).translate('start_date')} :',
-                    style: TextStyle(
-                      color: AppColor.backgroundColor,
-                      fontSize: 16.sp,
-                    ),
-                  ),
+
                   Container(
                     width: MediaQuery.of(context).size.width,
                     margin:
@@ -269,17 +264,10 @@ class _EditDealScreenState extends State<EditDealScreen>
                         return null;
                       },
                       decoration: InputDecoration(
-                        filled: true,
-                        //<-- SEE HERE
-                        fillColor: Colors.green.withOpacity(0.1),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 30)
-                            .flipped,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
+                          label: Text(
+                              '${AppLocalizations.of(context).translate('start_date')} :'),
+                          hintText:
+                              '${AppLocalizations.of(context).translate('start_date')} :'),
                       onTap: () async {
                         final date = await pickDate(
                           context: context,
@@ -340,16 +328,11 @@ class _EditDealScreenState extends State<EditDealScreen>
                         return null;
                       },
                       decoration: InputDecoration(
-                        filled: true,
-                        //<-- SEE HERE
-                        fillColor: Colors.green.withOpacity(0.1),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 30)
-                            .flipped,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(2),
+                        label: Text(
+                          '${AppLocalizations.of(context).translate('end_date')} :',
                         ),
+                        hintText:
+                            '${AppLocalizations.of(context).translate('end_date')} :',
                       ),
                       onTap: () async {
                         final date = await pickDate(
