@@ -201,7 +201,7 @@ class _StartScreenState extends State<StartScreen> {
     }
     return await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best,
-        timeLimit: const Duration(seconds: 10));
+        timeLimit: const Duration(seconds: 20));
   }
 
   @override
