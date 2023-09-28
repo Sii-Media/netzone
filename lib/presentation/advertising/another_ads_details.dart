@@ -114,8 +114,8 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                           adsBloc.add(GetAdsByIdEvent(id: widget.adsId));
                         });
                   } else if (state is GetAdsByIdSuccess) {
-                    _videoPlayerController = VideoPlayerController.network(
-                        state.ads.advertisingVedio ?? '')
+                    _videoPlayerController = VideoPlayerController.networkUrl(
+                        Uri.parse(state.ads.advertisingVedio ?? ''))
                       ..initialize().then((_) {
                         _videoPlayerController.play();
                         setState(() {});

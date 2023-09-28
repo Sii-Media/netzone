@@ -33,13 +33,13 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
 
   @override
   void initState() {
-    _videoPlayerController =
-        VideoPlayerController.network(widget.vehicle.vedioUrl ?? '')
-          ..initialize().then((_) {
-            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-            _videoPlayerController.play();
-            setState(() {});
-          });
+    _videoPlayerController = VideoPlayerController.networkUrl(
+        Uri.parse(widget.vehicle.vedioUrl ?? ''))
+      ..initialize().then((_) {
+        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+        _videoPlayerController.play();
+        setState(() {});
+      });
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController,
       aspectRatio: 16 / 9,

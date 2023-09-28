@@ -67,7 +67,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
     favBloc.add(IsFavoriteEvent(productId: widget.item));
     countryBloc = BlocProvider.of<CountryBloc>(context);
     countryBloc.add(GetCountryEvent());
-    _videoPlayerController = VideoPlayerController.network('')
+    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(''))
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
@@ -194,12 +194,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                           productId: widget.item));
                                     });
                               } else if (state is GetProductByIdSuccess) {
-                                _videoPlayerController = VideoPlayerController
-                                    .network(state.product.vedioUrl ?? '')
-                                  ..initialize().then((_) {
-                                    // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-                                    setState(() {});
-                                  });
+                                _videoPlayerController =
+                                    VideoPlayerController.networkUrl(
+                                        Uri.parse(state.product.vedioUrl ?? ''))
+                                      ..initialize().then((_) {
+                                        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+                                        setState(() {});
+                                      });
                                 _chewieController = ChewieController(
                                   videoPlayerController: _videoPlayerController,
                                   aspectRatio: 16 / 9,
@@ -278,8 +279,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                                       18.sp,
                                                                   color: AppColor
                                                                       .backgroundColor),
-                                                              children: <
-                                                                  TextSpan>[
+                                                              children: <TextSpan>[
                                                                 TextSpan(
                                                                     text:
                                                                         '${state.product.price}',
@@ -418,8 +418,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                                         18.sp,
                                                                     color: AppColor
                                                                         .backgroundColor),
-                                                                children: <
-                                                                    TextSpan>[
+                                                                children: <TextSpan>[
                                                                   TextSpan(
                                                                       text:
                                                                           '${state.product.priceAfterDiscount}',

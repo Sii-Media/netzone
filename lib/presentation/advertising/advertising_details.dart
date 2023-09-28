@@ -253,13 +253,14 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                               adsBloc.add(GetAdsByIdEvent(id: widget.adsId));
                             });
                       } else if (state is GetAdsByIdSuccess) {
-                        _videoPlayerController = VideoPlayerController.network(
-                            state.ads.advertisingVedio ?? '')
-                          ..initialize().then((_) {
-                            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-                            _videoPlayerController.play();
-                            setState(() {});
-                          });
+                        _videoPlayerController =
+                            VideoPlayerController.networkUrl(
+                                Uri.parse(state.ads.advertisingVedio ?? ''))
+                              ..initialize().then((_) {
+                                // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+                                _videoPlayerController.play();
+                                setState(() {});
+                              });
                         _chewieController = ChewieController(
                           videoPlayerController: _videoPlayerController,
                           aspectRatio: 16 / 9,
