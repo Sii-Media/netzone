@@ -166,8 +166,14 @@ class Product extends StatelessWidget {
                                 final path = '${temp.path}/image.jpg';
                                 File(path).writeAsBytesSync(bytes);
                                 // ignore: deprecated_member_use
-                                await Share.shareFiles([path],
-                                    text: 'This is Amazing');
+                                await Share.shareFiles(
+                                  [path],
+                                  text: 'This is Amazing',
+                                  sharePositionOrigin: Rect.fromPoints(
+                                    const Offset(2, 2),
+                                    const Offset(3, 3),
+                                  ),
+                                );
                               },
                               icon: const Icon(
                                 Icons.share,

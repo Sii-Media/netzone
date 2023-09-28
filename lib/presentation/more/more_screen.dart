@@ -185,13 +185,23 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
           SizedBox(
             height: 10.h,
           ),
-          SettingsCategory(
-            name: AppLocalizations.of(context).translate('share_netzoon_app'),
-            icon: Icons.share,
-            onTap: () async {
-              await Share.share('share netzoon app link');
-            },
-          ),
+          Builder(builder: (context) {
+            return SettingsCategory(
+              name: AppLocalizations.of(context).translate('share_netzoon_app'),
+              icon: Icons.share,
+              onTap: () async {
+                // await Share.share('share netzoon app link');
+                // final box = context.findRenderObject() as RenderBox?;
+                await Share.share(
+                  'share netzoon app link',
+                  sharePositionOrigin: Rect.fromPoints(
+                    const Offset(2, 2),
+                    const Offset(3, 3),
+                  ),
+                );
+              },
+            );
+          }),
           SizedBox(
             height: 10.h,
           ),
