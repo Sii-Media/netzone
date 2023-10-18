@@ -98,7 +98,7 @@ class _AdvertisingScreenState extends State<AdvertisingScreen> {
                   );
                 }
                 return Container(
-                  padding: const EdgeInsets.only(bottom: 60).r,
+                  padding: const EdgeInsets.only(bottom: 60, top: 8).h,
                   child: Column(
                     children: [
                       Padding(
@@ -143,16 +143,26 @@ class _AdvertisingScreenState extends State<AdvertisingScreen> {
                             SizedBox(
                               width: 10.w,
                             ),
-                            IconButton(
-                              onPressed: () {
+                            // IconButton(
+                            //   onPressed: () {
+                            //     _showFilterBottomSheet(context);
+                            //   },
+                            //   icon: const Icon(
+                            //     Icons.filter_alt,
+                            //     color: AppColor.backgroundColor,
+                            //     size: 30,
+                            //   ),
+                            // )
+                            InkWell(
+                              onTap: () {
                                 _showFilterBottomSheet(context);
                               },
-                              icon: const Icon(
+                              child: Icon(
                                 Icons.filter_alt,
                                 color: AppColor.backgroundColor,
-                                size: 30,
+                                size: 30.sp,
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),

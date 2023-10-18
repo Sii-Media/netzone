@@ -54,15 +54,15 @@ class _ListGridViewState extends State<ListGridView> {
                     children: [
                       Text(
                         AppLocalizations.of(context).translate('category'),
-                        style:
-                            const TextStyle(fontSize: 25, color: Colors.black),
+                        style: TextStyle(fontSize: 25.sp, color: Colors.black),
                       ),
                       SizedBox(
                         width: 10.w,
                       ),
-                      const Icon(
+                      Icon(
                         Icons.arrow_downward_sharp,
                         color: Colors.black,
+                        size: 15.sp,
                       ),
                     ],
                   ),
@@ -72,7 +72,7 @@ class _ListGridViewState extends State<ListGridView> {
                 child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: 0.95,
+                      childAspectRatio: 1.2,
                       crossAxisSpacing: 10.w,
                       mainAxisSpacing: 10.h),
                   shrinkWrap: true,

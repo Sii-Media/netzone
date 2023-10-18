@@ -105,7 +105,7 @@ class _DeliveryCompanyProfileScreenState
                 ),
               ),
               SizedBox(
-                width: 190,
+                width: 190.w,
                 child: Text(
                   input,
                   style: TextStyle(
@@ -125,6 +125,7 @@ class _DeliveryCompanyProfileScreenState
   Widget screen(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 70.h,
         title: Text(
           widget.deliveryCompany.username ?? '',
           style: const TextStyle(color: AppColor.backgroundColor),
@@ -134,19 +135,21 @@ class _DeliveryCompanyProfileScreenState
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_rounded,
             color: AppColor.backgroundColor,
+            size: 22.sp,
           ),
         ),
         actions: [
           Padding(
-              padding: const EdgeInsets.symmetric(horizontal: .0),
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: IconButton(
                 onPressed: () {},
-                icon: const Icon(
+                icon: Icon(
                   Icons.share,
                   color: AppColor.backgroundColor,
+                  size: 22.sp,
                 ),
               )),
         ],
@@ -517,11 +520,15 @@ class _DeliveryCompanyProfileScreenState
                                   icon: Text(
                                     AppLocalizations.of(context)
                                         .translate('services'),
+                                    style: TextStyle(fontSize: 12.sp),
                                   ),
                                 ),
                                 Tab(
-                                  icon: Text(AppLocalizations.of(context)
-                                      .translate('about_us')),
+                                  icon: Text(
+                                    AppLocalizations.of(context)
+                                        .translate('about_us'),
+                                    style: TextStyle(fontSize: 12.sp),
+                                  ),
                                 ),
                               ],
                             ),
@@ -579,7 +586,7 @@ class _DeliveryCompanyProfileScreenState
                                                   return Card(
                                                     elevation: 3,
                                                     margin: const EdgeInsets
-                                                            .symmetric(
+                                                        .symmetric(
                                                         horizontal: 16,
                                                         vertical: 8),
                                                     shape:
@@ -646,16 +653,15 @@ class _DeliveryCompanyProfileScreenState
                                                           SizedBox(height: 8.h),
                                                           RichText(
                                                             text: TextSpan(
-                                                                style: const TextStyle(
+                                                                style: TextStyle(
                                                                     fontSize:
-                                                                        16,
+                                                                        16.sp,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold,
                                                                     color: AppColor
                                                                         .black),
-                                                                children: <
-                                                                    TextSpan>[
+                                                                children: <TextSpan>[
                                                                   TextSpan(
                                                                     text:
                                                                         '${sstate.services[index].price}',
@@ -673,11 +679,11 @@ class _DeliveryCompanyProfileScreenState
                                                                           .selectedCountry,
                                                                       context,
                                                                     ),
-                                                                    style: const TextStyle(
+                                                                    style: TextStyle(
                                                                         color: AppColor
                                                                             .backgroundColor,
                                                                         fontSize:
-                                                                            10),
+                                                                            10.sp),
                                                                   )
                                                                 ]),
                                                           ),

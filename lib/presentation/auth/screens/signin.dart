@@ -301,8 +301,8 @@ class SocialIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image.asset(
       imagePath,
-      height: 40,
-      width: 40,
+      height: 40.h,
+      width: 40.w,
     );
   }
 }

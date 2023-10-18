@@ -218,7 +218,7 @@ class _ComplaintsScreenState extends State<ComplaintsScreen>
                         },
                       ),
                       SizedBox(
-                        height: 40.h,
+                        height: 80.h,
                       ),
                     ],
                   ),

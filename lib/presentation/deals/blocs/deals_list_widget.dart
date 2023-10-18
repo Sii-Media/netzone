@@ -152,15 +152,14 @@ class DealsListWidget extends StatelessWidget {
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor:
                                             AppColor.backgroundColor,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20.h),
                                         //shadowColor: Colors.black,
                                         //  elevation: 5
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(5)),
-                                        textStyle:
-                                            const TextStyle(fontSize: 15)),
+                                        textStyle: TextStyle(fontSize: 15.sp)),
                                     child: Text(
                                       buttonText,
                                       style: const TextStyle(

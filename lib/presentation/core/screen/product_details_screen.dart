@@ -104,7 +104,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
             backgroundColor: AppColor.backgroundColor,
             child: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.only(top: 8.0, bottom: 30.0.h),
+                padding: EdgeInsets.only(top: 20.0.h, bottom: 30.0.h),
                 child: BlocListener<ElecDevicesBloc, ElecDevicesState>(
                   bloc: rateBloc,
                   listener: (context, state) {
@@ -264,10 +264,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                       children: [
                                                         Text(
                                                           '${AppLocalizations.of(context).translate('price')}: ',
-                                                          style: const TextStyle(
+                                                          style: TextStyle(
                                                               color: AppColor
                                                                   .colorOne,
-                                                              fontSize: 20,
+                                                              fontSize: 20.sp,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w700),
@@ -329,11 +329,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                                         .product
                                                                         .name);
                                                           },
-                                                          icon: const Icon(
+                                                          icon: Icon(
                                                             Icons.share,
                                                             color: AppColor
                                                                 .backgroundColor,
+                                                            size: 15.sp,
                                                           ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 8.w,
                                                         ),
                                                         BlocBuilder<
                                                             FavoritesBloc,
@@ -375,6 +379,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                                         .favorite
                                                                     : Icons
                                                                         .favorite_border,
+                                                                size: 15.sp,
                                                                 color: isFavorite
                                                                     ? AppColor
                                                                         .red
@@ -494,11 +499,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                                       );
                                                                     }));
                                                                   },
-                                                                  icon:
-                                                                      const Icon(
+                                                                  icon: Icon(
                                                                     Icons.edit,
                                                                     color: AppColor
                                                                         .backgroundColor,
+                                                                    size: 15.sp,
                                                                   ),
                                                                 ),
                                                                 IconButton(
@@ -508,13 +513,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                                         productId:
                                                                             widget.item));
                                                                   },
-                                                                  icon:
-                                                                      const Icon(
+                                                                  icon: Icon(
                                                                     Icons
                                                                         .delete,
                                                                     color:
                                                                         AppColor
                                                                             .red,
+                                                                    size: 15.sp,
                                                                   ),
                                                                 ),
                                                               ],
@@ -530,10 +535,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                   children: [
                                                     Text(
                                                       '${state.product.averageRating}',
-                                                      style: const TextStyle(
+                                                      style: TextStyle(
                                                           color: AppColor
                                                               .secondGrey,
-                                                          fontSize: 18,
+                                                          fontSize: 18.sp,
                                                           fontWeight:
                                                               FontWeight.w600),
                                                     ),
@@ -556,7 +561,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                                 .product
                                                                 .averageRating ??
                                                             0,
-                                                        itemSize: 25,
+                                                        itemSize: 25.sp,
                                                         ignoreGestures: true,
                                                         itemBuilder:
                                                             (context, _) {
@@ -573,10 +578,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                     ),
                                                     Text(
                                                       '(${state.product.totalRatings} ${AppLocalizations.of(context).translate('review')})',
-                                                      style: const TextStyle(
+                                                      style: TextStyle(
                                                         color:
                                                             AppColor.secondGrey,
-                                                        fontSize: 14,
+                                                        fontSize: 14.sp,
                                                       ),
                                                     ),
                                                   ],
@@ -990,8 +995,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                       RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(18.0),
                                   )),
-                                  fixedSize: const MaterialStatePropertyAll(
-                                    Size.fromWidth(200),
+                                  fixedSize: MaterialStatePropertyAll(
+                                    Size.fromWidth(200.w),
                                   ),
                                 ),
                                 child: Text(AppLocalizations.of(context)
@@ -1050,8 +1055,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                 RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0),
                             )),
-                            fixedSize: const MaterialStatePropertyAll(
-                              Size.fromWidth(200),
+                            fixedSize: MaterialStatePropertyAll(
+                              Size.fromWidth(200.w),
                             ),
                           ),
                           child: Text(AppLocalizations.of(context)

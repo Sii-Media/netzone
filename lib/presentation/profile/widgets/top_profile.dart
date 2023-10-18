@@ -47,8 +47,8 @@ Widget accountWidget(
     child: Row(
       children: [
         Container(
-          height: 40,
-          width: 40,
+          height: 40.r,
+          width: 40.r,
           decoration: BoxDecoration(
               color: AppColor.backgroundColor,
               image: DecorationImage(
@@ -64,8 +64,10 @@ Widget accountWidget(
         ),
         Text(
           accountstate.users[index].username ?? '',
-          style: const TextStyle(
-              color: AppColor.white, fontSize: 16, fontWeight: FontWeight.w500),
+          style: TextStyle(
+              color: AppColor.white,
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w500),
         ),
         const Spacer(),
         Radio<int>(
@@ -105,7 +107,7 @@ Padding titleAndInput({required String title, required String input}) {
               ),
             ),
             SizedBox(
-              width: 190,
+              width: 190.w,
               child: Text(
                 input,
                 style: TextStyle(

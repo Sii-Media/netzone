@@ -87,6 +87,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
       length: 3,
       child: Scaffold(
         appBar: AppBar(
+          toolbarHeight: 45.h,
           title: Text(
             widget.user.username ?? '',
             style: const TextStyle(
@@ -98,19 +99,21 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: const Icon(
+            child: Icon(
               Icons.arrow_back_rounded,
               color: AppColor.backgroundColor,
+              size: 22.sp,
             ),
           ),
           actions: [
             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: .0),
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: IconButton(
                   onPressed: () {},
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.share,
                     color: AppColor.backgroundColor,
+                    size: 22.sp,
                   ),
                 )),
           ],
@@ -233,8 +236,8 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                               imageUrl:
                                                   state.userInfo.profilePhoto ??
                                                       '',
-                                              width: 100,
-                                              height: 100,
+                                              width: 100.r,
+                                              height: 100.r,
                                               fit: BoxFit.fill,
                                               progressIndicatorBuilder:
                                                   (context, url,
@@ -383,10 +386,10 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                               children: [
                                                 Text(
                                                   '${widget.user.averageRating?.toStringAsFixed(3)}',
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                       color:
                                                           AppColor.secondGrey,
-                                                      fontSize: 18,
+                                                      fontSize: 18.sp,
                                                       fontWeight:
                                                           FontWeight.w600),
                                                 ),
@@ -404,7 +407,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                     initialRating: widget.user
                                                             .averageRating ??
                                                         0,
-                                                    itemSize: 18,
+                                                    itemSize: 18.sp,
                                                     ignoreGestures: true,
                                                     itemBuilder: (context, _) {
                                                       return const Icon(
@@ -419,9 +422,9 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                 ),
                                                 Text(
                                                   '(${widget.user.totalRatings} ${AppLocalizations.of(context).translate('review')})',
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                     color: AppColor.secondGrey,
-                                                    fontSize: 14,
+                                                    fontSize: 14.sp,
                                                   ),
                                                 ),
                                                 SizedBox(
@@ -456,8 +459,8 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                         borderRadius:
                                             BorderRadius.circular(100),
                                         child: Container(
-                                          height: 50,
-                                          width: 150,
+                                          height: 50.h,
+                                          width: 150.w,
                                           decoration: const BoxDecoration(
                                             color: AppColor.backgroundColor,
                                             // borderRadius: BorderRadius.circular(100),
@@ -540,8 +543,8 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                               borderRadius:
                                                   BorderRadius.circular(100),
                                               child: Container(
-                                                height: 50,
-                                                width: 150,
+                                                height: 50.h,
+                                                width: 150.w,
                                                 decoration: const BoxDecoration(
                                                   color:
                                                       AppColor.backgroundColor,
@@ -561,7 +564,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                       Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .only(
+                                                                .only(
                                                                 left: 4.0),
                                                         child: Text(
                                                           AppLocalizations.of(
@@ -707,7 +710,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                                     index) {
                                                               return Container(
                                                                 margin: const EdgeInsets
-                                                                        .symmetric(
+                                                                    .symmetric(
                                                                     vertical:
                                                                         8),
                                                                 decoration: BoxDecoration(
@@ -732,10 +735,11 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                                     ]),
                                                                 child:
                                                                     ClipRRect(
-                                                                  borderRadius: const BorderRadius
+                                                                  borderRadius:
+                                                                      const BorderRadius
                                                                           .all(
-                                                                      Radius.circular(
-                                                                          20)),
+                                                                          Radius.circular(
+                                                                              20)),
                                                                   child:
                                                                       GestureDetector(
                                                                     onTap: () {
@@ -783,7 +787,8 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                                               const Icon(Icons.error),
                                                                         ),
                                                                         Padding(
-                                                                          padding: const EdgeInsets.only(
+                                                                          padding: const EdgeInsets
+                                                                              .only(
                                                                               right: 9.0,
                                                                               left: 9.0,
                                                                               bottom: 8.0),
@@ -914,7 +919,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                                     index) {
                                                               return Container(
                                                                 margin: const EdgeInsets
-                                                                        .symmetric(
+                                                                    .symmetric(
                                                                     vertical:
                                                                         8),
                                                                 decoration: BoxDecoration(
@@ -939,10 +944,11 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                                     ]),
                                                                 child:
                                                                     ClipRRect(
-                                                                  borderRadius: const BorderRadius
+                                                                  borderRadius:
+                                                                      const BorderRadius
                                                                           .all(
-                                                                      Radius.circular(
-                                                                          20)),
+                                                                          Radius.circular(
+                                                                              20)),
                                                                   child:
                                                                       GestureDetector(
                                                                     onTap: () {
@@ -990,7 +996,8 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                                               const Icon(Icons.error),
                                                                         ),
                                                                         Padding(
-                                                                          padding: const EdgeInsets.only(
+                                                                          padding: const EdgeInsets
+                                                                              .only(
                                                                               right: 9.0,
                                                                               left: 9.0,
                                                                               bottom: 8.0),

@@ -33,14 +33,16 @@ class _CommentsPageState extends State<CommentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60.h,
         backgroundColor: AppColor.white,
         leading: GestureDetector(
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_rounded,
             color: AppColor.backgroundColor,
+            size: 22.sp,
           ),
         ),
         title: Text(

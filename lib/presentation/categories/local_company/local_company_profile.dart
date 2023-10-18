@@ -107,6 +107,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
       length: 3,
       child: Scaffold(
         appBar: AppBar(
+          toolbarHeight: 45.h,
           title: Text(
             widget.localCompany.username ?? '',
             style: const TextStyle(
@@ -118,19 +119,18 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: const Icon(
-              Icons.arrow_back_rounded,
-              color: AppColor.backgroundColor,
-            ),
+            child: Icon(Icons.arrow_back_rounded,
+                color: AppColor.backgroundColor, size: 22.sp),
           ),
           actions: [
             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: .0),
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: IconButton(
                   onPressed: () {},
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.share,
                     color: AppColor.backgroundColor,
+                    size: 22.sp,
                   ),
                 )),
           ],
@@ -277,15 +277,15 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                 imageUrl: state.userInfo
                                                         .profilePhoto ??
                                                     '',
-                                                width: 80,
-                                                height: 80,
+                                                width: 80.r,
+                                                height: 80.r,
                                                 fit: BoxFit.fill,
                                                 progressIndicatorBuilder:
                                                     (context, url,
                                                             downloadProgress) =>
                                                         Padding(
                                                   padding: const EdgeInsets
-                                                          .symmetric(
+                                                      .symmetric(
                                                       horizontal: 70.0,
                                                       vertical: 50),
                                                   child:
@@ -423,10 +423,10 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                 children: [
                                                   Text(
                                                     '${state.userInfo.averageRating?.toStringAsFixed(3)}',
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                         color:
                                                             AppColor.secondGrey,
-                                                        fontSize: 18,
+                                                        fontSize: 18.sp,
                                                         fontWeight:
                                                             FontWeight.w600),
                                                   ),
@@ -445,7 +445,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                               .userInfo
                                                               .averageRating ??
                                                           0,
-                                                      itemSize: 18,
+                                                      itemSize: 18.sp,
                                                       ignoreGestures: true,
                                                       itemBuilder:
                                                           (context, _) {
@@ -462,10 +462,10 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                   ),
                                                   Text(
                                                     '(${state.userInfo.totalRatings} ${AppLocalizations.of(context).translate('review')})',
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                       color:
                                                           AppColor.secondGrey,
-                                                      fontSize: 14,
+                                                      fontSize: 14.sp,
                                                     ),
                                                   ),
                                                   SizedBox(
@@ -485,7 +485,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                         state.userInfo.bio ?? 'BIO',
                                         style: TextStyle(
                                           color: AppColor.mainGrey,
-                                          fontSize: 11.3.sp,
+                                          fontSize: 8.sp,
                                         ),
                                       ),
                                     ),
@@ -503,11 +503,11 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                         CrossAxisAlignment
                                                             .center,
                                                     children: [
-                                                      const Icon(
+                                                      Icon(
                                                         Icons.link,
                                                         color:
                                                             AppColor.secondGrey,
-                                                        size: 20,
+                                                        size: 15.sp,
                                                       ),
                                                       GestureDetector(
                                                         onTap: followLink,
@@ -646,8 +646,8 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                           borderRadius:
                                               BorderRadius.circular(100),
                                           child: Container(
-                                            height: 50,
-                                            width: 150,
+                                            height: 50.h,
+                                            width: 150.w,
                                             decoration: const BoxDecoration(
                                               color: AppColor.backgroundColor,
                                               // borderRadius: BorderRadius.circular(100),
@@ -726,8 +726,8 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                 borderRadius:
                                                     BorderRadius.circular(100),
                                                 child: Container(
-                                                  height: 50,
-                                                  width: 150,
+                                                  height: 50.h,
+                                                  width: 150.w,
                                                   decoration:
                                                       const BoxDecoration(
                                                     color: AppColor
@@ -748,7 +748,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   left: 4.0),
                                                           child: Text(
                                                             AppLocalizations.of(
@@ -909,9 +909,9 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                                     index) {
                                                                   return Container(
                                                                     height:
-                                                                        190.h,
+                                                                        200.h,
                                                                     margin: const EdgeInsets
-                                                                            .symmetric(
+                                                                        .symmetric(
                                                                         vertical:
                                                                             8),
                                                                     decoration:
@@ -939,7 +939,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                                     child:
                                                                         ClipRRect(
                                                                       borderRadius: const BorderRadius
-                                                                              .all(
+                                                                          .all(
                                                                           Radius.circular(
                                                                               20)),
                                                                       child:
@@ -1083,7 +1083,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                   width: MediaQuery.of(context)
                                                       .size
                                                       .width,
-                                                  height: 220.h,
+                                                  height: 240.h,
                                                   padding: const EdgeInsets
                                                       .symmetric(horizontal: 8),
                                                   decoration: BoxDecoration(

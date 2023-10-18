@@ -40,6 +40,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
           link: event.link,
           slogn: event.slogn,
           website: event.website,
+          address: event.address,
         ),
       );
       emit(

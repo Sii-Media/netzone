@@ -174,8 +174,8 @@ class SliderNewsWidget extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(25.0),
                   child: Container(
-                    width: 25,
-                    height: 25,
+                    width: 25.r,
+                    height: 25.r,
                     color: AppColor.backgroundColor.withOpacity(0.6),
                     child: IconButton(
                       onPressed: () {
@@ -190,9 +190,9 @@ class SliderNewsWidget extends StatelessWidget {
                           );
                         }
                       },
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.arrow_back_ios_sharp,
-                        size: 10,
+                        size: 10.sp,
                         color: Colors.white,
                       ),
                     ),
@@ -201,8 +201,8 @@ class SliderNewsWidget extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(25.0),
                   child: Container(
-                    width: 25,
-                    height: 25,
+                    width: 25.r,
+                    height: 25.r,
                     color: const Color(0xFF5776a5).withOpacity(0.6),
                     child: IconButton(
                       onPressed: () {
@@ -217,9 +217,9 @@ class SliderNewsWidget extends StatelessWidget {
                           );
                         }
                       },
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.arrow_forward_ios_outlined,
-                        size: 10,
+                        size: 10.sp,
                         color: Colors.white,
                       ),
                     ),

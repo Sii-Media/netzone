@@ -95,8 +95,9 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
                               child: TextFormField(
                                 controller: controller,
                                 decoration: InputDecoration(
-                                  prefixIcon: const Icon(
+                                  prefixIcon: Icon(
                                     Icons.search,
+                                    size: 15.sp,
                                   ),
                                   hintText: AppLocalizations.of(context)
                                       .translate('search'),
@@ -117,14 +118,24 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
                             SizedBox(
                               width: 10.w,
                             ),
-                            IconButton(
-                              onPressed: () {
+                            // IconButton(
+                            //   onPressed: () {
+                            //     _showFilterBottomSheet(context);
+                            //   },
+                            //   icon: Icon(
+                            //     Icons.filter_alt,
+                            //     color: AppColor.backgroundColor,
+                            //     size: 30.sp,
+                            //   ),
+                            // ),
+                            InkWell(
+                              onTap: () {
                                 _showFilterBottomSheet(context);
                               },
-                              icon: const Icon(
+                              child: Icon(
                                 Icons.filter_alt,
                                 color: AppColor.backgroundColor,
-                                size: 30,
+                                size: 30.sp,
                               ),
                             ),
                           ],

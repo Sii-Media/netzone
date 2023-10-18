@@ -14,11 +14,12 @@ Widget buildRating(double userRate) {
     minRating: 1,
     maxRating: 5,
     initialRating: userRate,
-    itemSize: 25,
+    itemSize: 25.sp,
     itemBuilder: (context, _) {
-      return const Icon(
+      return Icon(
         Icons.star,
         color: Colors.amber,
+        size: 15.sp,
       );
     },
     allowHalfRating: true,
@@ -43,16 +44,16 @@ void showRating(BuildContext context, GetUserBloc userBloc, String id,
           ),
           title: const Text('Rating'),
           content: SizedBox(
-            height: 100,
+            height: 160.h,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   AppLocalizations.of(context)
                       .translate('please leave a star rating'),
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColor.backgroundColor,
-                    fontSize: 20,
+                    fontSize: 20.sp,
                   ),
                 ),
                 SizedBox(
@@ -70,9 +71,9 @@ void showRating(BuildContext context, GetUserBloc userBloc, String id,
               },
               child: Text(
                 AppLocalizations.of(context).translate('submit'),
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColor.backgroundColor,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                 ),
               ),
             ),
@@ -153,16 +154,16 @@ void showServiceRating(
           ),
           title: const Text('Rating'),
           content: SizedBox(
-            height: 100,
+            height: 150.h,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   AppLocalizations.of(context)
                       .translate('please leave a star rating'),
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColor.backgroundColor,
-                    fontSize: 20,
+                    fontSize: 20.sp,
                   ),
                 ),
                 SizedBox(
@@ -180,9 +181,9 @@ void showServiceRating(
               },
               child: Text(
                 AppLocalizations.of(context).translate('submit'),
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColor.backgroundColor,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                 ),
               ),
             ),

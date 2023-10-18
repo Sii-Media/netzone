@@ -12,7 +12,7 @@ class ViewFactoriesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20.0),
+      padding: EdgeInsets.only(bottom: 20.0.h, top: 20.0.h),
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,

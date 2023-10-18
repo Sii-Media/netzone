@@ -108,7 +108,7 @@ class _VehicleCompaniesProfileScreenState
                 ),
               ),
               SizedBox(
-                width: 190,
+                width: 190.w,
                 child: Text(
                   input,
                   style: TextStyle(
@@ -128,6 +128,7 @@ class _VehicleCompaniesProfileScreenState
   Widget screen(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 45.h,
         title: Text(
           widget.vehiclesCompany.username ?? '',
           style: const TextStyle(color: AppColor.backgroundColor),
@@ -137,19 +138,21 @@ class _VehicleCompaniesProfileScreenState
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_rounded,
             color: AppColor.backgroundColor,
+            size: 22.sp,
           ),
         ),
         actions: [
           Padding(
-              padding: const EdgeInsets.symmetric(horizontal: .0),
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: IconButton(
                 onPressed: () {},
-                icon: const Icon(
+                icon: Icon(
                   Icons.share,
                   color: AppColor.backgroundColor,
+                  size: 22.sp,
                 ),
               )),
         ],
@@ -376,9 +379,9 @@ class _VehicleCompaniesProfileScreenState
                                       children: [
                                         Text(
                                           '${widget.vehiclesCompany.averageRating?.toStringAsFixed(3)}',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                               color: AppColor.secondGrey,
-                                              fontSize: 18,
+                                              fontSize: 18.sp,
                                               fontWeight: FontWeight.w600),
                                         ),
                                         GestureDetector(
@@ -396,7 +399,7 @@ class _VehicleCompaniesProfileScreenState
                                                     .vehiclesCompany
                                                     .averageRating ??
                                                 0,
-                                            itemSize: 18,
+                                            itemSize: 18.sp,
                                             ignoreGestures: true,
                                             itemBuilder: (context, _) {
                                               return const Icon(
@@ -411,9 +414,9 @@ class _VehicleCompaniesProfileScreenState
                                         ),
                                         Text(
                                           '(${widget.vehiclesCompany.totalRatings} ${AppLocalizations.of(context).translate('review')})',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             color: AppColor.secondGrey,
-                                            fontSize: 14,
+                                            fontSize: 14.sp,
                                           ),
                                         ),
                                         SizedBox(
@@ -443,8 +446,8 @@ class _VehicleCompaniesProfileScreenState
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(100),
                                 child: Container(
-                                  height: 50,
-                                  width: 150,
+                                  height: 50.h,
+                                  width: 150.w,
                                   decoration: const BoxDecoration(
                                     color: AppColor.backgroundColor,
                                     // borderRadius: BorderRadius.circular(100),
@@ -514,8 +517,8 @@ class _VehicleCompaniesProfileScreenState
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(100),
                                       child: Container(
-                                        height: 50,
-                                        width: 150,
+                                        height: 50.h,
+                                        width: 150.w,
                                         decoration: const BoxDecoration(
                                           color: AppColor.backgroundColor,
                                           // borderRadius: BorderRadius.circular(100),
@@ -577,11 +580,14 @@ class _VehicleCompaniesProfileScreenState
                           icon: Text(
                             AppLocalizations.of(context).translate(
                                 widget.vehiclesCompany.userType ?? ''),
+                            style: TextStyle(fontSize: 10.sp),
                           ),
                         ),
                         Tab(
-                          icon: Text(AppLocalizations.of(context)
-                              .translate('about_us')),
+                          icon: Text(
+                            AppLocalizations.of(context).translate('about_us'),
+                            style: TextStyle(fontSize: 10.sp),
+                          ),
                         ),
                       ],
                     ),

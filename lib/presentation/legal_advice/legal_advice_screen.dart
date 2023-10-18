@@ -160,20 +160,23 @@ class _LegalAdviceScreenState extends State<LegalAdviceScreen> {
                               ),
                             );
                           } else if (state is LegalAdviceSuccess) {
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: state.legalAdvices.length,
-                              itemBuilder: (BuildContext context, index) {
-                                return Text(
-                                  langState is EnglishState
-                                      ? state.legalAdvices[index].textEn
-                                      : state.legalAdvices[index].text,
-                                  style: TextStyle(
-                                    color: AppColor.black,
-                                    fontSize: 14.sp,
-                                  ),
-                                );
-                              },
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 80.0),
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: state.legalAdvices.length,
+                                itemBuilder: (BuildContext context, index) {
+                                  return Text(
+                                    langState is EnglishState
+                                        ? state.legalAdvices[index].textEn
+                                        : state.legalAdvices[index].text,
+                                    style: TextStyle(
+                                      color: AppColor.black,
+                                      fontSize: 14.sp,
+                                    ),
+                                  );
+                                },
+                              ),
                             );
                           }
                           return Container();

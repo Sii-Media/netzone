@@ -100,6 +100,7 @@ abstract class AuthRepository {
     String? website,
     String? link,
     String? slogn,
+    String? address,
   });
 
   Future<Either<Failure, UserInfo>> addAcccess({

@@ -55,7 +55,7 @@ class BackgroundWidget extends StatelessWidget {
             // ),
             CustomAppBar(context: context, isHome: isHome),
             Positioned(
-              top: 57.h,
+              top: 60.r,
               right: 0,
               left: 0,
               child: SizedBox(

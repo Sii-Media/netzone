@@ -90,6 +90,7 @@ class _RealEstateCompanyProfileScreenState
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          toolbarHeight: 45.h,
           title: Text(
             widget.user.username ?? '',
             style: const TextStyle(
@@ -101,19 +102,21 @@ class _RealEstateCompanyProfileScreenState
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: const Icon(
+            child: Icon(
               Icons.arrow_back_rounded,
               color: AppColor.backgroundColor,
+              size: 22.sp,
             ),
           ),
           actions: [
             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: .0),
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: IconButton(
                   onPressed: () {},
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.share,
                     color: AppColor.backgroundColor,
+                    size: 22.sp,
                   ),
                 )),
           ],
@@ -236,8 +239,8 @@ class _RealEstateCompanyProfileScreenState
                                               imageUrl:
                                                   state.userInfo.profilePhoto ??
                                                       '',
-                                              width: 100,
-                                              height: 100,
+                                              width: 100.r,
+                                              height: 100.r,
                                               fit: BoxFit.fill,
                                               progressIndicatorBuilder:
                                                   (context, url,
@@ -386,10 +389,10 @@ class _RealEstateCompanyProfileScreenState
                                               children: [
                                                 Text(
                                                   '${widget.user.averageRating?.toStringAsFixed(3)}',
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                       color:
                                                           AppColor.secondGrey,
-                                                      fontSize: 18,
+                                                      fontSize: 18.sp,
                                                       fontWeight:
                                                           FontWeight.w600),
                                                 ),
@@ -407,7 +410,7 @@ class _RealEstateCompanyProfileScreenState
                                                     initialRating: widget.user
                                                             .averageRating ??
                                                         0,
-                                                    itemSize: 18,
+                                                    itemSize: 18.sp,
                                                     ignoreGestures: true,
                                                     itemBuilder: (context, _) {
                                                       return const Icon(
@@ -422,9 +425,9 @@ class _RealEstateCompanyProfileScreenState
                                                 ),
                                                 Text(
                                                   '(${widget.user.totalRatings} ${AppLocalizations.of(context).translate('review')})',
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                     color: AppColor.secondGrey,
-                                                    fontSize: 14,
+                                                    fontSize: 14.sp,
                                                   ),
                                                 ),
                                                 SizedBox(
@@ -459,8 +462,8 @@ class _RealEstateCompanyProfileScreenState
                                         borderRadius:
                                             BorderRadius.circular(100),
                                         child: Container(
-                                          height: 50,
-                                          width: 150,
+                                          height: 50.h,
+                                          width: 150.w,
                                           decoration: const BoxDecoration(
                                             color: AppColor.backgroundColor,
                                             // borderRadius: BorderRadius.circular(100),
@@ -537,8 +540,8 @@ class _RealEstateCompanyProfileScreenState
                                               borderRadius:
                                                   BorderRadius.circular(100),
                                               child: Container(
-                                                height: 50,
-                                                width: 150,
+                                                height: 50.h,
+                                                width: 150.w,
                                                 decoration: const BoxDecoration(
                                                   color:
                                                       AppColor.backgroundColor,
@@ -558,7 +561,7 @@ class _RealEstateCompanyProfileScreenState
                                                       Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .only(
+                                                                .only(
                                                                 left: 4.0),
                                                         child: Text(
                                                           AppLocalizations.of(
@@ -721,7 +724,7 @@ class _RealEstateCompanyProfileScreenState
                                                                             downloadProgress) =>
                                                                         Padding(
                                                                   padding: const EdgeInsets
-                                                                          .symmetric(
+                                                                      .symmetric(
                                                                       horizontal:
                                                                           70.0,
                                                                       vertical:
@@ -768,10 +771,11 @@ class _RealEstateCompanyProfileScreenState
                                                               ),
                                                             ),
                                                             Padding(
-                                                              padding: const EdgeInsets
+                                                              padding:
+                                                                  const EdgeInsets
                                                                       .symmetric(
-                                                                  horizontal:
-                                                                      6.0),
+                                                                      horizontal:
+                                                                          6.0),
                                                               child: Align(
                                                                 alignment: Alignment
                                                                     .bottomCenter,
@@ -893,7 +897,7 @@ class _RealEstateCompanyProfileScreenState
                 ),
               ),
               SizedBox(
-                width: 190,
+                width: 190.w,
                 child: Text(
                   input,
                   style: TextStyle(

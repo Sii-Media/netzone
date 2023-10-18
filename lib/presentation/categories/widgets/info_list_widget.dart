@@ -62,7 +62,7 @@ Widget infoListWidget({
                       ),
                     ),
                     SizedBox(
-                      width: 190,
+                      width: 190.w,
                       child: PhoneCallWidget(
                         phonePath: firstMobile,
                         title: firstMobile,
@@ -176,7 +176,7 @@ Padding titleAndInput({required String title, required String input}) {
               ),
             ),
             SizedBox(
-              width: 190,
+              width: 190.w,
               child: Text(
                 input,
                 style: TextStyle(

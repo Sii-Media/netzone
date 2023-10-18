@@ -88,14 +88,16 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60.h,
         backgroundColor: AppColor.white,
         leading: GestureDetector(
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_rounded,
             color: AppColor.backgroundColor,
+            size: 22.sp,
           ),
         ),
         title: Text(
@@ -321,9 +323,9 @@ class _SearchPageState extends State<SearchPage> {
                                         fontSize: 17.sp,
                                         fontWeight: FontWeight.w600),
                                   ),
-                                  leading: const Icon(
+                                  leading: Icon(
                                     Icons.arrow_forward_ios,
-                                    size: 22,
+                                    size: 22.sp,
                                   ),
                                 ),
                               ),
@@ -406,7 +408,7 @@ class _SearchPageState extends State<SearchPage> {
           width: MediaQuery.of(context).size.width,
           margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 10).r,
           // Add some padding and a background color
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
           decoration: BoxDecoration(
             color: AppColor.backgroundColor.withOpacity(0.1),
             borderRadius: BorderRadius.circular(10),
@@ -416,7 +418,10 @@ class _SearchPageState extends State<SearchPage> {
           ),
           child: DropdownButton<String>(
             value: selectedCarType,
-            hint: const Text('Select car type'),
+            hint: Text(
+              'Select car type',
+              style: TextStyle(fontSize: 10.sp),
+            ),
             onChanged: (value) {
               setState(() {
                 selectedCarType = value;
@@ -428,7 +433,10 @@ class _SearchPageState extends State<SearchPage> {
               return DropdownMenuItem<String>(
                 enabled: true,
                 value: carType.name,
-                child: Text(carType.name),
+                child: Text(
+                  carType.name,
+                  style: TextStyle(fontSize: 10.sp),
+                ),
               );
             }).toList(),
           ),

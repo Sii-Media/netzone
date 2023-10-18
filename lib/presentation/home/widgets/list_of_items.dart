@@ -100,8 +100,8 @@ class _ListofItemsState extends State<ListofItems> {
                                 child: Text(
                                   AppLocalizations.of(context)
                                       .translate(widget.elec[index].name),
-                                  style: const TextStyle(
-                                    fontSize: 10,
+                                  style: TextStyle(
+                                    fontSize: 10.sp,
                                     color: Colors.white,
                                     fontWeight: FontWeight.w800,
                                   ),

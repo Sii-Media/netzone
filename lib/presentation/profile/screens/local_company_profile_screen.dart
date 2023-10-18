@@ -95,8 +95,8 @@ class _MyLocalCompanyProfileScreenState
       child: Row(
         children: [
           Container(
-            height: 40,
-            width: 40,
+            height: 40.r,
+            width: 40.r,
             decoration: BoxDecoration(
                 color: AppColor.backgroundColor,
                 image: DecorationImage(
@@ -112,9 +112,9 @@ class _MyLocalCompanyProfileScreenState
           ),
           Text(
             accountstate.users[index].username ?? '',
-            style: const TextStyle(
+            style: TextStyle(
                 color: AppColor.white,
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w500),
           ),
           const Spacer(),
@@ -155,7 +155,7 @@ class _MyLocalCompanyProfileScreenState
                 ),
               ),
               SizedBox(
-                width: 190,
+                width: 190.w,
                 child: Text(
                   input,
                   style: TextStyle(
@@ -815,7 +815,7 @@ class _MyLocalCompanyProfileScreenState
                                                                       index) {
                                                                 return Container(
                                                                   margin: const EdgeInsets
-                                                                          .symmetric(
+                                                                      .symmetric(
                                                                       vertical:
                                                                           8),
                                                                   decoration:
@@ -842,10 +842,10 @@ class _MyLocalCompanyProfileScreenState
                                                                   ),
                                                                   child:
                                                                       ClipRRect(
-                                                                    borderRadius: const BorderRadius
+                                                                    borderRadius:
+                                                                        const BorderRadius
                                                                             .all(
-                                                                        Radius.circular(
-                                                                            20)),
+                                                                            Radius.circular(20)),
                                                                     child:
                                                                         GestureDetector(
                                                                       onTap:

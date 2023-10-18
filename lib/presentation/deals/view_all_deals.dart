@@ -117,16 +117,26 @@ class _ViewAllDealsScreenState extends State<ViewAllDealsScreen> {
                       SizedBox(
                         width: 10.w,
                       ),
-                      IconButton(
-                        onPressed: () {
+                      // IconButton(
+                      //   onPressed: () {
+                      //     _showFilterBottomSheet(context);
+                      //   },
+                      //   icon: const Icon(
+                      //     Icons.filter_alt,
+                      //     color: AppColor.backgroundColor,
+                      //     size: 30,
+                      //   ),
+                      // )
+                      InkWell(
+                        onTap: () {
                           _showFilterBottomSheet(context);
                         },
-                        icon: const Icon(
+                        child: Icon(
                           Icons.filter_alt,
                           color: AppColor.backgroundColor,
-                          size: 30,
+                          size: 30.sp,
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -463,12 +473,12 @@ class Deals extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.backgroundColor,
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: EdgeInsets.symmetric(horizontal: 20.h),
                           //shadowColor: Colors.black,
                           //  elevation: 5
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5)),
-                          textStyle: const TextStyle(fontSize: 15)),
+                          textStyle: TextStyle(fontSize: 15.sp)),
                       child: Text(
                           AppLocalizations.of(context).translate("buy_deal"))),
                 )

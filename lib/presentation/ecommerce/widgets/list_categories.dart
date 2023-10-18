@@ -21,11 +21,11 @@ class ListCategoriesEcommerce extends StatelessWidget {
           shrinkWrap: true,
           physics: const BouncingScrollPhysics(),
           itemCount: items.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 1.2,
-            crossAxisSpacing: 16.0,
-            mainAxisSpacing: 16.0,
+            childAspectRatio: 1.2.h,
+            crossAxisSpacing: 16.0.w,
+            mainAxisSpacing: 16.0.h,
           ),
           itemBuilder: (context, index) {
             return GestureDetector(

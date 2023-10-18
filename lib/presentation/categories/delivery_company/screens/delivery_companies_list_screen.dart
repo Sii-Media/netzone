@@ -48,7 +48,7 @@ class _DeliveryCompaniesListScreenState
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 60.0),
+                  padding: EdgeInsets.only(bottom: 60.0.h, top: 20.h),
                   child: BlocBuilder<UsersBloc, UsersState>(
                     bloc: usersBloc,
                     builder: (context, state) {
@@ -79,8 +79,9 @@ class _DeliveryCompaniesListScreenState
                             TextFormField(
                               controller: controller,
                               decoration: InputDecoration(
-                                prefixIcon: const Icon(
+                                prefixIcon: Icon(
                                   Icons.search,
+                                  size: 15.sp,
                                 ),
                                 hintText: AppLocalizations.of(context)
                                     .translate('search'),
@@ -105,7 +106,7 @@ class _DeliveryCompaniesListScreenState
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 2,
-                                        childAspectRatio: 0.85,
+                                        childAspectRatio: 0.85.h,
                                         crossAxisSpacing: 10.w,
                                         mainAxisSpacing: 10.h),
                                 shrinkWrap: true,
@@ -155,7 +156,7 @@ class _DeliveryCompaniesListScreenState
                                                                 Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .symmetric(
+                                                                  .symmetric(
                                                                   horizontal:
                                                                       70.0,
                                                                   vertical: 50),

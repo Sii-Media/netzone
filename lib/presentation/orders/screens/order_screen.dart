@@ -36,14 +36,16 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60.h,
         backgroundColor: AppColor.white,
         leading: GestureDetector(
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_rounded,
             color: AppColor.backgroundColor,
+            size: 22.sp,
           ),
         ),
         title: Text(
@@ -118,13 +120,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 children: [
                   Text(
                     '${AppLocalizations.of(context).translate('Order')} ${orders.length - (index)}',
-                    style: const TextStyle(
-                        fontSize: 18.0, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 18.0.sp, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8.0),
                   Text(
                     '${AppLocalizations.of(context).translate('Date')}: ${formatDateTime(orders[index].createdAt ?? '')}',
-                    style: const TextStyle(fontSize: 16.0),
+                    style: TextStyle(fontSize: 16.0.sp),
                   ),
                   const SizedBox(height: 16.0),
                   ListView.builder(
@@ -136,7 +138,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: ListTile(
                           leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
+                            borderRadius: BorderRadius.circular(8.0).r,
                             // child: Image.network(
                             //   'https://imageio.forbes.com/specials-images/imageserve/64e74ad803781abed13b0612/Apple--iPhone--iPhone-15--iPhone-15-Pro--iPhone-15-Pro-Max--iPhone-15-release--new/0x0.jpg?format=jpg&crop=1275,956,x113,y0,safe&width=960',
                             //   width: 80.0,
@@ -170,8 +172,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           ),
                           title: Text(
                             orders[index].products[indexx].product.name,
-                            style: const TextStyle(
-                                fontSize: 16.0, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 16.0.sp, fontWeight: FontWeight.bold),
                           ),
                         ),
                       );

@@ -31,6 +31,7 @@ class _MyProductsScreenState extends State<MyProductsScreen>
   Widget screen(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60.h,
         title: Text(
           AppLocalizations.of(context).translate('my_products'),
           style: const TextStyle(
@@ -42,9 +43,10 @@ class _MyProductsScreenState extends State<MyProductsScreen>
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_rounded,
             color: AppColor.backgroundColor,
+            size: 22.sp,
           ),
         ),
       ),
@@ -205,9 +207,10 @@ class _MyProductsScreenState extends State<MyProductsScreen>
                                                   productId: state
                                                       .products[index].id));
                                         },
-                                        icon: const Icon(
+                                        icon: Icon(
                                           Icons.delete,
                                           color: AppColor.red,
+                                          size: 15.sp,
                                         )),
                                   ],
                                 ),

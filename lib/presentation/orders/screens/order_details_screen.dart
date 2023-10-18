@@ -19,6 +19,17 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60.h,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Icon(
+            Icons.arrow_back_rounded,
+            color: AppColor.white,
+            size: 22.sp,
+          ),
+        ),
         title: Text(
           AppLocalizations.of(context).translate('order_details'),
         ),
@@ -182,46 +193,48 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                             splashColor:
                                 AppColor.backgroundColor.withOpacity(0.2),
                             trailing: Padding(
-                              padding: const EdgeInsets.only(right: 4.0),
+                              padding: const EdgeInsets.only(
+                                right: 4.0,
+                              ),
                               child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      // if (state.categoryProducts[index].owner
-                                      //         .userType ==
-                                      //     'user') {
-                                      //   Navigator.of(context).push(
-                                      //       MaterialPageRoute(
-                                      //           builder: (context) {
-                                      //     return UsersProfileScreen(
-                                      //         user: state
-                                      //             .categoryProducts[index]
-                                      //             .owner);
-                                      //   }));
-                                      // } else if (state.categoryProducts[index]
-                                      //         .owner.userType ==
-                                      //     'local_company') {
-                                      //   Navigator.of(context).push(
-                                      //       MaterialPageRoute(
-                                      //           builder: (context) {
-                                      //     return LocalCompanyProfileScreen(
-                                      //         localCompany: state
-                                      //             .categoryProducts[index]
-                                      //             .owner);
-                                      //   }));
-                                      // }
-                                    },
-                                    child: Text(
-                                      widget.order.products[indexx].product
-                                              .owner.username ??
-                                          '',
-                                      style: const TextStyle(
-                                          decoration: TextDecoration.underline,
-                                          color: AppColor.colorOne),
-                                    ),
-                                  ),
+                                  // GestureDetector(
+                                  //   onTap: () {
+                                  //     // if (state.categoryProducts[index].owner
+                                  //     //         .userType ==
+                                  //     //     'user') {
+                                  //     //   Navigator.of(context).push(
+                                  //     //       MaterialPageRoute(
+                                  //     //           builder: (context) {
+                                  //     //     return UsersProfileScreen(
+                                  //     //         user: state
+                                  //     //             .categoryProducts[index]
+                                  //     //             .owner);
+                                  //     //   }));
+                                  //     // } else if (state.categoryProducts[index]
+                                  //     //         .owner.userType ==
+                                  //     //     'local_company') {
+                                  //     //   Navigator.of(context).push(
+                                  //     //       MaterialPageRoute(
+                                  //     //           builder: (context) {
+                                  //     //     return LocalCompanyProfileScreen(
+                                  //     //         localCompany: state
+                                  //     //             .categoryProducts[index]
+                                  //     //             .owner);
+                                  //     //   }));
+                                  //     // }
+                                  //   },
+                                  //   child: Text(
+                                  //     widget.order.products[indexx].product
+                                  //             .owner.username ??
+                                  //         '',
+                                  //     style: const TextStyle(
+                                  //         decoration: TextDecoration.underline,
+                                  //         color: AppColor.colorOne),
+                                  //   ),
+                                  // ),
                                   RichText(
                                     text: TextSpan(
                                         style: TextStyle(

@@ -41,6 +41,7 @@ class _AllProductsScreenState extends State<AllProductsScreen>
   Widget screen(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60.h,
         title: Text(
           AppLocalizations.of(context).translate('all_products'),
           style: const TextStyle(
@@ -52,9 +53,10 @@ class _AllProductsScreenState extends State<AllProductsScreen>
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_rounded,
             color: AppColor.backgroundColor,
+            size: 22.sp,
           ),
         ),
       ),
@@ -141,11 +143,105 @@ class _AllProductsScreenState extends State<AllProductsScreen>
                                   ),
                                   contentPadding:
                                       const EdgeInsets.symmetric(vertical: 6.0),
-                                  subtitle: Text(
-                                    state.categoryProducts[index].description,
-                                    style: const TextStyle(
-                                      color: AppColor.secondGrey,
-                                    ),
+                                  subtitle: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        width: 140.w,
+                                        child: Text(
+                                          state.categoryProducts[index]
+                                              .description,
+                                          style: const TextStyle(
+                                            color: AppColor.secondGrey,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 4.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                if (state
+                                                        .categoryProducts[index]
+                                                        .owner
+                                                        .userType ==
+                                                    'user') {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) {
+                                                    return UsersProfileScreen(
+                                                        user: state
+                                                            .categoryProducts[
+                                                                index]
+                                                            .owner);
+                                                  }));
+                                                } else if (state
+                                                        .categoryProducts[index]
+                                                        .owner
+                                                        .userType ==
+                                                    'local_company') {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) {
+                                                    return LocalCompanyProfileScreen(
+                                                        localCompany: state
+                                                            .categoryProducts[
+                                                                index]
+                                                            .owner);
+                                                  }));
+                                                }
+                                              },
+                                              child: Text(
+                                                state.categoryProducts[index]
+                                                        .owner.username ??
+                                                    '',
+                                                style: TextStyle(
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                    color: AppColor.colorOne,
+                                                    fontSize: 11.sp),
+                                              ),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                  style: TextStyle(
+                                                      fontSize: 9.sp,
+                                                      color: AppColor
+                                                          .backgroundColor),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text:
+                                                          '${state.categoryProducts[index].price}',
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: AppColor.red,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text:
+                                                          getCurrencyFromCountry(
+                                                        countryState
+                                                            .selectedCountry,
+                                                        context,
+                                                      ),
+                                                      style: TextStyle(
+                                                          color: AppColor.red,
+                                                          fontSize: 8.sp),
+                                                    )
+                                                  ]),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   tileColor: isSelected
                                       ? AppColor.backgroundColor
@@ -174,80 +270,6 @@ class _AllProductsScreenState extends State<AllProductsScreen>
                                   },
                                   splashColor:
                                       AppColor.backgroundColor.withOpacity(0.2),
-                                  trailing: Padding(
-                                    padding: const EdgeInsets.only(right: 4.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            if (state.categoryProducts[index]
-                                                    .owner.userType ==
-                                                'user') {
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder: (context) {
-                                                return UsersProfileScreen(
-                                                    user: state
-                                                        .categoryProducts[index]
-                                                        .owner);
-                                              }));
-                                            } else if (state
-                                                    .categoryProducts[index]
-                                                    .owner
-                                                    .userType ==
-                                                'local_company') {
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder: (context) {
-                                                return LocalCompanyProfileScreen(
-                                                    localCompany: state
-                                                        .categoryProducts[index]
-                                                        .owner);
-                                              }));
-                                            }
-                                          },
-                                          child: Text(
-                                            state.categoryProducts[index].owner
-                                                    .username ??
-                                                '',
-                                            style: const TextStyle(
-                                                decoration:
-                                                    TextDecoration.underline,
-                                                color: AppColor.colorOne),
-                                          ),
-                                        ),
-                                        RichText(
-                                          text: TextSpan(
-                                              style: TextStyle(
-                                                  fontSize: 12.sp,
-                                                  color:
-                                                      AppColor.backgroundColor),
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                  text:
-                                                      '${state.categoryProducts[index].price}',
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.w700,
-                                                    color: AppColor.red,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: getCurrencyFromCountry(
-                                                    countryState
-                                                        .selectedCountry,
-                                                    context,
-                                                  ),
-                                                  style: TextStyle(
-                                                      color: AppColor.red,
-                                                      fontSize: 12.sp),
-                                                )
-                                              ]),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
                                 ),
                               ),
                             );

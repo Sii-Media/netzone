@@ -206,6 +206,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                                     )),
                                 child: DropdownButton<String>(
                                   value: selectedCarType,
+                                  itemHeight: 45.h,
                                   hint: const Text('Select car type'),
                                   onChanged: (value) {
                                     setState(() {
@@ -240,6 +241,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                                       )),
                                   child: DropdownButton<String>(
                                     value: selectedCategory,
+                                    itemHeight: 45.h,
                                     hint: const Text('Select category'),
                                     onChanged: (value) {
                                       setState(() {

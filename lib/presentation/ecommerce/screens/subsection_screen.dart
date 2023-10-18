@@ -93,7 +93,8 @@ class _SubSectionsScreenState extends State<SubSectionsScreen> {
                           child: SizedBox(
                             height: MediaQuery.of(context).size.height,
                             child: Padding(
-                              padding: const EdgeInsets.only(bottom: 70.0),
+                              padding:
+                                  EdgeInsets.only(bottom: 70.0.h, top: 20.h),
                               child: Column(
                                 children: [
                                   Padding(
@@ -146,16 +147,26 @@ class _SubSectionsScreenState extends State<SubSectionsScreen> {
                                         SizedBox(
                                           width: 10.w,
                                         ),
-                                        IconButton(
-                                          onPressed: () {
+                                        // IconButton(
+                                        //   onPressed: () {
+                                        //     _showFilterBottomSheet(context);
+                                        //   },
+                                        //   icon: const Icon(
+                                        //     Icons.filter_alt,
+                                        //     color: AppColor.backgroundColor,
+                                        //     size: 20,
+                                        //   ),
+                                        // ),
+                                        InkWell(
+                                          onTap: () {
                                             _showFilterBottomSheet(context);
                                           },
-                                          icon: const Icon(
+                                          child: Icon(
                                             Icons.filter_alt,
                                             color: AppColor.backgroundColor,
-                                            size: 30,
+                                            size: 20.sp,
                                           ),
-                                        ),
+                                        )
                                       ],
                                     ),
                                   ),
@@ -163,8 +174,8 @@ class _SubSectionsScreenState extends State<SubSectionsScreen> {
                                     child: DynamicHeightGridView(
                                         itemCount: filteredUsers.length,
                                         crossAxisCount: 2,
-                                        crossAxisSpacing: 10,
-                                        mainAxisSpacing: 10,
+                                        crossAxisSpacing: 10.w,
+                                        mainAxisSpacing: 10.h,
                                         builder: (ctx, index) {
                                           return ListSubSectionsWidget(
                                             deviceList: filteredUsers[index],

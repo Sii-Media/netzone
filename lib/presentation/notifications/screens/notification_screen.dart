@@ -45,14 +45,16 @@ class _NotificatiionScreenState extends State<NotificatiionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60.h,
         backgroundColor: AppColor.white,
         leading: GestureDetector(
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_rounded,
             color: AppColor.backgroundColor,
+            size: 22.sp,
           ),
         ),
         title: Text(
@@ -165,9 +167,11 @@ class _NotificatiionScreenState extends State<NotificatiionScreen> {
                                           },
                                           leading: CircleAvatar(
                                             backgroundImage:
-                                                CachedNetworkImageProvider(state
-                                                    .notifications[index]
-                                                    .userProfileImage),
+                                                CachedNetworkImageProvider(
+                                              state.notifications[index]
+                                                  .userProfileImage,
+                                            ),
+                                            radius: 20.r,
                                           ),
                                           title: Text(
                                               '${state.notifications[index].username} ${AppLocalizations.of(context).translate('added a')} ${state.notifications[index].text} ${AppLocalizations.of(context).translate('to')} ${AppLocalizations.of(context).translate(state.notifications[index].category)}'),

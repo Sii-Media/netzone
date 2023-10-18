@@ -4,6 +4,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -28,6 +29,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   String stripePubKey = dotenv.get('STRIPE_PUB_KEY', fallback: '');
   Stripe.publishableKey = stripePubKey;
   // await initializeQuickBlox();

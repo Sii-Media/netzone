@@ -347,6 +347,7 @@ class AuthRepositoryImpl implements AuthRepository {
     String? website,
     String? link,
     String? slogn,
+    String? address,
   }) async {
     try {
       if (await networkInfo.isConnected) {
@@ -372,6 +373,9 @@ class AuthRepositoryImpl implements AuthRepository {
         }
         if (link != null) {
           formData.fields.add(MapEntry('link', link));
+        }
+        if (address != null) {
+          formData.fields.add(MapEntry('address', address));
         }
 
         if (profilePhoto != null) {
@@ -412,6 +416,7 @@ class AuthRepositoryImpl implements AuthRepository {
                   isFreeZoon: user.userInfo.isFreeZoon,
                   deliverable: user.userInfo.deliverable,
                   id: user.userInfo.id,
+                  address: user.userInfo.address,
                 ));
           }
           await local.signInUser(updatedUser);

@@ -153,7 +153,7 @@ class _MyDeliveryCompanyProfileScreenState
                 ),
               ),
               SizedBox(
-                width: 190,
+                width: 190.w,
                 child: Text(
                   input,
                   style: TextStyle(
@@ -657,7 +657,7 @@ class _MyDeliveryCompanyProfileScreenState
                                                 return Card(
                                                   elevation: 3,
                                                   margin: const EdgeInsets
-                                                          .symmetric(
+                                                      .symmetric(
                                                       horizontal: 16,
                                                       vertical: 8),
                                                   shape: RoundedRectangleBorder(
@@ -728,8 +728,7 @@ class _MyDeliveryCompanyProfileScreenState
                                                                           .bold,
                                                                   color: AppColor
                                                                       .black),
-                                                              children: <
-                                                                  TextSpan>[
+                                                              children: <TextSpan>[
                                                                 TextSpan(
                                                                   text:
                                                                       '${sstate.services[index].price}',

@@ -245,6 +245,7 @@ class _AddProductScreenState extends State<AddProductScreen>
                                     // Set the selected value
                                     value: selectedValue,
                                     menuMaxHeight: 300.h,
+                                    itemHeight: 50.h,
                                     // Handle the value change
                                     onChanged: (String? newValue) {
                                       setState(() {
@@ -303,7 +304,7 @@ class _AddProductScreenState extends State<AddProductScreen>
                                   // Create the dropdown button
                                   child: DropdownButton<DepartmentsCategories>(
                                     // Set the selected value
-                                    value: selectCat,
+                                    value: selectCat, itemHeight: 50.h,
                                     // // Handle the value change
                                     menuMaxHeight: 300.h,
                                     onChanged:
@@ -715,7 +716,7 @@ class _AddProductScreenState extends State<AddProductScreen>
                             children: [
                               Container(
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(250.0).w,
+                                  borderRadius: BorderRadius.circular(250.0).r,
                                   gradient: LinearGradient(
                                     begin: Alignment.topCenter,
                                     end: Alignment.bottomCenter,
@@ -880,7 +881,7 @@ class _AddProductScreenState extends State<AddProductScreen>
                                 }),
                           ),
                           SizedBox(
-                            height: 80.h,
+                            height: 130.h,
                           ),
                         ],
                       ),

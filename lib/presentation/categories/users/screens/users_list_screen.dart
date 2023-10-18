@@ -72,11 +72,15 @@ class _UsersListScreenState extends State<UsersListScreen> {
                             .toList();
                         return Column(
                           children: [
+                            SizedBox(
+                              height: 20.h,
+                            ),
                             TextFormField(
                               controller: controller,
                               decoration: InputDecoration(
-                                prefixIcon: const Icon(
+                                prefixIcon: Icon(
                                   Icons.search,
+                                  size: 15.sp,
                                 ),
                                 hintText: AppLocalizations.of(context)
                                     .translate('search'),
@@ -149,7 +153,7 @@ class _UsersListScreenState extends State<UsersListScreen> {
                                                                 Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .symmetric(
+                                                                  .symmetric(
                                                                   horizontal:
                                                                       70.0,
                                                                   vertical: 50),
