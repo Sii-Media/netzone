@@ -36,7 +36,7 @@ dependencies:
   dropdown_button2: ^2.0.0
   cached_network_image: ^3.2.3
   dynamic_height_grid_view: ^0.0.3
-  geolocator: ^9.0.2
+  geolocator: ^10.1.0
   country_code_picker: ^3.0.0
   youtube_player_flutter: ^8.1.2
   curved_navigation_bar: ^1.0.3
@@ -60,8 +60,8 @@ dependencies:
   flutter_typeahead: ^4.6.1
   file_picker: ^5.3.1
   open_file: ^3.3.2
-  firebase_core: ^2.14.0
-  firebase_messaging: ^14.6.3
+  firebase_core: ^2.16.0
+  firebase_messaging: ^14.6.8
   flutter_local_notifications: ^14.1.1
   lottie: ^2.3.2
   geocoding: ^2.1.0

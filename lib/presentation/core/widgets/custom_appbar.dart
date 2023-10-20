@@ -222,7 +222,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         Image.asset(
           "assets/images/netzoon-logo.png",
           fit: BoxFit.cover,
-          width: 150,
+          width: 150.w,
         ),
       ],
     );
@@ -230,23 +230,24 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   Row iosBar(BuildContext context, NotificationsBloc notiBloc) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         widget.isHome == true
-            ? const SizedBox(
-                width: 0,
-                height: 0,
+            ? SizedBox(
+                width: 0.w,
+                height: 0.h,
               )
             : Theme.of(context).platform == TargetPlatform.iOS
                 ? GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5.0),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
                       child: Icon(
                         CupertinoIcons.back,
+                        size: 22.sp,
                       ),
                     ),
                   )
@@ -265,6 +266,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
         //     ),
         //   ),
         // ),
+        SizedBox(
+          width: 8.w,
+        ),
         BlocBuilder<CountryBloc, CountryState>(
           builder: (context, state) {
             if (state is CountryInitial) {
@@ -279,9 +283,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         return const SearchPage();
                       }));
                     },
-                    child: const Icon(
+                    child: Icon(
                       Icons.search,
                       color: AppColor.backgroundColor,
+                      size: 22.sp,
                     ),
                   ),
                   SizedBox(
@@ -296,9 +301,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     },
                     child: Stack(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.notifications,
                           color: AppColor.backgroundColor,
+                          size: 22.sp,
                         ),
                         BlocBuilder<NotificationsBloc, NotificationsState>(
                           bloc: notiBloc,
@@ -348,16 +354,18 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     currency,
                     style: TextStyle(
                       color: AppColor.backgroundColor,
-                      fontSize: 12.sp, // Adjust the font size
+                      fontSize: 16.sp, // Adjust the font size
                     ),
                   ),
                   SizedBox(
                     width: 10.w,
                   ),
                   CountryCodePicker(
+                    flagWidth: 32.w,
                     searchStyle: const TextStyle(color: AppColor.black),
-                    dialogTextStyle: const TextStyle(
+                    dialogTextStyle: TextStyle(
                       color: AppColor.black,
+                      fontSize: 10.sp,
                     ),
                     boxDecoration: BoxDecoration(
                       color: const Color.fromARGB(255, 209, 219, 235)
@@ -406,10 +414,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
             return Container();
           },
         ),
+        const Spacer(),
         Image.asset(
           "assets/images/netzoon-logo.png",
-          fit: BoxFit.cover,
-          width: 150,
+          fit: BoxFit.contain,
+          width: 120.w,
         ),
       ],
     );

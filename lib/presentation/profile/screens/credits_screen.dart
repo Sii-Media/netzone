@@ -12,14 +12,16 @@ class CreditScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60.h,
         backgroundColor: AppColor.white,
         leading: GestureDetector(
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_rounded,
             color: AppColor.backgroundColor,
+            size: 22.sp,
           ),
         ),
         title: Text(
@@ -33,7 +35,7 @@ class CreditScreen extends StatelessWidget {
             children: [
               Container(
                 width: double.infinity,
-                height: 100,
+                height: 100.h,
                 decoration: BoxDecoration(
                     color: AppColor.backgroundColor.withOpacity(0.3),
                     borderRadius: BorderRadius.circular(10)),
@@ -93,12 +95,13 @@ class CreditScreen extends StatelessWidget {
                       fontSize: 17.sp,
                     ),
                   ),
-                  leading: const Icon(
+                  leading: Icon(
                     Icons.credit_card,
-                    size: 34,
+                    size: 34.sp,
                   ),
-                  trailing: const Icon(
+                  trailing: Icon(
                     Icons.arrow_forward_ios_rounded,
+                    size: 15.sp,
                   ),
                   onTap: () {
                     Navigator.of(context)

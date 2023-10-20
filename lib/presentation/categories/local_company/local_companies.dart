@@ -53,7 +53,7 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Padding(
-                          padding: const EdgeInsets.only(bottom: 60.0),
+                          padding: EdgeInsets.only(bottom: 60.0.h, top: 20.h),
                           child:
                               BlocBuilder<LocalCompanyBloc, LocalCompanyState>(
                             bloc: localCompanyBloc,
@@ -87,8 +87,9 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
                                           TextFormField(
                                             controller: controller,
                                             decoration: InputDecoration(
-                                              prefixIcon: const Icon(
+                                              prefixIcon: Icon(
                                                 Icons.search,
+                                                size: 15.sp,
                                               ),
                                               hintText:
                                                   AppLocalizations.of(context)
@@ -113,14 +114,14 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
                                             },
                                           ),
                                           SizedBox(
-                                            height: 4.h,
+                                            height: 8.h,
                                           ),
                                           Expanded(
                                             child: GridView.builder(
                                               gridDelegate:
                                                   SliverGridDelegateWithFixedCrossAxisCount(
                                                       crossAxisCount: 2,
-                                                      childAspectRatio: 0.85,
+                                                      childAspectRatio: 0.85.h,
                                                       crossAxisSpacing: 10.w,
                                                       mainAxisSpacing: 10.h),
                                               shrinkWrap: true,
@@ -139,7 +140,7 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
                                                     onTap: () {},
                                                     child: Container(
                                                       margin: const EdgeInsets
-                                                              .symmetric(
+                                                          .symmetric(
                                                           vertical: 10),
                                                       child: GestureDetector(
                                                         onTap: () {
@@ -180,7 +181,8 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
                                                                               url,
                                                                               downloadProgress) =>
                                                                           Padding(
-                                                                        padding: const EdgeInsets.symmetric(
+                                                                        padding: const EdgeInsets
+                                                                            .symmetric(
                                                                             horizontal:
                                                                                 70.0,
                                                                             vertical:

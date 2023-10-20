@@ -528,8 +528,11 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       });
                     },
                     child: showPass
-                        ? const Icon(Icons.visibility_off)
-                        : const Icon(Icons.visibility),
+                        ? Icon(
+                            Icons.visibility_off,
+                            size: 15.sp,
+                          )
+                        : Icon(Icons.visibility, size: 15.sp),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(2),
@@ -1219,12 +1222,10 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         activeColor: AppColor.backgroundColor,
                       ),
                       Row(
-                        children: const [
-                          Icon(
-                            Icons.work_outline_outlined,
-                            color: AppColor.backgroundColor,
-                          ),
-                          Text('Work')
+                        children: [
+                          Icon(Icons.work_outline_outlined,
+                              color: AppColor.backgroundColor, size: 15.sp),
+                          const Text('Work')
                         ],
                       )
                     ],
@@ -1245,12 +1246,10 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         activeColor: AppColor.backgroundColor,
                       ),
                       Row(
-                        children: const [
-                          Icon(
-                            Icons.home,
-                            color: AppColor.backgroundColor,
-                          ),
-                          Text('Home'),
+                        children: [
+                          Icon(Icons.home,
+                              color: AppColor.backgroundColor, size: 15.sp),
+                          const Text('Home'),
                         ],
                       ),
                     ],
@@ -1810,7 +1809,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 ),
               ),
               SizedBox(
-                height: 80.h,
+                height: 190.h,
               ),
             ],
           ),

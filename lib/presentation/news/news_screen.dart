@@ -207,7 +207,7 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
                             ],
                           ),
                           SizedBox(
-                            height: 240.h,
+                            height: 250.h,
                             child: InkWell(
                               onTap: () {
                                 Navigator.of(context).push(
@@ -272,7 +272,7 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 5),
-                                                height: 50.h,
+                                                height: 70.h,
                                                 child: Text(
                                                   widget.news[index].title,
                                                   style: TextStyle(
@@ -345,6 +345,7 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
                                             color: isLikedList[index]
                                                 ? AppColor.red
                                                 : AppColor.black,
+                                            size: 23.sp,
                                           ),
                                         ),
                                         // IconButton(
@@ -379,8 +380,9 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
                                               }),
                                             );
                                           },
-                                          child: const Icon(
+                                          child: Icon(
                                             Feather.message_square,
+                                            size: 23.sp,
                                           ),
                                         ),
                                         SizedBox(
@@ -395,8 +397,9 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
                                                   .news[index].description,
                                             );
                                           },
-                                          child: const Icon(
+                                          child: Icon(
                                             Feather.share_2,
+                                            size: 23.sp,
                                           ),
                                         ),
                                       ],

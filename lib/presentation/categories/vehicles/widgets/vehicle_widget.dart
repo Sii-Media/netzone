@@ -139,9 +139,9 @@ class VehicleWidget extends StatelessWidget {
                                 countryState.selectedCountry,
                                 context,
                               ),
-                              style: const TextStyle(
+                              style: TextStyle(
                                   color: AppColor.backgroundColor,
-                                  fontSize: 10),
+                                  fontSize: 10.sp),
                             )
                           ]),
                     ),

@@ -135,9 +135,10 @@ class _RealEstateDetailsScreenState extends State<RealEstateDetailsScreen> {
                                                   description: widget
                                                       .realEstate.description);
                                             },
-                                            icon: const Icon(
+                                            icon: Icon(
                                               Icons.share,
                                               color: AppColor.backgroundColor,
+                                              size: 15.sp,
                                             ),
                                           ),
                                           // const Icon(

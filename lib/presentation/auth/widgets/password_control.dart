@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 
 typedef PasswordControlValidator = String? Function(String? value);
@@ -43,6 +44,7 @@ class _PasswordControlState extends State<PasswordControl> {
             icon: Icon(
               _obscureText ? Icons.visibility : Icons.visibility_off,
               color: Theme.of(context).iconTheme.color,
+              size: 15.sp,
             ),
             onPressed: _toggle),
       ),

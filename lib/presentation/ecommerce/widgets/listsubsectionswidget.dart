@@ -48,7 +48,7 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
             child: Card(
               elevation: 3,
               child: SizedBox(
-                height: 302.h,
+                height: 340.h,
                 child: Padding(
                   padding: EdgeInsets.all(size.height * 0.002),
                   child: Stack(
@@ -101,7 +101,7 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                             ),
                           ),
                           SizedBox(
-                            height: 43.h,
+                            height: 65.h,
                             child: Text(
                               widget.deviceList.description,
                               style: TextStyle(
@@ -201,10 +201,14 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                                                 ));
                                               }
                                             },
-                                            child: const Icon(
+                                            child: Icon(
                                               Icons.shopping_cart_outlined,
                                               color: AppColor.backgroundColor,
+                                              size: 23.sp,
                                             ),
+                                          ),
+                                          SizedBox(
+                                            width: 4.w,
                                           ),
                                           GestureDetector(
                                             onTap: () async {
@@ -215,9 +219,10 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                                                     widget.deviceList.name,
                                               );
                                             },
-                                            child: const Icon(
+                                            child: Icon(
                                               Icons.share,
                                               color: AppColor.backgroundColor,
+                                              size: 23.sp,
                                             ),
                                           ),
                                         ],

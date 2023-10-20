@@ -71,8 +71,9 @@ class _RealEstateListScreenState extends State<RealEstateListScreen> {
                       child: TextFormField(
                         controller: controller,
                         decoration: InputDecoration(
-                          prefixIcon: const Icon(
+                          prefixIcon: Icon(
                             Icons.search,
+                            size: 15.sp,
                           ),
                           hintText:
                               AppLocalizations.of(context).translate('search'),
@@ -99,12 +100,11 @@ class _RealEstateListScreenState extends State<RealEstateListScreen> {
                         shrinkWrap: true,
                         physics: const BouncingScrollPhysics(),
                         itemCount: filteredRealEstate.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           childAspectRatio: 1.2,
-                          crossAxisSpacing: 16.0,
-                          mainAxisSpacing: 16.0,
+                          crossAxisSpacing: 16.0.w,
+                          mainAxisSpacing: 16.0.h,
                         ),
                         itemBuilder: (context, index) {
                           return GestureDetector(

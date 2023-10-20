@@ -43,11 +43,11 @@ class _CompanyServiceDetailsScreenState
   @override
   void initState() {
     authBloc.add(AuthCheckRequested());
-    _videoPlayerController =
-        VideoPlayerController.network(widget.companyService.vedioUrl ?? '')
-          ..initialize().then((_) {
-            setState(() {});
-          });
+    _videoPlayerController = VideoPlayerController.networkUrl(
+        Uri.parse(widget.companyService.vedioUrl ?? ''))
+      ..initialize().then((_) {
+        setState(() {});
+      });
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController,
       aspectRatio: 16 / 9,
@@ -130,7 +130,7 @@ class _CompanyServiceDetailsScreenState
               }
             },
             child: Padding(
-              padding: EdgeInsets.only(bottom: 20.0.h),
+              padding: EdgeInsets.symmetric(vertical: 20.h),
               child: SingleChildScrollView(
                 child: Card(
                   child: Column(
@@ -206,16 +206,21 @@ class _CompanyServiceDetailsScreenState
                                                   description: widget
                                                       .companyService.title);
                                             },
-                                            icon: const Icon(
+                                            icon: Icon(
                                               Icons.share,
                                               color: AppColor.backgroundColor,
+                                              size: 22.sp,
                                             ),
+                                          ),
+                                          SizedBox(
+                                            width: 8.w,
                                           ),
                                           IconButton(
                                             onPressed: () async {},
-                                            icon: const Icon(
+                                            icon: Icon(
                                               Icons.favorite,
                                               color: AppColor.backgroundColor,
+                                              size: 22.sp,
                                             ),
                                           ),
                                         ],
@@ -230,9 +235,9 @@ class _CompanyServiceDetailsScreenState
                                     children: [
                                       Text(
                                         '${widget.companyService.averageRating}',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             color: AppColor.secondGrey,
-                                            fontSize: 18,
+                                            fontSize: 18.sp,
                                             fontWeight: FontWeight.w600),
                                       ),
                                       GestureDetector(
@@ -249,7 +254,7 @@ class _CompanyServiceDetailsScreenState
                                           initialRating: widget.companyService
                                                   .averageRating ??
                                               0,
-                                          itemSize: 18,
+                                          itemSize: 18.sp,
                                           ignoreGestures: true,
                                           itemBuilder: (context, _) {
                                             return const Icon(
@@ -264,9 +269,9 @@ class _CompanyServiceDetailsScreenState
                                       ),
                                       Text(
                                         '(${widget.companyService.totalRatings} ${AppLocalizations.of(context).translate('review')})',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           color: AppColor.secondGrey,
-                                          fontSize: 14,
+                                          fontSize: 14.sp,
                                         ),
                                       ),
                                       BlocBuilder<AuthBloc, AuthState>(
@@ -331,10 +336,6 @@ class _CompanyServiceDetailsScreenState
                       ),
                       Row(
                         children: [
-                          // Text(
-                          //   '${AppLocalizations.of(context).translate('Product details')}: ',
-                          //   style: TextStyle(color: Colors.grey[600], fontSize: 16.sp),
-                          // ),
                           SizedBox(
                             width: 10.w,
                           ),
@@ -369,7 +370,7 @@ class _CompanyServiceDetailsScreenState
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 2,
-                                          childAspectRatio: 0.94),
+                                          childAspectRatio: 0.92),
                                   itemBuilder: (BuildContext context, index) {
                                     return ClipRRect(
                                       borderRadius: BorderRadius.circular(25.0),
@@ -427,7 +428,7 @@ class _CompanyServiceDetailsScreenState
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        height: 60.0,
+        height: 60.0.h,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -447,7 +448,7 @@ class _CompanyServiceDetailsScreenState
                   borderRadius: BorderRadius.circular(18.0),
                 )),
                 fixedSize: MaterialStateProperty.all(
-                  const Size.fromWidth(100),
+                  Size.fromWidth(100.w),
                 ),
               ),
               child: Text(AppLocalizations.of(context).translate('chat')),

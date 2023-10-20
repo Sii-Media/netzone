@@ -279,14 +279,18 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                     color: AppColor.backgroundColor
                                         .withOpacity(0.8),
                                     alignment: Alignment.center,
-                                    child: Text(
-                                      textAlign: TextAlign.center,
-                                      AppLocalizations.of(context).translate(
-                                          widget.categories[index].name),
-                                      style: TextStyle(
-                                          fontSize: 8.sp,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w800),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 2.0),
+                                      child: Text(
+                                        textAlign: TextAlign.center,
+                                        AppLocalizations.of(context).translate(
+                                            widget.categories[index].name),
+                                        style: TextStyle(
+                                            fontSize: 12.sp,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w900),
+                                      ),
                                     ),
                                   ),
                                 )

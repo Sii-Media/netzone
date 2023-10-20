@@ -63,8 +63,8 @@ class _UserTypeState extends State<UserType> {
                         selectedValue ??
                             AppLocalizations.of(context)
                                 .translate('choose_user_type'),
-                        style: const TextStyle(
-                          fontSize: 14,
+                        style: TextStyle(
+                          fontSize: 14.sp,
                           color: AppColor.black,
                         ),
                       ),
@@ -76,8 +76,8 @@ class _UserTypeState extends State<UserType> {
                           value: item,
                           child: Text(
                             AppLocalizations.of(context).translate(item),
-                            style: const TextStyle(
-                              fontSize: 14,
+                            style: TextStyle(
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                             ),
@@ -86,6 +86,7 @@ class _UserTypeState extends State<UserType> {
                         ))
                     .toList(),
                 value: selectedValue,
+                style: TextStyle(fontSize: 10.sp),
                 onChanged: (value) {
                   setState(() {
                     selectedValue = value as String;
@@ -115,18 +116,18 @@ class _UserTypeState extends State<UserType> {
                   ),
                   elevation: 2,
                 ),
-                iconStyleData: const IconStyleData(
-                  icon: Icon(
+                iconStyleData: IconStyleData(
+                  icon: const Icon(
                     color: AppColor.backgroundColor,
                     Icons.arrow_downward_rounded,
                   ),
-                  iconSize: 14,
+                  iconSize: 14.sp,
                   iconEnabledColor: Colors.black,
                   iconDisabledColor: Colors.grey,
                 ),
                 dropdownStyleData: DropdownStyleData(
-                  maxHeight: 200,
-                  width: 200,
+                  maxHeight: 200.h,
+                  width: 200.w,
                   padding: null,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(14),

@@ -18,8 +18,8 @@ Widget roundedIconText(
         GestureDetector(
           onTap: onTap,
           child: Container(
-            height: 35.h,
-            width: 35.w,
+            height: 35.r,
+            width: 35.r,
             padding: const EdgeInsets.all(0.5),
             decoration: const BoxDecoration(
               color: AppColor.backgroundColor,
@@ -31,7 +31,7 @@ Widget roundedIconText(
               child: Icon(
                 icon,
                 color: AppColor.white,
-                size: 20,
+                size: 16.sp,
               ),
             ),
           ),

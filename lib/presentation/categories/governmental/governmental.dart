@@ -106,7 +106,7 @@ class _GovernmentInstitutionScreenState
                     ),
                   ),
                   Positioned(
-                    top: 202.h,
+                    top: 210.h,
                     right: 0,
                     left: 0,
                     child: Container(
@@ -115,7 +115,10 @@ class _GovernmentInstitutionScreenState
                       height: MediaQuery.of(context).size.height - 191.h,
                       child: SingleChildScrollView(
                         child: Padding(
-                          padding: const EdgeInsets.all(20.0),
+                          padding: EdgeInsets.only(
+                            top: 20.h,
+                            bottom: 60.h,
+                          ),
                           child: GridView.builder(
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
@@ -154,8 +157,8 @@ class _GovernmentInstitutionScreenState
                                               .companies
                                               .govermentalCompanies[index]
                                               .imgurl,
-                                          height: 120,
-                                          width: 160,
+                                          height: 120.h,
+                                          width: 160.w,
                                           fit: BoxFit.fill,
                                           progressIndicatorBuilder: (context,
                                                   url, downloadProgress) =>
@@ -188,7 +191,7 @@ class _GovernmentInstitutionScreenState
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                           ),
-                                        )
+                                        ),
                                       ],
                                     ),
                                   ),

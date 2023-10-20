@@ -19,6 +19,8 @@ class OnEditProfileEvent extends EditProfileEvent {
   final String? website;
   final String? link;
   final String? slogn;
+  final String? address;
+
   const OnEditProfileEvent({
     required this.username,
     required this.email,
@@ -31,5 +33,6 @@ class OnEditProfileEvent extends EditProfileEvent {
     this.website,
     this.link,
     this.slogn,
+    this.address,
   });
 }

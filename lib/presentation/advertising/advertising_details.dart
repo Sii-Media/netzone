@@ -253,13 +253,14 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                               adsBloc.add(GetAdsByIdEvent(id: widget.adsId));
                             });
                       } else if (state is GetAdsByIdSuccess) {
-                        _videoPlayerController = VideoPlayerController.network(
-                            state.ads.advertisingVedio ?? '')
-                          ..initialize().then((_) {
-                            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-                            _videoPlayerController.play();
-                            setState(() {});
-                          });
+                        _videoPlayerController =
+                            VideoPlayerController.networkUrl(
+                                Uri.parse(state.ads.advertisingVedio ?? ''))
+                              ..initialize().then((_) {
+                                // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+                                _videoPlayerController.play();
+                                setState(() {});
+                              });
                         _chewieController = ChewieController(
                           videoPlayerController: _videoPlayerController,
                           aspectRatio: 16 / 9,
@@ -337,10 +338,11 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                                                         description:
                                                             state.ads.name);
                                                   },
-                                                  icon: const Icon(
+                                                  icon: Icon(
                                                     Icons.share,
                                                     color: AppColor
                                                         .backgroundColor,
+                                                    size: 15.sp,
                                                   ),
                                                 ),
                                               ],
@@ -424,10 +426,11 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                                                               );
                                                             }));
                                                           },
-                                                          icon: const Icon(
+                                                          icon: Icon(
                                                             Icons.edit,
                                                             color: AppColor
                                                                 .backgroundColor,
+                                                            size: 15.sp,
                                                           ),
                                                         ),
                                                         IconButton(
@@ -438,9 +441,10 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                                                                         .ads
                                                                         .id));
                                                           },
-                                                          icon: const Icon(
+                                                          icon: Icon(
                                                             Icons.delete,
                                                             color: AppColor.red,
+                                                            size: 15.sp,
                                                           ),
                                                         ),
                                                       ],
@@ -637,7 +641,7 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                                           gridDelegate:
                                               const SliverGridDelegateWithFixedCrossAxisCount(
                                                   crossAxisCount: 2,
-                                                  childAspectRatio: 0.94),
+                                                  childAspectRatio: 0.90),
                                           itemBuilder:
                                               (BuildContext context, index) {
                                             return ClipRRect(
@@ -734,8 +738,8 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                                   RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0),
                               )),
-                              fixedSize: const MaterialStatePropertyAll(
-                                Size.fromWidth(200),
+                              fixedSize: MaterialStatePropertyAll(
+                                Size.fromWidth(200.w),
                               ),
                             ),
                             child: Text(AppLocalizations.of(context)

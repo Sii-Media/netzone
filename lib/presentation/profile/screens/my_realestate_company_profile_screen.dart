@@ -334,10 +334,12 @@ class _MyRealEstateCompanyProfileScreenState
                             Tab(
                               text: AppLocalizations.of(context)
                                   .translate('about_us'),
+                              height: 35.h,
                             ),
                             Tab(
                               text: AppLocalizations.of(context)
                                   .translate('real_estate'),
+                              height: 35.h,
                             ),
                           ],
                         ),
@@ -492,7 +494,7 @@ class _MyRealEstateCompanyProfileScreenState
                                                                             downloadProgress) =>
                                                                         Padding(
                                                                   padding: const EdgeInsets
-                                                                          .symmetric(
+                                                                      .symmetric(
                                                                       horizontal:
                                                                           70.0,
                                                                       vertical:
@@ -539,10 +541,11 @@ class _MyRealEstateCompanyProfileScreenState
                                                               ),
                                                             ),
                                                             Padding(
-                                                              padding: const EdgeInsets
+                                                              padding:
+                                                                  const EdgeInsets
                                                                       .symmetric(
-                                                                  horizontal:
-                                                                      6.0),
+                                                                      horizontal:
+                                                                          6.0),
                                                               child: Align(
                                                                 alignment: Alignment
                                                                     .bottomCenter,

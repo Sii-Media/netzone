@@ -93,6 +93,7 @@ class ListOfPictures extends StatelessWidget {
                     },
                     icon: const Icon(Icons.share),
                     color: AppColor.backgroundColor,
+                    iconSize: 15.sp,
                   ),
                   // IconButton(
                   //   onPressed: () {},

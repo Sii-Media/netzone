@@ -326,6 +326,7 @@ class _MyVehicleProfileScreenState extends State<MyVehicleProfileScreen>
                               Tab(
                                 text: AppLocalizations.of(context)
                                     .translate('about_us'),
+                                height: 35.h,
                               ),
                               Tab(
                                 text: state.userInfo.userType == 'car'
@@ -333,6 +334,7 @@ class _MyVehicleProfileScreenState extends State<MyVehicleProfileScreen>
                                         .translate('cars')
                                     : AppLocalizations.of(context)
                                         .translate('planes'),
+                                height: 35.h,
                               ),
                             ],
                           ),
@@ -495,7 +497,7 @@ class _MyVehicleProfileScreenState extends State<MyVehicleProfileScreen>
                                                     child: ClipRRect(
                                                       borderRadius:
                                                           const BorderRadius
-                                                                  .all(
+                                                              .all(
                                                               Radius.circular(
                                                                   20)),
                                                       child: GestureDetector(
@@ -534,7 +536,7 @@ class _MyVehicleProfileScreenState extends State<MyVehicleProfileScreen>
                                                                           downloadProgress) =>
                                                                       Padding(
                                                                 padding: const EdgeInsets
-                                                                        .symmetric(
+                                                                    .symmetric(
                                                                     horizontal:
                                                                         70.0,
                                                                     vertical:
@@ -558,7 +560,7 @@ class _MyVehicleProfileScreenState extends State<MyVehicleProfileScreen>
                                                             Padding(
                                                               padding:
                                                                   const EdgeInsets
-                                                                          .only(
+                                                                      .only(
                                                                       right:
                                                                           9.0,
                                                                       left: 9.0,
@@ -730,7 +732,7 @@ class _MyVehicleProfileScreenState extends State<MyVehicleProfileScreen>
                 ),
               ),
               SizedBox(
-                width: 190,
+                width: 190.w,
                 child: Text(
                   input,
                   style: TextStyle(

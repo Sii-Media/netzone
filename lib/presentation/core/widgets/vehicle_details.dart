@@ -33,13 +33,13 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
 
   @override
   void initState() {
-    _videoPlayerController =
-        VideoPlayerController.network(widget.vehicle.vedioUrl ?? '')
-          ..initialize().then((_) {
-            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-            _videoPlayerController.play();
-            setState(() {});
-          });
+    _videoPlayerController = VideoPlayerController.networkUrl(
+        Uri.parse(widget.vehicle.vedioUrl ?? ''))
+      ..initialize().then((_) {
+        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+        _videoPlayerController.play();
+        setState(() {});
+      });
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController,
       aspectRatio: 16 / 9,
@@ -65,7 +65,7 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
         isHome: false,
         widget: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.only(bottom: 30.0.h),
+            padding: EdgeInsets.only(bottom: 30.0.h, top: 20.h),
             child: BlocBuilder<CountryBloc, CountryState>(
               bloc: countryBloc,
               builder: (context, countryState) {
@@ -115,13 +115,6 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      // Text(
-                                      //   '${widget.vehicle.price.toString()} \$',
-                                      //   style: TextStyle(
-                                      //       color: AppColor.colorOne,
-                                      //       fontSize: 17.sp,
-                                      //       fontWeight: FontWeight.bold),
-                                      // ),
                                       RichText(
                                         text: TextSpan(
                                             style: TextStyle(
@@ -159,9 +152,10 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                                   description: widget
                                                       .vehicle.description);
                                             },
-                                            icon: const Icon(
+                                            icon: Icon(
                                               Icons.share,
                                               color: AppColor.backgroundColor,
+                                              size: 15.sp,
                                             ),
                                           ),
                                           // const Icon(
@@ -596,8 +590,8 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
                   )),
-                  fixedSize: const MaterialStatePropertyAll(
-                    Size.fromWidth(100),
+                  fixedSize: MaterialStatePropertyAll(
+                    Size.fromWidth(100.w),
                   ),
                 ),
                 child: Text(AppLocalizations.of(context).translate('chat'))),

@@ -25,8 +25,6 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
-  // Declare a variable to store the current position
-
   bool isGetLocation = false;
   Future<Position> _getCurrentLocation() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -201,7 +199,7 @@ class _StartScreenState extends State<StartScreen> {
     }
     return await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best,
-        timeLimit: const Duration(seconds: 10));
+        timeLimit: const Duration(seconds: 20));
   }
 
   @override
@@ -260,8 +258,8 @@ class _StartScreenState extends State<StartScreen> {
                         child: Text(
                           AppLocalizations.of(context)
                               .translate(currentLanguage),
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: TextStyle(
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
                             color: AppColor.white,
                           ),
@@ -287,9 +285,8 @@ class _StartScreenState extends State<StartScreen> {
                           ),
                           child: CountryCodePicker(
                             searchStyle: const TextStyle(color: AppColor.black),
-                            dialogTextStyle: const TextStyle(
-                              color: AppColor.black,
-                            ),
+                            dialogTextStyle: TextStyle(
+                                color: AppColor.black, fontSize: 10.sp),
                             boxDecoration: BoxDecoration(
                               color: const Color.fromARGB(255, 209, 219, 235)
                                   .withOpacity(0.8),
@@ -340,16 +337,16 @@ class _StartScreenState extends State<StartScreen> {
                             }),
                           );
                         },
-                        style: const ButtonStyle(
-                            side: MaterialStatePropertyAll(
+                        style: ButtonStyle(
+                            side: const MaterialStatePropertyAll(
                               BorderSide(
                                 color: AppColor.white,
                               ),
                             ),
-                            backgroundColor: MaterialStatePropertyAll(
+                            backgroundColor: const MaterialStatePropertyAll(
                                 AppColor.backgroundColor),
-                            fixedSize:
-                                MaterialStatePropertyAll(Size.fromWidth(100))),
+                            fixedSize: MaterialStatePropertyAll(
+                                Size.fromWidth(100.w))),
                         child: Text(
                           AppLocalizations.of(context).translate('next'),
                         ),

@@ -82,7 +82,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>
           ),
           leading: Icon(
             icon,
-            size: 34,
+            size: 24.sp,
           ),
         ),
       ),
@@ -526,13 +526,13 @@ class _UserProfileScreenState extends State<UserProfileScreen>
                                   fontSize: 17.sp,
                                   fontWeight: FontWeight.w600),
                             ),
-                            leading: const Icon(
+                            leading: Icon(
                               Icons.edit,
-                              size: 34,
+                              size: 24.sp,
                             ),
-                            trailing: const Icon(
+                            trailing: Icon(
                               Icons.arrow_forward_ios,
-                              size: 27,
+                              size: 24.sp,
                             ),
                             onTap: () {
                               Navigator.of(context)

@@ -114,8 +114,8 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                           adsBloc.add(GetAdsByIdEvent(id: widget.adsId));
                         });
                   } else if (state is GetAdsByIdSuccess) {
-                    _videoPlayerController = VideoPlayerController.network(
-                        state.ads.advertisingVedio ?? '')
+                    _videoPlayerController = VideoPlayerController.networkUrl(
+                        Uri.parse(state.ads.advertisingVedio ?? ''))
                       ..initialize().then((_) {
                         _videoPlayerController.play();
                         setState(() {});
@@ -134,8 +134,8 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(100),
                                 child: CachedNetworkImage(
-                                  width: 35.w,
-                                  height: 35.h,
+                                  width: 35.r,
+                                  height: 35.r,
                                   fit: BoxFit.cover,
                                   progressIndicatorBuilder:
                                       (context, url, downloadProgress) =>
@@ -217,9 +217,10 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                                                 );
                                               }));
                                             },
-                                            icon: const Icon(
+                                            icon: Icon(
                                               Icons.edit,
                                               color: AppColor.backgroundColor,
+                                              size: 15.sp,
                                             ),
                                           ),
                                           IconButton(
@@ -227,9 +228,10 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                                               adsBloc.add(DeleteAdsEvent(
                                                   id: state.ads.id));
                                             },
-                                            icon: const Icon(
+                                            icon: Icon(
                                               Icons.delete,
                                               color: AppColor.red,
+                                              size: 15.sp,
                                             ),
                                           ),
                                         ],
@@ -245,15 +247,16 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                                 children: [
                                   Row(
                                     children: [
-                                      const Icon(
+                                      Icon(
                                         Icons.location_on_outlined,
                                         color: AppColor.secondGrey,
+                                        size: 15.sp,
                                       ),
                                       Text(
                                         state.ads.advertisingLocation,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           color: AppColor.secondGrey,
-                                          fontSize: 14,
+                                          fontSize: 14.sp,
                                         ),
                                       ),
                                     ],
@@ -311,9 +314,10 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                                                   state.ads.advertisingImage,
                                               description: state.ads.name);
                                         },
-                                        icon: const Icon(
+                                        icon: Icon(
                                           Icons.share,
                                           color: AppColor.backgroundColor,
+                                          size: 15.sp,
                                         ),
                                       ),
                                     ],
@@ -449,7 +453,7 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                           ),
                         ),
                         SizedBox(
-                          height: 120.h,
+                          height: 140.h,
                         ),
                       ],
                     );
@@ -483,8 +487,8 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                         shape: MaterialStateProperty.all(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
                         )),
-                        fixedSize: const MaterialStatePropertyAll(
-                          Size.fromWidth(100),
+                        fixedSize: MaterialStatePropertyAll(
+                          Size.fromWidth(100.w),
                         ),
                       ),
                       child:

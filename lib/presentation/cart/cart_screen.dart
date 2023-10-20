@@ -377,7 +377,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                             horizontal: 20,
                             vertical: 10,
                           ),
-                          height: 200.h,
+                          height: 220.h,
                           decoration: const BoxDecoration(
                               color: AppColor.backgroundColor,
                               borderRadius: BorderRadius.only(
@@ -596,8 +596,8 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                                   child: Text(
                                     AppLocalizations.of(context)
                                         .translate('check_out'),
-                                    style: const TextStyle(
-                                      fontSize: 16,
+                                    style: TextStyle(
+                                      fontSize: 16.sp,
                                       fontWeight: FontWeight.bold,
                                       color: AppColor.white,
                                     ),

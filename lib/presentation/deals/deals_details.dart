@@ -214,9 +214,10 @@ class _DealDetailsState extends State<DealDetails> {
                                         );
                                       }));
                                     },
-                                    icon: const Icon(
+                                    icon: Icon(
                                       Icons.edit,
                                       color: AppColor.backgroundColor,
+                                      size: 15.sp,
                                     ),
                                   ),
                                   IconButton(
@@ -224,9 +225,10 @@ class _DealDetailsState extends State<DealDetails> {
                                       dealBloc.add(DeleteDealEvent(
                                           id: state.deal.id ?? ''));
                                     },
-                                    icon: const Icon(
+                                    icon: Icon(
                                       Icons.delete,
                                       color: AppColor.red,
+                                      size: 15.sp,
                                     ),
                                   ),
                                 ],
@@ -367,11 +369,10 @@ class _DealDetailsState extends State<DealDetails> {
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColor.backgroundColor,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
+                                padding: EdgeInsets.symmetric(horizontal: 20.h),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5)),
-                                textStyle: const TextStyle(fontSize: 15)),
+                                textStyle: TextStyle(fontSize: 15.sp)),
                             child: Text(AppLocalizations.of(context)
                                 .translate('اشتري الان'))),
                       ),
@@ -417,7 +418,7 @@ Padding titleAndInput({required String title, required String input}) {
                   fontWeight: FontWeight.w600),
             ),
             SizedBox(
-              width: 190,
+              width: 190.w,
               child: Text(
                 input,
                 style: TextStyle(

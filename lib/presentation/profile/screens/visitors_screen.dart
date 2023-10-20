@@ -32,6 +32,7 @@ class _VisitorsScreenState extends State<VisitorsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60.h,
         title: Text(
           AppLocalizations.of(context).translate('visitors'),
           style: const TextStyle(
@@ -43,9 +44,10 @@ class _VisitorsScreenState extends State<VisitorsScreen> {
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_rounded,
             color: AppColor.backgroundColor,
+            size: 22.sp,
           ),
         ),
       ),

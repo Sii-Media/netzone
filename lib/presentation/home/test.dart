@@ -215,7 +215,7 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                       backgroundColor: AppColor.white,
                       activeColor: AppColor.backgroundColor,
                       inactiveColor: AppColor.backgroundColor.withOpacity(0.9),
-                      height: 60,
+                      height: 40.h,
                       border: Border(
                         top: BorderSide(
                           width: 1,
@@ -223,8 +223,28 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                         ),
                       ),
                       items: [
-                        const BottomNavigationBarItem(
-                          icon: Icon(CupertinoIcons.home),
+                        BottomNavigationBarItem(
+                          icon: GestureDetector(
+                            onTap: () async {
+                              final isFirstRouteInCurrentTab =
+                                  !await listOfKeys[tabController.index]
+                                      .currentState!
+                                      .maybePop();
+                              if (isFirstRouteInCurrentTab) {
+                                if (tabController.index == 0) {
+                                  listOfKeys[0]
+                                      .currentState
+                                      ?.popUntil((route) => route.isFirst);
+                                } else {
+                                  tabController.index = 0;
+                                }
+                              }
+                            },
+                            child: Icon(
+                              CupertinoIcons.home,
+                              size: 25.sp,
+                            ),
+                          ),
                           // label: 'Home',
                         ),
                         BottomNavigationBarItem(
@@ -233,8 +253,9 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                           builder: (context, state) {
                             return Stack(
                               children: [
-                                const Icon(
+                                Icon(
                                   CupertinoIcons.cart,
+                                  size: 25.sp,
                                 ),
                                 Positioned(
                                   top: -1,
@@ -245,25 +266,25 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                       color: AppColor.red,
                                       shape: BoxShape.circle,
                                     ),
-                                    constraints: const BoxConstraints(
-                                      minWidth: 16.0,
-                                      minHeight: 16.0,
+                                    constraints: BoxConstraints(
+                                      minWidth: 16.0.r,
+                                      minHeight: 16.0.r,
                                     ),
                                     child: state is CartLoaded
                                         ? Text(
                                             state.totalQuantity.toString(),
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               color: AppColor.white,
-                                              fontSize: 12.0,
+                                              fontSize: 12.0.sp,
                                               fontWeight: FontWeight.bold,
                                             ),
                                             textAlign: TextAlign.center,
                                           )
-                                        : const Text(
+                                        : Text(
                                             '0',
                                             style: TextStyle(
                                               color: AppColor.backgroundColor,
-                                              fontSize: 12.0,
+                                              fontSize: 12.0.sp,
                                               fontWeight: FontWeight.bold,
                                             ),
                                             textAlign: TextAlign.center,
@@ -278,8 +299,8 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                             ),
                         BottomNavigationBarItem(
                           icon: Container(
-                            width: 40,
-                            height: 40,
+                            width: 40.r,
+                            height: 40.r,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: AppColor
@@ -287,22 +308,24 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                               border: Border.all(
                                 color: AppColor
                                     .backgroundColor, // Set the outer circle border color to white
-                                width: 2.0, // Set the outer circle border width
+                                width:
+                                    2.0.w, // Set the outer circle border width
                               ),
                             ),
                             child: Center(
                               child: AnimatedContainer(
                                 duration: const Duration(milliseconds: 200),
-                                width: _isPressed ? 40 : 30,
-                                height: _isPressed ? 40 : 30,
+                                width: _isPressed ? 40.r : 30.r,
+                                height: _isPressed ? 40.r : 30.r,
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: AppColor
                                       .backgroundColor, // Set the outer circle color to blue
                                 ),
-                                child: const Icon(
+                                child: Icon(
                                   Icons.add,
                                   color: AppColor.white,
+                                  size: 25.r,
                                 ),
                               ),
                             ),
@@ -339,8 +362,8 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                                       bottom: 4.0,
                                                     ),
                                                     child: Container(
-                                                      width: 75,
-                                                      height: 7,
+                                                      width: 75.w,
+                                                      height: 7.h,
                                                       decoration:
                                                           const BoxDecoration(
                                                         color:
@@ -396,9 +419,9 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                                                     children: [
                                                                       Container(
                                                                         height:
-                                                                            40,
+                                                                            40.h,
                                                                         width:
-                                                                            40,
+                                                                            40.w,
                                                                         decoration:
                                                                             BoxDecoration(
                                                                           color:
@@ -425,11 +448,11 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                                                         state.user.userInfo.username ??
                                                                             '',
                                                                         style:
-                                                                            const TextStyle(
+                                                                            TextStyle(
                                                                           color:
                                                                               AppColor.white,
                                                                           fontSize:
-                                                                              16,
+                                                                              16.sp,
                                                                           fontWeight:
                                                                               FontWeight.w500,
                                                                         ),
@@ -471,8 +494,10 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                                                         (context,
                                                                             index) {
                                                                       return Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.symmetric(vertical: 4.0),
+                                                                        padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                            vertical:
+                                                                                4.0),
                                                                         child:
                                                                             accountWidget(
                                                                           accountstate:
@@ -528,9 +553,9 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                                                       children: [
                                                                         Container(
                                                                           height:
-                                                                              40,
+                                                                              40.r,
                                                                           width:
-                                                                              40,
+                                                                              40.r,
                                                                           decoration:
                                                                               BoxDecoration(
                                                                             color:
@@ -539,12 +564,12 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                                                                 BorderRadius.circular(100),
                                                                           ),
                                                                           child:
-                                                                              const Icon(
+                                                                              Icon(
                                                                             Icons.add,
                                                                             color:
                                                                                 AppColor.backgroundColor,
                                                                             size:
-                                                                                30,
+                                                                                30.sp,
                                                                           ),
                                                                         ),
                                                                         SizedBox(
@@ -555,17 +580,20 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                                                           AppLocalizations.of(context)
                                                                               .translate('add_account'),
                                                                           style:
-                                                                              const TextStyle(
+                                                                              TextStyle(
                                                                             color:
                                                                                 AppColor.white,
                                                                             fontSize:
-                                                                                16,
+                                                                                16.sp,
                                                                             fontWeight:
                                                                                 FontWeight.w500,
                                                                           ),
                                                                         ),
                                                                       ],
                                                                     ),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 30,
                                                                   ),
                                                                 ],
                                                               ),
@@ -585,8 +613,8 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                     : () {},
                                 child: state is Authenticated
                                     ? Container(
-                                        height: 32,
-                                        width: 32,
+                                        height: 32.r,
+                                        width: 32.r,
                                         decoration: BoxDecoration(
                                           color: AppColor.backgroundColor,
                                           image: DecorationImage(
@@ -599,16 +627,20 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                                               BorderRadius.circular(100),
                                         ),
                                       )
-                                    : const Icon(
+                                    : Icon(
                                         CupertinoIcons.person_alt_circle,
+                                        size: 25.sp,
                                       ),
                               );
                             },
                           ),
                           // label: 'Profile',
                         ),
-                        const BottomNavigationBarItem(
-                          icon: Icon(CupertinoIcons.list_dash),
+                        BottomNavigationBarItem(
+                          icon: Icon(
+                            CupertinoIcons.list_dash,
+                            size: 25.sp,
+                          ),
                           // label: 'More',
                         ),
                       ],
@@ -696,8 +728,8 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
       child: Row(
         children: [
           Container(
-            height: 40,
-            width: 40,
+            height: 40.r,
+            width: 40.r,
             decoration: BoxDecoration(
                 color: AppColor.backgroundColor,
                 image: DecorationImage(
@@ -713,9 +745,9 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
           ),
           Text(
             accountstate.users[index].username ?? '',
-            style: const TextStyle(
+            style: TextStyle(
                 color: AppColor.white,
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w500),
           ),
           const Spacer(),

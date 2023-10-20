@@ -169,9 +169,10 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                             product: widget.cart,
                           ));
                         },
-                        child: const Icon(
+                        child: Icon(
                           Icons.delete_rounded,
                           color: AppColor.red,
+                          size: 15.sp,
                         ),
                       ),
                       const SizedBox(
@@ -201,6 +202,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                               child: Icon(
                                 Icons.add,
                                 color: AppColor.red.withOpacity(0.6),
+                                size: 15.sp,
                               ),
                             ),
                           ),
@@ -238,6 +240,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                               child: Icon(
                                 Icons.remove,
                                 color: AppColor.red.withOpacity(0.6),
+                                size: 15.sp,
                               ),
                             ),
                           ),

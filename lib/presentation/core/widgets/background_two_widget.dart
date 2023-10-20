@@ -99,11 +99,11 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
           ),
           Positioned(
             top: 100.h,
-            right: 0,
+            right: 2.w,
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0.w),
                   child: Text(
                     widget.title,
                     style: TextStyle(
@@ -114,14 +114,14 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
                   isExpanded: true,
                   hint: Row(
                     children: [
-                      const SizedBox(
-                        width: 4,
+                      SizedBox(
+                        width: 4.w,
                       ),
                       Expanded(
                         child: Text(
                           AppLocalizations.of(context).translate('show_all'),
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: TextStyle(
+                            fontSize: 11.sp,
                             color: Colors.black,
                           ),
                         ),
@@ -133,8 +133,8 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
                             value: item,
                             child: Text(
                               AppLocalizations.of(context).translate(item),
-                              style: const TextStyle(
-                                fontSize: 14,
+                              style: TextStyle(
+                                fontSize: 8.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               ),
@@ -160,8 +160,8 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
                     icon: ClipRRect(
                       borderRadius: BorderRadius.circular(10000),
                       child: Container(
-                        height: 20.h,
-                        width: 20.w,
+                        height: 20.r,
+                        width: 20.r,
                         color: AppColor.backgroundColor,
                         child: const Icon(
                           color: AppColor.white,
@@ -169,13 +169,13 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
                         ),
                       ),
                     ),
-                    iconSize: 14,
+                    iconSize: 14.sp,
                     iconEnabledColor: Colors.black,
                     iconDisabledColor: Colors.grey,
                   ),
                   dropdownStyleData: DropdownStyleData(
-                    maxHeight: 240,
-                    width: 200,
+                    maxHeight: 240.h,
+                    width: 200.w,
                     padding: null,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(14),
@@ -215,7 +215,7 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
       elevation: 16,
       style: const TextStyle(color: Colors.deepPurple),
       underline: Container(
-        height: 2,
+        height: 2.h,
         color: Colors.deepPurpleAccent,
       ),
       onChanged: (String? value) {

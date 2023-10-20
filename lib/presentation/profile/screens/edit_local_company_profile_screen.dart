@@ -77,6 +77,7 @@ class _EditLocalCompanyprofileScreenState
   Widget screen(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60.h,
         title: Text(
           AppLocalizations.of(context).translate('edit_profile'),
         ),
@@ -384,7 +385,7 @@ class _EditLocalCompanyprofileScreenState
                       hintText: 'address',
                       prefixIcon: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Icon(Icons.person)),
+                          child: Icon(Icons.location_city)),
                     ),
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
@@ -437,10 +438,6 @@ class _EditLocalCompanyprofileScreenState
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.next,
                     validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return 'field_required_message';
-                      }
-
                       return null;
                     },
                   ),
@@ -461,16 +458,12 @@ class _EditLocalCompanyprofileScreenState
                     maxLines: 3,
                     textInputAction: TextInputAction.next,
                     validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return 'field_required_message';
-                      }
-
                       return null;
                     },
                   ),
                   const SizedBox(height: 25),
                   TextFormField(
-                    controller: _bioController,
+                    controller: _websiteController,
                     style: const TextStyle(
                       color: AppColor.backgroundColor,
                     ),
@@ -484,10 +477,6 @@ class _EditLocalCompanyprofileScreenState
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
                     validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return 'field_required_message';
-                      }
-
                       return null;
                     },
                   ),
@@ -507,10 +496,6 @@ class _EditLocalCompanyprofileScreenState
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
                     validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return 'field_required_message';
-                      }
-
                       return null;
                     },
                   ),
@@ -530,10 +515,6 @@ class _EditLocalCompanyprofileScreenState
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.done,
                     validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return 'field_required_message';
-                      }
-
                       return null;
                     },
                   ),
@@ -565,6 +546,7 @@ class _EditLocalCompanyprofileScreenState
                         Icon(
                           Icons.password,
                           color: Theme.of(context).colorScheme.secondary,
+                          size: 15.sp,
                         ),
                         const SizedBox(width: 10.0),
                         Text(
@@ -572,7 +554,7 @@ class _EditLocalCompanyprofileScreenState
                               .translate('change_password'),
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,
-                            fontSize: 16,
+                            fontSize: 16.sp,
                           ),
                         ),
                         const Spacer(),
@@ -592,13 +574,22 @@ class _EditLocalCompanyprofileScreenState
                     child: ElevatedButton(
                       onPressed: () {
                         if (!_formKey.currentState!.validate()) return;
-                        editBloc.add(OnEditProfileEvent(
+                        editBloc.add(
+                          OnEditProfileEvent(
                             username: _userNameController.text,
                             email: _emailController.text,
                             firstMobile: _firstMobileController.text,
                             secondeMobile: _secondeMobileController.text,
                             thirdMobile: _thirdMobileController.text,
-                            profilePhoto: _updatedImage));
+                            profilePhoto: _updatedImage,
+                            bio: _bioController.text,
+                            description: _descController.text,
+                            link: _linkController.text,
+                            slogn: _slognController.text,
+                            website: _websiteController.text,
+                            address: _addressController.text,
+                          ),
+                        );
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(

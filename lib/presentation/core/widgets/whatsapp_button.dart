@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../constant/colors.dart';
@@ -20,8 +21,8 @@ class WhatsAppButton extends StatelessWidget {
         shape: MaterialStateProperty.all(RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
         )),
-        fixedSize: const MaterialStatePropertyAll(
-          Size.fromWidth(130),
+        fixedSize: MaterialStatePropertyAll(
+          Size.fromWidth(130.w),
         ),
       ),
       child: const Text('WhatsApp'),

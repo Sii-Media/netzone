@@ -61,10 +61,10 @@ class CommentBottomSheet extends StatelessWidget {
                     AddCommentEvent(newsId: newsId, text: textController.text));
                 textController.clear();
               },
-              child: const Icon(
+              child: Icon(
                 Icons.send,
                 color: AppColor.backgroundColor,
-                size: 30,
+                size: 25.sp,
               ),
             ),
           ),

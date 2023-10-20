@@ -385,17 +385,17 @@ Widget changeAccountText(
                                         child: Row(
                                           children: [
                                             Container(
-                                              height: 40,
-                                              width: 40,
+                                              height: 40.r,
+                                              width: 40.r,
                                               decoration: BoxDecoration(
                                                 color: AppColor.white,
                                                 borderRadius:
                                                     BorderRadius.circular(100),
                                               ),
-                                              child: const Icon(
+                                              child: Icon(
                                                 Icons.add,
                                                 color: AppColor.backgroundColor,
-                                                size: 30,
+                                                size: 30.sp,
                                               ),
                                             ),
                                             SizedBox(
@@ -404,9 +404,9 @@ Widget changeAccountText(
                                             Text(
                                               AppLocalizations.of(context)
                                                   .translate('add_account'),
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 color: AppColor.white,
-                                                fontSize: 16,
+                                                fontSize: 16.sp,
                                                 fontWeight: FontWeight.w500,
                                               ),
                                             ),
@@ -428,7 +428,10 @@ Widget changeAccountText(
               },
             );
           },
-          child: const Icon(Icons.keyboard_arrow_down_sharp),
+          child: Icon(
+            Icons.keyboard_arrow_down_sharp,
+            size: 15.sp,
+          ),
         ),
       ],
     ),

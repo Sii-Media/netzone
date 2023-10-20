@@ -327,10 +327,12 @@ class _MyNewsProfileScreenState extends State<MyNewsProfileScreen>
                           Tab(
                             text: AppLocalizations.of(context)
                                 .translate('about_us'),
+                            height: 35.h,
                           ),
                           Tab(
                             text:
                                 AppLocalizations.of(context).translate('news'),
+                            height: 35.h,
                           ),
                         ],
                       ),
@@ -464,7 +466,7 @@ class _MyNewsProfileScreenState extends State<MyNewsProfileScreen>
                                                                             downloadProgress) =>
                                                                         Padding(
                                                                       padding: const EdgeInsets
-                                                                              .symmetric(
+                                                                          .symmetric(
                                                                           horizontal:
                                                                               70.0,
                                                                           vertical:
@@ -516,8 +518,9 @@ class _MyNewsProfileScreenState extends State<MyNewsProfileScreen>
                                                                           ),
                                                                         ),
                                                                         Container(
-                                                                          padding:
-                                                                              const EdgeInsets.symmetric(horizontal: 5),
+                                                                          padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                              horizontal: 5),
                                                                           height:
                                                                               50.h,
                                                                           child:
@@ -533,8 +536,9 @@ class _MyNewsProfileScreenState extends State<MyNewsProfileScreen>
                                                                           ),
                                                                         ),
                                                                         Container(
-                                                                          padding:
-                                                                              const EdgeInsets.symmetric(horizontal: 5),
+                                                                          padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                              horizontal: 5),
                                                                           height:
                                                                               30.h,
                                                                           child:

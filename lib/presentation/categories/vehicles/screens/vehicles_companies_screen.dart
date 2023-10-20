@@ -79,11 +79,15 @@ class _VehiclesCompaniesScreenState extends State<VehiclesCompaniesScreen> {
                       .toList();
                   return Column(
                     children: [
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       TextFormField(
                         controller: controller,
                         decoration: InputDecoration(
-                          prefixIcon: const Icon(
+                          prefixIcon: Icon(
                             Icons.search,
+                            size: 15.sp,
                           ),
                           hintText:
                               AppLocalizations.of(context).translate('search'),
@@ -118,7 +122,7 @@ class _VehiclesCompaniesScreenState extends State<VehiclesCompaniesScreen> {
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 2,
-                                        childAspectRatio: 0.85,
+                                        childAspectRatio: 0.85.h,
                                         crossAxisSpacing: 10.w,
                                         mainAxisSpacing: 10.h),
                                 shrinkWrap: true,
@@ -172,7 +176,7 @@ class _VehiclesCompaniesScreenState extends State<VehiclesCompaniesScreen> {
                                                               Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .symmetric(
+                                                                .symmetric(
                                                                 horizontal:
                                                                     70.0,
                                                                 vertical: 50),
@@ -232,8 +236,8 @@ class _VehiclesCompaniesScreenState extends State<VehiclesCompaniesScreen> {
                                   );
                                 }),
                       ),
-                      const SizedBox(
-                        height: 70,
+                      SizedBox(
+                        height: 70.h,
                       ),
                     ],
                   );

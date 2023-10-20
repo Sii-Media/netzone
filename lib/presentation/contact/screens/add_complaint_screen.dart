@@ -67,127 +67,132 @@ class _AddComplaintScreenState extends State<AddComplaintScreen>
             },
             child: Form(
               key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.circle,
-                        size: 13.sp,
-                        color: AppColor.backgroundColor,
-                      ),
-                      SizedBox(
-                        width: 5.w,
-                      ),
-                      Text(
-                        AppLocalizations.of(context)
-                            .translate('private_requests'),
-                        style: TextStyle(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.circle,
+                          size: 13.sp,
                           color: AppColor.backgroundColor,
-                          fontSize: 20.sp,
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context).translate('address'),
-                        style: TextStyle(
-                          color: AppColor.black,
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w700,
+                        SizedBox(
+                          width: 5.w,
                         ),
-                      ),
-                      QuestionFormField(
-                        textController: addressController,
-                        hintText: '',
-                        onChanged: (text) {
-                          _addressFormFieldKey.currentState?.validate();
-                        },
-                        validator: (val) {
-                          if (val!.isEmpty) {
-                            return AppLocalizations.of(context)
-                                .translate('required');
-                          }
+                        Text(
+                          AppLocalizations.of(context)
+                              .translate('private_requests'),
+                          style: TextStyle(
+                            color: AppColor.backgroundColor,
+                            fontSize: 20.sp,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppLocalizations.of(context).translate('address'),
+                          style: TextStyle(
+                            color: AppColor.black,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        QuestionFormField(
+                          textController: addressController,
+                          hintText: '',
+                          onChanged: (text) {
+                            _addressFormFieldKey.currentState?.validate();
+                          },
+                          validator: (val) {
+                            if (val!.isEmpty) {
+                              return AppLocalizations.of(context)
+                                  .translate('required');
+                            }
 
-                          return null;
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)
-                            .translate('private_request'),
-                        style: TextStyle(
-                          color: AppColor.black,
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w700,
+                            return null;
+                          },
                         ),
-                      ),
-                      QuestionFormField(
-                        textController: textController,
-                        hintText: '',
-                        maxLines: 7,
-                        onChanged: (text) {
-                          _textFormFieldKey.currentState?.validate();
-                        },
-                        validator: (val) {
-                          if (val!.isEmpty) {
-                            return AppLocalizations.of(context)
-                                .translate('required');
-                          }
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)
+                              .translate('private_request'),
+                          style: TextStyle(
+                            color: AppColor.black,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        QuestionFormField(
+                          textController: textController,
+                          hintText: '',
+                          maxLines: 7,
+                          onChanged: (text) {
+                            _textFormFieldKey.currentState?.validate();
+                          },
+                          validator: (val) {
+                            if (val!.isEmpty) {
+                              return AppLocalizations.of(context)
+                                  .translate('required');
+                            }
 
-                          return null;
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: InkWell(
+                        onTap: () {
+                          if (!_formKey.currentState!.validate()) return;
+                          reqBloc.add(PostRequestEvent(
+                            address: addressController.text,
+                            text: textController.text,
+                          ));
                         },
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: InkWell(
-                      onTap: () {
-                        if (!_formKey.currentState!.validate()) return;
-                        reqBloc.add(PostRequestEvent(
-                          address: addressController.text,
-                          text: textController.text,
-                        ));
-                      },
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        height: 40.h,
-                        width: double.infinity,
-                        color: AppColor.backgroundColor,
-                        child: Center(
-                          child: Text(
-                            AppLocalizations.of(context).translate('send'),
-                            style: TextStyle(
-                                fontSize: 15.sp, color: AppColor.white),
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          height: 40.h,
+                          width: double.infinity,
+                          color: AppColor.backgroundColor,
+                          child: Center(
+                            child: Text(
+                              AppLocalizations.of(context).translate('send'),
+                              style: TextStyle(
+                                  fontSize: 15.sp, color: AppColor.white),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  )
-                ],
+                    SizedBox(
+                      height: 80.h,
+                    ),
+                  ],
+                ),
               ),
             ),
           )),

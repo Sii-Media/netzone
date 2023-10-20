@@ -38,6 +38,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
   final TextEditingController _descController = TextEditingController();
 
   final TextEditingController _websiteController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
 
   final TextEditingController _linkController = TextEditingController();
   final TextEditingController _slognController = TextEditingController();
@@ -58,6 +59,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     _websiteController.text = widget.userInfo.website ?? '';
     _linkController.text = widget.userInfo.link ?? '';
     _slognController.text = widget.userInfo.slogn ?? '';
+    _addressController.text = widget.userInfo.address ?? '';
     super.initState();
   }
 
@@ -67,6 +69,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
   Widget screen(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          toolbarHeight: 60.h,
           title: Text(
             AppLocalizations.of(context).translate('edit_profile'),
             style: const TextStyle(
@@ -79,9 +82,10 @@ class _EditProfileScreenState extends State<EditProfileScreen>
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: const Icon(
+            child: Icon(
               Icons.arrow_back_rounded,
               color: AppColor.backgroundColor,
+              size: 15.sp,
             ),
           ),
         ),
@@ -139,8 +143,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                     Row(
                       children: [
                         Container(
-                          width: 78,
-                          height: 78,
+                          width: 78.r,
+                          height: 78.r,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             image: DecorationImage(
@@ -165,8 +169,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                             child: Align(
                               alignment: Alignment.bottomCenter,
                               child: Container(
-                                height: 38,
-                                width: 78,
+                                height: 38.r,
+                                width: 78.r,
                                 decoration: BoxDecoration(
                                   color: Colors.black.withOpacity(0.5),
                                   borderRadius: const BorderRadius.only(
@@ -185,10 +189,10 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               'Profile_Photo',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 16.sp,
                                 color: AppColor.backgroundColor,
                               ),
                             ),
@@ -201,11 +205,11 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                                     image == null ? null : File(image.path);
                                 setState(() {});
                               },
-                              child: const Text(
+                              child: Text(
                                 'change',
                                 style: TextStyle(
                                   color: AppColor.colorTwo,
-                                  fontSize: 14,
+                                  fontSize: 14.sp,
                                 ),
                               ),
                             ),
@@ -219,11 +223,14 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       style: const TextStyle(
                         color: AppColor.backgroundColor,
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'email',
                         prefixIcon: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(Icons.email_rounded)),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.email_rounded,
+                              size: 15.sp,
+                            )),
                       ),
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
@@ -241,11 +248,14 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       style: const TextStyle(
                         color: AppColor.backgroundColor,
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'first_name',
                         prefixIcon: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(Icons.person)),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.person,
+                              size: 15.sp,
+                            )),
                       ),
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
@@ -263,11 +273,14 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       style: const TextStyle(
                         color: AppColor.backgroundColor,
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'first mobile number',
                         prefixIcon: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(Icons.phone_android)),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.phone_android,
+                              size: 15.sp,
+                            )),
                       ),
                       keyboardType: TextInputType.name,
                       textInputAction: TextInputAction.next,
@@ -285,11 +298,14 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       style: const TextStyle(
                         color: AppColor.backgroundColor,
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'second mobile number',
                         prefixIcon: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(Icons.phone_android)),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.phone_android,
+                              size: 15.sp,
+                            )),
                       ),
                       keyboardType: TextInputType.name,
                       textInputAction: TextInputAction.next,
@@ -300,13 +316,34 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       style: const TextStyle(
                         color: AppColor.backgroundColor,
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'third mobile number',
                         prefixIcon: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(Icons.phone_android)),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.phone_android,
+                              size: 15.sp,
+                            )),
                       ),
                       keyboardType: TextInputType.name,
+                      textInputAction: TextInputAction.next,
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    TextFormField(
+                      controller: _addressController,
+                      style: const TextStyle(
+                        color: AppColor.backgroundColor,
+                      ),
+                      decoration: const InputDecoration(
+                        label: Text('address'),
+                        hintText: 'address',
+                        prefixIcon: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(Icons.location_city)),
+                      ),
+                      keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                     ),
                     const SizedBox(height: 25),
@@ -315,19 +352,18 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       style: const TextStyle(
                         color: AppColor.backgroundColor,
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Bio',
                         prefixIcon: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(Icons.add_outlined)),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.add_outlined,
+                              size: 15.sp,
+                            )),
                       ),
                       keyboardType: TextInputType.name,
                       textInputAction: TextInputAction.next,
                       validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'field_required_message';
-                        }
-
                         return null;
                       },
                     ),
@@ -337,20 +373,19 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       style: const TextStyle(
                         color: AppColor.backgroundColor,
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Description',
                         prefixIcon: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(Icons.add_outlined)),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.add_outlined,
+                              size: 15.sp,
+                            )),
                       ),
                       keyboardType: TextInputType.text,
                       maxLines: 3,
                       textInputAction: TextInputAction.next,
                       validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'field_required_message';
-                        }
-
                         return null;
                       },
                     ),
@@ -360,19 +395,18 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       style: const TextStyle(
                         color: AppColor.backgroundColor,
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Website',
                         prefixIcon: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(Icons.app_registration_sharp)),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.app_registration_sharp,
+                              size: 15.sp,
+                            )),
                       ),
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                       validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'field_required_message';
-                        }
-
                         return null;
                       },
                     ),
@@ -382,19 +416,18 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       style: const TextStyle(
                         color: AppColor.backgroundColor,
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Link',
                         prefixIcon: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(Icons.link)),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.link,
+                              size: 15.sp,
+                            )),
                       ),
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                       validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'field_required_message';
-                        }
-
                         return null;
                       },
                     ),
@@ -404,19 +437,18 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       style: const TextStyle(
                         color: AppColor.backgroundColor,
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Slogn',
                         prefixIcon: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(Icons.add_outlined)),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.add_outlined,
+                              size: 15.sp,
+                            )),
                       ),
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
                       validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'field_required_message';
-                        }
-
                         return null;
                       },
                     ),
@@ -448,6 +480,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                           Icon(
                             Icons.password,
                             color: Theme.of(context).colorScheme.secondary,
+                            size: 15.sp,
                           ),
                           const SizedBox(width: 10.0),
                           Text(
@@ -455,13 +488,13 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                                 .translate('change_password'),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
-                              fontSize: 16,
+                              fontSize: 16.sp,
                             ),
                           ),
                           const Spacer(),
                           Icon(
                             Icons.arrow_forward_ios,
-                            size: 16.0,
+                            size: 16.0.sp,
                             color: Theme.of(context).colorScheme.secondary,
                           ),
                         ],
@@ -487,6 +520,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                             link: _linkController.text,
                             slogn: _slognController.text,
                             website: _websiteController.text,
+                            address: _addressController.text,
                           ));
                         },
                         style: ButtonStyle(

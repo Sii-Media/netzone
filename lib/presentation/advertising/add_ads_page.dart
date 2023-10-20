@@ -323,6 +323,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                               )),
                           // Create the dropdown button
                           child: DropdownButton<String>(
+                            itemHeight: 40.h,
                             // Set the selected value
                             value: selectedValue,
                             // Handle the value change
@@ -587,6 +588,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                                         color: AppColor.black,
                                       )),
                                   child: DropdownButton<String>(
+                                    itemHeight: 40.h,
                                     value: selectedCarType,
                                     hint: const Text('Select car type'),
                                     onChanged: (value) {
@@ -621,6 +623,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                                           color: AppColor.black,
                                         )),
                                     child: DropdownButton<String>(
+                                      itemHeight: 40.h,
                                       value: selectedCategory,
                                       hint: const Text('Select category'),
                                       onChanged: (value) {
@@ -1034,7 +1037,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                             }),
                       ),
                       SizedBox(
-                        height: 80.h,
+                        height: 100.h,
                       ),
                     ],
                   ),

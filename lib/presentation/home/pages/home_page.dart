@@ -178,59 +178,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 10.0,
                 ),
-                // TitleAndButton(
-                //   title: AppLocalizations.of(context).translate('elec'),
-                //   icon: true,
-                //   onPress: () {
-                //     Navigator.of(context).push(
-                //       MaterialPageRoute(builder: (context) {
-                //         return CategoriesScreen(
-                //           items: elecDevices,
-                //           filter: 'الكترونيات',
-                //         );
-                //       }),
-                //     );
-                //   },
-                // ),
-                // BlocBuilder<ElecDevicesBloc, ElecDevicesState>(
-                //   bloc: elcDeviceBloc,
-                //   builder: (context, state) {
-                //     if (state is ElecDevicesInProgress) {
-                //       return const Center(
-                //         child: CircularProgressIndicator(
-                //           color: AppColor.backgroundColor,
-                //         ),
-                //       );
-                //     } else if (state is ElecDevicesFailure) {
-                //       final failure = state.message;
-                //       return FailureWidget(
-                //         failure: failure,
-                //         onPressed: () {
-                //           elcDeviceBloc.add(const GetElcDevicesEvent(
-                //               department: 'الكترونيات'));
-                //         },
-                //       );
-                //     } else if (state is ElecDevicesSuccess) {
-                //       return Container(
-                //         padding: const EdgeInsets.symmetric(
-                //           vertical: 3.0,
-                //         ),
-                //         width: MediaQuery.of(context).size.width,
-                //         decoration: BoxDecoration(
-                //           color: const Color.fromARGB(255, 209, 219, 235)
-                //               .withOpacity(0.8),
-                //         ),
-                //         height: 110.h,
-                //         child: ListofItems(
-                //           filter: 'الكترونيات',
-                //           // devices: elecDevices,
-                //           elec: state.elecDevices,
-                //         ),
-                //       );
-                //     }
-                //     return Container();
-                //   },
-                // ),
+
                 buildSection(
                   filter: 'الكترونيات',
                   title: 'elec',
@@ -448,7 +396,7 @@ class _HomePageState extends State<HomePage> {
                                                             downloadProgress) =>
                                                         Padding(
                                                   padding: const EdgeInsets
-                                                          .symmetric(
+                                                      .symmetric(
                                                       horizontal: 70.0,
                                                       vertical: 50),
                                                   child:
@@ -803,9 +751,9 @@ class _HomePageState extends State<HomePage> {
                                           AppLocalizations.of(context)
                                               .translate('chat_home'),
                                           textAlign: TextAlign.center,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                               color: AppColor.backgroundColor,
-                                              fontSize: 14,
+                                              fontSize: 14.sp,
                                               fontWeight: FontWeight.w500),
                                         ),
                                       ),

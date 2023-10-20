@@ -136,28 +136,28 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
         appBar: AppBar(
           title: Text(
             widget.user.username ?? '',
-            style: const TextStyle(
-              color: AppColor.backgroundColor,
-            ),
+            style: TextStyle(color: AppColor.backgroundColor, fontSize: 15.sp),
           ),
           backgroundColor: AppColor.white,
           leading: GestureDetector(
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: const Icon(
+            child: Icon(
               Icons.arrow_back_rounded,
               color: AppColor.backgroundColor,
+              size: 22.sp,
             ),
           ),
           actions: [
             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: .0),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: IconButton(
                   onPressed: () {},
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.share,
                     color: AppColor.backgroundColor,
+                    size: 22.sp,
                   ),
                 )),
           ],
@@ -303,7 +303,7 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                             downloadProgress) =>
                                                         Padding(
                                                   padding: const EdgeInsets
-                                                          .symmetric(
+                                                      .symmetric(
                                                       horizontal: 70.0,
                                                       vertical: 50),
                                                   child:
@@ -445,10 +445,10 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                 children: [
                                                   Text(
                                                     '${widget.user.averageRating?.toStringAsFixed(3)}',
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                         color:
                                                             AppColor.secondGrey,
-                                                        fontSize: 18,
+                                                        fontSize: 18.sp,
                                                         fontWeight:
                                                             FontWeight.w600),
                                                   ),
@@ -466,7 +466,7 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                       initialRating: widget.user
                                                               .averageRating ??
                                                           0,
-                                                      itemSize: 18,
+                                                      itemSize: 18.sp,
                                                       ignoreGestures: true,
                                                       itemBuilder:
                                                           (context, _) {
@@ -483,10 +483,10 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                   ),
                                                   Text(
                                                     '(${widget.user.totalRatings} ${AppLocalizations.of(context).translate('review')})',
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                       color:
                                                           AppColor.secondGrey,
-                                                      fontSize: 14,
+                                                      fontSize: 14.sp,
                                                     ),
                                                   ),
                                                   SizedBox(
@@ -628,8 +628,8 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                           borderRadius:
                                               BorderRadius.circular(100),
                                           child: Container(
-                                            height: 50,
-                                            width: 150,
+                                            height: 50.h,
+                                            width: 150.w,
                                             decoration: const BoxDecoration(
                                               color: AppColor.backgroundColor,
                                               // borderRadius: BorderRadius.circular(100),
@@ -714,8 +714,8 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                 borderRadius:
                                                     BorderRadius.circular(100),
                                                 child: Container(
-                                                  height: 50,
-                                                  width: 150,
+                                                  height: 50.h,
+                                                  width: 150.w,
                                                   decoration:
                                                       const BoxDecoration(
                                                     color: AppColor
@@ -736,7 +736,7 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   left: 4.0),
                                                           child: Text(
                                                             AppLocalizations.of(
@@ -988,9 +988,9 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                                     index) {
                                                                   return Container(
                                                                     height:
-                                                                        200.h,
+                                                                        240.h,
                                                                     margin: const EdgeInsets
-                                                                            .symmetric(
+                                                                        .symmetric(
                                                                         vertical:
                                                                             8),
                                                                     decoration:
@@ -1018,7 +1018,7 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                                     child:
                                                                         ClipRRect(
                                                                       borderRadius: const BorderRadius
-                                                                              .all(
+                                                                          .all(
                                                                           Radius.circular(
                                                                               20)),
                                                                       child:
@@ -1127,74 +1127,7 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                           },
                                         ),
                                       ),
-                                      // BlocBuilder<AdsBlocBloc, AdsBlocState>(
-                                      //   bloc: adsBloc,
-                                      //   builder: (context, state) {
-                                      //     if (state is AdsBlocInProgress) {
-                                      //       return SizedBox(
-                                      //         height: MediaQuery.of(context)
-                                      //                 .size
-                                      //                 .height -
-                                      //             120.h,
-                                      //         child: const Center(
-                                      //           child: CircularProgressIndicator(
-                                      //             color: AppColor.backgroundColor,
-                                      //           ),
-                                      //         ),
-                                      //       );
-                                      //     } else if (state is AdsBlocFailure) {
-                                      //       final failure = state.message;
-                                      //       return FailureWidget(
-                                      //           failure: failure,
-                                      //           onPressed: () {
-                                      //             adsBloc.add(GetUserAdsEvent(
-                                      //                 userId: widget.user.id));
-                                      //           });
-                                      //     } else if (state is AdsBlocSuccess) {
-                                      //       return state.ads.isEmpty
-                                      //           ? Text(
-                                      //               AppLocalizations.of(context)
-                                      //                   .translate('no_items'),
-                                      //               style: TextStyle(
-                                      //                 color: AppColor
-                                      //                     .backgroundColor,
-                                      //                 fontSize: 22.sp,
-                                      //               ),
-                                      //             )
-                                      //           : ListView.builder(
-                                      //               shrinkWrap: true,
-                                      //               physics:
-                                      //                   const BouncingScrollPhysics(),
-                                      //               itemCount: state.ads.length,
-                                      //               scrollDirection:
-                                      //                   Axis.vertical,
-                                      //               itemBuilder:
-                                      //                   (context, index) {
-                                      //                 return Container(
-                                      //                   width:
-                                      //                       MediaQuery.of(context)
-                                      //                           .size
-                                      //                           .width,
-                                      //                   height: 220.h,
-                                      //                   padding: const EdgeInsets
-                                      //                           .symmetric(
-                                      //                       horizontal: 8),
-                                      //                   decoration: BoxDecoration(
-                                      //                       borderRadius:
-                                      //                           BorderRadius
-                                      //                                   .circular(
-                                      //                                       20)
-                                      //                               .w),
-                                      //                   child: Advertising(
-                                      //                       advertisment:
-                                      //                           state.ads[index]),
-                                      //                 );
-                                      //               },
-                                      //             );
-                                      //     }
-                                      //     return Container();
-                                      //   },
-                                      // ),
+
                                       infoListWidget(
                                         context: context,
                                         username: state.userInfo.username,

@@ -124,9 +124,10 @@ class _NewsDetailsState extends State<NewsDetails>
                                   );
                                 }));
                               },
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.edit,
                                 color: AppColor.backgroundColor,
+                                size: 15.sp,
                               ),
                             ),
                             IconButton(
@@ -134,9 +135,10 @@ class _NewsDetailsState extends State<NewsDetails>
                                 newsBloc.add(
                                     DeleteNewsEvent(id: widget.news.id ?? ''));
                               },
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.delete,
                                 color: AppColor.red,
+                                size: 15.sp,
                               ),
                             ),
                           ],
@@ -161,7 +163,7 @@ class _NewsDetailsState extends State<NewsDetails>
                   height: 15.h,
                 ),
                 Container(
-                  margin: const EdgeInsets.only(bottom: 20),
+                  margin: EdgeInsets.only(bottom: 80.h),
                   alignment: Alignment.topCenter,
                   child: Text(
                     widget.news.description,

@@ -141,10 +141,9 @@ class _MobileLoginScreenState extends State<MobileLoginScreen>
                           backgroundColor: AppColor.backgroundColor,
                           dialogBackgroundColor: AppColor.backgroundColor,
                           searchStyle: const TextStyle(color: AppColor.black),
-                          flagWidth: 22,
-                          dialogTextStyle: const TextStyle(
-                            color: AppColor.black,
-                          ),
+                          flagWidth: 22.sp,
+                          dialogTextStyle:
+                              TextStyle(color: AppColor.black, fontSize: 10.sp),
                           boxDecoration: BoxDecoration(
                             color: const Color.fromARGB(255, 209, 219, 235)
                                 .withOpacity(0.8),
