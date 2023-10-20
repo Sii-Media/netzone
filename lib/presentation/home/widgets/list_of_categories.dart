@@ -275,7 +275,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                   left: 0,
                                   right: 0,
                                   child: Container(
-                                    height: 36.h,
+                                    height: 43.h,
                                     color: AppColor.backgroundColor
                                         .withOpacity(0.8),
                                     alignment: Alignment.center,
@@ -289,7 +289,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                         style: TextStyle(
                                             fontSize: 12.sp,
                                             color: Colors.white,
-                                            fontWeight: FontWeight.w900),
+                                            fontWeight: FontWeight.w700),
                                       ),
                                     ),
                                   ),
