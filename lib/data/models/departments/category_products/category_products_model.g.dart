@@ -18,6 +18,7 @@ CategoryProductsModel _$CategoryProductsModelFromJson(
       condition: json['condition'] as String?,
       description: json['description'] as String,
       price: json['price'] as int,
+      weight: (json['weight'] as num?)?.toDouble(),
       quantity: json['quantity'] as num?,
       images:
           (json['images'] as List<dynamic>?)?.map((e) => e as String).toList(),
@@ -47,6 +48,7 @@ Map<String, dynamic> _$CategoryProductsModelToJson(
       'condition': instance.condition,
       'description': instance.description,
       'price': instance.price,
+      'weight': instance.weight,
       'quantity': instance.quantity,
       'images': instance.images,
       'vedioUrl': instance.vedioUrl,

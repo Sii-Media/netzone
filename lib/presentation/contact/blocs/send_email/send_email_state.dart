@@ -42,3 +42,9 @@ class SendEmailDeliverySuccess extends SendEmailState {
 
   const SendEmailDeliverySuccess({required this.response});
 }
+
+class SendEmailPaymentAndDeliveryInProgress extends SendEmailState {}
+
+class SendEmailPaymentAndDeliveryFailure extends SendEmailState {}
+
+class SendEmailPaymentAndDeliverySuccess extends SendEmailState {}

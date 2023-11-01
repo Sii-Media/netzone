@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
+import 'package:netzoon/presentation/cart/helpers/handle_add_to_cart_fun.dart';
 import 'package:netzoon/presentation/categories/widgets/image_free_zone_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
@@ -333,7 +334,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                             Icons.share,
                                                             color: AppColor
                                                                 .backgroundColor,
-                                                            size: 15.sp,
+                                                            size: 22.sp,
                                                           ),
                                                         ),
                                                         SizedBox(
@@ -379,7 +380,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                                         .favorite
                                                                     : Icons
                                                                         .favorite_border,
-                                                                size: 15.sp,
+                                                                size: 22.sp,
                                                                 color: isFavorite
                                                                     ? AppColor
                                                                         .red
@@ -462,11 +463,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    Text(
-                                                      state.product.name,
-                                                      style: TextStyle(
-                                                        color: AppColor.black,
-                                                        fontSize: 22.sp,
+                                                    Expanded(
+                                                      child: Text(
+                                                        state.product.name,
+                                                        style: TextStyle(
+                                                          color: AppColor.black,
+                                                          fontSize: 18.sp,
+                                                        ),
                                                       ),
                                                     ),
                                                     BlocBuilder<AuthBloc,
@@ -503,7 +506,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                                     Icons.edit,
                                                                     color: AppColor
                                                                         .backgroundColor,
-                                                                    size: 15.sp,
+                                                                    size: 22.sp,
                                                                   ),
                                                                 ),
                                                                 IconButton(
@@ -519,7 +522,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                                     color:
                                                                         AppColor
                                                                             .red,
-                                                                    size: 15.sp,
+                                                                    size: 22.sp,
                                                                   ),
                                                                 ),
                                                               ],
@@ -1064,30 +1067,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                           onPressed: () {
                             // final cartBloc = sl<CartBlocBloc>();
                             _togglePressed();
-                            final cartBloc = context.read<CartBlocBloc>();
-                            final cartItems = cartBloc.state.props;
-                            if (cartItems
-                                .any((elm) => elm.id == state.product.id)) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text(
-                                  AppLocalizations.of(context).translate(
-                                      'Product_Already_added_to_cart'),
-                                  style: const TextStyle(color: AppColor.white),
-                                ),
-                                backgroundColor: AppColor.red,
-                                duration: const Duration(seconds: 2),
-                              ));
-                            } else {
-                              cartBloc.add(AddToCart(product: state.product));
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text(AppLocalizations.of(context)
-                                    .translate('Product_added_to_cart')),
-                                backgroundColor: AppColor.backgroundColor,
-                                duration: const Duration(seconds: 2),
-                              ));
-                            }
+                            handleAddToCart(
+                                context: context, product: state.product);
                           },
                         ),
                         PriceSuggestionButton(input: input),

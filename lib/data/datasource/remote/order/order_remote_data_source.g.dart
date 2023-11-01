@@ -13,7 +13,7 @@ class _OrderRemoteDataSourceImpl implements OrderRemoteDataSourceImpl {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://145.14.158.175';
+    baseUrl ??= 'http://10.0.2.2:5000';
   }
 
   final Dio _dio;
@@ -25,7 +25,7 @@ class _OrderRemoteDataSourceImpl implements OrderRemoteDataSourceImpl {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<List<dynamic>>(_setStreamType<List<MyOrderModel>>(Options(
       method: 'GET',
@@ -35,6 +35,35 @@ class _OrderRemoteDataSourceImpl implements OrderRemoteDataSourceImpl {
             .compose(
               _dio.options,
               '/order/get/${userId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) => MyOrderModel.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<List<MyOrderModel>> getClientOrders(String clientId) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<MyOrderModel>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/order/client-orders/${clientId}',
               queryParameters: queryParameters,
               data: _data,
             )

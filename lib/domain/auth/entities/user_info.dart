@@ -7,7 +7,7 @@ class UserInfo {
   final bool? isFreeZoon;
   final bool? isService;
   final bool? isSelectable;
-
+  final double? netzoonBalance;
   final String? freezoneCity;
   final bool? deliverable;
 
@@ -61,6 +61,8 @@ class UserInfo {
   final int? planesListingsRemaining;
   final String? city;
   final String? addressDetails;
+  final String? contactName;
+
   final int? floorNum;
   final String? locationType;
   UserInfo({
@@ -116,7 +118,9 @@ class UserInfo {
     this.planesListingsRemaining,
     this.city,
     this.addressDetails,
+    required this.contactName,
     this.floorNum,
     this.locationType,
+    this.netzoonBalance,
   });
 }

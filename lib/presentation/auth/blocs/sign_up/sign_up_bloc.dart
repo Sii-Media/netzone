@@ -68,6 +68,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
           addressDetails: event.addressDetails,
           floorNum: event.floorNum,
           locationType: event.locationType,
+          contactName: event.contactName,
         ));
 
         emit(failureOrUser.fold(

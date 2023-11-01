@@ -14,6 +14,7 @@ class SaveOrderUseCase extends UseCase<MyOrder, SaveOrderParams> {
   Future<Either<Failure, MyOrder>> call(SaveOrderParams params) {
     return orderRepository.saveOrder(
       userId: params.userId,
+      clientId: params.clientId,
       products: params.products,
       orderStatus: params.orderStatus,
       grandTotal: params.grandTotal,
@@ -27,6 +28,7 @@ class SaveOrderUseCase extends UseCase<MyOrder, SaveOrderParams> {
 
 class SaveOrderParams {
   final String userId;
+  final String clientId;
   final List<OrderInput> products;
   final String orderStatus;
   final double grandTotal;
@@ -37,6 +39,7 @@ class SaveOrderParams {
 
   SaveOrderParams({
     required this.userId,
+    required this.clientId,
     required this.products,
     required this.orderStatus,
     required this.grandTotal,

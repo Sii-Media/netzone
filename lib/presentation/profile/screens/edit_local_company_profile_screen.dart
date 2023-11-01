@@ -29,6 +29,8 @@ class _EditLocalCompanyprofileScreenState
     with ScreenLoader<EditLocalCompanyprofileScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _contactNameController = TextEditingController();
+
   final TextEditingController _firstMobileController = TextEditingController();
   final TextEditingController _secondeMobileController =
       TextEditingController();
@@ -55,6 +57,7 @@ class _EditLocalCompanyprofileScreenState
   @override
   void initState() {
     _userNameController.text = widget.userInfo.username ?? '';
+    _contactNameController.text = widget.userInfo.contactName ?? '';
     _firstMobileController.text = widget.userInfo.firstMobile ?? '';
     _secondeMobileController.text = widget.userInfo.secondeMobile ?? '';
     _thirdMobileController.text = widget.userInfo.thirdMobile ?? '';
@@ -113,16 +116,18 @@ class _EditLocalCompanyprofileScreenState
               backgroundColor: Theme.of(context).colorScheme.secondary,
             ));
             UserInfo userInfo = UserInfo(
-                username: _userNameController.text,
-                email: _emailController.text,
-                password: widget.userInfo.password,
-                userType: widget.userInfo.userType,
-                firstMobile: _firstMobileController.text,
-                secondeMobile: _secondeMobileController.text,
-                thirdMobile: _thirdMobileController.text,
-                profilePhoto: _updatedImage?.path,
-                isFreeZoon: widget.userInfo.isFreeZoon,
-                id: widget.userInfo.id);
+              username: _userNameController.text,
+              email: _emailController.text,
+              password: widget.userInfo.password,
+              userType: widget.userInfo.userType,
+              firstMobile: _firstMobileController.text,
+              secondeMobile: _secondeMobileController.text,
+              thirdMobile: _thirdMobileController.text,
+              profilePhoto: _updatedImage?.path,
+              isFreeZoon: widget.userInfo.isFreeZoon,
+              id: widget.userInfo.id,
+              contactName: widget.userInfo.contactName,
+            );
             Navigator.of(context).pop(userInfo);
           }
         },
@@ -289,6 +294,29 @@ class _EditLocalCompanyprofileScreenState
                     decoration: const InputDecoration(
                       label: Text('first_name'),
                       hintText: 'first_name',
+                      prefixIcon: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(Icons.person)),
+                    ),
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'field_required_message';
+                      }
+
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 25),
+                  TextFormField(
+                    controller: _contactNameController,
+                    style: const TextStyle(
+                      color: AppColor.backgroundColor,
+                    ),
+                    decoration: const InputDecoration(
+                      label: Text('contact_name'),
+                      hintText: 'contact_name',
                       prefixIcon: Padding(
                           padding: EdgeInsets.all(8.0),
                           child: Icon(Icons.person)),
@@ -576,19 +604,19 @@ class _EditLocalCompanyprofileScreenState
                         if (!_formKey.currentState!.validate()) return;
                         editBloc.add(
                           OnEditProfileEvent(
-                            username: _userNameController.text,
-                            email: _emailController.text,
-                            firstMobile: _firstMobileController.text,
-                            secondeMobile: _secondeMobileController.text,
-                            thirdMobile: _thirdMobileController.text,
-                            profilePhoto: _updatedImage,
-                            bio: _bioController.text,
-                            description: _descController.text,
-                            link: _linkController.text,
-                            slogn: _slognController.text,
-                            website: _websiteController.text,
-                            address: _addressController.text,
-                          ),
+                              username: _userNameController.text,
+                              email: _emailController.text,
+                              firstMobile: _firstMobileController.text,
+                              secondeMobile: _secondeMobileController.text,
+                              thirdMobile: _thirdMobileController.text,
+                              profilePhoto: _updatedImage,
+                              bio: _bioController.text,
+                              description: _descController.text,
+                              link: _linkController.text,
+                              slogn: _slognController.text,
+                              website: _websiteController.text,
+                              address: _addressController.text,
+                              contactName: _contactNameController.text),
                         );
                       },
                       style: ButtonStyle(

@@ -25,6 +25,7 @@ class EditProfileUseCase extends UseCase<String, EditProfileParams> {
       slogn: params.slogn,
       website: params.website,
       address: params.address,
+      contactName: params.contactName,
     );
   }
 }
@@ -42,7 +43,7 @@ class EditProfileParams {
   final String? website;
   final String? link;
   final String? slogn;
-
+  final String contactName;
   final String? address;
   EditProfileParams({
     required this.userId,
@@ -58,5 +59,6 @@ class EditProfileParams {
     this.link,
     this.slogn,
     this.address,
+    required this.contactName,
   });
 }

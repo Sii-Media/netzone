@@ -16,10 +16,12 @@ class CartLoaded extends CartBlocState {
 
   final double totalPrice;
   final num totalQuantity;
+  final bool? outStock;
   const CartLoaded({
     required this.totalQuantity,
     required this.items,
     required this.totalPrice,
+    this.outStock = false,
   });
 
   @override

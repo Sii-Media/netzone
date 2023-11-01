@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
+import 'package:netzoon/presentation/cart/helpers/handle_add_to_cart_fun.dart';
+import 'package:netzoon/presentation/cart/widgets/identity_alert_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
@@ -164,42 +168,9 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                                         children: [
                                           InkWell(
                                             onTap: () {
-                                              final cartBloc =
-                                                  context.read<CartBlocBloc>();
-                                              final cartItems =
-                                                  cartBloc.state.props;
-                                              if (cartItems.any((elm) =>
-                                                  elm.id ==
-                                                  widget.deviceList.id)) {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                  content: Text(
-                                                    AppLocalizations.of(context)
-                                                        .translate(
-                                                            'Product_Already_added_to_cart'),
-                                                    style: const TextStyle(
-                                                        color: AppColor.white),
-                                                  ),
-                                                  backgroundColor: AppColor.red,
-                                                  duration: const Duration(
-                                                      seconds: 2),
-                                                ));
-                                              } else {
-                                                cartBloc.add(AddToCart(
-                                                    product:
-                                                        widget.deviceList));
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                  content: Text(AppLocalizations
-                                                          .of(context)
-                                                      .translate(
-                                                          'Product_added_to_cart')),
-                                                  backgroundColor:
-                                                      AppColor.backgroundColor,
-                                                  duration: const Duration(
-                                                      seconds: 2),
-                                                ));
-                                              }
+                                              handleAddToCart(
+                                                  context: context,
+                                                  product: widget.deviceList);
                                             },
                                             child: Icon(
                                               Icons.shopping_cart_outlined,

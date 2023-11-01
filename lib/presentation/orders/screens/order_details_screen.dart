@@ -8,8 +8,10 @@ import '../../utils/app_localizations.dart';
 import '../../utils/convert_date_to_string.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
-  const OrderDetailsScreen({super.key, required this.order});
+  const OrderDetailsScreen(
+      {super.key, required this.order, this.client = false});
   final MyOrder order;
+  final bool? client;
   @override
   State<OrderDetailsScreen> createState() => _OrderDetailsScreenState();
 }
@@ -61,6 +63,28 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 ),
               ),
               const Divider(),
+              widget.client == true
+                  ? Column(
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)
+                              .translate('order_holder'),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 15.sp),
+                        ),
+                        Text(
+                          '${widget.order.userId.username}',
+                          style: TextStyle(
+                              color: AppColor.secondGrey,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w300),
+                        ),
+                      ],
+                    )
+                  : const SizedBox(),
+              const SizedBox(
+                height: 12,
+              ),
               Text(
                 AppLocalizations.of(context).translate('shipping_address'),
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.sp),
@@ -293,15 +317,18 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                               Text('${widget.order.subTotal}'),
                             ],
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(AppLocalizations.of(context)
-                                  .translate('service_fee')),
-                              Text('${widget.order.serviceFee}'),
-                            ],
-                          ),
+                          widget.client == false
+                              ? Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(AppLocalizations.of(context)
+                                        .translate('service_fee')),
+                                    Text('${widget.order.serviceFee}'),
+                                  ],
+                                )
+                              : const SizedBox(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -315,7 +342,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                 ),
                               ),
                               Text(
-                                '${widget.order.grandTotal}',
+                                '${widget.client == false ? widget.order.grandTotal : widget.order.subTotal}',
                                 style: const TextStyle(
                                   color: AppColor.black,
                                   fontWeight: FontWeight.bold,

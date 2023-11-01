@@ -12,7 +12,7 @@ String formatDateTime(String dateString) {
 
   final inputDate = DateTime.parse(dateString);
 
-  final formatter = DateFormat.yMd().add_jm();
+  final formatter = DateFormat('dd/MM/yyyy hh:mm a');
   final formattedDate = formatter.format(inputDate);
 
   return formattedDate;

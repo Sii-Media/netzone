@@ -13,7 +13,7 @@ class _FavoriteremoteDataSourceImpl implements FavoriteremoteDataSourceImpl {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://145.14.158.175';
+    baseUrl ??= 'http://10.0.2.2:5000';
   }
 
   final Dio _dio;

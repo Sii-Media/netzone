@@ -41,6 +41,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
           slogn: event.slogn,
           website: event.website,
           address: event.address,
+          contactName: event.contactName,
         ),
       );
       emit(

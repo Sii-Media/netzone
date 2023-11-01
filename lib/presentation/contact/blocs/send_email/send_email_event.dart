@@ -60,3 +60,32 @@ class SendEmailDeliveryRequestEvent extends SendEmailEvent {
     required this.from,
   });
 }
+
+class SendEmailPaymentAndDeliveryEvent extends SendEmailEvent {
+  final String toName;
+  final String toEmail;
+  final String mobile;
+  final String city;
+  final String productsNames;
+  final String grandTotal;
+  final String serviceFee;
+  final double subTotal;
+  final String addressDetails;
+  final String floorNum;
+  final String subject;
+  final String from;
+
+  const SendEmailPaymentAndDeliveryEvent(
+      {required this.toName,
+      required this.toEmail,
+      required this.mobile,
+      required this.city,
+      required this.productsNames,
+      required this.grandTotal,
+      required this.serviceFee,
+      required this.subTotal,
+      required this.addressDetails,
+      required this.floorNum,
+      required this.subject,
+      required this.from});
+}

@@ -12,6 +12,7 @@ class CategoryProducts extends Equatable {
   final String? condition;
   final String description;
   final int price;
+  final double? weight;
   final List<String>? images;
   final String? vedioUrl;
   final bool? guarantee;
@@ -20,6 +21,7 @@ class CategoryProducts extends Equatable {
   final String? madeIn;
   final String? year;
   final num? quantity;
+  final num? cartQty;
   final String? gifUrl;
   final double? discountPercentage;
   final double? priceAfterDiscount;
@@ -37,6 +39,7 @@ class CategoryProducts extends Equatable {
     this.condition,
     required this.description,
     required this.price,
+    required this.weight,
     this.images,
     this.vedioUrl,
     this.guarantee,
@@ -45,6 +48,7 @@ class CategoryProducts extends Equatable {
     this.madeIn,
     this.year,
     this.quantity,
+    this.cartQty,
     this.gifUrl,
     this.discountPercentage,
     this.priceAfterDiscount,
@@ -63,6 +67,7 @@ class CategoryProducts extends Equatable {
         condition,
         description,
         price,
+        weight,
         images,
         vedioUrl,
         guarantee,
@@ -70,6 +75,7 @@ class CategoryProducts extends Equatable {
         madeIn,
         year,
         quantity,
+        cartQty,
         gifUrl,
         discountPercentage,
         priceAfterDiscount,

@@ -36,3 +36,17 @@ class GetUserOrdersSuccess extends OrderState {
 
   const GetUserOrdersSuccess({required this.orderList});
 }
+
+class GetClientOrdersInProgress extends OrderState {}
+
+class GetClientOrdersFailure extends OrderState {
+  final String message;
+
+  const GetClientOrdersFailure({required this.message});
+}
+
+class GetClientOrdersSuccess extends OrderState {
+  final List<MyOrder> orderList;
+
+  const GetClientOrdersSuccess({required this.orderList});
+}

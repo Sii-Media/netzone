@@ -11,6 +11,7 @@ abstract class OrderRepository {
 
   Future<Either<Failure, MyOrder>> saveOrder({
     required final String userId,
+    required final String clientId,
     required final List<OrderInput> products,
     required final String orderStatus,
     required final double grandTotal,
@@ -18,5 +19,9 @@ abstract class OrderRepository {
     required final String? mobile,
     required final double? subTotal,
     required final double? serviceFee,
+  });
+
+  Future<Either<Failure, List<MyOrder>>> getClientOrders({
+    required final String clientId,
   });
 }

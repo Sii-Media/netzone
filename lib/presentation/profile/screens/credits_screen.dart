@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/domain/auth/entities/user_info.dart';
 import 'package:netzoon/presentation/profile/screens/refund_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../core/constant/colors.dart';
 
-class CreditScreen extends StatelessWidget {
-  const CreditScreen({super.key});
+class CreditScreen extends StatefulWidget {
+  final UserInfo user;
+  const CreditScreen({super.key, required this.user});
 
+  @override
+  State<CreditScreen> createState() => _CreditScreenState();
+}
+
+class _CreditScreenState extends State<CreditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +60,7 @@ class CreditScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'AED 0.00',
+                      '${widget.user.netzoonBalance} ${AppLocalizations.of(context).translate('AED')}',
                       style: TextStyle(
                         color: AppColor.black,
                         fontSize: 18.sp,

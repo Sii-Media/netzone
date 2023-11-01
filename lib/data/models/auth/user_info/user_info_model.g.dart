@@ -61,8 +61,10 @@ UserInfoModel _$UserInfoModelFromJson(Map<String, dynamic> json) =>
       planesListingsRemaining: json['planesListingsRemaining'] as int?,
       city: json['city'] as String?,
       addressDetails: json['addressDetails'] as String?,
+      contactName: json['contactName'] as String?,
       floorNum: json['floorNum'] as int?,
       locationType: json['locationType'] as String?,
+      netzoonBalance: (json['netzoonBalance'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$UserInfoModelToJson(UserInfoModel instance) =>
@@ -76,6 +78,7 @@ Map<String, dynamic> _$UserInfoModelToJson(UserInfoModel instance) =>
       'isService': instance.isService,
       'freezoneCity': instance.freezoneCity,
       'deliverable': instance.deliverable,
+      'netzoonBalance': instance.netzoonBalance,
       'secondeMobile': instance.secondeMobile,
       'thirdMobile': instance.thirdMobile,
       'subcategory': instance.subcategory,
@@ -115,6 +118,7 @@ Map<String, dynamic> _$UserInfoModelToJson(UserInfoModel instance) =>
       'planesListingsRemaining': instance.planesListingsRemaining,
       'city': instance.city,
       'addressDetails': instance.addressDetails,
+      'contactName': instance.contactName,
       'floorNum': instance.floorNum,
       'locationType': instance.locationType,
     };

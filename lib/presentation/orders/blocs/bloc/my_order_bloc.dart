@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
+import 'package:netzoon/domain/order/usecases/get_client_orders_use_case.dart';
 import 'package:netzoon/domain/order/usecases/get_user_orders_use_case.dart';
 import 'package:netzoon/domain/order/usecases/save_order_use_case.dart';
 
@@ -17,10 +18,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   final SaveOrderUseCase saveOrderUseCase;
   final GetSignedInUserUseCase getSignedInUser;
   final GetUserOrdersUseCase getUserOrdersUseCase;
+  final GetClientOrdersUseCase getClientOrdersUseCase;
   OrderBloc({
     required this.saveOrderUseCase,
     required this.getSignedInUser,
     required this.getUserOrdersUseCase,
+    required this.getClientOrdersUseCase,
   }) : super(OrderInitial()) {
     on<SaveOrderEvent>((event, emit) async {
       emit(SaveOrderInProgress());
@@ -31,6 +34,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       final order = await saveOrderUseCase(
         SaveOrderParams(
           userId: user.userInfo.id,
+          clientId: event.clientId,
           products: event.products,
           orderStatus: event.orderStatus,
           grandTotal: event.grandTotal,
@@ -57,6 +61,22 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           (failure) =>
               GetUserOrdersFailure(message: mapFailureToString(failure)),
           (orderList) => GetUserOrdersSuccess(
+            orderList: orderList,
+          ),
+        ),
+      );
+    });
+    on<GetClientOrdersEvent>((event, emit) async {
+      emit(GetClientOrdersInProgress());
+      final result = await getSignedInUser.call(NoParams());
+      late User user;
+      result.fold((l) => null, (r) => user = r!);
+      final orders = await getClientOrdersUseCase(user.userInfo.id);
+      emit(
+        orders.fold(
+          (failure) =>
+              GetClientOrdersFailure(message: mapFailureToString(failure)),
+          (orderList) => GetClientOrdersSuccess(
             orderList: orderList,
           ),
         ),

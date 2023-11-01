@@ -1,12 +1,27 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/domain/aramex/entities/actual_weight.dart';
+import 'package:netzoon/domain/aramex/entities/calculate_rate_input_data.dart';
+import 'package:netzoon/domain/aramex/entities/client_info.dart';
+import 'package:netzoon/domain/aramex/entities/contact.dart';
+import 'package:netzoon/domain/aramex/entities/create_pickup_input_data.dart';
+import 'package:netzoon/domain/aramex/entities/label_info.dart';
+import 'package:netzoon/domain/aramex/entities/party_address.dart';
+import 'package:netzoon/domain/aramex/entities/pickup.dart';
+import 'package:netzoon/domain/aramex/entities/pickup_items.dart';
+import 'package:netzoon/domain/aramex/entities/rate_shipment_details.dart';
+import 'package:netzoon/domain/aramex/entities/shipment_dimensions.dart';
+import 'package:netzoon/domain/aramex/entities/transaction.dart';
 import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/advertising/advertising.dart';
+import 'package:netzoon/presentation/aramex/blocs/aramex_bloc/aramex_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
 import 'package:netzoon/presentation/categories/main_categories.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
@@ -50,7 +65,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final categories = cat;
 
-  final advertismentList = advertisments;
+  // final advertismentList = advertisments;
 
   final PageController controller = PageController(initialPage: 0);
 
@@ -76,10 +91,23 @@ class _HomePageState extends State<HomePage> {
   final realEstateBloc = sl<RealEstateBloc>();
   // late AnimationController _animationController;
   final authBloc = sl<AuthBloc>();
+
+  final aramexBloc = sl<AramexBloc>();
+
   int totalUnreadMessageCount = 0;
   void connectToSendbird({required String id}) async {
     await SendbirdChat.connect(id);
   }
+
+  List imgs = [
+    {"id": 1, "image": 'assets/images/aramex.png'},
+    {"id": 2, "image": 'assets/images/payments.png'},
+    {"id": 3, "image": 'assets/images/netzoon_download.png'},
+    {"id": 4, "image": 'assets/images/comp.png'}
+  ];
+
+  final CarouselController carouselController = CarouselController();
+  int currentIndex = 0;
 
   @override
   void initState() {
@@ -116,6 +144,7 @@ class _HomePageState extends State<HomePage> {
   //   _animationController.dispose();
   //   super.dispose();
   // }
+
   void callApi() {
     authBloc.add(AuthCheckRequested());
     newsBloc.add(GetAllNewsEvent());
@@ -174,7 +203,85 @@ class _HomePageState extends State<HomePage> {
                     categories: categories,
                   ),
                 ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Stack(
+                  children: [
+                    InkWell(
+                      onTap: () {},
+                      child: CarouselSlider(
+                        carouselController: carouselController,
+                        items: imgs.map((img) {
+                          return Builder(builder: (BuildContext context) {
+                            return Image.asset(
+                              img["image"],
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                            );
+                          });
+                        }).toList(),
+                        options: CarouselOptions(
+                          // height: 400.0.h,
+                          // aspectRatio: 16 / 9,
+                          // viewportFraction: 0.8,
+                          // initialPage: 0,
+                          // enableInfiniteScroll: true,
+                          // reverse: false,
+                          // autoPlay: true,
+                          // autoPlayInterval: const Duration(seconds: 3),
+                          // autoPlayAnimationDuration:
+                          //     const Duration(milliseconds: 800),
+                          // autoPlayCurve: Curves.fastOutSlowIn,
+                          // enlargeCenterPage: true,
+                          // onPageChanged: (index, reason) {},
+                          // scrollDirection: Axis.horizontal,
 
+                          scrollPhysics: const BouncingScrollPhysics(),
+                          autoPlay: true,
+                          aspectRatio: 2,
+                          viewportFraction: 1,
+                          // scrollDirection: Axis.horizontal,
+                          // enableInfiniteScroll: true,
+                          autoPlayCurve: Curves.easeInOut,
+                          autoPlayAnimationDuration:
+                              const Duration(milliseconds: 300),
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              currentIndex = index;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 10,
+                      right: 0,
+                      left: 0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: imgs.asMap().entries.map((entry) {
+                          return GestureDetector(
+                            onTap: () =>
+                                carouselController.animateToPage(entry.key),
+                            child: Container(
+                              width: currentIndex == entry.key ? 17 : 7,
+                              height: 7.0,
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 3.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: currentIndex == entry.key
+                                    ? Colors.red
+                                    : AppColor.backgroundColor,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(
                   height: 10.0,
                 ),

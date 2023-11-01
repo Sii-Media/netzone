@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:netzoon/data/models/order/my_order_model.dart';
 import 'package:retrofit/http.dart';
@@ -11,6 +10,10 @@ part 'order_remote_data_source.g.dart';
 abstract class OrderRemoteDataSource {
   Future<List<MyOrderModel>> getUserOrders(
     final String userId,
+  );
+
+  Future<List<MyOrderModel>> getClientOrders(
+    final String clientId,
   );
 
   Future<MyOrderModel> saveOrder(
@@ -37,6 +40,12 @@ abstract class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
   @GET('/order/get/{userId}')
   Future<List<MyOrderModel>> getUserOrders(
     @Path('userId') String userId,
+  );
+
+  @override
+  @GET('/order/client-orders/{clientId}')
+  Future<List<MyOrderModel>> getClientOrders(
+    @Path('clientId') String clientId,
   );
 
   @override

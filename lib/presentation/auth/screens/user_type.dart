@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/auth/screens/signup.dart';
+import 'package:netzoon/presentation/auth/screens/signup_screen.dart';
 import 'package:netzoon/presentation/auth/widgets/background_auth_widget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';

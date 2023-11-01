@@ -14,6 +14,7 @@ class AddProductRequestedEvent extends AddProductEvent {
   final String? condition;
   final String description;
   final int price;
+  final double weight;
   final int quantity;
   final List<XFile>? productimages;
   final File? video;
@@ -32,6 +33,7 @@ class AddProductRequestedEvent extends AddProductEvent {
     this.condition,
     required this.description,
     required this.price,
+    required this.weight,
     required this.quantity,
     this.productimages,
     this.video,

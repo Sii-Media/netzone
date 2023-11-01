@@ -170,7 +170,7 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
         }
 
         Response response = await dio.post(
-            'http://145.14.158.175/advertisements/createAds',
+            'http://10.0.2.2:5000/advertisements/createAds',
             data: formData);
         // Handle the response as needed
         if (response.statusCode == 201) {
@@ -335,7 +335,7 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
         }
 
         Response response = await dio
-            .put('http://145.14.158.175/advertisements/$id', data: formData);
+            .put('http://10.0.2.2:5000/advertisements/$id', data: formData);
         // Handle the response as needed
         if (response.statusCode == 200) {
           return Right(response.data);

@@ -59,7 +59,7 @@ class NewsRepositoryImpl implements NewsRepository {
         });
 
         Response response = await dio
-            .post('http://145.14.158.175/news/createNews', data: formData);
+            .post('http://10.0.2.2:5000/news/createNews', data: formData);
         // Handle the response as needed
         if (response.statusCode == 201) {
           return Right(response.data);
@@ -196,7 +196,7 @@ class NewsRepositoryImpl implements NewsRepository {
           ));
         }
         Response response = await dio.put(
-          'http://145.14.158.175/news/$id',
+          'http://10.0.2.2:5000/news/$id',
           data: formData,
         );
         return Right(response.data);

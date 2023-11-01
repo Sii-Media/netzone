@@ -8,6 +8,7 @@ import 'package:netzoon/presentation/chat/screens/chat_home_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
+import 'package:netzoon/presentation/orders/screens/manage_order_screen.dart';
 import 'package:netzoon/presentation/profile/screens/visitors_screen.dart';
 
 import '../../../injection_container.dart';
@@ -281,18 +282,24 @@ class _MyLocalCompanyProfileScreenState
                                                 MainAxisAlignment.spaceEvenly,
                                             children: [
                                               roundedIconText(
-                                                context: context,
-                                                text: state.userInfo
-                                                                .isService ==
-                                                            false ||
-                                                        state.userInfo
-                                                                .isService ==
-                                                            null
-                                                    ? 'Products sold'
-                                                    : 'my_services',
-                                                icon: Icons
-                                                    .production_quantity_limits,
-                                              ),
+                                                  context: context,
+                                                  text: state.userInfo
+                                                                  .isService ==
+                                                              false ||
+                                                          state.userInfo
+                                                                  .isService ==
+                                                              null
+                                                      ? 'manage_orders'
+                                                      : 'my_services',
+                                                  icon: Icons
+                                                      .production_quantity_limits,
+                                                  onTap: () {
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
+                                                      return const ManageOrdersScreen();
+                                                    }));
+                                                  }),
                                               roundedIconText(
                                                 context: context,
                                                 text: state.userInfo
@@ -358,7 +365,9 @@ class _MyLocalCompanyProfileScreenState
                                                     Navigator.of(context).push(
                                                         MaterialPageRoute(
                                                             builder: (context) {
-                                                      return const CreditScreen();
+                                                      return CreditScreen(
+                                                        user: state.userInfo,
+                                                      );
                                                     }));
                                                   }),
                                             ],

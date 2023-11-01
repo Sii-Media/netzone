@@ -77,5 +77,47 @@ class SendEmailBloc extends Bloc<SendEmailEvent, SendEmailState> {
         ),
       );
     });
+    on<SendEmailPaymentAndDeliveryEvent>((event, emit) async {
+      emit(SendEmailPaymentAndDeliveryInProgress());
+
+      final result1 = await sendEmailPaymentUseCase(SendEmailPaymentParams(
+          toName: event.toName,
+          toEmail: event.toEmail,
+          userMobile: event.mobile,
+          productsNames: event.productsNames,
+          grandTotal: event.grandTotal,
+          serviceFee: event.serviceFee));
+
+      final result2 = await sendEmailDeliveryUseCas(SendEmailDeliveryParams(
+        toName: event.toName,
+        toEmail: event.toEmail,
+        mobile: event.mobile,
+        city: event.city,
+        addressDetails: event.addressDetails,
+        floorNum: event.floorNum,
+        subject: event.subject,
+        from: event.from,
+      ));
+
+      emit(result2.fold((l) => SendEmailPaymentAndDeliveryFailure(),
+          (r) => SendEmailPaymentAndDeliverySuccess()));
+
+      // result1.fold((l) => emit(SendEmailPaymentAndDeliveryFailure()),
+      //     (r) async {
+      //   final result2 = await sendEmailDeliveryUseCas(SendEmailDeliveryParams(
+      //     toName: event.toName,
+      //     toEmail: event.toEmail,
+      //     mobile: event.mobile,
+      //     city: event.city,
+      //     addressDetails: event.addressDetails,
+      //     floorNum: event.floorNum,
+      //     subject: event.subject,
+      //     from: event.from,
+      //   ));
+      //   result2.fold((l) => emit(SendEmailPaymentAndDeliveryFailure()), (r) {
+      //     emit(SendEmailPaymentAndDeliverySuccess());
+      //   });
+      // });
+    });
   }
 }

@@ -13,7 +13,7 @@ class UserInfoModel {
   final bool? isService;
   final String? freezoneCity;
   final bool? deliverable;
-
+  final double? netzoonBalance;
   final String? secondeMobile;
 
   final String? thirdMobile;
@@ -61,6 +61,7 @@ class UserInfoModel {
   final int? planesListingsRemaining;
   final String? city;
   final String? addressDetails;
+  final String? contactName;
   final int? floorNum;
   final String? locationType;
   UserInfoModel({
@@ -111,8 +112,10 @@ class UserInfoModel {
     this.planesListingsRemaining,
     this.city,
     this.addressDetails,
+    required this.contactName,
     this.floorNum,
     this.locationType,
+    this.netzoonBalance,
   });
 
   factory UserInfoModel.fromJson(Map<String, dynamic> json) =>
@@ -170,7 +173,9 @@ extension MapToDomain on UserInfoModel {
         realEstateListingsRemaining: realEstateListingsRemaining,
         city: city,
         addressDetails: addressDetails,
+        contactName: contactName,
         floorNum: floorNum,
         locationType: locationType,
+        netzoonBalance: netzoonBalance,
       );
 }

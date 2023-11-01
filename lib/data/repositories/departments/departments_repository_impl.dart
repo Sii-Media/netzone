@@ -69,6 +69,7 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
       required String name,
       required String description,
       required int price,
+      required double weight,
       List<String>? images,
       String? videoUrl,
       String? guarantee,
@@ -215,7 +216,7 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
           ));
         }
         Response response = await dio.put(
-          'http://145.14.158.175/departments/editProduct/$productId',
+          'http://10.0.2.2:5000/departments/editProduct/$productId',
           data: formData,
         );
         return Right(response.data);

@@ -39,7 +39,7 @@ class AuthRepositoryImpl implements AuthRepository {
     String? secondMobile,
     String? thirdMobile,
     String? subcategory,
-    String? address,
+    required String? address,
     int? companyProductsNumbe,
     String? sellType,
     String? toCountry,
@@ -63,10 +63,11 @@ class AuthRepositoryImpl implements AuthRepository {
     int? deliveryCarsNum,
     int? deliveryMotorsNum,
     double? profitRatio,
-    String? city,
+    required String? city,
     String? addressDetails,
     int? floorNum,
     String? locationType,
+    required String? contactName,
   }) async {
     try {
       if (await networkInfo.isConnected) {
@@ -100,6 +101,8 @@ class AuthRepositoryImpl implements AuthRepository {
           MapEntry('isThereWarehouse', isThereWarehouse.toString()),
           MapEntry('isThereFoodsDelivery', isThereFoodsDelivery.toString()),
           MapEntry('deliveryType', deliveryType.toString()),
+          MapEntry('contactName', contactName ?? ""),
+          MapEntry('city', city ?? ''),
         ]);
         if (title != null) {
           formData.fields.add(MapEntry('title', title));
@@ -131,9 +134,7 @@ class AuthRepositoryImpl implements AuthRepository {
         if (profitRatio != null) {
           formData.fields.add(MapEntry('profitRatio', profitRatio.toString()));
         }
-        if (city != null) {
-          formData.fields.add(MapEntry('city', city.toString()));
-        }
+
         if (addressDetails != null) {
           formData.fields
               .add(MapEntry('addressDetails', addressDetails.toString()));
@@ -224,8 +225,8 @@ class AuthRepositoryImpl implements AuthRepository {
           ));
         }
 
-        Response response = await dio
-            .post('http://145.14.158.175/user/register', data: formData);
+        Response response = await dio.post('http://10.0.2.2:5000/user/register',
+            data: formData);
 
         if (response.statusCode == 201) {
           final UserModel user = UserModel.fromJson(response.data!);
@@ -348,6 +349,7 @@ class AuthRepositoryImpl implements AuthRepository {
     String? link,
     String? slogn,
     String? address,
+    required String contactName,
   }) async {
     try {
       if (await networkInfo.isConnected) {
@@ -358,6 +360,7 @@ class AuthRepositoryImpl implements AuthRepository {
           'firstMobile': firstMobile,
           'secondMobile': secondeMobile,
           'thirdMobile': thirdMobile,
+          'contactName': contactName,
         });
         if (bio != null) {
           formData.fields.add(MapEntry('bio', bio));
@@ -393,7 +396,7 @@ class AuthRepositoryImpl implements AuthRepository {
         }
 
         Response response = await dio
-            .put('http://145.14.158.175/user/editUser/$userId', data: formData);
+            .put('http://10.0.2.2:5000/user/editUser/$userId', data: formData);
 
         if (response.statusCode == 200) {
           final user = local.getSignedInUser();
@@ -417,6 +420,7 @@ class AuthRepositoryImpl implements AuthRepository {
                   deliverable: user.userInfo.deliverable,
                   id: user.userInfo.id,
                   address: user.userInfo.address,
+                  contactName: user.userInfo.contactName,
                 ));
           }
           await local.signInUser(updatedUser);

@@ -52,8 +52,10 @@ class SignUpRequested extends SignUpEvent {
   final String? addressDetails;
   final int? floorNum;
   final String? locationType;
+  final String? contactName;
   const SignUpRequested({
     required this.username,
+    required this.contactName,
     required this.email,
     required this.password,
     required this.userType,
@@ -61,7 +63,7 @@ class SignUpRequested extends SignUpEvent {
     this.secondMobile,
     this.thirdMobile,
     this.subcategory,
-    this.address,
+    required this.address,
     this.companyProductsNumber,
     this.sellType,
     this.toCountry,
@@ -89,7 +91,7 @@ class SignUpRequested extends SignUpEvent {
     this.deliveryCarsNum,
     this.deliveryMotorsNum,
     this.profitRatio,
-    this.city,
+    required this.city,
     this.addressDetails,
     this.floorNum,
     this.locationType,

@@ -92,6 +92,8 @@ class _AddProductScreenState extends State<AddProductScreen>
   late TextEditingController productName = TextEditingController();
   late TextEditingController productImage = TextEditingController();
   late TextEditingController productPrice = TextEditingController();
+  late TextEditingController productWeight = TextEditingController();
+
   late TextEditingController productQuantity = TextEditingController();
 
   late TextEditingController productDesc = TextEditingController();
@@ -364,6 +366,16 @@ class _AddProductScreenState extends State<AddProductScreen>
                             controller: productPrice,
                             title:
                                 '${AppLocalizations.of(context).translate('price')} :',
+                            isNumber: true,
+                          ),
+                          SizedBox(
+                            height: 7.h,
+                          ),
+                          addProductTextField(
+                            context: context,
+                            controller: productWeight,
+                            title:
+                                '${AppLocalizations.of(context).translate('weightkg')} :',
                             isNumber: true,
                           ),
                           SizedBox(
@@ -853,6 +865,8 @@ class _AddProductScreenState extends State<AddProductScreen>
                                                   description: productDesc.text,
                                                   price: int.parse(
                                                       productPrice.text),
+                                                  weight: double.parse(
+                                                      productWeight.text),
                                                   quantity: int.parse(
                                                       productQuantity.text),
                                                   guarantee: _isGuarantee,

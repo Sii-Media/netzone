@@ -51,6 +51,18 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
         final index = updatedCart.indexWhere((item) => item == event.product);
 
         if (index != -1) {
+          if (event.cartQty > updatedCart[index].quantity!) {
+            final totalPrice = calculateTotalPrice(updatedCart);
+            final totalQuantity = calculateTotalQuantity(updatedCart);
+            emit(
+              CartLoaded(
+                items: updatedCart,
+                totalPrice: totalPrice,
+                totalQuantity: totalQuantity,
+                outStock: true,
+              ),
+            );
+          }
           final updatedItem = CategoryProducts(
             id: event.product.id,
             owner: event.product.owner,
@@ -60,26 +72,27 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
             condition: event.product.condition,
             description: event.product.description,
             price: event.product.price,
+            weight: event.product.weight,
             images: event.product.images,
             vedioUrl: event.product.vedioUrl,
             guarantee: event.product.guarantee,
             propert: event.product.propert,
             madeIn: event.product.madeIn,
             year: event.product.year,
-            quantity: event.quantity,
+            quantity: event.product.quantity,
+            cartQty: event.cartQty,
             country: event.product.country,
           );
           updatedCart[index] = updatedItem;
+          final totalPrice = calculateTotalPrice(updatedCart);
+          final totalQuantity = calculateTotalQuantity(updatedCart);
+          emit(
+            CartLoaded(
+                items: updatedCart,
+                totalPrice: totalPrice,
+                totalQuantity: totalQuantity),
+          );
         }
-
-        final totalPrice = calculateTotalPrice(updatedCart);
-        final totalQuantity = calculateTotalQuantity(updatedCart);
-        emit(
-          CartLoaded(
-              items: updatedCart,
-              totalPrice: totalPrice,
-              totalQuantity: totalQuantity),
-        );
       },
     );
     on<ClearCart>(
@@ -98,16 +111,16 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
     double totalPrice = 0;
     for (var item in cartItems) {
       if (item.priceAfterDiscount == null) {
-        if (item.quantity == null) {
+        if (item.cartQty == null) {
           totalPrice += item.price * 1;
         } else {
-          totalPrice += item.price * item.quantity!;
+          totalPrice += item.price * item.cartQty!;
         }
       } else {
-        if (item.quantity == null) {
+        if (item.cartQty == null) {
           totalPrice += item.priceAfterDiscount! * 1;
         } else {
-          totalPrice += item.priceAfterDiscount! * item.quantity!;
+          totalPrice += item.priceAfterDiscount! * item.cartQty!;
         }
       }
     }
@@ -117,7 +130,7 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
   num calculateTotalQuantity(List<CategoryProducts> cartItems) {
     num totalQuantity = 0;
     for (var item in cartItems) {
-      totalQuantity += item.quantity ?? 1;
+      totalQuantity += item.cartQty ?? 1;
     }
     return totalQuantity;
   }

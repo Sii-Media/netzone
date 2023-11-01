@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
+import 'package:netzoon/presentation/cart/widgets/identity_alert_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 
@@ -172,7 +173,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                         child: Icon(
                           Icons.delete_rounded,
                           color: AppColor.red,
-                          size: 15.sp,
+                          size: 22.sp,
                         ),
                       ),
                       const SizedBox(
@@ -182,9 +183,13 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                         children: [
                           InkWell(
                             onTap: () {
-                              _incrementQuantity();
-                              cartBloc.add(ChangeQuantity(
-                                  product: widget.cart, quantity: _quantity));
+                              if (_quantity + 1 > widget.cart.quantity!) {
+                                showOutOfStockDialog(context);
+                              } else {
+                                _incrementQuantity();
+                                cartBloc.add(ChangeQuantity(
+                                    product: widget.cart, cartQty: _quantity));
+                              }
                             },
                             borderRadius: BorderRadius.circular(20),
                             child: Container(
@@ -202,7 +207,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                               child: Icon(
                                 Icons.add,
                                 color: AppColor.red.withOpacity(0.6),
-                                size: 15.sp,
+                                size: 22.sp,
                               ),
                             ),
                           ),
@@ -235,12 +240,12 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                               onTap: () {
                                 _decrementQuantity();
                                 cartBloc.add(ChangeQuantity(
-                                    product: widget.cart, quantity: _quantity));
+                                    product: widget.cart, cartQty: _quantity));
                               },
                               child: Icon(
                                 Icons.remove,
                                 color: AppColor.red.withOpacity(0.6),
-                                size: 15.sp,
+                                size: 22.sp,
                               ),
                             ),
                           ),

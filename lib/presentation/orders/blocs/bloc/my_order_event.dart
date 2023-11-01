@@ -8,6 +8,7 @@ abstract class OrderEvent extends Equatable {
 }
 
 class SaveOrderEvent extends OrderEvent {
+  final String clientId;
   final List<OrderInput> products;
   final String orderStatus;
   final double grandTotal;
@@ -16,6 +17,7 @@ class SaveOrderEvent extends OrderEvent {
   final double? subTotal;
   final double? serviceFee;
   const SaveOrderEvent({
+    required this.clientId,
     required this.products,
     required this.orderStatus,
     required this.grandTotal,
@@ -27,3 +29,5 @@ class SaveOrderEvent extends OrderEvent {
 }
 
 class GetUserOrdersEvent extends OrderEvent {}
+
+class GetClientOrdersEvent extends OrderEvent {}

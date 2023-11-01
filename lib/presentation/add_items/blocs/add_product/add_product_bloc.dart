@@ -42,6 +42,7 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
         condition: event.condition,
         description: event.description,
         price: event.price,
+        weight: event.weight,
         quantity: event.quantity,
         image: event.image,
         productimages: event.productimages,
@@ -120,7 +121,7 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
 //     });
 
 //     Response response = await dio.post(
-//         'http://145.14.158.175/departments/addProduct',
+//         'http://10.0.2.2:5000/departments/addProduct',
 //         data: formData);
 //     // Handle the response as needed
 
@@ -138,6 +139,7 @@ Future<Response<dynamic>> _uploadFile({
   required String name,
   required String description,
   required int price,
+  required double weight,
   required int quantity,
   required File image,
   List<XFile>? productimages,
@@ -162,6 +164,7 @@ Future<Response<dynamic>> _uploadFile({
       MapEntry('name', name),
       MapEntry('description', description),
       MapEntry('price', price.toString()),
+      MapEntry('weight', weight.toString()),
       MapEntry('quantity', quantity.toString()),
       MapEntry('guarantee', guarantee.toString()),
       MapEntry('madeIn', madeIn ?? ''),
@@ -232,7 +235,7 @@ Future<Response<dynamic>> _uploadFile({
     }
 
     Response response = await dio.post(
-      'http://145.14.158.175/departments/addProduct',
+      'http://10.0.2.2:5000/departments/addProduct',
       data: formData,
     );
 

@@ -7,6 +7,7 @@ import 'package:netzoon/data/datasource/local/country/country_local_data_source.
 import 'package:netzoon/data/datasource/local/favorite/favorite_local_data_source.dart';
 import 'package:netzoon/data/datasource/local/lang/lang_local_data_resource.dart';
 import 'package:netzoon/data/datasource/remote/advertisements/ads_remote_data_source.dart';
+import 'package:netzoon/data/datasource/remote/aramex/aramex_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/auth/auth_remote_datasource.dart';
 import 'package:netzoon/data/datasource/remote/complaints/complaints_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/customs/customs_remote_data_source.dart';
@@ -31,6 +32,7 @@ import 'package:netzoon/data/datasource/remote/tenders/tenders_remote_data_sourc
 import 'package:netzoon/data/datasource/remote/users/users_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/vehicles/vehicle_remote_data_source.dart';
 import 'package:netzoon/data/repositories/advertisments/advertisment_repository_impl.dart';
+import 'package:netzoon/data/repositories/aramex/aramex_repository_impl.dart';
 import 'package:netzoon/data/repositories/auth_repository_impl.dart';
 import 'package:netzoon/data/repositories/complaints/complaints_repository_impl.dart';
 import 'package:netzoon/data/repositories/country/country_repository_impl.dart';
@@ -64,6 +66,10 @@ import 'package:netzoon/domain/advertisements/usercases/edit_ads_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_ads_by_type_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_advertisements_usecase.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_user_ads_use_case.dart';
+import 'package:netzoon/domain/aramex/repositories/aramex_repository.dart';
+import 'package:netzoon/domain/aramex/usecases/calculate_rate_use_case.dart';
+import 'package:netzoon/domain/aramex/usecases/create_pickup_use_case.dart';
+import 'package:netzoon/domain/aramex/usecases/create_shipment_usecase.dart';
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
 import 'package:netzoon/domain/auth/usecases/add_account_to_user_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/add_visitor_to_profile_use_case.dart';
@@ -173,6 +179,7 @@ import 'package:netzoon/domain/notifications/use_cases/make_all_notification_as_
 import 'package:netzoon/domain/openions/repositories/openion_repository.dart';
 import 'package:netzoon/domain/openions/usecases/add_openion_use_case.dart';
 import 'package:netzoon/domain/order/repositories/order_repository.dart';
+import 'package:netzoon/domain/order/usecases/get_client_orders_use_case.dart';
 import 'package:netzoon/domain/order/usecases/get_user_orders_use_case.dart';
 import 'package:netzoon/domain/order/usecases/save_order_use_case.dart';
 import 'package:netzoon/domain/questions/repositories/question_repository.dart';
@@ -190,6 +197,7 @@ import 'package:netzoon/domain/tenders/usecases/get_tenders_items_by_max.dart';
 import 'package:netzoon/presentation/add_items/blocs/add_product/add_product_bloc.dart';
 import 'package:netzoon/presentation/advertising/blocs/add_ads/add_ads_bloc.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
+import 'package:netzoon/presentation/aramex/blocs/aramex_bloc/aramex_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/change_password/change_password_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/get_otp_code/get_otp_code_bloc.dart';
@@ -248,7 +256,7 @@ import 'domain/notifications/use_cases/send_notification_use_case.dart';
 import 'domain/send_emails/use_cases/send_email_use_case.dart';
 import 'domain/tenders/usecases/add_tender_use_case.dart';
 
-const String baseUrl = 'http://145.14.158.175';
+const String baseUrl = 'http://10.0.2.2:5000';
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -484,6 +492,15 @@ Future<void> init() async {
       saveOrderUseCase: sl(),
       getSignedInUser: sl(),
       getUserOrdersUseCase: sl(),
+      getClientOrdersUseCase: sl(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => AramexBloc(
+      createPickUpUseCase: sl(),
+      createShipmentUseCase: sl(),
+      calculateRateUseCase: sl(),
     ),
   );
 
@@ -778,6 +795,14 @@ Future<void> init() async {
 
   sl.registerLazySingleton(
       () => SendEmailDeliveryUseCas(sendEmailRepository: sl()));
+
+  sl.registerLazySingleton(() => CreatePickUpUseCase(aramexRepository: sl()));
+  sl.registerLazySingleton(() => CreateShipmentUseCase(aramexRepository: sl()));
+
+  sl.registerLazySingleton(() => GetClientOrdersUseCase(orderRepository: sl()));
+
+  sl.registerLazySingleton(() => CalculateRateUseCase(aramexRepository: sl()));
+
   //! Repositories
 
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
@@ -868,6 +893,10 @@ Future<void> init() async {
       orderRemoteDataSource: sl(),
     ),
   );
+
+  sl.registerLazySingleton<AramexRepository>(() =>
+      AramexRespositoryImpl(aramexRemoteDataSource: sl(), networkInfo: sl()));
+
   //! DataSourses
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
@@ -952,6 +981,11 @@ Future<void> init() async {
 
   sl.registerLazySingleton<OrderRemoteDataSource>(
       () => OrderRemoteDataSourceImpl(sl(), baseUrl: baseUrl));
+
+  sl.registerLazySingleton<AramexRemoteDataSource>(() => AramexRemoteDataSourceImpl(
+      sl(),
+      baseUrl:
+          'https://ws.sbx.aramex.net/ShippingAPI.V2/Shipping/Service_1_0.svc/json'));
 
   //! Core
 

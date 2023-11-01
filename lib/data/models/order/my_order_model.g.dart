@@ -8,7 +8,9 @@ part of 'my_order_model.dart';
 
 MyOrderModel _$MyOrderModelFromJson(Map<String, dynamic> json) => MyOrderModel(
       id: json['_id'] as String,
-      userId: json['userId'] as String,
+      userId: UserInfoModel.fromJson(json['userId'] as Map<String, dynamic>),
+      clientId:
+          UserInfoModel.fromJson(json['clientId'] as Map<String, dynamic>),
       products: (json['products'] as List<dynamic>)
           .map((e) => OrderProductsModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -26,6 +28,7 @@ Map<String, dynamic> _$MyOrderModelToJson(MyOrderModel instance) =>
     <String, dynamic>{
       '_id': instance.id,
       'userId': instance.userId,
+      'clientId': instance.clientId,
       'products': instance.products,
       'grandTotal': instance.grandTotal,
       'orderStatus': instance.orderStatus,

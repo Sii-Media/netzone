@@ -28,12 +28,12 @@ class RemoveFromCart extends CartBlocEvent {
 
 class ChangeQuantity extends CartBlocEvent {
   final CategoryProducts product;
-  final int quantity;
+  final int cartQty;
 
-  const ChangeQuantity({required this.product, required this.quantity});
+  const ChangeQuantity({required this.product, required this.cartQty});
 
   @override
-  List<Object> get props => [product, quantity];
+  List<Object> get props => [product, cartQty];
 }
 
 class ClearCart extends CartBlocEvent {}

@@ -16,6 +16,7 @@ class CategoryProductsModel {
   final String? condition;
   final String description;
   final int price;
+  final double? weight;
   final num? quantity;
   final List<String>? images;
   final String? vedioUrl;
@@ -43,6 +44,7 @@ class CategoryProductsModel {
     this.condition,
     required this.description,
     required this.price,
+    required this.weight,
     this.quantity,
     this.images,
     this.vedioUrl,
@@ -76,6 +78,7 @@ extension MapToDomain on CategoryProductsModel {
         condition: condition,
         description: description,
         price: price,
+        weight: weight,
         quantity: quantity,
         images: images,
         vedioUrl: vedioUrl,

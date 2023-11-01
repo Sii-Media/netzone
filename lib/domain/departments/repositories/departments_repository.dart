@@ -28,6 +28,7 @@ abstract class DepartmentRepository {
     required String name,
     required String description,
     required int price,
+    required double weight,
     List<String>? images,
     String? videoUrl,
     String? guarantee,

@@ -21,7 +21,7 @@ abstract class AuthRepository {
     String? secondMobile,
     String? thirdMobile,
     String? subcategory,
-    String? address,
+    required String? address,
     int? companyProductsNumbe,
     String? sellType,
     String? toCountry,
@@ -45,10 +45,11 @@ abstract class AuthRepository {
     int? deliveryCarsNum,
     int? deliveryMotorsNum,
     double? profitRatio,
-    String? city,
+    required String? city,
     String? addressDetails,
     int? floorNum,
     String? locationType,
+    required String? contactName,
   });
 
   Future<Either<Failure, User>> signIn({
@@ -95,6 +96,7 @@ abstract class AuthRepository {
     required String secondeMobile,
     required String thirdMobile,
     required File? profilePhoto,
+    required String contactName,
     String? bio,
     String? description,
     String? website,

@@ -37,6 +37,7 @@ class OrderRepositoryImpl implements OrderRepository {
   @override
   Future<Either<Failure, MyOrder>> saveOrder({
     required String userId,
+    required String clientId,
     required List<OrderInput> products,
     required String orderStatus,
     required double grandTotal,
@@ -49,6 +50,7 @@ class OrderRepositoryImpl implements OrderRepository {
       Dio dio = Dio();
       if (await networkInfo.isConnected) {
         final requestData = {
+          "clientId": clientId,
           "products": products.map((product) {
             return {
               "product": product.product,
@@ -65,7 +67,7 @@ class OrderRepositoryImpl implements OrderRepository {
         };
         final requestDataJson = jsonEncode(requestData);
         final response = await dio.post(
-            'http://145.14.158.175/order/save/$userId',
+            'http://10.0.2.2:5000/order/save/$userId',
             data: requestDataJson);
         // Handle the response as needed
         if (response.statusCode == 200) {
@@ -74,6 +76,7 @@ class OrderRepositoryImpl implements OrderRepository {
           final MyOrder order = MyOrder(
             id: response.data['_id'],
             userId: response.data['userId'],
+            clientId: response.data['clientId'],
             products: response.data['products'],
             grandTotal: grandTotal,
           );
@@ -84,6 +87,23 @@ class OrderRepositoryImpl implements OrderRepository {
           return Left(response.data);
           // Handle other status codes if necessary
         }
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      print(e);
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<MyOrder>>> getClientOrders(
+      {required String clientId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final orders = await orderRemoteDataSource.getClientOrders(clientId);
+        print(orders);
+        return Right(orders.map((e) => e.toDomain()).toList());
       } else {
         return Left(OfflineFailure());
       }

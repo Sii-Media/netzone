@@ -181,7 +181,9 @@ class _MyRealEstateCompanyProfileScreenState
                                             Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                     builder: (context) {
-                                              return const CreditScreen();
+                                              return CreditScreen(
+                                                user: state.userInfo,
+                                              );
                                             }));
                                           }),
                                       roundedIconText(

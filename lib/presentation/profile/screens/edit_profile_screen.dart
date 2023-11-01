@@ -26,6 +26,8 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     with ScreenLoader<EditProfileScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _contactNameController = TextEditingController();
+
   final TextEditingController _firstMobileController = TextEditingController();
   final TextEditingController _secondeMobileController =
       TextEditingController();
@@ -118,16 +120,18 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                 backgroundColor: Theme.of(context).colorScheme.secondary,
               ));
               UserInfo userInfo = UserInfo(
-                  username: _userNameController.text,
-                  email: _emailController.text,
-                  password: widget.userInfo.password,
-                  userType: widget.userInfo.userType,
-                  firstMobile: _firstMobileController.text,
-                  secondeMobile: _secondeMobileController.text,
-                  thirdMobile: _thirdMobileController.text,
-                  profilePhoto: _updatedImage?.path,
-                  isFreeZoon: widget.userInfo.isFreeZoon,
-                  id: widget.userInfo.id);
+                username: _userNameController.text,
+                email: _emailController.text,
+                password: widget.userInfo.password,
+                userType: widget.userInfo.userType,
+                firstMobile: _firstMobileController.text,
+                secondeMobile: _secondeMobileController.text,
+                thirdMobile: _thirdMobileController.text,
+                profilePhoto: _updatedImage?.path,
+                isFreeZoon: widget.userInfo.isFreeZoon,
+                id: widget.userInfo.id,
+                contactName: widget.userInfo.contactName,
+              );
               Navigator.of(context).pop(userInfo);
             }
           },
@@ -250,6 +254,31 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       ),
                       decoration: InputDecoration(
                         hintText: 'first_name',
+                        prefixIcon: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.person,
+                              size: 15.sp,
+                            )),
+                      ),
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return 'field_required_message';
+                        }
+
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 25),
+                    TextFormField(
+                      controller: _contactNameController,
+                      style: const TextStyle(
+                        color: AppColor.backgroundColor,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'contact name',
                         prefixIcon: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(
@@ -521,6 +550,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                             slogn: _slognController.text,
                             website: _websiteController.text,
                             address: _addressController.text,
+                            contactName: _contactNameController.text,
                           ));
                         },
                         style: ButtonStyle(

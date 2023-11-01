@@ -17,6 +17,7 @@ class AddProductUseCase extends UseCase<String, AddProductParams> {
       name: params.name,
       description: params.description,
       price: params.price,
+      weight: params.weight,
       guarantee: params.guarantee,
       image: params.image,
       images: params.images,
@@ -34,6 +35,7 @@ class AddProductParams {
   final String name;
   final String description;
   final int price;
+  final double weight;
   final List<String>? images;
   final String? videoUrl;
   final String? guarantee;
@@ -48,6 +50,7 @@ class AddProductParams {
     required this.name,
     required this.description,
     required this.price,
+    required this.weight,
     this.images,
     this.videoUrl,
     this.guarantee,

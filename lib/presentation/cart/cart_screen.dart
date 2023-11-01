@@ -223,6 +223,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                 serviceFee: emailState.serviceFee,
                 subTotal: emailState.subtotal,
                 totalAmount: emailState.grandTotal,
+                productsNames: products.map((e) => e.name).toList().join(' - '),
               );
             }));
           }
@@ -560,27 +561,61 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                               InkWell(
                                 onTap: () {
                                   if (state is CartLoaded) {
-                                    String amount =
-                                        (state.totalPrice.toInt() * 100)
-                                            .toString();
-                                    makePayment(
-                                      amount: amount,
-                                      currency: 'AED',
-                                      toName:
-                                          authState.user.userInfo.username ??
-                                              '',
-                                      toEmail:
-                                          authState.user.userInfo.email ?? '',
-                                      userMobile:
-                                          authState.user.userInfo.firstMobile ??
-                                              '',
-                                      productsNames: products
-                                          .map((e) => e.name)
-                                          .toList()
-                                          .join(' - '),
-                                      grandTotal: totalAmount.toString(),
-                                      serviceFee: serviceFee.toString(),
-                                    );
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return DeliveryDetailsScreen(
+                                        userInfo: userInfo,
+                                        from: from.join(' / '),
+                                        products: products,
+                                        serviceFee: serviceFee,
+                                        subTotal: totalAmount - serviceFee,
+                                        totalAmount: totalAmount,
+                                        productsNames: products
+                                            .map((e) => e.name)
+                                            .toList()
+                                            .join(' - '),
+                                      );
+                                    }));
+                                    // String amount =
+                                    //     (totalAmount.toInt() * 100).toString();
+                                    // makePayment(
+                                    //   amount: amount,
+                                    //   currency: 'AED',
+                                    //   toName:
+                                    //       authState.user.userInfo.username ??
+                                    //           '',
+                                    //   toEmail:
+                                    //       authState.user.userInfo.email ?? '',
+                                    //   userMobile:
+                                    //       authState.user.userInfo.firstMobile ??
+                                    //           '',
+                                    //   productsNames: products
+                                    //       .map((e) => e.name)
+                                    //       .toList()
+                                    //       .join(' - '),
+                                    //   grandTotal: totalAmount.toString(),
+                                    //   serviceFee: serviceFee.toString(),
+                                    // );
+                                    // double g = totalAmount;
+                                    // double s = serviceFee;
+
+                                    // sendBloc.add(SendEmailPaymentRequestEvent(
+                                    //   toName:
+                                    //       authState.user.userInfo.username ??
+                                    //           '',
+                                    //   toEmail:
+                                    //       authState.user.userInfo.email ?? '',
+                                    //   userMobile:
+                                    //       authState.user.userInfo.firstMobile ??
+                                    //           '',
+                                    //   productsNames: products
+                                    //       .map((e) => e.name)
+                                    //       .toList()
+                                    //       .join(' - '),
+                                    //   grandTotal: totalAmount.toString(),
+                                    //   serviceFee: serviceFee.toString(),
+                                    //   subTotal: g - s,
+                                    // ));
                                   } else {
                                     print('asd');
                                   }
@@ -595,7 +630,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                                           Border.all(color: AppColor.white)),
                                   child: Text(
                                     AppLocalizations.of(context)
-                                        .translate('check_out'),
+                                        .translate('confirm'),
                                     style: TextStyle(
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.bold,
