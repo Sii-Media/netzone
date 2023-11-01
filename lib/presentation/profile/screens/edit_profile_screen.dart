@@ -413,6 +413,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                       ),
                       keyboardType: TextInputType.text,
                       maxLines: 3,
+                      minLines: 1,
                       textInputAction: TextInputAction.next,
                       validator: (text) {
                         return null;

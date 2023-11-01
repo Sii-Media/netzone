@@ -815,83 +815,78 @@ class _AddProductScreenState extends State<AddProductScreen>
                                     );
                                     return;
                                   }
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text(
-                                            AppLocalizations.of(context)
-                                                .translate('service_fee'),
-                                            style: const TextStyle(
-                                                color: AppColor.backgroundColor,
-                                                fontWeight: FontWeight.w700),
-                                          ),
-                                          content: Text(
-                                            '${AppLocalizations.of(context).translate('you_should_pay')} ${calulateAddProductFee(
-                                              isNew: _selectedCondition,
-                                              price:
-                                                  int.parse(productPrice.text),
-                                              quantity: int.parse(
-                                                  productQuantity.text),
-                                            )} ${AppLocalizations.of(context).translate('AED')}',
-                                            style: const TextStyle(
-                                              color: AppColor.backgroundColor,
-                                            ),
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context)
-                                                    .pop(false);
-                                              },
-                                              child: Text(
-                                                AppLocalizations.of(context)
-                                                    .translate('cancel'),
-                                                style: const TextStyle(
-                                                    color: AppColor.red),
-                                              ),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context)
-                                                    .pop(false);
-                                                addBloc.add(
-                                                    AddProductRequestedEvent(
-                                                  departmentName: selectedValue,
-                                                  categoryName:
-                                                      selectCat?.name ?? '',
-                                                  name: productName.text,
-                                                  condition: _selectedCondition,
-                                                  description: productDesc.text,
-                                                  price: int.parse(
-                                                      productPrice.text),
-                                                  weight: double.parse(
-                                                      productWeight.text),
-                                                  quantity: int.parse(
-                                                      productQuantity.text),
-                                                  guarantee: _isGuarantee,
-                                                  productimages: imageFileList,
-                                                  madeIn: madeInController.text,
-                                                  address: productAddress.text,
-                                                  video: _video,
-                                                  image: _image!,
-                                                  discountPercentage:
-                                                      _discountPercentage
-                                                          .round(),
-                                                  color: colorController.text,
-                                                ));
-                                              },
-                                              child: Text(
-                                                AppLocalizations.of(context)
-                                                    .translate('submit'),
-                                                style: const TextStyle(
-                                                    color: AppColor
-                                                        .backgroundColor),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      });
+                                  // showDialog(
+                                  //     context: context,
+                                  //     builder: (BuildContext context) {
+                                  //       return AlertDialog(
+                                  //         title: Text(
+                                  //           AppLocalizations.of(context)
+                                  //               .translate('service_fee'),
+                                  //           style: const TextStyle(
+                                  //               color: AppColor.backgroundColor,
+                                  //               fontWeight: FontWeight.w700),
+                                  //         ),
+                                  //         content: Text(
+                                  //           '${AppLocalizations.of(context).translate('you_should_pay')} ${calulateAddProductFee(
+                                  //             isNew: _selectedCondition,
+                                  //             price:
+                                  //                 int.parse(productPrice.text),
+                                  //             quantity: int.parse(
+                                  //                 productQuantity.text),
+                                  //           )} ${AppLocalizations.of(context).translate('AED')}',
+                                  //           style: const TextStyle(
+                                  //             color: AppColor.backgroundColor,
+                                  //           ),
+                                  //         ),
+                                  //         actions: [
+                                  //           TextButton(
+                                  //             onPressed: () {
+                                  //               Navigator.of(context)
+                                  //                   .pop(false);
+                                  //             },
+                                  //             child: Text(
+                                  //               AppLocalizations.of(context)
+                                  //                   .translate('cancel'),
+                                  //               style: const TextStyle(
+                                  //                   color: AppColor.red),
+                                  //             ),
+                                  //           ),
+                                  //           TextButton(
+                                  //             onPressed: () {
+                                  //               Navigator.of(context)
+                                  //                   .pop(false);
+
+                                  //             },
+                                  //             child: Text(
+                                  //               AppLocalizations.of(context)
+                                  //                   .translate('submit'),
+                                  //               style: const TextStyle(
+                                  //                   color: AppColor
+                                  //                       .backgroundColor),
+                                  //             ),
+                                  //           ),
+                                  //         ],
+                                  //       );
+                                  //     });
+                                  addBloc.add(AddProductRequestedEvent(
+                                    departmentName: selectedValue,
+                                    categoryName: selectCat?.name ?? '',
+                                    name: productName.text,
+                                    condition: _selectedCondition,
+                                    description: productDesc.text,
+                                    price: int.parse(productPrice.text),
+                                    weight: double.parse(productWeight.text),
+                                    quantity: int.parse(productQuantity.text),
+                                    guarantee: _isGuarantee,
+                                    productimages: imageFileList,
+                                    madeIn: madeInController.text,
+                                    address: productAddress.text,
+                                    video: _video,
+                                    image: _image!,
+                                    discountPercentage:
+                                        _discountPercentage.round(),
+                                    color: colorController.text,
+                                  ));
                                 }),
                           ),
                           SizedBox(

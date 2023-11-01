@@ -114,7 +114,7 @@ class DealsRepositoryImpl implements DealsRepository {
           ));
         }
         Response response = await dio.post(
-          'http://10.0.2.2:5000/deals/addDeal',
+          'http://192.168.0.191:5000/deals/addDeal',
           data: formData,
         );
         if (response.statusCode == 200) {
@@ -200,7 +200,7 @@ class DealsRepositoryImpl implements DealsRepository {
           ));
         }
         Response response = await dio.put(
-          'http://10.0.2.2:5000/deals/$id',
+          'http://192.168.0.191:5000/deals/$id',
           data: formData,
         );
         return Right(response.data);

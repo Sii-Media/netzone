@@ -14,7 +14,7 @@ class _LocalCompanyRemoteDataSourceImpl
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://10.0.2.2:5000';
+    baseUrl ??= 'http://192.168.0.191:5000';
   }
 
   final Dio _dio;
