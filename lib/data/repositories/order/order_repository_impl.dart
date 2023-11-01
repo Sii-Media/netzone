@@ -67,7 +67,7 @@ class OrderRepositoryImpl implements OrderRepository {
         };
         final requestDataJson = jsonEncode(requestData);
         final response = await dio.post(
-            'http://10.0.2.2:5000/order/save/$userId',
+            'http://145.14.158.175:5000/order/save/$userId',
             data: requestDataJson);
         // Handle the response as needed
         if (response.statusCode == 200) {

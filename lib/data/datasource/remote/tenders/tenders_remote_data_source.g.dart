@@ -13,7 +13,7 @@ class _TendersRemoteDataSourceImpl implements TendersRemoteDataSourceImpl {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://10.0.2.2:5000';
+    baseUrl ??= 'http://145.14.158.175:5000';
   }
 
   final Dio _dio;

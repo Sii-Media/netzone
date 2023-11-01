@@ -256,7 +256,7 @@ import 'domain/notifications/use_cases/send_notification_use_case.dart';
 import 'domain/send_emails/use_cases/send_email_use_case.dart';
 import 'domain/tenders/usecases/add_tender_use_case.dart';
 
-const String baseUrl = 'http://10.0.2.2:5000';
+const String baseUrl = 'http://145.14.158.175:5000';
 final sl = GetIt.instance;
 
 Future<void> init() async {
