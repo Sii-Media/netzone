@@ -48,8 +48,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     color: AppColor.backgroundColor,
                   ),
                 );
-              }
-              if (state is Authenticated) {
+              } else if (state is Authenticated) {
                 return Column(
                   children: [
                     Text(
@@ -220,7 +219,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         : const SizedBox(),
                   ],
                 );
-              } else {
+              } else if (state is Unauthenticated) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -262,6 +261,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   ],
                 );
               }
+              return Container();
             },
           )),
     );

@@ -580,32 +580,46 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
                 );
               } else if (shipmentState is CreateShipmentSuccess) {
                 stopLoading();
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(
-                    AppLocalizations.of(context).translate('success'),
-                  ),
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
-                ));
-                print('asdasddddddddddddddddddddddddddddddd');
-                orderBloc.add(SaveOrderEvent(
-                    clientId: widget.products[0].owner.id,
-                    products: widget.products
-                        .map((e) => OrderInput(
-                            product: e.id,
-                            amount: e.price.toDouble(),
-                            qty: e.cartQty?.toInt() ?? 1))
-                        .toList(),
-                    orderStatus: 'pending',
-                    grandTotal: widget.totalAmount + widget.deliveryFee,
-                    mobile: widget.userMobile,
-                    serviceFee: widget.serviceFee,
-                    subTotal: widget.subTotal,
-                    shippingAddress:
-                        '${widget.city} - ${widget.addressDetails} - ${widget.floorNum}'));
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) {
-                  return const CongsScreen();
-                }));
+                if (shipmentState.createShipmentResponse.hasError == true) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'failure',
+                        style: TextStyle(
+                          color: AppColor.white,
+                        ),
+                      ),
+                      backgroundColor: AppColor.red,
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                      AppLocalizations.of(context).translate('success'),
+                    ),
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                  ));
+                  print('asdasddddddddddddddddddddddddddddddd');
+                  orderBloc.add(SaveOrderEvent(
+                      clientId: widget.products[0].owner.id,
+                      products: widget.products
+                          .map((e) => OrderInput(
+                              product: e.id,
+                              amount: e.price.toDouble(),
+                              qty: e.cartQty?.toInt() ?? 1))
+                          .toList(),
+                      orderStatus: 'pending',
+                      grandTotal: widget.totalAmount + widget.deliveryFee,
+                      mobile: widget.userMobile,
+                      serviceFee: widget.serviceFee,
+                      subTotal: widget.subTotal,
+                      shippingAddress:
+                          '${widget.city} - ${widget.addressDetails} - ${widget.floorNum}'));
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return const CongsScreen();
+                  }));
+                }
               }
             },
             child: Padding(

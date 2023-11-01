@@ -484,6 +484,8 @@ class _EditLocalCompanyprofileScreenState
                     ),
                     keyboardType: TextInputType.text,
                     maxLines: 3,
+                    enableIMEPersonalizedLearning: true,
+                    minLines: 1,
                     textInputAction: TextInputAction.next,
                     validator: (text) {
                       return null;

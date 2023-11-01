@@ -237,8 +237,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                   color: AppColor.backgroundColor,
                 ),
               );
-            }
-            if (authState is Authenticated) {
+            } else if (authState is Authenticated) {
               userInfo = authState.user.userInfo;
               return BlocBuilder<CartBlocBloc, CartBlocState>(
                 builder: (context, state) {
@@ -299,49 +298,51 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                   return Container();
                 },
               );
-            }
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  AppLocalizations.of(context)
-                      .translate('You must log in first'),
-                  style: TextStyle(
-                    color: AppColor.mainGrey,
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          AppColor.backgroundColor,
-                        ),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        )),
-                      ),
-                      child:
-                          Text(AppLocalizations.of(context).translate('login')),
-                      onPressed: () async {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return const SignInScreen();
-                        }));
-                      },
+            } else {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)
+                        .translate('You must log in first'),
+                    style: TextStyle(
+                      color: AppColor.mainGrey,
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                ),
-              ],
-            );
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            AppColor.backgroundColor,
+                          ),
+                          shape:
+                              MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          )),
+                        ),
+                        child: Text(
+                            AppLocalizations.of(context).translate('login')),
+                        onPressed: () async {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return const SignInScreen();
+                          }));
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }
           },
         ),
       ),
