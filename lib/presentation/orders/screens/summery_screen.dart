@@ -82,7 +82,7 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
   final aramexBloc2 = sl<AramexBloc>();
   late final CartBlocBloc cartBloc;
 
-  String secretKey = dotenv.get('STRIPE_SEC_KEY', fallback: '');
+  String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
 
   Map<String, dynamic>? paymentIntent;
 
@@ -333,10 +333,10 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
                       source: 24,
                       accountCountryCode: 'AE',
                       accountEntity: 'DXB',
-                      accountPin: '116216',
-                      accountNumber: '45796',
-                      userName: 'testingapi@aramex.com',
-                      password: 'R123456789\$r',
+                      accountPin: '906169',
+                      accountNumber: '71923340',
+                      userName: 'netzoon.2023@gmail.com',
+                      password: 'Netzoon@123@aramex',
                       version: 'v1'),
                   labelInfo: const LabelInfo(
                     reportID: 9201,
@@ -466,7 +466,7 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
                         reference3: '',
                         shipper: ShipperOrConsignee(
                           reference1: '',
-                          accountNumber: '45796',
+                          accountNumber: '71923340',
                           partyAddress: PartyAddress(
                               line1: widget.products[0].owner.address ?? '',
                               line2:
@@ -493,7 +493,7 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
                         ),
                         consignee: ShipperOrConsignee(
                             reference1: '',
-                            accountNumber: '45796',
+                            accountNumber: '71923340',
                             partyAddress: PartyAddress(
                                 line1: widget.addressDetails,
                                 city: widget.city,
@@ -550,10 +550,10 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
                           source: 24,
                           accountCountryCode: 'AE',
                           accountEntity: 'DXB',
-                          accountPin: '116216',
-                          accountNumber: '45796',
-                          userName: 'testingapi@aramex.com',
-                          password: 'R123456789\$r',
+                          accountPin: '906169',
+                          accountNumber: '71923340',
+                          userName: 'netzoon.2023@gmail.com',
+                          password: 'Netzoon@123@aramex',
                           version: 'v1'),
                       transaction:
                           const Transaction(reference1: 'reference1'))));

@@ -37,7 +37,7 @@ class AramexRespositoryImpl implements AramexRepository {
         final dio = Dio();
 
         const requestUrl =
-            "https://ws.sbx.aramex.net/ShippingAPI.V2/Shipping/Service_1_0.svc/json/CreateShipments";
+            "https://ws.aramex.net/shippingapi.v2/shipping/service_1_0.svc/json/CreateShipments";
 
         final requestBody = {
           "Shipments": [
@@ -48,7 +48,7 @@ class AramexRespositoryImpl implements AramexRepository {
               "Shipper": {
                 "Reference1": null,
                 "Reference2": null,
-                "AccountNumber": "45796",
+                "AccountNumber": "71923340",
                 "PartyAddress": {
                   "Line1": createShipmentInputData
                       .shipments.first.shipper.partyAddress.line1,
@@ -203,10 +203,10 @@ class AramexRespositoryImpl implements AramexRepository {
             "Source": 24,
             "AccountCountryCode": "AE",
             "AccountEntity": "DXB",
-            "AccountPin": "116216",
-            "AccountNumber": "45796",
-            "UserName": "testingapi@aramex.com",
-            "Password": "R123456789\$r",
+            "AccountPin": "906169",
+            "AccountNumber": "71923340",
+            "UserName": "netzoon.2023@gmail.com",
+            "Password": "Netzoon@123@aramex",
             "Version": "v1"
           },
           "Transaction": {
@@ -251,17 +251,17 @@ class AramexRespositoryImpl implements AramexRepository {
         final dio = Dio();
 
         const requestUrl =
-            "https://ws.sbx.aramex.net/ShippingAPI.V2/Shipping/Service_1_0.svc/json/CreatePickup";
+            "https://ws.aramex.net/shippingapi.v2/shipping/service_1_0.svc/json/CreatePickup";
 
         final requestBody = {
           "ClientInfo": {
             "Source": 24,
             "AccountCountryCode": "AE",
             "AccountEntity": "DXB",
-            "AccountPin": "116216",
-            "AccountNumber": "45796",
-            "UserName": "testingapi@aramex.com",
-            "Password": "R123456789\$r",
+            "AccountPin": "906169",
+            "AccountNumber": "71923340",
+            "UserName": "netzoon.2023@gmail.com",
+            "Password": "Netzoon@123@aramex",
             "Version": "v1"
           },
           "LabelInfo": {"ReportID": 9201, "ReportType": "URL"},
@@ -393,7 +393,7 @@ class AramexRespositoryImpl implements AramexRepository {
         final dio = Dio();
 
         const requestUrl =
-            "https://ws.sbx.aramex.net/ShippingAPI.V2/RateCalculator/Service_1_0.svc/json/CalculateRate";
+            "https://ws.aramex.net/ShippingAPI.V2/RateCalculator/Service_1_0.svc/json/CalculateRate";
 
         final requestBody = {
           "OriginAddress": {
@@ -463,10 +463,10 @@ class AramexRespositoryImpl implements AramexRepository {
             "Source": 24,
             "AccountCountryCode": "AE",
             "AccountEntity": "DXB",
-            "AccountPin": "116216",
-            "AccountNumber": "45796",
-            "UserName": "testingapi@aramex.com",
-            "Password": "R123456789\$r",
+            "AccountPin": "906169",
+            "AccountNumber": "71923340",
+            "UserName": "netzoon.2023@gmail.com",
+            "Password": "Netzoon@123@aramex",
             "Version": "v1"
           },
           "Transaction": null

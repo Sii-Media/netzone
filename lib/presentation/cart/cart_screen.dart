@@ -31,7 +31,7 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
-  String secretKey = dotenv.get('STRIPE_SEC_KEY', fallback: '');
+  String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
 
   Map<String, dynamic>? paymentIntent;
 

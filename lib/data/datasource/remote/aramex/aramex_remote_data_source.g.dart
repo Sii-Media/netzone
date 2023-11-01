@@ -14,7 +14,7 @@ class _AramexRemoteDataSourceImpl implements AramexRemoteDataSourceImpl {
     this.baseUrl,
   }) {
     baseUrl ??=
-        'https://ws.sbx.aramex.net/ShippingAPI.V2/Shipping/Service_1_0.svc/json';
+        'https://ws.aramex.net/shippingapi.v2/shipping/service_1_0.svc/json';
   }
 
   final Dio _dio;

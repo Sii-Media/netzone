@@ -17,7 +17,7 @@ abstract class AramexRemoteDataSource {
 
 @RestApi(
     baseUrl:
-        'https://ws.sbx.aramex.net/ShippingAPI.V2/Shipping/Service_1_0.svc/json')
+        'https://ws.aramex.net/shippingapi.v2/shipping/service_1_0.svc/json')
 abstract class AramexRemoteDataSourceImpl implements AramexRemoteDataSource {
   factory AramexRemoteDataSourceImpl(Dio dio, {required String baseUrl}) {
     dio.options = BaseOptions(
@@ -28,7 +28,7 @@ abstract class AramexRemoteDataSourceImpl implements AramexRemoteDataSource {
     );
     return _AramexRemoteDataSourceImpl(dio,
         baseUrl:
-            'https://ws.sbx.aramex.net/ShippingAPI.V2/Shipping/Service_1_0.svc/json');
+            'https://ws.aramex.net/shippingapi.v2/shipping/service_1_0.svc/json');
   }
 
   @override

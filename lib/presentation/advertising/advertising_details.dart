@@ -35,7 +35,7 @@ class AdvertismentDetalsScreen extends StatefulWidget {
 
 class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
     with ScreenLoader<AdvertismentDetalsScreen> {
-  String secretKey = dotenv.get('STRIPE_SEC_KEY', fallback: '');
+  String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
 
   Map<String, dynamic>? paymentIntent;
   final adsBloc = sl<AdsBlocBloc>();

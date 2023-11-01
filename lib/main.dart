@@ -33,7 +33,7 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  String stripePubKey = dotenv.get('STRIPE_PUB_KEY', fallback: '');
+  String stripePubKey = dotenv.get('STRIPE_LIVE_PUB_KEY', fallback: '');
   Stripe.publishableKey = stripePubKey;
   // await initializeQuickBlox();
   await Firebase.initializeApp();
