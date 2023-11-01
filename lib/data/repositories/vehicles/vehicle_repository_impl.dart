@@ -341,7 +341,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
           ));
         }
         Response response = await dio.post(
-            'http://192.168.0.191:5000/categories/vehicle/create-vehicle',
+            'http://145.14.158.175:5000/categories/vehicle/create-vehicle',
             data: formData);
         if (response.statusCode == 201) {
           return Right(response.data);

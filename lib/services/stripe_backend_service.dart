@@ -18,7 +18,7 @@ class CheckoutSessionResponse {
 }
 
 class StripeBackendService {
-  static String apiBase = 'http://192.168.0.191:5000/user/api/stripe';
+  static String apiBase = 'http://145.14.158.175:5000/user/api/stripe';
   static String createAccountUrl =
       '${StripeBackendService.apiBase}/account?mobile=true';
   static Map<String, String> headers = {'Content-Type': 'application/json'};

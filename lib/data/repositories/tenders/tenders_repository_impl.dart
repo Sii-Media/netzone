@@ -114,7 +114,7 @@ class TendersRepositoryImpl implements TenderRepository {
           ),
         ));
         Response response = await dio.post(
-          'http://192.168.0.191:5000/tenders/add-tender',
+          'http://145.14.158.175:5000/tenders/add-tender',
           data: formData,
         );
         if (response.statusCode == 200) {

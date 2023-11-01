@@ -216,7 +216,7 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
           ));
         }
         Response response = await dio.put(
-          'http://192.168.0.191:5000/departments/editProduct/$productId',
+          'http://145.14.158.175:5000/departments/editProduct/$productId',
           data: formData,
         );
         return Right(response.data);

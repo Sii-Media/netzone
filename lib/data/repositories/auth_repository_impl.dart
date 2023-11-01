@@ -226,7 +226,7 @@ class AuthRepositoryImpl implements AuthRepository {
         }
 
         Response response = await dio
-            .post('http://192.168.0.191:5000/user/register', data: formData);
+            .post('http://145.14.158.175:5000/user/register', data: formData);
 
         if (response.statusCode == 201) {
           final UserModel user = UserModel.fromJson(response.data!);
@@ -396,7 +396,7 @@ class AuthRepositoryImpl implements AuthRepository {
         }
 
         Response response = await dio.put(
-            'http://192.168.0.191:5000/user/editUser/$userId',
+            'http://145.14.158.175:5000/user/editUser/$userId',
             data: formData);
 
         if (response.statusCode == 200) {

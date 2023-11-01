@@ -130,7 +130,7 @@ class RealEstateRepositoryImpl implements RealEstateRepository {
           }
         }
         Response response = await dio.post(
-            'http://192.168.0.191:5000/real-estate/add-real-estate',
+            'http://145.14.158.175:5000/real-estate/add-real-estate',
             data: formData);
         if (response.statusCode == 201) {
           return Right(response.data);
