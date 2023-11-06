@@ -8,6 +8,7 @@ import 'package:netzoon/presentation/contact/screens/send_email_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactUsScreen extends StatelessWidget {
   const ContactUsScreen({super.key});
@@ -80,6 +81,35 @@ class ContactUsScreen extends StatelessWidget {
                     .push(MaterialPageRoute(builder: (context) {
                   return const AddComplaintScreen();
                 }));
+              },
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            ContactCategory(
+              title: AppLocalizations.of(context)
+                  .translate('send email to Info@netzoon.com'),
+              icon: Icons.email_rounded,
+              onTap: () async {
+                String? encodeQueryParameters(Map<String, String> params) {
+                  return params.entries
+                      .map((e) =>
+                          '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+                      .join('&');
+                }
+
+                final Uri emailUri = Uri(
+                    scheme: 'mailto',
+                    path: 'info@netzoon.com',
+                    query: encodeQueryParameters(<String, String>{
+                      'subject': 'Give Us a Like',
+                      'body': 'D\'ont forget to give us your support',
+                    }));
+                if (await canLaunchUrl(emailUri)) {
+                  launchUrl(emailUri);
+                } else {
+                  print('object');
+                }
               },
             ),
             SizedBox(
