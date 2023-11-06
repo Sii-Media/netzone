@@ -25,4 +25,13 @@ abstract class SendEmailRepository {
     required final String subject,
     required String from,
   });
+  Future<Either<Failure, String>> sendEmailBalance({
+    required String fullName,
+    required String email,
+    required double balance,
+    required String accountName,
+    required String bankName,
+    required String iban,
+    required String phoneNumber,
+  });
 }

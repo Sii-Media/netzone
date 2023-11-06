@@ -71,7 +71,13 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             })
                         : const SizedBox(),
 
-                    state.user.userInfo.userType == 'user'
+                    state.user.userInfo.userType == 'user' ||
+                            state.user.userInfo.userType == 'car' ||
+                            state.user.userInfo.userType == 'planes' ||
+                            state.user.userInfo.userType == 'sea_companies' ||
+                            state.user.userInfo.userType == 'news_agency' ||
+                            state.user.userInfo.userType == 'real_estate' ||
+                            state.user.userInfo.userType == 'delivery_company'
                         ? const SizedBox()
                         : state.user.userInfo.userType == 'factory' ||
                                 state.user.userInfo.userType ==

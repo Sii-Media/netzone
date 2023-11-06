@@ -222,21 +222,7 @@ class _HomePageState extends State<HomePage> {
                           });
                         }).toList(),
                         options: CarouselOptions(
-                          // height: 400.0.h,
-                          // aspectRatio: 16 / 9,
-                          // viewportFraction: 0.8,
-                          // initialPage: 0,
-                          // enableInfiniteScroll: true,
-                          // reverse: false,
-                          // autoPlay: true,
-                          // autoPlayInterval: const Duration(seconds: 3),
-                          // autoPlayAnimationDuration:
-                          //     const Duration(milliseconds: 800),
-                          // autoPlayCurve: Curves.fastOutSlowIn,
-                          // enlargeCenterPage: true,
-                          // onPageChanged: (index, reason) {},
-                          // scrollDirection: Axis.horizontal,
-
+                          height: 150.h,
                           scrollPhysics: const BouncingScrollPhysics(),
                           autoPlay: true,
                           aspectRatio: 2,
@@ -255,7 +241,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     Positioned(
-                      bottom: 10,
+                      bottom: 5,
                       right: 0,
                       left: 0,
                       child: Row(

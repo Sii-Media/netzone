@@ -13,7 +13,7 @@ class _FactoriesRemoteDataSourceImpl implements FactoriesRemoteDataSourceImpl {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://145.14.158.175:5000';
+    baseUrl ??= 'https://www.back.netzoon.com/';
   }
 
   final Dio _dio;

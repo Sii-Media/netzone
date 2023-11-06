@@ -281,25 +281,38 @@ class _MyLocalCompanyProfileScreenState
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
                                             children: [
-                                              roundedIconText(
-                                                  context: context,
-                                                  text: state.userInfo
-                                                                  .isService ==
-                                                              false ||
-                                                          state.userInfo
-                                                                  .isService ==
-                                                              null
-                                                      ? 'manage_orders'
-                                                      : 'my_services',
-                                                  icon: Icons
-                                                      .production_quantity_limits,
-                                                  onTap: () {
-                                                    Navigator.of(context).push(
-                                                        MaterialPageRoute(
-                                                            builder: (context) {
-                                                      return const ManageOrdersScreen();
-                                                    }));
-                                                  }),
+                                              state.userInfo.isService ==
+                                                          false ||
+                                                      state.userInfo.isService ==
+                                                          null
+                                                  ? roundedIconText(
+                                                      context: context,
+                                                      text: state.userInfo
+                                                                      .isService ==
+                                                                  false ||
+                                                              state.userInfo
+                                                                      .isService ==
+                                                                  null
+                                                          ? 'manage_orders'
+                                                          : 'my_services',
+                                                      icon: Icons
+                                                          .production_quantity_limits,
+                                                      onTap: () {
+                                                        if (state.userInfo
+                                                                    .isService ==
+                                                                false ||
+                                                            state.userInfo
+                                                                    .isService ==
+                                                                null) {
+                                                          Navigator.of(context).push(
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) {
+                                                            return const ManageOrdersScreen();
+                                                          }));
+                                                        }
+                                                      })
+                                                  : const SizedBox(),
                                               roundedIconText(
                                                 context: context,
                                                 text: state.userInfo
@@ -807,7 +820,7 @@ class _MyLocalCompanyProfileScreenState
                                                                   crossAxisCount:
                                                                       2,
                                                                   childAspectRatio:
-                                                                      0.95,
+                                                                      0.79.h,
                                                                   crossAxisSpacing:
                                                                       10.w,
                                                                   mainAxisSpacing:

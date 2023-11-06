@@ -195,7 +195,8 @@ class _AddDealScreenState extends State<AddDealScreen>
                                     // Create the dropdown button
                                     child: DropdownButton<DealsResult>(
                                       // Set the selected value
-                                      value: selectCat, itemHeight: 40.h,
+                                      value: selectCat,
+                                      itemHeight: 45.h,
                                       // // Handle the value change
                                       onChanged: (DealsResult? newValue) {
                                         setState(() {

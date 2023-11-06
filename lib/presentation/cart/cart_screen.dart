@@ -358,18 +358,11 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                   return BlocBuilder<CartBlocBloc, CartBlocState>(
                     builder: (context, state) {
                       totalAmount = state is CartLoaded
-                          ? authState.user.userInfo.userType == 'trader' ||
-                                  authState.user.userInfo.userType ==
-                                      'local_company'
-                              ? state.totalPrice +
-                                  calculateTraderFee(items: state.items)
-                              : state.totalPrice +
-                                  calculatePurchaseFee(state.totalPrice)
+                          ? state.totalPrice +
+                              calculatePurchaseFee(state.totalPrice)
                           : 0;
                       serviceFee = state is CartLoaded
-                          ? authState.user.userInfo.userType == 'local_company'
-                              ? calculateTraderFee(items: state.items)
-                              : calculatePurchaseFee(state.totalPrice)
+                          ? calculatePurchaseFee(state.totalPrice)
                           : 0;
                       return BottomAppBar(
                         // elevation: 1,
@@ -467,11 +460,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                                         children: <TextSpan>[
                                           TextSpan(
                                             text: state is CartLoaded
-                                                ? authState.user.userInfo
-                                                            .userType ==
-                                                        'local_company'
-                                                    ? '${calculateTraderFee(items: state.items)}'
-                                                    : '${calculatePurchaseFee(state.totalPrice)}'
+                                                ? '${calculatePurchaseFee(state.totalPrice)}'
                                                 : '0',
                                             style: const TextStyle(
                                               fontWeight: FontWeight.w700,
@@ -533,14 +522,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                                         children: <TextSpan>[
                                           TextSpan(
                                             text: state is CartLoaded
-                                                ? authState.user.userInfo
-                                                                .userType ==
-                                                            'trader' ||
-                                                        authState.user.userInfo
-                                                                .userType ==
-                                                            'local_company'
-                                                    ? '${state.totalPrice + calculateTraderFee(items: state.items)}'
-                                                    : '${state.totalPrice + calculatePurchaseFee(state.totalPrice)}'
+                                                ? '${state.totalPrice + calculatePurchaseFee(state.totalPrice)}'
                                                 : '0',
                                             style: const TextStyle(
                                               fontWeight: FontWeight.w700,
@@ -559,87 +541,90 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                                   ),
                                 ],
                               ),
-                              InkWell(
-                                onTap: () {
-                                  if (state is CartLoaded) {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) {
-                                      return DeliveryDetailsScreen(
-                                        userInfo: userInfo,
-                                        from: from.join(' / '),
-                                        products: products,
-                                        serviceFee: serviceFee,
-                                        subTotal: totalAmount - serviceFee,
-                                        totalAmount: totalAmount,
-                                        productsNames: products
-                                            .map((e) => e.name)
-                                            .toList()
-                                            .join(' - '),
-                                      );
-                                    }));
-                                    // String amount =
-                                    //     (totalAmount.toInt() * 100).toString();
-                                    // makePayment(
-                                    //   amount: amount,
-                                    //   currency: 'AED',
-                                    //   toName:
-                                    //       authState.user.userInfo.username ??
-                                    //           '',
-                                    //   toEmail:
-                                    //       authState.user.userInfo.email ?? '',
-                                    //   userMobile:
-                                    //       authState.user.userInfo.firstMobile ??
-                                    //           '',
-                                    //   productsNames: products
-                                    //       .map((e) => e.name)
-                                    //       .toList()
-                                    //       .join(' - '),
-                                    //   grandTotal: totalAmount.toString(),
-                                    //   serviceFee: serviceFee.toString(),
-                                    // );
-                                    // double g = totalAmount;
-                                    // double s = serviceFee;
+                              state is CartLoaded
+                                  ? state.items.isEmpty
+                                      ? const SizedBox()
+                                      : InkWell(
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) {
+                                              return DeliveryDetailsScreen(
+                                                userInfo: userInfo,
+                                                from: from.join(' / '),
+                                                products: products,
+                                                serviceFee: serviceFee,
+                                                subTotal:
+                                                    totalAmount - serviceFee,
+                                                totalAmount: totalAmount,
+                                                productsNames: products
+                                                    .map((e) => e.name)
+                                                    .toList()
+                                                    .join(' - '),
+                                              );
+                                            }));
+                                            // String amount =
+                                            //     (totalAmount.toInt() * 100).toString();
+                                            // makePayment(
+                                            //   amount: amount,
+                                            //   currency: 'AED',
+                                            //   toName:
+                                            //       authState.user.userInfo.username ??
+                                            //           '',
+                                            //   toEmail:
+                                            //       authState.user.userInfo.email ?? '',
+                                            //   userMobile:
+                                            //       authState.user.userInfo.firstMobile ??
+                                            //           '',
+                                            //   productsNames: products
+                                            //       .map((e) => e.name)
+                                            //       .toList()
+                                            //       .join(' - '),
+                                            //   grandTotal: totalAmount.toString(),
+                                            //   serviceFee: serviceFee.toString(),
+                                            // );
+                                            // double g = totalAmount;
+                                            // double s = serviceFee;
 
-                                    // sendBloc.add(SendEmailPaymentRequestEvent(
-                                    //   toName:
-                                    //       authState.user.userInfo.username ??
-                                    //           '',
-                                    //   toEmail:
-                                    //       authState.user.userInfo.email ?? '',
-                                    //   userMobile:
-                                    //       authState.user.userInfo.firstMobile ??
-                                    //           '',
-                                    //   productsNames: products
-                                    //       .map((e) => e.name)
-                                    //       .toList()
-                                    //       .join(' - '),
-                                    //   grandTotal: totalAmount.toString(),
-                                    //   serviceFee: serviceFee.toString(),
-                                    //   subTotal: g - s,
-                                    // ));
-                                  } else {
-                                    print('asd');
-                                  }
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: double.infinity,
-                                  height: 50.h,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      border:
-                                          Border.all(color: AppColor.white)),
-                                  child: Text(
-                                    AppLocalizations.of(context)
-                                        .translate('confirm'),
-                                    style: TextStyle(
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColor.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                                            // sendBloc.add(SendEmailPaymentRequestEvent(
+                                            //   toName:
+                                            //       authState.user.userInfo.username ??
+                                            //           '',
+                                            //   toEmail:
+                                            //       authState.user.userInfo.email ?? '',
+                                            //   userMobile:
+                                            //       authState.user.userInfo.firstMobile ??
+                                            //           '',
+                                            //   productsNames: products
+                                            //       .map((e) => e.name)
+                                            //       .toList()
+                                            //       .join(' - '),
+                                            //   grandTotal: totalAmount.toString(),
+                                            //   serviceFee: serviceFee.toString(),
+                                            //   subTotal: g - s,
+                                            // ));
+                                          },
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            width: double.infinity,
+                                            height: 50.h,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                border: Border.all(
+                                                    color: AppColor.white)),
+                                            child: Text(
+                                              AppLocalizations.of(context)
+                                                  .translate('confirm'),
+                                              style: TextStyle(
+                                                fontSize: 16.sp,
+                                                fontWeight: FontWeight.bold,
+                                                color: AppColor.white,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                  : const SizedBox(),
                             ],
                           ),
                         ),

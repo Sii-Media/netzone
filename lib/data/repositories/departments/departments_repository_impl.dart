@@ -216,7 +216,7 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
           ));
         }
         Response response = await dio.put(
-          'http://145.14.158.175:5000/departments/editProduct/$productId',
+          'https://www.back.netzoon.com//departments/editProduct/$productId',
           data: formData,
         );
         return Right(response.data);

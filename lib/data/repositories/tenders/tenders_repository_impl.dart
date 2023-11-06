@@ -114,7 +114,7 @@ class TendersRepositoryImpl implements TenderRepository {
           ),
         ));
         Response response = await dio.post(
-          'http://145.14.158.175:5000/tenders/add-tender',
+          'https://www.back.netzoon.com//tenders/add-tender',
           data: formData,
         );
         if (response.statusCode == 200) {

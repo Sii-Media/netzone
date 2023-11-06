@@ -83,4 +83,26 @@ class SendEmailRepositoryImpl implements SendEmailRepository {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, String>> sendEmailBalance(
+      {required String fullName,
+      required String email,
+      required double balance,
+      required String accountName,
+      required String bankName,
+      required String iban,
+      required String phoneNumber}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final response = await sendEmailRemoteDataSource.sendEmailBalance(
+            fullName, email, balance, accountName, bankName, iban, phoneNumber);
+        return Right(response);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
 }

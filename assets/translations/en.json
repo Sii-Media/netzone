@@ -324,6 +324,7 @@
     "companyName": "Company Name",
     "available_balance": "Available balance",
     "balance_request": "Balance Request",
+    "balance": "balance",
     "submit_a_refund_request": "Submit a refund request",
     "refund_request": "Refund Request",
     "please_fill_in_the_following_information": "Please fill in the following information",
@@ -579,5 +580,6 @@
     "exceeded_product_limit": "Exceeded Product Limit",
     "exceeded_product_limit_cap": "You have exceeded the number of available products.",
     "summrey_order": "Summery Order",
-    "delivery_fee": "Delivery fee"
+    "delivery_fee": "Delivery fee",
+    "you_cannot_purchase_your_product": "you cannot purchase your product"
 }

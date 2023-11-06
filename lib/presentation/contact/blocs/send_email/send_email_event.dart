@@ -89,3 +89,22 @@ class SendEmailPaymentAndDeliveryEvent extends SendEmailEvent {
       required this.subject,
       required this.from});
 }
+
+class SendEmailBalanceEvent extends SendEmailEvent {
+  final String fullName;
+  final String email;
+  final double balance;
+  final String accountName;
+  final String bankName;
+  final String iban;
+  final String phoneNumber;
+
+  const SendEmailBalanceEvent(
+      {required this.fullName,
+      required this.email,
+      required this.balance,
+      required this.accountName,
+      required this.bankName,
+      required this.iban,
+      required this.phoneNumber});
+}

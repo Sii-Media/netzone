@@ -7,6 +7,9 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
 import 'package:netzoon/presentation/cart/helpers/handle_add_to_cart_fun.dart';
+import 'package:netzoon/presentation/categories/factories/factory_profile_screen.dart';
+import 'package:netzoon/presentation/categories/local_company/local_company_profile.dart';
+import 'package:netzoon/presentation/categories/users/screens/users_profile_screen.dart';
 import 'package:netzoon/presentation/categories/widgets/image_free_zone_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
@@ -632,6 +635,49 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                               input: state
                                                       .product.owner.username ??
                                                   '',
+                                              onTap: () {
+                                                if (state.product.owner
+                                                        .userType ==
+                                                    'user') {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) {
+                                                    return UsersProfileScreen(
+                                                        user: state
+                                                            .product.owner);
+                                                  }));
+                                                } else if (state.product.owner
+                                                        .userType ==
+                                                    'local_company') {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) {
+                                                    return LocalCompanyProfileScreen(
+                                                        localCompany: state
+                                                            .product.owner);
+                                                  }));
+                                                } else if (state.product.owner
+                                                        .userType ==
+                                                    'factory') {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) {
+                                                    return FactoryProfileScreen(
+                                                        user: state
+                                                            .product.owner);
+                                                  }));
+                                                } else if (state.product.owner
+                                                        .userType ==
+                                                    'trader') {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) {
+                                                    return LocalCompanyProfileScreen(
+                                                        localCompany: state
+                                                            .product.owner);
+                                                  }));
+                                                }
+                                              },
                                             ),
                                             SizedBox(
                                               height: 7.h,
@@ -1083,10 +1129,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
         ));
   }
 
-  Container titleAndInput({
-    required String title,
-    required String input,
-  }) {
+  Container titleAndInput(
+      {required String title, required String input, void Function()? onTap}) {
     return Container(
       height: 40.h,
       width: double.infinity,
@@ -1109,11 +1153,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                 fontSize: 15.sp,
               ),
             ),
-            Text(
-              input,
-              style: TextStyle(
-                color: AppColor.mainGrey,
-                fontSize: 15.sp,
+            InkWell(
+              onTap: onTap,
+              child: Text(
+                input,
+                style: TextStyle(
+                  color: AppColor.mainGrey,
+                  fontSize: 15.sp,
+                ),
               ),
             ),
           ],

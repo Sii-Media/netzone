@@ -324,6 +324,7 @@
     "companyName": "اسم الشركة",
     "available_balance": "الرصيد المتوفر",
     "balance_request": "طلب الرصيد",
+    "balance": "الرصيد",
     "submit_a_refund_request": "تقديم طلب استرجاع الرصيد",
     "refund_request": "طلب استرجاع",
     "please_fill_in_the_following_information": "الرجاء القيام بتعبئة الحقول التالية",
@@ -579,5 +580,6 @@
     "exceeded_product_limit": "تجاوز الحد الأقصى للمنتج",
     "exceeded_product_limit_cap": "لقد تجاوزت عدد المنتجات المتاحة.",
     "summrey_order": "ملخص الطلبية",
-    "delivery_fee": "رسوم التوصيل"
+    "delivery_fee": "رسوم التوصيل",
+    "you_cannot_purchase_your_product": "عذرا، لا يمكنك شراء منتجك"
 }

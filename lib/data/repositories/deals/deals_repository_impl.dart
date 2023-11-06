@@ -114,7 +114,7 @@ class DealsRepositoryImpl implements DealsRepository {
           ));
         }
         Response response = await dio.post(
-          'http://145.14.158.175:5000/deals/addDeal',
+          'https://www.back.netzoon.com//deals/addDeal',
           data: formData,
         );
         if (response.statusCode == 200) {
@@ -200,7 +200,7 @@ class DealsRepositoryImpl implements DealsRepository {
           ));
         }
         Response response = await dio.put(
-          'http://145.14.158.175:5000/deals/$id',
+          'https://www.back.netzoon.com//deals/$id',
           data: formData,
         );
         return Right(response.data);

@@ -10,6 +10,16 @@ abstract class SendEmailRemoteDataSource {
     String message,
   );
 
+  Future<String> sendEmailBalance(
+    String fullName,
+    String email,
+    double balance,
+    String accountName,
+    String bankName,
+    String iban,
+    String phoneNumber,
+  );
+
   Future<String> sendEmailOnPayment(
       String toName,
       String toEmail,
@@ -131,6 +141,44 @@ class SendEmailRemoteDataSourceImpl implements SendEmailRemoteDataSource {
           'address_details': addressDetails,
           'floor_num': floorNum,
           'from': from,
+        }
+      }),
+    );
+    return response.body;
+  }
+
+  @override
+  Future<String> sendEmailBalance(
+      String fullName,
+      String email,
+      double balance,
+      String accountName,
+      String bankName,
+      String iban,
+      String phoneNumber) async {
+    const String serviceId = 'service_gho7z1b';
+    const String templateId = 'template_okqyy5n';
+    const String userId = 'K-2rPXOy2bcBaUIoJ';
+
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    final response = await http.post(
+      url,
+      headers: {
+        'origin': 'http://localhost',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'service_id': serviceId,
+        'template_id': templateId,
+        'user_id': userId,
+        'template_params': {
+          'user_balance': balance,
+          'user_name': fullName,
+          'user_email': email,
+          'account_name': accountName,
+          'bank_name': bankName,
+          'iban': iban,
+          'user_mobile': phoneNumber,
         }
       }),
     );

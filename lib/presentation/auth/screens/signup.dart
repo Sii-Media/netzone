@@ -252,7 +252,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   File? backIdPhoto;
   File? deliveryPermitPhoto;
   File? tradeLicensePhoto;
-  bool _isDeliverable = false;
+  final bool _isDeliverable = false;
   bool _isThereWarehouse = false;
   bool _isThereFoodsDelivery = false;
   bool _isFreeZone = false;
@@ -830,28 +830,28 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         ),
                       )
                     : const SizedBox(),
-                widget.accountTitle == 'الشركات المحلية'
-                    ? Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: CheckboxListTile(
-                          title: Text(
-                            AppLocalizations.of(context)
-                                .translate('Is there delivery'),
-                            style: TextStyle(
-                              color: AppColor.backgroundColor,
-                              fontSize: 15.sp,
-                            ),
-                          ),
-                          activeColor: AppColor.backgroundColor,
-                          value: _isDeliverable,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              _isDeliverable = value ?? false;
-                            });
-                          },
-                        ),
-                      )
-                    : const SizedBox(),
+                // widget.accountTitle == 'الشركات المحلية'
+                //     ? Padding(
+                //         padding: const EdgeInsets.only(bottom: 10.0),
+                //         child: CheckboxListTile(
+                //           title: Text(
+                //             AppLocalizations.of(context)
+                //                 .translate('Is there delivery'),
+                //             style: TextStyle(
+                //               color: AppColor.backgroundColor,
+                //               fontSize: 15.sp,
+                //             ),
+                //           ),
+                //           activeColor: AppColor.backgroundColor,
+                //           value: _isDeliverable,
+                //           onChanged: (bool? value) {
+                //             setState(() {
+                //               _isDeliverable = value ?? false;
+                //             });
+                //           },
+                //         ),
+                //       )
+                //     : const SizedBox(),
                 widget.accountTitle == 'شركة توصيل'
                     ? Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),

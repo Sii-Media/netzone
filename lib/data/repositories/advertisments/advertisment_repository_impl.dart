@@ -170,7 +170,7 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
         }
 
         Response response = await dio.post(
-            'http://145.14.158.175:5000/advertisements/createAds',
+            'https://www.back.netzoon.com//advertisements/createAds',
             data: formData);
         // Handle the response as needed
         if (response.statusCode == 201) {
@@ -335,7 +335,7 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
         }
 
         Response response = await dio.put(
-            'http://145.14.158.175:5000/advertisements/$id',
+            'https://www.back.netzoon.com//advertisements/$id',
             data: formData);
         // Handle the response as needed
         if (response.statusCode == 200) {

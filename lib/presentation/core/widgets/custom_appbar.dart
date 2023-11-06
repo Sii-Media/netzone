@@ -220,7 +220,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           },
         ),
         Image.asset(
-          "assets/images/netzoon-logo.png",
+          "assets/images/final-logo.png",
           fit: BoxFit.cover,
           width: 150.w,
         ),

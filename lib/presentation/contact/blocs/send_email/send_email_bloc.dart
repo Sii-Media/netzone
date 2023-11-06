@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:netzoon/domain/send_emails/use_cases/send_email_balance_use_case.dart';
 import 'package:netzoon/domain/send_emails/use_cases/send_email_delivery_use_case.dart';
 import 'package:netzoon/domain/send_emails/use_cases/send_email_payment_use_case.dart';
 import 'package:netzoon/domain/send_emails/use_cases/send_email_use_case.dart';
@@ -12,10 +13,12 @@ class SendEmailBloc extends Bloc<SendEmailEvent, SendEmailState> {
   final SendEmailUseCase sendEmailUseCase;
   final SendEmailPaymentUseCase sendEmailPaymentUseCase;
   final SendEmailDeliveryUseCas sendEmailDeliveryUseCas;
+  final SendEmailBalanceUseCase sendEmailBalanceUseCase;
   SendEmailBloc({
     required this.sendEmailUseCase,
     required this.sendEmailPaymentUseCase,
     required this.sendEmailDeliveryUseCas,
+    required this.sendEmailBalanceUseCase,
   }) : super(SendEmailInitial()) {
     on<SendEmailRequestEvent>((event, emit) async {
       emit(SendEmailInProgress());
@@ -118,6 +121,25 @@ class SendEmailBloc extends Bloc<SendEmailEvent, SendEmailState> {
       //     emit(SendEmailPaymentAndDeliverySuccess());
       //   });
       // });
+    });
+    on<SendEmailBalanceEvent>((event, emit) async {
+      emit(SendEmailInProgress());
+
+      final response = await sendEmailBalanceUseCase(SendEmailBalanceParams(
+          fullName: event.fullName,
+          email: event.email,
+          balance: event.balance,
+          accountName: event.accountName,
+          bankName: event.bankName,
+          iban: event.iban,
+          phoneNumber: event.phoneNumber));
+
+      emit(
+        response.fold(
+          (failure) => SendEmailFailure(message: mapFailureToString(failure)),
+          (response) => SendEmailSuccess(response: response),
+        ),
+      );
     });
   }
 }
