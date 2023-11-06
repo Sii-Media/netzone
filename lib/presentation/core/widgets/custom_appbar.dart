@@ -416,7 +416,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         ),
         const Spacer(),
         Image.asset(
-          "assets/images/netzoon-logo.png",
+          "assets/images/final-logo.png",
           fit: BoxFit.contain,
           width: 120.w,
         ),
