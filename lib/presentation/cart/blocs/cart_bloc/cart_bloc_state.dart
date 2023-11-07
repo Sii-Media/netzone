@@ -15,9 +15,11 @@ class CartLoaded extends CartBlocState {
   final List<CategoryProducts> items;
 
   final double totalPrice;
+  final double totalWeight;
   final num totalQuantity;
   final bool? outStock;
   const CartLoaded({
+    required this.totalWeight,
     required this.totalQuantity,
     required this.items,
     required this.totalPrice,

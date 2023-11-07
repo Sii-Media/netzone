@@ -51,6 +51,8 @@ class SummeryOrderScreen extends StatefulWidget {
   final String productsNames;
   final String grandTotal;
   final List<CategoryProducts> products;
+  final double totalWeight;
+  final num totalQuantity;
   const SummeryOrderScreen(
       {super.key,
       required this.totalAmount,
@@ -68,7 +70,9 @@ class SummeryOrderScreen extends StatefulWidget {
       required this.from,
       required this.productsNames,
       required this.grandTotal,
-      required this.products});
+      required this.products,
+      required this.totalWeight,
+      required this.totalQuantity});
 
   @override
   State<SummeryOrderScreen> createState() => _SummeryOrderScreenState();
@@ -382,9 +386,10 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
                           numberOfShipments: 1,
                           packageTypel: 'Box',
                           payment: 'P',
-                          shipmentWeight:
-                              ActualWeight(unit: 'KG', value: totalWeight),
-                          numberOfPieces: widget.products.length,
+                          shipmentWeight: ActualWeight(
+                              unit: 'KG', value: widget.totalWeight),
+                          numberOfPieces:
+                              int.parse(widget.totalQuantity.toString()),
                           shipmentDimensions: const ShipmentDimensions(
                               length: 0, width: 0, height: 0, unit: ''),
                           comments: 'comments')
@@ -516,11 +521,12 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
                         dueDate: "/Date(${dueDate.millisecondsSinceEpoch})/",
                         comments: 'comments',
                         details: ShipmentDetails(
-                          actualWeight:
-                              ActualWeight(unit: 'KG', value: totalWeight),
+                          actualWeight: ActualWeight(
+                              unit: 'KG', value: widget.totalWeight),
                           descriptionOfGoods: 'items',
                           goodsOriginCountry: 'AE',
-                          numberOfPieces: widget.products.length,
+                          numberOfPieces:
+                              int.parse(widget.totalQuantity.toString()),
                           productGroup: 'DOM',
                           productType: 'CDS',
                           paymentType: 'P',

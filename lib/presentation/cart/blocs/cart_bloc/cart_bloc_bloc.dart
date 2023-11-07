@@ -13,6 +13,7 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
           items: [],
           totalPrice: 0,
           totalQuantity: 0,
+          totalWeight: 0,
         ),
       ),
     );
@@ -22,11 +23,13 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
           ..add(event.product);
         final totalPrice = calculateTotalPrice(updatedCart);
         final totalQuantity = calculateTotalQuantity(updatedCart);
+        final totalWeight = calculateTotalWeight(updatedCart);
         emit(
           CartLoaded(
             items: updatedCart,
             totalPrice: totalPrice,
             totalQuantity: totalQuantity,
+            totalWeight: totalWeight,
           ),
         );
       },
@@ -36,12 +39,13 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
         ..remove(event.product);
       final totalPrice = calculateTotalPrice(updatedCart);
       final totalQuantity = calculateTotalQuantity(updatedCart);
+      final totalWeight = calculateTotalWeight(updatedCart);
       emit(
         CartLoaded(
-          items: updatedCart,
-          totalPrice: totalPrice,
-          totalQuantity: totalQuantity,
-        ),
+            items: updatedCart,
+            totalPrice: totalPrice,
+            totalQuantity: totalQuantity,
+            totalWeight: totalWeight),
       );
     });
 
@@ -54,12 +58,14 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
           if (event.cartQty > updatedCart[index].quantity!) {
             final totalPrice = calculateTotalPrice(updatedCart);
             final totalQuantity = calculateTotalQuantity(updatedCart);
+            final totalWeight = calculateTotalWeight(updatedCart);
             emit(
               CartLoaded(
                 items: updatedCart,
                 totalPrice: totalPrice,
                 totalQuantity: totalQuantity,
                 outStock: true,
+                totalWeight: totalWeight,
               ),
             );
           }
@@ -86,11 +92,14 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
           updatedCart[index] = updatedItem;
           final totalPrice = calculateTotalPrice(updatedCart);
           final totalQuantity = calculateTotalQuantity(updatedCart);
+          final totalWeight = calculateTotalWeight(updatedCart);
           emit(
             CartLoaded(
-                items: updatedCart,
-                totalPrice: totalPrice,
-                totalQuantity: totalQuantity),
+              items: updatedCart,
+              totalPrice: totalPrice,
+              totalQuantity: totalQuantity,
+              totalWeight: totalWeight,
+            ),
           );
         }
       },
@@ -99,6 +108,7 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
       (event, emit) {
         emit(
           const CartLoaded(
+            totalWeight: 0,
             items: [],
             totalPrice: 0,
             totalQuantity: 0,
@@ -107,6 +117,20 @@ class CartBlocBloc extends Bloc<CartBlocEvent, CartBlocState> {
       },
     );
   }
+  double calculateTotalWeight(List<CategoryProducts> cartItems) {
+    double totalWeight = 0;
+    for (var item in cartItems) {
+      print('aaaaaaaaaaaa');
+      print(item.cartQty ?? 1);
+      if (item.cartQty == null) {
+        totalWeight = totalWeight + item.weight! * 1;
+      } else {
+        totalWeight = totalWeight + (item.weight! * item.cartQty!);
+      }
+    }
+    return totalWeight;
+  }
+
   double calculateTotalPrice(List<CategoryProducts> cartItems) {
     double totalPrice = 0;
     for (var item in cartItems) {

@@ -37,6 +37,8 @@ class DeliveryDetailsScreen extends StatefulWidget {
     required this.subTotal,
     required this.serviceFee,
     required this.productsNames,
+    required this.totalWeight,
+    required this.totalQuantity,
   });
   final UserInfo userInfo;
   final String from;
@@ -45,6 +47,8 @@ class DeliveryDetailsScreen extends StatefulWidget {
   final String productsNames;
   final double subTotal;
   final double serviceFee;
+  final double totalWeight;
+  final num totalQuantity;
   @override
   State<DeliveryDetailsScreen> createState() => _DeliveryDetailsScreenState();
 }
@@ -209,23 +213,26 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) {
                     return SummeryOrderScreen(
-                        products: widget.products,
-                        totalAmount: widget.totalAmount,
-                        serviceFee: widget.serviceFee,
-                        deliveryFee:
-                            aramexState.calculateRateResponse.totalAmount.value,
-                        toName: nameController.text,
-                        toEmail: emailController.text,
-                        userMobile: phoneNumberController.text,
-                        phoneNumber: cellPhoneController.text,
-                        city: selectedCity,
-                        subTotal: widget.subTotal,
-                        addressDetails: addressDetailsController.text,
-                        floorNum: floorNumController.text,
-                        subject: 'Order',
-                        from: widget.from,
-                        productsNames: widget.productsNames,
-                        grandTotal: widget.totalAmount.toString());
+                      products: widget.products,
+                      totalAmount: widget.totalAmount,
+                      serviceFee: widget.serviceFee,
+                      deliveryFee:
+                          aramexState.calculateRateResponse.totalAmount.value,
+                      toName: nameController.text,
+                      toEmail: emailController.text,
+                      userMobile: phoneNumberController.text,
+                      phoneNumber: cellPhoneController.text,
+                      city: selectedCity,
+                      subTotal: widget.subTotal,
+                      addressDetails: addressDetailsController.text,
+                      floorNum: floorNumController.text,
+                      subject: 'Order',
+                      from: widget.from,
+                      productsNames: widget.productsNames,
+                      grandTotal: widget.totalAmount.toString(),
+                      totalWeight: widget.totalWeight,
+                      totalQuantity: widget.totalQuantity,
+                    );
                   }));
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -582,11 +589,10 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
                                 if (!_formKey.currentState!.validate()) {
                                   return;
                                 }
-                                double totalWeight = 0.0;
-                                for (CategoryProducts product
-                                    in widget.products) {
-                                  totalWeight += product.weight ?? 0;
-                                }
+
+                                print(widget.totalWeight);
+                                print('111111111');
+                                print(widget.totalQuantity);
 
                                 aramexBloc.add(
                                   CalculateRateEvent(
@@ -596,7 +602,8 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
                                         line1:
                                             widget.products[0].owner.address ??
                                                 '',
-                                        line2: '',
+                                        line2: widget
+                                            .products[0].owner.addressDetails,
                                         line3: "",
                                         city: widget.products[0].owner.city ??
                                             'Dubai',
@@ -621,11 +628,12 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
                                       ),
                                       shipmentDetails: RateShipmentDetails(
                                           actualWeight: ActualWeight(
-                                              unit: 'KG', value: totalWeight),
+                                              unit: 'KG',
+                                              value: widget.totalWeight),
                                           chargeableWeight: const ActualWeight(
                                               unit: 'KG', value: 0.0),
-                                          numberOfPieces:
-                                              widget.products.length,
+                                          numberOfPieces: int.parse(
+                                              widget.totalQuantity.toString()),
                                           productGroup: 'DOM',
                                           productType: 'ONP',
                                           paymentType: 'P'),

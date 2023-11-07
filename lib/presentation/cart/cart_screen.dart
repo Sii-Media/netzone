@@ -184,6 +184,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
   }
 
   late UserInfo userInfo;
+
   @override
   Widget screen(BuildContext context) {
     return Scaffold(
@@ -220,6 +221,8 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                 userInfo: userInfo,
                 from: from.join(' / '),
                 products: products,
+                totalWeight: 0,
+                totalQuantity: 0,
                 serviceFee: emailState.serviceFee,
                 subTotal: emailState.subtotal,
                 totalAmount: emailState.grandTotal,
@@ -550,13 +553,16 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                                                 MaterialPageRoute(
                                                     builder: (context) {
                                               return DeliveryDetailsScreen(
+                                                totalWeight: state.totalWeight,
                                                 userInfo: userInfo,
                                                 from: from.join(' / '),
-                                                products: products,
+                                                products: state.props,
                                                 serviceFee: serviceFee,
                                                 subTotal:
                                                     totalAmount - serviceFee,
                                                 totalAmount: totalAmount,
+                                                totalQuantity:
+                                                    state.totalQuantity,
                                                 productsNames: products
                                                     .map((e) => e.name)
                                                     .toList()
