@@ -117,7 +117,7 @@ Widget contentBox(
                     AppLocalizations.of(context).translate('confirm'),
                     style: const TextStyle(
                       color: AppColor.red,
-                      fontSize: 18,
+                      // fontSize: 18,
                     ),
                   ),
                 ),

@@ -216,16 +216,16 @@ class _HomePageState extends State<HomePage> {
                           return Builder(builder: (BuildContext context) {
                             return Image.asset(
                               img["image"],
-                              fit: BoxFit.cover,
+                              fit: BoxFit.fill,
                               width: double.infinity,
                             );
                           });
                         }).toList(),
                         options: CarouselOptions(
-                          height: 150.h,
+                          height: 160.h,
                           scrollPhysics: const BouncingScrollPhysics(),
                           autoPlay: true,
-                          aspectRatio: 2,
+                          // aspectRatio: 3,
                           viewportFraction: 1,
                           // scrollDirection: Axis.horizontal,
                           // enableInfiniteScroll: true,

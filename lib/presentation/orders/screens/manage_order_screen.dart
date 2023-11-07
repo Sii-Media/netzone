@@ -178,13 +178,14 @@ class _ManageOrdersScreenState extends State<ManageOrdersScreen> {
                             //   height: 80.0,
                             //   fit: BoxFit.cover,
                             // ),
+
                             child: CachedNetworkImage(
                               imageUrl: orders[index]
                                   .products[indexx]
                                   .product
                                   .imageUrl,
                               width: 80.w,
-                              height: 80.h,
+                              height: 120.h,
                               fit: BoxFit.contain,
                               maxHeightDiskCache: 400,
                               maxWidthDiskCache: 400,

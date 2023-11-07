@@ -108,7 +108,7 @@ class ContactUsScreen extends StatelessWidget {
                 if (await canLaunchUrl(emailUri)) {
                   launchUrl(emailUri);
                 } else {
-                  print('object');
+                  print('');
                 }
               },
             ),

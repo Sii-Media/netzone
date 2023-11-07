@@ -286,6 +286,17 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
   Widget screen(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60.h,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Icon(
+            Icons.arrow_back_rounded,
+            color: AppColor.white,
+            size: 22.sp,
+          ),
+        ),
         title: Text(
           AppLocalizations.of(context).translate('summrey_order'),
         ),
