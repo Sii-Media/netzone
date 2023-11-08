@@ -25,7 +25,9 @@ import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/aramex/blocs/aramex_bloc/aramex_bloc.dart';
 import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
 import 'package:netzoon/presentation/contact/blocs/send_email/send_email_bloc.dart';
+import 'package:netzoon/presentation/core/blocs/country_bloc/country_bloc.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/helpers/get_currency_of_country.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/orders/blocs/bloc/my_order_bloc.dart';
 import 'package:netzoon/presentation/orders/screens/congs_screen.dart';
@@ -84,6 +86,8 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
   final orderBloc = sl<OrderBloc>();
   final aramexBloc = sl<AramexBloc>();
   final aramexBloc2 = sl<AramexBloc>();
+  late final CountryBloc countryBloc;
+
   late final CartBlocBloc cartBloc;
 
   String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
@@ -280,6 +284,8 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
   void initState() {
     super.initState();
     cartBloc = BlocProvider.of<CartBlocBloc>(context);
+    countryBloc = BlocProvider.of<CountryBloc>(context);
+    countryBloc.add(GetCountryEvent());
   }
 
   @override
@@ -639,212 +645,234 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
                 }
               }
             },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context).translate('order_total'),
-                        style: TextStyle(
-                          color: AppColor.backgroundColor,
-                          fontSize: 17.sp,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      RichText(
-                        text: TextSpan(
-                            style: TextStyle(
-                              fontSize: 17.sp,
-                              color: AppColor.backgroundColor,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: widget.totalAmount.toString(),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              TextSpan(
-                                text: 'AED',
-                                style: TextStyle(
-                                    color: AppColor.backgroundColor,
-                                    fontSize: 10.sp),
-                              )
-                            ]),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context).translate('service_fee'),
-                        style: TextStyle(
-                          color: AppColor.backgroundColor,
-                          fontSize: 17.sp,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      RichText(
-                        text: TextSpan(
-                            style: TextStyle(
-                              fontSize: 17.sp,
-                              color: AppColor.backgroundColor,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: widget.serviceFee.toString(),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              TextSpan(
-                                text: 'AED',
-                                style: TextStyle(
-                                    color: AppColor.backgroundColor,
-                                    fontSize: 10.sp),
-                              )
-                            ]),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context).translate('delivery_fee'),
-                        style: TextStyle(
-                          color: AppColor.backgroundColor,
-                          fontSize: 17.sp,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      RichText(
-                        text: TextSpan(
-                            style: TextStyle(
-                              fontSize: 17.sp,
-                              color: AppColor.backgroundColor,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: widget.deliveryFee.toString(),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              TextSpan(
-                                text: 'AED',
-                                style: TextStyle(
-                                    color: AppColor.backgroundColor,
-                                    fontSize: 10.sp),
-                              )
-                            ]),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context).translate('total_amount'),
-                        style: TextStyle(
-                          color: AppColor.primaryColor,
-                          fontSize: 17.sp,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      RichText(
-                        text: TextSpan(
-                            style: TextStyle(
-                              fontSize: 17.sp,
-                              color: AppColor.primaryColor,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text:
-                                    '${widget.totalAmount + widget.deliveryFee + widget.serviceFee}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              TextSpan(
-                                text: 'AED',
-                                style: TextStyle(
-                                    color: AppColor.primaryColor,
-                                    fontSize: 10.sp),
-                              )
-                            ]),
-                      ),
-                    ],
-                  ),
-                  const Divider(),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  Center(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: InkWell(
-                        onTap: () {
-                          double tm = widget.totalAmount +
-                              widget.deliveryFee +
-                              widget.serviceFee;
-                          String amount = (tm.toInt() * 100).toString();
-                          makePayment(
-                            amount: amount,
-                            currency: 'AED',
-                            toName: widget.toName,
-                            userMobile: widget.userMobile,
-                            addressDetails: widget.addressDetails,
-                            city: widget.city,
-                            floorNum: widget.floorNum,
-                            from: widget.from,
-                            grandTotal: widget.grandTotal,
-                            productsNames: widget.productsNames,
-                            serviceFee: widget.serviceFee.toString(),
-                            subTotal: widget.subTotal,
-                            subject: widget.subject,
-                            toEmail: widget.toEmail,
-                          );
-                        },
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          height: 40.h,
-                          width: 200.w,
-                          color: AppColor.backgroundColor,
-                          child: Center(
-                            child: Text(
+            child: BlocBuilder<CountryBloc, CountryState>(
+              bloc: countryBloc,
+              builder: (context, countryState) {
+                if (countryState is CountryInitial) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
                               AppLocalizations.of(context)
-                                  .translate('check_out'),
+                                  .translate('order_total'),
                               style: TextStyle(
-                                  fontSize: 15.sp, color: AppColor.white),
+                                color: AppColor.backgroundColor,
+                                fontSize: 17.sp,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                  style: TextStyle(
+                                    fontSize: 17.sp,
+                                    color: AppColor.backgroundColor,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: widget.totalAmount.toString(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: getCurrencyFromCountry(
+                                          countryState.selectedCountry,
+                                          context),
+                                      style: TextStyle(
+                                          color: AppColor.backgroundColor,
+                                          fontSize: 10.sp),
+                                    )
+                                  ]),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('service_fee'),
+                              style: TextStyle(
+                                color: AppColor.backgroundColor,
+                                fontSize: 17.sp,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                  style: TextStyle(
+                                    fontSize: 17.sp,
+                                    color: AppColor.backgroundColor,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: widget.serviceFee.toString(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: getCurrencyFromCountry(
+                                          countryState.selectedCountry,
+                                          context),
+                                      style: TextStyle(
+                                          color: AppColor.backgroundColor,
+                                          fontSize: 10.sp),
+                                    )
+                                  ]),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('delivery_fee'),
+                              style: TextStyle(
+                                color: AppColor.backgroundColor,
+                                fontSize: 17.sp,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                  style: TextStyle(
+                                    fontSize: 17.sp,
+                                    color: AppColor.backgroundColor,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: widget.deliveryFee.toString(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: getCurrencyFromCountry(
+                                          countryState.selectedCountry,
+                                          context),
+                                      style: TextStyle(
+                                          color: AppColor.backgroundColor,
+                                          fontSize: 10.sp),
+                                    )
+                                  ]),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('total_amount'),
+                              style: TextStyle(
+                                color: AppColor.primaryColor,
+                                fontSize: 17.sp,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                  style: TextStyle(
+                                    fontSize: 17.sp,
+                                    color: AppColor.primaryColor,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text:
+                                          '${widget.totalAmount + widget.deliveryFee + widget.serviceFee}',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: getCurrencyFromCountry(
+                                          countryState.selectedCountry,
+                                          context),
+                                      style: TextStyle(
+                                          color: AppColor.primaryColor,
+                                          fontSize: 10.sp),
+                                    )
+                                  ]),
+                            ),
+                          ],
+                        ),
+                        const Divider(),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Center(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: InkWell(
+                              onTap: () {
+                                double tm = widget.totalAmount +
+                                    widget.deliveryFee +
+                                    widget.serviceFee;
+                                String amount = (tm.toInt() * 100).toString();
+                                makePayment(
+                                  amount: amount,
+                                  currency: getCurrencyFromCountryStripe(
+                                      countryState.selectedCountry, context),
+                                  toName: widget.toName,
+                                  userMobile: widget.userMobile,
+                                  addressDetails: widget.addressDetails,
+                                  city: widget.city,
+                                  floorNum: widget.floorNum,
+                                  from: widget.from,
+                                  grandTotal: widget.grandTotal,
+                                  productsNames: widget.productsNames,
+                                  serviceFee: widget.serviceFee.toString(),
+                                  subTotal: widget.subTotal,
+                                  subject: widget.subject,
+                                  toEmail: widget.toEmail,
+                                );
+                              },
+                              child: Container(
+                                alignment: Alignment.centerRight,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                height: 40.h,
+                                width: 200.w,
+                                color: AppColor.backgroundColor,
+                                child: Center(
+                                  child: Text(
+                                    AppLocalizations.of(context)
+                                        .translate('check_out'),
+                                    style: TextStyle(
+                                        fontSize: 15.sp, color: AppColor.white),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
+                        )
+                      ],
                     ),
-                  )
-                ],
-              ),
+                  );
+                }
+                return Container();
+              },
             ),
           ),
         ),

@@ -16,3 +16,20 @@ String getCurrencyFromCountry(String country, context) {
       return '\$';
   }
 }
+
+String getCurrencyFromCountryStripe(String country, context) {
+  switch (country) {
+    case 'AE':
+      return 'AED';
+    case 'EG':
+      return 'EGP';
+    case 'JO':
+      return 'JOD';
+    case 'IQ':
+      return 'IQD';
+    case 'SA':
+      return 'SAR';
+    default:
+      return '\$';
+  }
+}
