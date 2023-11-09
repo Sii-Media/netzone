@@ -676,6 +676,18 @@ class _HomePageState extends State<HomePage> {
                         },
                       );
                     } else if (state is AdsBlocSuccess) {
+                      if (state.ads.isEmpty) {
+                        return Center(
+                          child: Text(
+                            AppLocalizations.of(context).translate('no_items'),
+                            style: TextStyle(
+                              color: AppColor.backgroundColor,
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      }
                       return SizedBox(
                         height: MediaQuery.of(context).size.height * 0.25,
                         child: SliderImages(advertisments: state.ads),

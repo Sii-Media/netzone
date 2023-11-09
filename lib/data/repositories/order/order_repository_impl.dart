@@ -67,7 +67,7 @@ class OrderRepositoryImpl implements OrderRepository {
         };
         final requestDataJson = jsonEncode(requestData);
         final response = await dio.post(
-            'https://www.back.netzoon.com//order/save/$userId',
+            'https://back.netzoon.com//order/save/$userId',
             data: requestDataJson);
         // Handle the response as needed
         if (response.statusCode == 200) {

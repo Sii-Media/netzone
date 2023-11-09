@@ -14,7 +14,7 @@ class _DeliveryServiceRemoteDataSourceImpl
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://www.back.netzoon.com/';
+    baseUrl ??= 'https://back.netzoon.com/';
   }
 
   final Dio _dio;

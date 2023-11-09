@@ -130,7 +130,7 @@ class RealEstateRepositoryImpl implements RealEstateRepository {
           }
         }
         Response response = await dio.post(
-            'https://www.back.netzoon.com//real-estate/add-real-estate',
+            'https://back.netzoon.com//real-estate/add-real-estate',
             data: formData);
         if (response.statusCode == 201) {
           return Right(response.data);

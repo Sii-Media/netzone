@@ -58,9 +58,8 @@ class NewsRepositoryImpl implements NewsRepository {
           'creator': creator,
         });
 
-        Response response = await dio.post(
-            'https://www.back.netzoon.com//news/createNews',
-            data: formData);
+        Response response = await dio
+            .post('https://back.netzoon.com//news/createNews', data: formData);
         // Handle the response as needed
         if (response.statusCode == 201) {
           return Right(response.data);
@@ -197,7 +196,7 @@ class NewsRepositoryImpl implements NewsRepository {
           ));
         }
         Response response = await dio.put(
-          'https://www.back.netzoon.com//news/$id',
+          'https://back.netzoon.com//news/$id',
           data: formData,
         );
         return Right(response.data);

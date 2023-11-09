@@ -151,7 +151,7 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
           ));
         }
         Response response = await dio.post(
-            'https://www.back.netzoon.com//categories/local-company/add-service',
+            'https://back.netzoon.com//categories/local-company/add-service',
             data: formData);
 
         if (response.statusCode == 201) {
@@ -280,7 +280,7 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
         }
 
         Response response = await dio.put(
-            'https://www.back.netzoon.com//categories/local-company/$id',
+            'https://back.netzoon.com//categories/local-company/$id',
             data: formData);
         // Handle the response as needed
         if (response.statusCode == 200) {

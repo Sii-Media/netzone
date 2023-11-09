@@ -225,9 +225,8 @@ class AuthRepositoryImpl implements AuthRepository {
           ));
         }
 
-        Response response = await dio.post(
-            'https://www.back.netzoon.com//user/register',
-            data: formData);
+        Response response = await dio
+            .post('https://back.netzoon.com//user/register', data: formData);
 
         if (response.statusCode == 201) {
           final UserModel user = UserModel.fromJson(response.data!);
@@ -397,7 +396,7 @@ class AuthRepositoryImpl implements AuthRepository {
         }
 
         Response response = await dio.put(
-            'https://www.back.netzoon.com//user/editUser/$userId',
+            'https://back.netzoon.com//user/editUser/$userId',
             data: formData);
 
         if (response.statusCode == 200) {

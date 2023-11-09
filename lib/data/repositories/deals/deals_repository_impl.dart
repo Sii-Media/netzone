@@ -114,7 +114,7 @@ class DealsRepositoryImpl implements DealsRepository {
           ));
         }
         Response response = await dio.post(
-          'https://www.back.netzoon.com//deals/addDeal',
+          'https://back.netzoon.com//deals/addDeal',
           data: formData,
         );
         if (response.statusCode == 200) {
@@ -200,7 +200,7 @@ class DealsRepositoryImpl implements DealsRepository {
           ));
         }
         Response response = await dio.put(
-          'https://www.back.netzoon.com//deals/$id',
+          'https://back.netzoon.com//deals/$id',
           data: formData,
         );
         return Right(response.data);
