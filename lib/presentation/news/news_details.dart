@@ -76,10 +76,10 @@ class _NewsDetailsState extends State<NewsDetails>
             child: ListView(
               children: [
                 SizedBox(
-                  height: size.height * 0.4,
+                  // height: size.height * 0.4,
                   child: CachedNetworkImage(
                     imageUrl: widget.news.imgUrl,
-                    fit: BoxFit.fill,
+                    // fit: BoxFit.fill,
                     progressIndicatorBuilder:
                         (context, url, downloadProgress) => Padding(
                       padding: const EdgeInsets.symmetric(

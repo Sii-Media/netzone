@@ -207,10 +207,10 @@ class _StartScreenState extends State<StartScreen> {
     _getCurrentLocation().then((value) => {
           // ignore: avoid_print
           print('${value.latitude}'),
-          setState(() {
-            isGetLocation = true;
-          }),
         });
+    setState(() {
+      isGetLocation = true;
+    });
     final SharedPreferences preferences = sl<SharedPreferences>();
     currentCode = preferences.getString(SharedPreferencesKeys.language) ?? 'ar';
     currentLanguage = currentCode == 'en' ? 'English' : 'Arabic';
