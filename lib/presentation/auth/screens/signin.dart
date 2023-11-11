@@ -200,6 +200,9 @@ class _SignInScreenState extends State<SignInScreen>
                         height: 10.h,
                       ),
                       SizedBox(
+                        height: 10.h,
+                      ),
+                      SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           style: ButtonStyle(
@@ -225,60 +228,58 @@ class _SignInScreenState extends State<SignInScreen>
                           },
                         ),
                       ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Row(
-                        children: [
-                          const Expanded(
-                            child: Divider(
-                              thickness: 0.5,
-                              color: AppColor.backgroundColor,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0,
-                            ),
-                            child: Text(
-                              AppLocalizations.of(context)
-                                  .translate('or_continue_with'),
-                              style: TextStyle(
-                                fontSize: 16.sp,
-                                color: AppColor.secondGrey,
-                              ),
-                            ),
-                          ),
-                          const Expanded(
-                            child: Divider(
-                              thickness: 0.5,
-                              color: AppColor.backgroundColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SocialIcon(
-                            imagePath: 'assets/images/google_icon.png',
-                          ),
-                          SizedBox(
-                            width: 7.w,
-                          ),
-                          const SocialIcon(
-                            imagePath: 'assets/images/facebook_icon.png',
-                          ),
-                          SizedBox(
-                            width: 7.w,
-                          ),
-                          const SocialIcon(
-                              imagePath: 'assets/images/mac_icon.png')
-                        ],
-                      ),
+
+                      // Row(
+                      //   children: [
+                      //     const Expanded(
+                      //       child: Divider(
+                      //         thickness: 0.5,
+                      //         color: AppColor.backgroundColor,
+                      //       ),
+                      //     ),
+                      //     Padding(
+                      //       padding: const EdgeInsets.symmetric(
+                      //         horizontal: 10.0,
+                      //       ),
+                      //       child: Text(
+                      //         AppLocalizations.of(context)
+                      //             .translate('or_continue_with'),
+                      //         style: TextStyle(
+                      //           fontSize: 16.sp,
+                      //           color: AppColor.secondGrey,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     const Expanded(
+                      //       child: Divider(
+                      //         thickness: 0.5,
+                      //         color: AppColor.backgroundColor,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      // SizedBox(
+                      //   height: 10.h,
+                      // ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     const SocialIcon(
+                      //       imagePath: 'assets/images/google_icon.png',
+                      //     ),
+                      //     SizedBox(
+                      //       width: 7.w,
+                      //     ),
+                      //     const SocialIcon(
+                      //       imagePath: 'assets/images/facebook_icon.png',
+                      //     ),
+                      //     SizedBox(
+                      //       width: 7.w,
+                      //     ),
+                      //     const SocialIcon(
+                      //         imagePath: 'assets/images/mac_icon.png')
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),

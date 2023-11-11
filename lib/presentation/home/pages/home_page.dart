@@ -793,7 +793,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       }
                       return SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.34,
+                        height: MediaQuery.of(context).size.height * 0.45,
                         child: SliderNewsWidget(
                             controller: controller, news: state.news),
                       );

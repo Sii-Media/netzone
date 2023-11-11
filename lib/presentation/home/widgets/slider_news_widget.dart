@@ -108,8 +108,8 @@ class SliderNewsWidget extends StatelessWidget {
                                     children: [
                                       CachedNetworkImage(
                                         imageUrl: news[index].imgUrl,
-                                        fit: BoxFit.fitWidth,
-                                        height: 90,
+                                        fit: BoxFit.cover,
+                                        height: 200.h,
                                         width:
                                             MediaQuery.of(context).size.width,
                                         progressIndicatorBuilder:
@@ -127,12 +127,6 @@ class SliderNewsWidget extends StatelessWidget {
                                         errorWidget: (context, url, error) =>
                                             const Icon(Icons.error),
                                       ),
-                                      // Image.network(
-                                      //   news[index].imgUrl,
-                                      //   fit: BoxFit.fitWidth,
-                                      //   height: 90,
-                                      //   width: MediaQuery.of(context).size.width,
-                                      // ),
                                       Text(
                                         news[index].title,
                                         style: TextStyle(
@@ -143,11 +137,12 @@ class SliderNewsWidget extends StatelessWidget {
                                       ),
                                       Text(
                                         news[index].description,
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color:
                                                 Colors.grey.withOpacity(0.6)),
                                         overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
+                                        maxLines: 1,
                                         softWrap: false,
                                       )
                                     ],

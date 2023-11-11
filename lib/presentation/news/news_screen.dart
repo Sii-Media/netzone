@@ -272,7 +272,7 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 5),
-                                                height: 70.h,
+                                                // height: 70.h,
                                                 child: Text(
                                                   widget.news[index].title,
                                                   style: TextStyle(
@@ -286,12 +286,14 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 5),
-                                                height: 30.h,
+                                                // height: 30.h,
                                                 child: Text(
                                                   widget
                                                       .news[index].description,
-                                                  style: const TextStyle(
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
                                                     color: AppColor.white,
+                                                    fontSize: 11.sp,
                                                   ),
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -319,7 +321,8 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
                                 );
                               } else if (authState is Authenticated) {
                                 return Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
+                                  padding:
+                                      EdgeInsets.only(right: 8.0, top: 10.h),
                                   child: SizedBox(
                                     width: 90.w,
                                     child: Row(
