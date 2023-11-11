@@ -46,8 +46,8 @@ class SliderNewsWidget extends StatelessWidget {
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(100),
                                   child: CachedNetworkImage(
-                                    width: 35.w,
-                                    height: 35.h,
+                                    width: 35.r,
+                                    height: 35.r,
                                     fit: BoxFit.cover,
                                     progressIndicatorBuilder:
                                         (context, url, downloadProgress) =>

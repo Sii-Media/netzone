@@ -793,7 +793,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       }
                       return SizedBox(
-                        height: 300.h,
+                        height: 330.r,
                         child: SliderNewsWidget(
                             controller: controller, news: state.news),
                       );

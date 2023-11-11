@@ -74,7 +74,7 @@ class _NewsScreenState extends State<NewsScreen> {
                 }
 
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height,
                     child: AllNewsWidget(
