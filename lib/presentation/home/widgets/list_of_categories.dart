@@ -275,7 +275,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                   left: 0,
                                   right: 0,
                                   child: Container(
-                                    height: 43.h,
+                                    height: 45.h,
                                     color: AppColor.backgroundColor
                                         .withOpacity(0.8),
                                     alignment: Alignment.center,
@@ -287,7 +287,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                         AppLocalizations.of(context).translate(
                                             widget.categories[index].name),
                                         style: TextStyle(
-                                            fontSize: 12.sp,
+                                            fontSize: 10.sp,
                                             color: Colors.white,
                                             fontWeight: FontWeight.w700),
                                       ),
