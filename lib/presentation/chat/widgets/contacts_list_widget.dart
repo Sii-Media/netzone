@@ -124,7 +124,7 @@ class _ContactsListWidgetState extends State<ContactsListWidget> {
                                           'this is a bio',
                                       style: TextStyle(
                                         color: AppColor.mainGrey,
-                                        fontSize: 16.sp,
+                                        fontSize: 14.sp,
                                       ),
                                     ),
                                   ),

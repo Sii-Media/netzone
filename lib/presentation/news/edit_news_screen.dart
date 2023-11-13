@@ -138,12 +138,13 @@ class _EditNewsScreenState extends State<EditNewsScreen>
                       color: AppColor.backgroundColor,
                     ),
                     decoration: const InputDecoration(
-                      hintText: 'address',
-                      label: Text('address'),
+                      hintText: 'title',
+                      label: Text('title'),
                     ),
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.multiline,
+                    textInputAction: TextInputAction.newline,
                     maxLines: 2,
+                    minLines: 1,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
                         return 'field_required_message';
@@ -162,9 +163,10 @@ class _EditNewsScreenState extends State<EditNewsScreen>
                       hintText: 'description',
                       label: Text('description'),
                     ),
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.multiline,
+                    textInputAction: TextInputAction.done,
                     maxLines: 4,
+                    minLines: 1,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
                         return 'field_required_message';
@@ -202,9 +204,10 @@ class _EditNewsScreenState extends State<EditNewsScreen>
                           Size.fromWidth(200),
                         ),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          'save_changes',
+                          AppLocalizations.of(context)
+                              .translate('save_changes'),
                         ),
                       ),
                     ),

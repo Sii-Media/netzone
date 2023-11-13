@@ -127,7 +127,7 @@ class _NewsDetailsState extends State<NewsDetails>
                               icon: Icon(
                                 Icons.edit,
                                 color: AppColor.backgroundColor,
-                                size: 15.sp,
+                                size: 25.sp,
                               ),
                             ),
                             IconButton(
@@ -138,7 +138,7 @@ class _NewsDetailsState extends State<NewsDetails>
                               icon: Icon(
                                 Icons.delete,
                                 color: AppColor.red,
-                                size: 15.sp,
+                                size: 25.sp,
                               ),
                             ),
                           ],
