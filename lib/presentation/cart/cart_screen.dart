@@ -260,7 +260,8 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                       );
                     }
                     products = state.props;
-
+                    String cc = getCurrencyFromCountry(
+                        state.items.first.owner.country ?? 'AE', context);
                     for (var product in products) {
                       from.add(product.owner.username ?? '');
                     }
@@ -289,8 +290,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                             itemBuilder: (context, index) {
                               return CartItemWidget(
                                 cart: state.props[index],
-                                currency: getCurrencyFromCountry(
-                                    countryState.selectedCountry, context),
+                                currency: cc,
                               );
                             },
                           ),
@@ -360,6 +360,14 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                 builder: (context, countryState) {
                   return BlocBuilder<CartBlocBloc, CartBlocState>(
                     builder: (context, state) {
+                      String cc = state is CartLoaded
+                          ? getCurrencyFromCountry(
+                              state.items.isNotEmpty
+                                  ? state.items.first.owner.country ?? 'AE'
+                                  : 'AE',
+                              context,
+                            )
+                          : 'AE';
                       totalAmount = state is CartLoaded
                           ? state.totalPrice +
                               calculatePurchaseFee(state.totalPrice)
@@ -415,10 +423,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                                             ),
                                           ),
                                           TextSpan(
-                                            text: getCurrencyFromCountry(
-                                              countryState.selectedCountry,
-                                              context,
-                                            ),
+                                            text: cc,
                                             style: TextStyle(
                                                 color: AppColor.white,
                                                 fontSize: 10.sp),
@@ -470,10 +475,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                                             ),
                                           ),
                                           TextSpan(
-                                            text: getCurrencyFromCountry(
-                                              countryState.selectedCountry,
-                                              context,
-                                            ),
+                                            text: cc,
                                             style: TextStyle(
                                                 color: AppColor.white,
                                                 fontSize: 10.sp),
@@ -532,10 +534,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                                             ),
                                           ),
                                           TextSpan(
-                                            text: getCurrencyFromCountry(
-                                              countryState.selectedCountry,
-                                              context,
-                                            ),
+                                            text: cc,
                                             style: TextStyle(
                                                 color: AppColor.white,
                                                 fontSize: 10.sp),

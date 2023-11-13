@@ -17,11 +17,14 @@ import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/injection_container.dart' as di;
 import 'package:netzoon/presentation/data/cities.dart';
 import 'package:netzoon/presentation/home/test.dart';
+import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
+import 'package:netzoon/presentation/legal_advice/blocs/legal_advice/legal_advice_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 
 import '../../../injection_container.dart';
 import '../../categories/factories/blocs/factories_bloc/factories_bloc.dart';
+import 'package:readmore/readmore.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key, required this.accountTitle});
@@ -82,8 +85,12 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
       GlobalKey<FormFieldState>();
   final GlobalKey<FormFieldState> passwordFormFieldKey =
       GlobalKey<FormFieldState>();
+  final LegalAdviceBloc adviceBloc = sl<LegalAdviceBloc>();
+  late final LanguageBloc langBloc;
   @override
   void initState() {
+    langBloc = BlocProvider.of<LanguageBloc>(context);
+    langBloc.add(GetLanguage());
     if (widget.accountTitle == 'المصانع') {
       factoryBloc.add(GetAllFactoriesEvent());
     }
@@ -133,6 +140,8 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
       },
       child: SignUpWidget(
         formKey: formKey,
+        adviceBloc: adviceBloc,
+        langBloc: langBloc,
         accountTitle: widget.accountTitle,
         emailSignup: emailSignup,
         username: username,
@@ -173,6 +182,8 @@ class SignUpWidget extends StatefulWidget {
   const SignUpWidget({
     super.key,
     required this.formKey,
+    required this.adviceBloc,
+    required this.langBloc,
     required this.accountTitle,
     required this.emailSignup,
     required this.username,
@@ -235,7 +246,8 @@ class SignUpWidget extends StatefulWidget {
   final TextEditingController cityController;
   final TextEditingController addressDetailsController;
   final TextEditingController floorNumController;
-
+  final LegalAdviceBloc adviceBloc;
+  final LanguageBloc langBloc;
   final SignUpBloc bloc;
   final FactoriesBloc factoriesBloc;
   @override
@@ -1796,10 +1808,10 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           ),
                         ),
                         child: RawMaterialButton(
-                          onPressed: () {
-                            // if (!widget.formKey.currentState!.validate()) {
-                            //   return;
-                            // }
+                          onPressed: () async {
+                            if (!widget.formKey.currentState!.validate()) {
+                              return;
+                            }
                             if (profileImage == null || coverImage == null) {
                               showDialog(
                                 context: context,
@@ -1870,58 +1882,69 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                             if (!widget.formKey.currentState!.validate()) {
                               return;
                             }
-                            widget.bloc.add(
-                              SignUpRequested(
-                                username: widget.username.text,
-                                email: widget.emailSignup.text,
-                                password: widget.passwordSignup.text,
-                                userType: userType,
-                                firstMobile: widget.numberPhoneOne.text,
-                                secondMobile: widget.numberPhoneTow.text,
-                                thirdMobile: widget.numberPhoneThree.text,
-                                address: widget.address.text,
-                                companyProductsNumber: int.tryParse(
-                                    widget.companyProductsNumber.text),
-                                sellType: widget.sellType.text,
-                                subcategory: widget.subcategory.text,
-                                toCountry: widget.toCountry.text,
-                                isFreeZoon: _isFreeZone,
-                                isService: _isService,
-                                isSelectable: _isSelectable,
-                                freezoneCity:
-                                    widget.freezoneCityController.text,
-                                deliverable: _isDeliverable,
-                                profilePhoto: profileImage,
-                                coverPhoto: coverImage,
-                                // banerPhoto: banerImage,
-                                frontIdPhoto: frontIdPhoto,
-                                backIdPhoto: backIdPhoto,
-                                bio: widget.bioController.text,
-                                description: widget.descriptionController.text,
-                                website: widget.websiteController.text,
-                                link: widget.linkController.text,
-                                slogn: widget.slognController.text,
-                                title: selectCat?.title,
-                                deliveryCarsNum: int.tryParse(
-                                    widget.deliveryCarsNumController.text),
-                                deliveryMotorsNum: int.tryParse(
-                                    widget.deliveryMotorsNumController.text),
-                                deliveryPermitPhoto: deliveryPermitPhoto,
-                                deliveryType: deliveryType,
-                                isThereFoodsDelivery: _isThereFoodsDelivery,
-                                isThereWarehouse: _isThereWarehouse,
-                                tradeLicensePhoto: tradeLicensePhoto,
-                                profitRatio: double.tryParse(
-                                    widget.profitRatioController.text),
-                                city: selectedCity,
-                                addressDetails:
-                                    widget.addressDetailsController.text,
-                                floorNum: int.tryParse(
-                                    widget.floorNumController.text),
-                                locationType: _selectedLocationType,
-                                contactName: widget.contactName.text,
-                              ),
+                            bool acc = await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return const PriveryPolicyWidget();
+                              },
                             );
+                            if (acc == true) {
+                              widget.bloc.add(
+                                SignUpRequested(
+                                  username: widget.username.text,
+                                  email: widget.emailSignup.text,
+                                  password: widget.passwordSignup.text,
+                                  userType: userType,
+                                  firstMobile: widget.numberPhoneOne.text,
+                                  secondMobile: widget.numberPhoneTow.text,
+                                  thirdMobile: widget.numberPhoneThree.text,
+                                  address: widget.address.text,
+                                  companyProductsNumber: int.tryParse(
+                                      widget.companyProductsNumber.text),
+                                  sellType: widget.sellType.text,
+                                  subcategory: widget.subcategory.text,
+                                  toCountry: widget.toCountry.text,
+                                  isFreeZoon: _isFreeZone,
+                                  isService: _isService,
+                                  isSelectable: _isSelectable,
+                                  freezoneCity:
+                                      widget.freezoneCityController.text,
+                                  deliverable: _isDeliverable,
+                                  profilePhoto: profileImage,
+                                  coverPhoto: coverImage,
+                                  // banerPhoto: banerImage,
+                                  frontIdPhoto: frontIdPhoto,
+                                  backIdPhoto: backIdPhoto,
+                                  bio: widget.bioController.text,
+                                  description:
+                                      widget.descriptionController.text,
+                                  website: widget.websiteController.text,
+                                  link: widget.linkController.text,
+                                  slogn: widget.slognController.text,
+                                  title: selectCat?.title,
+                                  deliveryCarsNum: int.tryParse(
+                                      widget.deliveryCarsNumController.text),
+                                  deliveryMotorsNum: int.tryParse(
+                                      widget.deliveryMotorsNumController.text),
+                                  deliveryPermitPhoto: deliveryPermitPhoto,
+                                  deliveryType: deliveryType,
+                                  isThereFoodsDelivery: _isThereFoodsDelivery,
+                                  isThereWarehouse: _isThereWarehouse,
+                                  tradeLicensePhoto: tradeLicensePhoto,
+                                  profitRatio: double.tryParse(
+                                      widget.profitRatioController.text),
+                                  city: selectedCity,
+                                  addressDetails:
+                                      widget.addressDetailsController.text,
+                                  floorNum: int.tryParse(
+                                      widget.floorNumController.text),
+                                  locationType: _selectedLocationType,
+                                  contactName: widget.contactName.text,
+                                ),
+                              );
+                            } else {
+                              print('errrrr');
+                            }
                           },
                           child: Text(
                             AppLocalizations.of(context)
@@ -1971,5 +1994,158 @@ class _SignUpWidgetState extends State<SignUpWidget> {
       default:
         return 'user';
     }
+  }
+}
+
+class PriveryPolicyWidget extends StatefulWidget {
+  const PriveryPolicyWidget({super.key});
+
+  @override
+  State<PriveryPolicyWidget> createState() => _PriveryPolicyWidgetState();
+}
+
+class _PriveryPolicyWidgetState extends State<PriveryPolicyWidget> {
+  final LegalAdviceBloc adviceBloc = sl<LegalAdviceBloc>();
+  late final LanguageBloc langBloc;
+  @override
+  void initState() {
+    adviceBloc.add(GetLegalAdviceEvent());
+    langBloc = BlocProvider.of<LanguageBloc>(context);
+    langBloc.add(GetLanguage());
+    super.initState();
+  }
+
+  bool isChecked = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LanguageBloc, LanguageState>(
+      bloc: langBloc,
+      builder: (context, langState) {
+        return BlocBuilder<LegalAdviceBloc, LegalAdviceState>(
+          bloc: adviceBloc,
+          builder: (context, state) {
+            if (state is LegalAdviceProgress) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: AppColor.backgroundColor,
+                ),
+              );
+            } else if (state is LegalAdviceFailure) {
+              final failure = state.message;
+              return Center(
+                child: Text(
+                  failure,
+                  style: const TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
+              );
+            } else if (state is LegalAdviceSuccess) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                child: SingleChildScrollView(
+                  child: Stack(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        margin: const EdgeInsets.only(top: 10),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('privacy_policy'),
+                              style: TextStyle(
+                                color: AppColor.backgroundColor,
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 80.0),
+                              child: Column(
+                                children: [
+                                  ReadMoreText(
+                                    langState is EnglishState
+                                        ? state.legalAdvices.first.textEn
+                                        : state.legalAdvices.first.text,
+                                    trimLines: 2,
+                                    colorClickableText: Colors.pink,
+                                    trimMode: TrimMode.Line,
+                                    trimCollapsedText: 'Show more',
+                                    trimExpandedText: 'Show less',
+                                    lessStyle:
+                                        const TextStyle(color: AppColor.red),
+                                    moreStyle: TextStyle(
+                                        color: AppColor.colorThree,
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Checkbox(
+                                        value: isChecked,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            isChecked = value ?? false;
+                                          });
+                                        },
+                                      ),
+                                      const Text(
+                                          'I agree to the terms and conditions'),
+                                    ],
+                                  ),
+                                  isChecked == true
+                                      ? Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            const SizedBox(width: 10),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                isChecked == true
+                                                    ? Navigator.of(context)
+                                                        .pop(isChecked)
+                                                    : null;
+                                              },
+                                              child: const Text('Ok'),
+                                            ),
+                                          ],
+                                        )
+                                      : const SizedBox(),
+                                ],
+                              ),
+                            ),
+                            // const ReadMoreText(
+                            //   state.,
+                            //   trimLines: 2,
+                            //   colorClickableText: Colors.pink,
+                            //   trimMode: TrimMode.Line,
+                            //   trimCollapsedText: 'Show more',
+                            //   trimExpandedText: 'Show less',
+                            //   moreStyle: TextStyle(
+                            //       fontSize: 14, fontWeight: FontWeight.bold),
+                            // ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+            return const SizedBox();
+          },
+        );
+      },
+    );
   }
 }
