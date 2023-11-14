@@ -91,7 +91,7 @@
     "username": "username",
     "contact_name": "contact_name",
     "username_required": "username is required",
-    "username_condition": "username should be at least 5 characters",
+    "username_condition": "username should be at least 2 characters",
     "contact_numbers": "contact numbers",
     "required": "required",
     "subcategory": "subcategory",

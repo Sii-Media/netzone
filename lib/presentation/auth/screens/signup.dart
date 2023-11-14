@@ -511,7 +511,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       return AppLocalizations.of(context)
                           .translate('username_required');
                     }
-                    if (val.length < 5) {
+                    if (val.length < 2) {
                       return AppLocalizations.of(context)
                           .translate('username_condition');
                     }

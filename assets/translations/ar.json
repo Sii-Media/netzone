@@ -90,7 +90,7 @@
     "username": "اسم المستخدم",
     "contact_name": "الاسم للتواصل",
     "username_required": "اسم المستخدم مطلوب",
-    "username_condition": "يجب أن يحتوي اسم المستخدم على 5 أحرف على الأقل",
+    "username_condition": "يجب أن يحتوي اسم المستخدم على حرفين على الأقل",
     "contact_numbers": "أرقام التواصل",
     "required": "مطلوب",
     "subcategory": "الفئة الفرعية",
