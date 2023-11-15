@@ -280,18 +280,20 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
         }
 
         Response response = await dio.put(
-            'https://back.netzoon.com//categories/local-company/$id',
+            'http://back.netzoon.com/categories/local-company/edit-service$id',
             data: formData);
         // Handle the response as needed
         if (response.statusCode == 200) {
           return Right(response.data);
         } else {
+          print(response.statusCode);
           return Left(ServerFailure());
         }
       } else {
         return Left(OfflineFailure());
       }
     } catch (e) {
+      print(e);
       return Left(ServerFailure());
     }
   }

@@ -53,7 +53,7 @@ class ListCategoriesEcommerce extends StatelessWidget {
                         maxHeightDiskCache: 400,
                         maxWidthDiskCache: 400,
                         imageUrl: items[index].imageUrl,
-                        fit: BoxFit.contain,
+                        fit: BoxFit.cover,
                         progressIndicatorBuilder:
                             (context, url, downloadProgress) => Padding(
                           padding: const EdgeInsets.symmetric(

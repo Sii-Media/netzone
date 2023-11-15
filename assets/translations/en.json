@@ -218,7 +218,9 @@
     "ساعات": "Watches",
     "عطور": "perfumes",
     "mobiles": "Mobiles",
+    "Telephones": "Telephones",
     "tvs": "TVs",
+    "Televisions":"Televisions",
     "headphones": "headphones",
     "computers": "computers",
     "tables": "tables",
@@ -582,5 +584,13 @@
     "summrey_order": "Summery Order",
     "delivery_fee": "Delivery fee",
     "you_cannot_purchase_your_product": "you cannot purchase your product",
-    "send email to Info@netzoon.com": "send email to Info@netzoon.com"
+    "send email to Info@netzoon.com": "send email to Info@netzoon.com",
+    "Inks and printers": "Inks and printers",
+    "Computer accessories": "Computer accessories",
+    "Location Permission": "Location Permission",
+    "To provide you with the best delivery experience, our app needs access to your location.": "To provide you with the best delivery experience, our app needs access to your location.",
+    "Electronic watches": "Electronic watches",
+    "Yes, I understand": "Yes, I understand",
+    "No, I prefer not to share": "No, I prefer not to share",
+    "I agree to the terms and conditions":"I agree to the terms and conditions"
 }

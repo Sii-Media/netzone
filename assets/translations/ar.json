@@ -218,7 +218,9 @@
     "عطور": "perfumes",
     "ساعات": "ساعات",
     "mobiles": "موبايلات",
+    "Telephones": "موبايلات",
     "tvs": "تلفزيونات",
+    "Televisions": "تلفزيونات",
     "headphones": "سماعات",
     "computers": "حواسيب",
     "tables": "طاولات",
@@ -582,5 +584,13 @@
     "summrey_order": "ملخص الطلبية",
     "delivery_fee": "رسوم التوصيل",
     "you_cannot_purchase_your_product": "عذرا، لا يمكنك شراء منتجك",
-    "send email to Info@netzoon.com":"أرسل ايميل ل info@netzoon.com"
+    "send email to Info@netzoon.com": "أرسل ايميل ل info@netzoon.com",
+    "Inks and printers": "الأحبار والطابعات",
+    "Computer accessories": "ملحقات الكمبيوتر",
+    "Location Permission": "إذن الموقع",
+    "To provide you with the best delivery experience, our app needs access to your location.": "لتزويدك بأفضل تجربة توصيل، يحتاج تطبيقنا إلى الوصول إلى موقعك.",
+    "Electronic watches": "الساعات الالكترونية",
+    "Yes, I understand": "نعم أفهم",
+    "No, I prefer not to share": "لا، أفضل عدم المشاركة",
+    "I agree to the terms and conditions":"أوافق على الشروط والأحكام"
 }

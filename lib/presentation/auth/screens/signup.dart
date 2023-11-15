@@ -2099,8 +2099,8 @@ class _PriveryPolicyWidgetState extends State<PriveryPolicyWidget> {
                                           });
                                         },
                                       ),
-                                      const Text(
-                                          'I agree to the terms and conditions'),
+                                      Text(AppLocalizations.of(context).translate(
+                                          'I agree to the terms and conditions')),
                                     ],
                                   ),
                                   isChecked == true

@@ -26,180 +26,345 @@ class StartScreen extends StatefulWidget {
 
 class _StartScreenState extends State<StartScreen> {
   bool isGetLocation = false;
+  bool isFirstTime = false;
+  final SharedPreferences preferences = sl<SharedPreferences>();
+  // Future<Position> _getCurrentLocation() async {
+  //   bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     // If not, show a dialog to ask the user to enable it
+  //     WidgetsBinding.instance.addPostFrameCallback((_) {
+  //       showDialog(
+  //         context: context,
+  //         builder: (context) => AlertDialog(
+  //           title: const Text(
+  //             'Location service is disabled',
+  //             style: TextStyle(
+  //               color: Colors.black,
+  //             ),
+  //           ),
+  //           content: const Text(
+  //             'Please enable location service in settings',
+  //             style: TextStyle(
+  //               color: Colors.black,
+  //             ),
+  //           ),
+  //           actions: [
+  //             TextButton(
+  //               onPressed: () {
+  //                 // Close the dialog
+  //                 Navigator.of(context).pop();
+  //               },
+  //               child: const Text('OK'),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     });
+  //     // Location services are not enabled don't continue
+  //     // accessing the position and request users of the
+  //     // App to enable the location services.
+  //     // return Future.error('Location services are disabled.');
+  //   }
+  //   Timer.periodic(const Duration(seconds: 1), (timer) async {
+  //     // Check if location service is enabled
+  //     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //     if (serviceEnabled) {
+  //       // If enabled, cancel the timer and proceed to check permission
+  //       timer.cancel();
+  //       // Check the location permission status
+  //       LocationPermission permission = await Geolocator.checkPermission();
+  //       if (permission == LocationPermission.denied) {
+  //         // If denied, request the permission
+  //         permission = await Geolocator.requestPermission();
+  //         if (permission == LocationPermission.denied) {
+  //           // If still denied, show a dialog to inform the user
+  //           WidgetsBinding.instance.addPostFrameCallback((_) {
+  //             showDialog(
+  //               context: context,
+  //               builder: (context) => AlertDialog(
+  //                 title: const Text('Location permission is denied'),
+  //                 content: const Text(
+  //                     'Please grant location permission in settings'),
+  //                 actions: [
+  //                   TextButton(
+  //                     onPressed: () {
+  //                       // Close the dialog
+  //                       Navigator.of(context).pop();
+  //                     },
+  //                     child: const Text('OK'),
+  //                   ),
+  //                 ],
+  //               ),
+  //             );
+  //           });
+  //           return;
+  //         }
+  //       }
+
+  //       if (permission == LocationPermission.deniedForever) {
+  //         // If denied forever, show a dialog to inform the user
+  //         WidgetsBinding.instance.addPostFrameCallback((_) {
+  //           showDialog(
+  //             context: context,
+  //             builder: (context) => AlertDialog(
+  //               title: const Text('Location permission is denied forever'),
+  //               content:
+  //                   const Text('Please grant location permission in settings'),
+  //               actions: [
+  //                 TextButton(
+  //                   onPressed: () {
+  //                     // Close the dialog
+  //                     Navigator.of(context).pop();
+  //                   },
+  //                   child: const Text('OK'),
+  //                 ),
+  //               ],
+  //             ),
+  //           );
+  //         });
+  //         return;
+  //       }
+
+  //       // If permission is granted, get the current position
+  //       // Update the state with the new position
+  //       setState(() {
+  //         isGetLocation = true;
+  //       });
+  //     }
+  //   });
+
+  //   LocationPermission permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       // If still denied, show a dialog to inform the user
+  //       WidgetsBinding.instance.addPostFrameCallback((_) {
+  //         showDialog(
+  //           context: context,
+  //           builder: (context) => AlertDialog(
+  //             title: const Text(
+  //               'Location permission is denied',
+  //               style: TextStyle(
+  //                 color: Colors.black,
+  //               ),
+  //             ),
+  //             content: const Text(
+  //               'Please grant location permission in settings',
+  //               style: TextStyle(
+  //                 color: Colors.black,
+  //               ),
+  //             ),
+  //             actions: [
+  //               TextButton(
+  //                 onPressed: () {
+  //                   // Close the dialog
+  //                   Navigator.of(context).pop();
+  //                 },
+  //                 child: const Text('OK'),
+  //               ),
+  //             ],
+  //           ),
+  //         );
+  //       });
+  //       // Permissions are denied, next time you could try
+  //       // requesting permissions again (this is also where
+  //       // Android's shouldShowRequestPermissionRationale
+  //       // returned true. According to Android guidelines
+  //       // your App should show an explanatory UI now.
+  //       return Future.error('Location permissions are denied');
+  //     }
+  //   }
+
+  //   if (permission == LocationPermission.deniedForever) {
+  //     // If denied forever, show a dialog to inform the user
+  //     WidgetsBinding.instance.addPostFrameCallback((_) {
+  //       showDialog(
+  //         context: context,
+  //         builder: (context) => AlertDialog(
+  //           title: const Text('Location permission is denied forever'),
+  //           content: const Text('Please grant location permission in settings'),
+  //           actions: [
+  //             TextButton(
+  //               onPressed: () {
+  //                 // Close the dialog
+  //                 Navigator.of(context).pop();
+  //               },
+  //               child: const Text('OK'),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     });
+  //     // Permissions are denied forever, handle appropriately.
+  //     return Future.error(
+  //         'Location permissions are permanently denied, we cannot request permissions.');
+  //   }
+  //   return await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.best,
+  //       timeLimit: const Duration(seconds: 20));
+  // }
   Future<Position> _getCurrentLocation() async {
+    // Check if location service is enabled
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // If not, show a dialog to ask the user to enable it
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text(
-              'Location service is disabled',
-              style: TextStyle(
-                color: Colors.black,
-              ),
-            ),
-            content: const Text(
-              'Please enable location service in settings',
-              style: TextStyle(
-                color: Colors.black,
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  // Close the dialog
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          ),
-        );
-      });
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      // return Future.error('Location services are disabled.');
+      // If not enabled, show a dialog to ask the user to enable it
+      _showLocationDisabledDialog();
+      return Future.error('Location services are disabled.');
     }
-    Timer.periodic(const Duration(seconds: 1), (timer) async {
-      // Check if location service is enabled
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (serviceEnabled) {
-        // If enabled, cancel the timer and proceed to check permission
-        timer.cancel();
-        // Check the location permission status
-        LocationPermission permission = await Geolocator.checkPermission();
-        if (permission == LocationPermission.denied) {
-          // If denied, request the permission
-          permission = await Geolocator.requestPermission();
-          if (permission == LocationPermission.denied) {
-            // If still denied, show a dialog to inform the user
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Location permission is denied'),
-                  content: const Text(
-                      'Please grant location permission in settings'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        // Close the dialog
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('OK'),
-                    ),
-                  ],
-                ),
-              );
-            });
-            return;
-          }
-        }
 
-        if (permission == LocationPermission.deniedForever) {
-          // If denied forever, show a dialog to inform the user
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text('Location permission is denied forever'),
-                content:
-                    const Text('Please grant location permission in settings'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      // Close the dialog
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('OK'),
-                  ),
-                ],
-              ),
-            );
-          });
-          return;
-        }
+    // Display a prominent disclosure dialog
+    isFirstTime =
+        preferences.getBool(SharedPreferencesKeys.isFirstTimeLogged) != false;
+    print(isFirstTime);
+    isFirstTime == true
+        ? preferences.setBool(SharedPreferencesKeys.isFirstTimeLogged, false)
+        : true;
+    bool userConsent =
+        isFirstTime == false ? false : await _showLocationDisclosureDialog();
+    if (!userConsent) {
+      // If the user doesn't consent, handle it accordingly
+      return Future.error('User did not consent to location access.');
+    }
 
-        // If permission is granted, get the current position
-        // Update the state with the new position
-        setState(() {
-          isGetLocation = true;
-        });
-      }
-    });
-
+    // Check the location permission status
     LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      // Request the permission
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // If still denied, show a dialog to inform the user
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text(
-                'Location permission is denied',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-              content: const Text(
-                'Please grant location permission in settings',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    // Close the dialog
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
-            ),
-          );
-        });
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
+        // _showPermissionDeniedDialog();
+        return Future.error('Location permissions are denied.');
+      } else if (permission == LocationPermission.deniedForever) {
+        // _showPermissionDeniedForeverDialog();
+        return Future.error(
+            'Location permissions are permanently denied, we cannot request permissions.');
       }
     }
 
-    if (permission == LocationPermission.deniedForever) {
-      // If denied forever, show a dialog to inform the user
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        showDialog(
+    // If permission is granted, get the current position
+    setState(() {
+      isGetLocation = true;
+    });
+
+    // Return the current position
+    return await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.best,
+      timeLimit: const Duration(seconds: 20),
+    );
+  }
+
+  void _showLocationDisabledDialog() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'Location service is disabled',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+          content: const Text(
+            'Please enable location service in settings',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Close the dialog
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  void _showPermissionDeniedDialog() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Location permission is denied'),
+          content: const Text('Please grant location permission in settings'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Close the dialog
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  void _showPermissionDeniedForeverDialog() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Location permission is denied forever'),
+          content: const Text('Please grant location permission in settings'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Close the dialog
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  Future<bool> _showLocationDisclosureDialog() async {
+    return await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Location permission is denied forever'),
-            content: const Text('Please grant location permission in settings'),
+            title: Text(
+                AppLocalizations.of(context).translate('Location Permission')),
+            content: Text(
+              AppLocalizations.of(context).translate(
+                  'To provide you with the best delivery experience, our app needs access to your location.'),
+              style: const TextStyle(color: AppColor.black),
+            ),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5),
+            contentTextStyle: const TextStyle(fontSize: 16.0),
             actions: [
               TextButton(
                 onPressed: () {
-                  // Close the dialog
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pop(true); // User consents
                 },
-                child: const Text('OK'),
+                child: Text(
+                  AppLocalizations.of(context).translate('Yes, I understand'),
+                  style: const TextStyle(color: AppColor.backgroundColor),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false); // User does not consent
+                },
+                child: Text(
+                  AppLocalizations.of(context)
+                      .translate('No, I prefer not to share'),
+                  style: const TextStyle(color: AppColor.backgroundColor),
+                ),
               ),
             ],
           ),
-        );
-      });
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-    return await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best,
-        timeLimit: const Duration(seconds: 20));
+        ) ??
+        false;
   }
 
   @override
@@ -211,7 +376,7 @@ class _StartScreenState extends State<StartScreen> {
     setState(() {
       isGetLocation = true;
     });
-    final SharedPreferences preferences = sl<SharedPreferences>();
+
     currentCode = preferences.getString(SharedPreferencesKeys.language) ?? 'ar';
     currentLanguage = currentCode == 'en' ? 'English' : 'Arabic';
     super.initState();

@@ -62,7 +62,7 @@ Widget buildSection({
                 color:
                     const Color.fromARGB(255, 209, 219, 235).withOpacity(0.8),
               ),
-              height: 110.h,
+              height: 123.h,
               child: ListofItems(
                 filter: filter,
                 elec: state.elecDevices,

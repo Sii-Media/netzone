@@ -32,7 +32,7 @@ class _ListofItemsState extends State<ListofItems> {
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           return SizedBox(
-            width: MediaQuery.of(context).size.width * 0.30,
+            width: MediaQuery.of(context).size.width * 0.34,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Container(
@@ -92,7 +92,7 @@ class _ListofItemsState extends State<ListofItems> {
                             left: 0,
                             right: 0,
                             child: Container(
-                              height: 35.h,
+                              height: 40.h,
                               color: AppColor.backgroundColor.withOpacity(0.8),
                               alignment: Alignment.center,
                               child: Padding(
@@ -100,8 +100,9 @@ class _ListofItemsState extends State<ListofItems> {
                                 child: Text(
                                   AppLocalizations.of(context)
                                       .translate(widget.elec[index].name),
+                                  maxLines: 2,
                                   style: TextStyle(
-                                    fontSize: 10.sp,
+                                    fontSize: 9.sp,
                                     color: Colors.white,
                                     fontWeight: FontWeight.w800,
                                   ),

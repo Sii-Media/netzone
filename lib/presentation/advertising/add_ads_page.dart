@@ -120,8 +120,8 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
       paymentIntent = await createPaymentIntent(amount, currency);
 
       var gpay = const flutter_stripe.PaymentSheetGooglePay(
-        merchantCountryCode: "GP",
-        currencyCode: "GBP",
+        merchantCountryCode: "AE",
+        currencyCode: "AED",
         testEnv: true,
       );
 
@@ -136,7 +136,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
             merchantDisplayName: 'Netzoon',
             // customerId: customerId['id'],
 
-            // googlePay: gpay,
+            googlePay: gpay,
           ))
           .then((value) {});
 
