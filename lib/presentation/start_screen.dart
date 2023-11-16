@@ -334,8 +334,7 @@ class _StartScreenState extends State<StartScreen> {
             title: Text(
                 AppLocalizations.of(context).translate('Location Permission')),
             content: Text(
-              AppLocalizations.of(context).translate(
-                  'To provide you with the best delivery experience, our app needs access to your location.'),
+              AppLocalizations.of(context).translate('location permission exp'),
               style: const TextStyle(color: AppColor.black),
             ),
             contentPadding:

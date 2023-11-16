@@ -220,7 +220,7 @@
     "mobiles": "Mobiles",
     "Telephones": "Telephones",
     "tvs": "TVs",
-    "Televisions":"Televisions",
+    "Televisions": "Televisions",
     "headphones": "headphones",
     "computers": "computers",
     "tables": "tables",
@@ -588,9 +588,11 @@
     "Inks and printers": "Inks and printers",
     "Computer accessories": "Computer accessories",
     "Location Permission": "Location Permission",
-    "To provide you with the best delivery experience, our app needs access to your location.": "To provide you with the best delivery experience, our app needs access to your location.",
+    "location permission exp": "To enhance your experience and provide you with the best delivery service, our app requires access to your location information. This includes features such as order tracking, delivery notifications, and ensuring accurate and timely delivery even when the app is closed. Rest assured that your privacy is our priority, and your location data is used exclusively to improve your app experience in general.",
     "Electronic watches": "Electronic watches",
     "Yes, I understand": "Yes, I understand",
     "No, I prefer not to share": "No, I prefer not to share",
-    "I agree to the terms and conditions":"I agree to the terms and conditions"
+    "I agree to the terms and conditions": "I agree to the terms and conditions",
+    "delete_my_account": "Delete my account",
+    "Are you sure you want to delete your account ?!":"Are you sure you want to delete your account ?!"
 }

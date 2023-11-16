@@ -21,3 +21,5 @@ class AuthSetFirstTimeLogged extends AuthEvent {
   final bool isFirstTimeLogged;
   const AuthSetFirstTimeLogged({required this.isFirstTimeLogged});
 }
+
+class DeleteMyAccountEvent extends AuthEvent {}

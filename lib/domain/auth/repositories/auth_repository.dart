@@ -57,6 +57,10 @@ abstract class AuthRepository {
     required String password,
   });
 
+  Future<Either<Failure, String>> deleteAccount({
+    required String userId,
+  });
+
   Future<Either<Failure, User>> changeAccount({
     required String email,
     required String password,

@@ -75,6 +75,7 @@ import 'package:netzoon/domain/auth/usecases/add_account_to_user_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/add_visitor_to_profile_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/change_account_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/change_password_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/delete_account_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/edit_profile_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_all_users_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_first_time_logged_use_case.dart';
@@ -349,6 +350,7 @@ Future<void> init() async {
         getFirstTimeLogged: sl(),
         setFirstTimeLogged: sl(),
         logoutUseCase: sl(),
+        deleteAccountUseCase: sl(),
       ));
 
   sl.registerFactory(() =>
@@ -512,6 +514,7 @@ Future<void> init() async {
       () => GetFirstTimeLoggedUseCase(authRepository: sl()));
   sl.registerLazySingleton(
       () => SetFirstTimeLoggedUseCase(authRepository: sl()));
+  sl.registerLazySingleton(() => DeleteAccountUseCase(authRepository: sl()));
   sl.registerLazySingleton(() => LogoutUseCase(repository: sl()));
   sl.registerLazySingleton(() => SignUpUseCase(authRepository: sl()));
   sl.registerLazySingleton(() => SignInUseCase(authRepository: sl()));

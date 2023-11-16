@@ -22,6 +22,8 @@ abstract class AuthRemoteDataSource {
     final String password,
   );
 
+  Future<String> deleteAccount(final String userId);
+
   Future<UserModel> changeAccount(
     final String email,
     final String password,
@@ -138,6 +140,12 @@ abstract class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   @GET('/user/getUser/{userId}')
   Future<UserInfoModel> getUserById(
+    @Path('userId') String userId,
+  );
+
+  @override
+  @DELETE('user/delete-user/{userId}')
+  Future<String> deleteAccount(
     @Path('userId') String userId,
   );
 

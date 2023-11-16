@@ -28,3 +28,13 @@ class AuthFailure extends AuthState {
 
   const AuthFailure(this.failure);
 }
+
+class DeleteAccountInProgress extends AuthState {}
+
+class DeleteAccountFailure extends AuthState {
+  final String message;
+
+  const DeleteAccountFailure({required this.message});
+}
+
+class DeleteAccountSuccess extends AuthState {}

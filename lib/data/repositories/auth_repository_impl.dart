@@ -614,4 +614,19 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, String>> deleteAccount(
+      {required String userId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final result = await authRemoteDataSource.deleteAccount(userId);
+        return Right(result);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
 }

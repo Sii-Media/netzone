@@ -99,132 +99,228 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
   final authBloc = sl<AuthBloc>();
   @override
   Widget screen(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          SettingsCategory(
-            name: AppLocalizations.of(context).translate('privacy_policy'),
-            icon: Icons.policy_outlined,
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const LegalAdviceScreen();
-                    // return const StripeTestScreen();
-                  },
+    return BlocListener<AuthBloc, AuthState>(
+      bloc: authBloc,
+      listener: (context, deleteState) {
+        if (deleteState is DeleteAccountInProgress) {
+          startLoading();
+        } else if (deleteState is DeleteAccountFailure) {
+          stopLoading();
+
+          final failure = deleteState.message;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                failure,
+                style: const TextStyle(
+                  color: AppColor.white,
                 ),
-              );
-            },
-          ),
-          // SizedBox(
-          //   height: 10.h,
-          // ),
-          // SettingsCategory(
-          //   name: AppLocalizations.of(context).translate('vacancies'),
-          //   icon: Icons.work,
-          //   onTap: () {
-          //     // Navigator.of(context).push(
-          //     //   MaterialPageRoute(
-          //     //     builder: (context) {
-          //     //       return const MobileLoginScreen();
-          //     //     },
-          //     //   ),
-          //     // );
-          //   },
-          // ),
-          // SizedBox(
-          //   height: 10.h,
-          // ),
-          // SettingsCategory(
-          //   name: AppLocalizations.of(context).translate('country'),
-          //   icon: Icons.location_city,
-          //   onTap: () {
-          //     // Navigator.of(context).push(
-          //     //   MaterialPageRoute(
-          //     //     builder: (context) {
-          //     //       return const LanguagesScreen();
-          //     //     },
-          //     //   ),
-          //     // );
-          //   },
-          // ),
-          SizedBox(
-            height: 10.h,
-          ),
-          SettingsCategory(
-            name: AppLocalizations.of(context).translate('language'),
-            icon: Icons.language,
-            onTap: () {
-              showLanguageDialog(context);
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (context) {
-              //       return const LanguagesScreen();
-              //     },
-              //   ),
-              // );
-            },
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
-          SettingsCategory(
-            name: AppLocalizations.of(context).translate('contact_us'),
-            icon: Icons.email,
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const ContactUsScreen();
-                  },
-                ),
-              );
-            },
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
-          Builder(builder: (context) {
-            return SettingsCategory(
-              name: AppLocalizations.of(context).translate('share_netzoon_app'),
-              icon: Icons.share,
-              onTap: () async {
-                // await Share.share('share netzoon app link');
-                // final box = context.findRenderObject() as RenderBox?;
-                await Share.share(
-                  'share netzoon app link',
-                  sharePositionOrigin: Rect.fromPoints(
-                    const Offset(2, 2),
-                    const Offset(3, 3),
+              ),
+              backgroundColor: AppColor.red,
+            ),
+          );
+        } else if (deleteState is DeleteAccountSuccess) {
+          stopLoading();
+
+          final cartBloc = context.read<CartBlocBloc>();
+          cartBloc.add(ClearCart());
+
+          Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+              CupertinoPageRoute(builder: (context) {
+            return const StartScreen();
+          }), (route) => false);
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            SettingsCategory(
+              name: AppLocalizations.of(context).translate('privacy_policy'),
+              icon: Icons.policy_outlined,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const LegalAdviceScreen();
+                      // return const StripeTestScreen();
+                    },
                   ),
                 );
               },
-            );
-          }),
-          SizedBox(
-            height: 10.h,
-          ),
-          isLoggedIn != null && isLoggedIn != ''
-              ? SettingsCategory(
-                  name: AppLocalizations.of(context).translate('logout'),
-                  icon: Icons.logout,
-                  onTap: () {
-                    final cartBloc = context.read<CartBlocBloc>();
-                    cartBloc.add(ClearCart());
-                    authBloc.add(AuthLogout());
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            SettingsCategory(
+              name: AppLocalizations.of(context).translate('language'),
+              icon: Icons.language,
+              onTap: () {
+                showLanguageDialog(context);
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(
+                //     builder: (context) {
+                //       return const LanguagesScreen();
+                //     },
+                //   ),
+                // );
+              },
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            SettingsCategory(
+              name: AppLocalizations.of(context).translate('contact_us'),
+              icon: Icons.email,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const ContactUsScreen();
+                    },
+                  ),
+                );
+              },
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Builder(builder: (context) {
+              return SettingsCategory(
+                name:
+                    AppLocalizations.of(context).translate('share_netzoon_app'),
+                icon: Icons.share,
+                onTap: () async {
+                  // await Share.share('share netzoon app link');
+                  // final box = context.findRenderObject() as RenderBox?;
+                  await Share.share(
+                    'share netzoon app link',
+                    sharePositionOrigin: Rect.fromPoints(
+                      const Offset(2, 2),
+                      const Offset(3, 3),
+                    ),
+                  );
+                },
+              );
+            }),
+            SizedBox(
+              height: 10.h,
+            ),
+            isLoggedIn != null && isLoggedIn != ''
+                ? SettingsCategory(
+                    name: AppLocalizations.of(context).translate('logout'),
+                    icon: Icons.logout,
+                    onTap: () {
+                      final cartBloc = context.read<CartBlocBloc>();
+                      cartBloc.add(ClearCart());
+                      authBloc.add(AuthLogout());
 
-                    Navigator.of(context, rootNavigator: true)
-                        .pushAndRemoveUntil(
-                            CupertinoPageRoute(builder: (context) {
-                      return const StartScreen();
-                    }), (route) => false);
-                  },
-                )
-              : const SizedBox(),
-        ],
+                      Navigator.of(context, rootNavigator: true)
+                          .pushAndRemoveUntil(
+                              CupertinoPageRoute(builder: (context) {
+                        return const StartScreen();
+                      }), (route) => false);
+                    },
+                  )
+                : const SizedBox(),
+            SizedBox(
+              height: 10.h,
+            ),
+            isLoggedIn != null && isLoggedIn != ''
+                // ? SettingsCategory(
+                //     name: AppLocalizations.of(context)
+                //         .translate('delete_my_account'),
+                //     icon: Icons.remove_circle,
+                //     onTap: () {
+                //       authBloc.add(DeleteMyAccountEvent());
+                //     },
+                //   )
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: InkWell(
+                        onTap: () async {
+                          bool isSubmit = await _showDeleteAccountDialog();
+                          isSubmit == true
+                              ? authBloc.add(DeleteMyAccountEvent())
+                              : null;
+                        },
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          height: 60.h,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              color: AppColor.white,
+                              borderRadius: BorderRadius.circular(10.0),
+                              border: Border.all(color: AppColor.red)),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.remove_circle_rounded,
+                                color: AppColor.red,
+                                size: 20.sp,
+                              ),
+                              SizedBox(
+                                width: 5.w,
+                              ),
+                              Text(
+                                AppLocalizations.of(context)
+                                    .translate('delete_my_account'),
+                                style: TextStyle(
+                                    fontSize: 15.sp, color: AppColor.red),
+                              ),
+                            ],
+                          ),
+                        )),
+                  )
+                : const SizedBox(),
+          ],
+        ),
       ),
     );
+  }
+
+  Future<bool> _showDeleteAccountDialog() async {
+    return await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(
+                AppLocalizations.of(context).translate('delete_my_account'),
+                style: const TextStyle(color: AppColor.backgroundColor),
+              ),
+              content: Text(
+                AppLocalizations.of(context).translate(
+                    'Are you sure you want to delete your account ?!'),
+                style: const TextStyle(color: AppColor.black),
+              ),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5),
+              contentTextStyle: TextStyle(fontSize: 14.0.sp),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false); // User does not consent
+                  },
+                  child: Text(
+                    AppLocalizations.of(context).translate('No'),
+                    style: const TextStyle(color: AppColor.backgroundColor),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true); // User consents
+                  },
+                  child: Text(
+                    AppLocalizations.of(context).translate('Yes'),
+                    style: const TextStyle(color: AppColor.backgroundColor),
+                  ),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
   }
 }
 
