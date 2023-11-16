@@ -119,6 +119,8 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
         currencyCode: "aed",
         testEnv: true,
       );
+      print('jasdjajsdajdsjasd');
+      print(paymentIntent);
       print(paymentIntent!['client_secret']);
       //STEP 2: Initialize Payment Sheet
       await Stripe.instance
@@ -246,7 +248,8 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
       var response = await http.post(
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
-          'Authorization': 'Bearer $secretKey',
+          'Authorization':
+              'Bearer sk_test_51NcotDFDslnmTEHTPCFTKNDMtYwf06E9qZ0Ch3rHa8kI6wbx6LPPTuD0qmN3JG2MF9MtoSr8JjmAfwcxNECDaBvZ00yMpBm3f1',
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: body,
@@ -269,7 +272,8 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
         Uri.parse("https://api.stripe.com/v1/customers"),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
-          "Authorization": "Bearer $secretKey",
+          "Authorization":
+              "Bearer sk_test_51NcotDFDslnmTEHTPCFTKNDMtYwf06E9qZ0Ch3rHa8kI6wbx6LPPTuD0qmN3JG2MF9MtoSr8JjmAfwcxNECDaBvZ00yMpBm3f1",
         },
         body: body,
       );

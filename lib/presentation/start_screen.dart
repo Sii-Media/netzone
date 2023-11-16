@@ -221,10 +221,10 @@ class _StartScreenState extends State<StartScreen> {
         : true;
     bool userConsent =
         isFirstTime == false ? false : await _showLocationDisclosureDialog();
-    if (!userConsent) {
-      // If the user doesn't consent, handle it accordingly
-      return Future.error('User did not consent to location access.');
-    }
+    // if (!userConsent) {
+    //   // If the user doesn't consent, handle it accordingly
+    //   return Future.error('User did not consent to location access.');
+    // }
 
     // Check the location permission status
     LocationPermission permission = await Geolocator.checkPermission();

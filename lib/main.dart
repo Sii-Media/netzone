@@ -33,8 +33,11 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  String stripePubKey = dotenv.get('STRIPE_LIVE_PUB_KEY', fallback: '');
+  // String stripePubKey = dotenv.get('STRIPE_LIVE_PUB_KEY', fallback: '');
+  String stripePubKey =
+      'pk_test_51NcotDFDslnmTEHTC1GIVWyuc6ZGAfhWvQFlyE7v6Pno2VZeZ8gAHlwFPP1Euj5Rqdxyo58LMdOuLTQKIazuD13G00cUhvtJLe';
   Stripe.publishableKey = stripePubKey;
+  print('Stripe : $stripePubKey');
   // await initializeQuickBlox();
   await Firebase.initializeApp();
   await FirebaseMessaging.instance.subscribeToTopic('Netzoon');
