@@ -93,7 +93,7 @@ class _ServicesCategoriesScreenState extends State<ServicesCategoriesScreen> {
                                       );
                                     },
                                     child: Container(
-                                      padding: const EdgeInsets.all(3),
+                                      // padding: const EdgeInsets.all(3),
                                       margin: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
                                           borderRadius:
