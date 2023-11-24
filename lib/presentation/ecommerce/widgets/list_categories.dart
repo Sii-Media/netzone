@@ -15,7 +15,7 @@ class ListCategoriesEcommerce extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        margin: const EdgeInsets.only(bottom: 80),
+        margin: EdgeInsets.only(bottom: 80.h),
         child: GridView.builder(
           padding: const EdgeInsets.all(16.0),
           shrinkWrap: true,

@@ -172,7 +172,8 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
       var response = await http.post(
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
-          'Authorization': 'Bearer $secretKey',
+          'Authorization':
+              'Bearer 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',
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: body,
