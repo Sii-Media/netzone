@@ -9,7 +9,10 @@ import 'package:netzoon/domain/categories/usecases/local_company/edit_company_se
 import 'package:netzoon/domain/categories/usecases/local_company/get_all_local_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_company_products_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_local_companies_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/local_company/get_services_by_category_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/local_company/get_services_categories_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/rate_company_service_use_case.dart';
+import 'package:netzoon/domain/company_service/service_category.dart';
 import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
@@ -39,6 +42,8 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
   final RateCompanyServiceUseCase rateCompanyServiceUseCase;
   final EditCompanyServiceUseCase editCompanyServiceUseCase;
   final DeleteCompanyServiceUseCase deleteCompanyServiceUseCase;
+  final GetServicesByCategoryUseCase getServicesByCategoryUseCase;
+  final GetServicesCategoriesUseCase getServicesCategoriesUseCase;
   LocalCompanyBloc({
     required this.getLocalCompaniesUseCase,
     required this.getAllLocalCompaniesUseCase,
@@ -51,6 +56,8 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
     required this.rateCompanyServiceUseCase,
     required this.editCompanyServiceUseCase,
     required this.deleteCompanyServiceUseCase,
+    required this.getServicesByCategoryUseCase,
+    required this.getServicesCategoriesUseCase,
   }) : super(LocalCompanyInitial()) {
     on<GetAllLocalCompaniesEvent>((event, emit) async {
       emit(LocalCompanyInProgress());
@@ -151,6 +158,7 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
       late User? user;
       result.fold((l) => null, (r) => user = r);
       final success = await addCompanyServiceUseCase(AddCompanyServiceParams(
+        category: event.category,
         title: event.title,
         description: event.description,
         price: event.price,
@@ -248,6 +256,28 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
               .contains(event.searchQuery.toLowerCase()))
           .toList();
       emit(GetLocalCompaniesSuccess(companies: searchResults));
+    });
+    on<GetServicesCategoriesEvent>((event, emit) async {
+      emit(GetServicesCategoriesInProgress());
+      final result = await getServicesCategoriesUseCase(NoParams());
+      emit(
+        result.fold(
+          (failure) => GetServicesCategoriesFailure(
+              message: mapFailureToString(failure)),
+          (result) => GetServicesCategoriesSuccess(servicesCategories: result),
+        ),
+      );
+    });
+    on<GetServicesByCategoryEvent>((event, emit) async {
+      emit(GetServicesByCategoryInProgress());
+      final result = await getServicesByCategoryUseCase(event.category);
+      emit(
+        result.fold(
+          (failure) => GetServicesByCategoryFailure(
+              message: mapFailureToString(failure)),
+          (result) => GetServicesByCategorySuccess(servicesCategories: result),
+        ),
+      );
     });
   }
 }

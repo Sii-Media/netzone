@@ -23,6 +23,9 @@ import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/advertising/advertising.dart';
 import 'package:netzoon/presentation/aramex/blocs/aramex_bloc/aramex_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
+import 'package:netzoon/presentation/categories/local_company/local_company_bloc/local_company_bloc.dart';
+import 'package:netzoon/presentation/categories/local_company/services_by_category_screen.dart';
+import 'package:netzoon/presentation/categories/local_company/services_categories_screen.dart';
 import 'package:netzoon/presentation/categories/main_categories.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/data/advertisments.dart';
@@ -93,6 +96,8 @@ class _HomePageState extends State<HomePage> {
   final authBloc = sl<AuthBloc>();
 
   final aramexBloc = sl<AramexBloc>();
+
+  final servicesBloc = sl<LocalCompanyBloc>();
 
   int totalUnreadMessageCount = 0;
   void connectToSendbird({required String id}) async {
@@ -168,6 +173,7 @@ class _HomePageState extends State<HomePage> {
     planesBloc.add(const GetAllPlanesEvent());
     carsBloc.add(GetLatestCarByCreatorEvent());
     realEstateBloc.add(GetAllRealEstatesEvent());
+    servicesBloc.add(GetServicesCategoriesEvent());
   }
 
   @override
@@ -385,6 +391,138 @@ class _HomePageState extends State<HomePage> {
                   title: 'أخرى',
                   bloc: otherBloc,
                   context: context,
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TitleAndButton(
+                  title: AppLocalizations.of(context).translate('services'),
+                  icon: true,
+                  onPress: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const ServicesCategoriesScreen();
+                        },
+                      ),
+                    );
+                  },
+                ),
+                BlocBuilder<LocalCompanyBloc, LocalCompanyState>(
+                  bloc: servicesBloc,
+                  builder: (context, serviceState) {
+                    if (serviceState is GetServicesCategoriesInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (serviceState is GetServicesCategoriesFailure) {
+                      final failure = serviceState.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {},
+                      );
+                    } else if (serviceState is GetServicesCategoriesSuccess) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3.0,
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 209, 219, 235)
+                              .withOpacity(0.8),
+                        ),
+                        height: 280.h,
+                        child: Center(
+                          child: GridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 2.5.r,
+                              crossAxisSpacing: 10.r,
+                            ),
+                            itemCount: 8,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return ServicesByCategoryScreen(
+                                          category: serviceState
+                                              .servicesCategories[index].id,
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(3),
+                                  margin: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: AppColor.white,
+                                      border: Border.all(
+                                        color: AppColor.backgroundColor,
+                                      )),
+                                  // child: ElevatedButton(
+                                  //   onPressed: () {
+                                  //     Navigator.of(context).push(
+                                  //       MaterialPageRoute(
+                                  //         builder: (context) {
+                                  //           return ServicesByCategoryScreen(
+                                  //             category: serviceState
+                                  //                 .servicesCategories[index].id,
+                                  //           );
+                                  //         },
+                                  //       ),
+                                  //     );
+                                  //   },
+                                  //   style: ElevatedButton.styleFrom(
+                                  //     backgroundColor: AppColor.white,
+                                  //     // elevation: 3,
+
+                                  //     shape: BeveledRectangleBorder(
+                                  //       borderRadius: BorderRadius.circular(5),
+                                  //       side: const BorderSide(
+                                  //           color: AppColor.backgroundColor,
+                                  //           width: 0.6),
+                                  //     ),
+                                  //   ),
+                                  //   child: Text(
+                                  //     AppLocalizations.of(context).translate(
+                                  //         serviceState
+                                  //             .servicesCategories[index].title),
+                                  //     textAlign: TextAlign.center,
+                                  //     style: TextStyle(
+                                  //         color: AppColor.backgroundColor,
+                                  //         fontSize: 11.sp,
+                                  //         fontWeight: FontWeight.w700),
+                                  //   ),
+                                  // ),
+                                  child: Center(
+                                    child: Text(
+                                      AppLocalizations.of(context).translate(
+                                          serviceState
+                                              .servicesCategories[index].title),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: AppColor.backgroundColor,
+                                          fontSize: 11.sp,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
                 ),
                 const SizedBox(
                   height: 10.0,

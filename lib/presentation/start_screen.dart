@@ -16,6 +16,7 @@ import '../data/core/constants/constants.dart';
 import '../injection_container.dart';
 import 'core/blocs/country_bloc/country_bloc.dart';
 import 'language_screen/blocs/language_bloc/language_bloc.dart';
+import 'package:geocoding/geocoding.dart';
 
 class StartScreen extends StatefulWidget {
   const StartScreen({super.key});
@@ -26,192 +27,41 @@ class StartScreen extends StatefulWidget {
 
 class _StartScreenState extends State<StartScreen> {
   bool isGetLocation = false;
+  bool isGetPosition = true;
   bool isFirstTime = false;
   final SharedPreferences preferences = sl<SharedPreferences>();
-  // Future<Position> _getCurrentLocation() async {
-  //   bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //   if (!serviceEnabled) {
-  //     // If not, show a dialog to ask the user to enable it
-  //     WidgetsBinding.instance.addPostFrameCallback((_) {
-  //       showDialog(
-  //         context: context,
-  //         builder: (context) => AlertDialog(
-  //           title: const Text(
-  //             'Location service is disabled',
-  //             style: TextStyle(
-  //               color: Colors.black,
-  //             ),
-  //           ),
-  //           content: const Text(
-  //             'Please enable location service in settings',
-  //             style: TextStyle(
-  //               color: Colors.black,
-  //             ),
-  //           ),
-  //           actions: [
-  //             TextButton(
-  //               onPressed: () {
-  //                 // Close the dialog
-  //                 Navigator.of(context).pop();
-  //               },
-  //               child: const Text('OK'),
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     });
-  //     // Location services are not enabled don't continue
-  //     // accessing the position and request users of the
-  //     // App to enable the location services.
-  //     // return Future.error('Location services are disabled.');
-  //   }
-  //   Timer.periodic(const Duration(seconds: 1), (timer) async {
-  //     // Check if location service is enabled
-  //     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //     if (serviceEnabled) {
-  //       // If enabled, cancel the timer and proceed to check permission
-  //       timer.cancel();
-  //       // Check the location permission status
-  //       LocationPermission permission = await Geolocator.checkPermission();
-  //       if (permission == LocationPermission.denied) {
-  //         // If denied, request the permission
-  //         permission = await Geolocator.requestPermission();
-  //         if (permission == LocationPermission.denied) {
-  //           // If still denied, show a dialog to inform the user
-  //           WidgetsBinding.instance.addPostFrameCallback((_) {
-  //             showDialog(
-  //               context: context,
-  //               builder: (context) => AlertDialog(
-  //                 title: const Text('Location permission is denied'),
-  //                 content: const Text(
-  //                     'Please grant location permission in settings'),
-  //                 actions: [
-  //                   TextButton(
-  //                     onPressed: () {
-  //                       // Close the dialog
-  //                       Navigator.of(context).pop();
-  //                     },
-  //                     child: const Text('OK'),
-  //                   ),
-  //                 ],
-  //               ),
-  //             );
-  //           });
-  //           return;
-  //         }
-  //       }
+  String? countryCode = 'AE';
+  String addressDetails = '';
 
-  //       if (permission == LocationPermission.deniedForever) {
-  //         // If denied forever, show a dialog to inform the user
-  //         WidgetsBinding.instance.addPostFrameCallback((_) {
-  //           showDialog(
-  //             context: context,
-  //             builder: (context) => AlertDialog(
-  //               title: const Text('Location permission is denied forever'),
-  //               content:
-  //                   const Text('Please grant location permission in settings'),
-  //               actions: [
-  //                 TextButton(
-  //                   onPressed: () {
-  //                     // Close the dialog
-  //                     Navigator.of(context).pop();
-  //                   },
-  //                   child: const Text('OK'),
-  //                 ),
-  //               ],
-  //             ),
-  //           );
-  //         });
-  //         return;
-  //       }
-
-  //       // If permission is granted, get the current position
-  //       // Update the state with the new position
-  //       setState(() {
-  //         isGetLocation = true;
-  //       });
-  //     }
-  //   });
-
-  //   LocationPermission permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.denied) {
-  //     permission = await Geolocator.requestPermission();
-  //     if (permission == LocationPermission.denied) {
-  //       // If still denied, show a dialog to inform the user
-  //       WidgetsBinding.instance.addPostFrameCallback((_) {
-  //         showDialog(
-  //           context: context,
-  //           builder: (context) => AlertDialog(
-  //             title: const Text(
-  //               'Location permission is denied',
-  //               style: TextStyle(
-  //                 color: Colors.black,
-  //               ),
-  //             ),
-  //             content: const Text(
-  //               'Please grant location permission in settings',
-  //               style: TextStyle(
-  //                 color: Colors.black,
-  //               ),
-  //             ),
-  //             actions: [
-  //               TextButton(
-  //                 onPressed: () {
-  //                   // Close the dialog
-  //                   Navigator.of(context).pop();
-  //                 },
-  //                 child: const Text('OK'),
-  //               ),
-  //             ],
-  //           ),
-  //         );
-  //       });
-  //       // Permissions are denied, next time you could try
-  //       // requesting permissions again (this is also where
-  //       // Android's shouldShowRequestPermissionRationale
-  //       // returned true. According to Android guidelines
-  //       // your App should show an explanatory UI now.
-  //       return Future.error('Location permissions are denied');
-  //     }
-  //   }
-
-  //   if (permission == LocationPermission.deniedForever) {
-  //     // If denied forever, show a dialog to inform the user
-  //     WidgetsBinding.instance.addPostFrameCallback((_) {
-  //       showDialog(
-  //         context: context,
-  //         builder: (context) => AlertDialog(
-  //           title: const Text('Location permission is denied forever'),
-  //           content: const Text('Please grant location permission in settings'),
-  //           actions: [
-  //             TextButton(
-  //               onPressed: () {
-  //                 // Close the dialog
-  //                 Navigator.of(context).pop();
-  //               },
-  //               child: const Text('OK'),
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     });
-  //     // Permissions are denied forever, handle appropriately.
-  //     return Future.error(
-  //         'Location permissions are permanently denied, we cannot request permissions.');
-  //   }
-  //   return await Geolocator.getCurrentPosition(
-  //       desiredAccuracy: LocationAccuracy.best,
-  //       timeLimit: const Duration(seconds: 20));
-  // }
-  Future<Position> _getCurrentLocation() async {
-    // Check if location service is enabled
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // If not enabled, show a dialog to ask the user to enable it
-      _showLocationDisabledDialog();
-      return Future.error('Location services are disabled.');
+  Future<void> getAddressFromLocation() async {
+    Position position = await _determineLocation();
+    print('aaaaaaaaaaaaaaaaaaa');
+    if (isGetPosition == true) {
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
+      print(placemarks);
+      setState(() {
+        selectedCountry = placemarks.first.isoCountryCode ?? 'AE';
+        addressDetails = '${placemarks.first.street}';
+      });
     }
+    setState(() {
+      isGetLocation = true;
+    });
+  }
 
+  Future<Position> _determineLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      _showLocationDisabledDialog();
+      setState(() {
+        isGetLocation = true;
+      });
+      return Future.error('Location service is not enabled');
+    }
     // Display a prominent disclosure dialog
     isFirstTime =
         preferences.getBool(SharedPreferencesKeys.isFirstTimeLogged) != false;
@@ -221,33 +71,18 @@ class _StartScreenState extends State<StartScreen> {
         : true;
     bool userConsent =
         isFirstTime == false ? false : await _showLocationDisclosureDialog();
-    if (!userConsent) {
-      // If the user doesn't consent, handle it accordingly
-      return Future.error('User did not consent to location access.');
-    }
 
-    // Check the location permission status
-    LocationPermission permission = await Geolocator.checkPermission();
+    permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
       // Request the permission
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // _showPermissionDeniedDialog();
-        return Future.error('Location permissions are denied.');
-      } else if (permission == LocationPermission.deniedForever) {
-        // _showPermissionDeniedForeverDialog();
-        return Future.error(
-            'Location permissions are permanently denied, we cannot request permissions.');
-      }
+      // permission = await Geolocator.requestPermission();
+      setState(() {
+        isGetLocation = true;
+        isGetPosition = false;
+      });
     }
 
-    // If permission is granted, get the current position
-    setState(() {
-      isGetLocation = true;
-    });
-
-    // Return the current position
     return await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.best,
       timeLimit: const Duration(seconds: 20),
@@ -342,7 +177,26 @@ class _StartScreenState extends State<StartScreen> {
             contentTextStyle: const TextStyle(fontSize: 16.0),
             actions: [
               TextButton(
-                onPressed: () {
+                onPressed: () async {
+                  // Check the location permission status
+                  LocationPermission permission =
+                      await Geolocator.checkPermission();
+                  if (permission == LocationPermission.denied ||
+                      permission == LocationPermission.deniedForever) {
+                    // Request the permission
+                    permission = await Geolocator.requestPermission();
+                    if (permission == LocationPermission.denied) {
+                      // Handle denied permission
+                      _showPermissionDeniedDialog();
+                      return;
+                    } else if (permission == LocationPermission.deniedForever) {
+                      // Handle permanently denied permission
+                      _showPermissionDeniedForeverDialog();
+                      return;
+                    }
+                  }
+
+                  // If permission is granted, proceed with background location access
                   Navigator.of(context).pop(true); // User consents
                 },
                 child: Text(
@@ -366,15 +220,12 @@ class _StartScreenState extends State<StartScreen> {
         false;
   }
 
+  double lat = 0;
+  double long = 0;
+
   @override
   void initState() {
-    _getCurrentLocation().then((value) => {
-          // ignore: avoid_print
-          print('${value.latitude}'),
-        });
-    setState(() {
-      isGetLocation = true;
-    });
+    getAddressFromLocation();
 
     currentCode = preferences.getString(SharedPreferencesKeys.language) ?? 'ar';
     currentLanguage = currentCode == 'en' ? 'English' : 'Arabic';
@@ -435,7 +286,7 @@ class _StartScreenState extends State<StartScreen> {
                     ),
                     BlocBuilder<CountryBloc, CountryState>(
                       builder: (context, state) {
-                        selectedCountry = state.selectedCountry;
+                        // selectedCountry = state.selectedCountry;
                         return Container(
                           margin: const EdgeInsets.symmetric(horizontal: 8.0),
                           width: MediaQuery.of(context).size.width,
@@ -447,46 +298,65 @@ class _StartScreenState extends State<StartScreen> {
                                   BorderSide(width: 2.0, color: AppColor.white),
                             ),
                           ),
-                          child: CountryCodePicker(
-                            searchStyle: const TextStyle(color: AppColor.black),
-                            dialogTextStyle: TextStyle(
-                                color: AppColor.black, fontSize: 10.sp),
-                            boxDecoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 209, 219, 235)
-                                  .withOpacity(0.8),
-                            ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CountryCodePicker(
+                                searchStyle:
+                                    const TextStyle(color: AppColor.black),
+                                dialogTextStyle: TextStyle(
+                                    color: AppColor.black, fontSize: 10.sp),
+                                boxDecoration: BoxDecoration(
+                                  color:
+                                      const Color.fromARGB(255, 209, 219, 235)
+                                          .withOpacity(0.8),
+                                ),
 
-                            textStyle: TextStyle(
-                              color: AppColor.white,
-                              fontSize: 10.sp,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            onChanged: (val) {
-                              selectedCountry = val.code ?? 'AE';
-                              // print(val);
-                              countryBloc
-                                  .add(UpdateCountryEvent(selectedCountry));
+                                textStyle: TextStyle(
+                                  color: AppColor.white,
+                                  fontSize: 10.sp,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                onChanged: (val) {
+                                  selectedCountry = val.code ?? 'AE';
+                                  // print(val);
+                                  countryBloc
+                                      .add(UpdateCountryEvent(selectedCountry));
 
-                              // sendMessageToRecipient();
-                            },
-                            // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-                            initialSelection: selectedCountry,
-                            favorite: const [
-                              'EG',
-                              'JO',
-                              'IQ',
-                              '+971',
-                              'AE',
-                              'SA'
+                                  // sendMessageToRecipient();
+                                },
+                                // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+                                initialSelection: selectedCountry,
+                                favorite: const [
+                                  'EG',
+                                  'JO',
+                                  'IQ',
+                                  '+971',
+                                  'AE',
+                                  'SA'
+                                ],
+                                // optional. Shows only country name and flag
+                                showCountryOnly: true,
+                                // optional. Shows only country name and flag when popup is closed.
+                                showOnlyCountryWhenClosed: true,
+                                // optional. aligns the flag and the Text left
+                                alignLeft: false,
+                                // backgroundColor: AppColor.backgroundColor,
+                                // barrierColor: AppColor.backgroundColor,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 4.0),
+                                child: Text(
+                                  addressDetails,
+                                  style: TextStyle(
+                                    fontSize: 9.sp,
+                                    decoration: TextDecoration.none,
+                                    color: AppColor.white,
+                                  ),
+                                ),
+                              ),
                             ],
-                            // optional. Shows only country name and flag
-                            showCountryOnly: true,
-                            // optional. Shows only country name and flag when popup is closed.
-                            showOnlyCountryWhenClosed: true,
-                            // optional. aligns the flag and the Text left
-                            alignLeft: false,
-                            // backgroundColor: AppColor.backgroundColor,
-                            // barrierColor: AppColor.backgroundColor,
                           ),
                         );
                       },
@@ -495,6 +365,7 @@ class _StartScreenState extends State<StartScreen> {
                       padding: const EdgeInsets.only(top: 18.0),
                       child: ElevatedButton(
                         onPressed: () {
+                          countryBloc.add(UpdateCountryEvent(selectedCountry));
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(builder: (context) {
                               return const TestScreen();

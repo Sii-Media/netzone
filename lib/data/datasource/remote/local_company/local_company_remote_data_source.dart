@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:netzoon/data/models/company_service/service_category_model.dart';
 import 'package:netzoon/data/models/departments/category_products/category_products_model.dart';
 import 'package:netzoon/data/models/local_company/local_company_model.dart';
 import 'package:retrofit/http.dart';
@@ -16,6 +17,10 @@ abstract class LocalCompanyRemoteDataSource {
       String country, String userType);
 
   Future<List<CompanyServiceModel>> getCompanyServices(String id);
+
+  Future<List<ServiceCategoryModel>> getServicesCategories();
+  Future<ServiceCategoryModel> getServicesByCategories(String category);
+
   Future<String> addCompanyService(
       String title, String description, int price, String owner);
 
@@ -66,6 +71,16 @@ abstract class LocalCompanyRemoteDataSourceImpl
   );
 
   @override
+  @GET('/categories/services-categories')
+  Future<List<ServiceCategoryModel>> getServicesCategories();
+
+  @override
+  @GET('/categories/services-by-category')
+  Future<ServiceCategoryModel> getServicesByCategories(
+    @Query('category') String category,
+  );
+
+  @override
   @POST('/categories/local-company/add-service')
   Future<String> addCompanyService(
     @Part() String title,
@@ -83,7 +98,7 @@ abstract class LocalCompanyRemoteDataSourceImpl
   );
 
   @override
-  @DELETE('/categories/local-company/{id}')
+  @DELETE('/categories/local-company/service/{id}')
   Future<String> deleteCompanyService(
     @Path('id') String id,
   );

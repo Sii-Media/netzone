@@ -11,7 +11,7 @@ class AppColor {
   static const Color mainGrey = Color.fromARGB(255, 70, 69, 69);
   static const Color secondGrey = Color.fromARGB(255, 122, 122, 122);
   static const Color red = Colors.red;
-
+  static const Color serviceColor = Color.fromARGB(255, 130, 214, 228);
   // static const Color backgroundColor = Color(0xFF5776a5);
 /*Color.fromARGB(255, 16, 24, 39);*/
   //

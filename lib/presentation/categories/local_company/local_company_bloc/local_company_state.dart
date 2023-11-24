@@ -88,3 +88,31 @@ class DeleteCompanyServiceSuccess extends LocalCompanyState {
 
   const DeleteCompanyServiceSuccess({required this.message});
 }
+
+class GetServicesCategoriesInProgress extends LocalCompanyState {}
+
+class GetServicesCategoriesFailure extends LocalCompanyState {
+  final String message;
+
+  const GetServicesCategoriesFailure({required this.message});
+}
+
+class GetServicesCategoriesSuccess extends LocalCompanyState {
+  final List<ServiceCategory> servicesCategories;
+
+  const GetServicesCategoriesSuccess({required this.servicesCategories});
+}
+
+class GetServicesByCategoryInProgress extends LocalCompanyState {}
+
+class GetServicesByCategoryFailure extends LocalCompanyState {
+  final String message;
+
+  const GetServicesByCategoryFailure({required this.message});
+}
+
+class GetServicesByCategorySuccess extends LocalCompanyState {
+  final ServiceCategory servicesCategories;
+
+  const GetServicesByCategorySuccess({required this.servicesCategories});
+}

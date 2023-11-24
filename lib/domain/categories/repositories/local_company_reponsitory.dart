@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:netzoon/domain/categories/entities/local_company/local_company.dart';
+import 'package:netzoon/domain/company_service/service_category.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 
@@ -25,6 +26,7 @@ abstract class LocalCompanyRepository {
   });
 
   Future<Either<Failure, String>> addCompanyService({
+    required String category,
     required String title,
     required String description,
     int? price,
@@ -35,6 +37,13 @@ abstract class LocalCompanyRepository {
     String? bio,
     File? video,
   });
+
+  Future<Either<Failure, ServiceCategory>> getServicesByCategories({
+    required String category,
+  });
+
+  Future<Either<Failure, List<ServiceCategory>>> getServicesCategories();
+
   Future<Either<Failure, String>> rateCompanyService({
     required String id,
     required double rating,

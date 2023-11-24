@@ -6,6 +6,7 @@ import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/remote/local_company/local_company_remote_data_source.dart';
 import 'package:netzoon/data/models/auth/user_info/user_info_model.dart';
 import 'package:netzoon/data/models/company_service/company_service_model.dart';
+import 'package:netzoon/data/models/company_service/service_category_model.dart';
 import 'package:netzoon/data/models/departments/category_products/category_products_model.dart';
 import 'package:netzoon/data/models/local_company/local_company_model.dart';
 import 'package:netzoon/domain/auth/entities/user_info.dart';
@@ -13,6 +14,7 @@ import 'package:netzoon/domain/categories/entities/local_company/local_company.d
 import 'package:dartz/dartz.dart';
 import 'package:netzoon/domain/categories/repositories/local_company_reponsitory.dart';
 import 'package:netzoon/domain/company_service/company_service.dart';
+import 'package:netzoon/domain/company_service/service_category.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 import 'package:share_plus/share_plus.dart';
@@ -78,6 +80,7 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
 
   @override
   Future<Either<Failure, String>> addCompanyService({
+    required String category,
     required String title,
     required String description,
     int? price,
@@ -151,12 +154,14 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
           ));
         }
         Response response = await dio.post(
-            'https://back.netzoon.com//categories/local-company/add-service',
-            data: formData);
+          'https://back.netzoon.com/categories/local-company/add-service?category=$category',
+          data: formData,
+        );
 
         if (response.statusCode == 201) {
           return Right(response.data);
         } else {
+          print(response);
           return Left(ServerFailure());
         }
         // final result = await localCompanyRemoteDataSource.addCompanyService(
@@ -166,6 +171,7 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
         return Left(OfflineFailure());
       }
     } catch (e) {
+      print(e);
       return Left(ServerFailure());
     }
   }
@@ -217,6 +223,7 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
         return Left(OfflineFailure());
       }
     } catch (e) {
+      print(e);
       return Left(ServerFailure());
     }
   }
@@ -280,7 +287,7 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
         }
 
         Response response = await dio.put(
-            'http://back.netzoon.com/categories/local-company/edit-service$id',
+            'https://back.netzoon.com/categories/local-company/edit-service/$id',
             data: formData);
         // Handle the response as needed
         if (response.statusCode == 200) {
@@ -289,6 +296,41 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
           print(response.statusCode);
           return Left(ServerFailure());
         }
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      print(e);
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, ServiceCategory>> getServicesByCategories(
+      {required String category}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final result = await localCompanyRemoteDataSource
+            .getServicesByCategories(category);
+        print(result);
+        return Right(result.toDomain());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      print(e);
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<ServiceCategory>>> getServicesCategories() async {
+    try {
+      if (await networkInfo.isConnected) {
+        final result =
+            await localCompanyRemoteDataSource.getServicesCategories();
+        print(result);
+        return Right(result.map((e) => e.toDomain()).toList());
       } else {
         return Left(OfflineFailure());
       }

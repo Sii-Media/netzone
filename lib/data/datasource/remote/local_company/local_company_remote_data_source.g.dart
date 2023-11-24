@@ -147,6 +147,63 @@ class _LocalCompanyRemoteDataSourceImpl
   }
 
   @override
+  Future<List<ServiceCategoryModel>> getServicesCategories() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<List<dynamic>>(
+        _setStreamType<List<ServiceCategoryModel>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/categories/services-categories',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) =>
+            ServiceCategoryModel.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<ServiceCategoryModel> getServicesByCategories(String category) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'category': category};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ServiceCategoryModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/categories/services-by-category',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ServiceCategoryModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<String> addCompanyService(
     String title,
     String description,
@@ -244,7 +301,7 @@ class _LocalCompanyRemoteDataSourceImpl
     )
         .compose(
           _dio.options,
-          '/categories/local-company/${id}',
+          '/categories/local-company/service/${id}',
           queryParameters: queryParameters,
           data: _data,
         )

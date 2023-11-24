@@ -28,6 +28,7 @@ class GetLocalProductsEvent extends LocalCompanyEvent {
 }
 
 class AddCompanyServiceEvent extends LocalCompanyEvent {
+  final String category;
   final String title;
   final String description;
   final int? price;
@@ -37,6 +38,7 @@ class AddCompanyServiceEvent extends LocalCompanyEvent {
   final String? bio;
   final File? video;
   const AddCompanyServiceEvent({
+    required this.category,
     required this.title,
     required this.description,
     this.price,
@@ -46,6 +48,14 @@ class AddCompanyServiceEvent extends LocalCompanyEvent {
     this.bio,
     this.video,
   });
+}
+
+class GetServicesCategoriesEvent extends LocalCompanyEvent {}
+
+class GetServicesByCategoryEvent extends LocalCompanyEvent {
+  final String category;
+
+  const GetServicesByCategoryEvent({required this.category});
 }
 
 class GetCompanyServicesEvent extends LocalCompanyEvent {}

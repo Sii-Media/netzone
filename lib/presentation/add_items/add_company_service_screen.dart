@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:netzoon/domain/company_service/service_category.dart';
 import 'package:netzoon/presentation/categories/local_company/local_company_bloc/local_company_bloc.dart';
+import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -57,6 +59,15 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
       imageFileList.addAll(selectedImages);
     }
     setState(() {});
+  }
+
+  final servicesBloc = sl<LocalCompanyBloc>();
+  ServiceCategory? selectCat;
+  @override
+  void initState() {
+    servicesBloc.add(GetServicesCategoriesEvent());
+
+    super.initState();
   }
 
   @override
@@ -124,6 +135,89 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
                       thickness: 0.2,
                       endIndent: 30,
                       indent: 30,
+                    ),
+                    BlocBuilder<LocalCompanyBloc, LocalCompanyState>(
+                      bloc: servicesBloc,
+                      builder: (context, state) {
+                        if (state is GetServicesCategoriesInProgress) {
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColor.backgroundColor,
+                            ),
+                          );
+                        } else if (state is GetServicesCategoriesFailure) {
+                          final failure = state.message;
+                          return FailureWidget(
+                            failure: failure,
+                            onPressed: () {
+                              servicesBloc.add(GetServicesCategoriesEvent());
+                            },
+                          );
+                        } else if (state is GetServicesCategoriesSuccess) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context).translate('categ'),
+                                style: TextStyle(
+                                  color: AppColor.backgroundColor,
+                                  fontSize: 15.sp,
+                                ),
+                              ),
+                              Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin: const EdgeInsets.symmetric(
+                                          horizontal: 2, vertical: 10)
+                                      .r,
+                                  // Add some padding and a background color
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  decoration: BoxDecoration(
+                                      color: Colors.green.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: AppColor.black,
+                                      )),
+                                  // Create the dropdown button
+                                  child: DropdownButton<ServiceCategory>(
+                                    // Set the selected value
+                                    value: selectCat,
+                                    // // Handle the value change
+                                    menuMaxHeight: 300.h,
+                                    onChanged: (ServiceCategory? newValue) {
+                                      setState(() {
+                                        selectCat = newValue!;
+                                      });
+                                    },
+                                    // onChanged: (String? newValue) => setState(
+                                    //     () => selectedValue = newValue ?? ''),
+                                    // Map each option to a widget
+                                    items: state.servicesCategories
+                                        .map<DropdownMenuItem<ServiceCategory>>(
+                                            (ServiceCategory value) {
+                                      return DropdownMenuItem<ServiceCategory>(
+                                        value: value,
+                                        // Use a colored box to show the option
+                                        child: Text(
+                                          AppLocalizations.of(context)
+                                              .translate(value.title),
+                                          style: const TextStyle(
+                                              color: Colors.black),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  )),
+                            ],
+                          );
+                        }
+                        return Container(
+                          child: const Text(
+                            'asd',
+                            style: TextStyle(color: AppColor.backgroundColor),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(
                       height: 10.h,
@@ -387,9 +481,39 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
                         context: context,
                         onPressed: () {
                           if (!_formKey.currentState!.validate()) return;
-
+                          if (selectCat == null) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    AppLocalizations.of(context)
+                                        .translate('please select category'),
+                                    style: const TextStyle(color: AppColor.red),
+                                  ),
+                                  content: Text(
+                                    AppLocalizations.of(context).translate(
+                                        'please_select_category_befor_uploading'),
+                                    style: const TextStyle(color: AppColor.red),
+                                  ),
+                                  actions: [
+                                    ElevatedButton(
+                                      child: Text(
+                                        AppLocalizations.of(context)
+                                            .translate('ok'),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
                           addBloc.add(
                             AddCompanyServiceEvent(
+                              category: selectCat!.id,
                               title: titleController.text,
                               description: descController.text,
                               price: int.tryParse(priceController.text),

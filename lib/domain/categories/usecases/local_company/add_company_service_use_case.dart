@@ -14,6 +14,7 @@ class AddCompanyServiceUseCase
   @override
   Future<Either<Failure, String>> call(AddCompanyServiceParams params) {
     return localCompanyRepository.addCompanyService(
+      category: params.category,
       title: params.title,
       description: params.description,
       price: params.price,
@@ -28,6 +29,7 @@ class AddCompanyServiceUseCase
 }
 
 class AddCompanyServiceParams {
+  final String category;
   final String title;
   final String description;
   final int? price;
@@ -38,6 +40,7 @@ class AddCompanyServiceParams {
   String? bio;
   File? video;
   AddCompanyServiceParams({
+    required this.category,
     required this.title,
     required this.description,
     this.price,

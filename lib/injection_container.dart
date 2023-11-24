@@ -118,6 +118,8 @@ import 'package:netzoon/domain/categories/usecases/local_company/get_all_local_c
 import 'package:netzoon/domain/categories/usecases/local_company/get_company_products_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_company_service_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_local_companies_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/local_company/get_services_by_category_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/local_company/get_services_categories_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/rate_company_service_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/real_estate/add_real_estate_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/real_estate/get_all_real_estates_use_case.dart';
@@ -399,6 +401,8 @@ Future<void> init() async {
         rateCompanyServiceUseCase: sl(),
         deleteCompanyServiceUseCase: sl(),
         editCompanyServiceUseCase: sl(),
+        getServicesByCategoryUseCase: sl(),
+        getServicesCategoriesUseCase: sl(),
       ));
 
   sl.registerFactory(() => GovermentalBloc(
@@ -810,6 +814,11 @@ Future<void> init() async {
 
   sl.registerLazySingleton(
       () => SendEmailBalanceUseCase(sendEmailRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => GetServicesByCategoryUseCase(localCompanyRepository: sl()));
+  sl.registerLazySingleton(
+      () => GetServicesCategoriesUseCase(localCompanyRepository: sl()));
 
   //! Repositories
 
