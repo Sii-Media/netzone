@@ -74,7 +74,7 @@ class _ServicesCategoriesScreenState extends State<ServicesCategoriesScreen> {
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
-                                  childAspectRatio: 2.5.r,
+                                  childAspectRatio: 2.r,
                                   crossAxisSpacing: 10.r,
                                 ),
                                 itemCount: state.servicesCategories.length,
@@ -146,7 +146,7 @@ class _ServicesCategoriesScreenState extends State<ServicesCategoriesScreen> {
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               color: AppColor.backgroundColor,
-                                              fontSize: 11.sp,
+                                              fontSize: 10.sp,
                                               fontWeight: FontWeight.w700),
                                         ),
                                       ),

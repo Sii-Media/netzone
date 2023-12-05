@@ -209,8 +209,7 @@ class _StartScreenState extends State<StartScreen> {
                   Navigator.of(context).pop(false); // User does not consent
                 },
                 child: Text(
-                  AppLocalizations.of(context)
-                      .translate('No, I prefer not to share'),
+                  AppLocalizations.of(context).translate('continue'),
                   style: const TextStyle(color: AppColor.backgroundColor),
                 ),
               ),

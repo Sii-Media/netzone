@@ -440,7 +440,7 @@ class _HomePageState extends State<HomePage> {
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              childAspectRatio: 2.5.r,
+                              childAspectRatio: 2.3.r,
                               crossAxisSpacing: 10.r,
                             ),
                             itemCount: 8,
@@ -460,7 +460,7 @@ class _HomePageState extends State<HomePage> {
                                 },
                                 child: Container(
                                   // padding: const EdgeInsets.all(8),
-                                  margin: const EdgeInsets.all(8),
+                                  margin: const EdgeInsets.all(4),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5),
                                       color: AppColor.white,
@@ -510,7 +510,7 @@ class _HomePageState extends State<HomePage> {
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: AppColor.backgroundColor,
-                                          fontSize: 11.sp,
+                                          fontSize: 10.sp,
                                           fontWeight: FontWeight.w700),
                                     ),
                                   ),
