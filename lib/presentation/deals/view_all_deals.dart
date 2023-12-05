@@ -321,10 +321,14 @@ class Deals extends StatelessWidget {
                   children: [
                     Column(
                       children: [
-                        Text(
-                          dealsInfo.name,
-                          style: TextStyle(
-                              color: AppColor.backgroundColor, fontSize: 20.sp),
+                        SizedBox(
+                          width: 180.w,
+                          child: Text(
+                            dealsInfo.name,
+                            style: TextStyle(
+                                color: AppColor.backgroundColor,
+                                fontSize: 20.sp),
+                          ),
                         ),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(25.0),

@@ -32,14 +32,15 @@ class BackgroundWidget extends StatelessWidget {
                   color: AppColor.white,
                   border: Border(
                     bottom: BorderSide(
-                        width: 1, color: AppColor.mainGrey.withOpacity(0.1)),
+                        width: 0.7,
+                        color: AppColor.backgroundColor.withOpacity(0.1)),
                   ),
-                  boxShadow: const [
+                  boxShadow: [
                     BoxShadow(
-                        color: Colors.grey,
-                        spreadRadius: 3,
-                        blurRadius: 10,
-                        offset: Offset(0, 3)),
+                        color: AppColor.backgroundColor.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 5,
+                        offset: const Offset(0, 0.2)),
                   ],
                 ),
               ),

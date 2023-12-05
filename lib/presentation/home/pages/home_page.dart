@@ -433,7 +433,7 @@ class _HomePageState extends State<HomePage> {
                           color: const Color.fromARGB(255, 209, 219, 235)
                               .withOpacity(0.8),
                         ),
-                        height: 240.h,
+                        height: 300.r,
                         child: Center(
                           child: GridView.builder(
                             physics: const NeverScrollableScrollPhysics(),

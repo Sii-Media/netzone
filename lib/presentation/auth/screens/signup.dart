@@ -1232,12 +1232,13 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         },
                         myController: widget.toCountry,
                       ),
-                const TextSignup(
-                  text: 'Location Info :',
+                TextSignup(
+                  text:
+                      '${AppLocalizations.of(context).translate('Location Info')} :',
                 ),
                 const Divider(),
-                const TextSignup(
-                  text: 'City',
+                TextSignup(
+                  text: AppLocalizations.of(context).translate('city'),
                 ),
                 // TextFormSignupWidget(
                 //   password: false,
@@ -1293,8 +1294,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         );
                       }).toList(),
                     )),
-                const TextSignup(
-                  text: 'Address Details',
+                TextSignup(
+                  text:
+                      AppLocalizations.of(context).translate('Address Details'),
                 ),
                 TextFormSignupWidget(
                   password: false,
@@ -1309,8 +1311,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   },
                   myController: widget.addressDetailsController,
                 ),
-                const TextSignup(
-                  text: 'Floor Number',
+                TextSignup(
+                  text: AppLocalizations.of(context).translate('floor_number'),
                 ),
                 TextFormSignupWidget(
                   password: false,
@@ -1325,8 +1327,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   },
                   myController: widget.floorNumController,
                 ),
-                const TextSignup(
-                  text: 'Location Type',
+                TextSignup(
+                  text: AppLocalizations.of(context).translate('location_type'),
                 ),
                 Row(
                   children: [
@@ -1346,7 +1348,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           children: [
                             Icon(Icons.work_outline_outlined,
                                 color: AppColor.backgroundColor, size: 15.sp),
-                            const Text('Work')
+                            Text(AppLocalizations.of(context).translate('work'))
                           ],
                         )
                       ],
@@ -1370,7 +1372,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           children: [
                             Icon(Icons.home,
                                 color: AppColor.backgroundColor, size: 15.sp),
-                            const Text('Home'),
+                            Text(
+                                AppLocalizations.of(context).translate('home')),
                           ],
                         ),
                       ],

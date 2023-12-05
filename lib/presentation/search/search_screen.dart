@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
+import 'package:netzoon/presentation/categories/free_zoon/freezone_company_profile_screen.dart';
 import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 
 import '../../injection_container.dart';
@@ -30,6 +31,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   List<String> categories = [
     'local_companies',
+    'free_zone_companies',
     'Products',
     'cars',
     'advertiments',
@@ -58,6 +60,7 @@ class _SearchPageState extends State<SearchPage> {
   void filterItems(String cat) {
     setState(() {
       if (cat == 'local_companies' ||
+          cat == 'free_zone_companies' ||
           cat == 'factories' ||
           cat == 'real_estate') {
         filteredItems = items
@@ -79,6 +82,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   final factoryBloc = sl<UsersBloc>();
+  final freeZoneBloc = sl<UsersBloc>();
   final productBloc = sl<ElecDevicesBloc>();
   final localCompanyBloc = sl<LocalCompanyBloc>();
   final adsBloc = sl<AdsBlocBloc>();
@@ -140,8 +144,9 @@ class _SearchPageState extends State<SearchPage> {
                           String cat = categories[index];
                           bool isSelected = selectedCategory == cat;
 
-                          return SizedBox(
-                            width: 105.w,
+                          return Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8.r),
+                            // width: 120.w,
                             // margin: EdgeInsets.symmetric(horizontal: 1),
                             child: GestureDetector(
                               onTap: () {
@@ -154,6 +159,9 @@ class _SearchPageState extends State<SearchPage> {
                                     localCompanyBloc.add(
                                         const GetLocalCompaniesEvent(
                                             userType: 'local_company'));
+                                  } else if (cat == 'free_zone_companies') {
+                                    freeZoneBloc.add(const GetUsersListEvent(
+                                        userType: 'freezone'));
                                   } else if (cat == 'real_estate') {
                                     estateBloc
                                         .add(GetRealEstateCompaniesEvent());
@@ -208,6 +216,8 @@ class _SearchPageState extends State<SearchPage> {
                 if (selectedCategory == 'Products') productBlocWidget(),
                 if (selectedCategory == 'local_companies')
                   localCompanyBlocWidget(),
+                if (selectedCategory == 'free_zone_companies')
+                  freeZoneBlocWidget(),
                 if (selectedCategory == 'real_estate')
                   realEstateCompanyBlocWidget(),
                 if (selectedCategory == 'factories') factoryBlocWidget(),
@@ -262,6 +272,13 @@ class _SearchPageState extends State<SearchPage> {
                                     return LocalCompanyProfileScreen(
                                         localCompany: filteredItems[index]);
                                   }));
+                                } else if (selectedCategory ==
+                                    'free_zone_companies') {
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return FreezoneCompanyProfileScreen(
+                                        user: filteredItems[index]);
+                                  }));
                                 } else if (selectedCategory == 'real_estate') {
                                   Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) {
@@ -314,6 +331,8 @@ class _SearchPageState extends State<SearchPage> {
                                 child: ListTile(
                                   title: Text(
                                     selectedCategory == 'local_companies' ||
+                                            selectedCategory ==
+                                                'free_zone_companies' ||
                                             selectedCategory == 'factories' ||
                                             selectedCategory == 'real_estate'
                                         ? filteredItems[index].username
@@ -698,6 +717,66 @@ class _SearchPageState extends State<SearchPage> {
   BlocBuilder<UsersBloc, UsersState> factoryBlocWidget() {
     return BlocBuilder<UsersBloc, UsersState>(
       bloc: factoryBloc,
+      builder: (context, state) {
+        if (state is GetUsersInProgress) {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: AppColor.backgroundColor,
+            ),
+          );
+        } else if (state is GetUsersFailure) {
+          final failure = state.message;
+          return Center(
+            child: Text(
+              failure,
+              style: const TextStyle(
+                color: Colors.red,
+              ),
+            ),
+          );
+        } else if (state is GetUsersSuccess) {
+          items = state.users;
+          return TypeAheadField(
+            hideSuggestionsOnKeyboardHide: false,
+            textFieldConfiguration: TextFieldConfiguration(
+              controller: controller,
+              onChanged: (value) {
+                setState(() {
+                  searchText = value;
+                });
+              },
+              decoration: const InputDecoration(
+                labelText: 'Search',
+              ),
+            ),
+            suggestionsCallback: (pattern) {
+              return state.users.where((item) =>
+                  item.username!.toLowerCase().contains(pattern.toLowerCase()));
+            },
+            itemBuilder: (context, suggestion) {
+              return ListTile(
+                title: Text(suggestion.username ?? ''),
+              );
+            },
+            onSuggestionSelected: (suggestion) {
+              setState(() {
+                searchText = suggestion.username ?? '';
+              });
+              controller.text = searchText;
+              controller.selection = TextSelection.fromPosition(
+                TextPosition(offset: controller.text.length),
+              );
+            },
+          );
+        }
+        return Container();
+      },
+    );
+  }
+
+  BlocBuilder<UsersBloc, UsersState> freeZoneBlocWidget() {
+    return BlocBuilder<UsersBloc, UsersState>(
+      bloc: freeZoneBloc,
       builder: (context, state) {
         if (state is GetUsersInProgress) {
           return const Center(
