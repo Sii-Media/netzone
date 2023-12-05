@@ -214,7 +214,7 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
                                                                           Alignment
                                                                               .center,
                                                                       height:
-                                                                          50.h,
+                                                                          55.h,
                                                                       width: MediaQuery.of(
                                                                               context)
                                                                           .size
@@ -230,7 +230,7 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
                                                                           filteredUsers[index].username ??
                                                                               '',
                                                                           style: TextStyle(
-                                                                              fontSize: 18.sp,
+                                                                              fontSize: 15.sp,
                                                                               color: Colors.white,
                                                                               fontWeight: FontWeight.bold),
                                                                           textAlign:

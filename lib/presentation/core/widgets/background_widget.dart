@@ -33,15 +33,15 @@ class BackgroundWidget extends StatelessWidget {
                   border: Border(
                     bottom: BorderSide(
                         width: 0.7,
-                        color: AppColor.backgroundColor.withOpacity(0.1)),
+                        color: AppColor.backgroundColor.withOpacity(0.4)),
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                        color: AppColor.backgroundColor.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius: 5,
-                        offset: const Offset(0, 0.2)),
-                  ],
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //       color: AppColor.backgroundColor.withOpacity(0.5),
+                  //       spreadRadius: 1,
+                  //       blurRadius: 5,
+                  //       offset: const Offset(0, 0.2)),
+                  // ],
                 ),
               ),
             ),

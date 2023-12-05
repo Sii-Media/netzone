@@ -33,6 +33,10 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: AppColor.white,
+    statusBarIconBrightness: Brightness.dark,
+  ));
   // String stripePubKey = dotenv.get('STRIPE_LIVE_PUB_KEY', fallback: '');
   String stripePubKey =
       'pk_live_51NcotDFDslnmTEHTPtLglOb3AT42QjZZVLq1vf8tJnIPfdFg1KuICUbY7E2dgVNbbx6GLmzAfezZ55ECVftwhVRy00Aa4dpTFg';
