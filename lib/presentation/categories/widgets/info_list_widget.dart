@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/link.dart';
 
 import '../../core/constant/colors.dart';
 import '../../core/widgets/phone_call_button.dart';
@@ -87,9 +88,58 @@ Widget infoListWidget({
                   input: address)
               : const SizedBox(),
           website != null && website != ''
-              ? titleAndInput(
-                  title: AppLocalizations.of(context).translate('website'),
-                  input: website)
+              ?
+              // ? titleAndInput(
+              //     title: AppLocalizations.of(context).translate('website'),
+              //     input: website)
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    // height: 40.h,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.grey.withOpacity(0.4),
+                          width: 1.0,
+                        ),
+                      ),
+                    ),
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context).translate('website'),
+                            style: TextStyle(
+                              color: AppColor.black,
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                          Link(
+                            uri: Uri.parse(
+                              website,
+                            ),
+                            builder: ((context, followLink) => SizedBox(
+                                  width: 190.w,
+                                  child: GestureDetector(
+                                    onTap: followLink,
+                                    child: Text(
+                                      website,
+                                      style: TextStyle(
+                                        color: AppColor.mainGrey,
+                                        fontSize: 15.sp,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                  ),
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
               : const SizedBox(),
           link != null && link != ''
               ? titleAndInput(
