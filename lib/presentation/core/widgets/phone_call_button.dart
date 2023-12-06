@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../constant/colors.dart';
@@ -38,6 +39,7 @@ class PhoneCallWidget extends StatelessWidget {
       ),
       child: Text(
         title,
+        textDirection: TextDirection.ltr,
       ),
     );
   }

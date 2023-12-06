@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 
@@ -35,6 +36,8 @@ class _PasswordControlState extends State<PasswordControl> {
     return TextFormField(
       key: _passwordFormFieldKey,
       controller: widget.controller,
+      autofillHints: const [AutofillHints.password],
+      onEditingComplete: () => TextInput.finishAutofillContext(),
       style: const TextStyle(color: AppColor.black),
       decoration: InputDecoration(
         hintText: widget.hintText,
