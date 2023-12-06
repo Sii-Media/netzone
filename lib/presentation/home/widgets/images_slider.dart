@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:netzoon/domain/advertisements/entities/advertisement.dart';
+import 'package:netzoon/presentation/advertising/advertising_details.dart';
+import 'package:netzoon/presentation/advertising/another_ads_details.dart';
 
 import '../../core/constant/colors.dart';
 
@@ -22,19 +24,36 @@ class SliderImages extends StatelessWidget {
   Widget build(BuildContext context) {
     return CarouselSlider(
       items: advertisments.map((ads) {
-        return CachedNetworkImage(
-          imageUrl: ads.advertisingImage,
-          fit: BoxFit.cover,
-          progressIndicatorBuilder: (context, url, downloadProgress) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 70.0, vertical: 50),
-            child: CircularProgressIndicator(
-              value: downloadProgress.progress,
-              color: AppColor.backgroundColor,
+        return GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) {
+                return ads.advertisingType == 'car' ||
+                        ads.advertisingType == 'planes' ||
+                        ads.advertisingType == 'real_estate'
+                    ? AdvertismentDetalsScreen(adsId: ads.id)
+                    : AnotherAdsDetails(
+                        adsId: ads.id,
+                      );
+              }),
+            );
+          },
+          child: CachedNetworkImage(
+            imageUrl: ads.advertisingImage,
+            fit: BoxFit.cover,
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 70.0, vertical: 50),
+              child: CircularProgressIndicator(
+                value: downloadProgress.progress,
+                color: AppColor.backgroundColor,
 
-              // strokeWidth: 10,
+                // strokeWidth: 10,
+              ),
             ),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
           ),
-          errorWidget: (context, url, error) => const Icon(Icons.error),
         );
       }).toList(),
       options: CarouselOptions(

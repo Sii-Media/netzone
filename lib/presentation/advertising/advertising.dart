@@ -433,9 +433,9 @@ class Advertising extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     fontSize: 13.sp),
               ),
-              SizedBox(
-                height: 5.h,
-              ),
+              // SizedBox(
+              //   height: 5.h,
+              // ),
               Text(
                 advertisment.advertisingDescription,
                 style: TextStyle(

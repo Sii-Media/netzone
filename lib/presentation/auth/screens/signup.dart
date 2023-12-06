@@ -1815,37 +1815,37 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                             if (!widget.formKey.currentState!.validate()) {
                               return;
                             }
-                            if (profileImage == null || coverImage == null) {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text(
-                                      AppLocalizations.of(context)
-                                          .translate('no_image_selected'),
-                                      style:
-                                          const TextStyle(color: AppColor.red),
-                                    ),
-                                    content: Text(
-                                      AppLocalizations.of(context).translate(
-                                          'please_select_an_image_before_uploading'),
-                                      style:
-                                          const TextStyle(color: AppColor.red),
-                                    ),
-                                    actions: [
-                                      ElevatedButton(
-                                        child: Text(AppLocalizations.of(context)
-                                            .translate('ok')),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                              return;
-                            }
+                            // if (profileImage == null || coverImage == null) {
+                            //   showDialog(
+                            //     context: context,
+                            //     builder: (BuildContext context) {
+                            //       return AlertDialog(
+                            //         title: Text(
+                            //           AppLocalizations.of(context)
+                            //               .translate('no_image_selected'),
+                            //           style:
+                            //               const TextStyle(color: AppColor.red),
+                            //         ),
+                            //         content: Text(
+                            //           AppLocalizations.of(context).translate(
+                            //               'please_select_an_image_before_uploading'),
+                            //           style:
+                            //               const TextStyle(color: AppColor.red),
+                            //         ),
+                            //         actions: [
+                            //           ElevatedButton(
+                            //             child: Text(AppLocalizations.of(context)
+                            //                 .translate('ok')),
+                            //             onPressed: () {
+                            //               Navigator.of(context).pop();
+                            //             },
+                            //           ),
+                            //         ],
+                            //       );
+                            //     },
+                            //   );
+                            //   return;
+                            // }
                             final String userType = getUserType();
                             if (userType == 'local_company') {
                               if (frontIdPhoto == null || backIdPhoto == null) {

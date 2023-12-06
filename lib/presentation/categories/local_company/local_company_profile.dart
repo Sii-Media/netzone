@@ -18,6 +18,7 @@ import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/link.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../data/core/constants/constants.dart';
 import '../../../data/models/auth/user/user_model.dart';
@@ -493,39 +494,42 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                         ? Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0),
-                                            child: Link(
-                                              uri: Uri.parse(
-                                                state.userInfo.link ?? '',
-                                              ),
-                                              builder: ((context, followLink) =>
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Icon(
-                                                        Icons.link,
-                                                        color:
-                                                            AppColor.secondGrey,
-                                                        size: 15.sp,
-                                                      ),
-                                                      GestureDetector(
-                                                        onTap: followLink,
-                                                        child: Text(
-                                                          state.userInfo.link ??
-                                                              '',
-                                                          style: TextStyle(
-                                                            color: AppColor
-                                                                .backgroundColor,
-                                                            fontSize: 11.sp,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .underline,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.link,
+                                                  color: AppColor.secondGrey,
+                                                  size: 15.sp,
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () async {
+                                                    final Uri url = Uri(
+                                                      scheme: 'https',
+                                                      path: state.userInfo.link,
+                                                    );
+                                                    if (await canLaunchUrl(
+                                                        url)) {
+                                                      await launchUrl(url);
+                                                    } else {
+                                                      // Handle the error
+                                                      print(
+                                                          'Could not launch $url');
+                                                    }
+                                                  },
+                                                  child: Text(
+                                                    state.userInfo.link ?? '',
+                                                    style: TextStyle(
+                                                      color: AppColor
+                                                          .backgroundColor,
+                                                      fontSize: 11.sp,
+                                                      decoration: TextDecoration
+                                                          .underline,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           )
                                         : const SizedBox(),

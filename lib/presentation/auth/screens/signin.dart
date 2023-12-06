@@ -13,6 +13,7 @@ import 'package:netzoon/presentation/home/test.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -23,6 +24,23 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen>
     with ScreenLoader<SignInScreen> {
+  _loadSavedCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedEmail = prefs.getString('email');
+    String? savedPassword = prefs.getString('password');
+
+    if (savedEmail != null && savedPassword != null) {
+      _emailController.text = savedEmail;
+      _passwordController.text = savedPassword;
+    }
+  }
+
+  _saveCredentials() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('email', _emailController.text);
+    prefs.setString('password', _passwordController.text);
+  }
+
   final signInBloc = sl<SignInBloc>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -34,6 +52,7 @@ class _SignInScreenState extends State<SignInScreen>
 
   @override
   void initState() {
+    _loadSavedCredentials();
     super.initState();
   }
 
@@ -81,206 +100,210 @@ class _SignInScreenState extends State<SignInScreen>
       child: Scaffold(
         body: Form(
           key: _formKey,
-          child: BackgroundWidget(
-            isHome: false,
-            widget: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      const Icon(
-                        Icons.lock,
-                        size: 100,
-                        color: AppColor.backgroundColor,
-                      ),
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      Text(
-                        AppLocalizations.of(context).translate('welcome'),
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          color: AppColor.mainGrey,
+          child: AutofillGroup(
+            child: BackgroundWidget(
+              isHome: false,
+              widget: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 20.h,
                         ),
-                      ),
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      TextFormField(
-                        key: _emailFormFieldKey,
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          hintText: 'example@example.example',
-                          labelText: AppLocalizations.of(context)
-                              .translate('email_or_phone'),
+                        const Icon(
+                          Icons.lock,
+                          size: 100,
+                          color: AppColor.backgroundColor,
                         ),
-                        style: const TextStyle(color: AppColor.black),
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.next,
-                        onChanged: (text) {
-                          _emailFormFieldKey.currentState!.validate();
-                        },
-                        validator: (text) {
-                          if (text == null || text.isEmpty) {
-                            return AppLocalizations.of(context)
-                                .translate('email_condition');
-                          }
-
-                          if (!EmailValidator(
-                                  errorText: AppLocalizations.of(context)
-                                      .translate('email_not_valid'))
-                              .isValid(text.toLowerCase())) {
-                            return AppLocalizations.of(context)
-                                .translate('input_valid_email');
-                          }
-
-                          return null;
-                        },
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      PasswordControl(
-                        hintText: '* * * * * * * *',
-                        labelText:
-                            AppLocalizations.of(context).translate('password'),
-                        controller: _passwordController,
-                        validator: MultiValidator([
-                          RequiredValidator(
-                              errorText: AppLocalizations.of(context)
-                                  .translate('password_required')),
-                          MinLengthValidator(8,
-                              errorText: AppLocalizations.of(context)
-                                  .translate('password_condition')),
-                        ]),
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context)
-                                .translate('password_forget'),
-                            style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              fontSize: 13.sp,
-                              color: AppColor.secondGrey,
-                            ),
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        Text(
+                          AppLocalizations.of(context).translate('welcome'),
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            color: AppColor.mainGrey,
                           ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return const UserType();
-                                  },
-                                ),
-                              );
-                            },
-                            child: Text(
+                        ),
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        TextFormField(
+                          key: _emailFormFieldKey,
+                          controller: _emailController,
+                          autofillHints: const [AutofillHints.email],
+                          decoration: InputDecoration(
+                            hintText: 'example@example.example',
+                            labelText: AppLocalizations.of(context)
+                                .translate('email_or_phone'),
+                          ),
+                          style: const TextStyle(color: AppColor.black),
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          onChanged: (text) {
+                            _emailFormFieldKey.currentState!.validate();
+                          },
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return AppLocalizations.of(context)
+                                  .translate('email_condition');
+                            }
+
+                            if (!EmailValidator(
+                                    errorText: AppLocalizations.of(context)
+                                        .translate('email_not_valid'))
+                                .isValid(text.toLowerCase())) {
+                              return AppLocalizations.of(context)
+                                  .translate('input_valid_email');
+                            }
+
+                            return null;
+                          },
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        PasswordControl(
+                          hintText: '* * * * * * * *',
+                          labelText: AppLocalizations.of(context)
+                              .translate('password'),
+                          controller: _passwordController,
+                          validator: MultiValidator([
+                            RequiredValidator(
+                                errorText: AppLocalizations.of(context)
+                                    .translate('password_required')),
+                            MinLengthValidator(8,
+                                errorText: AppLocalizations.of(context)
+                                    .translate('password_condition')),
+                          ]),
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
                               AppLocalizations.of(context)
-                                  .translate('create_new_account'),
+                                  .translate('password_forget'),
                               style: TextStyle(
                                 decoration: TextDecoration.underline,
                                 fontSize: 13.sp,
-                                color: AppColor.backgroundColor,
+                                color: AppColor.secondGrey,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                              AppColor.backgroundColor,
+                            InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return const UserType();
+                                    },
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                AppLocalizations.of(context)
+                                    .translate('create_new_account'),
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  fontSize: 13.sp,
+                                  color: AppColor.backgroundColor,
+                                ),
+                              ),
                             ),
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                            )),
-                          ),
-                          child: Text(
-                              AppLocalizations.of(context).translate('login')),
-                          onPressed: () async {
-                            if (!_formKey.currentState!.validate()) return;
-                            signInBloc.add(SignInRequestEvent(
-                                email: _emailController.text,
-                                password: _passwordController.text));
-                            // final SharedPreferences sharedPreferences =
-                            //     await SharedPreferences.getInstance();
-                            // sharedPreferences.setString(
-                            //     'email', _emailController.text);
-                          },
+                          ],
                         ),
-                      ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                AppColor.backgroundColor,
+                              ),
+                              shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                              )),
+                            ),
+                            child: Text(AppLocalizations.of(context)
+                                .translate('login')),
+                            onPressed: () async {
+                              if (!_formKey.currentState!.validate()) return;
+                              _saveCredentials();
+                              signInBloc.add(SignInRequestEvent(
+                                  email: _emailController.text,
+                                  password: _passwordController.text));
+                              // final SharedPreferences sharedPreferences =
+                              //     await SharedPreferences.getInstance();
+                              // sharedPreferences.setString(
+                              //     'email', _emailController.text);
+                            },
+                          ),
+                        ),
 
-                      // Row(
-                      //   children: [
-                      //     const Expanded(
-                      //       child: Divider(
-                      //         thickness: 0.5,
-                      //         color: AppColor.backgroundColor,
-                      //       ),
-                      //     ),
-                      //     Padding(
-                      //       padding: const EdgeInsets.symmetric(
-                      //         horizontal: 10.0,
-                      //       ),
-                      //       child: Text(
-                      //         AppLocalizations.of(context)
-                      //             .translate('or_continue_with'),
-                      //         style: TextStyle(
-                      //           fontSize: 16.sp,
-                      //           color: AppColor.secondGrey,
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     const Expanded(
-                      //       child: Divider(
-                      //         thickness: 0.5,
-                      //         color: AppColor.backgroundColor,
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
-                      // SizedBox(
-                      //   height: 10.h,
-                      // ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: [
-                      //     const SocialIcon(
-                      //       imagePath: 'assets/images/google_icon.png',
-                      //     ),
-                      //     SizedBox(
-                      //       width: 7.w,
-                      //     ),
-                      //     const SocialIcon(
-                      //       imagePath: 'assets/images/facebook_icon.png',
-                      //     ),
-                      //     SizedBox(
-                      //       width: 7.w,
-                      //     ),
-                      //     const SocialIcon(
-                      //         imagePath: 'assets/images/mac_icon.png')
-                      //   ],
-                      // ),
-                    ],
+                        // Row(
+                        //   children: [
+                        //     const Expanded(
+                        //       child: Divider(
+                        //         thickness: 0.5,
+                        //         color: AppColor.backgroundColor,
+                        //       ),
+                        //     ),
+                        //     Padding(
+                        //       padding: const EdgeInsets.symmetric(
+                        //         horizontal: 10.0,
+                        //       ),
+                        //       child: Text(
+                        //         AppLocalizations.of(context)
+                        //             .translate('or_continue_with'),
+                        //         style: TextStyle(
+                        //           fontSize: 16.sp,
+                        //           color: AppColor.secondGrey,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     const Expanded(
+                        //       child: Divider(
+                        //         thickness: 0.5,
+                        //         color: AppColor.backgroundColor,
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                        // SizedBox(
+                        //   height: 10.h,
+                        // ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     const SocialIcon(
+                        //       imagePath: 'assets/images/google_icon.png',
+                        //     ),
+                        //     SizedBox(
+                        //       width: 7.w,
+                        //     ),
+                        //     const SocialIcon(
+                        //       imagePath: 'assets/images/facebook_icon.png',
+                        //     ),
+                        //     SizedBox(
+                        //       width: 7.w,
+                        //     ),
+                        //     const SocialIcon(
+                        //         imagePath: 'assets/images/mac_icon.png')
+                        //   ],
+                        // ),
+                      ],
+                    ),
                   ),
                 ),
               ),

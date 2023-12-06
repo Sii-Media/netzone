@@ -312,7 +312,9 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                                           await shareImageWithDescription(
                                               imageUrl:
                                                   state.ads.advertisingImage,
-                                              description: state.ads.name);
+                                              subject: state.ads.name,
+                                              description: state
+                                                  .ads.advertisingDescription);
                                         },
                                         icon: Icon(
                                           Icons.share,
