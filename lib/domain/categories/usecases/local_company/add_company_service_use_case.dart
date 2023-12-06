@@ -15,6 +15,7 @@ class AddCompanyServiceUseCase
   Future<Either<Failure, String>> call(AddCompanyServiceParams params) {
     return localCompanyRepository.addCompanyService(
       category: params.category,
+      country: params.country,
       title: params.title,
       description: params.description,
       price: params.price,
@@ -30,6 +31,7 @@ class AddCompanyServiceUseCase
 
 class AddCompanyServiceParams {
   final String category;
+  final String country;
   final String title;
   final String description;
   final int? price;
@@ -41,6 +43,7 @@ class AddCompanyServiceParams {
   File? video;
   AddCompanyServiceParams({
     required this.category,
+    required this.country,
     required this.title,
     required this.description,
     this.price,

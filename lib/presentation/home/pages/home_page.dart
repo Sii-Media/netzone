@@ -973,7 +973,7 @@ class _HomePageState extends State<HomePage> {
                               child: Container(
                                 width: double.infinity,
                                 height:
-                                    MediaQuery.of(context).size.height * 0.12,
+                                    MediaQuery.of(context).size.height * 0.14,
                                 transform: Matrix4.identity(),
                                 decoration: BoxDecoration(
                                     border: Border.all(
@@ -989,7 +989,8 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     Expanded(
                                       child: Container(
-                                        padding: const EdgeInsets.only(left: 3),
+                                        padding: const EdgeInsets.only(
+                                            left: 3, top: 3, bottom: 3),
                                         child: Text(
                                           AppLocalizations.of(context)
                                               .translate('chat_home'),
@@ -1006,7 +1007,7 @@ class _HomePageState extends State<HomePage> {
                                       child: Container(
                                         height:
                                             MediaQuery.of(context).size.height *
-                                                0.12,
+                                                0.14,
                                         width: 80.w,
                                         decoration: const BoxDecoration(
                                           color: AppColor.backgroundColor,

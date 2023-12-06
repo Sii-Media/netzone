@@ -81,6 +81,7 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
   @override
   Future<Either<Failure, String>> addCompanyService({
     required String category,
+    required String country,
     required String title,
     required String description,
     int? price,
@@ -154,7 +155,7 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
           ));
         }
         Response response = await dio.post(
-          'https://back.netzoon.com/categories/local-company/add-service?category=$category',
+          'https://back.netzoon.com/categories/local-company/add-service?category=$category&country=$country',
           data: formData,
         );
 
@@ -307,11 +308,11 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
 
   @override
   Future<Either<Failure, ServiceCategory>> getServicesByCategories(
-      {required String category}) async {
+      {required String category, required String country}) async {
     try {
       if (await networkInfo.isConnected) {
         final result = await localCompanyRemoteDataSource
-            .getServicesByCategories(category);
+            .getServicesByCategories(category, country);
         print(result);
         return Right(result.toDomain());
       } else {

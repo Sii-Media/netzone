@@ -177,9 +177,15 @@ class _LocalCompanyRemoteDataSourceImpl
   }
 
   @override
-  Future<ServiceCategoryModel> getServicesByCategories(String category) async {
+  Future<ServiceCategoryModel> getServicesByCategories(
+    String category,
+    String country,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'category': category};
+    final queryParameters = <String, dynamic>{
+      r'category': category,
+      r'country': country,
+    };
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(

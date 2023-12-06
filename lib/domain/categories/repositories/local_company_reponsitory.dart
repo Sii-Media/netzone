@@ -27,6 +27,7 @@ abstract class LocalCompanyRepository {
 
   Future<Either<Failure, String>> addCompanyService({
     required String category,
+    required String country,
     required String title,
     required String description,
     int? price,
@@ -40,6 +41,7 @@ abstract class LocalCompanyRepository {
 
   Future<Either<Failure, ServiceCategory>> getServicesByCategories({
     required String category,
+    required String country,
   });
 
   Future<Either<Failure, List<ServiceCategory>>> getServicesCategories();

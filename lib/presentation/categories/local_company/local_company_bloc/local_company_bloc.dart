@@ -157,8 +157,12 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
       final result = await getSignedInUser.call(NoParams());
       late User? user;
       result.fold((l) => null, (r) => user = r);
+      late String country;
+      final countryresult = await getCountryUseCase(NoParams());
+      countryresult.fold((l) => null, (r) => country = r ?? 'AE');
       final success = await addCompanyServiceUseCase(AddCompanyServiceParams(
         category: event.category,
+        country: country,
         title: event.title,
         description: event.description,
         price: event.price,
@@ -270,7 +274,12 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
     });
     on<GetServicesByCategoryEvent>((event, emit) async {
       emit(GetServicesByCategoryInProgress());
-      final result = await getServicesByCategoryUseCase(event.category);
+      late String country;
+      final countryresult = await getCountryUseCase(NoParams());
+      countryresult.fold((l) => null, (r) => country = r ?? 'AE');
+      final result = await getServicesByCategoryUseCase(
+          GetServicesByCategoryParams(
+              category: event.category, country: country));
       emit(
         result.fold(
           (failure) => GetServicesByCategoryFailure(

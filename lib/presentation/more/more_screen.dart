@@ -194,7 +194,8 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
                   // await Share.share('share netzoon app link');
                   // final box = context.findRenderObject() as RenderBox?;
                   await Share.share(
-                    'share netzoon app link',
+                    'download netzoon app from google play : https://play.google.com/store/apps/details?id=com.netzoon.netzoon_app\nfrom app store : https://apps.apple.com/ae/app/netzoon/id6467718964',
+                    subject: 'Share netzoon app link',
                     sharePositionOrigin: Rect.fromPoints(
                       const Offset(2, 2),
                       const Offset(3, 3),

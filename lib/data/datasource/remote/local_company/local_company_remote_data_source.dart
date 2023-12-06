@@ -19,7 +19,10 @@ abstract class LocalCompanyRemoteDataSource {
   Future<List<CompanyServiceModel>> getCompanyServices(String id);
 
   Future<List<ServiceCategoryModel>> getServicesCategories();
-  Future<ServiceCategoryModel> getServicesByCategories(String category);
+  Future<ServiceCategoryModel> getServicesByCategories(
+    String category,
+    String country,
+  );
 
   Future<String> addCompanyService(
       String title, String description, int price, String owner);
@@ -78,6 +81,7 @@ abstract class LocalCompanyRemoteDataSourceImpl
   @GET('/categories/services-by-category')
   Future<ServiceCategoryModel> getServicesByCategories(
     @Query('category') String category,
+    @Query('country') String country,
   );
 
   @override
