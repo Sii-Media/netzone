@@ -244,10 +244,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       Navigator.of(context).pop();
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Icon(
                         CupertinoIcons.back,
-                        size: 22.sp,
+                        size: 28.sp,
                       ),
                     ),
                   )

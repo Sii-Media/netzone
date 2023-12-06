@@ -1,10 +1,10 @@
 name: netzoon
 description: A new Flutter project.
 
-publish_to: 'none' 
+publish_to: 'none'
 
 
-version: 1.0.0+9
+version: 1.0.1+9
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
