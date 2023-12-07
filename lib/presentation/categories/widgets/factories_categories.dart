@@ -92,7 +92,8 @@ class FactoriesCategories extends StatelessWidget {
                     color: AppColor.backgroundColor.withOpacity(0.8),
                     child: Text(
                       factory.username ?? '',
-                      style: TextStyle(color: Colors.white, fontSize: 20.sp),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white, fontSize: 13.sp),
                     ),
                   ),
                 )

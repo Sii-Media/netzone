@@ -29,27 +29,27 @@ class TitleAndButton extends StatelessWidget {
         InkWell(
           onTap: onPress,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
-            width: 100.w,
-            height: 30.h,
-            child: Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                border: Border.all(color: AppColor.white),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColor.backgroundColor.withOpacity(0.8),
-                    // spreadRadius: 2,
-                    blurRadius: 1,
-                    // offset: const Offset(0, 1),
-                  ),
-                ],
-              ),
-              child: Text(
-                AppLocalizations.of(context).translate('show_all'),
-                textAlign: TextAlign.center,
-                style: TextStyle(color: AppColor.white, fontSize: 13.sp),
-              ),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+            margin: const EdgeInsets.symmetric(horizontal: 10),
+
+            width: 90.w,
+            // height: 30.h,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColor.white),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColor.backgroundColor.withOpacity(0.8),
+                  // spreadRadius: 2,
+                  blurRadius: 1,
+                  // offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            child: Text(
+              AppLocalizations.of(context).translate('show_all'),
+              textAlign: TextAlign.center,
+              style: TextStyle(color: AppColor.white, fontSize: 13.sp),
             ),
           ),
         )

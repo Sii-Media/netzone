@@ -80,6 +80,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             state.user.userInfo.userType == 'delivery_company'
                         ? const SizedBox()
                         : state.user.userInfo.userType == 'factory' ||
+                                state.user.userInfo.userType == 'trader' ||
                                 state.user.userInfo.userType ==
                                         'local_company' &&
                                     state.user.userInfo.isService == false ||

@@ -103,7 +103,7 @@ class _ListofItemsState extends State<ListofItems> {
                                       .translate(widget.elec[index].name),
                                   maxLines: 2,
                                   style: TextStyle(
-                                    fontSize: 9.sp,
+                                    fontSize: 8.dm,
                                     color: Colors.white,
                                     fontWeight: FontWeight.w800,
                                   ),

@@ -417,7 +417,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         const Spacer(),
         Image.asset(
           "assets/images/final-logo.png",
-          fit: BoxFit.contain,
+          fit: BoxFit.cover,
           width: 120.w,
         ),
       ],

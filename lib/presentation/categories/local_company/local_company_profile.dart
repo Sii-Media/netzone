@@ -360,8 +360,13 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                             style: ButtonStyle(
                                                               backgroundColor:
                                                                   MaterialStateProperty
-                                                                      .all(AppColor
-                                                                          .backgroundColor),
+                                                                      .all(
+                                                                isFollowing
+                                                                    ? AppColor
+                                                                        .white
+                                                                    : AppColor
+                                                                        .backgroundColor,
+                                                              ),
                                                               shape: MaterialStateProperty
                                                                   .all(
                                                                       RoundedRectangleBorder(
@@ -381,10 +386,15 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                                           context)
                                                                       .translate(
                                                                           'follow'),
-                                                              style: const TextStyle(
+                                                              style: TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
-                                                                          .bold),
+                                                                          .bold,
+                                                                  color: isFollowing
+                                                                      ? AppColor
+                                                                          .backgroundColor
+                                                                      : AppColor
+                                                                          .white),
                                                             ),
                                                             onPressed: () {
                                                               setState(() {
@@ -514,8 +524,6 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                       await launchUrl(url);
                                                     } else {
                                                       // Handle the error
-                                                      print(
-                                                          'Could not launch $url');
                                                     }
                                                   },
                                                   child: Text(

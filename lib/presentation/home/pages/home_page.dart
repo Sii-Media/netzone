@@ -997,7 +997,7 @@ class _HomePageState extends State<HomePage> {
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               color: AppColor.backgroundColor,
-                                              fontSize: 14.sp,
+                                              fontSize: 11.sp,
                                               fontWeight: FontWeight.w500),
                                         ),
                                       ),

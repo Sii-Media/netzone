@@ -202,13 +202,13 @@ class AuthRepositoryImpl implements AuthRepository {
           ));
         }
         if (tradeLicensePhoto != null) {
-          String fileName = 'image.jpg';
+          // String fileName = 'image.jpg';
           formData.files.add(MapEntry(
             'tradeLicensePhoto',
             await MultipartFile.fromFile(
               tradeLicensePhoto.path,
-              filename: fileName,
-              contentType: MediaType('image', 'jpeg'),
+              filename: tradeLicensePhoto.path.split('/').last,
+              contentType: MediaType('application', 'pdf'),
             ),
           ));
         }

@@ -1,30 +1,35 @@
 import 'dart:io';
 
+import 'package:dropdown_search/dropdown_search.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:netzoon/presentation/core/widgets/add_file_button.dart';
+import 'package:readmore/readmore.dart';
+import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
+
 import 'package:netzoon/domain/categories/entities/factories/factories.dart';
+import 'package:netzoon/injection_container.dart' as di;
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
 import 'package:netzoon/presentation/auth/widgets/background_auth_widget.dart';
 import 'package:netzoon/presentation/auth/widgets/text_form_signup_widget.dart';
 import 'package:netzoon/presentation/auth/widgets/text_signup_widget.dart';
+import 'package:netzoon/presentation/core/blocs/country_bloc/country_bloc.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/helpers/get_city_from_country.dart';
 import 'package:netzoon/presentation/core/widgets/add_photo_button.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
-import 'package:netzoon/injection_container.dart' as di;
-import 'package:netzoon/presentation/data/cities.dart';
 import 'package:netzoon/presentation/home/test.dart';
 import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
 import 'package:netzoon/presentation/legal_advice/blocs/legal_advice/legal_advice_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
-import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 
 import '../../../injection_container.dart';
 import '../../categories/factories/blocs/factories_bloc/factories_bloc.dart';
-import 'package:readmore/readmore.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key, required this.accountTitle});
@@ -87,10 +92,13 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
       GlobalKey<FormFieldState>();
   final LegalAdviceBloc adviceBloc = sl<LegalAdviceBloc>();
   late final LanguageBloc langBloc;
+  late final CountryBloc countryBloc;
   @override
   void initState() {
     langBloc = BlocProvider.of<LanguageBloc>(context);
     langBloc.add(GetLanguage());
+    countryBloc = BlocProvider.of<CountryBloc>(context);
+    countryBloc.add(GetCountryEvent());
     if (widget.accountTitle == 'المصانع') {
       factoryBloc.add(GetAllFactoriesEvent());
     }
@@ -173,6 +181,7 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
         cityController: cityController,
         addressDetailsController: addressDetailsController,
         floorNumController: floorNumController,
+        countryBloc: countryBloc,
       ),
     );
   }
@@ -215,6 +224,7 @@ class SignUpWidget extends StatefulWidget {
     required this.cityController,
     required this.addressDetailsController,
     required this.floorNumController,
+    required this.countryBloc,
   });
   final GlobalKey<FormState> formKey;
   final GlobalKey<FormFieldState> emailFormFieldKey;
@@ -250,6 +260,7 @@ class SignUpWidget extends StatefulWidget {
   final LanguageBloc langBloc;
   final SignUpBloc bloc;
   final FactoriesBloc factoriesBloc;
+  final CountryBloc countryBloc;
   @override
   State<SignUpWidget> createState() => _SignUpWidgetState();
 }
@@ -271,7 +282,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   bool _isSelectable = false;
   bool _isService = false;
   String? deliveryType;
-  String selectedCity = 'Abadilah';
+  String? selectedCity;
   Future getProfileImage(ImageSource imageSource) async {
     final image = await ImagePicker().pickImage(source: imageSource);
 
@@ -351,6 +362,61 @@ class _SignUpWidgetState extends State<SignUpWidget> {
     setState(() {
       backIdPhoto = imageTemporary;
     });
+  }
+
+  String? selectedTradeFileName;
+  String? selectedFrontIdFileName;
+  String? selectedBackIdFileName;
+
+  void getFile(BuildContext context) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      String fileName = file.path.split('/').last; // Extract file name
+
+      // Update the UI with the selected file name
+      setState(() {
+        selectedTradeFileName = fileName;
+        tradeLicensePhoto = file;
+      });
+    } else {
+      // User canceled the file picking
+    }
+  }
+
+  void getBackIdFile(BuildContext context) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      String fileName = file.path.split('/').last; // Extract file name
+
+      // Update the UI with the selected file name
+      setState(() {
+        selectedBackIdFileName = fileName;
+        backIdPhoto = file;
+      });
+    } else {
+      // User canceled the file picking
+    }
+  }
+
+  void getFrontIdFile(BuildContext context) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      String fileName = file.path.split('/').last; // Extract file name
+
+      // Update the UI with the selected file name
+      setState(() {
+        selectedFrontIdFileName = fileName;
+        frontIdPhoto = file;
+      });
+    } else {
+      // User canceled the file picking
+    }
   }
 
   Factories? selectCat;
@@ -1253,47 +1319,132 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 //   },
                 //   myController: widget.cityController,
                 // ),
-                Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 2, vertical: 10)
-                            .r,
-                    // Add some padding and a background color
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                        color: Colors.green.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: AppColor.black,
-                        )),
-                    // Create the dropdown button
-                    child: DropdownButton<String>(
-                      // Set the selected value
-                      value: selectedCity,
-                      menuMaxHeight: 200.h,
-                      itemHeight: 50.h,
-                      // Handle the value change
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedCity = newValue ?? '';
-                        });
-                      },
-                      // Map each option to a widget
-                      items:
-                          cities.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          // Use a colored box to show the option
-                          child: Text(
-                            value,
-                            style: const TextStyle(
-                              color: Colors.black,
+                // BlocBuilder<CountryBloc, CountryState>(
+                //   bloc: widget.countryBloc,
+                //   builder: (context, countryState) {
+                //     late List<String> selectedCountry = [];
+
+                //     if (countryState is CountryInitial) {
+                //       selectedCountry = getCitiesFromCountry(
+                //           country: countryState.selectedCountry);
+
+                //       return Container(
+                //           width: MediaQuery.of(context).size.width,
+                //           margin: const EdgeInsets.symmetric(
+                //                   horizontal: 2, vertical: 10)
+                //               .r,
+                //           // Add some padding and a background color
+                //           padding: const EdgeInsets.symmetric(
+                //               horizontal: 10, vertical: 5),
+                //           decoration: BoxDecoration(
+                //               color: Colors.green.withOpacity(0.1),
+                //               borderRadius: BorderRadius.circular(10),
+                //               border: Border.all(
+                //                 color: AppColor.black,
+                //               )),
+                //           // Create the dropdown button
+                //           child: DropdownButton<String>(
+                //             // Set the selected value
+                //             value: selectedCity,
+                //             menuMaxHeight: 200.h,
+                //             itemHeight: 50.h,
+                //             // Handle the value change
+                //             onChanged: (String? newValue) {
+                //               setState(() {
+                //                 selectedCity = newValue ?? '';
+                //               });
+                //             },
+                //             // Map each option to a widget
+                //             items: selectedCountry
+                //                 .map<DropdownMenuItem<String>>((String value) {
+                //               return DropdownMenuItem<String>(
+                //                 value: value,
+                //                 // Use a colored box to show the option
+                //                 child: Text(
+                //                   value,
+                //                   style: const TextStyle(
+                //                     color: Colors.black,
+                //                   ),
+                //                 ),
+                //               );
+                //             }).toList(),
+                //           ));
+                //     }
+                //     return const SizedBox();
+                //   },
+                // ),
+                BlocBuilder<CountryBloc, CountryState>(
+                  bloc: widget.countryBloc,
+                  builder: (context, countryState) {
+                    List<String> selectedCountry = [];
+
+                    if (countryState is CountryInitial) {
+                      selectedCountry = getCitiesFromCountry(
+                          country: countryState.selectedCountry);
+
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        // height: 70,
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 2, vertical: 10),
+                        // padding: const EdgeInsets.symmetric(
+                        //     horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: Colors.green.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(10),
+                          // border: Border.all(
+                          //   color: AppColor.black,
+                          // ),
+                        ),
+                        child: DropdownSearch<String>(
+                          popupProps: const PopupProps.modalBottomSheet(
+                              showSearchBox: true,
+                              constraints: BoxConstraints(
+                                  // maxHeight: 300,
+                                  )),
+
+                          dropdownBuilder: (context, selectedItem) {
+                            return ListTile(
+                              title: Text(selectedItem ?? ''),
+                              // selected: isSelected,
+                            );
+                          },
+                          dropdownDecoratorProps: const DropDownDecoratorProps(
+                            dropdownSearchDecoration: InputDecoration(
+                              // constraints: BoxConstraints(maxHeight: 60),
+                              border: OutlineInputBorder(),
                             ),
                           ),
-                        );
-                      }).toList(),
-                    )),
+                          // mode: Mode.BOTTOM_SHEET,
+                          // showSearchBox: true,
+                          // searchBoxDecoration: const InputDecoration(
+                          //   hintText: 'Search...',
+                          // ),
+                          // dropdownDecoratorProps: const InputDecoration(
+                          //   border: OutlineInputBorder(),
+                          // ),
+                          items: selectedCountry,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedCity = newValue ?? '';
+                            });
+                          },
+                          selectedItem: selectedCity,
+                          // label: 'Select a city',
+                          // showClearButton: true,
+                          // popupItemBuilder: (context, item, isSelected) {
+                          //   return ListTile(
+                          //     title: Text(item),
+                          //     selected: isSelected,
+                          //   );
+                          // },
+                        ),
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                ),
+
                 TextSignup(
                   text:
                       AppLocalizations.of(context).translate('Address Details'),
@@ -1392,50 +1543,78 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           SizedBox(
                             height: 10.h,
                           ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          //   children: [
+                          //     addPhotoButton(
+                          //         context: context,
+                          //         text: 'add_from_camera',
+                          //         onPressed: () {
+                          //           getTradeImage(ImageSource.camera);
+                          //         }),
+                          //     addPhotoButton(
+                          //         context: context,
+                          //         text: 'add_from_gallery',
+                          //         onPressed: () {
+                          //           getTradeImage(ImageSource.gallery);
+                          //         }),
+                          //   ],
+                          // ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              addPhotoButton(
+                              Flexible(
+                                child: addFileButton(
                                   context: context,
-                                  text: 'add_from_camera',
+                                  text: 'copy_of_trade_license',
                                   onPressed: () {
-                                    getTradeImage(ImageSource.camera);
-                                  }),
-                              addPhotoButton(
-                                  context: context,
-                                  text: 'add_from_gallery',
-                                  onPressed: () {
-                                    getTradeImage(ImageSource.gallery);
-                                  }),
+                                    getFile(context);
+                                  },
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Text(
+                                selectedTradeFileName ?? '',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: AppColor.backgroundColor,
+                                  fontSize: 10.0.sp,
+                                ),
+                              ),
                             ],
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          tradeLicensePhoto != null
-                              ? Center(
-                                  child: Image.file(
-                                    tradeLicensePhoto!,
-                                    width: 250.w,
-                                    height: 250.h,
-                                    fit: BoxFit.cover,
-                                  ),
-                                )
-                              : Center(
-                                  child: Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.5,
-                                    decoration: BoxDecoration(
-                                        color: Colors.green.withOpacity(0.1),
-                                        image: const DecorationImage(
-                                            image: AssetImage(
-                                                "assets/images/logo.png"),
-                                            fit: BoxFit.cover)),
-                                  ),
-                                ),
+                          // SizedBox(
+                          //   height: 10.h,
+                          // ),
+                          // tradeLicensePhoto != null
+                          //     ? Center(
+                          //         child: Image.file(
+                          //           tradeLicensePhoto!,
+                          //           width: 250.w,
+                          //           height: 250.h,
+                          //           fit: BoxFit.cover,
+                          //         ),
+                          //       )
+                          //     : Center(
+                          //         child: Container(
+                          //           height: MediaQuery.of(context).size.height *
+                          //               0.5,
+                          //           decoration: BoxDecoration(
+                          //               color: Colors.green.withOpacity(0.1),
+                          //               image: const DecorationImage(
+                          //                   image: AssetImage(
+                          //                       "assets/images/logo.png"),
+                          //                   fit: BoxFit.cover)),
+                          //         ),
+                          //       ),
                         ],
                       ),
-
+                SizedBox(
+                  height: 10.h,
+                ),
                 TextSignup(
                   text: AppLocalizations.of(context).translate('profile_photo'),
                 ),
@@ -1606,61 +1785,87 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 widget.accountTitle == 'المستهلك' ||
                         widget.accountTitle == 'جهة إخبارية'
                     ? Container()
-                    : Column(
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            height: 10.h,
+                          Flexible(
+                            child: addFileButton(
+                              context: context,
+                              text: 'front_id_photo',
+                              onPressed: () {
+                                getFrontIdFile(context);
+                              },
+                            ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              addPhotoButton(
-                                  context: context,
-                                  text: 'add_from_camera',
-                                  onPressed: () {
-                                    getFrontIdImage(
-                                      ImageSource.camera,
-                                    );
-                                  }),
-                              addPhotoButton(
-                                  context: context,
-                                  text: 'add_from_gallery',
-                                  onPressed: () {
-                                    getFrontIdImage(
-                                      ImageSource.gallery,
-                                    );
-                                  }),
-                            ],
+                          const SizedBox(
+                            width: 4,
                           ),
-                          SizedBox(
-                            height: 10.h,
+                          Text(
+                            selectedFrontIdFileName ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: AppColor.backgroundColor,
+                              fontSize: 10.0.sp,
+                            ),
                           ),
-                          frontIdPhoto != null
-                              ? Center(
-                                  child: Image.file(
-                                    frontIdPhoto!,
-                                    width: 250.w,
-                                    height: 250.h,
-                                    fit: BoxFit.cover,
-                                  ),
-                                )
-                              : Center(
-                                  child: Center(
-                                    child: Container(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.5,
-                                      decoration: BoxDecoration(
-                                          color: Colors.green.withOpacity(0.1),
-                                          image: const DecorationImage(
-                                              image: AssetImage(
-                                                  "assets/images/logo.png"),
-                                              fit: BoxFit.cover)),
-                                    ),
-                                  ),
-                                ),
                         ],
                       ),
+                // : Column(
+                //     children: [
+                //       SizedBox(
+                //         height: 10.h,
+                //       ),
+                //       Row(
+                //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //         children: [
+                //           addPhotoButton(
+                //               context: context,
+                //               text: 'add_from_camera',
+                //               onPressed: () {
+                //                 getFrontIdImage(
+                //                   ImageSource.camera,
+                //                 );
+                //               }),
+                //           addPhotoButton(
+                //               context: context,
+                //               text: 'add_from_gallery',
+                //               onPressed: () {
+                //                 getFrontIdImage(
+                //                   ImageSource.gallery,
+                //                 );
+                //               }),
+                //         ],
+                //       ),
+                //       SizedBox(
+                //         height: 10.h,
+                //       ),
+                //       frontIdPhoto != null
+                //           ? Center(
+                //               child: Image.file(
+                //                 frontIdPhoto!,
+                //                 width: 250.w,
+                //                 height: 250.h,
+                //                 fit: BoxFit.cover,
+                //               ),
+                //             )
+                //           : Center(
+                //               child: Center(
+                //                 child: Container(
+                //                   height:
+                //                       MediaQuery.of(context).size.height *
+                //                           0.5,
+                //                   decoration: BoxDecoration(
+                //                       color: Colors.green.withOpacity(0.1),
+                //                       image: const DecorationImage(
+                //                           image: AssetImage(
+                //                               "assets/images/logo.png"),
+                //                           fit: BoxFit.cover)),
+                //                 ),
+                //               ),
+                //             ),
+                //     ],
+                //   ),
                 SizedBox(
                   height: 10.h,
                 ),
@@ -1674,61 +1879,87 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 widget.accountTitle == 'المستهلك' ||
                         widget.accountTitle == 'جهة إخبارية'
                     ? Container()
-                    : Column(
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            height: 10.h,
+                          Flexible(
+                            child: addFileButton(
+                              context: context,
+                              text: 'back_id_photo',
+                              onPressed: () {
+                                getBackIdFile(context);
+                              },
+                            ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              addPhotoButton(
-                                  context: context,
-                                  text: 'add_from_camera',
-                                  onPressed: () {
-                                    getBackIdImage(
-                                      ImageSource.camera,
-                                    );
-                                  }),
-                              addPhotoButton(
-                                  context: context,
-                                  text: 'add_from_gallery',
-                                  onPressed: () {
-                                    getBackIdImage(
-                                      ImageSource.gallery,
-                                    );
-                                  }),
-                            ],
+                          const SizedBox(
+                            width: 4,
                           ),
-                          SizedBox(
-                            height: 10.h,
+                          Text(
+                            selectedBackIdFileName ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: AppColor.backgroundColor,
+                              fontSize: 10.0.sp,
+                            ),
                           ),
-                          backIdPhoto != null
-                              ? Center(
-                                  child: Image.file(
-                                    backIdPhoto!,
-                                    width: 250.w,
-                                    height: 250.h,
-                                    fit: BoxFit.cover,
-                                  ),
-                                )
-                              : Center(
-                                  child: Center(
-                                    child: Container(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.5,
-                                      decoration: BoxDecoration(
-                                          color: Colors.green.withOpacity(0.1),
-                                          image: const DecorationImage(
-                                              image: AssetImage(
-                                                  "assets/images/logo.png"),
-                                              fit: BoxFit.cover)),
-                                    ),
-                                  ),
-                                ),
                         ],
                       ),
+                // : Column(
+                //     children: [
+                //       SizedBox(
+                //         height: 10.h,
+                //       ),
+                //       Row(
+                //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //         children: [
+                //           addPhotoButton(
+                //               context: context,
+                //               text: 'add_from_camera',
+                //               onPressed: () {
+                //                 getBackIdImage(
+                //                   ImageSource.camera,
+                //                 );
+                //               }),
+                //           addPhotoButton(
+                //               context: context,
+                //               text: 'add_from_gallery',
+                //               onPressed: () {
+                //                 getBackIdImage(
+                //                   ImageSource.gallery,
+                //                 );
+                //               }),
+                //         ],
+                //       ),
+                //       SizedBox(
+                //         height: 10.h,
+                //       ),
+                //       backIdPhoto != null
+                //           ? Center(
+                //               child: Image.file(
+                //                 backIdPhoto!,
+                //                 width: 250.w,
+                //                 height: 250.h,
+                //                 fit: BoxFit.cover,
+                //               ),
+                //             )
+                //           : Center(
+                //               child: Center(
+                //                 child: Container(
+                //                   height:
+                //                       MediaQuery.of(context).size.height *
+                //                           0.5,
+                //                   decoration: BoxDecoration(
+                //                       color: Colors.green.withOpacity(0.1),
+                //                       image: const DecorationImage(
+                //                           image: AssetImage(
+                //                               "assets/images/logo.png"),
+                //                           fit: BoxFit.cover)),
+                //                 ),
+                //               ),
+                //             ),
+                //     ],
+                //   ),
                 SizedBox(
                   height: 10.h,
                 ),
@@ -1786,7 +2017,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       )
                     : const SizedBox(),
                 SizedBox(
-                  height: 20.h,
+                  height: 25.h,
                 ),
                 Center(
                   child: Container(
@@ -1881,7 +2112,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                 return;
                               }
                             }
-                            print(widget.formKey.currentState!.validate());
                             if (!widget.formKey.currentState!.validate()) {
                               return;
                             }
