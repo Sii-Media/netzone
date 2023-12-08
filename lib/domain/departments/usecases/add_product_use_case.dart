@@ -34,7 +34,7 @@ class AddProductParams {
   final String categoryName;
   final String name;
   final String description;
-  final int price;
+  final double price;
   final double weight;
   final List<String>? images;
   final String? videoUrl;

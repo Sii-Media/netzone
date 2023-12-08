@@ -42,8 +42,8 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
     required String department,
     required String category,
     required String country,
-    int? priceMin,
-    int? priceMax,
+    double? priceMin,
+    double? priceMax,
     String? owner,
     String? condition,
   }) async {
@@ -68,7 +68,7 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
       required String categoryName,
       required String name,
       required String description,
-      required int price,
+      required double price,
       required double weight,
       List<String>? images,
       String? videoUrl,
@@ -175,7 +175,7 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
       required String description,
       required File? image,
       File? video,
-      required int price,
+      required double price,
       bool? guarantee,
       String? address,
       String? madeIn}) async {

@@ -652,5 +652,9 @@
     "Water":"Water",
     "Location Info":"Location Info",
     "city":"City",
-    "Address Details":"Address Details"
+    "Address Details":"Address Details",
+    "to_ios_device":"To IOS Device",
+    "to_android_device":"To Android Device",
+    "play_store":"Play Store",
+    "apple_store":"Apple Store"
 }

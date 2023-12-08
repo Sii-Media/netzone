@@ -29,8 +29,8 @@ class CategoryProductsParams {
   final String department;
   final String category;
   final String country;
-  final int? priceMin;
-  final int? priceMax;
+  final double? priceMin;
+  final double? priceMax;
   final String? owner;
   final String? condition;
   CategoryProductsParams({

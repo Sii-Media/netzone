@@ -300,7 +300,7 @@ class _EditProductScreenState extends State<EditProductScreen>
                           productId: widget.item.id,
                           name: _nameController.text,
                           description: _descriptionController.text,
-                          price: int.parse(_priceController.text),
+                          price: double.parse(_priceController.text),
                           image: _updatedImage,
                           address: _addressController.text,
                           guarantee: _isGuarantee,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -86,6 +88,25 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
       isLoggedIn = prefs.getString(SharedPreferencesKeys.user);
     });
   }
+
+  // void _shareLink(String platform) async {
+  //   String link = '';
+  //   if (platform == 'Android') {
+  //     link =
+  //         'https://play.google.com/store/apps/details?id=com.netzoon.netzoon_app';
+  //   } else if (platform == 'iOS') {
+  //     link = 'https://apps.apple.com/ae/app/netzoon/id6467718964';
+  //   }
+
+  //   await Share.share(
+  //     'Download netzoon app: $link',
+  //     subject: 'Share netzoon app link',
+  //     sharePositionOrigin: Rect.fromPoints(
+  //       const Offset(2, 2),
+  //       const Offset(3, 3),
+  //     ),
+  //   );
+  // }
 
   @override
   void initState() {
@@ -191,10 +212,20 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
                     AppLocalizations.of(context).translate('share_netzoon_app'),
                 icon: Icons.share,
                 onTap: () async {
-                  // await Share.share('share netzoon app link');
-                  // final box = context.findRenderObject() as RenderBox?;
+                  // Determine the current platform
+                  String appStoreLink;
+                  if (Platform.isIOS) {
+                    appStoreLink =
+                        'https://apps.apple.com/ae/app/netzoon/id6467718964';
+                  } else if (Platform.isAndroid) {
+                    appStoreLink =
+                        'https://play.google.com/store/apps/details?id=com.netzoon.netzoon_app';
+                  } else {
+                    return;
+                  }
+
                   await Share.share(
-                    'download netzoon app from google play : https://play.google.com/store/apps/details?id=com.netzoon.netzoon_app\nfrom app store : https://apps.apple.com/ae/app/netzoon/id6467718964',
+                    'Download netzoon app: $appStoreLink',
                     subject: 'Share netzoon app link',
                     sharePositionOrigin: Rect.fromPoints(
                       const Offset(2, 2),
@@ -204,6 +235,43 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
                 },
               );
             }),
+            // Builder(builder: (context) {
+            //   return SettingsCategory(
+            //     name:
+            //         AppLocalizations.of(context).translate('share_netzoon_app'),
+            //     icon: Icons.share,
+            //     onTap: () async {
+            //       showModalBottomSheet(
+            //         context: context,
+            //         builder: (BuildContext context) {
+            //           return Column(
+            //             mainAxisSize: MainAxisSize.min,
+            //             children: <Widget>[
+            //               ListTile(
+            //                 leading: const Icon(Icons.android),
+            //                 title: Text(AppLocalizations.of(context)
+            //                     .translate('play_store')),
+            //                 onTap: () {
+            //                   Navigator.pop(context);
+            //                   _shareLink('Android');
+            //                 },
+            //               ),
+            //               ListTile(
+            //                 leading: const Icon(Icons.phone_iphone),
+            //                 title: Text(AppLocalizations.of(context)
+            //                     .translate('apple_store')),
+            //                 onTap: () {
+            //                   Navigator.pop(context);
+            //                   _shareLink('iOS');
+            //                 },
+            //               ),
+            //             ],
+            //           );
+            //         },
+            //       );
+            //     },
+            //   );
+            // }),
             SizedBox(
               height: 10.h,
             ),

@@ -16,8 +16,8 @@ class GetElcDevicesEvent extends ElecDevicesEvent {
 class GetElcCategoryProductsEvent extends ElecDevicesEvent {
   final String department;
   final String category;
-  final int? priceMin;
-  final int? priceMax;
+  final double? priceMin;
+  final double? priceMax;
   final String? owner;
   final String? condition;
   const GetElcCategoryProductsEvent({
@@ -44,7 +44,7 @@ class EditProductEvent extends ElecDevicesEvent {
   final String productId;
   final String name;
   final String description;
-  final int price;
+  final double price;
   final File? image;
   final File? video;
   final bool? guarantee;

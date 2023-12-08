@@ -30,7 +30,7 @@ class EditProductParams {
   final String productId;
   final String name;
   final String description;
-  final int price;
+  final double price;
   final File? image;
   final File? video;
   final bool? guarantee;

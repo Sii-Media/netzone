@@ -652,5 +652,9 @@
     "Water":"مياه الشرب",
     "Location Info":"تفاصيل الموقع",
     "city":"المدينة",
-    "Address Details":"العنوان بالتفصيل"
+    "Address Details":"العنوان بالتفصيل",
+    "to_ios_device":"مشاركة لجهاز IOS",
+    "to_android_device":"مشاركة لجهاز Android",
+    "play_store":"Play Store",
+    "apple_store":"Apple Store"
 }

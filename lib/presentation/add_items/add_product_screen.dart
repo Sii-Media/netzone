@@ -874,7 +874,7 @@ class _AddProductScreenState extends State<AddProductScreen>
                                     name: productName.text,
                                     condition: _selectedCondition,
                                     description: productDesc.text,
-                                    price: int.parse(productPrice.text),
+                                    price: double.parse(productPrice.text),
                                     weight: double.parse(productWeight.text),
                                     quantity: int.parse(productQuantity.text),
                                     guarantee: _isGuarantee,

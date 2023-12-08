@@ -13,7 +13,7 @@ class AddProductRequestedEvent extends AddProductEvent {
   final String name;
   final String? condition;
   final String description;
-  final int price;
+  final double price;
   final double weight;
   final int quantity;
   final List<XFile>? productimages;

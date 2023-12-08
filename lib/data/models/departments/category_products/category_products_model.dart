@@ -15,7 +15,7 @@ class CategoryProductsModel {
   final DepartmentsCategoryModel category;
   final String? condition;
   final String description;
-  final int price;
+  final double price;
   final double? weight;
   final num? quantity;
   final List<String>? images;

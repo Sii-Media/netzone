@@ -138,7 +138,7 @@ Future<Response<dynamic>> _uploadFile({
   required String? condition,
   required String name,
   required String description,
-  required int price,
+  required double price,
   required double weight,
   required int quantity,
   required File image,

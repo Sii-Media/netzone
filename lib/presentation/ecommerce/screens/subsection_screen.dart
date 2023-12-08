@@ -350,8 +350,8 @@ class _SubSectionsScreenState extends State<SubSectionsScreen> {
                           department: widget.filter,
                           category: widget.category,
                           owner: ownerName,
-                          priceMin: priceMin.toInt(),
-                          priceMax: priceMax.toInt(),
+                          priceMin: priceMin,
+                          priceMax: priceMax,
                           condition: condition,
                         ));
                         // Close the bottom sheet after applying filters

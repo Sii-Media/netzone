@@ -17,7 +17,7 @@ CategoryProductsModel _$CategoryProductsModelFromJson(
           json['category'] as Map<String, dynamic>),
       condition: json['condition'] as String?,
       description: json['description'] as String,
-      price: json['price'] as int,
+      price: (json['price'] as num).toDouble(),
       weight: (json['weight'] as num?)?.toDouble(),
       quantity: json['quantity'] as num?,
       images:
