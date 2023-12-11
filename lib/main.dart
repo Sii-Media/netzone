@@ -80,9 +80,11 @@ Future<void> main() async {
       notification.body,
       NotificationDetails(
         android: AndroidNotificationDetails(
-            _androidChannel.id, _androidChannel.name,
-            channelDescription: _androidChannel.description,
-            icon: '@drawable/ic_launcher'),
+          _androidChannel.id,
+          _androidChannel.name,
+          channelDescription: _androidChannel.description,
+          icon: '@drawable/ic_launcher',
+        ),
       ),
       payload: jsonEncode(message.toMap()),
     );

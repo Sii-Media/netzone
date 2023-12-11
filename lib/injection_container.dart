@@ -146,6 +146,7 @@ import 'package:netzoon/domain/deals/usecases/edit_deal_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_all_deals_items_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_deals_cat_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_deals_items_by_cat_use_case.dart';
+import 'package:netzoon/domain/deals/usecases/get_user_deals_use_case.dart';
 import 'package:netzoon/domain/departments/repositories/departments_repository.dart';
 import 'package:netzoon/domain/departments/usecases/add_product_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/add_to_selected_products_use_case.dart';
@@ -309,6 +310,7 @@ Future<void> init() async {
         getCountryUseCase: sl(),
         deleteDealUseCase: sl(),
         editDealUseCase: sl(),
+        getUserDealsUseCase: sl(),
       ));
 
   sl.registerFactory(() => ElecDevicesBloc(
@@ -819,6 +821,8 @@ Future<void> init() async {
       () => GetServicesByCategoryUseCase(localCompanyRepository: sl()));
   sl.registerLazySingleton(
       () => GetServicesCategoriesUseCase(localCompanyRepository: sl()));
+
+  sl.registerLazySingleton(() => GetUserDealsUseCase(dealsRepository: sl()));
 
   //! Repositories
 

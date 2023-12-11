@@ -62,3 +62,17 @@ class DeleteDealSuccess extends DealsItemsState {
 
   const DeleteDealSuccess({required this.message});
 }
+
+class GetUserDealsInProgress extends DealsItemsState {}
+
+class GetUserDealsFailure extends DealsItemsState {
+  final String message;
+
+  const GetUserDealsFailure({required this.message});
+}
+
+class GetUserDealsSuccess extends DealsItemsState {
+  final List<DealsItems> deals;
+
+  const GetUserDealsSuccess({required this.deals});
+}

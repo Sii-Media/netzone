@@ -437,7 +437,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                                             FontWeight.w700,
                                                                       )),
                                                                   TextSpan(
-                                                                    text: '\$ ',
+                                                                    text:
+                                                                        getCurrencyFromCountry(
+                                                                      countryState
+                                                                          .selectedCountry,
+                                                                      context,
+                                                                    ),
                                                                     style: TextStyle(
                                                                         color: AppColor
                                                                             .backgroundColor,

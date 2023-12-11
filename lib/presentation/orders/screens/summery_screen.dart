@@ -336,124 +336,116 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
             );
           } else if (sendState is SendEmailPaymentAndDeliverySuccess) {
             stopLoading();
-            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            //   content: Text(
-            //     AppLocalizations.of(context).translate('success'),
-            //   ),
-            //   backgroundColor: Theme.of(context).colorScheme.secondary,
-            // ));
-            double totalWeight = 0.0;
-            for (CategoryProducts product in widget.products) {
-              totalWeight += product.weight ?? 0;
-            }
-            print('22222222222222222222222222222222222222222');
-            DateTime pickUpDate = DateTime.now();
-            DateTime readyTime = DateTime.now();
-            DateTime lastPickupTime = pickUpDate.add(const Duration(days: 3));
 
-            aramexBloc.add(
-              CreatePickUpEvent(
-                createPickUpInputData: CreatePickUpInputData(
-                  clientInfo: const ClientInfo(
-                      source: 24,
-                      accountCountryCode: 'AE',
-                      accountEntity: 'DXB',
-                      accountPin: '906169',
-                      accountNumber: '71923340',
-                      userName: 'netzoon.2023@gmail.com',
-                      password: 'Netzoon@123@aramex',
-                      version: 'v1'),
-                  labelInfo: const LabelInfo(
-                    reportID: 9201,
-                    reportType: 'URL',
-                  ),
-                  pickUp: PickUp(
-                    pickupAddress: PartyAddress(
-                      line1: widget.products[0].owner.address ?? "Dubai",
-                      line2: widget.products[0].owner.addressDetails ?? "Dubai",
-                      line3: "",
-                      city: widget.products[0].owner.city ?? "Dubai",
-                      stateOrProvinceCode:
-                          widget.products[0].owner.city ?? "Dubai",
-                      postCode: '',
-                      countryCode: 'AE',
-                      longitude: 0,
-                      latitude: 0,
-                    ),
-                    pickupContact: Contact(
-                      department: 'Test Department',
-                      personName: widget.products[0].owner.contactName ?? "",
-                      title: widget.products[0].owner.username ?? "",
-                      companyName: widget.products[0].owner.username ?? "",
-                      phoneNumber1: widget.products[0].owner.firstMobile ?? "",
-                      cellPhone: widget.products[0].owner.secondeMobile ??
-                          widget.products[0].owner.firstMobile ??
-                          '',
-                      emailAddress: widget.products[0].owner.email ?? '',
-                    ),
-                    pickupLocation: widget.products[0].owner.address ?? '',
-                    pickupDate: "/Date(${pickUpDate.millisecondsSinceEpoch})/",
-                    readyTime: "/Date(${readyTime.millisecondsSinceEpoch})/",
-                    lastPickupTime:
-                        "/Date(${lastPickupTime.millisecondsSinceEpoch})/",
-                    closingTime: "/Date(${pickUpDate.millisecondsSinceEpoch})/",
-                    comments: '',
-                    reference1: '001',
-                    vehicle: 'Car',
-                    pickupItems: [
-                      PickupItems(
-                          productGroup: 'DOM',
-                          productType: 'CDS',
-                          numberOfShipments: 1,
-                          packageTypel: 'Box',
-                          payment: 'P',
-                          shipmentWeight: ActualWeight(
-                              unit: 'KG', value: widget.totalWeight),
-                          numberOfPieces:
-                              int.parse(widget.totalQuantity.toString()),
-                          shipmentDimensions: const ShipmentDimensions(
-                              length: 0, width: 0, height: 0, unit: ''),
-                          comments: 'comments')
-                    ],
-                    status: 'Ready',
-                    branch: '',
-                    routeCode: '',
-                  ),
-                  transaction: const Transaction(
-                    reference1: 'reference1',
-                    reference2: '',
-                    reference3: '',
-                    reference4: '',
-                  ),
-                ),
-              ),
-            );
-            // orderBloc.add(SaveOrderEvent(
-            //     clientId: widget.products[0].owner.id,
-            //     products: widget.products
-            //         .map((e) => OrderInput(
-            //             product: e.id,
-            //             amount: e.price.toDouble(),
-            //             qty: e.cartQty?.toInt() ?? 1))
-            //         .toList(),
-            //     orderStatus: 'pending',
-            //     grandTotal: widget.totalAmount + widget.deliveryFee,
-            //     mobile: widget.userMobile,
-            //     serviceFee: widget.serviceFee,
-            //     subTotal: widget.subTotal,
-            //     shippingAddress:
-            //         '${widget.city} - ${widget.addressDetails} - ${widget.floorNum}'));
-            // Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            //   return const CongsScreen();
-            // }));
+            // double totalWeight = 0.0;
+            // for (CategoryProducts product in widget.products) {
+            //   totalWeight += product.weight ?? 0;
+            // }
+            // print('22222222222222222222222222222222222222222');
+            // DateTime pickUpDate = DateTime.now();
+            // DateTime readyTime = DateTime.now();
+            // DateTime lastPickupTime = pickUpDate.add(const Duration(days: 3));
+
+            // aramexBloc.add(
+            //   CreatePickUpEvent(
+            //     createPickUpInputData: CreatePickUpInputData(
+            //       clientInfo: const ClientInfo(
+            //           source: 24,
+            //           accountCountryCode: 'AE',
+            //           accountEntity: 'DXB',
+            //           accountPin: '906169',
+            //           accountNumber: '71923340',
+            //           userName: 'netzoon.2023@gmail.com',
+            //           password: 'Netzoon@123@aramex',
+            //           version: 'v1'),
+            //       labelInfo: const LabelInfo(
+            //         reportID: 9201,
+            //         reportType: 'URL',
+            //       ),
+            //       pickUp: PickUp(
+            //         pickupAddress: PartyAddress(
+            //           line1: widget.products[0].owner.address ?? "Dubai",
+            //           line2: widget.products[0].owner.addressDetails ?? "Dubai",
+            //           line3: "",
+            //           city: widget.products[0].owner.city ?? "Dubai",
+            //           stateOrProvinceCode:
+            //               widget.products[0].owner.city ?? "Dubai",
+            //           postCode: '',
+            //           countryCode: 'AE',
+            //           longitude: 0,
+            //           latitude: 0,
+            //         ),
+            //         pickupContact: Contact(
+            //           department: 'Test Department',
+            //           personName: widget.products[0].owner.contactName ?? "",
+            //           title: widget.products[0].owner.username ?? "",
+            //           companyName: widget.products[0].owner.username ?? "",
+            //           phoneNumber1: widget.products[0].owner.firstMobile ?? "",
+            //           cellPhone: widget.products[0].owner.secondeMobile ??
+            //               widget.products[0].owner.firstMobile ??
+            //               '',
+            //           emailAddress: widget.products[0].owner.email ?? '',
+            //         ),
+            //         pickupLocation: widget.products[0].owner.address ?? '',
+            //         pickupDate: "/Date(${pickUpDate.millisecondsSinceEpoch})/",
+            //         readyTime: "/Date(${readyTime.millisecondsSinceEpoch})/",
+            //         lastPickupTime:
+            //             "/Date(${lastPickupTime.millisecondsSinceEpoch})/",
+            //         closingTime: "/Date(${pickUpDate.millisecondsSinceEpoch})/",
+            //         comments: '',
+            //         reference1: '001',
+            //         vehicle: 'Car',
+            //         pickupItems: [
+            //           PickupItems(
+            //               productGroup: 'DOM',
+            //               productType: 'CDS',
+            //               numberOfShipments: 1,
+            //               packageTypel: 'Box',
+            //               payment: 'P',
+            //               shipmentWeight: ActualWeight(
+            //                   unit: 'KG', value: widget.totalWeight),
+            //               numberOfPieces:
+            //                   int.parse(widget.totalQuantity.toString()),
+            //               shipmentDimensions: const ShipmentDimensions(
+            //                   length: 0, width: 0, height: 0, unit: ''),
+            //               comments: 'comments')
+            //         ],
+            //         status: 'Ready',
+            //         branch: '',
+            //         routeCode: '',
+            //       ),
+            //       transaction: const Transaction(
+            //         reference1: 'reference1',
+            //         reference2: '',
+            //         reference3: '',
+            //         reference4: '',
+            //       ),
+            //     ),
+            //   ),
+            // );
+            orderBloc.add(SaveOrderEvent(
+                clientId: widget.products[0].owner.id,
+                products: widget.products
+                    .map((e) => OrderInput(
+                        product: e.id,
+                        amount: e.price.toDouble(),
+                        qty: e.cartQty?.toInt() ?? 1))
+                    .toList(),
+                orderStatus: 'pending',
+                grandTotal: widget.totalAmount + widget.deliveryFee,
+                mobile: widget.userMobile,
+                serviceFee: widget.serviceFee,
+                subTotal: widget.subTotal,
+                shippingAddress:
+                    '${widget.city} - ${widget.addressDetails} - ${widget.floorNum}'));
           }
         },
-        child: BlocListener<AramexBloc, AramexState>(
-          bloc: aramexBloc,
-          listener: (context, pickupState) {
-            if (pickupState is CreatePickUpInProgress) {
+        child: BlocListener<OrderBloc, OrderState>(
+          bloc: orderBloc,
+          listener: (context, orderState) {
+            if (orderState is SaveOrderInProgress) {
               startLoading();
-            } else if (pickupState is CreatePickUpInFailue) {
+            } else if (orderState is SaveOrderFailure) {
               stopLoading();
 
               ScaffoldMessenger.of(context).showSnackBar(
@@ -467,7 +459,7 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
                   backgroundColor: AppColor.red,
                 ),
               );
-            } else if (pickupState is CreatePickUpSuccess) {
+            } else if (orderState is SaveOrderSuccess) {
               stopLoading();
               // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               //   content: Text(
@@ -479,119 +471,118 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
               for (CategoryProducts product in widget.products) {
                 totalWeight += product.weight ?? 0;
               }
+              print('22222222222222222222222222222222222222222');
+              DateTime pickUpDate = DateTime.now();
+              DateTime readyTime = DateTime.now();
+              DateTime lastPickupTime = pickUpDate.add(const Duration(days: 3));
 
-              DateTime shippingDateTime = DateTime.now();
-
-              DateTime dueDate = shippingDateTime.add(const Duration(days: 3));
-              aramexBloc2.add(CreateShipmentEvent(
-                  createShipmentInputData: CreateShipmentInputData(
-                      shipments: [
-                    Shipments(
-                        reference1: '',
-                        reference2: '',
-                        reference3: '',
-                        shipper: ShipperOrConsignee(
-                          reference1: '',
-                          accountNumber: '71923340',
-                          partyAddress: PartyAddress(
-                              line1: widget.products[0].owner.address ?? '',
-                              line2:
-                                  widget.products[0].owner.addressDetails ?? '',
-                              city: widget.products[0].owner.city ?? 'Dubai',
-                              stateOrProvinceCode:
-                                  widget.products[0].owner.city ?? 'Dubai',
-                              countryCode: 'AE',
-                              longitude: 0,
-                              latitude: 0),
-                          contact: Contact(
-                            department: widget.products[0].owner.address,
-                            personName:
-                                widget.products[0].owner.contactName ?? '',
-                            title: 'title',
-                            companyName:
-                                widget.products[0].owner.username ?? '',
-                            phoneNumber1:
-                                widget.products[0].owner.firstMobile ?? '',
-                            cellPhone:
-                                widget.products[0].owner.secondeMobile ?? '',
-                            emailAddress: widget.products[0].owner.email ?? '',
-                          ),
-                        ),
-                        consignee: ShipperOrConsignee(
-                            reference1: '',
-                            accountNumber: '71923340',
-                            partyAddress: PartyAddress(
-                                line1: widget.addressDetails,
-                                city: widget.city,
-                                stateOrProvinceCode: widget.city,
-                                postCode: "",
-                                countryCode: 'AE',
-                                longitude: 0,
-                                latitude: 0),
-                            contact: Contact(
-                                department: widget.addressDetails,
-                                personName: widget.toName,
-                                title: 'title',
-                                companyName: widget.toName,
-                                phoneNumber1: widget.userMobile,
-                                cellPhone: widget.phoneNumber,
-                                emailAddress: widget.toEmail)),
-                        thirdParty: null,
-                        shippingDateTime:
-                            "/Date(${shippingDateTime.millisecondsSinceEpoch})/",
-                        dueDate: "/Date(${dueDate.millisecondsSinceEpoch})/",
-                        comments: 'comments',
-                        details: ShipmentDetails(
-                          actualWeight: ActualWeight(
-                              unit: 'KG', value: widget.totalWeight),
-                          descriptionOfGoods: 'items',
-                          goodsOriginCountry: 'AE',
-                          numberOfPieces:
-                              int.parse(widget.totalQuantity.toString()),
-                          productGroup: 'DOM',
-                          productType: 'CDS',
-                          paymentType: 'P',
-                          items: widget.products.map((e) {
-                            return ShipmentItems(
-                                packageType: 'item',
-                                quantity:
-                                    e.cartQty != null ? e.cartQty!.toInt() : 1,
-                                weight: ActualWeight(
-                                    unit: 'KG', value: e.weight ?? 0),
-                                comments: 'comments',
-                                reference: '',
-                                commodityCode: 640000,
-                                goodsDescription: 'goodsDescription',
-                                countryOfOrigin: 'AE',
-                                customsValue: const TotalAmount(
-                                    currencyCode: 'AED', value: 0));
-                          }).toList(),
-                        ),
-                        transportType: 0,
-                        pickupGUID: pickupState
-                            .createPickUpResponse.processedPickup.guid),
-                  ],
-                      labelInfo:
-                          const LabelInfo(reportID: 9729, reportType: 'URL'),
-                      clientInfo: const ClientInfo(
-                          source: 24,
-                          accountCountryCode: 'AE',
-                          accountEntity: 'DXB',
-                          accountPin: '906169',
-                          accountNumber: '71923340',
-                          userName: 'netzoon.2023@gmail.com',
-                          password: 'Netzoon@123@aramex',
-                          version: 'v1'),
-                      transaction:
-                          const Transaction(reference1: 'reference1'))));
+              aramexBloc.add(
+                CreatePickUpEvent(
+                  createPickUpInputData: CreatePickUpInputData(
+                    clientInfo: const ClientInfo(
+                        source: 24,
+                        accountCountryCode: 'AE',
+                        accountEntity: 'DXB',
+                        accountPin: '906169',
+                        accountNumber: '71923340',
+                        userName: 'netzoon.2023@gmail.com',
+                        password: 'Netzoon@123@aramex',
+                        version: 'v1'),
+                    labelInfo: const LabelInfo(
+                      reportID: 9201,
+                      reportType: 'URL',
+                    ),
+                    pickUp: PickUp(
+                      pickupAddress: PartyAddress(
+                        line1: widget.products[0].owner.address ?? "Dubai",
+                        line2:
+                            widget.products[0].owner.addressDetails ?? "Dubai",
+                        line3: "",
+                        city: widget.products[0].owner.city ?? "Dubai",
+                        stateOrProvinceCode:
+                            widget.products[0].owner.city ?? "Dubai",
+                        postCode: '',
+                        countryCode: 'AE',
+                        longitude: 0,
+                        latitude: 0,
+                      ),
+                      pickupContact: Contact(
+                        department: 'Test Department',
+                        personName: widget.products[0].owner.contactName ?? "",
+                        title: widget.products[0].owner.username ?? "",
+                        companyName: widget.products[0].owner.username ?? "",
+                        phoneNumber1:
+                            widget.products[0].owner.firstMobile ?? "",
+                        cellPhone: widget.products[0].owner.secondeMobile ??
+                            widget.products[0].owner.firstMobile ??
+                            '',
+                        emailAddress: widget.products[0].owner.email ?? '',
+                      ),
+                      pickupLocation: widget.products[0].owner.address ?? '',
+                      pickupDate:
+                          "/Date(${pickUpDate.millisecondsSinceEpoch})/",
+                      readyTime: "/Date(${readyTime.millisecondsSinceEpoch})/",
+                      lastPickupTime:
+                          "/Date(${lastPickupTime.millisecondsSinceEpoch})/",
+                      closingTime:
+                          "/Date(${pickUpDate.millisecondsSinceEpoch})/",
+                      comments: '',
+                      reference1: '001',
+                      vehicle: 'Car',
+                      pickupItems: [
+                        PickupItems(
+                            productGroup: 'DOM',
+                            productType: 'CDS',
+                            numberOfShipments: 1,
+                            packageTypel: 'Box',
+                            payment: 'P',
+                            shipmentWeight: ActualWeight(
+                                unit: 'KG', value: widget.totalWeight),
+                            numberOfPieces:
+                                int.parse(widget.totalQuantity.toString()),
+                            shipmentDimensions: const ShipmentDimensions(
+                                length: 0, width: 0, height: 0, unit: ''),
+                            comments: 'comments')
+                      ],
+                      status: 'Ready',
+                      branch: '',
+                      routeCode: '',
+                    ),
+                    transaction: const Transaction(
+                      reference1: 'reference1',
+                      reference2: '',
+                      reference3: '',
+                      reference4: '',
+                    ),
+                  ),
+                ),
+              );
+              // orderBloc.add(SaveOrderEvent(
+              //     clientId: widget.products[0].owner.id,
+              //     products: widget.products
+              //         .map((e) => OrderInput(
+              //             product: e.id,
+              //             amount: e.price.toDouble(),
+              //             qty: e.cartQty?.toInt() ?? 1))
+              //         .toList(),
+              //     orderStatus: 'pending',
+              //     grandTotal: widget.totalAmount + widget.deliveryFee,
+              //     mobile: widget.userMobile,
+              //     serviceFee: widget.serviceFee,
+              //     subTotal: widget.subTotal,
+              //     shippingAddress:
+              //         '${widget.city} - ${widget.addressDetails} - ${widget.floorNum}'));
+              // Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              //   return const CongsScreen();
+              // }));
             }
           },
           child: BlocListener<AramexBloc, AramexState>(
-            bloc: aramexBloc2,
-            listener: (context, shipmentState) {
-              if (shipmentState is CreateShipmentInProgress) {
+            bloc: aramexBloc,
+            listener: (context, pickupState) {
+              if (pickupState is CreatePickUpInProgress) {
                 startLoading();
-              } else if (shipmentState is CreateShipmentInFailue) {
+              } else if (pickupState is CreatePickUpInFailue) {
                 stopLoading();
 
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -605,9 +596,137 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
                     backgroundColor: AppColor.red,
                   ),
                 );
-              } else if (shipmentState is CreateShipmentSuccess) {
+              } else if (pickupState is CreatePickUpSuccess) {
                 stopLoading();
-                if (shipmentState.createShipmentResponse.hasError == true) {
+                // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                //   content: Text(
+                //     AppLocalizations.of(context).translate('success'),
+                //   ),
+                //   backgroundColor: Theme.of(context).colorScheme.secondary,
+                // ));
+                double totalWeight = 0.0;
+                for (CategoryProducts product in widget.products) {
+                  totalWeight += product.weight ?? 0;
+                }
+
+                DateTime shippingDateTime = DateTime.now();
+
+                DateTime dueDate =
+                    shippingDateTime.add(const Duration(days: 3));
+                aramexBloc2.add(CreateShipmentEvent(
+                    createShipmentInputData: CreateShipmentInputData(
+                        shipments: [
+                      Shipments(
+                          reference1: '',
+                          reference2: '',
+                          reference3: '',
+                          shipper: ShipperOrConsignee(
+                            reference1: '',
+                            accountNumber: '71923340',
+                            partyAddress: PartyAddress(
+                                line1: widget.products[0].owner.address ?? '',
+                                line2:
+                                    widget.products[0].owner.addressDetails ??
+                                        '',
+                                city: widget.products[0].owner.city ?? 'Dubai',
+                                stateOrProvinceCode:
+                                    widget.products[0].owner.city ?? 'Dubai',
+                                countryCode: 'AE',
+                                longitude: 0,
+                                latitude: 0),
+                            contact: Contact(
+                              department: widget.products[0].owner.address,
+                              personName:
+                                  widget.products[0].owner.contactName ?? '',
+                              title: 'title',
+                              companyName:
+                                  widget.products[0].owner.username ?? '',
+                              phoneNumber1:
+                                  widget.products[0].owner.firstMobile ?? '',
+                              cellPhone:
+                                  widget.products[0].owner.firstMobile ?? '',
+                              emailAddress:
+                                  widget.products[0].owner.email ?? '',
+                            ),
+                          ),
+                          consignee: ShipperOrConsignee(
+                              reference1: '',
+                              accountNumber: '71923340',
+                              partyAddress: PartyAddress(
+                                  line1: widget.addressDetails,
+                                  city: widget.city,
+                                  stateOrProvinceCode: widget.city,
+                                  postCode: "",
+                                  countryCode: 'AE',
+                                  longitude: 0,
+                                  latitude: 0),
+                              contact: Contact(
+                                  department: widget.addressDetails,
+                                  personName: widget.toName,
+                                  title: 'title',
+                                  companyName: widget.toName,
+                                  phoneNumber1: widget.userMobile,
+                                  cellPhone: widget.phoneNumber,
+                                  emailAddress: widget.toEmail)),
+                          thirdParty: null,
+                          shippingDateTime:
+                              "/Date(${shippingDateTime.millisecondsSinceEpoch})/",
+                          dueDate: "/Date(${dueDate.millisecondsSinceEpoch})/",
+                          comments: 'comments',
+                          details: ShipmentDetails(
+                            actualWeight: ActualWeight(
+                                unit: 'KG', value: widget.totalWeight),
+                            descriptionOfGoods: 'items',
+                            goodsOriginCountry: 'AE',
+                            numberOfPieces:
+                                int.parse(widget.totalQuantity.toString()),
+                            productGroup: 'DOM',
+                            productType: 'CDS',
+                            paymentType: 'P',
+                            items: widget.products.map((e) {
+                              return ShipmentItems(
+                                  packageType: 'item',
+                                  quantity: e.cartQty != null
+                                      ? e.cartQty!.toInt()
+                                      : 1,
+                                  weight: ActualWeight(
+                                      unit: 'KG', value: e.weight ?? 0),
+                                  comments: 'comments',
+                                  reference: '',
+                                  commodityCode: 640000,
+                                  goodsDescription: 'goodsDescription',
+                                  countryOfOrigin: 'AE',
+                                  customsValue: const TotalAmount(
+                                      currencyCode: 'AED', value: 0));
+                            }).toList(),
+                          ),
+                          transportType: 0,
+                          pickupGUID: pickupState
+                              .createPickUpResponse.processedPickup.guid),
+                    ],
+                        labelInfo:
+                            const LabelInfo(reportID: 9729, reportType: 'URL'),
+                        clientInfo: const ClientInfo(
+                            source: 24,
+                            accountCountryCode: 'AE',
+                            accountEntity: 'DXB',
+                            accountPin: '906169',
+                            accountNumber: '71923340',
+                            userName: 'netzoon.2023@gmail.com',
+                            password: 'Netzoon@123@aramex',
+                            version: 'v1'),
+                        transaction:
+                            const Transaction(reference1: 'reference1'))));
+              }
+            },
+            child: BlocListener<AramexBloc, AramexState>(
+              bloc: aramexBloc2,
+              listener: (context, shipmentState) {
+                if (shipmentState is CreateShipmentInProgress) {
+                  startLoading();
+                } else if (shipmentState is CreateShipmentInFailue) {
+                  stopLoading();
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text(
@@ -619,264 +738,280 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
                       backgroundColor: AppColor.red,
                     ),
                   );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(
-                      AppLocalizations.of(context).translate('success'),
-                    ),
-                    backgroundColor: Theme.of(context).colorScheme.secondary,
-                  ));
-                  print('asdasddddddddddddddddddddddddddddddd');
-                  orderBloc.add(SaveOrderEvent(
-                      clientId: widget.products[0].owner.id,
-                      products: widget.products
-                          .map((e) => OrderInput(
-                              product: e.id,
-                              amount: e.price.toDouble(),
-                              qty: e.cartQty?.toInt() ?? 1))
-                          .toList(),
-                      orderStatus: 'pending',
-                      grandTotal: widget.totalAmount + widget.deliveryFee,
-                      mobile: widget.userMobile,
-                      serviceFee: widget.serviceFee,
-                      subTotal: widget.subTotal,
-                      shippingAddress:
-                          '${widget.city} - ${widget.addressDetails} - ${widget.floorNum}'));
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return const CongsScreen();
-                  }));
+                } else if (shipmentState is CreateShipmentSuccess) {
+                  stopLoading();
+                  if (shipmentState.createShipmentResponse.hasError == true) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'failure',
+                          style: TextStyle(
+                            color: AppColor.white,
+                          ),
+                        ),
+                        backgroundColor: AppColor.red,
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        AppLocalizations.of(context).translate('success'),
+                      ),
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                    ));
+                    print('asdasddddddddddddddddddddddddddddddd');
+                    // orderBloc.add(SaveOrderEvent(
+                    //     clientId: widget.products[0].owner.id,
+                    //     products: widget.products
+                    //         .map((e) => OrderInput(
+                    //             product: e.id,
+                    //             amount: e.price.toDouble(),
+                    //             qty: e.cartQty?.toInt() ?? 1))
+                    //         .toList(),
+                    //     orderStatus: 'pending',
+                    //     grandTotal: widget.totalAmount + widget.deliveryFee,
+                    //     mobile: widget.userMobile,
+                    //     serviceFee: widget.serviceFee,
+                    //     subTotal: widget.subTotal,
+                    //     shippingAddress:
+                    //         '${widget.city} - ${widget.addressDetails} - ${widget.floorNum}'));
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      return const CongsScreen();
+                    }));
+                  }
                 }
-              }
-            },
-            child: BlocBuilder<CountryBloc, CountryState>(
-              bloc: countryBloc,
-              builder: (context, countryState) {
-                if (countryState is CountryInitial) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              AppLocalizations.of(context)
-                                  .translate('order_total'),
-                              style: TextStyle(
-                                color: AppColor.backgroundColor,
-                                fontSize: 17.sp,
-                                fontWeight: FontWeight.w700,
+              },
+              child: BlocBuilder<CountryBloc, CountryState>(
+                bloc: countryBloc,
+                builder: (context, countryState) {
+                  if (countryState is CountryInitial) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)
+                                    .translate('order_total'),
+                                style: TextStyle(
+                                  color: AppColor.backgroundColor,
+                                  fontSize: 17.sp,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                  style: TextStyle(
-                                    fontSize: 17.sp,
-                                    color: AppColor.backgroundColor,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: widget.totalAmount.toString(),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: getCurrencyFromCountry(
-                                          countryState.selectedCountry,
-                                          context),
-                                      style: TextStyle(
-                                          color: AppColor.backgroundColor,
-                                          fontSize: 10.sp),
-                                    )
-                                  ]),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              AppLocalizations.of(context)
-                                  .translate('service_fee'),
-                              style: TextStyle(
-                                color: AppColor.backgroundColor,
-                                fontSize: 17.sp,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                  style: TextStyle(
-                                    fontSize: 17.sp,
-                                    color: AppColor.backgroundColor,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: widget.serviceFee.toString(),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: getCurrencyFromCountry(
-                                          countryState.selectedCountry,
-                                          context),
-                                      style: TextStyle(
-                                          color: AppColor.backgroundColor,
-                                          fontSize: 10.sp),
-                                    )
-                                  ]),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              AppLocalizations.of(context)
-                                  .translate('delivery_fee'),
-                              style: TextStyle(
-                                color: AppColor.backgroundColor,
-                                fontSize: 17.sp,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                  style: TextStyle(
-                                    fontSize: 17.sp,
-                                    color: AppColor.backgroundColor,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: widget.deliveryFee.toString(),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: getCurrencyFromCountry(
-                                          countryState.selectedCountry,
-                                          context),
-                                      style: TextStyle(
-                                          color: AppColor.backgroundColor,
-                                          fontSize: 10.sp),
-                                    )
-                                  ]),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              AppLocalizations.of(context)
-                                  .translate('total_amount'),
-                              style: TextStyle(
-                                color: AppColor.primaryColor,
-                                fontSize: 17.sp,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                  style: TextStyle(
-                                    fontSize: 17.sp,
-                                    color: AppColor.primaryColor,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text:
-                                          '${widget.totalAmount + widget.deliveryFee + widget.serviceFee}',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: getCurrencyFromCountry(
-                                          countryState.selectedCountry,
-                                          context),
-                                      style: TextStyle(
-                                          color: AppColor.primaryColor,
-                                          fontSize: 10.sp),
-                                    )
-                                  ]),
-                            ),
-                          ],
-                        ),
-                        const Divider(),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Center(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: InkWell(
-                              onTap: () {
-                                double tm = widget.totalAmount +
-                                    widget.deliveryFee +
-                                    widget.serviceFee;
-                                String amount = (tm.toInt() * 100).toString();
-                                makePayment(
-                                  amount: amount,
-                                  currency: getCurrencyFromCountryStripe(
-                                      countryState.selectedCountry, context),
-                                  toName: widget.toName,
-                                  userMobile: widget.userMobile,
-                                  addressDetails: widget.addressDetails,
-                                  city: widget.city,
-                                  floorNum: widget.floorNum,
-                                  from: widget.from,
-                                  grandTotal: widget.grandTotal,
-                                  productsNames: widget.productsNames,
-                                  serviceFee: widget.serviceFee.toString(),
-                                  subTotal: widget.subTotal,
-                                  subject: widget.subject,
-                                  toEmail: widget.toEmail,
-                                );
-                              },
-                              child: Container(
-                                alignment: Alignment.centerRight,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                height: 40.h,
-                                width: 200.w,
-                                color: AppColor.backgroundColor,
-                                child: Center(
-                                  child: Text(
-                                    AppLocalizations.of(context)
-                                        .translate('check_out'),
+                              RichText(
+                                text: TextSpan(
                                     style: TextStyle(
-                                        fontSize: 15.sp, color: AppColor.white),
+                                      fontSize: 17.sp,
+                                      color: AppColor.backgroundColor,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: widget.totalAmount.toString(),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: getCurrencyFromCountry(
+                                            countryState.selectedCountry,
+                                            context),
+                                        style: TextStyle(
+                                            color: AppColor.backgroundColor,
+                                            fontSize: 10.sp),
+                                      )
+                                    ]),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)
+                                    .translate('service_fee'),
+                                style: TextStyle(
+                                  color: AppColor.backgroundColor,
+                                  fontSize: 17.sp,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                    style: TextStyle(
+                                      fontSize: 17.sp,
+                                      color: AppColor.backgroundColor,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: widget.serviceFee.toString(),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: getCurrencyFromCountry(
+                                            countryState.selectedCountry,
+                                            context),
+                                        style: TextStyle(
+                                            color: AppColor.backgroundColor,
+                                            fontSize: 10.sp),
+                                      )
+                                    ]),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)
+                                    .translate('delivery_fee'),
+                                style: TextStyle(
+                                  color: AppColor.backgroundColor,
+                                  fontSize: 17.sp,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                    style: TextStyle(
+                                      fontSize: 17.sp,
+                                      color: AppColor.backgroundColor,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: widget.deliveryFee.toString(),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: getCurrencyFromCountry(
+                                            countryState.selectedCountry,
+                                            context),
+                                        style: TextStyle(
+                                            color: AppColor.backgroundColor,
+                                            fontSize: 10.sp),
+                                      )
+                                    ]),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)
+                                    .translate('total_amount'),
+                                style: TextStyle(
+                                  color: AppColor.primaryColor,
+                                  fontSize: 17.sp,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                    style: TextStyle(
+                                      fontSize: 17.sp,
+                                      color: AppColor.primaryColor,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text:
+                                            '${widget.totalAmount + widget.deliveryFee + widget.serviceFee}',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: getCurrencyFromCountry(
+                                            countryState.selectedCountry,
+                                            context),
+                                        style: TextStyle(
+                                            color: AppColor.primaryColor,
+                                            fontSize: 10.sp),
+                                      )
+                                    ]),
+                              ),
+                            ],
+                          ),
+                          const Divider(),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Center(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: InkWell(
+                                onTap: () {
+                                  double tm = widget.totalAmount +
+                                      widget.deliveryFee +
+                                      widget.serviceFee;
+                                  String amount = (tm.toInt() * 100).toString();
+                                  makePayment(
+                                    amount: amount,
+                                    currency: getCurrencyFromCountryStripe(
+                                        countryState.selectedCountry, context),
+                                    toName: widget.toName,
+                                    userMobile: widget.userMobile,
+                                    addressDetails: widget.addressDetails,
+                                    city: widget.city,
+                                    floorNum: widget.floorNum,
+                                    from: widget.from,
+                                    grandTotal: widget.grandTotal,
+                                    productsNames: widget.productsNames,
+                                    serviceFee: widget.serviceFee.toString(),
+                                    subTotal: widget.subTotal,
+                                    subject: widget.subject,
+                                    toEmail: widget.toEmail,
+                                  );
+                                },
+                                child: Container(
+                                  alignment: Alignment.centerRight,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  height: 40.h,
+                                  width: 200.w,
+                                  color: AppColor.backgroundColor,
+                                  child: Center(
+                                    child: Text(
+                                      AppLocalizations.of(context)
+                                          .translate('check_out'),
+                                      style: TextStyle(
+                                          fontSize: 15.sp,
+                                          color: AppColor.white),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                }
-                return Container();
-              },
+                          )
+                        ],
+                      ),
+                    );
+                  }
+                  return Container();
+                },
+              ),
             ),
           ),
         ),

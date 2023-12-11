@@ -19,6 +19,7 @@ class EditProfileUseCase extends UseCase<String, EditProfileParams> {
       secondeMobile: params.secondeMobile,
       thirdMobile: params.thirdMobile,
       profilePhoto: params.profilePhoto,
+      coverPhoto: params.coverPhoto,
       bio: params.bio,
       description: params.description,
       link: params.link,
@@ -38,6 +39,7 @@ class EditProfileParams {
   final String secondeMobile;
   final String thirdMobile;
   final File? profilePhoto;
+  final File? coverPhoto;
   final String? bio;
   final String? description;
   final String? website;
@@ -53,6 +55,7 @@ class EditProfileParams {
     required this.secondeMobile,
     required this.thirdMobile,
     this.profilePhoto,
+    this.coverPhoto,
     this.bio,
     this.description,
     this.website,

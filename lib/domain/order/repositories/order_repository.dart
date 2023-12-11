@@ -9,7 +9,7 @@ abstract class OrderRepository {
     required final String userId,
   });
 
-  Future<Either<Failure, MyOrder>> saveOrder({
+  Future<Either<Failure, String>> saveOrder({
     required final String userId,
     required final String clientId,
     required final List<OrderInput> products,
