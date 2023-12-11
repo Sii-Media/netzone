@@ -169,17 +169,18 @@ class MyApp extends StatelessWidget {
                   builder: (BuildContext context, Widget? child) {
                     return MaterialApp(
                       debugShowCheckedModeBanner: false,
+
                       locale: local,
                       title: 'First Method',
                       // You can use the library anywhere in the app even in theme
                       theme: ThemeData(
-                        primarySwatch: Colors.blue,
-                        textTheme: Typography.englishLike2018.apply(
-                          fontSizeFactor: 1.sp,
-                          fontFamily: "Cairo",
-                          bodyColor: AppColor.black,
-                        ),
-                      ),
+                          primarySwatch: Colors.blue,
+                          textTheme: Typography.englishLike2018.apply(
+                            fontSizeFactor: 1.sp,
+                            fontFamily: "Cairo",
+                            bodyColor: AppColor.black,
+                          ),
+                          useMaterial3: false),
                       localizationsDelegates: const [
                         AppLocalizations.delegate,
                         GlobalMaterialLocalizations.delegate,
