@@ -53,6 +53,7 @@ class SignUpRequested extends SignUpEvent {
   final int? floorNum;
   final String? locationType;
   final String? contactName;
+  final bool? withAdd;
   const SignUpRequested({
     required this.username,
     required this.contactName,
@@ -95,5 +96,6 @@ class SignUpRequested extends SignUpEvent {
     this.addressDetails,
     this.floorNum,
     this.locationType,
+    this.withAdd,
   });
 }

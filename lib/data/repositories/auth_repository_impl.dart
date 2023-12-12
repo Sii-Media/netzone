@@ -68,9 +68,13 @@ class AuthRepositoryImpl implements AuthRepository {
     int? floorNum,
     String? locationType,
     required String? contactName,
+    bool? withAdd,
+    String? mainAccount,
   }) async {
     try {
       if (await networkInfo.isConnected) {
+        print('aaaaaaaaaaa');
+        print(withAdd);
         // FormData formData;
         // // final user = await authRemoteDataSource.signUp(
         // //     username, email, password, userType, firstMobile, isFreeZoon);
@@ -145,6 +149,12 @@ class AuthRepositoryImpl implements AuthRepository {
         if (locationType != null) {
           formData.fields
               .add(MapEntry('locationType', locationType.toString()));
+        }
+        if (withAdd != null) {
+          formData.fields.add(MapEntry('withAdd', withAdd.toString()));
+        }
+        if (mainAccount != null) {
+          formData.fields.add(MapEntry('mainAccount', mainAccount));
         }
         if (profilePhoto != null) {
           String fileName = 'image.jpg';
@@ -226,12 +236,14 @@ class AuthRepositoryImpl implements AuthRepository {
         }
 
         Response response = await dio
-            .post('https://back.netzoon.com//user/register', data: formData);
+            .post('https://back.netzoon.com/user/register', data: formData);
 
         if (response.statusCode == 201) {
           final UserModel user = UserModel.fromJson(response.data!);
 
-          local.signInUser(user);
+          if (withAdd == null || withAdd == false) {
+            local.signInUser(user);
+          }
 
           return Right(user.toDomain());
         } else {
@@ -241,6 +253,7 @@ class AuthRepositoryImpl implements AuthRepository {
         return Left(OfflineFailure());
       }
     } catch (e) {
+      print(e);
       return Left(CredintialFailure());
     }
   }

@@ -32,8 +32,13 @@ import '../../../injection_container.dart';
 import '../../categories/factories/blocs/factories_bloc/factories_bloc.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key, required this.accountTitle});
+  const SignUpPage({
+    super.key,
+    required this.accountTitle,
+    this.withAdd = true,
+  });
   final String accountTitle;
+  final bool? withAdd;
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -182,6 +187,7 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
         addressDetailsController: addressDetailsController,
         floorNumController: floorNumController,
         countryBloc: countryBloc,
+        withAdd: widget.withAdd,
       ),
     );
   }
@@ -225,6 +231,7 @@ class SignUpWidget extends StatefulWidget {
     required this.addressDetailsController,
     required this.floorNumController,
     required this.countryBloc,
+    this.withAdd,
   });
   final GlobalKey<FormState> formKey;
   final GlobalKey<FormFieldState> emailFormFieldKey;
@@ -261,6 +268,7 @@ class SignUpWidget extends StatefulWidget {
   final SignUpBloc bloc;
   final FactoriesBloc factoriesBloc;
   final CountryBloc countryBloc;
+  final bool? withAdd;
   @override
   State<SignUpWidget> createState() => _SignUpWidgetState();
 }
@@ -2159,6 +2167,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                       widget.floorNumController.text),
                                   locationType: _selectedLocationType,
                                   contactName: widget.contactName.text,
+                                  withAdd: widget.withAdd,
                                 ),
                               );
                             } else {

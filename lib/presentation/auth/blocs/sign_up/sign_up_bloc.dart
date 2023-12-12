@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/auth/entities/user.dart';
+import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/sign_up_use_case.dart';
 import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
@@ -15,9 +16,12 @@ part 'sign_up_state.dart';
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   final SignUpUseCase signUpUseCase;
   final GetCountryUseCase getCountryUseCase;
+  final GetSignedInUserUseCase getSignedInUser;
+
   SignUpBloc({
     required this.signUpUseCase,
     required this.getCountryUseCase,
+    required this.getSignedInUser,
   }) : super(SignUpInitial()) {
     on<SignUpEvent>((event, emit) async {
       if (event is SignUpRequested) {
@@ -26,6 +30,13 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         late String country;
         final countryresult = await getCountryUseCase(NoParams());
         countryresult.fold((l) => null, (r) => country = r ?? 'AE');
+        late User? user;
+        if (event.withAdd == true) {
+          final result = await getSignedInUser.call(NoParams());
+
+          result.fold((l) => null, (r) => user = r);
+        }
+
         final failureOrUser = await signUpUseCase(SignUpUseCaseParams(
           username: event.username,
           email: event.email,
@@ -69,6 +80,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
           floorNum: event.floorNum,
           locationType: event.locationType,
           contactName: event.contactName,
+          withAdd: event.withAdd,
+          mainAccount: event.withAdd == true ? user?.userInfo.email : null,
         ));
 
         emit(failureOrUser.fold(

@@ -17,6 +17,8 @@ class EditProductUseCase extends UseCase<String, EditProductParams> {
       name: params.name,
       description: params.description,
       price: params.price,
+      quantity: params.quantity,
+      weight: params.weight,
       image: params.image,
       video: params.video,
       guarantee: params.guarantee,
@@ -31,6 +33,8 @@ class EditProductParams {
   final String name;
   final String description;
   final double price;
+  final int? quantity;
+  final double? weight;
   final File? image;
   final File? video;
   final bool? guarantee;
@@ -42,6 +46,8 @@ class EditProductParams {
     required this.name,
     required this.description,
     required this.price,
+    this.quantity,
+    this.weight,
     required this.guarantee,
     required this.address,
     required this.image,

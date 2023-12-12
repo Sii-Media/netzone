@@ -269,6 +269,7 @@ Future<void> init() async {
   sl.registerFactory(() => SignUpBloc(
         signUpUseCase: sl(),
         getCountryUseCase: sl(),
+        getSignedInUser: sl(),
       ));
   sl.registerFactory(() => SignInBloc(signInUseCase: sl()));
   sl.registerFactory(() => AdsBlocBloc(
