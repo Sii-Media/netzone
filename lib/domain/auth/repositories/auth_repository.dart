@@ -50,6 +50,8 @@ abstract class AuthRepository {
     int? floorNum,
     String? locationType,
     required String? contactName,
+    bool? withAdd,
+    String? mainAccount,
   });
 
   Future<Either<Failure, User>> signIn({

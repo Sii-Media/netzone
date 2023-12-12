@@ -31,6 +31,8 @@ class _EditProductScreenState extends State<EditProductScreen>
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _madeInController = TextEditingController();
+  final TextEditingController _quantityController = TextEditingController();
+  final TextEditingController _weightController = TextEditingController();
 
   final ImagePicker _picker = ImagePicker();
   late bool _isGuarantee;
@@ -48,6 +50,8 @@ class _EditProductScreenState extends State<EditProductScreen>
     _addressController.text = widget.item.address ?? '';
     _madeInController.text = widget.item.madeIn ?? '';
     _isGuarantee = widget.item.guarantee ?? false;
+    _quantityController.text = widget.item.quantity.toString();
+    _weightController.text = widget.item.weight.toString();
   }
 
   @override
@@ -152,9 +156,10 @@ class _EditProductScreenState extends State<EditProductScreen>
                     style: const TextStyle(
                       color: AppColor.backgroundColor,
                     ),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: 'name',
-                      label: Text('Name'),
+                      label: Text(AppLocalizations.of(context)
+                          .translate('product_name')),
                     ),
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
@@ -172,9 +177,10 @@ class _EditProductScreenState extends State<EditProductScreen>
                     style: const TextStyle(
                       color: AppColor.backgroundColor,
                     ),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: 'price',
-                      label: Text('Price'),
+                      label:
+                          Text(AppLocalizations.of(context).translate('price')),
                     ),
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
@@ -192,11 +198,54 @@ class _EditProductScreenState extends State<EditProductScreen>
                     style: const TextStyle(
                       color: AppColor.backgroundColor,
                     ),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: 'description',
-                      label: Text('Description'),
+                      label: Text(AppLocalizations.of(context)
+                          .translate('description')),
                     ),
                     keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'field_required_message';
+                      }
+
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 25),
+                  TextFormField(
+                    controller: _quantityController,
+                    style: const TextStyle(
+                      color: AppColor.backgroundColor,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: 'quantity',
+                      label: Text(
+                          AppLocalizations.of(context).translate('quantity')),
+                    ),
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.next,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'field_required_message';
+                      }
+
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 25),
+                  TextFormField(
+                    controller: _weightController,
+                    style: const TextStyle(
+                      color: AppColor.backgroundColor,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: 'weight',
+                      label: Text(
+                          AppLocalizations.of(context).translate('weightkg')),
+                    ),
+                    keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
@@ -229,9 +278,10 @@ class _EditProductScreenState extends State<EditProductScreen>
                     style: const TextStyle(
                       color: AppColor.backgroundColor,
                     ),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: 'madeIn',
-                      label: Text('Made in'),
+                      label: Text(
+                          AppLocalizations.of(context).translate('made_in')),
                     ),
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
@@ -301,6 +351,8 @@ class _EditProductScreenState extends State<EditProductScreen>
                           name: _nameController.text,
                           description: _descriptionController.text,
                           price: double.parse(_priceController.text),
+                          quantity: int.parse(_quantityController.text),
+                          weight: double.parse(_weightController.text),
                           image: _updatedImage,
                           address: _addressController.text,
                           guarantee: _isGuarantee,
@@ -319,9 +371,10 @@ class _EditProductScreenState extends State<EditProductScreen>
                           Size.fromWidth(200),
                         ),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          'save_changes',
+                          AppLocalizations.of(context)
+                              .translate('save_changes'),
                         ),
                       ),
                     ),

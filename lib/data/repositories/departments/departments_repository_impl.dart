@@ -176,6 +176,8 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
       required File? image,
       File? video,
       required double price,
+      int? quantity,
+      double? weight,
       bool? guarantee,
       String? address,
       String? madeIn}) async {
@@ -188,6 +190,8 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
           MapEntry('name', name),
           MapEntry('description', description),
           MapEntry('price', price.toString()),
+          MapEntry('quantity', quantity.toString()),
+          MapEntry('weight', weight.toString()),
           MapEntry('guarantee', guarantee.toString()),
           MapEntry('madeIn', madeIn ?? ''),
           MapEntry('address', address ?? ''),

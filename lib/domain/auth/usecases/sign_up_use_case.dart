@@ -55,6 +55,8 @@ class SignUpUseCase extends UseCase<User, SignUpUseCaseParams> {
       floorNum: params.floorNum,
       locationType: params.locationType,
       contactName: params.contactName,
+      mainAccount: params.mainAccount,
+      withAdd: params.withAdd,
     );
   }
 }
@@ -104,6 +106,8 @@ class SignUpUseCaseParams {
   final int? floorNum;
   final String? locationType;
   final String? contactName;
+  final bool? withAdd;
+  final String? mainAccount;
   SignUpUseCaseParams({
     required this.username,
     required this.email,
@@ -147,5 +151,7 @@ class SignUpUseCaseParams {
     this.floorNum,
     this.locationType,
     required this.contactName,
+    this.mainAccount,
+    this.withAdd,
   });
 }

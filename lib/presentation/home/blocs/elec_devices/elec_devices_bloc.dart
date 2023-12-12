@@ -149,6 +149,8 @@ class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
         name: event.name,
         description: event.description,
         price: event.price,
+        quantity: event.quantity,
+        weight: event.weight,
         guarantee: event.guarantee,
         address: event.address,
         image: event.image,

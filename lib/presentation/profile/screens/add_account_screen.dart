@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:netzoon/presentation/auth/screens/user_type.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/profile/blocs/add_account/add_account_bloc.dart';
@@ -72,154 +73,204 @@ class _AddAccountScreenState extends State<AddAccountScreen>
                   ));
                 }
               },
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Text(
-                        AppLocalizations.of(context)
-                            .translate('add_account_text'),
-                        style: TextStyle(
-                            color: AppColor.secondGrey, fontSize: 12.sp),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 25.h,
-                    ),
-                    Text(
-                      AppLocalizations.of(context).translate('username'),
-                      style: const TextStyle(color: AppColor.backgroundColor),
-                    ),
-                    TextFormField(
-                      key: usernameFormFieldKey,
-                      controller: _usernameController,
-                      style: const TextStyle(
-                        color: AppColor.backgroundColor,
-                      ),
-                      decoration: InputDecoration(
-                        // hintText: 'Current Password',
-                        //<-- SEE HERE
-                        // fillColor: Colors.green.withOpacity(0.1),
-                        // floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 8)
-                            .flipped,
-
-                        // suffixIcon: InkWell(
-                        //   onTap: () {
-                        //     setState(() {
-                        //       showPass = !showPass;
-                        //     });
-                        //   },
-                        //   child: showPass
-                        //       ? const Icon(Icons.visibility_off)
-                        //       : const Icon(Icons.visibility),
-                        // ),
-
-                        // border: OutlineInputBorder(
-                        //   borderRadius: BorderRadius.circular(2),
-                        // ),
-                      ),
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'field_required_message';
-                        }
-
-                        return null;
-                      },
-                      // obscureText: showPass,
-                      // textInputAction: widget.textInputAction ?? TextInputAction.done,
-
-                      onChanged: (text) {
-                        usernameFormFieldKey.currentState!.validate();
-                      },
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Text(
-                      AppLocalizations.of(context).translate('password'),
-                      style: const TextStyle(color: AppColor.backgroundColor),
-                    ),
-                    TextFormField(
-                      key: passwordFormFieldKey,
-                      controller: _passwordController,
-                      style: const TextStyle(
-                        color: AppColor.backgroundColor,
-                      ),
-                      decoration: InputDecoration(
-                        // hintText: 'New Password',
-                        contentPadding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 8)
-                            .flipped,
-                        suffixIcon: InkWell(
-                          onTap: () {
-                            setState(() {
-                              showPass = !showPass;
-                            });
-                          },
-                          child: showPass
-                              ? const Icon(Icons.visibility_off)
-                              : const Icon(Icons.visibility),
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Text(
+                          AppLocalizations.of(context)
+                              .translate('add_account_text'),
+                          style: TextStyle(
+                              color: AppColor.secondGrey, fontSize: 12.sp),
                         ),
                       ),
-                      keyboardType: TextInputType.visiblePassword,
-                      textInputAction: TextInputAction.done,
-                      obscureText: showPass,
-                      validator: MultiValidator([
-                        RequiredValidator(
-                            errorText: AppLocalizations.of(context)
-                                .translate('password_required')),
-                        MinLengthValidator(8,
-                            errorText: AppLocalizations.of(context)
-                                .translate('password_condition')),
-                      ]),
-                      onChanged: (text) {
-                        passwordFormFieldKey.currentState!.validate();
-                      },
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (!_formKey.currentState!.validate()) return;
+                      SizedBox(
+                        height: 25.h,
+                      ),
+                      Text(
+                        AppLocalizations.of(context).translate('username'),
+                        style: const TextStyle(color: AppColor.backgroundColor),
+                      ),
+                      TextFormField(
+                        key: usernameFormFieldKey,
+                        controller: _usernameController,
+                        style: const TextStyle(
+                          color: AppColor.backgroundColor,
+                        ),
+                        decoration: InputDecoration(
+                          // hintText: 'Current Password',
+                          //<-- SEE HERE
+                          // fillColor: Colors.green.withOpacity(0.1),
+                          // floatingLabelBehavior: FloatingLabelBehavior.always,
+                          contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 8)
+                              .flipped,
 
-                          addAccountBloc.add(
-                            AddAccountRequestedEvent(
-                              username: _usernameController.text,
-                              password: _passwordController.text,
-                            ),
-                          );
+                          // suffixIcon: InkWell(
+                          //   onTap: () {
+                          //     setState(() {
+                          //       showPass = !showPass;
+                          //     });
+                          //   },
+                          //   child: showPass
+                          //       ? const Icon(Icons.visibility_off)
+                          //       : const Icon(Icons.visibility),
+                          // ),
+
+                          // border: OutlineInputBorder(
+                          //   borderRadius: BorderRadius.circular(2),
+                          // ),
+                        ),
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        validator: (text) {
+                          if (text == null || text.isEmpty) {
+                            return 'field_required_message';
+                          }
+
+                          return null;
                         },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                            AppColor.backgroundColor,
-                          ),
-                          shape:
-                              MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          )),
-                          fixedSize: const MaterialStatePropertyAll(
-                            Size.fromWidth(200),
+                        // obscureText: showPass,
+                        // textInputAction: widget.textInputAction ?? TextInputAction.done,
+
+                        onChanged: (text) {
+                          usernameFormFieldKey.currentState!.validate();
+                        },
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Text(
+                        AppLocalizations.of(context).translate('password'),
+                        style: const TextStyle(color: AppColor.backgroundColor),
+                      ),
+                      TextFormField(
+                        key: passwordFormFieldKey,
+                        controller: _passwordController,
+                        style: const TextStyle(
+                          color: AppColor.backgroundColor,
+                        ),
+                        decoration: InputDecoration(
+                          // hintText: 'New Password',
+                          contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 8)
+                              .flipped,
+                          suffixIcon: InkWell(
+                            onTap: () {
+                              setState(() {
+                                showPass = !showPass;
+                              });
+                            },
+                            child: showPass
+                                ? const Icon(Icons.visibility_off)
+                                : const Icon(Icons.visibility),
                           ),
                         ),
-                        child: Center(
-                          child: Text(
-                            AppLocalizations.of(context)
-                                .translate('add account'),
+                        keyboardType: TextInputType.visiblePassword,
+                        textInputAction: TextInputAction.done,
+                        obscureText: showPass,
+                        validator: MultiValidator([
+                          RequiredValidator(
+                              errorText: AppLocalizations.of(context)
+                                  .translate('password_required')),
+                          MinLengthValidator(8,
+                              errorText: AppLocalizations.of(context)
+                                  .translate('password_condition')),
+                        ]),
+                        onChanged: (text) {
+                          passwordFormFieldKey.currentState!.validate();
+                        },
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (!_formKey.currentState!.validate()) return;
+
+                            addAccountBloc.add(
+                              AddAccountRequestedEvent(
+                                username: _usernameController.text,
+                                password: _passwordController.text,
+                              ),
+                            );
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                              AppColor.backgroundColor,
+                            ),
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            )),
+                            fixedSize: const MaterialStatePropertyAll(
+                              Size.fromWidth(200),
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              AppLocalizations.of(context)
+                                  .translate('add account'),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Center(
+                        child: Text(
+                          'or',
+                          style: TextStyle(
+                              fontSize: 14.sp, color: AppColor.backgroundColor),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) {
+                                return const UserType(
+                                  withAdd: true,
+                                );
+                              },
+                            ));
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                              AppColor.backgroundColor,
+                            ),
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            )),
+                            fixedSize: const MaterialStatePropertyAll(
+                              Size.fromWidth(200),
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              AppLocalizations.of(context)
+                                  .translate('create_new_account'),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 80.h,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             )),

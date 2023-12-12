@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/auth/screens/signup.dart';
-import 'package:netzoon/presentation/auth/screens/signup_screen.dart';
 import 'package:netzoon/presentation/auth/widgets/background_auth_widget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class UserType extends StatefulWidget {
-  const UserType({super.key});
-
+  const UserType({super.key, this.withAdd});
+  final bool? withAdd;
   @override
   State<UserType> createState() => _UserTypeState();
 }
@@ -96,6 +95,7 @@ class _UserTypeState extends State<UserType> {
                         .push(MaterialPageRoute(builder: (context) {
                       return SignUpPage(
                         accountTitle: selectedValue ?? '',
+                        withAdd: widget.withAdd,
                       );
                     }));
                   });

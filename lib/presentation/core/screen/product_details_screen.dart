@@ -700,6 +700,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                             SizedBox(
                                               height: 7.h,
                                             ),
+                                            titleAndInput(
+                                              title:
+                                                  AppLocalizations.of(context)
+                                                      .translate('weightkg'),
+                                              input:
+                                                  state.product.weight == null
+                                                      ? 0.toString()
+                                                      : state.product.weight
+                                                          .toString(),
+                                            ),
+                                            SizedBox(
+                                              height: 7.h,
+                                            ),
                                             state.product.color != null &&
                                                     state.product.color != ''
                                                 ? titleAndInput(

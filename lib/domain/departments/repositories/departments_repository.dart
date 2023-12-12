@@ -65,6 +65,8 @@ abstract class DepartmentRepository {
     required File? image,
     File? video,
     required double price,
+    int? quantity,
+    double? weight,
     bool? guarantee,
     String? address,
     String? madeIn,
