@@ -343,6 +343,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required String secondeMobile,
     required String thirdMobile,
     required File? profilePhoto,
+    File? coverPhoto,
     String? bio,
     String? description,
     String? website,
@@ -388,6 +389,19 @@ class AuthRepositoryImpl implements AuthRepository {
               'profilePhoto',
               await MultipartFile.fromFile(
                 profilePhoto.path,
+                filename: fileName,
+                contentType: MediaType('image', 'jpeg'),
+              ),
+            ),
+          );
+        }
+        if (coverPhoto != null) {
+          String fileName = coverPhoto.path.split('/').last;
+          formData.files.add(
+            MapEntry(
+              'coverPhoto',
+              await MultipartFile.fromFile(
+                coverPhoto.path,
                 filename: fileName,
                 contentType: MediaType('image', 'jpeg'),
               ),

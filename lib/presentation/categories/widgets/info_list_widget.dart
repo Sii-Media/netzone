@@ -225,15 +225,15 @@ Widget infoListWidget({
               //     title: AppLocalizations.of(context).translate('link'),
               //     input: link)
               : const SizedBox(),
-          deliverable != null
-              ? titleAndInput(
-                  title: AppLocalizations.of(context)
-                      .translate('Is there delivery'),
-                  input: deliverable
-                      ? AppLocalizations.of(context).translate('Yes')
-                      : AppLocalizations.of(context).translate('No'),
-                )
-              : const SizedBox(),
+          // deliverable != null
+          //     ? titleAndInput(
+          //         title: AppLocalizations.of(context)
+          //             .translate('Is there delivery'),
+          //         input: deliverable
+          //             ? AppLocalizations.of(context).translate('Yes')
+          //             : AppLocalizations.of(context).translate('No'),
+          //       )
+          //     : const SizedBox(),
           deliveryType != null
               ? titleAndInput(
                   title:

@@ -27,7 +27,7 @@ class _ChatPageScreenState extends State<ChatPageScreen> {
   final appId = 'D27C6110-9DB9-4EBE-AA85-CF39E2AF562E';
   // final userId = 'Wesam';
   // final otherUserId = 'Edmon';
-  List<BaseMessage> _messages = [];
+  List<RootMessage> _messages = [];
   late GroupChannel _channel;
 
   bool _isLoadingMessages = false;

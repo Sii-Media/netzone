@@ -14,6 +14,7 @@ class OnEditProfileEvent extends EditProfileEvent {
   final String secondeMobile;
   final String thirdMobile;
   final File? profilePhoto;
+  final File? coverPhoto;
   final String? bio;
   final String? description;
   final String? website;
@@ -28,6 +29,7 @@ class OnEditProfileEvent extends EditProfileEvent {
     required this.secondeMobile,
     required this.thirdMobile,
     this.profilePhoto,
+    this.coverPhoto,
     this.bio,
     this.description,
     this.website,

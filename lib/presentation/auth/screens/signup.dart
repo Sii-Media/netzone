@@ -691,13 +691,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 TextFormSignupWidget(
                   password: false,
                   isNumber: true,
-                  valid: (val) {
-                    if (val!.isEmpty) {
-                      return AppLocalizations.of(context).translate('required');
-                    }
-
-                    return null;
-                  },
                   myController: widget.numberPhoneTow,
                 ),
                 TextSignup(
@@ -706,13 +699,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 TextFormSignupWidget(
                   password: false,
                   isNumber: true,
-                  valid: (val) {
-                    if (val!.isEmpty) {
-                      return AppLocalizations.of(context).translate('required');
-                    }
-
-                    return null;
-                  },
                   myController: widget.numberPhoneThree,
                 ),
                 // Column(

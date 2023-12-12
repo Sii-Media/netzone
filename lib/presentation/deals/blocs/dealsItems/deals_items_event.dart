@@ -85,3 +85,9 @@ class EditDealEvent extends DealsItemsEvent {
     required this.country,
   });
 }
+
+class GetUserDealsEvent extends DealsItemsEvent {
+  final String userId;
+
+  const GetUserDealsEvent({required this.userId});
+}

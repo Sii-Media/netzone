@@ -6,12 +6,12 @@ import '../entities/my_order.dart';
 import '../entities/order_input.dart';
 import '../repositories/order_repository.dart';
 
-class SaveOrderUseCase extends UseCase<MyOrder, SaveOrderParams> {
+class SaveOrderUseCase extends UseCase<String, SaveOrderParams> {
   final OrderRepository orderRepository;
 
   SaveOrderUseCase({required this.orderRepository});
   @override
-  Future<Either<Failure, MyOrder>> call(SaveOrderParams params) {
+  Future<Either<Failure, String>> call(SaveOrderParams params) {
     return orderRepository.saveOrder(
       userId: params.userId,
       clientId: params.clientId,

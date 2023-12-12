@@ -12,6 +12,7 @@ import 'package:netzoon/domain/deals/usecases/edit_deal_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_all_deals_items_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_deal_by_id_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_deals_items_by_cat_use_case.dart';
+import 'package:netzoon/domain/deals/usecases/get_user_deals_use_case.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 
 import '../../../../domain/auth/entities/user.dart';
@@ -29,6 +30,7 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
   final GetCountryUseCase getCountryUseCase;
   final EditDealUseCase editDealUseCase;
   final DeleteDealUseCase deleteDealUseCase;
+  final GetUserDealsUseCase getUserDealsUseCase;
   DealsItemsBloc({
     required this.getSignedInUser,
     required this.addDealUseCase,
@@ -38,6 +40,7 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
     required this.getCountryUseCase,
     required this.editDealUseCase,
     required this.deleteDealUseCase,
+    required this.getUserDealsUseCase,
   }) : super(DealsItemsInitial()) {
     on<DealsItemsByCatEvent>((event, emit) async {
       emit(DealsItemsInProgress());
@@ -152,6 +155,14 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
           (message) => DeleteDealSuccess(message: message),
         ),
       );
+    });
+    on<GetUserDealsEvent>((event, emit) async {
+      emit(GetUserDealsInProgress());
+
+      final deals = await getUserDealsUseCase(event.userId);
+      emit(deals.fold(
+          (l) => GetUserDealsFailure(message: mapFailureToString(l)),
+          (r) => GetUserDealsSuccess(deals: r)));
     });
   }
 }

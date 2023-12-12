@@ -18,7 +18,7 @@ class SaveOrderFailure extends OrderState {
 }
 
 class SaveOrderSuccess extends OrderState {
-  final MyOrder order;
+  final String order;
 
   const SaveOrderSuccess({required this.order});
 }

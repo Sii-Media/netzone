@@ -214,4 +214,19 @@ class DealsRepositoryImpl implements DealsRepository {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, List<DealsItems>>> getUserDeals(
+      {required String userId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final result = await dealsRemoteDataSource.getUserDeals(userId);
+        return Right(result.map((e) => e.toDomain()).toList());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
 }

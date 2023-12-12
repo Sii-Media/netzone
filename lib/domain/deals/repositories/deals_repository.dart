@@ -22,6 +22,9 @@ abstract class DealsRepository {
     int? maxPrice,
   });
 
+  Future<Either<Failure, List<DealsItems>>> getUserDeals(
+      {required String userId});
+
   Future<Either<Failure, String>> addDeal({
     required final String owner,
     required final String name,

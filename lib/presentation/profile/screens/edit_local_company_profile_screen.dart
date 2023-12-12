@@ -612,6 +612,7 @@ class _EditLocalCompanyprofileScreenState
                               secondeMobile: _secondeMobileController.text,
                               thirdMobile: _thirdMobileController.text,
                               profilePhoto: _updatedImage,
+                              coverPhoto: _updatedCoverPhoto,
                               bio: _bioController.text,
                               description: _descController.text,
                               link: _linkController.text,

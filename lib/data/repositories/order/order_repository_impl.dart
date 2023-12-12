@@ -35,7 +35,7 @@ class OrderRepositoryImpl implements OrderRepository {
   }
 
   @override
-  Future<Either<Failure, MyOrder>> saveOrder({
+  Future<Either<Failure, String>> saveOrder({
     required String userId,
     required String clientId,
     required List<OrderInput> products,
@@ -73,15 +73,9 @@ class OrderRepositoryImpl implements OrderRepository {
         if (response.statusCode == 200) {
           // Request was successful
           print("Order saved successfully!");
-          final MyOrder order = MyOrder(
-            id: response.data['_id'],
-            userId: response.data['userId'],
-            clientId: response.data['clientId'],
-            products: response.data['products'],
-            grandTotal: grandTotal,
-          );
-          print(response.data);
-          return Right(order);
+
+          print(response);
+          return Right(response.data);
         } else {
           print("Request failed with status code: ${response.statusCode}");
           return Left(response.data);

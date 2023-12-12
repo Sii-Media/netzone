@@ -101,6 +101,7 @@ abstract class AuthRepository {
     required String thirdMobile,
     required File? profilePhoto,
     required String contactName,
+    File? coverPhoto,
     String? bio,
     String? description,
     String? website,

@@ -6,6 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/auth/entities/user_info.dart';
+import 'package:netzoon/presentation/advertising/advertising.dart';
+import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
+import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
+import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dart';
+import 'package:netzoon/presentation/deals/view_all_deals.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,7 +43,8 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
   final userBloc = sl<GetUserBloc>();
   final rateBloc = sl<GetUserBloc>();
   final visitorBloc = sl<GetUserBloc>();
-
+  final adsBloc = sl<AdsBlocBloc>();
+  final dealsBloc = sl<DealsItemsBloc>();
   final productBloc = sl<GetUserBloc>();
   final myProductBloc = sl<GetUserBloc>();
   final authBloc = sl<AuthBloc>();
@@ -53,7 +59,8 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
     countryBloc = BlocProvider.of<CountryBloc>(context);
     countryBloc.add(GetCountryEvent());
     visitorBloc.add(AddVisitorEvent(userId: widget.user.id));
-
+    adsBloc.add(GetUserAdsEvent(userId: widget.user.id));
+    dealsBloc.add(GetUserDealsEvent(userId: widget.user.id));
     checkFollowStatus();
     super.initState();
   }
@@ -179,38 +186,38 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    width: double.infinity,
-                                    height: 140.h,
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                        bottom: BorderSide(
-                                          color: AppColor.secondGrey
-                                              .withOpacity(0.3),
-                                          width: 1,
-                                        ),
-                                      ),
-                                    ),
-                                    child: CachedNetworkImage(
-                                      imageUrl: state.userInfo.coverPhoto ??
-                                          'https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000',
-                                      fit: BoxFit.cover,
-                                      progressIndicatorBuilder:
-                                          (context, url, downloadProgress) =>
-                                              Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 70.0, vertical: 50),
-                                        child: CircularProgressIndicator(
-                                          value: downloadProgress.progress,
-                                          color: AppColor.backgroundColor,
+                                  // Container(
+                                  //   width: double.infinity,
+                                  //   height: 140.h,
+                                  //   decoration: BoxDecoration(
+                                  //     border: Border(
+                                  //       bottom: BorderSide(
+                                  //         color: AppColor.secondGrey
+                                  //             .withOpacity(0.3),
+                                  //         width: 1,
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  //   child: CachedNetworkImage(
+                                  //     imageUrl: state.userInfo.coverPhoto ??
+                                  //         'https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000',
+                                  //     fit: BoxFit.cover,
+                                  //     progressIndicatorBuilder:
+                                  //         (context, url, downloadProgress) =>
+                                  //             Padding(
+                                  //       padding: const EdgeInsets.symmetric(
+                                  //           horizontal: 70.0, vertical: 50),
+                                  //       child: CircularProgressIndicator(
+                                  //         value: downloadProgress.progress,
+                                  //         color: AppColor.backgroundColor,
 
-                                          // strokeWidth: 10,
-                                        ),
-                                      ),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                    ),
-                                  ),
+                                  //         // strokeWidth: 10,
+                                  //       ),
+                                  //     ),
+                                  //     errorWidget: (context, url, error) =>
+                                  //         const Icon(Icons.error),
+                                  //   ),
+                                  // ),
                                   SizedBox(
                                     height: 15.h,
                                   ),
@@ -236,8 +243,8 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                               imageUrl:
                                                   state.userInfo.profilePhoto ??
                                                       '',
-                                              width: 100.r,
-                                              height: 100.r,
+                                              width: 90.r,
+                                              height: 90.r,
                                               fit: BoxFit.fill,
                                               progressIndicatorBuilder:
                                                   (context, url,
@@ -608,18 +615,6 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                 controller: tabController,
                                 tabs: [
                                   BlocBuilder<GetUserBloc, GetUserState>(
-                                    bloc: productBloc,
-                                    builder: (context, productState) {
-                                      return Text(
-                                        '${AppLocalizations.of(context).translate('my_products')} (${productState is GetUserProductsSuccess ? productState.products.length : 0})',
-                                        style: TextStyle(
-                                          color: AppColor.black,
-                                          fontSize: 10.sp,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  BlocBuilder<GetUserBloc, GetUserState>(
                                     bloc: myProductBloc,
                                     builder: (context, myProdState) {
                                       return Text(
@@ -633,7 +628,15 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                   ),
                                   Text(
                                     AppLocalizations.of(context)
-                                        .translate('my_info'),
+                                        .translate('my_ads'),
+                                    style: TextStyle(
+                                      color: AppColor.black,
+                                      fontSize: 9.sp,
+                                    ),
+                                  ),
+                                  Text(
+                                    AppLocalizations.of(context)
+                                        .translate('deals'),
                                     style: TextStyle(
                                       color: AppColor.black,
                                       fontSize: 10.sp,
@@ -648,215 +651,215 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                 child: TabBarView(
                                   controller: tabController,
                                   children: [
-                                    RefreshIndicator(
-                                      onRefresh: () async {
-                                        productBloc.add(
-                                            GetUserProductsByIdEvent(
-                                                id: widget.user.id));
-                                      },
-                                      color: AppColor.white,
-                                      backgroundColor: AppColor.backgroundColor,
-                                      child: BlocBuilder<GetUserBloc,
-                                          GetUserState>(
-                                        bloc: productBloc,
-                                        builder: (context, state) {
-                                          if (state
-                                              is GetUserProductsInProgress) {
-                                            return const Center(
-                                              child: CircularProgressIndicator(
-                                                color: AppColor.backgroundColor,
-                                              ),
-                                            );
-                                          } else if (state
-                                              is GetUserProductsFailure) {
-                                            final failure = state.message;
-                                            return Center(
-                                              child: Text(
-                                                failure,
-                                                style: const TextStyle(
-                                                  color: Colors.red,
-                                                ),
-                                              ),
-                                            );
-                                          } else if (state
-                                              is GetUserProductsSuccess) {
-                                            return state.products.isNotEmpty
-                                                ? Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Column(
-                                                      children: [
-                                                        Expanded(
-                                                          child:
-                                                              GridView.builder(
-                                                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                                                crossAxisCount:
-                                                                    3,
-                                                                childAspectRatio:
-                                                                    0.95,
-                                                                crossAxisSpacing:
-                                                                    10.w,
-                                                                mainAxisSpacing:
-                                                                    10.h),
-                                                            shrinkWrap: true,
-                                                            physics:
-                                                                const BouncingScrollPhysics(),
-                                                            itemCount: state
-                                                                .products
-                                                                .length,
-                                                            itemBuilder:
-                                                                (context,
-                                                                    index) {
-                                                              return Container(
-                                                                margin: const EdgeInsets
-                                                                    .symmetric(
-                                                                    vertical:
-                                                                        8),
-                                                                decoration: BoxDecoration(
-                                                                    color: AppColor
-                                                                        .white,
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            20),
-                                                                    boxShadow: [
-                                                                      BoxShadow(
-                                                                        color: AppColor
-                                                                            .secondGrey
-                                                                            .withOpacity(0.5),
-                                                                        blurRadius:
-                                                                            10,
-                                                                        spreadRadius:
-                                                                            2,
-                                                                        offset: const Offset(
-                                                                            0,
-                                                                            3),
-                                                                      ),
-                                                                    ]),
-                                                                child:
-                                                                    ClipRRect(
-                                                                  borderRadius:
-                                                                      const BorderRadius
-                                                                          .all(
-                                                                          Radius.circular(
-                                                                              20)),
-                                                                  child:
-                                                                      GestureDetector(
-                                                                    onTap: () {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .push(MaterialPageRoute(builder:
-                                                                              (context) {
-                                                                        return ProductDetailScreen(
-                                                                            item:
-                                                                                state.products[index].id);
-                                                                      }));
-                                                                    },
-                                                                    child:
-                                                                        Column(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceBetween,
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        CachedNetworkImage(
-                                                                          imageUrl: state
-                                                                              .products[index]
-                                                                              .imageUrl,
-                                                                          height:
-                                                                              65.h,
-                                                                          width:
-                                                                              160.w,
-                                                                          fit: BoxFit
-                                                                              .contain,
-                                                                          progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                                                              Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.symmetric(horizontal: 70.0, vertical: 50),
-                                                                            child:
-                                                                                CircularProgressIndicator(
-                                                                              value: downloadProgress.progress,
-                                                                              color: AppColor.backgroundColor,
+                                    // RefreshIndicator(
+                                    //   onRefresh: () async {
+                                    //     productBloc.add(
+                                    //         GetUserProductsByIdEvent(
+                                    //             id: widget.user.id));
+                                    //   },
+                                    //   color: AppColor.white,
+                                    //   backgroundColor: AppColor.backgroundColor,
+                                    //   child: BlocBuilder<GetUserBloc,
+                                    //       GetUserState>(
+                                    //     bloc: productBloc,
+                                    //     builder: (context, state) {
+                                    //       if (state
+                                    //           is GetUserProductsInProgress) {
+                                    //         return const Center(
+                                    //           child: CircularProgressIndicator(
+                                    //             color: AppColor.backgroundColor,
+                                    //           ),
+                                    //         );
+                                    //       } else if (state
+                                    //           is GetUserProductsFailure) {
+                                    //         final failure = state.message;
+                                    //         return Center(
+                                    //           child: Text(
+                                    //             failure,
+                                    //             style: const TextStyle(
+                                    //               color: Colors.red,
+                                    //             ),
+                                    //           ),
+                                    //         );
+                                    //       } else if (state
+                                    //           is GetUserProductsSuccess) {
+                                    //         return state.products.isNotEmpty
+                                    //             ? Padding(
+                                    //                 padding:
+                                    //                     const EdgeInsets.all(
+                                    //                         8.0),
+                                    //                 child: Column(
+                                    //                   children: [
+                                    //                     Expanded(
+                                    //                       child:
+                                    //                           GridView.builder(
+                                    //                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                    //                             crossAxisCount:
+                                    //                                 3,
+                                    //                             childAspectRatio:
+                                    //                                 0.95,
+                                    //                             crossAxisSpacing:
+                                    //                                 10.w,
+                                    //                             mainAxisSpacing:
+                                    //                                 10.h),
+                                    //                         shrinkWrap: true,
+                                    //                         physics:
+                                    //                             const BouncingScrollPhysics(),
+                                    //                         itemCount: state
+                                    //                             .products
+                                    //                             .length,
+                                    //                         itemBuilder:
+                                    //                             (context,
+                                    //                                 index) {
+                                    //                           return Container(
+                                    //                             margin: const EdgeInsets
+                                    //                                 .symmetric(
+                                    //                                 vertical:
+                                    //                                     8),
+                                    //                             decoration: BoxDecoration(
+                                    //                                 color: AppColor
+                                    //                                     .white,
+                                    //                                 borderRadius:
+                                    //                                     BorderRadius.circular(
+                                    //                                         20),
+                                    //                                 boxShadow: [
+                                    //                                   BoxShadow(
+                                    //                                     color: AppColor
+                                    //                                         .secondGrey
+                                    //                                         .withOpacity(0.5),
+                                    //                                     blurRadius:
+                                    //                                         10,
+                                    //                                     spreadRadius:
+                                    //                                         2,
+                                    //                                     offset: const Offset(
+                                    //                                         0,
+                                    //                                         3),
+                                    //                                   ),
+                                    //                                 ]),
+                                    //                             child:
+                                    //                                 ClipRRect(
+                                    //                               borderRadius:
+                                    //                                   const BorderRadius
+                                    //                                       .all(
+                                    //                                       Radius.circular(
+                                    //                                           20)),
+                                    //                               child:
+                                    //                                   GestureDetector(
+                                    //                                 onTap: () {
+                                    //                                   Navigator.of(
+                                    //                                           context)
+                                    //                                       .push(MaterialPageRoute(builder:
+                                    //                                           (context) {
+                                    //                                     return ProductDetailScreen(
+                                    //                                         item:
+                                    //                                             state.products[index].id);
+                                    //                                   }));
+                                    //                                 },
+                                    //                                 child:
+                                    //                                     Column(
+                                    //                                   mainAxisAlignment:
+                                    //                                       MainAxisAlignment
+                                    //                                           .spaceBetween,
+                                    //                                   crossAxisAlignment:
+                                    //                                       CrossAxisAlignment
+                                    //                                           .center,
+                                    //                                   children: [
+                                    //                                     CachedNetworkImage(
+                                    //                                       imageUrl: state
+                                    //                                           .products[index]
+                                    //                                           .imageUrl,
+                                    //                                       height:
+                                    //                                           65.h,
+                                    //                                       width:
+                                    //                                           160.w,
+                                    //                                       fit: BoxFit
+                                    //                                           .contain,
+                                    //                                       progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                    //                                           Padding(
+                                    //                                         padding:
+                                    //                                             const EdgeInsets.symmetric(horizontal: 70.0, vertical: 50),
+                                    //                                         child:
+                                    //                                             CircularProgressIndicator(
+                                    //                                           value: downloadProgress.progress,
+                                    //                                           color: AppColor.backgroundColor,
 
-                                                                              // strokeWidth: 10,
-                                                                            ),
-                                                                          ),
-                                                                          errorWidget: (context, url, error) =>
-                                                                              const Icon(Icons.error),
-                                                                        ),
-                                                                        Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .only(
-                                                                              right: 9.0,
-                                                                              left: 9.0,
-                                                                              bottom: 8.0),
-                                                                          child:
-                                                                              Row(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.spaceBetween,
-                                                                            children: [
-                                                                              Text(
-                                                                                state.products[index].name,
-                                                                                style: TextStyle(
-                                                                                  color: AppColor.backgroundColor,
-                                                                                  fontSize: 11.sp,
-                                                                                ),
-                                                                              ),
-                                                                              // Text(
-                                                                              //   '${state.products[index].price} \$',
-                                                                              //   style: TextStyle(
-                                                                              //     color: AppColor.colorTwo,
-                                                                              //     fontSize: 11.sp,
-                                                                              //   ),
-                                                                              // ),
-                                                                              RichText(
-                                                                                text: TextSpan(style: TextStyle(fontSize: 12.sp, color: AppColor.backgroundColor), children: <TextSpan>[
-                                                                                  TextSpan(
-                                                                                    text: '${state.products[index].price}',
-                                                                                    style: const TextStyle(
-                                                                                      fontWeight: FontWeight.w700,
-                                                                                    ),
-                                                                                  ),
-                                                                                  TextSpan(
-                                                                                    text: getCurrencyFromCountry(
-                                                                                      countryState.selectedCountry,
-                                                                                      context,
-                                                                                    ),
-                                                                                    style: TextStyle(color: AppColor.backgroundColor, fontSize: 10.sp),
-                                                                                  )
-                                                                                ]),
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                : Center(
-                                                    child: Text(
-                                                        AppLocalizations.of(
-                                                                context)
-                                                            .translate(
-                                                                'no_items'),
-                                                        style: const TextStyle(
-                                                            color: AppColor
-                                                                .backgroundColor)),
-                                                  );
-                                          }
-                                          return Container();
-                                        },
-                                      ),
-                                    ),
+                                    //                                           // strokeWidth: 10,
+                                    //                                         ),
+                                    //                                       ),
+                                    //                                       errorWidget: (context, url, error) =>
+                                    //                                           const Icon(Icons.error),
+                                    //                                     ),
+                                    //                                     Padding(
+                                    //                                       padding: const EdgeInsets
+                                    //                                           .only(
+                                    //                                           right: 9.0,
+                                    //                                           left: 9.0,
+                                    //                                           bottom: 8.0),
+                                    //                                       child:
+                                    //                                           Row(
+                                    //                                         mainAxisAlignment:
+                                    //                                             MainAxisAlignment.spaceBetween,
+                                    //                                         children: [
+                                    //                                           Text(
+                                    //                                             state.products[index].name,
+                                    //                                             style: TextStyle(
+                                    //                                               color: AppColor.backgroundColor,
+                                    //                                               fontSize: 11.sp,
+                                    //                                             ),
+                                    //                                           ),
+                                    //                                           // Text(
+                                    //                                           //   '${state.products[index].price} \$',
+                                    //                                           //   style: TextStyle(
+                                    //                                           //     color: AppColor.colorTwo,
+                                    //                                           //     fontSize: 11.sp,
+                                    //                                           //   ),
+                                    //                                           // ),
+                                    //                                           RichText(
+                                    //                                             text: TextSpan(style: TextStyle(fontSize: 12.sp, color: AppColor.backgroundColor), children: <TextSpan>[
+                                    //                                               TextSpan(
+                                    //                                                 text: '${state.products[index].price}',
+                                    //                                                 style: const TextStyle(
+                                    //                                                   fontWeight: FontWeight.w700,
+                                    //                                                 ),
+                                    //                                               ),
+                                    //                                               TextSpan(
+                                    //                                                 text: getCurrencyFromCountry(
+                                    //                                                   countryState.selectedCountry,
+                                    //                                                   context,
+                                    //                                                 ),
+                                    //                                                 style: TextStyle(color: AppColor.backgroundColor, fontSize: 10.sp),
+                                    //                                               )
+                                    //                                             ]),
+                                    //                                           ),
+                                    //                                         ],
+                                    //                                       ),
+                                    //                                     ),
+                                    //                                   ],
+                                    //                                 ),
+                                    //                               ),
+                                    //                             ),
+                                    //                           );
+                                    //                         },
+                                    //                       ),
+                                    //                     ),
+                                    //                   ],
+                                    //                 ),
+                                    //               )
+                                    //             : Center(
+                                    //                 child: Text(
+                                    //                     AppLocalizations.of(
+                                    //                             context)
+                                    //                         .translate(
+                                    //                             'no_items'),
+                                    //                     style: const TextStyle(
+                                    //                         color: AppColor
+                                    //                             .backgroundColor)),
+                                    //               );
+                                    //       }
+                                    //       return Container();
+                                    //     },
+                                    //   ),
+                                    // ),
                                     RefreshIndicator(
                                       onRefresh: () async {
                                         myProductBloc.add(
@@ -903,11 +906,11 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                                 crossAxisCount:
                                                                     3,
                                                                 childAspectRatio:
-                                                                    0.95,
+                                                                    0.93,
                                                                 crossAxisSpacing:
-                                                                    10.w,
+                                                                    10.r,
                                                                 mainAxisSpacing:
-                                                                    10.h),
+                                                                    10.r),
                                                             shrinkWrap: true,
                                                             physics:
                                                                 const BouncingScrollPhysics(),
@@ -1070,50 +1073,144 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                         },
                                       ),
                                     ),
-                                    ListView(
-                                      children: [
-                                        Column(
-                                          children: [
-                                            titleAndInput(
-                                                title:
-                                                    AppLocalizations.of(context)
-                                                        .translate('username'),
-                                                input:
-                                                    state.userInfo.username ??
-                                                        ''),
-                                            titleAndInput(
-                                                title:
-                                                    AppLocalizations.of(context)
-                                                        .translate('email'),
-                                                input:
-                                                    state.userInfo.email ?? ''),
-                                            titleAndInput(
-                                                title:
-                                                    AppLocalizations.of(context)
-                                                        .translate('mobile'),
-                                                input: state
-                                                        .userInfo.firstMobile ??
-                                                    ''),
-                                            state.userInfo.bio != null
-                                                ? titleAndInput(
-                                                    title: AppLocalizations.of(
-                                                            context)
-                                                        .translate('Bio'),
-                                                    input: state.userInfo.bio ??
-                                                        '')
-                                                : const SizedBox(),
-                                            // titleAndInput(
-                                            //   title: AppLocalizations.of(context)
-                                            //       .translate('Is there delivery'),
-                                            //   input: state.userInfo.deliverable!
-                                            //       ? AppLocalizations.of(context)
-                                            //           .translate('Yes')
-                                            //       : AppLocalizations.of(context)
-                                            //           .translate('No'),
-                                            // ),
-                                          ],
-                                        ),
-                                      ],
+                                    BlocBuilder<AdsBlocBloc, AdsBlocState>(
+                                      bloc: adsBloc,
+                                      builder: (context, state) {
+                                        if (state is AdsBlocInProgress) {
+                                          return SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height -
+                                                120.h,
+                                            child: const Center(
+                                              child: CircularProgressIndicator(
+                                                color: AppColor.backgroundColor,
+                                              ),
+                                            ),
+                                          );
+                                        } else if (state is AdsBlocFailure) {
+                                          final failure = state.message;
+                                          return FailureWidget(
+                                              failure: failure,
+                                              onPressed: () {
+                                                adsBloc.add(GetUserAdsEvent(
+                                                    userId: widget.user.id));
+                                              });
+                                        } else if (state is AdsBlocSuccess) {
+                                          return state.ads.isEmpty
+                                              ? Text(
+                                                  AppLocalizations.of(context)
+                                                      .translate('no_items'),
+                                                  style: TextStyle(
+                                                    color: AppColor
+                                                        .backgroundColor,
+                                                    fontSize: 22.sp,
+                                                  ),
+                                                )
+                                              : ListView.builder(
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      const BouncingScrollPhysics(),
+                                                  itemCount: state.ads.length,
+                                                  scrollDirection:
+                                                      Axis.vertical,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      height: 240.h,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 8),
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                      .circular(
+                                                                          20)
+                                                                  .w),
+                                                      child: Advertising(
+                                                          advertisment:
+                                                              state.ads[index]),
+                                                    );
+                                                  },
+                                                );
+                                        }
+                                        return Container();
+                                      },
+                                    ),
+                                    BlocBuilder<DealsItemsBloc,
+                                        DealsItemsState>(
+                                      bloc: dealsBloc,
+                                      builder: (context, dealState) {
+                                        if (dealState
+                                            is GetUserDealsInProgress) {
+                                          return SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height -
+                                                120.h,
+                                            child: const Center(
+                                              child: CircularProgressIndicator(
+                                                color: AppColor.backgroundColor,
+                                              ),
+                                            ),
+                                          );
+                                        } else if (dealState
+                                            is GetUserDealsFailure) {
+                                          return FailureWidget(
+                                              failure: dealState.message,
+                                              onPressed: () {
+                                                adsBloc.add(GetUserAdsEvent(
+                                                    userId: widget.user.id));
+                                              });
+                                        } else if (dealState
+                                            is GetUserDealsSuccess) {
+                                          return dealState.deals.isEmpty
+                                              ? Text(
+                                                  AppLocalizations.of(context)
+                                                      .translate('no_items'),
+                                                  style: TextStyle(
+                                                    color: AppColor
+                                                        .backgroundColor,
+                                                    fontSize: 22.sp,
+                                                  ),
+                                                )
+                                              : ListView.builder(
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      const BouncingScrollPhysics(),
+                                                  itemCount:
+                                                      dealState.deals.length,
+                                                  scrollDirection:
+                                                      Axis.vertical,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 5),
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      20)),
+                                                      child: Deals(
+                                                        dealsInfo: dealState
+                                                            .deals[index],
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                        }
+                                        return Container();
+                                      },
                                     ),
                                   ],
                                 ),
