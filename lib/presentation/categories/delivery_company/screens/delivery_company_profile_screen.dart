@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/auth/entities/user_info.dart';
+import 'package:netzoon/presentation/core/helpers/share_image_function.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../data/core/constants/constants.dart';
@@ -23,9 +24,8 @@ import '../../widgets/info_list_widget.dart';
 import '../blocs/delivery_service/delivery_service_bloc.dart';
 
 class DeliveryCompanyProfileScreen extends StatefulWidget {
-  final UserInfo deliveryCompany;
-  const DeliveryCompanyProfileScreen(
-      {super.key, required this.deliveryCompany});
+  final String id;
+  const DeliveryCompanyProfileScreen({super.key, required this.id});
 
   @override
   State<DeliveryCompanyProfileScreen> createState() =>
@@ -45,20 +45,19 @@ class _DeliveryCompanyProfileScreenState
   @override
   void initState() {
     authBloc.add(AuthCheckRequested());
-    userBloc.add(GetUserByIdEvent(userId: widget.deliveryCompany.id));
+    userBloc.add(GetUserByIdEvent(userId: widget.id));
 
     checkFollowStatus();
     countryBloc = BlocProvider.of<CountryBloc>(context);
     countryBloc.add(GetCountryEvent());
-    deliveryBloc
-        .add(GetDeliveryCompanyServicesEvent(id: widget.deliveryCompany.id));
-    visitorBloc.add(AddVisitorEvent(userId: widget.deliveryCompany.id));
+    deliveryBloc.add(GetDeliveryCompanyServicesEvent(id: widget.id));
+    visitorBloc.add(AddVisitorEvent(userId: widget.id));
 
     super.initState();
   }
 
   void checkFollowStatus() async {
-    bool followStatus = await isFollow(widget.deliveryCompany.id);
+    bool followStatus = await isFollow(widget.id);
     setState(() {
       isFollowing = followStatus;
     });
@@ -126,9 +125,14 @@ class _DeliveryCompanyProfileScreenState
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 70.h,
-        title: Text(
-          widget.deliveryCompany.username ?? '',
-          style: const TextStyle(color: AppColor.backgroundColor),
+        title: BlocBuilder<GetUserBloc, GetUserState>(
+          bloc: userBloc,
+          builder: (context, state) {
+            return Text(
+              state is GetUserSuccess ? state.userInfo.username ?? '' : '',
+              style: const TextStyle(color: AppColor.backgroundColor),
+            );
+          },
         ),
         backgroundColor: AppColor.white,
         leading: GestureDetector(
@@ -142,16 +146,30 @@ class _DeliveryCompanyProfileScreenState
           ),
         ),
         actions: [
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0),
-              child: IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.share,
-                  color: AppColor.backgroundColor,
-                  size: 22.sp,
-                ),
-              )),
+          BlocBuilder<GetUserBloc, GetUserState>(
+            bloc: userBloc,
+            builder: (context, ssstate) {
+              return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: IconButton(
+                    onPressed: () async {
+                      ssstate is GetUserSuccess
+                          ? await shareImageWithDescription(
+                              imageUrl: ssstate.userInfo.profilePhoto ?? '',
+                              description:
+                                  'https://netzoon.com/home/catagories/delivery_companies/${ssstate.userInfo.id}',
+                              subject: ssstate.userInfo.username,
+                            )
+                          : null;
+                    },
+                    icon: Icon(
+                      Icons.share,
+                      color: AppColor.backgroundColor,
+                      size: 22.sp,
+                    ),
+                  ));
+            },
+          ),
         ],
       ),
       body: BlocListener<GetUserBloc, GetUserState>(
@@ -186,7 +204,7 @@ class _DeliveryCompanyProfileScreenState
         },
         child: RefreshIndicator(
           onRefresh: () async {
-            userBloc.add(GetUserByIdEvent(userId: widget.deliveryCompany.id));
+            userBloc.add(GetUserByIdEvent(userId: widget.id));
           },
           backgroundColor: AppColor.backgroundColor,
           color: AppColor.white,
@@ -234,8 +252,7 @@ class _DeliveryCompanyProfileScreenState
                                       ),
                                     ),
                                     child: CachedNetworkImage(
-                                      imageUrl: widget
-                                              .deliveryCompany.coverPhoto ??
+                                      imageUrl: state.userInfo.coverPhoto ??
                                           'https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000',
                                       fit: BoxFit.contain,
                                       progressIndicatorBuilder:
@@ -276,9 +293,9 @@ class _DeliveryCompanyProfileScreenState
                                                   BorderRadius.circular(100),
                                             ),
                                             child: CachedNetworkImage(
-                                              imageUrl: widget.deliveryCompany
-                                                      .profilePhoto ??
-                                                  '',
+                                              imageUrl:
+                                                  state.userInfo.profilePhoto ??
+                                                      '',
                                               width: 100,
                                               height: 100,
                                               fit: BoxFit.fill,
@@ -327,8 +344,7 @@ class _DeliveryCompanyProfileScreenState
                                                 children: [
                                                   Expanded(
                                                     child: Text(
-                                                      widget.deliveryCompany
-                                                              .username ??
+                                                      state.userInfo.username ??
                                                           '',
                                                       style: TextStyle(
                                                         color: AppColor.black,
@@ -401,7 +417,6 @@ class _DeliveryCompanyProfileScreenState
                                                                 ToggleFollowEvent(
                                                                     otherUserId:
                                                                         widget
-                                                                            .deliveryCompany
                                                                             .id));
                                                           },
                                                         );
@@ -412,11 +427,9 @@ class _DeliveryCompanyProfileScreenState
                                                 ],
                                               ),
                                             ),
-                                            widget.deliveryCompany.slogn != null
+                                            state.userInfo.slogn != null
                                                 ? Text(
-                                                    widget.deliveryCompany
-                                                            .slogn ??
-                                                        '',
+                                                    state.userInfo.slogn ?? '',
                                                     style: TextStyle(
                                                       color:
                                                           AppColor.secondGrey,
@@ -431,7 +444,7 @@ class _DeliveryCompanyProfileScreenState
                                                   CrossAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  '${widget.deliveryCompany.averageRating?.toStringAsFixed(3)}',
+                                                  '${state.userInfo.averageRating?.toStringAsFixed(3)}',
                                                   style: const TextStyle(
                                                       color:
                                                           AppColor.secondGrey,
@@ -443,15 +456,15 @@ class _DeliveryCompanyProfileScreenState
                                                   onTap: () => showRating(
                                                       context,
                                                       userBloc,
-                                                      widget.deliveryCompany.id,
-                                                      widget.deliveryCompany
+                                                      widget.id,
+                                                      state.userInfo
                                                               .averageRating ??
                                                           0),
                                                   child: RatingBar.builder(
                                                     minRating: 1,
                                                     maxRating: 5,
-                                                    initialRating: widget
-                                                            .deliveryCompany
+                                                    initialRating: state
+                                                            .userInfo
                                                             .averageRating ??
                                                         0,
                                                     itemSize: 18,
@@ -468,7 +481,7 @@ class _DeliveryCompanyProfileScreenState
                                                   ),
                                                 ),
                                                 Text(
-                                                  '(${widget.deliveryCompany.totalRatings} ${AppLocalizations.of(context).translate('review')})',
+                                                  '(${state.userInfo.totalRatings} ${AppLocalizations.of(context).translate('review')})',
                                                   style: const TextStyle(
                                                     color: AppColor.secondGrey,
                                                     fontSize: 14,
@@ -491,7 +504,7 @@ class _DeliveryCompanyProfileScreenState
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 8.0),
                                     child: Text(
-                                      widget.deliveryCompany.bio ?? '',
+                                      state.userInfo.bio ?? '',
                                       style: const TextStyle(
                                           color: AppColor.mainGrey),
                                     ),
@@ -538,8 +551,8 @@ class _DeliveryCompanyProfileScreenState
                               children: [
                                 RefreshIndicator(
                                   onRefresh: () async {
-                                    userBloc.add(GetUserByIdEvent(
-                                        userId: widget.deliveryCompany.id));
+                                    userBloc.add(
+                                        GetUserByIdEvent(userId: widget.id));
 
                                     // deliveryBloc.add(
                                     //     GetDeliveryCompanyServicesEvent(
@@ -704,28 +717,24 @@ class _DeliveryCompanyProfileScreenState
                                 ),
                                 infoListWidget(
                                   context: context,
-                                  username: widget.deliveryCompany.username,
-                                  firstMobile:
-                                      widget.deliveryCompany.firstMobile ?? '',
-                                  email: widget.deliveryCompany.email ?? '',
-                                  address: widget.deliveryCompany.address,
-                                  bio: widget.deliveryCompany.bio,
-                                  deliverable:
-                                      widget.deliveryCompany.deliverable,
-                                  description:
-                                      widget.deliveryCompany.description,
-                                  link: widget.deliveryCompany.link,
-                                  website: widget.deliveryCompany.website,
-                                  deliveryType:
-                                      widget.deliveryCompany.deliveryType,
+                                  username: state.userInfo.username,
+                                  firstMobile: state.userInfo.firstMobile ?? '',
+                                  email: state.userInfo.email ?? '',
+                                  address: state.userInfo.address,
+                                  bio: state.userInfo.bio,
+                                  deliverable: state.userInfo.deliverable,
+                                  description: state.userInfo.description,
+                                  link: state.userInfo.link,
+                                  website: state.userInfo.website,
+                                  deliveryType: state.userInfo.deliveryType,
                                   deliveryCarsNum:
-                                      widget.deliveryCompany.deliveryCarsNum,
+                                      state.userInfo.deliveryCarsNum,
                                   deliveryMotorsNum:
-                                      widget.deliveryCompany.deliveryMotorsNum,
-                                  isThereFoodsDelivery: widget
-                                      .deliveryCompany.isThereFoodsDelivery,
+                                      state.userInfo.deliveryMotorsNum,
+                                  isThereFoodsDelivery:
+                                      state.userInfo.isThereFoodsDelivery,
                                   isThereWarehouse:
-                                      widget.deliveryCompany.isThereWarehouse,
+                                      state.userInfo.isThereWarehouse,
                                 ),
                                 // ListView(
                                 //   children: [

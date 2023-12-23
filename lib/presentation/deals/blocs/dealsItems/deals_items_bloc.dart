@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -104,6 +105,7 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
         location: event.location,
         category: event.category,
         country: country,
+        description: event.description,
       ));
 
       emit(
@@ -128,17 +130,19 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
     on<EditDealEvent>((event, emit) async {
       emit(EditDealInProgress());
       final result = await editDealUseCase(EditDealParams(
-          id: event.id,
-          name: event.name,
-          companyName: event.companyName,
-          dealImage: event.dealImage,
-          prevPrice: event.prevPrice,
-          currentPrice: event.currentPrice,
-          startDate: event.startDate,
-          endDate: event.endDate,
-          location: event.location,
-          category: event.category,
-          country: event.country));
+        id: event.id,
+        name: event.name,
+        companyName: event.companyName,
+        dealImage: event.dealImage,
+        prevPrice: event.prevPrice,
+        currentPrice: event.currentPrice,
+        startDate: event.startDate,
+        endDate: event.endDate,
+        location: event.location,
+        category: event.category,
+        country: event.country,
+        description: event.description,
+      ));
       emit(
         result.fold(
           (failure) => EditDealFailure(message: mapFailureToString(failure)),

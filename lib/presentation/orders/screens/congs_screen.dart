@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
@@ -43,10 +44,14 @@ class CongsScreen extends StatelessWidget {
               const SizedBox(height: 40),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-                      CupertinoPageRoute(builder: (context) {
-                    return const TestScreen();
-                  }), (route) => false);
+                  // Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                  //     CupertinoPageRoute(builder: (context) {
+                  //   return const TestScreen();
+                  // }), (route) => false);
+                  while (context.canPop()) {
+                    context.pop();
+                  }
+                  context.push('/home');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColor.backgroundColor,

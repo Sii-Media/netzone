@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dynamic_height_grid_view/dynamic_height_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -8,9 +9,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/auth/entities/user_info.dart';
 import 'package:netzoon/presentation/advertising/advertising.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
+import 'package:netzoon/presentation/categories/widgets/product_details.dart';
+import 'package:netzoon/presentation/core/helpers/share_image_function.dart';
 import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
 import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dart';
 import 'package:netzoon/presentation/deals/view_all_deals.dart';
+import 'package:netzoon/presentation/ecommerce/widgets/listsubsectionswidget.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,8 +35,8 @@ import '../../widgets/build_rating.dart';
 import '../../widgets/title_and_input.dart';
 
 class UsersProfileScreen extends StatefulWidget {
-  final UserInfo user;
-  const UsersProfileScreen({super.key, required this.user});
+  final String userId;
+  const UsersProfileScreen({super.key, required this.userId});
 
   @override
   State<UsersProfileScreen> createState() => _UsersProfileScreenState();
@@ -52,21 +56,21 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
   bool isFollowing = false;
   @override
   void initState() {
-    userBloc.add(GetUserByIdEvent(userId: widget.user.id));
-    productBloc.add(GetUserProductsByIdEvent(id: widget.user.id));
-    myProductBloc.add(GetSelectedProductsByUserIdEvent(userId: widget.user.id));
+    userBloc.add(GetUserByIdEvent(userId: widget.userId));
+    productBloc.add(GetUserProductsByIdEvent(id: widget.userId));
+    myProductBloc.add(GetSelectedProductsByUserIdEvent(userId: widget.userId));
     authBloc.add(AuthCheckRequested());
     countryBloc = BlocProvider.of<CountryBloc>(context);
     countryBloc.add(GetCountryEvent());
-    visitorBloc.add(AddVisitorEvent(userId: widget.user.id));
-    adsBloc.add(GetUserAdsEvent(userId: widget.user.id));
-    dealsBloc.add(GetUserDealsEvent(userId: widget.user.id));
+    visitorBloc.add(AddVisitorEvent(userId: widget.userId));
+    adsBloc.add(GetUserAdsEvent(userId: widget.userId));
+    dealsBloc.add(GetUserDealsEvent(userId: widget.userId));
     checkFollowStatus();
     super.initState();
   }
 
   void checkFollowStatus() async {
-    bool followStatus = await isFollow(widget.user.id);
+    bool followStatus = await isFollow(widget.userId);
     setState(() {
       isFollowing = followStatus;
     });
@@ -95,11 +99,18 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 45.h,
-          title: Text(
-            widget.user.username ?? '',
-            style: const TextStyle(
-              color: AppColor.backgroundColor,
-            ),
+          title: BlocBuilder<GetUserBloc, GetUserState>(
+            bloc: userBloc,
+            builder: (context, userState) {
+              return Text(
+                userState is GetUserSuccess
+                    ? userState.userInfo.username ?? ''
+                    : '',
+                style: const TextStyle(
+                  color: AppColor.backgroundColor,
+                ),
+              );
+            },
           ),
           backgroundColor: AppColor.white,
           leading: GestureDetector(
@@ -113,16 +124,30 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
             ),
           ),
           actions: [
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.share,
-                    color: AppColor.backgroundColor,
-                    size: 22.sp,
-                  ),
-                )),
+            BlocBuilder<GetUserBloc, GetUserState>(
+              bloc: userBloc,
+              builder: (context, state) {
+                return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                    child: IconButton(
+                      onPressed: () async {
+                        state is GetUserSuccess
+                            ? await shareImageWithDescription(
+                                imageUrl: state.userInfo.profilePhoto ?? '',
+                                description:
+                                    'https://netzoon.com/home/catagories/users/${state.userInfo.id}',
+                                subject: state.userInfo.username,
+                              )
+                            : null;
+                      },
+                      icon: Icon(
+                        Icons.share,
+                        color: AppColor.backgroundColor,
+                        size: 22.sp,
+                      ),
+                    ));
+              },
+            ),
           ],
         ),
         body: BlocListener<GetUserBloc, GetUserState>(
@@ -291,7 +316,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                 children: [
                                                   Expanded(
                                                     child: Text(
-                                                      widget.user.username ??
+                                                      state.userInfo.username ??
                                                           '',
                                                       style: TextStyle(
                                                         color: AppColor.black,
@@ -364,8 +389,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                                 ToggleFollowEvent(
                                                                     otherUserId:
                                                                         widget
-                                                                            .user
-                                                                            .id));
+                                                                            .userId));
                                                           },
                                                         );
                                                       }
@@ -375,9 +399,9 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                 ],
                                               ),
                                             ),
-                                            widget.user.slogn != null
+                                            state.userInfo.slogn != null
                                                 ? Text(
-                                                    widget.user.slogn ?? '',
+                                                    state.userInfo.slogn ?? '',
                                                     style: TextStyle(
                                                       color:
                                                           AppColor.secondGrey,
@@ -392,7 +416,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                   CrossAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  '${widget.user.averageRating?.toStringAsFixed(3)}',
+                                                  '${state.userInfo.averageRating?.toStringAsFixed(3)}',
                                                   style: TextStyle(
                                                       color:
                                                           AppColor.secondGrey,
@@ -404,14 +428,15 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                   onTap: () => showRating(
                                                       context,
                                                       rateBloc,
-                                                      widget.user.id,
-                                                      widget.user
+                                                      state.userInfo.id,
+                                                      state.userInfo
                                                               .averageRating ??
                                                           0),
                                                   child: RatingBar.builder(
                                                     minRating: 1,
                                                     maxRating: 5,
-                                                    initialRating: widget.user
+                                                    initialRating: state
+                                                            .userInfo
                                                             .averageRating ??
                                                         0,
                                                     itemSize: 18.sp,
@@ -428,7 +453,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                                   ),
                                                 ),
                                                 Text(
-                                                  '(${widget.user.totalRatings} ${AppLocalizations.of(context).translate('review')})',
+                                                  '(${state.userInfo.totalRatings} ${AppLocalizations.of(context).translate('review')})',
                                                   style: TextStyle(
                                                     color: AppColor.secondGrey,
                                                     fontSize: 14.sp,
@@ -864,7 +889,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                       onRefresh: () async {
                                         myProductBloc.add(
                                             GetSelectedProductsByUserIdEvent(
-                                                userId: widget.user.id));
+                                                userId: widget.userId));
                                       },
                                       color: AppColor.white,
                                       backgroundColor: AppColor.backgroundColor,
@@ -893,167 +918,196 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                           } else if (sstate
                                               is GetSelectedProductsSuccess) {
                                             return sstate.products.isNotEmpty
-                                                ? Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Column(
-                                                      children: [
-                                                        Expanded(
-                                                          child:
-                                                              GridView.builder(
-                                                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                                                crossAxisCount:
-                                                                    3,
-                                                                childAspectRatio:
-                                                                    0.95,
-                                                                crossAxisSpacing:
-                                                                    10.w,
-                                                                mainAxisSpacing:
-                                                                    10.h),
-                                                            shrinkWrap: true,
-                                                            physics:
-                                                                const BouncingScrollPhysics(),
-                                                            itemCount: sstate
-                                                                .products
-                                                                .length,
-                                                            itemBuilder:
-                                                                (context,
-                                                                    index) {
-                                                              return Container(
-                                                                margin: const EdgeInsets
-                                                                    .symmetric(
-                                                                    vertical:
-                                                                        8),
-                                                                decoration: BoxDecoration(
-                                                                    color: AppColor
-                                                                        .white,
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            20),
-                                                                    boxShadow: [
-                                                                      BoxShadow(
-                                                                        color: AppColor
-                                                                            .secondGrey
-                                                                            .withOpacity(0.5),
-                                                                        blurRadius:
-                                                                            10,
-                                                                        spreadRadius:
-                                                                            2,
-                                                                        offset: const Offset(
-                                                                            0,
-                                                                            3),
-                                                                      ),
-                                                                    ]),
-                                                                child:
-                                                                    ClipRRect(
-                                                                  borderRadius:
-                                                                      const BorderRadius
-                                                                          .all(
-                                                                          Radius.circular(
-                                                                              20)),
-                                                                  child:
-                                                                      GestureDetector(
-                                                                    onTap: () {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .push(MaterialPageRoute(builder:
-                                                                              (context) {
-                                                                        return ProductDetailScreen(
-                                                                            item:
-                                                                                sstate.products[index].id);
-                                                                      }));
-                                                                    },
-                                                                    child:
-                                                                        Column(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceBetween,
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        CachedNetworkImage(
-                                                                          imageUrl: sstate
-                                                                              .products[index]
-                                                                              .imageUrl,
-                                                                          height:
-                                                                              65.h,
-                                                                          width:
-                                                                              160.w,
-                                                                          fit: BoxFit
-                                                                              .contain,
-                                                                          progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                                                              Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.symmetric(horizontal: 70.0, vertical: 50),
-                                                                            child:
-                                                                                CircularProgressIndicator(
-                                                                              value: downloadProgress.progress,
-                                                                              color: AppColor.backgroundColor,
+                                                ? DynamicHeightGridView(
+                                                    itemCount:
+                                                        sstate.products.length,
+                                                    crossAxisCount: 2,
+                                                    crossAxisSpacing: 10,
+                                                    mainAxisSpacing: 10,
+                                                    builder: (ctx, index) {
+                                                      return ListSubSectionsWidget(
+                                                        deviceList: sstate
+                                                            .products[index],
+                                                        onTap: () {
+                                                          Navigator.of(context)
+                                                              .push(
+                                                            MaterialPageRoute(
+                                                              builder:
+                                                                  (context) {
+                                                                return ProductDetailsScreen(
+                                                                    products: sstate
+                                                                        .products,
+                                                                    index:
+                                                                        index);
+                                                              },
+                                                            ),
+                                                          );
+                                                        },
+                                                      );
 
-                                                                              // strokeWidth: 10,
-                                                                            ),
-                                                                          ),
-                                                                          errorWidget: (context, url, error) =>
-                                                                              const Icon(Icons.error),
-                                                                        ),
-                                                                        Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .only(
-                                                                              right: 9.0,
-                                                                              left: 9.0,
-                                                                              bottom: 8.0),
-                                                                          child:
-                                                                              Row(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.spaceBetween,
-                                                                            children: [
-                                                                              Text(
-                                                                                sstate.products[index].name,
-                                                                                style: TextStyle(
-                                                                                  color: AppColor.backgroundColor,
-                                                                                  fontSize: 11.sp,
-                                                                                ),
-                                                                              ),
-                                                                              // Text(
-                                                                              //   '${sstate.products[index].price} \$',
-                                                                              //   style: TextStyle(
-                                                                              //     color: AppColor.colorTwo,
-                                                                              //     fontSize: 11.sp,
-                                                                              //   ),
-                                                                              // ),
-                                                                              RichText(
-                                                                                text: TextSpan(style: TextStyle(fontSize: 12.sp, color: AppColor.backgroundColor), children: <TextSpan>[
-                                                                                  TextSpan(
-                                                                                    text: '${sstate.products[index].price}',
-                                                                                    style: const TextStyle(
-                                                                                      fontWeight: FontWeight.w700,
-                                                                                    ),
-                                                                                  ),
-                                                                                  TextSpan(
-                                                                                    text: getCurrencyFromCountry(
-                                                                                      countryState.selectedCountry,
-                                                                                      context,
-                                                                                    ),
-                                                                                    style: TextStyle(color: AppColor.backgroundColor, fontSize: 10.sp),
-                                                                                  )
-                                                                                ]),
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
+                                                      /// return your widget here.
+                                                    })
+                                                // ? Padding(
+                                                //     padding:
+                                                //         const EdgeInsets.all(
+                                                //             8.0),
+                                                //     child: Column(
+                                                //       children: [
+                                                //         Expanded(
+                                                //           child:
+                                                //               GridView.builder(
+                                                //             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                                //                 crossAxisCount:
+                                                //                     3,
+                                                //                 childAspectRatio:
+                                                //                     0.95,
+                                                //                 crossAxisSpacing:
+                                                //                     10.w,
+                                                //                 mainAxisSpacing:
+                                                //                     10.h),
+                                                //             shrinkWrap: true,
+                                                //             physics:
+                                                //                 const BouncingScrollPhysics(),
+                                                //             itemCount: sstate
+                                                //                 .products
+                                                //                 .length,
+                                                //             itemBuilder:
+                                                //                 (context,
+                                                //                     index) {
+                                                //               return Container(
+                                                //                 margin: const EdgeInsets
+                                                //                     .symmetric(
+                                                //                     vertical:
+                                                //                         8),
+                                                //                 decoration: BoxDecoration(
+                                                //                     color: AppColor
+                                                //                         .white,
+                                                //                     borderRadius:
+                                                //                         BorderRadius.circular(
+                                                //                             20),
+                                                //                     boxShadow: [
+                                                //                       BoxShadow(
+                                                //                         color: AppColor
+                                                //                             .secondGrey
+                                                //                             .withOpacity(0.5),
+                                                //                         blurRadius:
+                                                //                             10,
+                                                //                         spreadRadius:
+                                                //                             2,
+                                                //                         offset: const Offset(
+                                                //                             0,
+                                                //                             3),
+                                                //                       ),
+                                                //                     ]),
+                                                //                 child:
+                                                //                     ClipRRect(
+                                                //                   borderRadius:
+                                                //                       const BorderRadius
+                                                //                           .all(
+                                                //                           Radius.circular(
+                                                //                               20)),
+                                                //                   child:
+                                                //                       GestureDetector(
+                                                //                     onTap: () {
+                                                //                       Navigator.of(
+                                                //                               context)
+                                                //                           .push(MaterialPageRoute(builder:
+                                                //                               (context) {
+                                                //                         return ProductDetailScreen(
+                                                //                             item:
+                                                //                                 sstate.products[index].id);
+                                                //                       }));
+                                                //                     },
+                                                //                     child:
+                                                //                         Column(
+                                                //                       mainAxisAlignment:
+                                                //                           MainAxisAlignment
+                                                //                               .spaceBetween,
+                                                //                       crossAxisAlignment:
+                                                //                           CrossAxisAlignment
+                                                //                               .center,
+                                                //                       children: [
+                                                //                         CachedNetworkImage(
+                                                //                           imageUrl: sstate
+                                                //                               .products[index]
+                                                //                               .imageUrl,
+                                                //                           height:
+                                                //                               65.h,
+                                                //                           width:
+                                                //                               160.w,
+                                                //                           fit: BoxFit
+                                                //                               .contain,
+                                                //                           progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                                //                               Padding(
+                                                //                             padding:
+                                                //                                 const EdgeInsets.symmetric(horizontal: 70.0, vertical: 50),
+                                                //                             child:
+                                                //                                 CircularProgressIndicator(
+                                                //                               value: downloadProgress.progress,
+                                                //                               color: AppColor.backgroundColor,
+
+                                                //                               // strokeWidth: 10,
+                                                //                             ),
+                                                //                           ),
+                                                //                           errorWidget: (context, url, error) =>
+                                                //                               const Icon(Icons.error),
+                                                //                         ),
+                                                //                         Padding(
+                                                //                           padding: const EdgeInsets
+                                                //                               .only(
+                                                //                               right: 9.0,
+                                                //                               left: 9.0,
+                                                //                               bottom: 8.0),
+                                                //                           child:
+                                                //                               Row(
+                                                //                             mainAxisAlignment:
+                                                //                                 MainAxisAlignment.spaceBetween,
+                                                //                             children: [
+                                                //                               Text(
+                                                //                                 sstate.products[index].name,
+                                                //                                 style: TextStyle(
+                                                //                                   color: AppColor.backgroundColor,
+                                                //                                   fontSize: 11.sp,
+                                                //                                 ),
+                                                //                               ),
+                                                //                               // Text(
+                                                //                               //   '${sstate.products[index].price} \$',
+                                                //                               //   style: TextStyle(
+                                                //                               //     color: AppColor.colorTwo,
+                                                //                               //     fontSize: 11.sp,
+                                                //                               //   ),
+                                                //                               // ),
+                                                //                               RichText(
+                                                //                                 text: TextSpan(style: TextStyle(fontSize: 12.sp, color: AppColor.backgroundColor), children: <TextSpan>[
+                                                //                                   TextSpan(
+                                                //                                     text: '${sstate.products[index].price}',
+                                                //                                     style: const TextStyle(
+                                                //                                       fontWeight: FontWeight.w700,
+                                                //                                     ),
+                                                //                                   ),
+                                                //                                   TextSpan(
+                                                //                                     text: getCurrencyFromCountry(
+                                                //                                       countryState.selectedCountry,
+                                                //                                       context,
+                                                //                                     ),
+                                                //                                     style: TextStyle(color: AppColor.backgroundColor, fontSize: 10.sp),
+                                                //                                   )
+                                                //                                 ]),
+                                                //                               ),
+                                                //                             ],
+                                                //                           ),
+                                                //                         ),
+                                                //                       ],
+                                                //                     ),
+                                                //                   ),
+                                                //                 ),
+                                                //               );
+                                                //             },
+                                                //           ),
+                                                //         ),
+                                                //       ],
+                                                //     ),
+                                                //   )
                                                 : Center(
                                                     child: Text(
                                                         AppLocalizations.of(
@@ -1094,7 +1148,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                               failure: failure,
                                               onPressed: () {
                                                 adsBloc.add(GetUserAdsEvent(
-                                                    userId: widget.user.id));
+                                                    userId: widget.userId));
                                               });
                                         } else if (state is AdsBlocSuccess) {
                                           return state.ads.isEmpty
@@ -1164,7 +1218,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                               failure: dealState.message,
                                               onPressed: () {
                                                 adsBloc.add(GetUserAdsEvent(
-                                                    userId: widget.user.id));
+                                                    userId: widget.userId));
                                               });
                                         } else if (dealState
                                             is GetUserDealsSuccess) {

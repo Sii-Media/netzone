@@ -2,13 +2,16 @@ import 'dart:io';
 
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:netzoon/presentation/aramex/blocs/aramex_bloc/aramex_bloc.dart';
 import 'package:netzoon/presentation/core/widgets/add_file_button.dart';
+import 'package:netzoon/presentation/notifications/blocs/notifications/notifications_bloc.dart';
 import 'package:readmore/readmore.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 
@@ -23,7 +26,6 @@ import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/helpers/get_city_from_country.dart';
 import 'package:netzoon/presentation/core/widgets/add_photo_button.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
-import 'package:netzoon/presentation/home/test.dart';
 import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
 import 'package:netzoon/presentation/legal_advice/blocs/legal_advice/legal_advice_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
@@ -52,6 +54,8 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
   final TextEditingController contactName = TextEditingController();
 
   final TextEditingController passwordSignup = TextEditingController();
+  final TextEditingController confirmPasswordSignup = TextEditingController();
+
   final TextEditingController aboutSignup = TextEditingController();
 
   final TextEditingController numberPhoneOne = TextEditingController();
@@ -95,15 +99,22 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
       GlobalKey<FormFieldState>();
   final GlobalKey<FormFieldState> passwordFormFieldKey =
       GlobalKey<FormFieldState>();
+
+  final GlobalKey<FormFieldState> confirmPasswordFormFieldKey =
+      GlobalKey<FormFieldState>();
   final LegalAdviceBloc adviceBloc = sl<LegalAdviceBloc>();
   late final LanguageBloc langBloc;
   late final CountryBloc countryBloc;
+  final aramexBloc = sl<AramexBloc>();
+  final notifiBloc = sl<NotificationsBloc>();
+
   @override
   void initState() {
     langBloc = BlocProvider.of<LanguageBloc>(context);
     langBloc.add(GetLanguage());
     countryBloc = BlocProvider.of<CountryBloc>(context);
     countryBloc.add(GetCountryEvent());
+    aramexBloc.add(const FetchCitiesEvent());
     if (widget.accountTitle == 'المصانع') {
       factoryBloc.add(GetAllFactoriesEvent());
     }
@@ -145,10 +156,28 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
             ),
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ));
-          Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-              CupertinoPageRoute(builder: (context) {
-            return const TestScreen();
-          }), (route) => false);
+          if (state.user.userInfo.userType == 'local_company' ||
+              state.user.userInfo.userType == 'factory' ||
+              state.user.userInfo.userType == 'trader') {
+            FirebaseMessaging.instance.getToken().then((value) {
+              notifiBloc.add(SendNotificationEvent(
+                  fcmtoken: value ?? '',
+                  text: state.user.userInfo.userType ?? '',
+                  username: state.user.userInfo.username ?? '',
+                  category: 'account',
+                  itemId: state.user.userInfo.id,
+                  body:
+                      'created an account as ${state.user.userInfo.userType}'));
+            });
+          }
+          // Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+          //     CupertinoPageRoute(builder: (context) {
+          //   return const TestScreen();
+          // }), (route) => false);
+          while (context.canPop()) {
+            context.pop();
+          }
+          context.push('/home');
         }
       },
       child: SignUpWidget(
@@ -188,6 +217,9 @@ class _SignUpPageState extends State<SignUpPage> with ScreenLoader<SignUpPage> {
         floorNumController: floorNumController,
         countryBloc: countryBloc,
         withAdd: widget.withAdd,
+        confirmPasswordFormFieldKey: confirmPasswordFormFieldKey,
+        confirmPasswordSignup: confirmPasswordSignup,
+        aramexBloc: aramexBloc,
       ),
     );
   }
@@ -232,15 +264,22 @@ class SignUpWidget extends StatefulWidget {
     required this.floorNumController,
     required this.countryBloc,
     this.withAdd,
+    required this.confirmPasswordFormFieldKey,
+    required this.confirmPasswordSignup,
+    required this.aramexBloc,
   });
   final GlobalKey<FormState> formKey;
   final GlobalKey<FormFieldState> emailFormFieldKey;
   final GlobalKey<FormFieldState> passwordFormFieldKey;
+  final GlobalKey<FormFieldState> confirmPasswordFormFieldKey;
+
   final String accountTitle;
   final TextEditingController emailSignup;
   final TextEditingController username;
   final TextEditingController contactName;
   final TextEditingController passwordSignup;
+  final TextEditingController confirmPasswordSignup;
+
   final TextEditingController aboutSignup;
   final TextEditingController numberPhoneOne;
   final TextEditingController numberPhoneTow;
@@ -269,11 +308,13 @@ class SignUpWidget extends StatefulWidget {
   final FactoriesBloc factoriesBloc;
   final CountryBloc countryBloc;
   final bool? withAdd;
+  final AramexBloc aramexBloc;
   @override
   State<SignUpWidget> createState() => _SignUpWidgetState();
 }
 
 bool showPass = true;
+bool showConfirmPass = true;
 
 class _SignUpWidgetState extends State<SignUpWidget> {
   File? profileImage;
@@ -286,7 +327,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   final bool _isDeliverable = false;
   bool _isThereWarehouse = false;
   bool _isThereFoodsDelivery = false;
-  bool _isFreeZone = false;
+  final bool _isFreeZone = false;
   bool _isSelectable = false;
   bool _isService = false;
   String? deliveryType;
@@ -537,6 +578,39 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       )
                     : const SizedBox(),
                 TextSignup(
+                    text: widget.accountTitle == 'المستهلك'
+                        ? AppLocalizations.of(context).translate('username')
+                        : AppLocalizations.of(context)
+                            .translate('business_name')),
+                TextFormField(
+                  controller: widget.username,
+                  style: const TextStyle(color: Colors.black),
+                  validator: (val) {
+                    if (val!.isEmpty) {
+                      return AppLocalizations.of(context)
+                          .translate('username_required');
+                    }
+                    if (val.length < 2) {
+                      return AppLocalizations.of(context)
+                          .translate('username_condition');
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    filled: true,
+                    //<-- SEE HERE
+                    fillColor: Colors.green.withOpacity(0.1),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 30)
+                            .flipped,
+
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+                TextSignup(
                     text: AppLocalizations.of(context).translate('email')),
                 TextFormField(
                   key: widget.emailFormFieldKey,
@@ -575,36 +649,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     ),
                   ),
                 ),
-                TextSignup(
-                    text: AppLocalizations.of(context).translate('username')),
-                TextFormField(
-                  controller: widget.username,
-                  style: const TextStyle(color: Colors.black),
-                  validator: (val) {
-                    if (val!.isEmpty) {
-                      return AppLocalizations.of(context)
-                          .translate('username_required');
-                    }
-                    if (val.length < 2) {
-                      return AppLocalizations.of(context)
-                          .translate('username_condition');
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                    filled: true,
-                    //<-- SEE HERE
-                    fillColor: Colors.green.withOpacity(0.1),
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 30)
-                            .flipped,
 
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
                 TextSignup(
                     text:
                         AppLocalizations.of(context).translate('contact_name')),
@@ -631,6 +676,21 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
+                ),
+                TextSignup(
+                    text:
+                        AppLocalizations.of(context).translate('phone_number')),
+                TextFormSignupWidget(
+                  password: false,
+                  isNumber: true,
+                  valid: (val) {
+                    if (val!.isEmpty) {
+                      return AppLocalizations.of(context).translate('required');
+                    }
+
+                    return null;
+                  },
+                  myController: widget.numberPhoneOne,
                 ),
                 TextSignup(
                     text: AppLocalizations.of(context).translate('password')),
@@ -679,36 +739,68 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   },
                 ),
                 TextSignup(
-                    text:
-                        AppLocalizations.of(context).translate('phone_number')),
-                TextFormSignupWidget(
-                  password: false,
-                  isNumber: true,
-                  valid: (val) {
-                    if (val!.isEmpty) {
-                      return AppLocalizations.of(context).translate('required');
+                  text: AppLocalizations.of(context)
+                      .translate('confirm_password'),
+                ),
+                TextFormField(
+                  key: widget.confirmPasswordFormFieldKey,
+                  controller: widget.confirmPasswordSignup,
+                  style: const TextStyle(color: AppColor.black),
+                  decoration: InputDecoration(
+                    filled: true,
+                    //<-- SEE HERE
+                    fillColor: Colors.green.withOpacity(0.1),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 30)
+                            .flipped,
+                    suffixIcon: InkWell(
+                      onTap: () {
+                        setState(() {
+                          showConfirmPass = !showConfirmPass;
+                        });
+                      },
+                      child: showConfirmPass
+                          ? Icon(
+                              Icons.visibility_off,
+                              size: 15.sp,
+                            )
+                          : Icon(Icons.visibility, size: 15.sp),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  keyboardType: TextInputType.visiblePassword,
+                  obscureText: showConfirmPass,
+                  validator: (value) {
+                    if (value != widget.passwordSignup.text) {
+                      return AppLocalizations.of(context)
+                          .translate('password_dont_match');
                     }
-
                     return null;
                   },
-                  myController: widget.numberPhoneOne,
+                  onChanged: (text) {
+                    widget.confirmPasswordFormFieldKey.currentState!.validate();
+                  },
                 ),
-                TextSignup(
-                    text: AppLocalizations.of(context)
-                        .translate('mobile_number')),
-                TextFormSignupWidget(
-                  password: false,
-                  isNumber: true,
-                  myController: widget.numberPhoneTow,
-                ),
-                TextSignup(
-                    text: AppLocalizations.of(context)
-                        .translate('contact_numbers')),
-                TextFormSignupWidget(
-                  password: false,
-                  isNumber: true,
-                  myController: widget.numberPhoneThree,
-                ),
+
+                // TextSignup(
+                //     text: AppLocalizations.of(context)
+                //         .translate('mobile_number')),
+                // TextFormSignupWidget(
+                //   password: false,
+                //   isNumber: true,
+                //   myController: widget.numberPhoneTow,
+                // ),
+                // TextSignup(
+                //     text: AppLocalizations.of(context)
+                //         .translate('contact_numbers')),
+                // TextFormSignupWidget(
+                //   password: false,
+                //   isNumber: true,
+                //   myController: widget.numberPhoneThree,
+                // ),
                 // Column(
                 //   children: [
                 //     TextFormSignupWidget(
@@ -733,175 +825,175 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 //     )
                 //   ],
                 // ),
-                TextSignup(text: AppLocalizations.of(context).translate('Bio')),
-                TextFormField(
-                  controller: widget.bioController,
-                  style: const TextStyle(color: AppColor.black),
-                  decoration: InputDecoration(
-                    filled: true,
-                    //<-- SEE HERE
-                    fillColor: Colors.green.withOpacity(0.1),
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 30)
-                            .flipped,
+                // TextSignup(text: AppLocalizations.of(context).translate('Bio')),
+                // TextFormField(
+                //   controller: widget.bioController,
+                //   style: const TextStyle(color: AppColor.black),
+                //   decoration: InputDecoration(
+                //     filled: true,
+                //     //<-- SEE HERE
+                //     fillColor: Colors.green.withOpacity(0.1),
+                //     floatingLabelBehavior: FloatingLabelBehavior.always,
+                //     contentPadding:
+                //         const EdgeInsets.symmetric(vertical: 5, horizontal: 30)
+                //             .flipped,
 
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                  keyboardType: TextInputType.multiline,
-                  maxLength: 300,
-                  maxLines: 4,
-                  // textInputAction: widget.textInputAction ?? TextInputAction.done,
+                //     border: OutlineInputBorder(
+                //       borderRadius: BorderRadius.circular(2),
+                //     ),
+                //   ),
+                //   keyboardType: TextInputType.multiline,
+                //   maxLength: 300,
+                //   maxLines: 4,
+                //   // textInputAction: widget.textInputAction ?? TextInputAction.done,
 
-                  onChanged: (text) {
-                    // widget.passwordFormFieldKey.currentState!.validate();
-                  },
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                TextSignup(
-                    text: AppLocalizations.of(context).translate('desc')),
-                TextFormField(
-                  controller: widget.descriptionController,
-                  style: const TextStyle(color: AppColor.black),
-                  decoration: InputDecoration(
-                    filled: true,
-                    //<-- SEE HERE
-                    fillColor: Colors.green.withOpacity(0.1),
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 30)
-                            .flipped,
+                //   onChanged: (text) {
+                //     // widget.passwordFormFieldKey.currentState!.validate();
+                //   },
+                // ),
+                // SizedBox(
+                //   height: 10.h,
+                // ),
+                // TextSignup(
+                //     text: AppLocalizations.of(context).translate('desc')),
+                // TextFormField(
+                //   controller: widget.descriptionController,
+                //   style: const TextStyle(color: AppColor.black),
+                //   decoration: InputDecoration(
+                //     filled: true,
+                //     //<-- SEE HERE
+                //     fillColor: Colors.green.withOpacity(0.1),
+                //     floatingLabelBehavior: FloatingLabelBehavior.always,
+                //     contentPadding:
+                //         const EdgeInsets.symmetric(vertical: 5, horizontal: 30)
+                //             .flipped,
 
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                  keyboardType: TextInputType.multiline,
-                  maxLines: 3,
-                  // textInputAction: widget.textInputAction ?? TextInputAction.done,
+                //     border: OutlineInputBorder(
+                //       borderRadius: BorderRadius.circular(2),
+                //     ),
+                //   ),
+                //   keyboardType: TextInputType.multiline,
+                //   maxLines: 3,
+                //   // textInputAction: widget.textInputAction ?? TextInputAction.done,
 
-                  onChanged: (text) {
-                    // widget.passwordFormFieldKey.currentState!.validate();
-                  },
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                TextSignup(
-                    text: AppLocalizations.of(context).translate('website')),
-                TextFormField(
-                  controller: widget.websiteController,
-                  style: const TextStyle(color: AppColor.black),
-                  decoration: InputDecoration(
-                    filled: true,
-                    //<-- SEE HERE
-                    fillColor: Colors.green.withOpacity(0.1),
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 30)
-                            .flipped,
+                //   onChanged: (text) {
+                //     // widget.passwordFormFieldKey.currentState!.validate();
+                //   },
+                // ),
+                // SizedBox(
+                //   height: 10.h,
+                // ),
+                // TextSignup(
+                //     text: AppLocalizations.of(context).translate('website')),
+                // TextFormField(
+                //   controller: widget.websiteController,
+                //   style: const TextStyle(color: AppColor.black),
+                //   decoration: InputDecoration(
+                //     filled: true,
+                //     //<-- SEE HERE
+                //     fillColor: Colors.green.withOpacity(0.1),
+                //     floatingLabelBehavior: FloatingLabelBehavior.always,
+                //     contentPadding:
+                //         const EdgeInsets.symmetric(vertical: 5, horizontal: 30)
+                //             .flipped,
 
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                  keyboardType: TextInputType.text,
+                //     border: OutlineInputBorder(
+                //       borderRadius: BorderRadius.circular(2),
+                //     ),
+                //   ),
+                //   keyboardType: TextInputType.text,
 
-                  // textInputAction: widget.textInputAction ?? TextInputAction.done,
+                //   // textInputAction: widget.textInputAction ?? TextInputAction.done,
 
-                  onChanged: (text) {
-                    // widget.passwordFormFieldKey.currentState!.validate();
-                  },
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                TextSignup(
-                    text: AppLocalizations.of(context).translate('link')),
-                TextFormField(
-                  controller: widget.linkController,
-                  style: const TextStyle(color: AppColor.black),
-                  decoration: InputDecoration(
-                    filled: true,
-                    //<-- SEE HERE
-                    fillColor: Colors.green.withOpacity(0.1),
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 30)
-                            .flipped,
+                //   onChanged: (text) {
+                //     // widget.passwordFormFieldKey.currentState!.validate();
+                //   },
+                // ),
+                // SizedBox(
+                //   height: 10.h,
+                // ),
+                // TextSignup(
+                //     text: AppLocalizations.of(context).translate('link')),
+                // TextFormField(
+                //   controller: widget.linkController,
+                //   style: const TextStyle(color: AppColor.black),
+                //   decoration: InputDecoration(
+                //     filled: true,
+                //     //<-- SEE HERE
+                //     fillColor: Colors.green.withOpacity(0.1),
+                //     floatingLabelBehavior: FloatingLabelBehavior.always,
+                //     contentPadding:
+                //         const EdgeInsets.symmetric(vertical: 5, horizontal: 30)
+                //             .flipped,
 
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                  keyboardType: TextInputType.text,
+                //     border: OutlineInputBorder(
+                //       borderRadius: BorderRadius.circular(2),
+                //     ),
+                //   ),
+                //   keyboardType: TextInputType.text,
 
-                  // textInputAction: widget.textInputAction ?? TextInputAction.done,
+                //   // textInputAction: widget.textInputAction ?? TextInputAction.done,
 
-                  onChanged: (text) {
-                    // widget.passwordFormFieldKey.currentState!.validate();
-                  },
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                TextSignup(
-                    text: AppLocalizations.of(context).translate('slogn')),
-                TextFormField(
-                  controller: widget.slognController,
-                  style: const TextStyle(color: AppColor.black),
-                  decoration: InputDecoration(
-                    filled: true,
-                    //<-- SEE HERE
-                    fillColor: Colors.green.withOpacity(0.1),
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 30)
-                            .flipped,
+                //   onChanged: (text) {
+                //     // widget.passwordFormFieldKey.currentState!.validate();
+                //   },
+                // ),
+                // SizedBox(
+                //   height: 10.h,
+                // ),
+                // TextSignup(
+                //     text: AppLocalizations.of(context).translate('slogn')),
+                // TextFormField(
+                //   controller: widget.slognController,
+                //   style: const TextStyle(color: AppColor.black),
+                //   decoration: InputDecoration(
+                //     filled: true,
+                //     //<-- SEE HERE
+                //     fillColor: Colors.green.withOpacity(0.1),
+                //     floatingLabelBehavior: FloatingLabelBehavior.always,
+                //     contentPadding:
+                //         const EdgeInsets.symmetric(vertical: 5, horizontal: 30)
+                //             .flipped,
 
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                  keyboardType: TextInputType.text,
+                //     border: OutlineInputBorder(
+                //       borderRadius: BorderRadius.circular(2),
+                //     ),
+                //   ),
+                //   keyboardType: TextInputType.text,
 
-                  // textInputAction: widget.textInputAction ?? TextInputAction.done,
+                //   // textInputAction: widget.textInputAction ?? TextInputAction.done,
 
-                  onChanged: (text) {
-                    // widget.passwordFormFieldKey.currentState!.validate();
-                  },
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                widget.accountTitle == 'منطقة حرة'
-                    ? Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextSignup(
-                                text: AppLocalizations.of(context)
-                                    .translate('freezoneCity')),
-                            TextFormSignupWidget(
-                              password: false,
-                              isNumber: false,
-                              valid: (val) {
-                                return null;
+                //   onChanged: (text) {
+                //     // widget.passwordFormFieldKey.currentState!.validate();
+                //   },
+                // ),
+                // SizedBox(
+                //   height: 10.h,
+                // ),
+                // widget.accountTitle == 'منطقة حرة'
+                //     ? Padding(
+                //         padding: const EdgeInsets.only(bottom: 10.0),
+                //         child: Column(
+                //           mainAxisAlignment: MainAxisAlignment.start,
+                //           crossAxisAlignment: CrossAxisAlignment.start,
+                //           children: [
+                //             TextSignup(
+                //                 text: AppLocalizations.of(context)
+                //                     .translate('freezoneCity')),
+                //             TextFormSignupWidget(
+                //               password: false,
+                //               isNumber: false,
+                //               valid: (val) {
+                //                 return null;
 
-                                // return validInput(val!, 5, 100, "password");
-                              },
-                              myController: widget.freezoneCityController,
-                            ),
-                          ],
-                        ),
-                      )
-                    : const SizedBox(),
+                //                 // return validInput(val!, 5, 100, "password");
+                //               },
+                //               myController: widget.freezoneCityController,
+                //             ),
+                //           ],
+                //         ),
+                //       )
+                //     : const SizedBox(),
                 // widget.accountTitle == 'الشركات المحلية'
                 //     ? Padding(
                 //         padding: const EdgeInsets.only(bottom: 10.0),
@@ -1085,64 +1177,64 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         ),
                       )
                     : const SizedBox(),
-                widget.accountTitle == 'المستهلك' ||
-                        widget.accountTitle == 'جهة إخبارية'
-                    ? Container()
-                    : TextSignup(
-                        text: AppLocalizations.of(context)
-                            .translate('subcategory')),
-                widget.accountTitle == 'المستهلك' ||
-                        widget.accountTitle == 'جهة إخبارية'
-                    ? Container()
-                    : TextFormSignupWidget(
-                        password: false,
-                        isNumber: false,
-                        valid: (val) {
-                          return null;
+                // widget.accountTitle == 'المستهلك' ||
+                //         widget.accountTitle == 'جهة إخبارية'
+                //     ? Container()
+                //     : TextSignup(
+                //         text: AppLocalizations.of(context)
+                //             .translate('subcategory')),
+                // widget.accountTitle == 'المستهلك' ||
+                //         widget.accountTitle == 'جهة إخبارية'
+                //     ? Container()
+                //     : TextFormSignupWidget(
+                //         password: false,
+                //         isNumber: false,
+                //         valid: (val) {
+                //           return null;
 
-                          // return validInput(val!, 5, 100, "password");
-                        },
-                        myController: widget.subcategory,
-                      ),
-                widget.accountTitle == 'المستهلك'
-                    ? Container()
-                    : TextSignup(
-                        text: AppLocalizations.of(context)
-                            .translate('address_and_other_branches')),
-                widget.accountTitle == 'المستهلك'
-                    ? Container()
-                    : TextFormSignupWidget(
-                        password: false,
-                        isNumber: false,
-                        valid: (val) {
-                          if (val!.isEmpty) {
-                            return AppLocalizations.of(context)
-                                .translate('required');
-                          }
+                //           // return validInput(val!, 5, 100, "password");
+                //         },
+                //         myController: widget.subcategory,
+                //       ),
+                // widget.accountTitle == 'المستهلك'
+                //     ? Container()
+                //     : TextSignup(
+                //         text: AppLocalizations.of(context)
+                //             .translate('address_and_other_branches')),
+                // widget.accountTitle == 'المستهلك'
+                //     ? Container()
+                //     : TextFormSignupWidget(
+                //         password: false,
+                //         isNumber: false,
+                //         valid: (val) {
+                //           if (val!.isEmpty) {
+                //             return AppLocalizations.of(context)
+                //                 .translate('required');
+                //           }
 
-                          return null;
-                        },
-                        myController: widget.address,
-                      ),
-                widget.accountTitle == 'المستهلك'
-                    ? Container()
-                    : CheckboxListTile(
-                        title: Text(
-                          AppLocalizations.of(context)
-                              .translate('affiliated_to_a_free_zone'),
-                          style: TextStyle(
-                            color: AppColor.backgroundColor,
-                            fontSize: 15.sp,
-                          ),
-                        ),
-                        activeColor: AppColor.backgroundColor,
-                        value: _isFreeZone,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            _isFreeZone = value ?? false;
-                          });
-                        },
-                      ),
+                //           return null;
+                //         },
+                //         myController: widget.address,
+                //       ),
+                // widget.accountTitle == 'المستهلك'
+                //     ? Container()
+                //     : CheckboxListTile(
+                //         title: Text(
+                //           AppLocalizations.of(context)
+                //               .translate('affiliated_to_a_free_zone'),
+                //           style: TextStyle(
+                //             color: AppColor.backgroundColor,
+                //             fontSize: 15.sp,
+                //           ),
+                //         ),
+                //         activeColor: AppColor.backgroundColor,
+                //         value: _isFreeZone,
+                //         onChanged: (bool? value) {
+                //           setState(() {
+                //             _isFreeZone = value ?? false;
+                //           });
+                //         },
+                //       ),
                 widget.accountTitle != 'الشركات المحلية'
                     ? Container()
                     : CheckboxListTile(
@@ -1227,71 +1319,71 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 //       )
                 //     ],
                 //   ),
-                widget.accountTitle == 'المستهلك' ||
-                        widget.accountTitle == 'جهة إخبارية' ||
-                        widget.accountTitle == 'شركة توصيل'
-                    ? Container()
-                    : TextSignup(
-                        text: AppLocalizations.of(context)
-                            .translate('number_of_company_products')),
-                widget.accountTitle == 'المستهلك' ||
-                        widget.accountTitle == 'جهة إخبارية' ||
-                        widget.accountTitle == 'شركة توصيل'
-                    ? Container()
-                    : TextFormSignupWidget(
-                        password: false,
-                        isNumber: true,
-                        valid: (val) {
-                          return null;
+                // widget.accountTitle == 'المستهلك' ||
+                //         widget.accountTitle == 'جهة إخبارية' ||
+                //         widget.accountTitle == 'شركة توصيل'
+                //     ? Container()
+                //     : TextSignup(
+                //         text: AppLocalizations.of(context)
+                //             .translate('number_of_company_products')),
+                // widget.accountTitle == 'المستهلك' ||
+                //         widget.accountTitle == 'جهة إخبارية' ||
+                //         widget.accountTitle == 'شركة توصيل'
+                //     ? Container()
+                //     : TextFormSignupWidget(
+                //         password: false,
+                //         isNumber: true,
+                //         valid: (val) {
+                //           return null;
 
-                          // return validInput(val!, 5, 100, "password");
-                        },
-                        myController: widget.companyProductsNumber,
-                      ),
-                widget.accountTitle == 'المستهلك' ||
-                        widget.accountTitle == 'جهة إخبارية' ||
-                        widget.accountTitle == 'شركة توصيل'
-                    ? Container()
-                    : TextSignup(
-                        text: AppLocalizations.of(context)
-                            .translate('sell_method'),
-                      ),
-                widget.accountTitle == 'المستهلك' ||
-                        widget.accountTitle == 'جهة إخبارية' ||
-                        widget.accountTitle == 'شركة توصيل'
-                    ? Container()
-                    : TextFormSignupWidget(
-                        password: false,
-                        isNumber: false,
-                        valid: (val) {
-                          return null;
+                //           // return validInput(val!, 5, 100, "password");
+                //         },
+                //         myController: widget.companyProductsNumber,
+                //       ),
+                // widget.accountTitle == 'المستهلك' ||
+                //         widget.accountTitle == 'جهة إخبارية' ||
+                //         widget.accountTitle == 'شركة توصيل'
+                //     ? Container()
+                //     : TextSignup(
+                //         text: AppLocalizations.of(context)
+                //             .translate('sell_method'),
+                //       ),
+                // widget.accountTitle == 'المستهلك' ||
+                //         widget.accountTitle == 'جهة إخبارية' ||
+                //         widget.accountTitle == 'شركة توصيل'
+                //     ? Container()
+                //     : TextFormSignupWidget(
+                //         password: false,
+                //         isNumber: false,
+                //         valid: (val) {
+                //           return null;
 
-                          // return validInput(val!, 5, 100, "password");
-                        },
-                        myController: widget.sellType,
-                      ),
-                widget.accountTitle == 'المستهلك' ||
-                        widget.accountTitle == 'جهة إخبارية' ||
-                        widget.accountTitle == 'شركة توصيل'
-                    ? Container()
-                    : TextSignup(
-                        text: AppLocalizations.of(context)
-                            .translate('where_to_sell'),
-                      ),
-                widget.accountTitle == 'المستهلك' ||
-                        widget.accountTitle == 'جهة إخبارية' ||
-                        widget.accountTitle == 'شركة توصيل'
-                    ? Container()
-                    : TextFormSignupWidget(
-                        password: false,
-                        isNumber: false,
-                        valid: (val) {
-                          return null;
+                //           // return validInput(val!, 5, 100, "password");
+                //         },
+                //         myController: widget.sellType,
+                //       ),
+                // widget.accountTitle == 'المستهلك' ||
+                //         widget.accountTitle == 'جهة إخبارية' ||
+                //         widget.accountTitle == 'شركة توصيل'
+                //     ? Container()
+                //     : TextSignup(
+                //         text: AppLocalizations.of(context)
+                //             .translate('where_to_sell'),
+                //       ),
+                // widget.accountTitle == 'المستهلك' ||
+                //         widget.accountTitle == 'جهة إخبارية' ||
+                //         widget.accountTitle == 'شركة توصيل'
+                //     ? Container()
+                //     : TextFormSignupWidget(
+                //         password: false,
+                //         isNumber: false,
+                //         valid: (val) {
+                //           return null;
 
-                          // return validInput(val!, 5, 100, "password");
-                        },
-                        myController: widget.toCountry,
-                      ),
+                //           // return validInput(val!, 5, 100, "password");
+                //         },
+                //         myController: widget.toCountry,
+                //       ),
                 TextSignup(
                   text:
                       '${AppLocalizations.of(context).translate('Location Info')} :',
@@ -1370,69 +1462,95 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 BlocBuilder<CountryBloc, CountryState>(
                   bloc: widget.countryBloc,
                   builder: (context, countryState) {
-                    List<String> selectedCountry = [];
-
                     if (countryState is CountryInitial) {
-                      selectedCountry = getCitiesFromCountry(
-                          country: countryState.selectedCountry);
-
-                      return Container(
-                        width: MediaQuery.of(context).size.width,
-                        // height: 70,
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 2, vertical: 10),
-                        // padding: const EdgeInsets.symmetric(
-                        //     horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(10),
-                          // border: Border.all(
-                          //   color: AppColor.black,
-                          // ),
-                        ),
-                        child: DropdownSearch<String>(
-                          popupProps: const PopupProps.modalBottomSheet(
-                              showSearchBox: true,
-                              constraints: BoxConstraints(
-                                  // maxHeight: 300,
-                                  )),
-
-                          dropdownBuilder: (context, selectedItem) {
-                            return ListTile(
-                              title: Text(selectedItem ?? ''),
-                              // selected: isSelected,
+                      return BlocBuilder<AramexBloc, AramexState>(
+                        bloc: widget.aramexBloc,
+                        builder: (context, armState) {
+                          if (armState is FetchCitiesInProgress) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                color: AppColor.backgroundColor,
+                              ),
                             );
-                          },
-                          dropdownDecoratorProps: const DropDownDecoratorProps(
-                            dropdownSearchDecoration: InputDecoration(
-                              // constraints: BoxConstraints(maxHeight: 60),
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                          // mode: Mode.BOTTOM_SHEET,
-                          // showSearchBox: true,
-                          // searchBoxDecoration: const InputDecoration(
-                          //   hintText: 'Search...',
-                          // ),
-                          // dropdownDecoratorProps: const InputDecoration(
-                          //   border: OutlineInputBorder(),
-                          // ),
-                          items: selectedCountry,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedCity = newValue ?? '';
-                            });
-                          },
-                          selectedItem: selectedCity,
-                          // label: 'Select a city',
-                          // showClearButton: true,
-                          // popupItemBuilder: (context, item, isSelected) {
-                          //   return ListTile(
-                          //     title: Text(item),
-                          //     selected: isSelected,
-                          //   );
-                          // },
-                        ),
+                          } else if (armState is FetchCitiesFailure) {
+                            return const Center(
+                              child: Text(
+                                'error',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                              ),
+                            );
+                          } else if (armState is FetchCitiesSuccess) {
+                            return Container(
+                              width: MediaQuery.of(context).size.width,
+                              // height: 70,
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 2, vertical: 10),
+                              // padding: const EdgeInsets.symmetric(
+                              //     horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                color: Colors.green.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10),
+                                // border: Border.all(
+                                //   color: AppColor.black,
+                                // ),
+                              ),
+                              child: DropdownSearch<String>(
+                                popupProps: const PopupProps.modalBottomSheet(
+                                  showSearchBox: true,
+                                ),
+
+                                dropdownBuilder: (context, selectedItem) {
+                                  return ListTile(
+                                    title: Text(selectedItem ?? ''),
+                                    // selected: isSelected,
+                                  );
+                                },
+                                dropdownDecoratorProps:
+                                    const DropDownDecoratorProps(
+                                  dropdownSearchDecoration: InputDecoration(
+                                    // constraints: BoxConstraints(maxHeight: 60),
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                                // mode: Mode.BOTTOM_SHEET,
+                                // showSearchBox: true,
+                                // searchBoxDecoration: const InputDecoration(
+                                //   hintText: 'Search...',
+                                // ),
+                                // dropdownDecoratorProps: const InputDecoration(
+                                //   border: OutlineInputBorder(),
+                                // ),
+                                validator: (value) {
+                                  if (value == null) {
+                                    return AppLocalizations.of(context)
+                                        .translate('required');
+                                  }
+
+                                  return null;
+                                },
+
+                                items: armState.cities,
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    selectedCity = newValue ?? '';
+                                  });
+                                },
+                                selectedItem: selectedCity,
+                                // label: 'Select a city',
+                                // showClearButton: true,
+                                // popupItemBuilder: (context, item, isSelected) {
+                                //   return ListTile(
+                                //     title: Text(item),
+                                //     selected: isSelected,
+                                //   );
+                                // },
+                              ),
+                            );
+                          }
+                          return const SizedBox();
+                        },
                       );
                     }
                     return const SizedBox();
@@ -2123,31 +2241,31 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                   password: widget.passwordSignup.text,
                                   userType: userType,
                                   firstMobile: widget.numberPhoneOne.text,
-                                  secondMobile: widget.numberPhoneTow.text,
-                                  thirdMobile: widget.numberPhoneThree.text,
+                                  // secondMobile: widget.numberPhoneTow.text,
+                                  // thirdMobile: widget.numberPhoneThree.text,
                                   address: widget.address.text,
-                                  companyProductsNumber: int.tryParse(
-                                      widget.companyProductsNumber.text),
-                                  sellType: widget.sellType.text,
-                                  subcategory: widget.subcategory.text,
-                                  toCountry: widget.toCountry.text,
+                                  // companyProductsNumber: int.tryParse(
+                                  //     widget.companyProductsNumber.text),
+                                  // sellType: widget.sellType.text,
+                                  // subcategory: widget.subcategory.text,
+                                  // toCountry: widget.toCountry.text,
                                   isFreeZoon: _isFreeZone,
                                   isService: _isService,
                                   isSelectable: _isSelectable,
-                                  freezoneCity:
-                                      widget.freezoneCityController.text,
-                                  deliverable: _isDeliverable,
+                                  // freezoneCity:
+                                  //     widget.freezoneCityController.text,
+                                  // deliverable: _isDeliverable,
                                   profilePhoto: profileImage,
                                   coverPhoto: coverImage,
                                   // banerPhoto: banerImage,
                                   frontIdPhoto: frontIdPhoto,
                                   backIdPhoto: backIdPhoto,
-                                  bio: widget.bioController.text,
-                                  description:
-                                      widget.descriptionController.text,
-                                  website: widget.websiteController.text,
-                                  link: widget.linkController.text,
-                                  slogn: widget.slognController.text,
+                                  // bio: widget.bioController.text,
+                                  // description:
+                                  //     widget.descriptionController.text,
+                                  // website: widget.websiteController.text,
+                                  // link: widget.linkController.text,
+                                  // slogn: widget.slognController.text,
                                   title: selectCat?.title,
                                   deliveryCarsNum: int.tryParse(
                                       widget.deliveryCarsNumController.text),

@@ -141,8 +141,10 @@ class _VehiclesCompaniesScreenState extends State<VehiclesCompaniesScreen> {
                                               MaterialPageRoute(
                                                   builder: (context) {
                                             return VehicleCompaniesProfileScreen(
-                                              vehiclesCompany:
-                                                  filteredUsers[index],
+                                              id: filteredUsers[index].id,
+                                              userType: filteredUsers[index]
+                                                      .userType ??
+                                                  '',
                                             );
                                           }));
                                         },

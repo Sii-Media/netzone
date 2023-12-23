@@ -76,7 +76,7 @@ class SignUpUseCaseParams {
   final String? sellType;
   final String? toCountry;
 
-  final bool isFreeZoon;
+  final bool? isFreeZoon;
   final bool? isService;
   final bool? isSelectable;
   final String? freezoneCity;

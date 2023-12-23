@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:netzoon/presentation/home/test.dart';
@@ -365,11 +366,12 @@ class _StartScreenState extends State<StartScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           countryBloc.add(UpdateCountryEvent(selectedCountry));
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (context) {
-                              return const TestScreen();
-                            }),
-                          );
+                          // Navigator.of(context).pushReplacement(
+                          //   MaterialPageRoute(builder: (context) {
+                          //     return const TestScreen();
+                          //   }),
+                          // );
+                          context.pushReplacement('/home');
                         },
                         style: ButtonStyle(
                             side: const MaterialStatePropertyAll(

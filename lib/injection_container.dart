@@ -70,6 +70,7 @@ import 'package:netzoon/domain/aramex/repositories/aramex_repository.dart';
 import 'package:netzoon/domain/aramex/usecases/calculate_rate_use_case.dart';
 import 'package:netzoon/domain/aramex/usecases/create_pickup_use_case.dart';
 import 'package:netzoon/domain/aramex/usecases/create_shipment_usecase.dart';
+import 'package:netzoon/domain/aramex/usecases/fetch_cities_use_case.dart';
 import 'package:netzoon/domain/auth/repositories/auth_repository.dart';
 import 'package:netzoon/domain/auth/usecases/add_account_to_user_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/add_visitor_to_profile_use_case.dart';
@@ -86,6 +87,7 @@ import 'package:netzoon/domain/auth/usecases/get_user_followers_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_user_followings_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_user_visitors_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/logout_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/oAuth_sign_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/rate_user_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/set_first_time_logged_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/sign_in_use_case.dart';
@@ -356,6 +358,8 @@ Future<void> init() async {
         setFirstTimeLogged: sl(),
         logoutUseCase: sl(),
         deleteAccountUseCase: sl(),
+        getCountryUseCase: sl(),
+        oauthSignUseCase: sl(),
       ));
 
   sl.registerFactory(() =>
@@ -512,6 +516,8 @@ Future<void> init() async {
       createPickUpUseCase: sl(),
       createShipmentUseCase: sl(),
       calculateRateUseCase: sl(),
+      fetchCitiesUseCase: sl(),
+      getCountryUseCase: sl(),
     ),
   );
 
@@ -824,7 +830,8 @@ Future<void> init() async {
       () => GetServicesCategoriesUseCase(localCompanyRepository: sl()));
 
   sl.registerLazySingleton(() => GetUserDealsUseCase(dealsRepository: sl()));
-
+  sl.registerLazySingleton(() => OAuthSignUseCase(authRepository: sl()));
+  sl.registerLazySingleton(() => FetchCitiesUseCase(aramexRepository: sl()));
   //! Repositories
 
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(

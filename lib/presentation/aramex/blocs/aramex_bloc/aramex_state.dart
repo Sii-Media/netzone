@@ -64,3 +64,13 @@ class CalculateRateSuccess extends AramexState {
 
   const CalculateRateSuccess({required this.calculateRateResponse});
 }
+
+class FetchCitiesInProgress extends AramexState {}
+
+class FetchCitiesFailure extends AramexState {}
+
+class FetchCitiesSuccess extends AramexState {
+  final List<String> cities;
+
+  const FetchCitiesSuccess({required this.cities});
+}

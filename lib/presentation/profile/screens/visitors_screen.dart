@@ -90,30 +90,33 @@ class _VisitorsScreenState extends State<VisitorsScreen> {
                                 if (state.visitors[index].userType ==
                                     'local_company') {
                                   return LocalCompanyProfileScreen(
-                                      localCompany: state.visitors[index]);
+                                      id: state.visitors[index].id);
                                 } else if (state.visitors[index].userType ==
                                         'car' ||
                                     state.visitors[index].userType ==
                                         'planes') {
                                   return VehicleCompaniesProfileScreen(
-                                      vehiclesCompany: state.visitors[index]);
+                                    id: state.visitors[index].id,
+                                    userType:
+                                        state.visitors[index].userType ?? '',
+                                  );
                                 } else if (state.visitors[index].userType ==
                                     'real_estate') {
                                   return RealEstateCompanyProfileScreen(
-                                      user: state.visitors[index]);
+                                      id: state.visitors[index].id);
                                 } else if (state.visitors[index].userType ==
                                     'trader') {
                                   return LocalCompanyProfileScreen(
-                                    localCompany: state.visitors[index],
+                                    id: state.visitors[index].id,
                                   );
                                 } else if (state.visitors[index].userType ==
                                     'delivery_company') {
                                   return DeliveryCompanyProfileScreen(
-                                    deliveryCompany: state.visitors[index],
+                                    id: state.visitors[index].id,
                                   );
                                 } else {
                                   return UsersProfileScreen(
-                                      user: state.visitors[index]);
+                                      userId: state.visitors[index].id);
                                 }
                               }));
                             },

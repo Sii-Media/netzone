@@ -70,6 +70,8 @@ abstract class DepartmentRepository {
     bool? guarantee,
     String? address,
     String? madeIn,
+    String? color,
+    int? discountPercentage,
   });
 
   Future<Either<Failure, List<CategoryProducts>>> getSelectedProducts({

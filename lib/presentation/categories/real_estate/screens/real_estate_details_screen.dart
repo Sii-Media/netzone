@@ -340,31 +340,31 @@ class _RealEstateDetailsScreenState extends State<RealEstateDetailsScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        height: 60.h,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // ElevatedButton(
-            //   style: ButtonStyle(
-            //     backgroundColor: MaterialStateProperty.all(
-            //       AppColor.backgroundColor,
-            //     ),
-            //     shape: MaterialStateProperty.all(RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(18.0),
-            //     )),
-            //     fixedSize: const MaterialStatePropertyAll(
-            //       Size.fromWidth(200),
-            //     ),
-            //   ),
-            //   child: Text(AppLocalizations.of(context).translate('buy')),
-            //   onPressed: () {},
-            // ),
-            PriceSuggestionButton(input: input),
-          ],
-        ),
-      ),
+      // bottomNavigationBar: BottomAppBar(
+      //   height: 60.h,
+      //   child: Row(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     crossAxisAlignment: CrossAxisAlignment.center,
+      //     children: [
+      //       // ElevatedButton(
+      //       //   style: ButtonStyle(
+      //       //     backgroundColor: MaterialStateProperty.all(
+      //       //       AppColor.backgroundColor,
+      //       //     ),
+      //       //     shape: MaterialStateProperty.all(RoundedRectangleBorder(
+      //       //       borderRadius: BorderRadius.circular(18.0),
+      //       //     )),
+      //       //     fixedSize: const MaterialStatePropertyAll(
+      //       //       Size.fromWidth(200),
+      //       //     ),
+      //       //   ),
+      //       //   child: Text(AppLocalizations.of(context).translate('buy')),
+      //       //   onPressed: () {},
+      //       // ),
+      //       PriceSuggestionButton(input: input),
+      //     ],
+      //   ),
+      // ),
     );
   }
 

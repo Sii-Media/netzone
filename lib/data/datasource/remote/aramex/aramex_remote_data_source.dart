@@ -3,6 +3,7 @@ import 'package:netzoon/data/models/aramex/create_pickup_input_data_model.dart';
 import 'package:netzoon/data/models/aramex/create_pickup_response_model.dart';
 import 'package:netzoon/data/models/aramex/create_shipment_input_data_model.dart';
 import 'package:netzoon/data/models/aramex/create_shipment_response_model.dart';
+import 'package:netzoon/data/models/aramex/fetch_cities_response_model.dart';
 import 'package:retrofit/http.dart';
 
 part 'aramex_remote_data_source.g.dart';

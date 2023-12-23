@@ -145,7 +145,9 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                       fcmtoken: value ?? '',
                       text: nameController.text,
                       category: 'cars',
-                      itemId: state.message));
+                      itemId: state.message,
+                      body:
+                          'add ${nameController.text} to ${widget.category}'));
                 });
               }
             },

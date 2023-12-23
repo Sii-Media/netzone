@@ -495,7 +495,7 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                       ),
                       child:
                           Text(AppLocalizations.of(context).translate('chat'))),
-                  PriceSuggestionButton(input: input),
+                  // PriceSuggestionButton(input: input),
                 ],
               ),
             );

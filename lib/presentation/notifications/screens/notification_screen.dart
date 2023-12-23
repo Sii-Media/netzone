@@ -3,6 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/advertising/advertising_details.dart';
+import 'package:netzoon/presentation/categories/delivery_company/screens/delivery_company_profile_screen.dart';
+import 'package:netzoon/presentation/categories/factories/factory_profile_screen.dart';
+import 'package:netzoon/presentation/categories/free_zoon/freezone_company_profile_screen.dart';
+import 'package:netzoon/presentation/categories/local_company/local_company_profile.dart';
+import 'package:netzoon/presentation/categories/real_estate/screens/real_estate_company_profile_screen.dart';
+import 'package:netzoon/presentation/categories/users/screens/users_profile_screen.dart';
+import 'package:netzoon/presentation/categories/vehicles/screens/vehicle_companies_profile_screen.dart';
 import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
 import 'package:netzoon/presentation/deals/deals_details.dart';
@@ -163,6 +170,90 @@ class _NotificatiionScreenState extends State<NotificatiionScreen> {
                                                       builder: (context) {
                                                 return const NewsScreen();
                                               }));
+                                            } else if (state
+                                                    .notifications[index]
+                                                    .category ==
+                                                'account') {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) {
+                                                if (state.notifications[index]
+                                                        .text ==
+                                                    'local_company') {
+                                                  return LocalCompanyProfileScreen(
+                                                      id: state
+                                                          .notifications[index]
+                                                          .itemId);
+                                                } else if (state
+                                                            .notifications[
+                                                                index]
+                                                            .text ==
+                                                        'car' ||
+                                                    state.notifications[index]
+                                                            .text ==
+                                                        'planes' ||
+                                                    state.notifications[index]
+                                                            .text ==
+                                                        'sea_companies') {
+                                                  return VehicleCompaniesProfileScreen(
+                                                    id: state
+                                                        .notifications[index]
+                                                        .itemId,
+                                                    userType: state
+                                                        .notifications[index]
+                                                        .text,
+                                                  );
+                                                } else if (state
+                                                        .notifications[index]
+                                                        .text ==
+                                                    'real_estate') {
+                                                  return RealEstateCompanyProfileScreen(
+                                                      id: state
+                                                          .notifications[index]
+                                                          .itemId);
+                                                } else if (state
+                                                        .notifications[index]
+                                                        .text ==
+                                                    'trader') {
+                                                  return LocalCompanyProfileScreen(
+                                                    id: state
+                                                        .notifications[index]
+                                                        .itemId,
+                                                  );
+                                                } else if (state
+                                                        .notifications[index]
+                                                        .text ==
+                                                    'delivery_company') {
+                                                  return DeliveryCompanyProfileScreen(
+                                                    id: state
+                                                        .notifications[index]
+                                                        .itemId,
+                                                  );
+                                                } else if (state
+                                                        .notifications[index]
+                                                        .text ==
+                                                    'factory') {
+                                                  return FactoryProfileScreen(
+                                                    id: state
+                                                        .notifications[index]
+                                                        .itemId,
+                                                  );
+                                                } else if (state
+                                                        .notifications[index]
+                                                        .text ==
+                                                    'freezone') {
+                                                  return FreezoneCompanyProfileScreen(
+                                                    id: state
+                                                        .notifications[index]
+                                                        .itemId,
+                                                  );
+                                                } else {
+                                                  return UsersProfileScreen(
+                                                      userId: state
+                                                          .notifications[index]
+                                                          .itemId);
+                                                }
+                                              }));
                                             }
                                           },
                                           leading: CircleAvatar(
@@ -173,8 +264,11 @@ class _NotificatiionScreenState extends State<NotificatiionScreen> {
                                             ),
                                             radius: 20.r,
                                           ),
-                                          title: Text(
-                                              '${state.notifications[index].username} ${AppLocalizations.of(context).translate('added a')} ${state.notifications[index].text} ${AppLocalizations.of(context).translate('to')} ${AppLocalizations.of(context).translate(state.notifications[index].category)}'),
+                                          title: Text(state.notifications[index]
+                                                      .category ==
+                                                  'account'
+                                              ? '${state.notifications[index].username} ${AppLocalizations.of(context).translate('created an account as')} ${state.notifications[index].text}'
+                                              : '${state.notifications[index].username} ${AppLocalizations.of(context).translate('added a')} ${state.notifications[index].text} ${AppLocalizations.of(context).translate('to')} ${AppLocalizations.of(context).translate(state.notifications[index].category)}'),
                                           subtitle: Text(
                                             formatDateTime(state
                                                     .notifications[index]

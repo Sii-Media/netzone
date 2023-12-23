@@ -270,26 +270,26 @@ class _SearchPageState extends State<SearchPage> {
                                   Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) {
                                     return LocalCompanyProfileScreen(
-                                        localCompany: filteredItems[index]);
+                                        id: filteredItems[index].id);
                                   }));
                                 } else if (selectedCategory ==
                                     'free_zone_companies') {
                                   Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) {
                                     return FreezoneCompanyProfileScreen(
-                                        user: filteredItems[index]);
+                                        id: filteredItems[index].id);
                                   }));
                                 } else if (selectedCategory == 'real_estate') {
                                   Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) {
                                     return RealEstateCompanyProfileScreen(
-                                        user: filteredItems[index]);
+                                        id: filteredItems[index].id);
                                   }));
                                 } else if (selectedCategory == 'factories') {
                                   Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) {
                                     return FactoryProfileScreen(
-                                        user: filteredItems[index]);
+                                        id: filteredItems[index].id);
                                   }));
                                 } else if (selectedCategory == 'advertiments') {
                                   Navigator.of(context).push(

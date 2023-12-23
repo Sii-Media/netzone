@@ -32,7 +32,7 @@ class AddDealEvent extends DealsItemsEvent {
   final DateTime endDate;
   final String location;
   final String category;
-
+  final String description;
   const AddDealEvent({
     required this.name,
     required this.companyName,
@@ -43,6 +43,7 @@ class AddDealEvent extends DealsItemsEvent {
     required this.endDate,
     required this.location,
     required this.category,
+    required this.description,
   });
 }
 
@@ -70,7 +71,7 @@ class EditDealEvent extends DealsItemsEvent {
   final String location;
   final String category;
   final String country;
-
+  final String description;
   const EditDealEvent({
     required this.id,
     required this.name,
@@ -83,6 +84,7 @@ class EditDealEvent extends DealsItemsEvent {
     required this.location,
     required this.category,
     required this.country,
+    required this.description,
   });
 }
 

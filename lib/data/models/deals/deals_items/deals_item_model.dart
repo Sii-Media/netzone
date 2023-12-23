@@ -19,6 +19,7 @@ class DealsItemsModel {
   final String category;
   final String country;
   final UserInfoModel owner;
+  final String? description;
   DealsItemsModel({
     this.id,
     required this.name,
@@ -32,6 +33,7 @@ class DealsItemsModel {
     required this.category,
     required this.country,
     required this.owner,
+    this.description,
   });
 
   factory DealsItemsModel.fromJson(Map<String, dynamic> json) =>
@@ -54,5 +56,6 @@ extension MapToDomain on DealsItemsModel {
         location: location,
         category: category,
         country: country,
+        description: description,
       );
 }

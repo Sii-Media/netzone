@@ -57,3 +57,7 @@ class CalculateRateEvent extends AramexEvent {
 
   const CalculateRateEvent({required this.calculateRateInputData});
 }
+
+class FetchCitiesEvent extends AramexEvent {
+  const FetchCitiesEvent();
+}

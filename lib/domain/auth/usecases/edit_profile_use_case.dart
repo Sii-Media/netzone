@@ -27,6 +27,13 @@ class EditProfileUseCase extends UseCase<String, EditProfileParams> {
       website: params.website,
       address: params.address,
       contactName: params.contactName,
+      userType: params.userType,
+      addressDetails: params.addressDetails,
+      backIdPhoto: params.backIdPhoto,
+      city: params.city,
+      deliveryPermitPhot: params.deliveryPermitPhot,
+      frontIdPhoto: params.frontIdPhoto,
+      tradeLicensePhoto: params.tradeLicensePhoto,
     );
   }
 }
@@ -36,8 +43,8 @@ class EditProfileParams {
   final String username;
   final String email;
   final String firstMobile;
-  final String secondeMobile;
-  final String thirdMobile;
+  final String? secondeMobile;
+  final String? thirdMobile;
   final File? profilePhoto;
   final File? coverPhoto;
   final String? bio;
@@ -47,13 +54,20 @@ class EditProfileParams {
   final String? slogn;
   final String contactName;
   final String? address;
+  final String? userType;
+  final String? city;
+  final String? addressDetails;
+  final File? frontIdPhoto;
+  final File? backIdPhoto;
+  final File? tradeLicensePhoto;
+  final File? deliveryPermitPhot;
   EditProfileParams({
     required this.userId,
     required this.username,
     required this.email,
     required this.firstMobile,
-    required this.secondeMobile,
-    required this.thirdMobile,
+    this.secondeMobile,
+    this.thirdMobile,
     this.profilePhoto,
     this.coverPhoto,
     this.bio,
@@ -63,5 +77,12 @@ class EditProfileParams {
     this.slogn,
     this.address,
     required this.contactName,
+    this.userType,
+    this.city,
+    this.addressDetails,
+    this.frontIdPhoto,
+    this.backIdPhoto,
+    this.tradeLicensePhoto,
+    this.deliveryPermitPhot,
   });
 }

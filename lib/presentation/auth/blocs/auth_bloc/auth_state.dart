@@ -38,3 +38,36 @@ class DeleteAccountFailure extends AuthState {
 }
 
 class DeleteAccountSuccess extends AuthState {}
+
+class SigninWithFacebookInProgress extends AuthState {}
+
+class SigninWithFacebookFailure extends AuthState {}
+
+class SigninWithFacebookSuccess extends AuthState {
+  final Map<String, dynamic> userData;
+
+  const SigninWithFacebookSuccess({required this.userData});
+}
+
+class OAuthSignInProgress extends AuthState {}
+
+class OAuthSignFailure extends AuthState {}
+
+class OAuthSignSuccess extends AuthState {
+  final User user;
+
+  const OAuthSignSuccess({required this.user});
+}
+
+class SigninWithGoogleInProgress extends AuthState {}
+
+class SigninWithGoogleFailure extends AuthState {}
+
+class SigninWithGoogleSuccess extends AuthState {
+  final String email;
+  final String username;
+  final String profile;
+
+  const SigninWithGoogleSuccess(
+      {required this.email, required this.username, required this.profile});
+}

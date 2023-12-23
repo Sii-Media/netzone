@@ -532,7 +532,7 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
                       pickupItems: [
                         PickupItems(
                             productGroup: 'DOM',
-                            productType: 'CDS',
+                            productType: 'ONP',
                             numberOfShipments: 1,
                             packageTypel: 'Box',
                             payment: 'P',
@@ -681,7 +681,7 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
                             numberOfPieces:
                                 int.parse(widget.totalQuantity.toString()),
                             productGroup: 'DOM',
-                            productType: 'CDS',
+                            productType: 'ONP',
                             paymentType: 'P',
                             items: widget.products.map((e) {
                               return ShipmentItems(

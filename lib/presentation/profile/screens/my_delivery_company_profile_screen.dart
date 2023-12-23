@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:netzoon/presentation/profile/screens/visitors_screen.dart';
 
 import '../../../injection_container.dart';
@@ -12,7 +12,6 @@ import '../../core/blocs/country_bloc/country_bloc.dart';
 import '../../core/constant/colors.dart';
 import '../../core/helpers/get_currency_of_country.dart';
 import '../../core/widgets/screen_loader.dart';
-import '../../home/test.dart';
 import '../../utils/app_localizations.dart';
 import '../blocs/add_account/add_account_bloc.dart';
 import '../blocs/get_user/get_user_bloc.dart';
@@ -229,11 +228,15 @@ class _MyDeliveryCompanyProfileScreenState
                       ),
                       backgroundColor: Theme.of(context).colorScheme.secondary,
                     ));
-                    Navigator.of(context, rootNavigator: true)
-                        .pushAndRemoveUntil(
-                            CupertinoPageRoute(builder: (context) {
-                      return const TestScreen();
-                    }), (route) => false);
+                    // Navigator.of(context, rootNavigator: true)
+                    //     .pushAndRemoveUntil(
+                    //         CupertinoPageRoute(builder: (context) {
+                    //   return const TestScreen();
+                    // }), (route) => false);
+                    while (context.canPop()) {
+                      context.pop();
+                    }
+                    context.push('/home');
                   }
                 },
                 child: DefaultTabController(

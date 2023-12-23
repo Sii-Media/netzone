@@ -37,6 +37,7 @@ abstract class DealsRepository {
     required final String location,
     required final String category,
     required final String country,
+    required final String description,
   });
 
   Future<Either<Failure, String>> editDeal({
@@ -51,6 +52,7 @@ abstract class DealsRepository {
     required final String location,
     required final String category,
     required final String country,
+    required final String description,
   });
   Future<Either<Failure, String>> deleteDeal({
     required String id,

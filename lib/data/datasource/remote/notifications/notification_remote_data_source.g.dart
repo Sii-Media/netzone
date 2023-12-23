@@ -59,6 +59,7 @@ class _NotificationRemoteDataSourceImpl
     String text,
     String category,
     String itemId,
+    String body,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -87,6 +88,10 @@ class _NotificationRemoteDataSourceImpl
     _data.fields.add(MapEntry(
       'itemId',
       itemId,
+    ));
+    _data.fields.add(MapEntry(
+      'body',
+      body,
     ));
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<MyNotificationsModel>(Options(

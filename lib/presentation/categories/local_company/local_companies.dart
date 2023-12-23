@@ -150,9 +150,9 @@ class _GovernmentalCompaniesState extends State<GovernmentalCompanies> {
                                                                 builder:
                                                                     (context) {
                                                               return LocalCompanyProfileScreen(
-                                                                localCompany:
-                                                                    filteredUsers[
-                                                                        index],
+                                                                id: filteredUsers[
+                                                                        index]
+                                                                    .id,
                                                               );
                                                             }),
                                                           );

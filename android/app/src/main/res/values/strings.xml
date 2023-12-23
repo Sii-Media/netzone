@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Netzoon</string>
+    <string name="facebook_app_id">2684836565004842</string>
+    <string name="fb_login_protocol_scheme">fb2684836565004842</string>
+    <string name="facebook_client_token">644d9cd18fc384edaaec2ca0e337c255</string>
+</resources>

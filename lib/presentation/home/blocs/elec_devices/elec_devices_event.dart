@@ -52,19 +52,24 @@ class EditProductEvent extends ElecDevicesEvent {
   final bool? guarantee;
   final String? address;
   final String? madeIn;
+  final String? color;
+  final int? discountPercentage;
 
-  const EditProductEvent(
-      {required this.productId,
-      required this.name,
-      required this.description,
-      required this.price,
-      this.quantity,
-      this.weight,
-      required this.image,
-      this.video,
-      this.guarantee,
-      this.address,
-      this.madeIn});
+  const EditProductEvent({
+    required this.productId,
+    required this.name,
+    required this.description,
+    required this.price,
+    this.quantity,
+    this.weight,
+    required this.image,
+    this.video,
+    this.guarantee,
+    this.address,
+    this.madeIn,
+    this.color,
+    this.discountPercentage,
+  });
 }
 
 class GetProductByIdEvent extends ElecDevicesEvent {

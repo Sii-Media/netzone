@@ -21,7 +21,7 @@ class SignUpRequested extends SignUpEvent {
   final String? sellType;
   final String? toCountry;
 
-  final bool isFreeZoon;
+  final bool? isFreeZoon;
   final bool? isService;
   final bool? isSelectable;
 
@@ -68,7 +68,7 @@ class SignUpRequested extends SignUpEvent {
     this.companyProductsNumber,
     this.sellType,
     this.toCountry,
-    required this.isFreeZoon,
+    this.isFreeZoon,
     this.isService,
     this.isSelectable,
     this.freezoneCity,

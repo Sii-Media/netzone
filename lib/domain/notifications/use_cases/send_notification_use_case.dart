@@ -20,6 +20,7 @@ class SendNotificationUseCase
       text: params.text,
       category: params.category,
       itemId: params.itemId,
+      body: params.body,
     );
   }
 }
@@ -31,12 +32,14 @@ class SendNotificationParams {
   final String text;
   final String category;
   final String itemId;
-
-  SendNotificationParams(
-      {required this.fcmtoken,
-      required this.username,
-      required this.imageUrl,
-      required this.text,
-      required this.category,
-      required this.itemId});
+  final String body;
+  SendNotificationParams({
+    required this.fcmtoken,
+    required this.username,
+    required this.imageUrl,
+    required this.text,
+    required this.category,
+    required this.itemId,
+    required this.body,
+  });
 }

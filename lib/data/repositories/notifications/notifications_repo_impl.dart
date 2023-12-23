@@ -28,13 +28,15 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
-  Future<Either<Failure, MyNotification>> sendNotification(
-      {required String fcmtoken,
-      required String username,
-      required String imageUrl,
-      required String text,
-      required String category,
-      required String itemId}) async {
+  Future<Either<Failure, MyNotification>> sendNotification({
+    required String fcmtoken,
+    required String username,
+    required String imageUrl,
+    required String text,
+    required String category,
+    required String itemId,
+    required String body,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
         final notification =
@@ -45,6 +47,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
           text,
           category,
           itemId,
+          body,
         );
         return Right(notification.toDomain());
       } else {

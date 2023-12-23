@@ -1,13 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:dynamic_height_grid_view/dynamic_height_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:netzoon/presentation/categories/local_company/local_company_bloc/local_company_bloc.dart';
 import 'package:netzoon/presentation/chat/screens/chat_home_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
+import 'package:netzoon/presentation/ecommerce/widgets/listsubsectionswidget.dart';
 import 'package:netzoon/presentation/orders/screens/manage_order_screen.dart';
 import 'package:netzoon/presentation/profile/screens/visitors_screen.dart';
 
@@ -16,7 +18,6 @@ import '../../categories/local_company/company_service_detail_screen.dart';
 import '../../core/blocs/country_bloc/country_bloc.dart';
 import '../../core/helpers/get_currency_of_country.dart';
 import '../../core/widgets/on_failure_widget.dart';
-import '../../home/test.dart';
 import '../../orders/screens/order_screen.dart';
 import '../../utils/app_localizations.dart';
 import '../blocs/add_account/add_account_bloc.dart';
@@ -244,11 +245,15 @@ class _MyLocalCompanyProfileScreenState
                         backgroundColor:
                             Theme.of(context).colorScheme.secondary,
                       ));
-                      Navigator.of(context, rootNavigator: true)
-                          .pushAndRemoveUntil(
-                              CupertinoPageRoute(builder: (context) {
-                        return const TestScreen();
-                      }), (route) => false);
+                      // Navigator.of(context, rootNavigator: true)
+                      //     .pushAndRemoveUntil(
+                      //         CupertinoPageRoute(builder: (context) {
+                      //   return const TestScreen();
+                      // }), (route) => false);
+                      while (context.canPop()) {
+                        context.pop();
+                      }
+                      context.push('/home');
                     }
                   },
                   child: DefaultTabController(
@@ -1033,141 +1038,163 @@ class ProductsListWidget extends StatelessWidget {
             );
           } else if (state is GetUserProductsSuccess) {
             return state.products.isNotEmpty
-                ? Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3,
-                                    childAspectRatio: 0.74,
-                                    crossAxisSpacing: 10.w,
-                                    mainAxisSpacing: 10.h),
-                            shrinkWrap: true,
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: state.products.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                margin: const EdgeInsets.symmetric(vertical: 8),
-                                decoration: BoxDecoration(
-                                    color: AppColor.white,
-                                    borderRadius: BorderRadius.circular(20),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: AppColor.secondGrey
-                                            .withOpacity(0.5),
-                                        blurRadius: 10,
-                                        spreadRadius: 2,
-                                        offset: const Offset(0, 3),
-                                      ),
-                                    ]),
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20)),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(builder: (context) {
-                                        return ProductDetailScreen(
-                                            item: state.products[index].id);
-                                      }));
-                                    },
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        CachedNetworkImage(
-                                          imageUrl:
-                                              state.products[index].imageUrl,
-                                          height: 65.h,
-                                          width: 160.w,
-                                          fit: BoxFit.contain,
-                                          progressIndicatorBuilder: (context,
-                                                  url, downloadProgress) =>
-                                              Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 70.0, vertical: 50),
-                                            child: CircularProgressIndicator(
-                                              value: downloadProgress.progress,
-                                              color: AppColor.backgroundColor,
+                ? DynamicHeightGridView(
+                    itemCount: state.products.length,
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    builder: (ctx, index) {
+                      return ListSubSectionsWidget(
+                        deviceList: state.products[index],
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return ProductDetailScreen(
+                                    item: state.products[index].id);
+                              },
+                            ),
+                          );
+                        },
+                      );
 
-                                              // strokeWidth: 10,
-                                            ),
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              const Icon(Icons.error),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              right: 9.0,
-                                              left: 9.0,
-                                              bottom: 2.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Expanded(
-                                                child: Center(
-                                                  child: Text(
-                                                    state.products[index].name,
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      color: AppColor
-                                                          .backgroundColor,
-                                                      fontSize: 12.sp,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        RichText(
-                                          text: TextSpan(
-                                              style: TextStyle(
-                                                  fontSize: 10.sp,
-                                                  color:
-                                                      AppColor.backgroundColor),
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                  text:
-                                                      '${state.products[index].price}',
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      color: AppColor.colorTwo),
-                                                ),
-                                                TextSpan(
-                                                  text: getCurrencyFromCountry(
-                                                    selectedCountry,
-                                                    context,
-                                                  ),
-                                                  style: TextStyle(
-                                                      color: AppColor.colorTwo,
-                                                      fontSize: 10.sp),
-                                                )
-                                              ]),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          height: 90.h,
-                        ),
-                      ],
-                    ),
-                  )
+                      /// return your widget here.
+                    })
+                // ? Padding(
+                //     padding: const EdgeInsets.all(8.0),
+                //     child: Column(
+                //       children: [
+                //         Expanded(
+                //           child: GridView.builder(
+                //             gridDelegate:
+                //                 SliverGridDelegateWithFixedCrossAxisCount(
+                //                     crossAxisCount: 3,
+                //                     childAspectRatio: 0.74,
+                //                     crossAxisSpacing: 10.w,
+                //                     mainAxisSpacing: 10.h),
+                //             shrinkWrap: true,
+                //             physics: const BouncingScrollPhysics(),
+                //             itemCount: state.products.length,
+                //             itemBuilder: (context, index) {
+                //               return Container(
+                //                 margin: const EdgeInsets.symmetric(vertical: 8),
+                //                 decoration: BoxDecoration(
+                //                     color: AppColor.white,
+                //                     borderRadius: BorderRadius.circular(20),
+                //                     boxShadow: [
+                //                       BoxShadow(
+                //                         color: AppColor.secondGrey
+                //                             .withOpacity(0.5),
+                //                         blurRadius: 10,
+                //                         spreadRadius: 2,
+                //                         offset: const Offset(0, 3),
+                //                       ),
+                //                     ]),
+                //                 child: ClipRRect(
+                //                   borderRadius: const BorderRadius.all(
+                //                       Radius.circular(20)),
+                //                   child: GestureDetector(
+                //                     onTap: () {
+                //                       Navigator.of(context).push(
+                //                           MaterialPageRoute(builder: (context) {
+                //                         return ProductDetailScreen(
+                //                             item: state.products[index].id);
+                //                       }));
+                //                     },
+                //                     child: Column(
+                //                       mainAxisAlignment:
+                //                           MainAxisAlignment.center,
+                //                       crossAxisAlignment:
+                //                           CrossAxisAlignment.center,
+                //                       children: [
+                //                         CachedNetworkImage(
+                //                           imageUrl:
+                //                               state.products[index].imageUrl,
+                //                           height: 65.h,
+                //                           width: 160.w,
+                //                           fit: BoxFit.contain,
+                //                           progressIndicatorBuilder: (context,
+                //                                   url, downloadProgress) =>
+                //                               Padding(
+                //                             padding: const EdgeInsets.symmetric(
+                //                                 horizontal: 70.0, vertical: 50),
+                //                             child: CircularProgressIndicator(
+                //                               value: downloadProgress.progress,
+                //                               color: AppColor.backgroundColor,
+
+                //                               // strokeWidth: 10,
+                //                             ),
+                //                           ),
+                //                           errorWidget: (context, url, error) =>
+                //                               const Icon(Icons.error),
+                //                         ),
+                //                         Padding(
+                //                           padding: const EdgeInsets.only(
+                //                               right: 9.0,
+                //                               left: 9.0,
+                //                               bottom: 2.0),
+                //                           child: Row(
+                //                             mainAxisAlignment:
+                //                                 MainAxisAlignment.spaceBetween,
+                //                             children: [
+                //                               Expanded(
+                //                                 child: Center(
+                //                                   child: Text(
+                //                                     state.products[index].name,
+                //                                     maxLines: 1,
+                //                                     overflow:
+                //                                         TextOverflow.ellipsis,
+                //                                     style: TextStyle(
+                //                                       color: AppColor
+                //                                           .backgroundColor,
+                //                                       fontSize: 12.sp,
+                //                                     ),
+                //                                   ),
+                //                                 ),
+                //                               ),
+                //                             ],
+                //                           ),
+                //                         ),
+                //                         RichText(
+                //                           text: TextSpan(
+                //                               style: TextStyle(
+                //                                   fontSize: 10.sp,
+                //                                   color:
+                //                                       AppColor.backgroundColor),
+                //                               children: <TextSpan>[
+                //                                 TextSpan(
+                //                                   text:
+                //                                       '${state.products[index].price}',
+                //                                   style: const TextStyle(
+                //                                       fontWeight:
+                //                                           FontWeight.w700,
+                //                                       color: AppColor.colorTwo),
+                //                                 ),
+                //                                 TextSpan(
+                //                                   text: getCurrencyFromCountry(
+                //                                     selectedCountry,
+                //                                     context,
+                //                                   ),
+                //                                   style: TextStyle(
+                //                                       color: AppColor.colorTwo,
+                //                                       fontSize: 10.sp),
+                //                                 )
+                //                               ]),
+                //                         ),
+                //                       ],
+                //                     ),
+                //                   ),
+                //                 ),
+                //               );
+                //             },
+                //           ),
+                //         ),
+                //         SizedBox(
+                //           height: 90.h,
+                //         ),
+                //       ],
+                //     ),
+                //   )
                 : Center(
                     child: Text(
                         AppLocalizations.of(context).translate('no_items'),

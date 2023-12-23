@@ -595,7 +595,7 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                   ),
                 ),
                 child: Text(AppLocalizations.of(context).translate('chat'))),
-            PriceSuggestionButton(input: input),
+            // PriceSuggestionButton(input: input),
           ],
         ),
       ),

@@ -126,7 +126,8 @@ class _UsersListScreenState extends State<UsersListScreen> {
                                               MaterialPageRoute(
                                                   builder: (context) {
                                                 return UsersProfileScreen(
-                                                    user: filteredUsers[index]);
+                                                    userId: filteredUsers[index]
+                                                        .id);
                                               }),
                                             );
                                           },

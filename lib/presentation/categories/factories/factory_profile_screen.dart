@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/auth/entities/user_info.dart';
+import 'package:netzoon/presentation/core/helpers/share_image_function.dart';
 import 'package:netzoon/presentation/home/widgets/auth_alert.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 
@@ -26,8 +27,12 @@ import '../widgets/build_rating.dart';
 import '../widgets/info_list_widget.dart';
 
 class FactoryProfileScreen extends StatefulWidget {
-  final UserInfo user;
-  const FactoryProfileScreen({super.key, required this.user});
+  final String id;
+
+  const FactoryProfileScreen({
+    super.key,
+    required this.id,
+  });
 
   @override
   State<FactoryProfileScreen> createState() => _FactoryProfileScreenState();
@@ -49,13 +54,13 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
 
   @override
   void initState() {
-    userBloc.add(GetUserByIdEvent(userId: widget.user.id));
-    productBloc.add(GetUserProductsByIdEvent(id: widget.user.id));
+    userBloc.add(GetUserByIdEvent(userId: widget.id));
+    productBloc.add(GetUserProductsByIdEvent(id: widget.id));
     authBloc.add(AuthCheckRequested());
     countryBloc = BlocProvider.of<CountryBloc>(context);
     countryBloc.add(GetCountryEvent());
-    adsBloc.add(GetUserAdsEvent(userId: widget.user.id));
-    visitorBloc.add(AddVisitorEvent(userId: widget.user.id));
+    adsBloc.add(GetUserAdsEvent(userId: widget.id));
+    visitorBloc.add(AddVisitorEvent(userId: widget.id));
 
     super.initState();
   }
@@ -134,9 +139,15 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            widget.user.username ?? '',
-            style: TextStyle(color: AppColor.backgroundColor, fontSize: 15.sp),
+          title: BlocBuilder<GetUserBloc, GetUserState>(
+            bloc: userBloc,
+            builder: (context, state) {
+              return Text(
+                state is GetUserSuccess ? state.userInfo.username ?? '' : '',
+                style:
+                    TextStyle(color: AppColor.backgroundColor, fontSize: 15.sp),
+              );
+            },
           ),
           backgroundColor: AppColor.white,
           leading: GestureDetector(
@@ -150,16 +161,30 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
             ),
           ),
           actions: [
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.share,
-                    color: AppColor.backgroundColor,
-                    size: 22.sp,
-                  ),
-                )),
+            BlocBuilder<GetUserBloc, GetUserState>(
+              bloc: userBloc,
+              builder: (context, state) {
+                return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: IconButton(
+                      onPressed: () async {
+                        state is GetUserSuccess
+                            ? await shareImageWithDescription(
+                                imageUrl: state.userInfo.profilePhoto ?? '',
+                                description:
+                                    'https://netzoon.com/home/catagories/factories/${state.userInfo.id}',
+                                subject: state.userInfo.username,
+                              )
+                            : null;
+                      },
+                      icon: Icon(
+                        Icons.share,
+                        color: AppColor.backgroundColor,
+                        size: 22.sp,
+                      ),
+                    ));
+              },
+            ),
           ],
         ),
         body: BlocListener<GetUserBloc, GetUserState>(
@@ -216,16 +241,15 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                   serviceBloc
                       .add(GetCompanyServicesByIdEvent(id: state.userInfo.id));
                 } else {
-                  productBloc.add(GetUserProductsByIdEvent(id: widget.user.id));
+                  productBloc.add(GetUserProductsByIdEvent(id: widget.id));
                 }
                 return RefreshIndicator(
                   onRefresh: () async {
-                    userBloc.add(GetUserByIdEvent(userId: widget.user.id));
-                    productBloc
-                        .add(GetUserProductsByIdEvent(id: widget.user.id));
+                    userBloc.add(GetUserByIdEvent(userId: widget.id));
+                    productBloc.add(GetUserProductsByIdEvent(id: widget.id));
                     authBloc.add(AuthCheckRequested());
-                    adsBloc.add(GetUserAdsEvent(userId: widget.user.id));
-                    visitorBloc.add(AddVisitorEvent(userId: widget.user.id));
+                    adsBloc.add(GetUserAdsEvent(userId: widget.id));
+                    visitorBloc.add(AddVisitorEvent(userId: widget.id));
                   },
                   child: DefaultTabController(
                     length: 3,
@@ -343,7 +367,8 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                   children: [
                                                     Expanded(
                                                       child: Text(
-                                                        widget.user.username ??
+                                                        state.userInfo
+                                                                .username ??
                                                             '',
                                                         style: TextStyle(
                                                           color: AppColor.black,
@@ -413,11 +438,11 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                                 isFollowing =
                                                                     !isFollowing;
                                                               });
-                                                              userBloc.add(ToggleFollowEvent(
-                                                                  otherUserId:
-                                                                      widget
-                                                                          .user
-                                                                          .id));
+                                                              userBloc.add(
+                                                                  ToggleFollowEvent(
+                                                                      otherUserId:
+                                                                          widget
+                                                                              .id));
                                                             },
                                                           );
                                                         }
@@ -427,9 +452,10 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                   ],
                                                 ),
                                               ),
-                                              widget.user.slogn != null
+                                              state.userInfo.slogn != null
                                                   ? Text(
-                                                      widget.user.slogn ?? '',
+                                                      state.userInfo.slogn ??
+                                                          '',
                                                       style: TextStyle(
                                                         color:
                                                             AppColor.secondGrey,
@@ -444,7 +470,7 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                     CrossAxisAlignment.center,
                                                 children: [
                                                   Text(
-                                                    '${widget.user.averageRating?.toStringAsFixed(3)}',
+                                                    '${state.userInfo.averageRating?.toStringAsFixed(3)}',
                                                     style: TextStyle(
                                                         color:
                                                             AppColor.secondGrey,
@@ -456,14 +482,15 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                     onTap: () => showRating(
                                                         context,
                                                         rateBloc,
-                                                        widget.user.id,
-                                                        widget.user
+                                                        widget.id,
+                                                        state.userInfo
                                                                 .averageRating ??
                                                             0),
                                                     child: RatingBar.builder(
                                                       minRating: 1,
                                                       maxRating: 5,
-                                                      initialRating: widget.user
+                                                      initialRating: state
+                                                              .userInfo
                                                               .averageRating ??
                                                           0,
                                                       itemSize: 18.sp,
@@ -482,7 +509,7 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                     ),
                                                   ),
                                                   Text(
-                                                    '(${widget.user.totalRatings} ${AppLocalizations.of(context).translate('review')})',
+                                                    '(${state.userInfo.totalRatings} ${AppLocalizations.of(context).translate('review')})',
                                                     style: TextStyle(
                                                       color:
                                                           AppColor.secondGrey,
@@ -528,7 +555,7 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                 return FollowingsListScreen(
                                                   type: 'followings',
                                                   who: 'other',
-                                                  id: widget.user.id,
+                                                  id: widget.id,
                                                 );
                                               }));
                                             },
@@ -565,7 +592,7 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                 return FollowingsListScreen(
                                                   type: 'followers',
                                                   who: 'other',
-                                                  id: widget.user.id,
+                                                  id: widget.id,
                                                 );
                                               }));
                                             },
@@ -838,7 +865,7 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                         onRefresh: () async {
                                           productBloc.add(
                                               GetUserProductsByIdEvent(
-                                                  id: widget.user.id));
+                                                  id: widget.id));
                                         },
                                         color: AppColor.white,
                                         backgroundColor:
@@ -1031,7 +1058,7 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                                               builder: (context) {
                                                                                 return CompanyServiceDetailsScreen(
                                                                                   companyService: serviceState.services[index],
-                                                                                  callNumber: widget.user.firstMobile,
+                                                                                  callNumber: state.userInfo.firstMobile,
                                                                                 );
                                                                               },
                                                                             ),
