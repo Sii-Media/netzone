@@ -34,20 +34,30 @@ class _StartScreenState extends State<StartScreen> {
   String addressDetails = '';
 
   Future<void> getAddressFromLocation() async {
-    Position position = await _determineLocation();
-    print('aaaaaaaaaaaaaaaaaaa');
-    if (isGetPosition == true) {
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
-      print(placemarks);
+    try {
+      Position position = await _determineLocation();
+      print('aaaaaaaaaaaaaaaaaaa');
+      if (isGetPosition == true) {
+        List<Placemark> placemarks = await placemarkFromCoordinates(
+            position.latitude, position.longitude);
+        print(placemarks);
+        setState(() {
+          selectedCountry = placemarks.first.isoCountryCode ?? 'AE';
+          addressDetails = '${placemarks.first.street}';
+        });
+      }
       setState(() {
-        selectedCountry = placemarks.first.isoCountryCode ?? 'AE';
-        addressDetails = '${placemarks.first.street}';
+        isGetLocation = true;
+      });
+    } catch (e) {
+      // setState(() {
+      //   isGetLocation = true;
+      // });
+      setState(() {
+        isGetLocation = true;
+        isGetPosition = false;
       });
     }
-    setState(() {
-      isGetLocation = true;
-    });
   }
 
   Future<Position> _determineLocation() async {

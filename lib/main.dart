@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,7 +28,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
-  await dotenv.load(fileName: ".env");
+  // await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -44,7 +45,25 @@ Future<void> main() async {
   print('Stripe : $stripePubKey');
   // await initializeQuickBlox();
   await Firebase.initializeApp();
-  await FirebaseMessaging.instance.subscribeToTopic('Netzoon');
+  if (Platform.isIOS) {
+    String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+    if (apnsToken != null) {
+      await FirebaseMessaging.instance.subscribeToTopic('Netzoon');
+    } else {
+      await Future<void>.delayed(
+        const Duration(
+          seconds: 3,
+        ),
+      );
+      apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+      if (apnsToken != null) {
+        await FirebaseMessaging.instance.subscribeToTopic('Netzoon');
+      }
+    }
+  } else {
+    await FirebaseMessaging.instance.subscribeToTopic('Netzoon');
+  }
+  // await FirebaseMessaging.instance.subscribeToTopic('Netzoon');
   // FirebaseMessaging.instance
   //     .getToken()
   //     // ignore: avoid_print
@@ -131,7 +150,7 @@ final _localNotifications = FlutterLocalNotificationsPlugin();
 
 class MyApp extends StatelessWidget {
   MyApp({super.key}) {
-    SendbirdChat.init(appId: dotenv.get('SENDBIRD_APP_ID', fallback: ''));
+    SendbirdChat.init(appId: 'D27C6110-9DB9-4EBE-AA85-CF39E2AF562E');
   }
 
   @override

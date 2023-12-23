@@ -157,7 +157,7 @@ class AramexRespositoryImpl implements AramexRepository {
                 "NumberOfPieces": createShipmentInputData
                     .shipments.first.details.numberOfPieces,
                 "ProductGroup": "DOM",
-                "ProductType": "CDS",
+                "ProductType": "ONP",
                 "PaymentType": "P",
                 "PaymentOptions": null,
                 "CustomsValueAmount": null,

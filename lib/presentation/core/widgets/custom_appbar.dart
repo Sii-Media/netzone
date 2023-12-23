@@ -239,18 +239,26 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 height: 0.h,
               )
             : Theme.of(context).platform == TargetPlatform.iOS
-                ? GestureDetector(
-                    onTap: () {
+                ? IconButton(
+                    onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Icon(
-                        CupertinoIcons.back,
-                        size: 28.sp,
-                      ),
-                    ),
-                  )
+                    icon: Icon(
+                      CupertinoIcons.back,
+                      size: 32.sp,
+                    ))
+                // ? GestureDetector(
+                //     onTap: () {
+                //       Navigator.of(context).pop();
+                //     },
+                //     child: Padding(
+                //       padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                //       child: Icon(
+                //         CupertinoIcons.back,
+                //         size: 32.sp,
+                //       ),
+                //     ),
+                //   )
                 : const SizedBox(),
         // Container(
         //   width: 150.w,

@@ -125,8 +125,8 @@ class AramexBloc extends Bloc<AramexEvent, AramexState> {
                     vehicle: 'Car',
                     pickupItems: [
                       PickupItems(
-                          productGroup: 'EXP',
-                          productType: 'PDX',
+                          productGroup: 'DOM',
+                          productType: 'ONP',
                           numberOfShipments: 1,
                           packageTypel: 'Box',
                           payment: 'P',
@@ -209,7 +209,7 @@ class AramexBloc extends Bloc<AramexEvent, AramexState> {
                           goodsOriginCountry: 'AE',
                           numberOfPieces: 1,
                           productGroup: 'DOM',
-                          productType: 'CDS',
+                          productType: 'ONP',
                           paymentType: 'P'),
                       transportType: 0,
                       pickupGUID: '99065af6-45ea-43a4-8b15-a62f2aac7906')
