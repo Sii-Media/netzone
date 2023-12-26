@@ -33,6 +33,8 @@ import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 import 'package:netzoon/presentation/favorites/favorite_blocs/favorites_bloc.dart';
 import 'package:netzoon/presentation/home/test.dart';
 import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
+import 'package:netzoon/presentation/news/news_details.dart';
+import 'package:netzoon/presentation/news/news_screen.dart';
 import 'package:netzoon/presentation/notifications/blocs/notifications/notifications_bloc.dart';
 import 'package:netzoon/presentation/notifications/screens/notification_screen.dart';
 import 'package:netzoon/presentation/splash/splash_screen.dart';
@@ -173,6 +175,17 @@ class MyApp extends StatelessWidget {
             path: 'product/:id',
             builder: (context, state) => ProductDetailScreen(
                 item: state.pathParameters['id'].toString()),
+          ),
+          GoRoute(
+            path: 'news',
+            builder: (context, state) => const NewsScreen(),
+            routes: [
+              GoRoute(
+                path: 'news_details/:id',
+                builder: (context, state) =>
+                    NewsDetails(newsId: state.pathParameters['id'].toString()),
+              ),
+            ],
           ),
           GoRoute(
             path: 'catagories',

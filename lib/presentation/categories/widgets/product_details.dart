@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/helpers/share_image_function.dart';
 import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
@@ -157,23 +158,28 @@ class Product extends StatelessWidget {
                             ),
                             IconButton(
                               onPressed: () async {
-                                final urlImage = product.imageUrl;
-                                final url = Uri.parse(urlImage);
-                                final response = await http.get(url);
-                                final bytes = response.bodyBytes;
+                                // final urlImage = product.imageUrl;
+                                // final url = Uri.parse(urlImage);
+                                // final response = await http.get(url);
+                                // final bytes = response.bodyBytes;
 
-                                final temp = await getTemporaryDirectory();
-                                final path = '${temp.path}/image.jpg';
-                                File(path).writeAsBytesSync(bytes);
-                                // ignore: deprecated_member_use
-                                await Share.shareFiles(
-                                  [path],
-                                  text: 'This is Amazing',
-                                  sharePositionOrigin: Rect.fromPoints(
-                                    const Offset(2, 2),
-                                    const Offset(3, 3),
-                                  ),
-                                );
+                                // final temp = await getTemporaryDirectory();
+                                // final path = '${temp.path}/image.jpg';
+                                // File(path).writeAsBytesSync(bytes);
+                                // // ignore: deprecated_member_use
+                                // await Share.shareFiles(
+                                //   [path],
+                                //   text: 'This is Amazing',
+                                //   sharePositionOrigin: Rect.fromPoints(
+                                //     const Offset(2, 2),
+                                //     const Offset(3, 3),
+                                //   ),
+                                // );
+                                await shareImageWithDescription(
+                                    imageUrl: product.imageUrl,
+                                    subject: product.name,
+                                    description:
+                                        'https://netzoon.com/home/product/${product.id}');
                               },
                               icon: const Icon(
                                 Icons.share,

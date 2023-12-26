@@ -435,9 +435,11 @@ class _MyNewsProfileScreenState extends State<MyNewsProfileScreen>
                                                                 builder:
                                                                     (context) {
                                                               return NewsDetails(
-                                                                news:
-                                                                    state.news[
-                                                                        index],
+                                                                newsId: state
+                                                                        .news[
+                                                                            index]
+                                                                        .id ??
+                                                                    '',
                                                               );
                                                             }),
                                                           );

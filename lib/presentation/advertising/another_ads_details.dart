@@ -3,8 +3,11 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/presentation/chat/screens/chat_page_screen.dart';
+import 'package:netzoon/presentation/core/helpers/connect_send_bird.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
+import 'package:netzoon/presentation/home/widgets/auth_alert.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../injection_container.dart';
@@ -480,21 +483,66 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                   PhoneCallWidget(
                       phonePath: state.ads.owner.firstMobile ?? "",
                       title: AppLocalizations.of(context).translate('call')),
-                  ElevatedButton(
-                      onPressed: () {},
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          AppColor.backgroundColor,
+                  BlocBuilder<AuthBloc, AuthState>(
+                    bloc: authBloc,
+                    builder: (context, authState) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          if (authState is Authenticated) {
+                            // await SendbirdChat.connect(
+                            //     authState.user.userInfo
+                            //             .username ??
+                            //         '');
+                            connectWithSendbird(
+                                username:
+                                    authState.user.userInfo.username ?? '');
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) {
+                                return ChatPageScreen(
+                                  userId:
+                                      authState.user.userInfo.username ?? '',
+                                  otherUserId: state.ads.owner.username ?? '',
+                                  title: state.ads.owner.username ?? '',
+                                  image: state.ads.owner.profilePhoto ?? '',
+                                );
+                              }),
+                            );
+                          } else {
+                            authAlert(context);
+                          }
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            AppColor.backgroundColor,
+                          ),
+                          shape:
+                              MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          )),
+                          fixedSize: MaterialStateProperty.all(
+                            Size.fromWidth(100.w),
+                          ),
                         ),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        )),
-                        fixedSize: MaterialStatePropertyAll(
-                          Size.fromWidth(100.w),
-                        ),
-                      ),
-                      child:
-                          Text(AppLocalizations.of(context).translate('chat'))),
+                        child: Text(
+                            AppLocalizations.of(context).translate('chat')),
+                      );
+                    },
+                  ),
+                  // ElevatedButton(
+                  //     onPressed: () {},
+                  //     style: ButtonStyle(
+                  //       backgroundColor: MaterialStateProperty.all(
+                  //         AppColor.backgroundColor,
+                  //       ),
+                  //       shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(18.0),
+                  //       )),
+                  //       fixedSize: MaterialStatePropertyAll(
+                  //         Size.fromWidth(100.w),
+                  //       ),
+                  //     ),
+                  //     child:
+                  //         Text(AppLocalizations.of(context).translate('chat'))),
                   // PriceSuggestionButton(input: input),
                 ],
               ),

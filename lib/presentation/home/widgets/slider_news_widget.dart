@@ -86,7 +86,7 @@ class SliderNewsWidget extends StatelessWidget {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(builder: (context) {
                                     return NewsDetails(
-                                      news: news[index],
+                                      newsId: news[index].id ?? "",
                                     );
                                   }),
                                 );
