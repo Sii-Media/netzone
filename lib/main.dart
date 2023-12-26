@@ -172,7 +172,7 @@ class MyApp extends StatelessWidget {
     SendbirdChat.init(appId: 'D27C6110-9DB9-4EBE-AA85-CF39E2AF562E');
   }
   final String cc = 'a';
-  final _router = GoRouter(
+  static final _router = GoRouter(
     routes: [
       GoRoute(
         path: '/',
@@ -182,160 +182,150 @@ class MyApp extends StatelessWidget {
             path: 'start',
             builder: (context, state) => const StartScreen(),
           ),
+        ],
+      ),
+      GoRoute(
+        path: '/home',
+        builder: (context, state) => const TestScreen(),
+        routes: [
           GoRoute(
-            path: 'home',
-            builder: (context, state) => const TestScreen(),
+            path: 'product/:id',
+            builder: (context, state) => ProductDetailScreen(
+                item: state.pathParameters['id'].toString()),
+          ),
+          GoRoute(
+            path: 'catagories',
+            builder: (context, state) => const CategoriesMainScreen(),
             routes: [
               GoRoute(
-                path: 'product/:id',
-                builder: (context, state) => ProductDetailScreen(
-                    item: state.pathParameters['id'].toString()),
-              ),
-              GoRoute(
-                path: 'catagories',
-                builder: (context, state) => const CategoriesMainScreen(),
+                path: 'local_company',
+                builder: (context, state) => const GovernmentalCompanies(
+                  userType: 'local_company',
+                ),
                 routes: [
                   GoRoute(
-                    path: 'local_company',
-                    builder: (context, state) => const GovernmentalCompanies(
-                      userType: 'local_company',
-                    ),
-                    routes: [
-                      GoRoute(
-                        path: ':id',
-                        builder: (context, state) => LocalCompanyProfileScreen(
-                            id: state.pathParameters['id'].toString()),
-                      ),
-                    ],
-                  ),
-                  GoRoute(
-                    path: 'users',
-                    builder: (context, state) => const UsersListScreen(),
-                    routes: [
-                      GoRoute(
-                        path: ':id',
-                        builder: (context, state) => UsersProfileScreen(
-                            userId: state.pathParameters['id'].toString()),
-                      ),
-                    ],
-                  ),
-                  GoRoute(
-                    path: 'real_estate',
-                    builder: (context, state) =>
-                        const RealEstateCompaniesListScreen(),
-                    routes: [
-                      GoRoute(
-                        path: ':id',
-                        builder: (context, state) =>
-                            RealEstateCompanyProfileScreen(
-                                id: state.pathParameters['id'].toString()),
-                      ),
-                    ],
-                  ),
-                  GoRoute(
-                    path: 'free_zone_companies',
-                    builder: (context, state) =>
-                        const FreeZoneCompaniesListScreen(),
-                    routes: [
-                      GoRoute(
-                        path: ':id',
-                        builder: (context, state) =>
-                            FreezoneCompanyProfileScreen(
-                                id: state.pathParameters['id'].toString()),
-                      ),
-                    ],
-                  ),
-                  GoRoute(
-                    path: 'factories',
-                    builder: (context, state) =>
-                        const FactoriesCategoryScreen(),
-                    routes: [
-                      GoRoute(
-                        path: ':id',
-                        builder: (context, state) => FactoryProfileScreen(
-                            id: state.pathParameters['id'].toString()),
-                      )
-                    ],
-                  ),
-                  GoRoute(
-                    path: 'civil_aircraft',
-                    builder: (context, state) =>
-                        const VehiclesCompaniesScreen(type: 'planes'),
-                    routes: [
-                      GoRoute(
-                        path: ':id',
-                        builder: (context, state) =>
-                            VehicleCompaniesProfileScreen(
-                          id: state.pathParameters['id'].toString(),
-                          userType: 'planes',
-                        ),
-                      )
-                    ],
-                  ),
-                  GoRoute(
-                    path: 'cars',
-                    builder: (context, state) =>
-                        const VehiclesCompaniesScreen(type: 'cars'),
-                    routes: [
-                      GoRoute(
-                        path: ':id',
-                        builder: (context, state) =>
-                            VehicleCompaniesProfileScreen(
-                          id: state.pathParameters['id'].toString(),
-                          userType: 'cars',
-                        ),
-                      )
-                    ],
-                  ),
-                  GoRoute(
-                    path: 'sea_companies',
-                    builder: (context, state) =>
-                        const VehiclesCompaniesScreen(type: 'sea_companies'),
-                    routes: [
-                      GoRoute(
-                        path: ':id',
-                        builder: (context, state) =>
-                            VehicleCompaniesProfileScreen(
-                          id: state.pathParameters['id'].toString(),
-                          userType: 'sea_companies',
-                        ),
-                      )
-                    ],
-                  ),
-                  GoRoute(
-                    path: 'trader',
-                    builder: (context, state) =>
-                        const GovernmentalCompanies(userType: 'trader'),
-                    routes: [
-                      GoRoute(
-                        path: ':id',
-                        builder: (context, state) => LocalCompanyProfileScreen(
-                            id: state.pathParameters['id'].toString()),
-                      )
-                    ],
-                  ),
-                  GoRoute(
-                    path: 'delivery_companies',
-                    builder: (context, state) =>
-                        const DeliveryCompaniesListScreen(),
-                    // routes: [
-                    //   GoRoute(
-                    //     path: ':id',
-                    //     builder: (context, state) => LocalCompanyProfileScreen(
-                    //         id: state.pathParameters['id'].toString()),
-                    //   )
-                    // ],
+                    path: ':id',
+                    builder: (context, state) => LocalCompanyProfileScreen(
+                        id: state.pathParameters['id'].toString()),
                   ),
                 ],
+              ),
+              GoRoute(
+                path: 'users',
+                builder: (context, state) => const UsersListScreen(),
+                routes: [
+                  GoRoute(
+                    path: ':id',
+                    builder: (context, state) => UsersProfileScreen(
+                        userId: state.pathParameters['id'].toString()),
+                  ),
+                ],
+              ),
+              GoRoute(
+                path: 'real_estate',
+                builder: (context, state) =>
+                    const RealEstateCompaniesListScreen(),
+                routes: [
+                  GoRoute(
+                    path: ':id',
+                    builder: (context, state) => RealEstateCompanyProfileScreen(
+                        id: state.pathParameters['id'].toString()),
+                  ),
+                ],
+              ),
+              GoRoute(
+                path: 'free_zone_companies',
+                builder: (context, state) =>
+                    const FreeZoneCompaniesListScreen(),
+                routes: [
+                  GoRoute(
+                    path: ':id',
+                    builder: (context, state) => FreezoneCompanyProfileScreen(
+                        id: state.pathParameters['id'].toString()),
+                  ),
+                ],
+              ),
+              GoRoute(
+                path: 'factories',
+                builder: (context, state) => const FactoriesCategoryScreen(),
+                routes: [
+                  GoRoute(
+                    path: ':id',
+                    builder: (context, state) => FactoryProfileScreen(
+                        id: state.pathParameters['id'].toString()),
+                  )
+                ],
+              ),
+              GoRoute(
+                path: 'civil_aircraft',
+                builder: (context, state) =>
+                    const VehiclesCompaniesScreen(type: 'planes'),
+                routes: [
+                  GoRoute(
+                    path: ':id',
+                    builder: (context, state) => VehicleCompaniesProfileScreen(
+                      id: state.pathParameters['id'].toString(),
+                      userType: 'planes',
+                    ),
+                  )
+                ],
+              ),
+              GoRoute(
+                path: 'cars',
+                builder: (context, state) =>
+                    const VehiclesCompaniesScreen(type: 'cars'),
+                routes: [
+                  GoRoute(
+                    path: ':id',
+                    builder: (context, state) => VehicleCompaniesProfileScreen(
+                      id: state.pathParameters['id'].toString(),
+                      userType: 'cars',
+                    ),
+                  )
+                ],
+              ),
+              GoRoute(
+                path: 'sea_companies',
+                builder: (context, state) =>
+                    const VehiclesCompaniesScreen(type: 'sea_companies'),
+                routes: [
+                  GoRoute(
+                    path: ':id',
+                    builder: (context, state) => VehicleCompaniesProfileScreen(
+                      id: state.pathParameters['id'].toString(),
+                      userType: 'sea_companies',
+                    ),
+                  )
+                ],
+              ),
+              GoRoute(
+                path: 'trader',
+                builder: (context, state) =>
+                    const GovernmentalCompanies(userType: 'trader'),
+                routes: [
+                  GoRoute(
+                    path: ':id',
+                    builder: (context, state) => LocalCompanyProfileScreen(
+                        id: state.pathParameters['id'].toString()),
+                  )
+                ],
+              ),
+              GoRoute(
+                path: 'delivery_companies',
+                builder: (context, state) =>
+                    const DeliveryCompaniesListScreen(),
+                // routes: [
+                //   GoRoute(
+                //     path: ':id',
+                //     builder: (context, state) => LocalCompanyProfileScreen(
+                //         id: state.pathParameters['id'].toString()),
+                //   )
+                // ],
               ),
             ],
           ),
         ],
       ),
-      // GoRoute(
-      //   path: '/start',
-      //   builder: (context, state) => const StartScreen(),
-      // ),
     ],
   );
 
