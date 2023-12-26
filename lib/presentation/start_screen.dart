@@ -371,7 +371,11 @@ class _StartScreenState extends State<StartScreen> {
                           //     return const TestScreen();
                           //   }),
                           // );
+                          while (context.canPop()) {
+                            context.pop();
+                          }
                           context.pushReplacement('/home');
+                          // context.pushReplacement('/home');
                         },
                         style: ButtonStyle(
                             side: const MaterialStatePropertyAll(

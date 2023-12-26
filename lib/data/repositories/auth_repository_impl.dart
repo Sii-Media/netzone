@@ -508,7 +508,7 @@ class AuthRepositoryImpl implements AuthRepository {
         }
 
         Response response = await dio.put(
-            'https://back.netzoon.com/user/editUser/$userId',
+            'https://back.netzoon.com/user/net-editUser/$userId',
             data: formData);
 
         if (response.statusCode == 200) {
