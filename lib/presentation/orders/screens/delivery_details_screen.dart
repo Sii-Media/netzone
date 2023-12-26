@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -89,7 +90,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
   late double totalAmount = 0;
   late double serviceFee = 0;
 
-  String selectedCity = 'Abadilah';
+  String? selectedCity;
   @override
   void initState() {
     super.initState();
@@ -97,6 +98,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
     countryBloc = BlocProvider.of<CountryBloc>(context);
     countryBloc.add(GetCountryEvent());
     cartBloc = BlocProvider.of<CartBlocBloc>(context);
+    aramexBloc.add(const FetchCitiesEvent());
     nameController.text = widget.userInfo.username ?? '';
     emailController.text = widget.userInfo.email ?? '';
     phoneNumberController.text = widget.userInfo.firstMobile ?? '';
@@ -106,6 +108,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
         ? widget.userInfo.floorNum.toString()
         : '';
     _selectedLocationType = widget.userInfo.locationType ?? '';
+    selectedCity = widget.userInfo.city;
     print('1');
     DateTime date = DateTime.now();
     // DateTime date = DateTime.parse(dateString);
@@ -233,7 +236,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
                       toEmail: emailController.text,
                       userMobile: phoneNumberController.text,
                       phoneNumber: cellPhoneController.text,
-                      city: selectedCity,
+                      city: selectedCity ?? 'Dubai',
                       subTotal: widget.subTotal,
                       addressDetails: addressDetailsController.text,
                       floorNum: floorNumController.text,
@@ -417,47 +420,147 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
                           'Select city',
                           style: TextStyle(fontSize: 14),
                         ),
-                        Container(
-                            width: MediaQuery.of(context).size.width,
-                            // margin: const EdgeInsets.symmetric(
-                            //         horizontal: 2, vertical: 10)
-                            //     .r,
-                            // Add some padding and a background color
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            decoration: BoxDecoration(
-                                // color: Colors.green.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: AppColor.black,
-                                )),
-                            // Create the dropdown button
-                            child: DropdownButton<String>(
-                              // Set the selected value
-                              value: selectedCity,
-                              menuMaxHeight: 200.h,
-                              itemHeight: 50.h,
-                              // Handle the value change
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  selectedCity = newValue ?? '';
-                                });
-                              },
-                              // Map each option to a widget
-                              items: cities.map<DropdownMenuItem<String>>(
-                                  (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  // Use a colored box to show the option
-                                  child: Text(
-                                    value,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            )),
+                        // Container(
+                        //     width: MediaQuery.of(context).size.width,
+                        //     // margin: const EdgeInsets.symmetric(
+                        //     //         horizontal: 2, vertical: 10)
+                        //     //     .r,
+                        //     // Add some padding and a background color
+                        //     padding: const EdgeInsets.symmetric(
+                        //         horizontal: 10, vertical: 5),
+                        //     decoration: BoxDecoration(
+                        //         // color: Colors.green.withOpacity(0.1),
+                        //         borderRadius: BorderRadius.circular(10),
+                        //         border: Border.all(
+                        //           color: AppColor.black,
+                        //         )),
+                        //     // Create the dropdown button
+                        //     child: DropdownButton<String>(
+                        //       // Set the selected value
+                        //       value: selectedCity,
+                        //       menuMaxHeight: 200.h,
+                        //       itemHeight: 50.h,
+                        //       // Handle the value change
+                        //       onChanged: (String? newValue) {
+                        //         setState(() {
+                        //           selectedCity = newValue ?? '';
+                        //         });
+                        //       },
+                        //       // Map each option to a widget
+                        //       items: cities.map<DropdownMenuItem<String>>(
+                        //           (String value) {
+                        //         return DropdownMenuItem<String>(
+                        //           value: value,
+                        //           // Use a colored box to show the option
+                        //           child: Text(
+                        //             value,
+                        //             style: const TextStyle(
+                        //               color: Colors.black,
+                        //             ),
+                        //           ),
+                        //         );
+                        //       }).toList(),
+                        //     )),
+                        BlocBuilder<CountryBloc, CountryState>(
+                          bloc: countryBloc,
+                          builder: (context, countryState) {
+                            if (countryState is CountryInitial) {
+                              return BlocBuilder<AramexBloc, AramexState>(
+                                bloc: aramexBloc,
+                                builder: (context, armState) {
+                                  if (armState is FetchCitiesInProgress) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(
+                                        color: AppColor.backgroundColor,
+                                      ),
+                                    );
+                                  } else if (armState is FetchCitiesFailure) {
+                                    return const Center(
+                                      child: Text(
+                                        'error',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    );
+                                  } else if (armState is FetchCitiesSuccess) {
+                                    return Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      // height: 70,
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 2, vertical: 10),
+                                      // padding: const EdgeInsets.symmetric(
+                                      //     horizontal: 10, vertical: 5),
+                                      decoration: BoxDecoration(
+                                        // color: Colors.green.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(10),
+                                        // border: Border.all(
+                                        //   color: AppColor.black,
+                                        // ),
+                                      ),
+                                      child: DropdownSearch<String>(
+                                        popupProps:
+                                            const PopupProps.modalBottomSheet(
+                                          showSearchBox: true,
+                                        ),
+
+                                        dropdownBuilder:
+                                            (context, selectedItem) {
+                                          return ListTile(
+                                            title: Text(selectedItem ?? ''),
+                                            // selected: isSelected,
+                                          );
+                                        },
+                                        dropdownDecoratorProps:
+                                            const DropDownDecoratorProps(
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            // constraints: BoxConstraints(maxHeight: 60),
+                                            border: OutlineInputBorder(),
+                                          ),
+                                        ),
+                                        // mode: Mode.BOTTOM_SHEET,
+                                        // showSearchBox: true,
+                                        // searchBoxDecoration: const InputDecoration(
+                                        //   hintText: 'Search...',
+                                        // ),
+                                        // dropdownDecoratorProps: const InputDecoration(
+                                        //   border: OutlineInputBorder(),
+                                        // ),
+                                        validator: (value) {
+                                          if (value == null) {
+                                            return AppLocalizations.of(context)
+                                                .translate('required');
+                                          }
+
+                                          return null;
+                                        },
+
+                                        items: armState.cities,
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            selectedCity = newValue ?? '';
+                                          });
+                                        },
+                                        selectedItem: selectedCity,
+                                        // label: 'Select a city',
+                                        // showClearButton: true,
+                                        // popupItemBuilder: (context, item, isSelected) {
+                                        //   return ListTile(
+                                        //     title: Text(item),
+                                        //     selected: isSelected,
+                                        //   );
+                                        // },
+                                      ),
+                                    );
+                                  }
+                                  return const SizedBox();
+                                },
+                              );
+                            }
+                            return const SizedBox();
+                          },
+                        ),
                         SizedBox(
                           height: 20.h,
                         ),
@@ -630,7 +733,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
                                         line1: addressDetailsController.text,
                                         line2: '',
                                         line3: "",
-                                        city: selectedCity,
+                                        city: selectedCity ?? 'Dubai',
                                         stateOrProvinceCode: selectedCity,
                                         postCode: '',
                                         countryCode: 'AE',

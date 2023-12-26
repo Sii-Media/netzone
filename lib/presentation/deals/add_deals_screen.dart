@@ -34,6 +34,7 @@ class _AddDealScreenState extends State<AddDealScreen>
   late TextEditingController companyNameController = TextEditingController();
   late TextEditingController prevPriceController = TextEditingController();
   late TextEditingController currentPriceController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
 
   late TextEditingController locationController = TextEditingController();
   late TextEditingController startDateController = TextEditingController();
@@ -118,7 +119,8 @@ class _AddDealScreenState extends State<AddDealScreen>
                         fcmtoken: value ?? '',
                         text: nameController.text,
                         category: 'deals',
-                        itemId: state.message));
+                        itemId: state.message,
+                        body: 'add ${nameController.text} to deals'));
                   });
                 }
               },
@@ -215,8 +217,9 @@ class _AddDealScreenState extends State<AddDealScreen>
                                           child: Text(
                                             AppLocalizations.of(context)
                                                 .translate(value.name),
-                                            style: const TextStyle(
-                                                color: Colors.black),
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 12.sp),
                                           ),
                                         );
                                       }).toList(),
@@ -227,7 +230,7 @@ class _AddDealScreenState extends State<AddDealScreen>
                                 addDealField(
                                   context: context,
                                   title: AppLocalizations.of(context)
-                                      .translate('title'),
+                                      .translate('deal_title'),
                                   isNumber: false,
                                   controller: nameController,
                                 ),
@@ -237,7 +240,17 @@ class _AddDealScreenState extends State<AddDealScreen>
                                 addDealField(
                                   context: context,
                                   title: AppLocalizations.of(context)
-                                      .translate('companyName'),
+                                      .translate('deal_desc'),
+                                  isNumber: false,
+                                  controller: descriptionController,
+                                ),
+                                SizedBox(
+                                  height: 7.h,
+                                ),
+                                addDealField(
+                                  context: context,
+                                  title: AppLocalizations.of(context)
+                                      .translate('saller'),
                                   isNumber: false,
                                   controller: companyNameController,
                                 ),
@@ -560,7 +573,9 @@ class _AddDealScreenState extends State<AddDealScreen>
                                             startDate: _selectedStartDate,
                                             endDate: _selectedEndDate,
                                             location: locationController.text,
-                                            category: selectCat?.name ?? ''));
+                                            category: selectCat?.name ?? '',
+                                            description:
+                                                descriptionController.text));
                                       }),
                                 ),
                               ],

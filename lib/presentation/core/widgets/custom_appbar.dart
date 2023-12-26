@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:netzoon/presentation/search/search_screen.dart';
 
-import '../../home/test.dart';
 import '../../notifications/blocs/notifications/notifications_bloc.dart';
 import '../../notifications/screens/notification_screen.dart';
 import '../blocs/country_bloc/country_bloc.dart';
@@ -185,12 +185,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       setState(() {
                         selectedCountry = val.code!;
                         countryBloc.add(UpdateCountryEvent(selectedCountry));
-                        Navigator.of(context, rootNavigator: true)
-                            .pushReplacement(
-                          MaterialPageRoute(builder: (context) {
-                            return const TestScreen();
-                          }),
-                        );
+                        // Navigator.of(context, rootNavigator: true)
+                        //     .pushReplacement(
+                        //   MaterialPageRoute(builder: (context) {
+                        //     return const TestScreen();
+                        //   }),
+                        // );
+                        context.pushReplacement('/home');
                       });
                     },
                     initialSelection: selectedCountry,
@@ -388,12 +389,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       setState(() {
                         selectedCountry = val.code!;
                         countryBloc.add(UpdateCountryEvent(selectedCountry));
-                        Navigator.of(context, rootNavigator: true)
-                            .pushReplacement(
-                          MaterialPageRoute(builder: (context) {
-                            return const TestScreen();
-                          }),
-                        );
+                        // Navigator.of(context, rootNavigator: true)
+                        //     .pushReplacement(
+                        //   MaterialPageRoute(builder: (context) {
+                        //     return const TestScreen();
+                        //   }),
+                        // );
+                        context.pushReplacement('/home');
                       });
                     },
                     initialSelection: selectedCountry,

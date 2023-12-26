@@ -263,7 +263,7 @@
     "فئات الصفقات": "Deals Categories",
     "الطائرات المدنية والخاصة الجديدة و المستخدمة": "New and used civil and private aircraft",
     "السيارات، الجديدة و المستخدمة": "Cars, new and used",
-    "المناقصات الفردية": "individual tenders",
+    "المناقصات الفردية": "individual deals",
     "محلات نشطة": "active shops",
     "القوارب والسفن المدنية والخاصة والمستخدمة": "Civil, private and used boats and vessels",
     "العقارات": "Real estate",
@@ -324,7 +324,9 @@
     "do not apply": "Do not apply",
     "gif": "GIF",
     "add_deals": "Add Deals",
+    "deal_desc":"Deal description",
     "title": "Title",
+    "deal_title":"Deal Title",
     "companyName": "Company Name",
     "available_balance": "Available balance",
     "balance_request": "Balance Request",
@@ -656,5 +658,11 @@
     "to_ios_device":"To IOS Device",
     "to_android_device":"To Android Device",
     "play_store":"Play Store",
-    "apple_store":"Apple Store"
+    "apple_store":"Apple Store",
+    "business_name":"Business Name",
+    "confirm_password":"Confirm Password",
+    "password_dont_match":"Passwords do not match",
+    "in_account" : "In My Account",
+    "account":"account",
+    "created an account as":"created an account as"
 }

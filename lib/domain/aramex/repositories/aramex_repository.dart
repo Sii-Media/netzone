@@ -5,6 +5,7 @@ import 'package:netzoon/domain/aramex/entities/create_pickup_input_data.dart';
 import 'package:netzoon/domain/aramex/entities/create_pickup_response.dart';
 import 'package:netzoon/domain/aramex/entities/create_shipment_input_data.dart';
 import 'package:netzoon/domain/aramex/entities/create_shipment_response.dart';
+import 'package:netzoon/domain/aramex/entities/fetch_cities_respomse.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 
 abstract class AramexRepository {
@@ -18,5 +19,9 @@ abstract class AramexRepository {
 
   Future<Either<Failure, CalculateRateResponse>> calculateRate({
     required CalculateRateInputData calculateRateInputData,
+  });
+
+  Future<Either<Failure, FetchCitiesResponse>> fetchCities({
+    required String country,
   });
 }

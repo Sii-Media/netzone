@@ -217,7 +217,7 @@ class Product extends StatelessWidget {
                 height: 10.h,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ElevatedButton(
@@ -259,7 +259,7 @@ class Product extends StatelessWidget {
                       }
                     },
                   ),
-                  PriceSuggestionButton(input: input),
+                  // PriceSuggestionButton(input: input),
                 ],
               ),
             ],

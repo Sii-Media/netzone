@@ -131,30 +131,33 @@ class _FollowingsListScreenState extends State<FollowingsListScreen> {
                                   if (state.follows[index].userType ==
                                       'local_company') {
                                     return LocalCompanyProfileScreen(
-                                        localCompany: state.follows[index]);
+                                        id: state.follows[index].id);
                                   } else if (state.follows[index].userType ==
                                           'car' ||
                                       state.follows[index].userType ==
                                           'planes') {
                                     return VehicleCompaniesProfileScreen(
-                                        vehiclesCompany: state.follows[index]);
+                                      id: state.follows[index].id,
+                                      userType:
+                                          state.follows[index].userType ?? '',
+                                    );
                                   } else if (state.follows[index].userType ==
                                       'real_estate') {
                                     return RealEstateCompanyProfileScreen(
-                                        user: state.follows[index]);
+                                        id: state.follows[index].id);
                                   } else if (state.follows[index].userType ==
                                       'trader') {
                                     return LocalCompanyProfileScreen(
-                                      localCompany: state.follows[index],
+                                      id: state.follows[index].id,
                                     );
                                   } else if (state.follows[index].userType ==
                                       'delivery_company') {
                                     return DeliveryCompanyProfileScreen(
-                                      deliveryCompany: state.follows[index],
+                                      id: state.follows[index].id,
                                     );
                                   } else {
                                     return UsersProfileScreen(
-                                        user: state.follows[index]);
+                                        userId: state.follows[index].id);
                                   }
                                 }));
                               },

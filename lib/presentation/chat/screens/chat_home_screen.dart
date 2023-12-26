@@ -343,6 +343,8 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(left: 4.0),
                                     child: Text(
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                       '$senderId: $lastMessage',
                                       style: const TextStyle(fontSize: 12.0),
                                     ),

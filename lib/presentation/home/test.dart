@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:netzoon/presentation/add_items/add_item_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
@@ -196,10 +197,14 @@ class _TestScreenState extends State<TestScreen> with ScreenLoader<TestScreen> {
                 ),
                 backgroundColor: Theme.of(context).colorScheme.secondary,
               ));
-              Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-                  CupertinoPageRoute(builder: (context) {
-                return const TestScreen();
-              }), (route) => false);
+              // Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+              //     CupertinoPageRoute(builder: (context) {
+              //   return const TestScreen();
+              // }), (route) => false);
+              while (context.canPop()) {
+                context.pop();
+              }
+              context.push('/home');
             }
           },
           child: Container(

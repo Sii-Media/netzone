@@ -95,7 +95,8 @@ class _AddNewScreenState extends State<AddNewScreen>
                       fcmtoken: value ?? '',
                       text: titleController.text,
                       category: 'news',
-                      itemId: state.news));
+                      itemId: state.news,
+                      body: 'add ${titleController.text} to news'));
                 });
               }
             },

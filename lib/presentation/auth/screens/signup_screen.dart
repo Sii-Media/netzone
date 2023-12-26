@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:netzoon/domain/categories/entities/factories/factories.dart';
 import 'package:netzoon/injection_container.dart';
@@ -14,11 +15,9 @@ import 'package:netzoon/presentation/auth/widgets/text_form_signup_widget.dart';
 import 'package:netzoon/presentation/auth/widgets/text_signup_widget.dart';
 import 'package:netzoon/presentation/categories/factories/blocs/factories_bloc/factories_bloc.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
-import 'package:netzoon/presentation/core/widgets/add_photo_button.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/injection_container.dart' as di;
-import 'package:netzoon/presentation/data/cities.dart';
-import 'package:netzoon/presentation/home/test.dart';
+
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 
@@ -238,10 +237,14 @@ class _SignUpScreenState extends State<SignUpScreen>
                 ),
                 backgroundColor: Theme.of(context).colorScheme.secondary,
               ));
-              Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-                  CupertinoPageRoute(builder: (context) {
-                return const TestScreen();
-              }), (route) => false);
+              // Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+              //     CupertinoPageRoute(builder: (context) {
+              //   return const TestScreen();
+              // }), (route) => false);
+              while (context.canPop()) {
+                context.pop();
+              }
+              context.push('/home');
             }
           },
           child: Container(

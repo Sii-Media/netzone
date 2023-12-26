@@ -42,7 +42,8 @@ class _AddProductScreenState extends State<AddProductScreen>
     'آلات موسيقية',
     'أجهزة رياضية',
     'الزراعة',
-    'أخرى'
+    'أخرى',
+    'in_account',
   ];
   String selectedValue = 'الكترونيات';
 
@@ -162,13 +163,13 @@ class _AddProductScreenState extends State<AddProductScreen>
                     backgroundColor: Theme.of(context).colorScheme.secondary,
                   ));
                   Navigator.of(context).pop();
-                  FirebaseMessaging.instance.getToken().then((value) {
-                    notifiBloc.add(SendNotificationEvent(
-                        fcmtoken: value ?? '',
-                        text: productName.text,
-                        category: 'products',
-                        itemId: state.product));
-                  });
+                  // FirebaseMessaging.instance.getToken().then((value) {
+                  //   notifiBloc.add(SendNotificationEvent(
+                  //       fcmtoken: value ?? '',
+                  //       text: productName.text,
+                  //       category: 'products',
+                  //       itemId: state.product));
+                  // });
                 }
               },
               child: BlocBuilder<ElecDevicesBloc, ElecDevicesState>(

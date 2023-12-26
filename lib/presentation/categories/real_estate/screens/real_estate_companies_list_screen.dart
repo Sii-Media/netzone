@@ -125,7 +125,7 @@ class _RealEstateCompaniesListScreenState
                                               MaterialPageRoute(
                                                   builder: (context) {
                                                 return RealEstateCompanyProfileScreen(
-                                                  user: filteredUsers[index],
+                                                  id: filteredUsers[index].id,
                                                 );
                                               }),
                                             );

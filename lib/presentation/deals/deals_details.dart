@@ -219,7 +219,7 @@ class _DealDetailsState extends State<DealDetails> {
                                     icon: Icon(
                                       Icons.edit,
                                       color: AppColor.backgroundColor,
-                                      size: 15.sp,
+                                      size: 23.sp,
                                     ),
                                   ),
                                   IconButton(
@@ -230,7 +230,7 @@ class _DealDetailsState extends State<DealDetails> {
                                     icon: Icon(
                                       Icons.delete,
                                       color: AppColor.red,
-                                      size: 15.sp,
+                                      size: 23.sp,
                                     ),
                                   ),
                                 ],
@@ -250,6 +250,14 @@ class _DealDetailsState extends State<DealDetails> {
                             "${AppLocalizations.of(context).translate('اسم البائع')} : ",
                         input: state.deal.companyName,
                       ),
+                      state.deal.description != null &&
+                              state.deal.description != ''
+                          ? titleAndInput(
+                              title:
+                                  "${AppLocalizations.of(context).translate('deal_desc')} : ",
+                              input: state.deal.description ?? '',
+                            )
+                          : const SizedBox(),
                       titleAndInput(
                         title:
                             "${AppLocalizations.of(context).translate('تاريخ بدء الصفقة')} : ",

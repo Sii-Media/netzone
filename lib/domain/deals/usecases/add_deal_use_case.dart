@@ -25,6 +25,7 @@ class AddDealUseCase extends UseCase<String, AddDealParams> {
       location: params.location,
       category: params.category,
       country: params.country,
+      description: params.description,
     );
   }
 }
@@ -41,6 +42,7 @@ class AddDealParams {
   final String location;
   final String category;
   final String country;
+  final String description;
   AddDealParams({
     required this.owner,
     required this.name,
@@ -53,5 +55,6 @@ class AddDealParams {
     required this.location,
     required this.category,
     required this.country,
+    required this.description,
   });
 }

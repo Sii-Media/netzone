@@ -46,7 +46,7 @@ class FactoriesCategories extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return FactoryProfileScreen(user: factory);
+          return FactoryProfileScreen(id: factory.id);
         }));
       },
       child: Padding(

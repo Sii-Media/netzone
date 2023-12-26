@@ -9,12 +9,20 @@
       "client_info": {
         "mobilesdk_app_id": "1:746173490441:android:a7c89d623178f56b3d5fd8",
         "android_client_info": {
-          "package_name": "com.netzoon.netzoon_app"
+          "package_name": "com.example.netzain"
         }
       },
       "oauth_client": [
         {
-          "client_id": "746173490441-39bkbn2bo42v7qj0o0d00ded82h1bdre.apps.googleusercontent.com",
+          "client_id": "746173490441-0b7hms737hsm4u1lh9o4gsn09nqv05i4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.netzain",
+            "certificate_hash": "229114400a12b8ab60ba8f5da9241d3822e24b50"
+          }
+        },
+        {
+          "client_id": "746173490441-lqj803t7qs8gmj1vf4gg9s4f3bq8na1m.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -29,6 +37,57 @@
             {
               "client_id": "746173490441-39bkbn2bo42v7qj0o0d00ded82h1bdre.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "746173490441-2o9u6ha38ddeldu3ot1urk17mg5q38km.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "netzoon.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746173490441:android:70f010e3198fcbc53d5fd8",
+        "android_client_info": {
+          "package_name": "com.netzoon.netzoon_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746173490441-sehbpnk9qhl5296k2fqhs1saabjmqskl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.netzoon.netzoon_app",
+            "certificate_hash": "229114400a12b8ab60ba8f5da9241d3822e24b50"
+          }
+        },
+        {
+          "client_id": "746173490441-lqj803t7qs8gmj1vf4gg9s4f3bq8na1m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrctgYFB62Wt-YMwjma8z43sHtTm0O9cc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746173490441-39bkbn2bo42v7qj0o0d00ded82h1bdre.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "746173490441-2o9u6ha38ddeldu3ot1urk17mg5q38km.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "netzoon.RunnerTests"
+              }
             }
           ]
         }

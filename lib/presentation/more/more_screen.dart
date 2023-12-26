@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:netzoon/data/core/constants/constants.dart';
 import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
@@ -17,7 +18,6 @@ import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../cart/blocs/cart_bloc/cart_bloc_bloc.dart';
 import '../legal_advice/legal_advice_screen.dart';
-import '../start_screen.dart';
 
 class MoreScreen extends StatefulWidget {
   const MoreScreen({super.key});
@@ -146,10 +146,15 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
           final cartBloc = context.read<CartBlocBloc>();
           cartBloc.add(ClearCart());
 
-          Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-              CupertinoPageRoute(builder: (context) {
-            return const StartScreen();
-          }), (route) => false);
+          // Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+          //     CupertinoPageRoute(builder: (context) {
+          //   return const StartScreen();
+          // }), (route) => false);
+          // context.pushReplacement('/start');
+          while (context.canPop()) {
+            context.pop();
+          }
+          context.push('/start');
         }
       },
       child: Padding(
@@ -284,11 +289,15 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
                       cartBloc.add(ClearCart());
                       authBloc.add(AuthLogout());
 
-                      Navigator.of(context, rootNavigator: true)
-                          .pushAndRemoveUntil(
-                              CupertinoPageRoute(builder: (context) {
-                        return const StartScreen();
-                      }), (route) => false);
+                      // Navigator.of(context, rootNavigator: true)
+                      //     .pushAndRemoveUntil(
+                      //         CupertinoPageRoute(builder: (context) {
+                      //   return const StartScreen();
+                      // }), (route) => false);
+                      while (context.canPop()) {
+                        context.pop();
+                      }
+                      context.push('/start');
                     },
                   )
                 : const SizedBox(),

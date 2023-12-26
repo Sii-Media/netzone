@@ -5,7 +5,6 @@ import 'package:dynamic_height_grid_view/dynamic_height_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:netzoon/domain/auth/entities/user_info.dart';
 import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/advertising/advertising.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
@@ -14,10 +13,11 @@ import 'package:netzoon/presentation/categories/local_company/company_service_de
 import 'package:netzoon/presentation/categories/local_company/local_company_bloc/local_company_bloc.dart';
 import 'package:netzoon/presentation/categories/widgets/product_details.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/helpers/connect_send_bird.dart';
+import 'package:netzoon/presentation/core/helpers/share_image_function.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../data/core/constants/constants.dart';
@@ -37,10 +37,10 @@ import '../widgets/info_list_widget.dart';
 
 class LocalCompanyProfileScreen extends StatefulWidget {
   // final LocalCompany localCompany;
-  final UserInfo localCompany;
+  final String id;
   const LocalCompanyProfileScreen({
     super.key,
-    required this.localCompany,
+    required this.id,
   });
 
   @override
@@ -66,10 +66,10 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
     countryBloc.add(GetCountryEvent());
     // productsBloc.add(GetLocalCompanyProductsEvent(id: widget.localCompany.id));
 
-    userBloc.add(GetUserByIdEvent(userId: widget.localCompany.id));
-    visitorBloc.add(AddVisitorEvent(userId: widget.localCompany.id));
-    prodBloc.add(GetLocalProductsEvent(username: widget.localCompany.id));
-    adsBloc.add(GetUserAdsEvent(userId: widget.localCompany.id));
+    userBloc.add(GetUserByIdEvent(userId: widget.id));
+    visitorBloc.add(AddVisitorEvent(userId: widget.id));
+    prodBloc.add(GetLocalProductsEvent(username: widget.id));
+    adsBloc.add(GetUserAdsEvent(userId: widget.id));
     authBloc.add(AuthCheckRequested());
 
     checkFollowStatus();
@@ -77,7 +77,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
   }
 
   void checkFollowStatus() async {
-    bool followStatus = await isFollow(widget.localCompany.id);
+    bool followStatus = await isFollow(widget.id);
     setState(() {
       isFollowing = followStatus;
     });
@@ -109,11 +109,16 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 45.h,
-          title: Text(
-            widget.localCompany.username ?? '',
-            style: const TextStyle(
-              color: AppColor.backgroundColor,
-            ),
+          title: BlocBuilder<GetUserBloc, GetUserState>(
+            bloc: userBloc,
+            builder: (context, sstate) {
+              return Text(
+                sstate is GetUserSuccess ? sstate.userInfo.username ?? '' : '',
+                style: const TextStyle(
+                  color: AppColor.backgroundColor,
+                ),
+              );
+            },
           ),
           backgroundColor: AppColor.white,
           leading: GestureDetector(
@@ -124,16 +129,33 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                 color: AppColor.backgroundColor, size: 22.sp),
           ),
           actions: [
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.share,
-                    color: AppColor.backgroundColor,
-                    size: 22.sp,
-                  ),
-                )),
+            BlocBuilder<GetUserBloc, GetUserState>(
+              bloc: userBloc,
+              builder: (context, ssstate) {
+                return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                    child: IconButton(
+                      onPressed: () async {
+                        final type = ssstate is GetUserSuccess
+                            ? ssstate.userInfo.userType
+                            : 'local_company';
+                        ssstate is GetUserSuccess
+                            ? await shareImageWithDescription(
+                                imageUrl: ssstate.userInfo.profilePhoto ?? '',
+                                description:
+                                    'https://netzoon.com/home/catagories/$type/${ssstate.userInfo.id}',
+                                subject: ssstate.userInfo.username,
+                              )
+                            : null;
+                      },
+                      icon: Icon(
+                        Icons.share,
+                        color: AppColor.backgroundColor,
+                        size: 22.sp,
+                      ),
+                    ));
+              },
+            ),
           ],
         ),
         body: RefreshIndicator(
@@ -142,11 +164,10 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
             // countryBloc.add(GetCountryEvent());
             // productsBloc.add(GetLocalCompanyProductsEvent(id: widget.localCompany.id));
 
-            userBloc.add(GetUserByIdEvent(userId: widget.localCompany.id));
+            userBloc.add(GetUserByIdEvent(userId: widget.id));
 
-            prodBloc
-                .add(GetLocalProductsEvent(username: widget.localCompany.id));
-            adsBloc.add(GetUserAdsEvent(userId: widget.localCompany.id));
+            prodBloc.add(GetLocalProductsEvent(username: widget.id));
+            adsBloc.add(GetUserAdsEvent(userId: widget.id));
             authBloc.add(AuthCheckRequested());
 
             // checkFollowStatus();
@@ -207,8 +228,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                     serviceBloc.add(
                         GetCompanyServicesByIdEvent(id: state.userInfo.id));
                   } else {
-                    prodBloc.add(GetLocalProductsEvent(
-                        username: widget.localCompany.id));
+                    prodBloc.add(GetLocalProductsEvent(username: widget.id));
                   }
                   return DefaultTabController(
                     length: 3,
@@ -326,7 +346,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                   children: [
                                                     Expanded(
                                                       child: Text(
-                                                        widget.localCompany
+                                                        state.userInfo
                                                                 .username ??
                                                             '',
                                                         style: TextStyle(
@@ -401,11 +421,11 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                                 isFollowing =
                                                                     !isFollowing;
                                                               });
-                                                              userBloc.add(ToggleFollowEvent(
-                                                                  otherUserId:
-                                                                      widget
-                                                                          .localCompany
-                                                                          .id));
+                                                              userBloc.add(
+                                                                  ToggleFollowEvent(
+                                                                      otherUserId:
+                                                                          widget
+                                                                              .id));
                                                             },
                                                           );
                                                         }
@@ -555,7 +575,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                 return FollowingsListScreen(
                                                   type: 'followings',
                                                   who: 'other',
-                                                  id: widget.localCompany.id,
+                                                  id: widget.id,
                                                 );
                                               }));
                                             },
@@ -592,7 +612,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                 return FollowingsListScreen(
                                                   type: 'followers',
                                                   who: 'other',
-                                                  id: widget.localCompany.id,
+                                                  id: widget.id,
                                                 );
                                               }));
                                             },
@@ -701,11 +721,17 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                           bloc: authBloc,
                                           builder: (context, authState) {
                                             return InkWell(
-                                              onTap: () async {
+                                              onTap: () {
                                                 if (authState
                                                     is Authenticated) {
-                                                  await SendbirdChat.connect(
-                                                      authState.user.userInfo
+                                                  // await SendbirdChat.connect(
+                                                  //     authState.user.userInfo
+                                                  //             .username ??
+                                                  //         '');
+                                                  connectWithSendbird(
+                                                      username: authState
+                                                              .user
+                                                              .userInfo
                                                               .username ??
                                                           '');
                                                   Navigator.of(context).push(
@@ -964,7 +990,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                                               builder: (context) {
                                                                                 return CompanyServiceDetailsScreen(
                                                                                   companyService: serviceState.services[index],
-                                                                                  callNumber: widget.localCompany.firstMobile,
+                                                                                  callNumber: state.userInfo.firstMobile,
                                                                                 );
                                                                               },
                                                                             ),
@@ -1071,8 +1097,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                           failure: failure,
                                           onPressed: () {
                                             adsBloc.add(GetUserAdsEvent(
-                                                userId:
-                                                    widget.localCompany.id));
+                                                userId: widget.id));
                                           });
                                     } else if (state is AdsBlocSuccess) {
                                       return state.ads.isEmpty
@@ -1159,7 +1184,7 @@ class ProductListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        prodBloc.add(GetLocalProductsEvent(username: widget.localCompany.id));
+        prodBloc.add(GetLocalProductsEvent(username: widget.id));
       },
       color: AppColor.white,
       backgroundColor: AppColor.backgroundColor,

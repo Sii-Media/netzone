@@ -127,8 +127,7 @@ class _DeliveryCompaniesListScreenState
                                               MaterialPageRoute(
                                                   builder: (context) {
                                                 return DeliveryCompanyProfileScreen(
-                                                  deliveryCompany:
-                                                      filteredUsers[index],
+                                                  id: filteredUsers[index].id,
                                                 );
                                               }),
                                             );

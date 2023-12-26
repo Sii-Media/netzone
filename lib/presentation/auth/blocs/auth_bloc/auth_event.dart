@@ -23,3 +23,18 @@ class AuthSetFirstTimeLogged extends AuthEvent {
 }
 
 class DeleteMyAccountEvent extends AuthEvent {}
+
+class SigninWithFacebookEvent extends AuthEvent {}
+
+class SigninWithGoogleEvent extends AuthEvent {}
+
+class OAuthSignEvent extends AuthEvent {
+  final String email;
+  final String username;
+  final String profilePhoto;
+  const OAuthSignEvent({
+    required this.email,
+    required this.username,
+    required this.profilePhoto,
+  });
+}

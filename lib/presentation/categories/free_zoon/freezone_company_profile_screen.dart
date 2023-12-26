@@ -30,9 +30,9 @@ import '../widgets/product_details.dart';
 import '../widgets/title_and_input.dart';
 
 class FreezoneCompanyProfileScreen extends StatefulWidget {
-  final UserInfo user;
+  final String id;
 
-  const FreezoneCompanyProfileScreen({super.key, required this.user});
+  const FreezoneCompanyProfileScreen({super.key, required this.id});
 
   @override
   State<FreezoneCompanyProfileScreen> createState() =>
@@ -55,20 +55,20 @@ class _FreezoneCompanyProfileScreenState
 
   @override
   void initState() {
-    userBloc.add(GetUserByIdEvent(userId: widget.user.id));
-    productBloc.add(GetUserProductsByIdEvent(id: widget.user.id));
+    userBloc.add(GetUserByIdEvent(userId: widget.id));
+    productBloc.add(GetUserProductsByIdEvent(id: widget.id));
     authBloc.add(AuthCheckRequested());
-    adsBloc.add(GetUserAdsEvent(userId: widget.user.id));
+    adsBloc.add(GetUserAdsEvent(userId: widget.id));
     countryBloc = BlocProvider.of<CountryBloc>(context);
     countryBloc.add(GetCountryEvent());
-    visitorBloc.add(AddVisitorEvent(userId: widget.user.id));
+    visitorBloc.add(AddVisitorEvent(userId: widget.id));
 
     checkFollowStatus();
     super.initState();
   }
 
   void checkFollowStatus() async {
-    bool followStatus = await isFollow(widget.user.id);
+    bool followStatus = await isFollow(widget.id);
     setState(() {
       isFollowing = followStatus;
     });
@@ -97,11 +97,16 @@ class _FreezoneCompanyProfileScreenState
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            widget.user.username ?? '',
-            style: const TextStyle(
-              color: AppColor.backgroundColor,
-            ),
+          title: BlocBuilder<GetUserBloc, GetUserState>(
+            bloc: userBloc,
+            builder: (context, state) {
+              return Text(
+                state is GetUserSuccess ? state.userInfo.username ?? '' : '',
+                style: const TextStyle(
+                  color: AppColor.backgroundColor,
+                ),
+              );
+            },
           ),
           backgroundColor: AppColor.white,
           leading: GestureDetector(
@@ -291,7 +296,7 @@ class _FreezoneCompanyProfileScreenState
                                                 children: [
                                                   Expanded(
                                                     child: Text(
-                                                      widget.user.username ??
+                                                      state.userInfo.username ??
                                                           '',
                                                       style: TextStyle(
                                                         color: AppColor.black,
@@ -364,7 +369,6 @@ class _FreezoneCompanyProfileScreenState
                                                                 ToggleFollowEvent(
                                                                     otherUserId:
                                                                         widget
-                                                                            .user
                                                                             .id));
                                                           },
                                                         );
@@ -375,9 +379,9 @@ class _FreezoneCompanyProfileScreenState
                                                 ],
                                               ),
                                             ),
-                                            widget.user.slogn != null
+                                            state.userInfo.slogn != null
                                                 ? Text(
-                                                    widget.user.slogn ?? '',
+                                                    state.userInfo.slogn ?? '',
                                                     style: TextStyle(
                                                       color:
                                                           AppColor.secondGrey,
@@ -392,7 +396,7 @@ class _FreezoneCompanyProfileScreenState
                                                   CrossAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  '${widget.user.averageRating?.toStringAsFixed(3)}',
+                                                  '${state.userInfo.averageRating?.toStringAsFixed(3)}',
                                                   style: const TextStyle(
                                                       color:
                                                           AppColor.secondGrey,
@@ -404,14 +408,15 @@ class _FreezoneCompanyProfileScreenState
                                                   onTap: () => showRating(
                                                       context,
                                                       rateBloc,
-                                                      widget.user.id,
-                                                      widget.user
+                                                      state.userInfo.id,
+                                                      state.userInfo
                                                               .averageRating ??
                                                           0),
                                                   child: RatingBar.builder(
                                                     minRating: 1,
                                                     maxRating: 5,
-                                                    initialRating: widget.user
+                                                    initialRating: state
+                                                            .userInfo
                                                             .averageRating ??
                                                         0,
                                                     itemSize: 18,
@@ -428,7 +433,7 @@ class _FreezoneCompanyProfileScreenState
                                                   ),
                                                 ),
                                                 Text(
-                                                  '(${widget.user.totalRatings} ${AppLocalizations.of(context).translate('review')})',
+                                                  '(${state.userInfo.totalRatings} ${AppLocalizations.of(context).translate('review')})',
                                                   style: const TextStyle(
                                                     color: AppColor.secondGrey,
                                                     fontSize: 14,
@@ -610,7 +615,7 @@ class _FreezoneCompanyProfileScreenState
                                                       Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .only(
+                                                                .only(
                                                                 left: 4.0),
                                                         child: Text(
                                                           AppLocalizations.of(
@@ -684,7 +689,7 @@ class _FreezoneCompanyProfileScreenState
                               RefreshIndicator(
                                 onRefresh: () async {
                                   productBloc.add(GetUserProductsByIdEvent(
-                                      id: widget.user.id));
+                                      id: state.userInfo.id));
                                 },
                                 color: AppColor.white,
                                 backgroundColor: AppColor.backgroundColor,
@@ -745,7 +750,7 @@ class _FreezoneCompanyProfileScreenState
                                                       return ClipRRect(
                                                         borderRadius:
                                                             const BorderRadius
-                                                                    .all(
+                                                                .all(
                                                                 Radius.circular(
                                                                     20)),
                                                         child: GestureDetector(
@@ -789,7 +794,7 @@ class _FreezoneCompanyProfileScreenState
                                                                             downloadProgress) =>
                                                                         Padding(
                                                                   padding: const EdgeInsets
-                                                                          .symmetric(
+                                                                      .symmetric(
                                                                       horizontal:
                                                                           70.0,
                                                                       vertical:
@@ -837,12 +842,10 @@ class _FreezoneCompanyProfileScreenState
                                                                   RichText(
                                                                     text: TextSpan(
                                                                         style: TextStyle(
-                                                                            fontSize: 10
-                                                                                .sp,
-                                                                            color: AppColor
-                                                                                .backgroundColor),
-                                                                        children: <
-                                                                            TextSpan>[
+                                                                            fontSize:
+                                                                                10.sp,
+                                                                            color: AppColor.backgroundColor),
+                                                                        children: <TextSpan>[
                                                                           TextSpan(
                                                                             text:
                                                                                 '${state.products[index].price}',
@@ -881,8 +884,8 @@ class _FreezoneCompanyProfileScreenState
                               ),
                               RefreshIndicator(
                                 onRefresh: () async {
-                                  adsBloc.add(
-                                      GetUserAdsEvent(userId: widget.user.id));
+                                  adsBloc
+                                      .add(GetUserAdsEvent(userId: widget.id));
                                 },
                                 color: AppColor.white,
                                 backgroundColor: AppColor.backgroundColor,
@@ -906,7 +909,7 @@ class _FreezoneCompanyProfileScreenState
                                           failure: failure,
                                           onPressed: () {
                                             adsBloc.add(GetUserAdsEvent(
-                                                userId: widget.user.id));
+                                                userId: widget.id));
                                           });
                                     } else if (state is AdsBlocSuccess) {
                                       return state.ads.isEmpty

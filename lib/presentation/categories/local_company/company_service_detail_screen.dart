@@ -5,6 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/company_service/company_service.dart';
+import 'package:netzoon/presentation/chat/screens/chat_page_screen.dart';
+import 'package:netzoon/presentation/core/helpers/connect_send_bird.dart';
+import 'package:netzoon/presentation/home/widgets/auth_alert.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:video_player/video_player.dart';
 
@@ -438,20 +441,65 @@ class _CompanyServiceDetailsScreenState
                     widget.companyService.whatsAppNumber ??
                     '',
                 title: AppLocalizations.of(context).translate('call')),
-            ElevatedButton(
-              onPressed: () {},
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
-                  AppColor.backgroundColor,
-                ),
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                )),
-                fixedSize: MaterialStateProperty.all(
-                  Size.fromWidth(100.w),
-                ),
-              ),
-              child: Text(AppLocalizations.of(context).translate('chat')),
+            // ElevatedButton(
+            //   onPressed: () {
+
+            //   },
+            //   style: ButtonStyle(
+            //     backgroundColor: MaterialStateProperty.all(
+            //       AppColor.backgroundColor,
+            //     ),
+            //     shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(18.0),
+            //     )),
+            //     fixedSize: MaterialStateProperty.all(
+            //       Size.fromWidth(100.w),
+            //     ),
+            //   ),
+            //   child: Text(AppLocalizations.of(context).translate('chat')),
+            // ),
+            BlocBuilder<AuthBloc, AuthState>(
+              bloc: authBloc,
+              builder: (context, authState) {
+                return ElevatedButton(
+                  onPressed: () {
+                    if (authState is Authenticated) {
+                      // await SendbirdChat.connect(
+                      //     authState.user.userInfo
+                      //             .username ??
+                      //         '');
+                      connectWithSendbird(
+                          username: authState.user.userInfo.username ?? '');
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) {
+                          return ChatPageScreen(
+                            userId: authState.user.userInfo.username ?? '',
+                            otherUserId:
+                                widget.companyService.owner.username ?? '',
+                            title: widget.companyService.owner.username ?? '',
+                            image:
+                                widget.companyService.owner.profilePhoto ?? '',
+                          );
+                        }),
+                      );
+                    } else {
+                      authAlert(context);
+                    }
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      AppColor.backgroundColor,
+                    ),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    )),
+                    fixedSize: MaterialStateProperty.all(
+                      Size.fromWidth(100.w),
+                    ),
+                  ),
+                  child: Text(AppLocalizations.of(context).translate('chat')),
+                );
+              },
             ),
             WhatsAppButton(
                 whatsappNumber: widget.companyService.whatsAppNumber ?? ''),

@@ -328,10 +328,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                                 imageUrl: state
                                                                     .product
                                                                     .imageUrl,
+                                                                subject: state
+                                                                    .product
+                                                                    .name,
                                                                 description:
-                                                                    state
-                                                                        .product
-                                                                        .name);
+                                                                    'https://netzoon.com/home/product/${state.product.id}');
                                                           },
                                                           icon: Icon(
                                                             Icons.share,
@@ -648,8 +649,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                       MaterialPageRoute(
                                                           builder: (context) {
                                                     return UsersProfileScreen(
-                                                        user: state
-                                                            .product.owner);
+                                                        userId: state
+                                                            .product.owner.id);
                                                   }));
                                                 } else if (state.product.owner
                                                         .userType ==
@@ -658,8 +659,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                       MaterialPageRoute(
                                                           builder: (context) {
                                                     return LocalCompanyProfileScreen(
-                                                        localCompany: state
-                                                            .product.owner);
+                                                        id: state
+                                                            .product.owner.id);
                                                   }));
                                                 } else if (state.product.owner
                                                         .userType ==
@@ -668,8 +669,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                       MaterialPageRoute(
                                                           builder: (context) {
                                                     return FactoryProfileScreen(
-                                                        user: state
-                                                            .product.owner);
+                                                        id: state
+                                                            .product.owner.id);
                                                   }));
                                                 } else if (state.product.owner
                                                         .userType ==
@@ -678,8 +679,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                       MaterialPageRoute(
                                                           builder: (context) {
                                                     return LocalCompanyProfileScreen(
-                                                        localCompany: state
-                                                            .product.owner);
+                                                        id: state
+                                                            .product.owner.id);
                                                   }));
                                                 }
                                               },
@@ -1050,7 +1051,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                         return BottomAppBar(
                           height: 60.h,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               ElevatedButton(
@@ -1099,7 +1100,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                   }
                                 },
                               ),
-                              PriceSuggestionButton(input: input),
+                              // PriceSuggestionButton(input: input),
                             ],
                           ),
                         );
@@ -1110,7 +1111,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                   return BottomAppBar(
                     height: 60.h,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         ElevatedButton(
@@ -1135,7 +1136,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                 context: context, product: state.product);
                           },
                         ),
-                        PriceSuggestionButton(input: input),
+                        // PriceSuggestionButton(input: input),
                       ],
                     ),
                   );

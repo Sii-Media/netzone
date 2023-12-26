@@ -11,10 +11,15 @@ class OnEditProfileEvent extends EditProfileEvent {
   final String username;
   final String email;
   final String firstMobile;
-  final String secondeMobile;
-  final String thirdMobile;
+  final String? secondeMobile;
+  final String? thirdMobile;
   final File? profilePhoto;
   final File? coverPhoto;
+  final File? frontIdPhoto;
+  final File? backIdPhoto;
+  final File? tradeLicensePhoto;
+  final File? deliveryPermitPhoto;
+
   final String? bio;
   final String? description;
   final String? website;
@@ -22,12 +27,15 @@ class OnEditProfileEvent extends EditProfileEvent {
   final String? slogn;
   final String? address;
   final String contactName;
+  final String? userType;
+  final String? city;
+  final String? addressDetails;
   const OnEditProfileEvent({
     required this.username,
     required this.email,
     required this.firstMobile,
-    required this.secondeMobile,
-    required this.thirdMobile,
+    this.secondeMobile,
+    this.thirdMobile,
     this.profilePhoto,
     this.coverPhoto,
     this.bio,
@@ -37,5 +45,12 @@ class OnEditProfileEvent extends EditProfileEvent {
     this.slogn,
     this.address,
     required this.contactName,
+    this.frontIdPhoto,
+    this.backIdPhoto,
+    this.tradeLicensePhoto,
+    this.deliveryPermitPhoto,
+    this.userType,
+    this.city,
+    this.addressDetails,
   });
 }

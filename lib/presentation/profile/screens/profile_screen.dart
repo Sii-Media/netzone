@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,7 +12,6 @@ import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../../injection_container.dart';
 import '../../favorites/favorite_screen.dart';
-import '../../home/test.dart';
 import '../../orders/screens/order_screen.dart';
 import '../blocs/add_account/add_account_bloc.dart';
 import '../blocs/get_user/get_user_bloc.dart';
@@ -303,10 +302,14 @@ class _UserProfileScreenState extends State<UserProfileScreen>
                     ),
                     backgroundColor: Theme.of(context).colorScheme.secondary,
                   ));
-                  Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-                      CupertinoPageRoute(builder: (context) {
-                    return const TestScreen();
-                  }), (route) => false);
+                  // Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                  //     CupertinoPageRoute(builder: (context) {
+                  //   return const TestScreen();
+                  // }), (route) => false);
+                  while (context.canPop()) {
+                    context.pop();
+                  }
+                  context.push('/home');
                 }
               },
               child: ListView(

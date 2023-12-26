@@ -726,7 +726,7 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     state.ads.purchasable
@@ -753,7 +753,7 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                             },
                           )
                         : Container(),
-                    PriceSuggestionButton(input: input),
+                    // PriceSuggestionButton(input: input),
                   ],
                 ),
               ),

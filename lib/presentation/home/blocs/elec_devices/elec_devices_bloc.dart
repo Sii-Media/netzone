@@ -156,6 +156,8 @@ class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
         image: event.image,
         madeIn: event.madeIn,
         video: event.video,
+        color: event.color,
+        discountPercentage: event.discountPercentage,
       ));
       emit(
         result.fold(

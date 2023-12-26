@@ -2,13 +2,14 @@ import 'package:netzoon/domain/departments/entities/category_products/category_p
 
 double calculatePurchaseFee(double amount) {
   double fee;
-  if (amount >= 1000) {
-    fee = 10;
-  } else if (amount > 100 && amount < 1000) {
-    fee = 5;
-  } else {
-    fee = 0;
-  }
+  // if (amount >= 1000) {
+  //   fee = 10;
+  // } else if (amount > 100 && amount < 1000) {
+  //   fee = 5;
+  // } else {
+  //   fee = 0;
+  // }
+  fee = 10;
   return fee;
 }
 

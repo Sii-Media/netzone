@@ -50,11 +50,12 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       final notification = await sendNotificationUseCase(
         SendNotificationParams(
           fcmtoken: event.fcmtoken,
-          username: user?.userInfo.username ?? '',
+          username: user?.userInfo.username ?? event.username ?? '',
           imageUrl: user?.userInfo.profilePhoto ?? '',
           text: event.text,
           category: event.category,
           itemId: event.itemId,
+          body: event.body,
         ),
       );
       emit(

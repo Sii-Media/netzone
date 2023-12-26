@@ -33,7 +33,8 @@ class _EditProductScreenState extends State<EditProductScreen>
   final TextEditingController _madeInController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
   final TextEditingController _weightController = TextEditingController();
-
+  final TextEditingController _colorController = TextEditingController();
+  double _discountPercentage = 0.0;
   final ImagePicker _picker = ImagePicker();
   late bool _isGuarantee;
   String videoName = '';
@@ -52,6 +53,8 @@ class _EditProductScreenState extends State<EditProductScreen>
     _isGuarantee = widget.item.guarantee ?? false;
     _quantityController.text = widget.item.quantity.toString();
     _weightController.text = widget.item.weight.toString();
+    _colorController.text = widget.item.color.toString();
+    _discountPercentage = widget.item.discountPercentage ?? 0.0;
   }
 
   @override
@@ -256,6 +259,57 @@ class _EditProductScreenState extends State<EditProductScreen>
                     },
                   ),
                   const SizedBox(height: 25),
+                  TextFormField(
+                    controller: _colorController,
+                    style: const TextStyle(
+                      color: AppColor.backgroundColor,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: 'color',
+                      label:
+                          Text(AppLocalizations.of(context).translate('color')),
+                    ),
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.next,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'field_required_message';
+                      }
+
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 25),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'discount percentage : ${_discountPercentage.round().toString()}%',
+                        style: TextStyle(
+                          color: AppColor.backgroundColor,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                      Slider(
+                        value: _discountPercentage,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _discountPercentage = newValue;
+                          });
+                        },
+                        min: 0,
+                        max: 100,
+                        divisions: 100,
+                        label: '${_discountPercentage.round()}%',
+                        activeColor: AppColor.backgroundColor,
+                        thumbColor: AppColor.backgroundColor,
+                        inactiveColor:
+                            AppColor.backgroundColor.withOpacity(0.3),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 25),
                   CheckboxListTile(
                     title: Text(
                       AppLocalizations.of(context).translate('is_guarantee'),
@@ -347,18 +401,19 @@ class _EditProductScreenState extends State<EditProductScreen>
                       onPressed: () {
                         if (!_formKey.currentState!.validate()) return;
                         productBloc.add(EditProductEvent(
-                          productId: widget.item.id,
-                          name: _nameController.text,
-                          description: _descriptionController.text,
-                          price: double.parse(_priceController.text),
-                          quantity: int.parse(_quantityController.text),
-                          weight: double.parse(_weightController.text),
-                          image: _updatedImage,
-                          address: _addressController.text,
-                          guarantee: _isGuarantee,
-                          madeIn: _madeInController.text,
-                          video: _updatedVedio,
-                        ));
+                            productId: widget.item.id,
+                            name: _nameController.text,
+                            description: _descriptionController.text,
+                            price: double.parse(_priceController.text),
+                            quantity: int.parse(_quantityController.text),
+                            weight: double.parse(_weightController.text),
+                            image: _updatedImage,
+                            address: _addressController.text,
+                            guarantee: _isGuarantee,
+                            madeIn: _madeInController.text,
+                            video: _updatedVedio,
+                            color: _colorController.text,
+                            discountPercentage: _discountPercentage.round()));
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(

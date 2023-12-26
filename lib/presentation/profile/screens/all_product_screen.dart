@@ -177,10 +177,11 @@ class _AllProductsScreenState extends State<AllProductsScreen>
                                                       MaterialPageRoute(
                                                           builder: (context) {
                                                     return UsersProfileScreen(
-                                                        user: state
+                                                        userId: state
                                                             .categoryProducts[
                                                                 index]
-                                                            .owner);
+                                                            .owner
+                                                            .id);
                                                   }));
                                                 } else if (state
                                                         .categoryProducts[index]
@@ -191,10 +192,11 @@ class _AllProductsScreenState extends State<AllProductsScreen>
                                                       MaterialPageRoute(
                                                           builder: (context) {
                                                     return LocalCompanyProfileScreen(
-                                                        localCompany: state
+                                                        id: state
                                                             .categoryProducts[
                                                                 index]
-                                                            .owner);
+                                                            .owner
+                                                            .id);
                                                   }));
                                                 }
                                               },

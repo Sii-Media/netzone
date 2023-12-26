@@ -275,7 +275,8 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                         fcmtoken: value ?? '',
                         text: titleController.text,
                         category: 'advertiments',
-                        itemId: state.msg));
+                        itemId: state.msg,
+                        body: 'add ${titleController.text} to advertiments'));
                   });
                 }
               },

@@ -43,6 +43,13 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
           website: event.website,
           address: event.address,
           contactName: event.contactName,
+          addressDetails: event.addressDetails,
+          backIdPhoto: event.backIdPhoto,
+          city: event.city,
+          deliveryPermitPhot: event.deliveryPermitPhoto,
+          frontIdPhoto: event.frontIdPhoto,
+          tradeLicensePhoto: event.tradeLicensePhoto,
+          userType: event.userType,
         ),
       );
       emit(

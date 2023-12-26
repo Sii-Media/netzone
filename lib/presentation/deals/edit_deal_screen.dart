@@ -31,6 +31,7 @@ class _EditDealScreenState extends State<EditDealScreen>
   late TextEditingController companyNameController = TextEditingController();
   late TextEditingController prevPriceController = TextEditingController();
   late TextEditingController currentPriceController = TextEditingController();
+  late TextEditingController descriptionController = TextEditingController();
 
   late TextEditingController locationController = TextEditingController();
   late TextEditingController startDateController = TextEditingController();
@@ -52,6 +53,7 @@ class _EditDealScreenState extends State<EditDealScreen>
     _selectedEndDate = DateTime.parse(widget.deal.endDate);
     startDateController.text = convertDateToString(widget.deal.startDate);
     endDateController.text = convertDateToString(widget.deal.endDate);
+    descriptionController.text = widget.deal.description ?? '';
     super.initState();
   }
 
@@ -153,12 +155,38 @@ class _EditDealScreenState extends State<EditDealScreen>
                     style: const TextStyle(
                       color: AppColor.backgroundColor,
                     ),
-                    decoration: const InputDecoration(
-                      hintText: 'name',
-                      label: Text('name'),
+                    decoration: InputDecoration(
+                      hintText:
+                          AppLocalizations.of(context).translate('اسم الصفقة'),
+                      label: Text(
+                          AppLocalizations.of(context).translate('اسم الصفقة')),
                     ),
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'field_required_message';
+                      }
+
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 25.h),
+                  TextFormField(
+                    controller: descriptionController,
+                    style: const TextStyle(
+                      color: AppColor.backgroundColor,
+                    ),
+                    decoration: InputDecoration(
+                      hintText:
+                          AppLocalizations.of(context).translate('deal_desc'),
+                      label: Text(
+                          AppLocalizations.of(context).translate('deal_desc')),
+                    ),
+                    keyboardType: TextInputType.multiline,
+                    textInputAction: TextInputAction.newline,
+                    maxLines: 4,
+                    minLines: 1,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
                         return 'field_required_message';
@@ -173,9 +201,11 @@ class _EditDealScreenState extends State<EditDealScreen>
                     style: const TextStyle(
                       color: AppColor.backgroundColor,
                     ),
-                    decoration: const InputDecoration(
-                      hintText: 'companyName',
-                      label: Text('companyName'),
+                    decoration: InputDecoration(
+                      hintText:
+                          AppLocalizations.of(context).translate('اسم البائع'),
+                      label: Text(
+                          AppLocalizations.of(context).translate('اسم البائع')),
                     ),
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
@@ -193,9 +223,11 @@ class _EditDealScreenState extends State<EditDealScreen>
                     style: const TextStyle(
                       color: AppColor.backgroundColor,
                     ),
-                    decoration: const InputDecoration(
-                      hintText: 'prev_price',
-                      label: Text('prev_price'),
+                    decoration: InputDecoration(
+                      hintText:
+                          AppLocalizations.of(context).translate('السعر قبل'),
+                      label: Text(
+                          AppLocalizations.of(context).translate('السعر قبل')),
                     ),
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
@@ -213,9 +245,11 @@ class _EditDealScreenState extends State<EditDealScreen>
                     style: const TextStyle(
                       color: AppColor.backgroundColor,
                     ),
-                    decoration: const InputDecoration(
-                      hintText: 'curr_price',
-                      label: Text('curr_price'),
+                    decoration: InputDecoration(
+                      hintText:
+                          AppLocalizations.of(context).translate('السعر بعد'),
+                      label: Text(
+                          AppLocalizations.of(context).translate('السعر بعد')),
                     ),
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
@@ -233,9 +267,11 @@ class _EditDealScreenState extends State<EditDealScreen>
                     style: const TextStyle(
                       color: AppColor.backgroundColor,
                     ),
-                    decoration: const InputDecoration(
-                      hintText: 'location',
-                      label: Text('location'),
+                    decoration: InputDecoration(
+                      hintText:
+                          AppLocalizations.of(context).translate('Location'),
+                      label: Text(
+                          AppLocalizations.of(context).translate('Location')),
                     ),
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
@@ -397,7 +433,8 @@ class _EditDealScreenState extends State<EditDealScreen>
                             endDate: _selectedEndDate,
                             location: locationController.text,
                             category: widget.deal.category,
-                            country: widget.deal.country));
+                            country: widget.deal.country,
+                            description: descriptionController.text));
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
@@ -410,9 +447,10 @@ class _EditDealScreenState extends State<EditDealScreen>
                           Size.fromWidth(200),
                         ),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          'save_changes',
+                          AppLocalizations.of(context)
+                              .translate('save_changes'),
                         ),
                       ),
                     ),

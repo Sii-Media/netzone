@@ -21,6 +21,9 @@ import 'package:netzoon/domain/aramex/entities/transaction.dart';
 import 'package:netzoon/domain/aramex/usecases/calculate_rate_use_case.dart';
 import 'package:netzoon/domain/aramex/usecases/create_pickup_use_case.dart';
 import 'package:netzoon/domain/aramex/usecases/create_shipment_usecase.dart';
+import 'package:netzoon/domain/aramex/usecases/fetch_cities_use_case.dart';
+import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
+import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 
@@ -31,10 +34,15 @@ class AramexBloc extends Bloc<AramexEvent, AramexState> {
   final CreatePickUpUseCase createPickUpUseCase;
   final CreateShipmentUseCase createShipmentUseCase;
   final CalculateRateUseCase calculateRateUseCase;
+  final FetchCitiesUseCase fetchCitiesUseCase;
+  final GetCountryUseCase getCountryUseCase;
+
   AramexBloc({
     required this.createPickUpUseCase,
     required this.createShipmentUseCase,
     required this.calculateRateUseCase,
+    required this.fetchCitiesUseCase,
+    required this.getCountryUseCase,
   }) : super(AramexInitial()) {
     on<CreatePickUpEvent>((event, emit) async {
       emit(CreatePickUpInProgress());
@@ -237,6 +245,15 @@ class AramexBloc extends Bloc<AramexEvent, AramexState> {
               CalculateRateFailure(message: mapFailureToString(failure)),
           (calculateRateResponse) => CalculateRateSuccess(
               calculateRateResponse: calculateRateResponse)));
+    });
+    on<FetchCitiesEvent>((event, emit) async {
+      emit(FetchCitiesInProgress());
+      late String country;
+      final countryresult = await getCountryUseCase(NoParams());
+      countryresult.fold((l) => null, (r) => country = r ?? 'AE');
+      final result = await fetchCitiesUseCase(country);
+      emit(result.fold((l) => FetchCitiesFailure(),
+          (r) => FetchCitiesSuccess(cities: r.cities)));
     });
   }
 }

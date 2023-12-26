@@ -13,6 +13,7 @@ import 'package:netzoon/domain/departments/entities/departments_categories/depar
 import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:dartz/dartz.dart';
 import 'package:netzoon/domain/departments/repositories/departments_repository.dart';
+import 'package:netzoon/injection_container.dart';
 
 class DepartmentRepositoryImpl implements DepartmentRepository {
   final DepartmentsRemoteDataSource departmentsRemoteDataSource;
@@ -169,18 +170,21 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
   }
 
   @override
-  Future<Either<Failure, String>> editProduct(
-      {required String productId,
-      required String name,
-      required String description,
-      required File? image,
-      File? video,
-      required double price,
-      int? quantity,
-      double? weight,
-      bool? guarantee,
-      String? address,
-      String? madeIn}) async {
+  Future<Either<Failure, String>> editProduct({
+    required String productId,
+    required String name,
+    required String description,
+    required File? image,
+    File? video,
+    required double price,
+    int? quantity,
+    double? weight,
+    bool? guarantee,
+    String? address,
+    String? madeIn,
+    String? color,
+    int? discountPercentage,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
         Dio dio = Dio();
@@ -195,6 +199,8 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
           MapEntry('guarantee', guarantee.toString()),
           MapEntry('madeIn', madeIn ?? ''),
           MapEntry('address', address ?? ''),
+          MapEntry('discountPercentage', discountPercentage.toString()),
+          MapEntry('color', color ?? ''),
         ]);
 
         if (image != null) {
@@ -220,7 +226,7 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
           ));
         }
         Response response = await dio.put(
-          'https://back.netzoon.com//departments/editProduct/$productId',
+          '$baseUrl/departments/editProduct/$productId',
           data: formData,
         );
         return Right(response.data);
@@ -228,6 +234,7 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
         return Left(OfflineFailure());
       }
     } catch (e) {
+      print(e);
       return Left(ServerFailure());
     }
   }

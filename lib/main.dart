@@ -10,15 +10,34 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
 import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
+import 'package:netzoon/presentation/categories/delivery_company/screens/delivery_companies_list_screen.dart';
+import 'package:netzoon/presentation/categories/factories/factories_categories.dart';
+import 'package:netzoon/presentation/categories/factories/factories_screen.dart';
+import 'package:netzoon/presentation/categories/factories/factory_profile_screen.dart';
+import 'package:netzoon/presentation/categories/free_zoon/freezone_companies_list_screen.dart';
+import 'package:netzoon/presentation/categories/free_zoon/freezone_company_profile_screen.dart';
+import 'package:netzoon/presentation/categories/local_company/local_companies.dart';
+import 'package:netzoon/presentation/categories/local_company/local_company_profile.dart';
+import 'package:netzoon/presentation/categories/main_categories.dart';
+import 'package:netzoon/presentation/categories/real_estate/screens/real_estate_companies_list_screen.dart';
+import 'package:netzoon/presentation/categories/real_estate/screens/real_estate_company_profile_screen.dart';
+import 'package:netzoon/presentation/categories/users/screens/users_list_screen.dart';
+import 'package:netzoon/presentation/categories/users/screens/users_profile_screen.dart';
+import 'package:netzoon/presentation/categories/vehicles/screens/vehicle_companies_profile_screen.dart';
+import 'package:netzoon/presentation/categories/vehicles/screens/vehicles_companies_screen.dart';
 import 'package:netzoon/presentation/core/blocs/country_bloc/country_bloc.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 import 'package:netzoon/presentation/favorites/favorite_blocs/favorites_bloc.dart';
+import 'package:netzoon/presentation/home/test.dart';
 import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
 import 'package:netzoon/presentation/notifications/blocs/notifications/notifications_bloc.dart';
 import 'package:netzoon/presentation/notifications/screens/notification_screen.dart';
 import 'package:netzoon/presentation/splash/splash_screen.dart';
+import 'package:netzoon/presentation/start_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:netzoon/presentation/utils/constants.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
@@ -152,6 +171,173 @@ class MyApp extends StatelessWidget {
   MyApp({super.key}) {
     SendbirdChat.init(appId: 'D27C6110-9DB9-4EBE-AA85-CF39E2AF562E');
   }
+  final String cc = 'a';
+  final _router = GoRouter(
+    routes: [
+      GoRoute(
+        path: '/',
+        builder: (context, state) => const SplashScreen(),
+        routes: [
+          GoRoute(
+            path: 'start',
+            builder: (context, state) => const StartScreen(),
+          ),
+          GoRoute(
+            path: 'home',
+            builder: (context, state) => const TestScreen(),
+            routes: [
+              GoRoute(
+                path: 'product/:id',
+                builder: (context, state) => ProductDetailScreen(
+                    item: state.pathParameters['id'].toString()),
+              ),
+              GoRoute(
+                path: 'catagories',
+                builder: (context, state) => const CategoriesMainScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'local_company',
+                    builder: (context, state) => const GovernmentalCompanies(
+                      userType: 'local_company',
+                    ),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        builder: (context, state) => LocalCompanyProfileScreen(
+                            id: state.pathParameters['id'].toString()),
+                      ),
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'users',
+                    builder: (context, state) => const UsersListScreen(),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        builder: (context, state) => UsersProfileScreen(
+                            userId: state.pathParameters['id'].toString()),
+                      ),
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'real_estate',
+                    builder: (context, state) =>
+                        const RealEstateCompaniesListScreen(),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        builder: (context, state) =>
+                            RealEstateCompanyProfileScreen(
+                                id: state.pathParameters['id'].toString()),
+                      ),
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'free_zone_companies',
+                    builder: (context, state) =>
+                        const FreeZoneCompaniesListScreen(),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        builder: (context, state) =>
+                            FreezoneCompanyProfileScreen(
+                                id: state.pathParameters['id'].toString()),
+                      ),
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'factories',
+                    builder: (context, state) =>
+                        const FactoriesCategoryScreen(),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        builder: (context, state) => FactoryProfileScreen(
+                            id: state.pathParameters['id'].toString()),
+                      )
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'civil_aircraft',
+                    builder: (context, state) =>
+                        const VehiclesCompaniesScreen(type: 'planes'),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        builder: (context, state) =>
+                            VehicleCompaniesProfileScreen(
+                          id: state.pathParameters['id'].toString(),
+                          userType: 'planes',
+                        ),
+                      )
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'cars',
+                    builder: (context, state) =>
+                        const VehiclesCompaniesScreen(type: 'cars'),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        builder: (context, state) =>
+                            VehicleCompaniesProfileScreen(
+                          id: state.pathParameters['id'].toString(),
+                          userType: 'cars',
+                        ),
+                      )
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'sea_companies',
+                    builder: (context, state) =>
+                        const VehiclesCompaniesScreen(type: 'sea_companies'),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        builder: (context, state) =>
+                            VehicleCompaniesProfileScreen(
+                          id: state.pathParameters['id'].toString(),
+                          userType: 'sea_companies',
+                        ),
+                      )
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'trader',
+                    builder: (context, state) =>
+                        const GovernmentalCompanies(userType: 'trader'),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        builder: (context, state) => LocalCompanyProfileScreen(
+                            id: state.pathParameters['id'].toString()),
+                      )
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'delivery_companies',
+                    builder: (context, state) =>
+                        const DeliveryCompaniesListScreen(),
+                    // routes: [
+                    //   GoRoute(
+                    //     path: ':id',
+                    //     builder: (context, state) => LocalCompanyProfileScreen(
+                    //         id: state.pathParameters['id'].toString()),
+                    //   )
+                    // ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+      // GoRoute(
+      //   path: '/start',
+      //   builder: (context, state) => const StartScreen(),
+      // ),
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +374,8 @@ class MyApp extends StatelessWidget {
                   minTextAdapt: true,
                   splitScreenMode: true,
                   builder: (BuildContext context, Widget? child) {
-                    return MaterialApp(
+                    return MaterialApp.router(
+                      routerConfig: _router,
                       debugShowCheckedModeBanner: false,
 
                       locale: local,
@@ -214,7 +401,9 @@ class MyApp extends StatelessWidget {
                         Locale('en', ""),
                         Locale('ar', ""),
                       ],
-                      home: child ?? Container(),
+                      builder: (context, child) {
+                        return child ?? Container();
+                      },
                     );
                   },
                   child: const SplashScreen(),

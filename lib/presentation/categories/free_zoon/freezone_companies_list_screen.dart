@@ -133,8 +133,9 @@ class _FreeZoneCompaniesListScreenState
                                                     MaterialPageRoute(
                                                         builder: (context) {
                                                       return FreezoneCompanyProfileScreen(
-                                                          user: filteredUsers[
-                                                              index]);
+                                                          id: filteredUsers[
+                                                                  index]
+                                                              .id);
                                                     }),
                                                   );
                                                 },
@@ -163,7 +164,7 @@ class _FreeZoneCompaniesListScreenState
                                                                           downloadProgress) =>
                                                                       Padding(
                                                                 padding: const EdgeInsets
-                                                                        .symmetric(
+                                                                    .symmetric(
                                                                     horizontal:
                                                                         70.0,
                                                                     vertical:

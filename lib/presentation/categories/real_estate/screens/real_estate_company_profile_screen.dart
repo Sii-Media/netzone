@@ -7,6 +7,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/categories/real_estate/blocs/real_estate/real_estate_bloc.dart';
 import 'package:netzoon/presentation/categories/real_estate/screens/real_estate_details_screen.dart';
+import 'package:netzoon/presentation/core/helpers/share_image_function.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,8 +26,8 @@ import '../../../utils/app_localizations.dart';
 import '../../widgets/build_rating.dart';
 
 class RealEstateCompanyProfileScreen extends StatefulWidget {
-  final UserInfo user;
-  const RealEstateCompanyProfileScreen({super.key, required this.user});
+  final String id;
+  const RealEstateCompanyProfileScreen({super.key, required this.id});
 
   @override
   State<RealEstateCompanyProfileScreen> createState() =>
@@ -51,17 +52,17 @@ class _RealEstateCompanyProfileScreenState
   void initState() {
     countryBloc = BlocProvider.of<CountryBloc>(context);
     countryBloc.add(GetCountryEvent());
-    userBloc.add(GetUserByIdEvent(userId: widget.user.id));
-    realEstatesBloc.add(GetCompanyRealEstatesEvent(id: widget.user.id));
+    userBloc.add(GetUserByIdEvent(userId: widget.id));
+    realEstatesBloc.add(GetCompanyRealEstatesEvent(id: widget.id));
     authBloc.add(AuthCheckRequested());
-    visitorBloc.add(AddVisitorEvent(userId: widget.user.id));
+    visitorBloc.add(AddVisitorEvent(userId: widget.id));
 
     checkFollowStatus();
     super.initState();
   }
 
   void checkFollowStatus() async {
-    bool followStatus = await isFollow(widget.user.id);
+    bool followStatus = await isFollow(widget.id);
     setState(() {
       isFollowing = followStatus;
     });
@@ -91,11 +92,16 @@ class _RealEstateCompanyProfileScreenState
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 45.h,
-          title: Text(
-            widget.user.username ?? '',
-            style: const TextStyle(
-              color: AppColor.backgroundColor,
-            ),
+          title: BlocBuilder<GetUserBloc, GetUserState>(
+            bloc: userBloc,
+            builder: (context, state) {
+              return Text(
+                state is GetUserSuccess ? state.userInfo.username ?? '' : '',
+                style: const TextStyle(
+                  color: AppColor.backgroundColor,
+                ),
+              );
+            },
           ),
           backgroundColor: AppColor.white,
           leading: GestureDetector(
@@ -109,16 +115,30 @@ class _RealEstateCompanyProfileScreenState
             ),
           ),
           actions: [
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.share,
-                    color: AppColor.backgroundColor,
-                    size: 22.sp,
-                  ),
-                )),
+            BlocBuilder<GetUserBloc, GetUserState>(
+              bloc: userBloc,
+              builder: (context, state) {
+                return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                    child: IconButton(
+                      onPressed: () async {
+                        state is GetUserSuccess
+                            ? await shareImageWithDescription(
+                                imageUrl: state.userInfo.profilePhoto ?? '',
+                                description:
+                                    'https://netzoon.com/home/catagories/real_estate/${state.userInfo.id}',
+                                subject: state.userInfo.username,
+                              )
+                            : null;
+                      },
+                      icon: Icon(
+                        Icons.share,
+                        color: AppColor.backgroundColor,
+                        size: 22.sp,
+                      ),
+                    ));
+              },
+            ),
           ],
         ),
         body: BlocListener<GetUserBloc, GetUserState>(
@@ -287,7 +307,7 @@ class _RealEstateCompanyProfileScreenState
                                                 children: [
                                                   Expanded(
                                                     child: Text(
-                                                      widget.user.username ??
+                                                      state.userInfo.username ??
                                                           '',
                                                       style: TextStyle(
                                                         color: AppColor.black,
@@ -360,7 +380,6 @@ class _RealEstateCompanyProfileScreenState
                                                                 ToggleFollowEvent(
                                                                     otherUserId:
                                                                         widget
-                                                                            .user
                                                                             .id));
                                                           },
                                                         );
@@ -371,9 +390,9 @@ class _RealEstateCompanyProfileScreenState
                                                 ],
                                               ),
                                             ),
-                                            widget.user.slogn != null
+                                            state.userInfo.slogn != null
                                                 ? Text(
-                                                    widget.user.slogn ?? '',
+                                                    state.userInfo.slogn ?? '',
                                                     style: TextStyle(
                                                       color:
                                                           AppColor.secondGrey,
@@ -388,7 +407,7 @@ class _RealEstateCompanyProfileScreenState
                                                   CrossAxisAlignment.center,
                                               children: [
                                                 Text(
-                                                  '${widget.user.averageRating?.toStringAsFixed(3)}',
+                                                  '${state.userInfo.averageRating?.toStringAsFixed(3)}',
                                                   style: TextStyle(
                                                       color:
                                                           AppColor.secondGrey,
@@ -400,14 +419,15 @@ class _RealEstateCompanyProfileScreenState
                                                   onTap: () => showRating(
                                                       context,
                                                       rateBloc,
-                                                      widget.user.id,
-                                                      widget.user
+                                                      widget.id,
+                                                      state.userInfo
                                                               .averageRating ??
                                                           0),
                                                   child: RatingBar.builder(
                                                     minRating: 1,
                                                     maxRating: 5,
-                                                    initialRating: widget.user
+                                                    initialRating: state
+                                                            .userInfo
                                                             .averageRating ??
                                                         0,
                                                     itemSize: 18.sp,
@@ -424,7 +444,7 @@ class _RealEstateCompanyProfileScreenState
                                                   ),
                                                 ),
                                                 Text(
-                                                  '(${widget.user.totalRatings} ${AppLocalizations.of(context).translate('review')})',
+                                                  '(${state.userInfo.totalRatings} ${AppLocalizations.of(context).translate('review')})',
                                                   style: TextStyle(
                                                     color: AppColor.secondGrey,
                                                     fontSize: 14.sp,
@@ -626,7 +646,7 @@ class _RealEstateCompanyProfileScreenState
                                 onRefresh: () async {
                                   realEstatesBloc.add(
                                       GetCompanyRealEstatesEvent(
-                                          id: widget.user.id));
+                                          id: widget.id));
                                 },
                                 color: AppColor.white,
                                 backgroundColor: AppColor.backgroundColor,

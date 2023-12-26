@@ -1,12 +1,16 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:netzoon/domain/auth/entities/user.dart';
 import 'package:netzoon/domain/auth/usecases/delete_account_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_first_time_logged_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/logout_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/oAuth_sign_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/set_first_time_logged_use_case.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
+import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 
@@ -19,12 +23,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SetFirstTimeLoggedUseCase setFirstTimeLogged;
   final LogoutUseCase logoutUseCase;
   final DeleteAccountUseCase deleteAccountUseCase;
+  final OAuthSignUseCase oauthSignUseCase;
+  final GetCountryUseCase getCountryUseCase;
+
   AuthBloc({
+    required this.getCountryUseCase,
     required this.getSignedInUser,
     required this.getFirstTimeLogged,
     required this.setFirstTimeLogged,
     required this.logoutUseCase,
     required this.deleteAccountUseCase,
+    required this.oauthSignUseCase,
   }) : super(AuthInitial()) {
     on<AuthSetFirstTimeLogged>((event, emit) {
       setFirstTimeLogged(SetFirstTimeLoggedUseCaseParams(
@@ -66,6 +75,46 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(deleted.fold(
           (l) => DeleteAccountFailure(message: mapFailureToString(l)),
           (r) => DeleteAccountSuccess()));
+    });
+    on<SigninWithFacebookEvent>((event, emit) async {
+      emit(SigninWithFacebookInProgress());
+      final LoginResult result = await FacebookAuth.instance.login();
+      if (result.status == LoginStatus.success) {
+        final userData = await FacebookAuth.instance.getUserData();
+
+        print(userData);
+        emit(SigninWithFacebookSuccess(userData: userData));
+      } else {
+        emit(SigninWithFacebookFailure());
+      }
+    });
+    on<SigninWithGoogleEvent>((event, emit) async {
+      emit(SigninWithGoogleInProgress());
+      final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+      if (gUser != null) {
+        print(gUser);
+        emit(SigninWithGoogleSuccess(
+            email: gUser.email,
+            username: gUser.displayName ?? 'User',
+            profile: gUser.photoUrl ??
+                'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'));
+      } else {
+        emit(SigninWithGoogleFailure());
+      }
+    });
+    on<OAuthSignEvent>((event, emit) async {
+      emit(OAuthSignInProgress());
+      late String country;
+      final countryresult = await getCountryUseCase(NoParams());
+      countryresult.fold((l) => null, (r) => country = r ?? 'AE');
+      final user = await oauthSignUseCase(OAuthSignParams(
+        username: event.username,
+        email: event.email,
+        country: country,
+        profilePhoto: event.profilePhoto,
+      ));
+      emit(user.fold(
+          (l) => OAuthSignFailure(), (r) => OAuthSignSuccess(user: r)));
     });
   }
 }

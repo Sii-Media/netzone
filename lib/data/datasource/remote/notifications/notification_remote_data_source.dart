@@ -15,6 +15,7 @@ abstract class NotificationRemoteDataSource {
     String text,
     String category,
     String itemId,
+    String body,
   );
 
   Future<List<MyNotificationsModel>> getUnreadNotifications(String userId);
@@ -48,6 +49,7 @@ abstract class NotificationRemoteDataSourceImpl
     @Part() String text,
     @Part() String category,
     @Part() String itemId,
+    @Part() String body,
   );
 
   @override

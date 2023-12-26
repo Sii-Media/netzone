@@ -14,12 +14,15 @@ class SendNotificationEvent extends NotificationsEvent {
   final String text;
   final String category;
   final String itemId;
-
+  final String body;
+  final String? username;
   const SendNotificationEvent({
     required this.fcmtoken,
     required this.text,
     required this.category,
     required this.itemId,
+    required this.body,
+    this.username,
   });
 }
 

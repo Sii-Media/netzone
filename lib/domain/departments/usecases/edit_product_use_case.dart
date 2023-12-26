@@ -24,6 +24,8 @@ class EditProductUseCase extends UseCase<String, EditProductParams> {
       guarantee: params.guarantee,
       address: params.address,
       madeIn: params.madeIn,
+      color: params.color,
+      discountPercentage: params.discountPercentage,
     );
   }
 }
@@ -40,7 +42,8 @@ class EditProductParams {
   final bool? guarantee;
   final String? address;
   final String? madeIn;
-
+  final String? color;
+  final int? discountPercentage;
   EditProductParams({
     required this.productId,
     required this.name,
@@ -53,5 +56,7 @@ class EditProductParams {
     required this.image,
     this.video,
     required this.madeIn,
+    this.color,
+    this.discountPercentage,
   });
 }

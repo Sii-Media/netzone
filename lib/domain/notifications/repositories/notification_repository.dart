@@ -12,6 +12,7 @@ abstract class NotificationRepository {
     required String text,
     required String category,
     required String itemId,
+    required String body,
   });
 
   Future<Either<Failure, List<MyNotification>>> getUnreadNotifications({

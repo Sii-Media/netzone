@@ -83,6 +83,7 @@ class DealsRepositoryImpl implements DealsRepository {
     required String location,
     required String category,
     required String country,
+    required String description,
   }) async {
     try {
       if (await networkInfo.isConnected) {
@@ -100,6 +101,7 @@ class DealsRepositoryImpl implements DealsRepository {
           MapEntry('location', location),
           MapEntry('category', category),
           MapEntry('country', country),
+          MapEntry('description', description),
         ]);
         // ignore: unnecessary_null_comparison
         if (dealImage != null) {
@@ -160,18 +162,20 @@ class DealsRepositoryImpl implements DealsRepository {
   }
 
   @override
-  Future<Either<Failure, String>> editDeal(
-      {required String id,
-      required String name,
-      required String companyName,
-      required File? dealImage,
-      required int prevPrice,
-      required int currentPrice,
-      required DateTime startDate,
-      required DateTime endDate,
-      required String location,
-      required String category,
-      required String country}) async {
+  Future<Either<Failure, String>> editDeal({
+    required String id,
+    required String name,
+    required String companyName,
+    required File? dealImage,
+    required int prevPrice,
+    required int currentPrice,
+    required DateTime startDate,
+    required DateTime endDate,
+    required String location,
+    required String category,
+    required String country,
+    required String description,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
         Dio dio = Dio();
@@ -187,6 +191,7 @@ class DealsRepositoryImpl implements DealsRepository {
           MapEntry('location', location.toString()),
           MapEntry('category', category.toString()),
           MapEntry('country', country.toString()),
+          MapEntry('description', description),
         ]);
         if (dealImage != null) {
           String fileName = 'image.jpg';

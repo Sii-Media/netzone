@@ -7,6 +7,7 @@ import 'package:netzoon/data/models/aramex/calculate_rate_response_model.dart';
 import 'package:netzoon/data/models/aramex/create_pickup_response_model.dart';
 // import 'package:netzoon/data/models/aramex/create_shipment_input_data_model.dart';
 import 'package:netzoon/data/models/aramex/create_shipment_response_model.dart';
+import 'package:netzoon/data/models/aramex/fetch_cities_response_model.dart';
 import 'package:netzoon/domain/aramex/entities/calculate_rate_input_data.dart';
 import 'package:netzoon/domain/aramex/entities/calculate_rate_response.dart';
 // import 'package:netzoon/domain/aramex/entities/client_info.dart';
@@ -14,12 +15,14 @@ import 'package:netzoon/domain/aramex/entities/create_pickup_input_data.dart';
 import 'package:netzoon/domain/aramex/entities/create_pickup_response.dart';
 import 'package:netzoon/domain/aramex/entities/create_shipment_input_data.dart';
 import 'package:netzoon/domain/aramex/entities/create_shipment_response.dart';
+import 'package:netzoon/domain/aramex/entities/fetch_cities_respomse.dart';
 // import 'package:netzoon/domain/aramex/entities/label_info.dart';
 // import 'package:netzoon/domain/aramex/entities/pickup.dart';
 // import 'package:netzoon/domain/aramex/entities/shipment.dart';
 // import 'package:netzoon/domain/aramex/entities/transaction.dart';
 import 'package:netzoon/domain/aramex/repositories/aramex_repository.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
+import 'package:netzoon/injection_container.dart';
 
 class AramexRespositoryImpl implements AramexRepository {
   final AramexRemoteDataSource aramexRemoteDataSource;
@@ -489,6 +492,32 @@ class AramexRespositoryImpl implements AramexRepository {
           // Handle the error
           return Left(ServerFailure());
         }
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      print(e);
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, FetchCitiesResponse>> fetchCities(
+      {required String country}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        Dio dio = Dio();
+        // FormData formData = FormData();
+
+        Response response = await dio.post(
+          '$baseUrl/aramex/fetchCities?countryCode=$country',
+          // data: formData,
+        );
+
+        FetchCitiesResponseModel result =
+            FetchCitiesResponseModel.fromJson(response.data);
+        // print(response.data);
+        return Right(result.toDomain());
       } else {
         return Left(OfflineFailure());
       }
