@@ -33,8 +33,13 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     Future.delayed(
         Duration(
-            milliseconds: _controller.value.duration.inMilliseconds + 4000),
-        () => context.go('/start'));
+            milliseconds: _controller.value.duration.inMilliseconds + 4300),
+        () {
+      while (context.canPop()) {
+        context.pop();
+      }
+      context.pushReplacement('/start');
+    });
     // final videoPlayerController = VideoPlayerController.asset(
     //   'assets/images/Final_intro_netzoon.mp4', // Update with your video file path
     // );

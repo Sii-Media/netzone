@@ -213,7 +213,7 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(builder: (context) {
                                     return NewsDetails(
-                                      news: widget.news[index],
+                                      newsId: widget.news[index].id ?? '',
                                     );
                                   }),
                                 );
@@ -393,12 +393,19 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
                                         ),
                                         GestureDetector(
                                           onTap: () async {
+                                            // await shareImageWithDescription(
+                                            //   imageUrl:
+                                            //       widget.news[index].imgUrl,
+                                            //   description: widget
+                                            //       .news[index].description,
+                                            // );
                                             await shareImageWithDescription(
-                                              imageUrl:
-                                                  widget.news[index].imgUrl,
-                                              description: widget
-                                                  .news[index].description,
-                                            );
+                                                imageUrl:
+                                                    widget.news[index].imgUrl,
+                                                subject:
+                                                    widget.news[index].title,
+                                                description:
+                                                    'https://netzoon.com/home/news/news_details/${widget.news[index].id}');
                                           },
                                           child: Icon(
                                             Feather.share_2,

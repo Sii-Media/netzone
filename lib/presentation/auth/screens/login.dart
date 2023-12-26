@@ -170,6 +170,10 @@ class _LogInScreenState extends State<LogInScreen> {
             return MyDeliveryCompanyProfileScreen(
               userId: state.user.userInfo.id,
             );
+          } else {
+            return UserProfileScreen(
+              userId: state.user.userInfo.id,
+            );
           }
         }
         return Container();
