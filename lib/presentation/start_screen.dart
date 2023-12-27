@@ -67,7 +67,7 @@ class _StartScreenState extends State<StartScreen> {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      _showLocationDisabledDialog();
+      // _showLocationDisabledDialog();
       setState(() {
         isGetLocation = true;
       });

@@ -29,7 +29,7 @@ class DealDetails extends StatefulWidget {
 }
 
 class _DealDetailsState extends State<DealDetails> {
-  String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
+  // String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
 
   Map<String, dynamic>? paymentIntent;
   late String email;

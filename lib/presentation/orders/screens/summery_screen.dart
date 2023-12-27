@@ -90,7 +90,7 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
 
   late final CartBlocBloc cartBloc;
 
-  String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
+  // String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
 
   Map<String, dynamic>? paymentIntent;
 
