@@ -222,12 +222,19 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                                               ),
                                               GestureDetector(
                                                 onTap: () async {
+                                                  // await shareImageWithDescription(
+                                                  //   imageUrl: widget
+                                                  //       .deviceList.imageUrl,
+                                                  //   description:
+                                                  //       widget.deviceList.name,
+                                                  // );
                                                   await shareImageWithDescription(
-                                                    imageUrl: widget
-                                                        .deviceList.imageUrl,
-                                                    description:
-                                                        widget.deviceList.name,
-                                                  );
+                                                      imageUrl: widget
+                                                          .deviceList.imageUrl,
+                                                      subject: widget
+                                                          .deviceList.name,
+                                                      description:
+                                                          'https://netzoon.com/home/product/${widget.deviceList.id}');
                                                 },
                                                 child: Icon(
                                                   Icons.share,

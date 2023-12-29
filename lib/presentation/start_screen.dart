@@ -80,9 +80,9 @@ class _StartScreenState extends State<StartScreen> {
     isFirstTime == true
         ? preferences.setBool(SharedPreferencesKeys.isFirstTimeLogged, false)
         : true;
-    bool userConsent =
-        isFirstTime == false ? false : await _showLocationDisclosureDialog();
-
+    // bool userConsent =
+    //     isFirstTime == false ? false : await _showLocationDisclosureDialog();
+    permission = await Geolocator.requestPermission();
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {

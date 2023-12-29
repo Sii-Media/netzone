@@ -95,16 +95,21 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                         ),
                       ),
                     ),
-                    _isLoadingMessages
-                        ? const Center(
-                            child: CircularProgressIndicator(
-                              backgroundColor: AppColor.backgroundColor,
-                            ),
-                          )
-                        : Expanded(
-                            child: collection.channelList.isNotEmpty
+                    Expanded(
+                        child: _isLoadingMessages == true
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: AppColor.backgroundColor,
+                                ),
+                              )
+                            : collection.channelList.isNotEmpty
                                 ? _list(state)
-                                : Container()),
+                                : const Center(
+                                    child: Text(
+                                    'no messages',
+                                    style: TextStyle(
+                                        color: AppColor.backgroundColor),
+                                  ))),
                     hasMore ? _moreButton() : Container(),
                   ],
                 );
@@ -199,7 +204,7 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
             MaterialPageRoute(builder: (context) {
               return const ContactsScreen();
             }),
-          );
+          ).then((value) => getLastConversation());
         },
         backgroundColor: AppColor.backgroundColor,
         child: const Icon(
