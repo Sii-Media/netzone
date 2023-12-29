@@ -79,9 +79,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
                     SizedBox(
                       height: 10.h,
                     ),
-                    const Text(
-                      'Forget Password',
-                      style: TextStyle(
+                    Text(
+                      AppLocalizations.of(context).translate('forget_password'),
+                      style: const TextStyle(
                         color: AppColor.backgroundColor,
                       ),
                     ),
@@ -89,7 +89,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
                       height: 10.h,
                     ),
                     Text(
-                      'Write Your Email to send you a message',
+                      AppLocalizations.of(context)
+                          .translate('write_your_email_to_send_you_a_message'),
                       style: TextStyle(
                         color: AppColor.secondGrey,
                         fontSize: 12.sp,
