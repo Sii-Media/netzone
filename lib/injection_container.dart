@@ -78,6 +78,7 @@ import 'package:netzoon/domain/auth/usecases/change_account_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/change_password_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/delete_account_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/edit_profile_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/forget_password_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_all_users_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_first_time_logged_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_otpcode_use_case.dart';
@@ -89,6 +90,7 @@ import 'package:netzoon/domain/auth/usecases/get_user_visitors_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/logout_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/oAuth_sign_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/rate_user_use_case.dart';
+import 'package:netzoon/domain/auth/usecases/reset_password_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/set_first_time_logged_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/sign_in_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/sign_up_use_case.dart';
@@ -264,6 +266,7 @@ import 'domain/send_emails/use_cases/send_email_use_case.dart';
 import 'domain/tenders/usecases/add_tender_use_case.dart';
 
 const String baseUrl = 'https://back.netzoon.com/';
+// const String baseUrl = 'http://10.0.2.2:5000/';
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -353,14 +356,15 @@ Future<void> init() async {
       ));
 
   sl.registerFactory(() => AuthBloc(
-        getSignedInUser: sl(),
-        getFirstTimeLogged: sl(),
-        setFirstTimeLogged: sl(),
-        logoutUseCase: sl(),
-        deleteAccountUseCase: sl(),
-        getCountryUseCase: sl(),
-        oauthSignUseCase: sl(),
-      ));
+      getSignedInUser: sl(),
+      getFirstTimeLogged: sl(),
+      setFirstTimeLogged: sl(),
+      logoutUseCase: sl(),
+      deleteAccountUseCase: sl(),
+      getCountryUseCase: sl(),
+      oauthSignUseCase: sl(),
+      forgetPasswordUseCase: sl(),
+      resetPasswordUseCase: sl()));
 
   sl.registerFactory(() =>
       GetOtpCodeBloc(getOtpCodeUseCase: sl(), verifyOtpCodeUseCase: sl()));
@@ -832,6 +836,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetUserDealsUseCase(dealsRepository: sl()));
   sl.registerLazySingleton(() => OAuthSignUseCase(authRepository: sl()));
   sl.registerLazySingleton(() => FetchCitiesUseCase(aramexRepository: sl()));
+
+  sl.registerLazySingleton(() => ForgetPasswordUseCase(authRepository: sl()));
+  sl.registerLazySingleton(() => ResetPasswordUseCase(authRepository: sl()));
+
   //! Repositories
 
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(

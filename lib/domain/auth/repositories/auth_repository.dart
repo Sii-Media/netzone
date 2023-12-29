@@ -204,4 +204,13 @@ abstract class AuthRepository {
   });
 
   Future<Either<Failure, List<UserInfo>>> getAllUsers();
+
+  Future<Either<Failure, String>> forgetPassword({
+    required String email,
+  });
+
+  Future<Either<Failure, String>> resetPassword({
+    required String password,
+    required String token,
+  });
 }

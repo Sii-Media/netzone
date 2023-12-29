@@ -17,3 +17,5 @@ class FilteredFailure extends Failure {}
 class RatingFailure extends Failure {}
 
 class EmpltyDataFailure extends Failure {}
+
+class ExictUserFailure extends Failure {}

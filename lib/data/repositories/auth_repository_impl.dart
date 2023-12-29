@@ -547,10 +547,11 @@ class AuthRepositoryImpl implements AuthRepository {
                   website: website ?? user.userInfo.website,
                 ));
           }
-          print(updatedUser.toDomain().userInfo.userType);
+          print(response.data["result"]["_id"]);
           local.signInUser(updatedUser);
-
-          return Right(response.data);
+          // String res = response.data["result"]["_id"];
+          print(response.data);
+          return Right(response.data["result"]["_id"]);
         } else {
           return Left(ServerFailure());
         }
@@ -558,6 +559,7 @@ class AuthRepositoryImpl implements AuthRepository {
         return Left(OfflineFailure());
       }
     } catch (e) {
+      print(e);
       return Left(CredintialFailure());
     }
   }
@@ -610,7 +612,8 @@ class AuthRepositoryImpl implements AuthRepository {
         return Left(OfflineFailure());
       }
     } catch (e) {
-      return Left(CredintialFailure());
+      print(e);
+      return Left(ExictUserFailure());
     }
   }
 
@@ -1025,6 +1028,38 @@ class AuthRepositoryImpl implements AuthRepository {
           print(response);
           return Left(ServerFailure());
         }
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      print(e);
+      return Left(CredintialFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> forgetPassword(
+      {required String email}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final data = await authRemoteDataSource.forgetPassword(email);
+        return Right(data);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      print(e);
+      return Left(CredintialFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> resetPassword(
+      {required String password, required String token}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final data = await authRemoteDataSource.resetPassword(password, token);
+        return Right(data);
       } else {
         return Left(OfflineFailure());
       }

@@ -8,6 +8,7 @@ import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_in/sign_in_bloc.dart';
 import 'package:netzoon/presentation/auth/screens/complete_signup_screen.dart';
+import 'package:netzoon/presentation/auth/screens/forget_password_screen.dart';
 import 'package:netzoon/presentation/auth/screens/user_type.dart';
 import 'package:netzoon/presentation/auth/widgets/password_control.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
@@ -324,13 +325,24 @@ class _SignInScreenState extends State<SignInScreen>
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  Text(
-                                    AppLocalizations.of(context)
-                                        .translate('password_forget'),
-                                    style: TextStyle(
-                                      decoration: TextDecoration.underline,
-                                      fontSize: 13.sp,
-                                      color: AppColor.secondGrey,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return const ForgetPasswordScreen();
+                                          },
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      AppLocalizations.of(context)
+                                          .translate('password_forget'),
+                                      style: TextStyle(
+                                        decoration: TextDecoration.underline,
+                                        fontSize: 13.sp,
+                                        color: AppColor.secondGrey,
+                                      ),
                                     ),
                                   ),
                                   InkWell(

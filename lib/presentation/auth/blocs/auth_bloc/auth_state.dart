@@ -71,3 +71,23 @@ class SigninWithGoogleSuccess extends AuthState {
   const SigninWithGoogleSuccess(
       {required this.email, required this.username, required this.profile});
 }
+
+class ForgetPasswordInProgress extends AuthState {}
+
+class ForgetPasswordFailure extends AuthState {}
+
+class ForgetPasswordSuccess extends AuthState {
+  final String result;
+
+  const ForgetPasswordSuccess({required this.result});
+}
+
+class ResetPasswordInProgress extends AuthState {}
+
+class ResetPasswordFailure extends AuthState {}
+
+class ResetPasswordSuccess extends AuthState {
+  final String result;
+
+  const ResetPasswordSuccess({required this.result});
+}
