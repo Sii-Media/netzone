@@ -664,5 +664,8 @@
     "password_dont_match":"Passwords do not match",
     "in_account" : "In My Account",
     "account":"account",
-    "created an account as":"created an account as"
+    "created an account as":"created an account as",
+    "write_your_email_to_send_you_a_message":"Write Your Email to send you a message",
+    "forget_password":"Forget Password",
+    "create_new_password":"Create New Password"
 }

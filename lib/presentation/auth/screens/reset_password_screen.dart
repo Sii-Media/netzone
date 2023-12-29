@@ -89,9 +89,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen>
                       SizedBox(
                         height: 10.h,
                       ),
-                      const Text(
-                        'Create New Password',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context)
+                            .translate('create_new_password'),
+                        style: const TextStyle(
                           color: AppColor.backgroundColor,
                         ),
                       ),

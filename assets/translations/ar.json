@@ -664,5 +664,8 @@
     "password_dont_match":"الكلمتان غير متطابقتين",
     "in_account":"في الحساب فقط",
     "account":"حساب",
-    "created an account as":"أنشأ حساب ك "
+    "created an account as":"أنشأ حساب ك ",
+    "write_your_email_to_send_you_a_message":"ادخل الايميل الخاص بك لنرسل رسالة لك",
+    "forget_password":"نسيان كلمة المرور",
+    "create_new_password":"أنشئ كلمة مرور جديدة"
 }
