@@ -18,6 +18,8 @@ String mapFailureToString(Failure failure) {
       return 'No data founded';
     case RatingFailure:
       return 'You have already rated this';
+    case ExictUserFailure:
+      return 'You have already added this user';
     default:
       return "UnExpected Error, Please try again later.";
   }

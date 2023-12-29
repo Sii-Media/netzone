@@ -38,3 +38,16 @@ class OAuthSignEvent extends AuthEvent {
     required this.profilePhoto,
   });
 }
+
+class ForgetPasswordEvent extends AuthEvent {
+  final String email;
+
+  const ForgetPasswordEvent({required this.email});
+}
+
+class ResetPasswordEvent extends AuthEvent {
+  final String password;
+  final String token;
+
+  const ResetPasswordEvent({required this.password, required this.token});
+}

@@ -68,6 +68,7 @@
                 <category android:name= "android.intent.category.BROWSABLE"/>
                 <data android:scheme="http" android:host="netzoon.com" android:pathPattern="/.." />
                 <data android:pathPattern="/home/..*" />
+                 <data android:pathPattern="/reset-password/..*" />
                 <data android:scheme="https" android:host="netzoon.com"  android:pathPattern="/.."/>
             </intent-filter>
         </activity>

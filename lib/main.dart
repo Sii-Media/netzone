@@ -12,6 +12,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
+import 'package:netzoon/presentation/auth/screens/reset_password_screen.dart';
 import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
 import 'package:netzoon/presentation/categories/delivery_company/screens/delivery_companies_list_screen.dart';
 import 'package:netzoon/presentation/categories/factories/factories_categories.dart';
@@ -338,6 +339,11 @@ class MyApp extends StatelessWidget {
             ],
           ),
         ],
+      ),
+      GoRoute(
+        path: '/reset-password/:token',
+        builder: (context, state) => ResetPasswordScreen(
+            token: state.pathParameters['token'].toString()),
       ),
     ],
   );

@@ -84,6 +84,14 @@ abstract class AuthRemoteDataSource {
   Future<List<UserInfoModel>> getVisitors(
     final String id,
   );
+
+  Future<String> forgetPassword(
+    final String email,
+  );
+  Future<String> resetPassword(
+    final String password,
+    final String token,
+  );
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -223,4 +231,16 @@ abstract class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   @GET('/user/get-all-users')
   Future<List<UserInfoModel>> getAllUsers();
+
+  @override
+  @POST('/user/forget-password')
+  Future<String> forgetPassword(
+    @Part() String email,
+  );
+  @override
+  @PUT('/user/reset-password/{token}')
+  Future<String> resetPassword(
+    @Part() String password,
+    @Path('token') String token,
+  );
 }

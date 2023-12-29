@@ -14,12 +14,14 @@ import 'package:netzoon/presentation/auth/widgets/text_form_signup_widget.dart';
 import 'package:netzoon/presentation/auth/widgets/text_signup_widget.dart';
 import 'package:netzoon/presentation/core/blocs/country_bloc/country_bloc.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/helpers/connect_send_bird.dart';
 import 'package:netzoon/presentation/core/helpers/get_city_from_country.dart';
 import 'package:netzoon/presentation/core/widgets/add_file_button.dart';
 import 'package:netzoon/presentation/core/widgets/add_photo_button.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/profile/blocs/edit_profile/edit_profile_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
+import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 
 class CompleteSignupScreen extends StatefulWidget {
   final String userId;
@@ -224,6 +226,11 @@ class _CompleteSignupScreenState extends State<CompleteSignupScreen>
               ),
               backgroundColor: Theme.of(context).colorScheme.secondary,
             ));
+            connectWithSendbird(username: widget.name);
+            updateCurrentUserInfo(
+              nickname: widget.name,
+              profileFileInfo: widget.profilePhoto,
+            );
             while (context.canPop()) {
               context.pop();
             }
