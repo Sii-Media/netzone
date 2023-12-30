@@ -7,6 +7,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/categories/real_estate/blocs/real_estate/real_estate_bloc.dart';
 import 'package:netzoon/presentation/categories/real_estate/screens/real_estate_details_screen.dart';
+import 'package:netzoon/presentation/categories/widgets/info_list_widget.dart';
 import 'package:netzoon/presentation/core/helpers/share_image_function.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -838,42 +839,17 @@ class _RealEstateCompanyProfileScreenState
                                   },
                                 ),
                               ),
-                              ListView(
-                                children: [
-                                  Column(
-                                    children: [
-                                      titleAndInput(
-                                          title: AppLocalizations.of(context)
-                                              .translate('username'),
-                                          input: state.userInfo.username ?? ''),
-                                      titleAndInput(
-                                          title: AppLocalizations.of(context)
-                                              .translate('email'),
-                                          input: state.userInfo.email ?? ''),
-                                      titleAndInput(
-                                          title: AppLocalizations.of(context)
-                                              .translate('mobile'),
-                                          input:
-                                              state.userInfo.firstMobile ?? ''),
-                                      state.userInfo.bio != null
-                                          ? titleAndInput(
-                                              title:
-                                                  AppLocalizations.of(context)
-                                                      .translate('Bio'),
-                                              input: state.userInfo.bio ?? '')
-                                          : const SizedBox(),
-                                      // titleAndInput(
-                                      //   title: AppLocalizations.of(context)
-                                      //       .translate('Is there delivery'),
-                                      //   input: state.userInfo.deliverable!
-                                      //       ? AppLocalizations.of(context)
-                                      //           .translate('Yes')
-                                      //       : AppLocalizations.of(context)
-                                      //           .translate('No'),
-                                      // ),
-                                    ],
-                                  ),
-                                ],
+                              infoListWidget(
+                                context: context,
+                                username: state.userInfo.username,
+                                firstMobile: state.userInfo.firstMobile ?? '',
+                                email: state.userInfo.email ?? '',
+                                address: state.userInfo.address,
+                                bio: state.userInfo.bio,
+                                deliverable: state.userInfo.deliverable,
+                                description: state.userInfo.description,
+                                link: state.userInfo.link,
+                                website: state.userInfo.website,
                               ),
                             ],
                           ),
