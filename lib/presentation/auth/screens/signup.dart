@@ -2077,9 +2077,10 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 ),
                 widget.accountTitle == 'شركة توصيل'
                     ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const TextSignup(
-                            text: 'delev',
+                            text: 'delivery Permit',
                           ),
                           SizedBox(
                             height: 10.h,

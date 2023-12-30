@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/categories/vehicles/blocs/bloc/vehicle_bloc.dart';
+import 'package:netzoon/presentation/categories/widgets/info_list_widget.dart';
 import 'package:netzoon/presentation/core/helpers/share_image_function.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/home/widgets/auth_alert.dart';
@@ -741,85 +742,17 @@ class _VehicleCompaniesProfileScreenState
                                   },
                                 ),
                               ),
-                              ListView(
-                                children: [
-                                  Column(
-                                    children: [
-                                      titleAndInput(
-                                          title: AppLocalizations.of(context)
-                                              .translate('company_name'),
-                                          input: state.userInfo.username ?? ''),
-                                      titleAndInput(
-                                          title: AppLocalizations.of(context)
-                                              .translate('desc'),
-                                          input:
-                                              state.userInfo.description ?? ''),
-                                      titleAndInput(
-                                          title: AppLocalizations.of(context)
-                                              .translate('Bio'),
-                                          input: state.userInfo.bio ?? ''),
-                                      // titleAndInput(
-                                      //     title: AppLocalizations.of(context)
-                                      //         .translate('mobile'),
-                                      //     input: widget.vehiclesCompany.firstMobile ??
-                                      //         ';'),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                          // height: 40.h,
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                            border: Border(
-                                              bottom: BorderSide(
-                                                color: Colors.grey
-                                                    .withOpacity(0.4),
-                                                width: 1.0,
-                                              ),
-                                            ),
-                                          ),
-                                          child: Center(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  AppLocalizations.of(context)
-                                                      .translate('mobile'),
-                                                  style: TextStyle(
-                                                    color: AppColor.black,
-                                                    fontSize: 15.sp,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 190,
-                                                  child: PhoneCallWidget(
-                                                    phonePath: state.userInfo
-                                                            .firstMobile ??
-                                                        "",
-                                                    title: state.userInfo
-                                                            .firstMobile ??
-                                                        AppLocalizations.of(
-                                                                context)
-                                                            .translate('call'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      titleAndInput(
-                                          title: AppLocalizations.of(context)
-                                              .translate('email'),
-                                          input: state.userInfo.email ?? ''),
-                                      titleAndInput(
-                                          title: AppLocalizations.of(context)
-                                              .translate('website'),
-                                          input: state.userInfo.website ?? ''),
-                                    ],
-                                  ),
-                                ],
+                              infoListWidget(
+                                context: context,
+                                username: state.userInfo.username,
+                                firstMobile: state.userInfo.firstMobile ?? '',
+                                email: state.userInfo.email ?? '',
+                                address: state.userInfo.address,
+                                bio: state.userInfo.bio,
+                                deliverable: state.userInfo.deliverable,
+                                description: state.userInfo.description,
+                                link: state.userInfo.link,
+                                website: state.userInfo.website,
                               ),
                             ],
                           ),

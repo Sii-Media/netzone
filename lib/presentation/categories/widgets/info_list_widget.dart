@@ -31,7 +31,7 @@ Widget infoListWidget({
           titleAndInput(
               title: AppLocalizations.of(context).translate('company_name'),
               input: username ?? ''),
-          description != null
+          description != null && description != ''
               ? titleAndInput(
                   title: AppLocalizations.of(context).translate('desc'),
                   input: description)
@@ -305,12 +305,15 @@ Padding titleAndInput({required String title, required String input}) {
               ),
             ),
             SizedBox(
-              width: 190.w,
-              child: Text(
-                input,
-                style: TextStyle(
-                  color: AppColor.mainGrey,
-                  fontSize: 15.sp,
+              width: 170.w,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  input,
+                  style: TextStyle(
+                    color: AppColor.mainGrey,
+                    fontSize: 15.sp,
+                  ),
                 ),
               ),
             ),
