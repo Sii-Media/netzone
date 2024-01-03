@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		047167B72AC55FF80011053D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 047167B62AC55FF80011053D /* GoogleService-Info.plist */; };
+		0486EB142B43EB1200383979 /* Runner.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 0492E0B42AC2D779000E0368 /* Runner.entitlements */; };
 		04E0CCFA2A77D14A00C01BAB /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E0CCF92A77D14A00C01BAB /* RunnerTests.swift */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
@@ -264,6 +265,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0486EB142B43EB1200383979 /* Runner.entitlements in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,

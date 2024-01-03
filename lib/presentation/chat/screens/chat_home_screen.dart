@@ -293,7 +293,11 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                                 ? groupChannel.members[1].userId
                                 : groupChannel.members[0].userId
                             : groupChannel.name,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        maxLines: 1,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            overflow: TextOverflow.ellipsis,
+                            fontSize: 10.sp),
                       ),
                     ),
                     Flexible(
@@ -351,7 +355,7 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       '$senderId: $lastMessage',
-                                      style: const TextStyle(fontSize: 12.0),
+                                      style: TextStyle(fontSize: 6.0.sp),
                                     ),
                                   ),
                                 ),
@@ -366,7 +370,7 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                         DateTime.fromMillisecondsSinceEpoch(
                           groupChannel.createdAt! * 1000,
                         ).toString(),
-                        style: const TextStyle(fontSize: 12.0),
+                        style: TextStyle(fontSize: 5.0.sp),
                       ),
                     ),
                   ],
