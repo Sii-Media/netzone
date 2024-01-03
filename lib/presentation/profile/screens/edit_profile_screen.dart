@@ -398,7 +398,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                     ),
                     const SizedBox(height: 25),
                     TextFormField(
-                      controller: _bioController,
+                      controller: _descController,
                       style: const TextStyle(
                         color: AppColor.backgroundColor,
                       ),
@@ -421,7 +421,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                     ),
                     const SizedBox(height: 25),
                     TextFormField(
-                      controller: _bioController,
+                      controller: _websiteController,
                       style: const TextStyle(
                         color: AppColor.backgroundColor,
                       ),

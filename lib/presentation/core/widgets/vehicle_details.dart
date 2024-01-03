@@ -4,12 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/categories/entities/vehicles/vehicle.dart';
+import 'package:netzoon/injection_container.dart';
+import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
+import 'package:netzoon/presentation/categories/vehicles/blocs/bloc/vehicle_bloc.dart';
+import 'package:netzoon/presentation/chat/screens/chat_page_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/helpers/connect_send_bird.dart';
 import 'package:netzoon/presentation/core/helpers/map_to_date.dart';
+import 'package:netzoon/presentation/core/helpers/show_image_dialog.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
+import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
 import 'package:netzoon/presentation/core/widgets/phone_call_button.dart';
-import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
+import 'package:netzoon/presentation/core/widgets/whatsapp_button.dart';
+import 'package:netzoon/presentation/home/widgets/auth_alert.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
+
 import 'package:video_player/video_player.dart';
 
 import '../../categories/widgets/image_free_zone_widget.dart';
@@ -18,9 +27,9 @@ import '../helpers/get_currency_of_country.dart';
 import '../helpers/share_image_function.dart';
 
 class VehicleDetailsScreen extends StatefulWidget {
-  const VehicleDetailsScreen({super.key, required this.vehicle});
+  const VehicleDetailsScreen({super.key, required this.vehicleId});
 
-  final Vehicle vehicle;
+  final String vehicleId;
 
   @override
   State<VehicleDetailsScreen> createState() => _VehicleDetailsScreenState();
@@ -30,14 +39,15 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
   late VideoPlayerController _videoPlayerController;
   late ChewieController _chewieController;
   late final CountryBloc countryBloc;
-
+  final authBloc = sl<AuthBloc>();
+  final vehicleBloc = sl<VehicleBloc>();
   @override
   void initState() {
-    _videoPlayerController = VideoPlayerController.networkUrl(
-        Uri.parse(widget.vehicle.vedioUrl ?? ''))
+    authBloc.add(AuthCheckRequested());
+    vehicleBloc.add(GetVehicleByIdEvent(id: widget.vehicleId));
+    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(''))
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        _videoPlayerController.play();
         setState(() {});
       });
     _chewieController = ChewieController(
@@ -70,500 +80,625 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
               bloc: countryBloc,
               builder: (context, countryState) {
                 if (countryState is CountryInitial) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              width: 7,
-                              color: Colors.grey.withOpacity(0.4),
+                  return BlocBuilder<VehicleBloc, VehicleState>(
+                    bloc: vehicleBloc,
+                    builder: (context, vehicleState) {
+                      if (vehicleState is VehicleInProgress) {
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height - 170.h,
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColor.backgroundColor,
                             ),
                           ),
-                        ),
-                        child: Column(
+                        );
+                      } else if (vehicleState is VehicleFailure) {
+                        final failure = vehicleState.message;
+                        return FailureWidget(
+                            failure: failure,
+                            onPressed: () {
+                              vehicleBloc.add(
+                                  GetVehicleByIdEvent(id: widget.vehicleId));
+                            });
+                      } else if (vehicleState is GetVehicleByIdSuccess) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CachedNetworkImage(
-                              imageUrl: widget.vehicle.imageUrl,
-                              width: 700.w,
-                              height: 200.h,
-                              fit: BoxFit.cover,
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) => Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 70.0, vertical: 50),
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  color: AppColor.backgroundColor,
-
-                                  // strokeWidth: 10,
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    width: 7,
+                                    color: Colors.grey.withOpacity(0.4),
+                                  ),
                                 ),
                               ),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      RichText(
-                                        text: TextSpan(
-                                            style: TextStyle(
-                                                fontSize: 18.sp,
-                                                color:
-                                                    AppColor.backgroundColor),
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text: '${widget.vehicle.price}',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.w700,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: getCurrencyFromCountry(
-                                                  countryState.selectedCountry,
-                                                  context,
-                                                ),
-                                                style: TextStyle(
+                                  CachedNetworkImage(
+                                    imageUrl: vehicleState.vehicle.imageUrl,
+                                    width: 700.w,
+                                    height: 200.h,
+                                    fit: BoxFit.cover,
+                                    progressIndicatorBuilder:
+                                        (context, url, downloadProgress) =>
+                                            Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 70.0, vertical: 50),
+                                      child: CircularProgressIndicator(
+                                        value: downloadProgress.progress,
+                                        color: AppColor.backgroundColor,
+
+                                        // strokeWidth: 10,
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            RichText(
+                                              text: TextSpan(
+                                                  style: TextStyle(
+                                                      fontSize: 18.sp,
+                                                      color: AppColor
+                                                          .backgroundColor),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text:
+                                                          '${vehicleState.vehicle.price}',
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text:
+                                                          getCurrencyFromCountry(
+                                                        countryState
+                                                            .selectedCountry,
+                                                        context,
+                                                      ),
+                                                      style: TextStyle(
+                                                          color: AppColor
+                                                              .backgroundColor,
+                                                          fontSize: 14.sp),
+                                                    )
+                                                  ]),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () async {
+                                                    await shareImageWithDescription(
+                                                        imageUrl: vehicleState
+                                                            .vehicle.imageUrl,
+                                                        subject: vehicleState
+                                                            .vehicle.name,
+                                                        description:
+                                                            'https://netzoon.com/home/vehicle/${vehicleState.vehicle.id}');
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.share,
                                                     color: AppColor
                                                         .backgroundColor,
-                                                    fontSize: 14.sp),
-                                              )
-                                            ]),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          IconButton(
-                                            onPressed: () async {
-                                              await shareImageWithDescription(
-                                                  imageUrl:
-                                                      widget.vehicle.imageUrl,
-                                                  description: widget
-                                                      .vehicle.description);
-                                            },
-                                            icon: Icon(
-                                              Icons.share,
-                                              color: AppColor.backgroundColor,
-                                              size: 15.sp,
+                                                    size: 15.sp,
+                                                  ),
+                                                ),
+                                                // const Icon(
+                                                //   Icons.favorite_border,
+                                                //   color: AppColor.backgroundColor,
+                                                // ),
+                                              ],
                                             ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 7.h,
+                                        ),
+                                        Text(
+                                          vehicleState.vehicle.name,
+                                          style: TextStyle(
+                                            color: AppColor.black,
+                                            fontSize: 22.sp,
                                           ),
-                                          // const Icon(
-                                          //   Icons.favorite_border,
-                                          //   color: AppColor.backgroundColor,
-                                          // ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 7.h,
-                                  ),
-                                  Text(
-                                    widget.vehicle.name,
-                                    style: TextStyle(
-                                      color: AppColor.black,
-                                      fontSize: 22.sp,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              width: 7,
-                              color: Colors.grey.withOpacity(0.4),
-                            ),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Text(
-                              //   AppLocalizations.of(context).translate('details'),
-                              //   style: TextStyle(
-                              //     color: AppColor.black,
-                              //     fontSize: 17.sp,
-                              //   ),
-                              // ),
-                              SizedBox(
-                                height: 7.h,
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    width: 7,
+                                    color: Colors.grey.withOpacity(0.4),
+                                  ),
+                                ),
                               ),
-                              titleAndInput(
-                                title: AppLocalizations.of(context)
-                                    .translate('owner'),
-                                input: widget.vehicle.creator?.username ?? '',
-                              ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              titleAndInput(
-                                title: AppLocalizations.of(context)
-                                    .translate('categ'),
-                                input: widget.vehicle.category,
-                              ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              titleAndInput(
-                                title: AppLocalizations.of(context)
-                                    .translate('contactNumber'),
-                                input: widget.vehicle.contactNumber ?? '',
-                              ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              titleAndInput(
-                                title: AppLocalizations.of(context)
-                                    .translate('year'),
-                                input: formatDate(widget.vehicle.year),
-                              ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              titleAndInput(
-                                title: AppLocalizations.of(context)
-                                    .translate('kilometers'),
-                                input: widget.vehicle.kilometers.toString(),
-                              ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              titleAndInput(
-                                title: AppLocalizations.of(context)
-                                    .translate('address'),
-                                input: widget.vehicle.location,
-                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Text(
+                                    //   AppLocalizations.of(context).translate('details'),
+                                    //   style: TextStyle(
+                                    //     color: AppColor.black,
+                                    //     fontSize: 17.sp,
+                                    //   ),
+                                    // ),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    titleAndInput(
+                                      title: AppLocalizations.of(context)
+                                          .translate('owner'),
+                                      input: vehicleState
+                                              .vehicle.creator?.username ??
+                                          '',
+                                    ),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    titleAndInput(
+                                      title: AppLocalizations.of(context)
+                                          .translate('categ'),
+                                      input: vehicleState.vehicle.category,
+                                    ),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    titleAndInput(
+                                      title: AppLocalizations.of(context)
+                                          .translate('contactNumber'),
+                                      input:
+                                          vehicleState.vehicle.contactNumber ??
+                                              '',
+                                    ),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    titleAndInput(
+                                      title: AppLocalizations.of(context)
+                                          .translate('year'),
+                                      input:
+                                          formatDate(vehicleState.vehicle.year),
+                                    ),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    titleAndInput(
+                                      title: AppLocalizations.of(context)
+                                          .translate('kilometers'),
+                                      input: vehicleState.vehicle.kilometers
+                                          .toString(),
+                                    ),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    vehicleState.vehicle.regionalSpecs !=
+                                                null &&
+                                            vehicleState
+                                                    .vehicle.regionalSpecs !=
+                                                ''
+                                        ? titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('regional_specs'),
+                                            input: AppLocalizations.of(context)
+                                                .translate(
+                                                    '${vehicleState.vehicle.regionalSpecs}'),
+                                          )
+                                        : const SizedBox(),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    titleAndInput(
+                                      title: AppLocalizations.of(context)
+                                          .translate('address'),
+                                      input: vehicleState.vehicle.location,
+                                    ),
 
-                              widget.vehicle.exteriorColor != null
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 7.0),
-                                      child: titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('exterior_color'),
-                                        input:
-                                            widget.vehicle.exteriorColor ?? '',
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              widget.vehicle.interiorColor != null
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 7.0),
-                                      child: titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('interior_color'),
-                                        input:
-                                            widget.vehicle.interiorColor ?? '',
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              widget.vehicle.doors != null
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 7.0),
-                                      child: titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('doors'),
-                                        input: '${widget.vehicle.doors} doors',
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              widget.vehicle.bodyCondition != null
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 7.0),
-                                      child: titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('body_condition'),
-                                        input:
-                                            widget.vehicle.bodyCondition ?? '',
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              widget.vehicle.bodyType != null
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 7.0),
-                                      child: titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('body_type'),
-                                        input: widget.vehicle.bodyType ?? '',
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              widget.vehicle.mechanicalCondition != null
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 7.0),
-                                      child: titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('mechanical_condition'),
-                                        input: widget
-                                                .vehicle.mechanicalCondition ??
-                                            '',
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              widget.vehicle.seatingCapacity != null
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 7.0),
-                                      child: titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('seating_capacity'),
-                                        input:
-                                            '${widget.vehicle.seatingCapacity} Seater',
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              widget.vehicle.numofCylinders != null
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 7.0),
-                                      child: titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('num_of_cylinders'),
-                                        input:
-                                            '${widget.vehicle.numofCylinders}',
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              widget.vehicle.transmissionType != null
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 7.0),
-                                      child: titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('transmission_type'),
-                                        input:
-                                            widget.vehicle.transmissionType ??
-                                                "",
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              widget.vehicle.horsepower != null
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 7.0),
-                                      child: titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('horsepower'),
-                                        input: widget.vehicle.horsepower ?? "",
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              widget.vehicle.fuelType != null
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 7.0),
-                                      child: titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('fuelType'),
-                                        input: widget.vehicle.fuelType ?? "",
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              widget.vehicle.extras != null
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 7.0),
-                                      child: titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('extras'),
-                                        input: widget.vehicle.extras ?? "",
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              widget.vehicle.technicalFeatures != null
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 7.0),
-                                      child: titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('technicalFeatures'),
-                                        input:
-                                            widget.vehicle.technicalFeatures ??
-                                                "",
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              widget.vehicle.steeringSide != null
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 7.0),
-                                      child: titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('steering_side'),
-                                        input:
-                                            widget.vehicle.steeringSide ?? "",
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              widget.vehicle.guarantee != null
-                                  ? Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 7.0),
-                                      child: titleAndInput(
-                                        title: AppLocalizations.of(context)
-                                            .translate('guarantee'),
-                                        input: widget.vehicle.guarantee == true
-                                            ? 'applies'
-                                            : 'do not apply',
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              width: 7,
-                              color: Colors.grey.withOpacity(0.4),
-                            ),
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              AppLocalizations.of(context).translate('desc'),
-                              style: TextStyle(
-                                color: AppColor.black,
-                                fontSize: 17.sp,
+                                    vehicleState.vehicle.exteriorColor != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 7.0),
+                                            child: titleAndInput(
+                                              title: AppLocalizations.of(
+                                                      context)
+                                                  .translate('exterior_color'),
+                                              input: vehicleState
+                                                      .vehicle.exteriorColor ??
+                                                  '',
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    vehicleState.vehicle.interiorColor != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 7.0),
+                                            child: titleAndInput(
+                                              title: AppLocalizations.of(
+                                                      context)
+                                                  .translate('interior_color'),
+                                              input: vehicleState
+                                                      .vehicle.interiorColor ??
+                                                  '',
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    vehicleState.vehicle.doors != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 7.0),
+                                            child: titleAndInput(
+                                              title:
+                                                  AppLocalizations.of(context)
+                                                      .translate('doors'),
+                                              input:
+                                                  '${vehicleState.vehicle.doors} doors',
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    vehicleState.vehicle.bodyCondition != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 7.0),
+                                            child: titleAndInput(
+                                              title: AppLocalizations.of(
+                                                      context)
+                                                  .translate('body_condition'),
+                                              input: vehicleState
+                                                      .vehicle.bodyCondition ??
+                                                  '',
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    vehicleState.vehicle.bodyType != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 7.0),
+                                            child: titleAndInput(
+                                              title:
+                                                  AppLocalizations.of(context)
+                                                      .translate('body_type'),
+                                              input: vehicleState
+                                                      .vehicle.bodyType ??
+                                                  '',
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    vehicleState.vehicle.mechanicalCondition !=
+                                            null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 7.0),
+                                            child: titleAndInput(
+                                              title: AppLocalizations.of(
+                                                      context)
+                                                  .translate(
+                                                      'mechanical_condition'),
+                                              input: vehicleState.vehicle
+                                                      .mechanicalCondition ??
+                                                  '',
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    vehicleState.vehicle.seatingCapacity != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 7.0),
+                                            child: titleAndInput(
+                                              title:
+                                                  AppLocalizations.of(context)
+                                                      .translate(
+                                                          'seating_capacity'),
+                                              input:
+                                                  '${vehicleState.vehicle.seatingCapacity} Seater',
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    vehicleState.vehicle.numofCylinders != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 7.0),
+                                            child: titleAndInput(
+                                              title:
+                                                  AppLocalizations.of(context)
+                                                      .translate(
+                                                          'num_of_cylinders'),
+                                              input:
+                                                  '${vehicleState.vehicle.numofCylinders}',
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    vehicleState.vehicle.transmissionType !=
+                                            null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 7.0),
+                                            child: titleAndInput(
+                                              title:
+                                                  AppLocalizations.of(context)
+                                                      .translate(
+                                                          'transmission_type'),
+                                              input: vehicleState.vehicle
+                                                      .transmissionType ??
+                                                  "",
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    vehicleState.vehicle.horsepower != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 7.0),
+                                            child: titleAndInput(
+                                              title:
+                                                  AppLocalizations.of(context)
+                                                      .translate('horsepower'),
+                                              input: vehicleState
+                                                      .vehicle.horsepower ??
+                                                  "",
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    vehicleState.vehicle.fuelType != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 7.0),
+                                            child: titleAndInput(
+                                              title:
+                                                  AppLocalizations.of(context)
+                                                      .translate('fuelType'),
+                                              input: vehicleState
+                                                      .vehicle.fuelType ??
+                                                  "",
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    vehicleState.vehicle.extras != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 7.0),
+                                            child: titleAndInput(
+                                              title:
+                                                  AppLocalizations.of(context)
+                                                      .translate('extras'),
+                                              input:
+                                                  vehicleState.vehicle.extras ??
+                                                      "",
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    vehicleState.vehicle.technicalFeatures !=
+                                            null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 7.0),
+                                            child: titleAndInput(
+                                              title:
+                                                  AppLocalizations.of(context)
+                                                      .translate(
+                                                          'technicalFeatures'),
+                                              input: vehicleState.vehicle
+                                                      .technicalFeatures ??
+                                                  "",
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    vehicleState.vehicle.steeringSide != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 7.0),
+                                            child: titleAndInput(
+                                              title: AppLocalizations.of(
+                                                      context)
+                                                  .translate('steering_side'),
+                                              input: vehicleState
+                                                      .vehicle.steeringSide ??
+                                                  "",
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    vehicleState.vehicle.guarantee != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 7.0),
+                                            child: titleAndInput(
+                                              title:
+                                                  AppLocalizations.of(context)
+                                                      .translate('guarantee'),
+                                              input: vehicleState
+                                                          .vehicle.guarantee ==
+                                                      true
+                                                  ? 'applies'
+                                                  : 'do not apply',
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    vehicleState.vehicle.guarantee != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 7.0),
+                                            child: titleAndInput(
+                                              title:
+                                                  AppLocalizations.of(context)
+                                                      .translate('condition'),
+                                              input:
+                                                  AppLocalizations.of(context)
+                                                      .translate(vehicleState
+                                                          .vehicle.type),
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                  ],
+                                ),
                               ),
                             ),
-                            Text(
-                              widget.vehicle.description,
-                              style: TextStyle(
-                                color: AppColor.mainGrey,
-                                fontSize: 15.sp,
+                            Container(
+                              padding: const EdgeInsets.all(8.0),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    width: 7,
+                                    color: Colors.grey.withOpacity(0.4),
+                                  ),
+                                ),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)
+                                        .translate('desc'),
+                                    style: TextStyle(
+                                      color: AppColor.black,
+                                      fontSize: 17.sp,
+                                    ),
+                                  ),
+                                  Text(
+                                    vehicleState.vehicle.description,
+                                    style: TextStyle(
+                                      color: AppColor.mainGrey,
+                                      fontSize: 15.sp,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 7.h,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              width: 7,
-                              color: Colors.grey.withOpacity(0.4),
+                            SizedBox(
+                              height: 7.h,
                             ),
-                          ),
-                        ),
-                        child: Column(
-                          // mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${AppLocalizations.of(context).translate('images')} :',
-                              style: TextStyle(
-                                color: AppColor.black,
-                                fontSize: 17.sp,
+                            Container(
+                              padding: const EdgeInsets.all(8.0),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    width: 7,
+                                    color: Colors.grey.withOpacity(0.4),
+                                  ),
+                                ),
                               ),
-                            ),
-                            widget.vehicle.carImages?.isNotEmpty == true
-                                ? GridView.builder(
-                                    shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    itemCount: widget.vehicle.carImages?.length,
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2,
-                                            childAspectRatio: 0.94),
-                                    itemBuilder: (BuildContext context, index) {
-                                      return ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(25.0),
-                                        child: ListOfPictures(
-                                          img: widget.vehicle.carImages![index],
+                              child: Column(
+                                // mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${AppLocalizations.of(context).translate('images')} :',
+                                    style: TextStyle(
+                                      color: AppColor.black,
+                                      fontSize: 17.sp,
+                                    ),
+                                  ),
+                                  vehicleState.vehicle.carImages?.isNotEmpty ==
+                                          true
+                                      ? GridView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount: vehicleState
+                                              .vehicle.carImages?.length,
+                                          gridDelegate:
+                                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 2,
+                                                  childAspectRatio: 0.94),
+                                          itemBuilder:
+                                              (BuildContext context, index) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                showImageDialog(
+                                                    context,
+                                                    vehicleState
+                                                        .vehicle.carImages!,
+                                                    index);
+                                              },
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(25.0),
+                                                child: ListOfPictures(
+                                                  img: vehicleState.vehicle
+                                                      .carImages![index],
+                                                ),
+                                              ),
+                                            );
+                                          })
+                                      : GestureDetector(
+                                          onTap: () {},
+                                          child: Text(
+                                            AppLocalizations.of(context)
+                                                .translate('no_images'),
+                                            style: TextStyle(
+                                              color: AppColor.mainGrey,
+                                              fontSize: 15.sp,
+                                            ),
+                                          ),
                                         ),
-                                      );
-                                    })
-                                : GestureDetector(
-                                    onTap: () {},
-                                    child: Text(
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(8.0),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    width: 7,
+                                    color: Colors.grey.withOpacity(0.4),
+                                  ),
+                                ),
+                              ),
+                              child: vehicleState.vehicle.vedioUrl != null &&
+                                      vehicleState.vehicle.vedioUrl != ''
+                                  // ? VideoFreeZoneWidget(
+                                  //     title:
+                                  //         "${AppLocalizations.of(context).translate('vedio')}  : ",
+                                  //     vediourl: state.ads.advertisingVedio ?? '',
+                                  //   )
+                                  ? AspectRatio(
+                                      aspectRatio: 16 / 9,
+                                      child: Chewie(
+                                        controller: _chewieController,
+                                      ),
+                                    )
+                                  : Text(
                                       AppLocalizations.of(context)
-                                          .translate('no_images'),
+                                          .translate('no_vedio'),
                                       style: TextStyle(
                                         color: AppColor.mainGrey,
                                         fontSize: 15.sp,
                                       ),
                                     ),
-                                  ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              width: 7,
-                              color: Colors.grey.withOpacity(0.4),
                             ),
-                          ),
-                        ),
-                        child: widget.vehicle.vedioUrl != null &&
-                                widget.vehicle.vedioUrl != ''
-                            // ? VideoFreeZoneWidget(
-                            //     title:
-                            //         "${AppLocalizations.of(context).translate('vedio')}  : ",
-                            //     vediourl: state.ads.advertisingVedio ?? '',
-                            //   )
-                            ? AspectRatio(
-                                aspectRatio: 16 / 9,
-                                child: Chewie(
-                                  controller: _chewieController,
-                                ),
-                              )
-                            : Text(
-                                AppLocalizations.of(context)
-                                    .translate('no_vedio'),
-                                style: TextStyle(
-                                  color: AppColor.mainGrey,
-                                  fontSize: 15.sp,
-                                ),
-                              ),
-                      ),
-                      SizedBox(
-                        height: 110.h,
-                      ),
-                    ],
+                            SizedBox(
+                              height: 110.h,
+                            ),
+                          ],
+                        );
+                      }
+                      return const SizedBox();
+                    },
                   );
                 }
                 return Container();
@@ -572,32 +707,95 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        height: 60.h,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            PhoneCallWidget(
-                phonePath: widget.vehicle.contactNumber ?? "",
-                title: AppLocalizations.of(context).translate('call')),
-            ElevatedButton(
-                onPressed: () {},
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    AppColor.backgroundColor,
+      bottomNavigationBar: BlocBuilder<VehicleBloc, VehicleState>(
+        bloc: vehicleBloc,
+        builder: (context, vehicleState) {
+          return vehicleState is GetVehicleByIdSuccess
+              ? BottomAppBar(
+                  height: 60.h,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      PhoneCallWidget(
+                          phonePath: vehicleState.vehicle.contactNumber ?? "",
+                          title:
+                              AppLocalizations.of(context).translate('call')),
+                      BlocBuilder<AuthBloc, AuthState>(
+                        bloc: authBloc,
+                        builder: (context, authState) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              if (authState is Authenticated) {
+                                // await SendbirdChat.connect(
+                                //     authState.user.userInfo
+                                //             .username ??
+                                //         '');
+                                connectWithSendbird(
+                                    username:
+                                        authState.user.userInfo.username ?? '');
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) {
+                                    return ChatPageScreen(
+                                      userId:
+                                          authState.user.userInfo.username ??
+                                              '',
+                                      otherUserId: vehicleState
+                                              .vehicle.creator?.username ??
+                                          '',
+                                      title: vehicleState
+                                              .vehicle.creator?.username ??
+                                          '',
+                                      image: vehicleState
+                                              .vehicle.creator?.profilePhoto ??
+                                          '',
+                                    );
+                                  }),
+                                );
+                              } else {
+                                authAlert(context);
+                              }
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                AppColor.backgroundColor,
+                              ),
+                              shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                              )),
+                              fixedSize: MaterialStateProperty.all(
+                                Size.fromWidth(100.w),
+                              ),
+                            ),
+                            child: Text(
+                                AppLocalizations.of(context).translate('chat')),
+                          );
+                        },
+                      ),
+                      WhatsAppButton(
+                          whatsappNumber:
+                              vehicleState.vehicle.creator?.firstMobile ?? ''),
+                      // ElevatedButton(
+                      //     onPressed: () {},
+                      //     style: ButtonStyle(
+                      //       backgroundColor: MaterialStateProperty.all(
+                      //         AppColor.backgroundColor,
+                      //       ),
+                      //       shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(18.0),
+                      //       )),
+                      //       fixedSize: MaterialStatePropertyAll(
+                      //         Size.fromWidth(100.w),
+                      //       ),
+                      //     ),
+                      //     child: Text(AppLocalizations.of(context).translate('chat'))),
+                      // PriceSuggestionButton(input: input),
+                    ],
                   ),
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                  )),
-                  fixedSize: MaterialStatePropertyAll(
-                    Size.fromWidth(100.w),
-                  ),
-                ),
-                child: Text(AppLocalizations.of(context).translate('chat'))),
-            // PriceSuggestionButton(input: input),
-          ],
-        ),
+                )
+              : const SizedBox();
+        },
       ),
     );
   }

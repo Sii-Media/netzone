@@ -513,9 +513,10 @@ class _MyVehicleProfileScreenState extends State<MyVehicleProfileScreen>
                                                               builder:
                                                                   (context) {
                                                                 return VehicleDetailsScreen(
-                                                                    vehicle: state
-                                                                            .companyVehicles[
-                                                                        index]);
+                                                                    vehicleId: state
+                                                                            .companyVehicles[index]
+                                                                            .id ??
+                                                                        '');
                                                               },
                                                             ),
                                                           );

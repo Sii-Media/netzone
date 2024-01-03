@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/presentation/advertising/advertising.dart';
+import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/categories/real_estate/blocs/real_estate/real_estate_bloc.dart';
 import 'package:netzoon/presentation/categories/real_estate/screens/real_estate_details_screen.dart';
 import 'package:netzoon/presentation/categories/widgets/info_list_widget.dart';
 import 'package:netzoon/presentation/core/helpers/share_image_function.dart';
+import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,7 +45,7 @@ class _RealEstateCompanyProfileScreenState
         ScreenLoader<RealEstateCompanyProfileScreen> {
   final userBloc = sl<GetUserBloc>();
   final rateBloc = sl<GetUserBloc>();
-
+  final adsBloc = sl<AdsBlocBloc>();
   final realEstatesBloc = sl<RealEstateBloc>();
   final authBloc = sl<AuthBloc>();
   final visitorBloc = sl<GetUserBloc>();
@@ -57,7 +60,7 @@ class _RealEstateCompanyProfileScreenState
     realEstatesBloc.add(GetCompanyRealEstatesEvent(id: widget.id));
     authBloc.add(AuthCheckRequested());
     visitorBloc.add(AddVisitorEvent(userId: widget.id));
-
+    adsBloc.add(GetUserAdsEvent(userId: widget.id));
     checkFollowStatus();
     super.initState();
   }
@@ -86,10 +89,10 @@ class _RealEstateCompanyProfileScreenState
 
   @override
   Widget screen(BuildContext context) {
-    final TabController tabController = TabController(length: 2, vsync: this);
+    final TabController tabController = TabController(length: 3, vsync: this);
 
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 45.h,
@@ -630,6 +633,13 @@ class _RealEstateCompanyProfileScreenState
                               ),
                             ),
                             Text(
+                              AppLocalizations.of(context).translate('my_ads'),
+                              style: TextStyle(
+                                color: AppColor.black,
+                                fontSize: 11.sp,
+                              ),
+                            ),
+                            Text(
                               AppLocalizations.of(context)
                                   .translate('about_us'),
                               style: TextStyle(
@@ -698,9 +708,10 @@ class _RealEstateCompanyProfileScreenState
                                                         MaterialPageRoute(
                                                           builder: (context) {
                                                             return RealEstateDetailsScreen(
-                                                              realEstate: sstate
-                                                                      .realEstates[
-                                                                  index],
+                                                              realEstateId: sstate
+                                                                  .realEstates[
+                                                                      index]
+                                                                  .id,
                                                             );
                                                           },
                                                         ),
@@ -833,6 +844,75 @@ class _RealEstateCompanyProfileScreenState
                                                   style: const TextStyle(
                                                       color: AppColor
                                                           .backgroundColor)),
+                                            );
+                                    }
+                                    return Container();
+                                  },
+                                ),
+                              ),
+                              RefreshIndicator(
+                                onRefresh: () async {
+                                  adsBloc
+                                      .add(GetUserAdsEvent(userId: widget.id));
+                                },
+                                color: AppColor.white,
+                                backgroundColor: AppColor.backgroundColor,
+                                child: BlocBuilder<AdsBlocBloc, AdsBlocState>(
+                                  bloc: adsBloc,
+                                  builder: (context, state) {
+                                    if (state is AdsBlocInProgress) {
+                                      return SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height -
+                                                120.h,
+                                        child: const Center(
+                                          child: CircularProgressIndicator(
+                                            color: AppColor.backgroundColor,
+                                          ),
+                                        ),
+                                      );
+                                    } else if (state is AdsBlocFailure) {
+                                      final failure = state.message;
+                                      return FailureWidget(
+                                          failure: failure,
+                                          onPressed: () {
+                                            adsBloc.add(GetUserAdsEvent(
+                                                userId: widget.id));
+                                          });
+                                    } else if (state is AdsBlocSuccess) {
+                                      return state.ads.isEmpty
+                                          ? Text(
+                                              AppLocalizations.of(context)
+                                                  .translate('no_items'),
+                                              style: TextStyle(
+                                                color: AppColor.backgroundColor,
+                                                fontSize: 22.sp,
+                                              ),
+                                            )
+                                          : ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const BouncingScrollPhysics(),
+                                              itemCount: state.ads.length,
+                                              scrollDirection: Axis.vertical,
+                                              itemBuilder: (context, index) {
+                                                return Container(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  height: 240.h,
+                                                  padding: const EdgeInsets
+                                                      .symmetric(horizontal: 8),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                                  20)
+                                                              .w),
+                                                  child: Advertising(
+                                                      advertisment:
+                                                          state.ads[index]),
+                                                );
+                                              },
                                             );
                                     }
                                     return Container();

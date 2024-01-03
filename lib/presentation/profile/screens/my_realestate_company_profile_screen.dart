@@ -452,9 +452,10 @@ class _MyRealEstateCompanyProfileScreenState
                                                         MaterialPageRoute(
                                                           builder: (context) {
                                                             return RealEstateDetailsScreen(
-                                                              realEstate: sstate
-                                                                      .realEstates[
-                                                                  index],
+                                                              realEstateId: sstate
+                                                                  .realEstates[
+                                                                      index]
+                                                                  .id,
                                                             );
                                                           },
                                                         ),

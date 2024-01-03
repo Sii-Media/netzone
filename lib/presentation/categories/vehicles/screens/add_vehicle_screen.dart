@@ -95,6 +95,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
   }
 
   String? _selectedCondition;
+  String? _selectedRegion;
 
   final addBloc = sl<VehicleBloc>();
   final notifiBloc = sl<NotificationsBloc>();
@@ -631,6 +632,64 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                     SizedBox(
                       height: 7.h,
                     ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${AppLocalizations.of(context).translate('regional_specs')} :',
+                          style: TextStyle(
+                            color: AppColor.backgroundColor,
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              children: [
+                                Radio(
+                                  value: 'gcc',
+                                  groupValue: _selectedRegion,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _selectedRegion = value ?? '';
+                                    });
+                                  },
+                                  activeColor: AppColor.backgroundColor,
+                                ),
+                                Text(AppLocalizations.of(context)
+                                    .translate('gcc'))
+                              ],
+                            ),
+                            SizedBox(
+                              width: 20.w,
+                            ),
+                            Row(
+                              children: [
+                                Radio(
+                                  value: 'incoming',
+                                  groupValue: _selectedRegion,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _selectedRegion = value ?? "";
+                                    });
+                                  },
+                                  activeColor: AppColor.backgroundColor,
+                                ),
+                                Text(AppLocalizations.of(context)
+                                    .translate('incoming')),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 7.h,
+                    ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -948,6 +1007,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                                   technicalFeaturesController.text,
                               transmissionType: transmissionTypeController.text,
                               forWhat: forWhatController.text,
+                              regionalSpecs: _selectedRegion,
                             ));
                           }),
                     ),

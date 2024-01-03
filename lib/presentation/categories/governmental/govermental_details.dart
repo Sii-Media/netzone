@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/categories/entities/govermental/govermental_details.dart';
 import 'package:netzoon/presentation/categories/widgets/free_zone_video_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/helpers/show_image_dialog.dart';
 import 'package:netzoon/presentation/core/widgets/custom_appbar.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:url_launcher/link.dart';
@@ -131,10 +132,16 @@ class GovermentalDetailsScreen extends StatelessWidget {
                                       crossAxisCount: 2,
                                       childAspectRatio: 0.94),
                               itemBuilder: (BuildContext context, index) {
-                                return ClipRRect(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                  child: ListOfPictures(
-                                    img: govermentalDetails.images[index],
+                                return GestureDetector(
+                                  onTap: () {
+                                    showImageDialog(context,
+                                        govermentalDetails.images, index);
+                                  },
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                    child: ListOfPictures(
+                                      img: govermentalDetails.images[index],
+                                    ),
                                   ),
                                 );
                               })

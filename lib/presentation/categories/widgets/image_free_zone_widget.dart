@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/helpers/show_image_dialog.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 import '../../core/helpers/share_image_function.dart';
@@ -34,10 +35,15 @@ class ImageFreeZoneWidget extends StatelessWidget {
                 mainAxisSpacing: 12.h,
               ),
               itemBuilder: (BuildContext context, index) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(25.0),
-                  child: ListOfPictures(
-                    img: companyimages![index],
+                return GestureDetector(
+                  onTap: () {
+                    showImageDialog(context, companyimages!, index);
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(25.0),
+                    child: ListOfPictures(
+                      img: companyimages![index],
+                    ),
                   ),
                 );
               }),

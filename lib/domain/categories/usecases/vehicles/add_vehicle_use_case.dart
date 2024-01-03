@@ -42,6 +42,8 @@ class AddVehicleUseCase extends UseCase<String, AddVehicleParams> {
       steeringSide: params.steeringSide,
       technicalFeatures: params.technicalFeatures,
       transmissionType: params.transmissionType,
+      forWhat: params.forWhat,
+      regionalSpecs: params.regionalSpecs,
     );
   }
 }
@@ -77,6 +79,8 @@ class AddVehicleParams {
   final String? steeringSide;
   final bool? guarantee;
   final String? forWhat;
+  final String? regionalSpecs;
+
   AddVehicleParams({
     required this.name,
     required this.description,
@@ -108,5 +112,6 @@ class AddVehicleParams {
     this.steeringSide,
     this.guarantee,
     this.forWhat,
+    this.regionalSpecs,
   });
 }

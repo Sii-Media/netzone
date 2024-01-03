@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:netzoon/domain/auth/entities/user_info.dart';
 
 class Vehicle extends Equatable {
+  final String? id;
   final String name;
   final String imageUrl;
   final String description;
@@ -32,7 +33,10 @@ class Vehicle extends Equatable {
   final String? steeringSide;
   final bool? guarantee;
   final String? forWhat;
+  final String? regionalSpecs;
+
   const Vehicle({
+    required this.id,
     required this.name,
     required this.imageUrl,
     required this.description,
@@ -63,6 +67,7 @@ class Vehicle extends Equatable {
     this.steeringSide,
     this.guarantee,
     this.forWhat,
+    this.regionalSpecs,
   });
   @override
   List<Object?> get props => [
@@ -94,5 +99,6 @@ class Vehicle extends Equatable {
         steeringSide,
         guarantee,
         forWhat,
+        regionalSpecs
       ];
 }

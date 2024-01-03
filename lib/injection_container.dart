@@ -128,6 +128,7 @@ import 'package:netzoon/domain/categories/usecases/local_company/rate_company_se
 import 'package:netzoon/domain/categories/usecases/real_estate/add_real_estate_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/real_estate/get_all_real_estates_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/real_estate/get_company_real_estates_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/real_estate/get_real_estate_by_id_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/users/get_users_list_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_all_cars_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_all_new_planes_use_case.dart';
@@ -137,6 +138,7 @@ import 'package:netzoon/domain/categories/usecases/vehicles/get_cars_companies_u
 import 'package:netzoon/domain/categories/usecases/vehicles/get_company_vehicles_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_latest_car_by_creator_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_planes_companies_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/vehicles/get_vehicle_by_id_use_case.dart';
 
 import 'package:netzoon/domain/complaints/repositories/complaints_repository.dart';
 import 'package:netzoon/domain/complaints/usecases/add_complaints_usecase.dart';
@@ -389,6 +391,7 @@ Future<void> init() async {
         getSignedInUserUseCase: sl(),
         getCountryUseCase: sl(),
         getSeaCompaniesUseCase: sl(),
+        getVehicleByIdUseCase: sl(),
       ));
 
   sl.registerFactory(() => FreezoneBloc(
@@ -493,6 +496,7 @@ Future<void> init() async {
         addRealEstateUseCase: sl(),
         getSignedInUserUseCase: sl(),
         getCountryUseCase: sl(),
+        getRealEstateByIdUseCase: sl(),
       ));
 
   sl.registerFactory(() => CountryBloc(
@@ -839,6 +843,12 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => ForgetPasswordUseCase(authRepository: sl()));
   sl.registerLazySingleton(() => ResetPasswordUseCase(authRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => GetRealEstateByIdUseCase(realEstateRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => GetVehicleByIdUseCase(vehicleRepository: sl()));
 
   //! Repositories
 

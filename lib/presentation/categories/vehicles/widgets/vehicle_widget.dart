@@ -39,7 +39,7 @@ class VehicleWidget extends StatelessWidget {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
-                  return VehicleDetailsScreen(vehicle: vehicle);
+                  return VehicleDetailsScreen(vehicleId: vehicle.id ?? '');
                 },
               ),
             );
@@ -106,7 +106,7 @@ class VehicleWidget extends StatelessWidget {
               Padding(
                 padding:
                     const EdgeInsets.only(right: 9.0, left: 9.0, bottom: 8.0),
-                child: Row(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
@@ -115,14 +115,6 @@ class VehicleWidget extends StatelessWidget {
                         color: AppColor.backgroundColor,
                       ),
                     ),
-                    // Text(
-                    //   '${state.companyVehicles[index].price} \$',
-                    //   style:
-                    //       const TextStyle(
-                    //     color: AppColor
-                    //         .colorTwo,
-                    //   ),
-                    // ),
                     RichText(
                       text: TextSpan(
                           style: TextStyle(

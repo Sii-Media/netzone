@@ -14,6 +14,7 @@ import 'package:netzoon/domain/categories/usecases/vehicles/get_company_vehicles
 import 'package:netzoon/domain/categories/usecases/vehicles/get_latest_car_by_creator_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_planes_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/vehicles/get_sea_companies_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/vehicles/get_vehicle_by_id_use_case.dart';
 import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 
 import 'package:netzoon/domain/core/usecase/usecase.dart';
@@ -39,6 +40,7 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
   final AddVehicleUseCase addVehicleUseCase;
   final GetSignedInUserUseCase getSignedInUserUseCase;
   final GetCountryUseCase getCountryUseCase;
+  final GetVehicleByIdUseCase getVehicleByIdUseCase;
   VehicleBloc({
     required this.getAllCarsUseCase,
     required this.getLatestCarByCreatorUseCase,
@@ -52,6 +54,7 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
     required this.getSignedInUserUseCase,
     required this.getCountryUseCase,
     required this.getSeaCompaniesUseCase,
+    required this.getVehicleByIdUseCase,
   }) : super(VehicleInitial()) {
     on<GetAllCarsEvent>((event, emit) async {
       emit(VehicleInProgress());
@@ -242,6 +245,7 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
         technicalFeatures: event.technicalFeatures,
         transmissionType: event.transmissionType,
         forWhat: event.forWhat,
+        regionalSpecs: event.regionalSpecs,
       ));
       emit(
         response.fold(
@@ -249,6 +253,12 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
           (message) => AddVehicleSuccess(message: message),
         ),
       );
+    });
+    on<GetVehicleByIdEvent>((event, emit) async {
+      emit(VehicleInProgress());
+      final result = await getVehicleByIdUseCase(event.id);
+      emit(result.fold((l) => VehicleFailure(message: mapFailureToString(l)),
+          (r) => GetVehicleByIdSuccess(vehicle: r.vehicle)));
     });
   }
 }

@@ -24,6 +24,7 @@ import 'package:netzoon/presentation/categories/local_company/local_company_prof
 import 'package:netzoon/presentation/categories/main_categories.dart';
 import 'package:netzoon/presentation/categories/real_estate/screens/real_estate_companies_list_screen.dart';
 import 'package:netzoon/presentation/categories/real_estate/screens/real_estate_company_profile_screen.dart';
+import 'package:netzoon/presentation/categories/real_estate/screens/real_estate_details_screen.dart';
 import 'package:netzoon/presentation/categories/users/screens/users_list_screen.dart';
 import 'package:netzoon/presentation/categories/users/screens/users_profile_screen.dart';
 import 'package:netzoon/presentation/categories/vehicles/screens/vehicle_companies_profile_screen.dart';
@@ -31,6 +32,7 @@ import 'package:netzoon/presentation/categories/vehicles/screens/vehicles_compan
 import 'package:netzoon/presentation/core/blocs/country_bloc/country_bloc.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
+import 'package:netzoon/presentation/core/widgets/vehicle_details.dart';
 import 'package:netzoon/presentation/favorites/favorite_blocs/favorites_bloc.dart';
 import 'package:netzoon/presentation/home/test.dart';
 import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
@@ -176,6 +178,16 @@ class MyApp extends StatelessWidget {
             path: 'product/:id',
             builder: (context, state) => ProductDetailScreen(
                 item: state.pathParameters['id'].toString()),
+          ),
+          GoRoute(
+            path: 'real_estate/:id',
+            builder: (context, state) => RealEstateDetailsScreen(
+                realEstateId: state.pathParameters['id'].toString()),
+          ),
+          GoRoute(
+            path: 'vehicle/:id',
+            builder: (context, state) => VehicleDetailsScreen(
+                vehicleId: state.pathParameters['id'].toString()),
           ),
           GoRoute(
             path: 'news',

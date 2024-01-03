@@ -844,7 +844,7 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                     // ),
                                     Text(
                                       AppLocalizations.of(context)
-                                          .translate('my_info'),
+                                          .translate('about_us'),
                                       style: TextStyle(
                                         color: AppColor.black,
                                         fontSize: 10.sp,
@@ -1073,9 +1073,9 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                                           children: [
                                                                             CachedNetworkImage(
                                                                               imageUrl: serviceState.services[index].imageUrl ?? '',
-                                                                              height: 120.h,
+                                                                              height: 180.h,
                                                                               width: 200.w,
-                                                                              fit: BoxFit.cover,
+                                                                              fit: BoxFit.contain,
                                                                               progressIndicatorBuilder: (context, url, downloadProgress) => Padding(
                                                                                 padding: const EdgeInsets.symmetric(horizontal: 70.0, vertical: 50),
                                                                                 child: CircularProgressIndicator(

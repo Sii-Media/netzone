@@ -21,6 +21,10 @@ class RealEstateModel {
   final List<String>? images;
   final UserInfoModel createdBy;
   final String country;
+  final String? type;
+  final String? category;
+  final String? forWhat;
+  final bool? furnishing;
   RealEstateModel({
     required this.id,
     required this.title,
@@ -35,6 +39,10 @@ class RealEstateModel {
     this.images,
     required this.createdBy,
     required this.country,
+    this.type,
+    this.category,
+    this.forWhat,
+    this.furnishing,
   });
 
   factory RealEstateModel.fromJson(Map<String, dynamic> json) =>
@@ -58,5 +66,9 @@ extension MapToDomain on RealEstateModel {
         amenities: amenities,
         images: images,
         country: country,
+        type: type,
+        category: category,
+        forWhat: forWhat,
+        furnishing: furnishing,
       );
 }

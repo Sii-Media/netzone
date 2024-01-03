@@ -184,12 +184,13 @@ class _NewsDetailsState extends State<NewsDetails>
                       ),
                       Container(
                         margin: EdgeInsets.only(bottom: 80.h),
-                        alignment: Alignment.topCenter,
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        alignment: Alignment.center,
                         child: Text(
                           newsState.news.description,
                           style:
                               TextStyle(fontSize: 13.sp, color: Colors.black),
-                          textAlign: TextAlign.center,
+                          textAlign: TextAlign.justify,
                         ),
                       ),
                     ],

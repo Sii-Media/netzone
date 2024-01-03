@@ -171,6 +171,33 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
   }
 
   @override
+  Future<OneVehicleResponseModel> getVehicleById(String id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<OneVehicleResponseModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/categories/vehicle/${id}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = OneVehicleResponseModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<List<UserInfoModel>> getPlanesCompanies(String country) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};

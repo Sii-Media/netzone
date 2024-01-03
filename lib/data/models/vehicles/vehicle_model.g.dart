@@ -42,6 +42,7 @@ VehicleModel _$VehicleModelFromJson(Map<String, dynamic> json) => VehicleModel(
       steeringSide: json['steeringSide'] as String?,
       guarantee: json['guarantee'] as bool?,
       forWhat: json['forWhat'] as String?,
+      regionalSpecs: json['regionalSpecs'] as String?,
     );
 
 Map<String, dynamic> _$VehicleModelToJson(VehicleModel instance) =>
@@ -77,4 +78,5 @@ Map<String, dynamic> _$VehicleModelToJson(VehicleModel instance) =>
       'steeringSide': instance.steeringSide,
       'guarantee': instance.guarantee,
       'forWhat': instance.forWhat,
+      'regionalSpecs': instance.regionalSpecs,
     };
