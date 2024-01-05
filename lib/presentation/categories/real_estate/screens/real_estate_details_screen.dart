@@ -177,7 +177,7 @@ class _RealEstateDetailsScreenState extends State<RealEstateDetailsScreen> {
                                                         subject: realEstateState
                                                             .realEstate.title,
                                                         description:
-                                                            'https://netzoon.com/home/real_estate/${realEstateState.realEstate.id}');
+                                                            'https://www.netzoon.com/home/real_estate/${realEstateState.realEstate.id}');
                                                   },
                                                   icon: Icon(
                                                     Icons.share,

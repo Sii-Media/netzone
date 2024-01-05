@@ -333,7 +333,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                                     .product
                                                                     .name,
                                                                 description:
-                                                                    'https://netzoon.com/home/product/${state.product.id}');
+                                                                    'https://www.netzoon.com/home/product/${state.product.id}');
                                                           },
                                                           icon: Icon(
                                                             Icons.share,

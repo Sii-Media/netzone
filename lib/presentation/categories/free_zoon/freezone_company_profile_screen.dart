@@ -932,7 +932,7 @@ class _FreezoneCompanyProfileScreenState
                                                   width: MediaQuery.of(context)
                                                       .size
                                                       .width,
-                                                  height: 220.h,
+                                                  height: 280.h,
                                                   padding: const EdgeInsets
                                                       .symmetric(horizontal: 8),
                                                   decoration: BoxDecoration(

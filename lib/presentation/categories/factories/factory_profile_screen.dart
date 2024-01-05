@@ -172,7 +172,7 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                             ? await shareImageWithDescription(
                                 imageUrl: state.userInfo.profilePhoto ?? '',
                                 description:
-                                    'https://netzoon.com/home/catagories/factories/${state.userInfo.id}',
+                                    'https://www.netzoon.com/home/catagories/factories/${state.userInfo.id}',
                                 subject: state.userInfo.username,
                               )
                             : null;

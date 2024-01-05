@@ -167,7 +167,7 @@ class _DeliveryCompanyProfileScreenState
                           ? await shareImageWithDescription(
                               imageUrl: ssstate.userInfo.profilePhoto ?? '',
                               description:
-                                  'https://netzoon.com/home/catagories/delivery_companies/${ssstate.userInfo.id}',
+                                  'https://www.netzoon.com/home/catagories/delivery_companies/${ssstate.userInfo.id}',
                               subject: ssstate.userInfo.username,
                             )
                           : null;

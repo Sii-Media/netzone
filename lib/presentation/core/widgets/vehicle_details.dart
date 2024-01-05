@@ -191,7 +191,7 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                                         subject: vehicleState
                                                             .vehicle.name,
                                                         description:
-                                                            'https://netzoon.com/home/vehicle/${vehicleState.vehicle.id}');
+                                                            'https://www.netzoon.com/home/vehicle/${vehicleState.vehicle.id}');
                                                   },
                                                   icon: Icon(
                                                     Icons.share,

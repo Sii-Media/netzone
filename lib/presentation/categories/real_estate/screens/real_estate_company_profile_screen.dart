@@ -130,7 +130,7 @@ class _RealEstateCompanyProfileScreenState
                             ? await shareImageWithDescription(
                                 imageUrl: state.userInfo.profilePhoto ?? '',
                                 description:
-                                    'https://netzoon.com/home/catagories/real_estate/${state.userInfo.id}',
+                                    'https://www.netzoon.com/home/catagories/real_estate/${state.userInfo.id}',
                                 subject: state.userInfo.username,
                               )
                             : null;
@@ -900,7 +900,7 @@ class _RealEstateCompanyProfileScreenState
                                                   width: MediaQuery.of(context)
                                                       .size
                                                       .width,
-                                                  height: 240.h,
+                                                  height: 280.h,
                                                   padding: const EdgeInsets
                                                       .symmetric(horizontal: 8),
                                                   decoration: BoxDecoration(

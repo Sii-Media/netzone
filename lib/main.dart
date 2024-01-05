@@ -10,10 +10,14 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:netzoon/presentation/advertising/advertising.dart';
+import 'package:netzoon/presentation/advertising/advertising_details.dart';
+import 'package:netzoon/presentation/advertising/another_ads_details.dart';
 import 'package:netzoon/presentation/auth/blocs/sign_up/sign_up_bloc.dart';
 import 'package:netzoon/presentation/auth/screens/reset_password_screen.dart';
 import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
 import 'package:netzoon/presentation/categories/delivery_company/screens/delivery_companies_list_screen.dart';
+import 'package:netzoon/presentation/categories/delivery_company/screens/delivery_company_profile_screen.dart';
 import 'package:netzoon/presentation/categories/factories/factories_categories.dart';
 import 'package:netzoon/presentation/categories/factories/factories_screen.dart';
 import 'package:netzoon/presentation/categories/factories/factory_profile_screen.dart';
@@ -201,6 +205,28 @@ class MyApp extends StatelessWidget {
             ],
           ),
           GoRoute(
+            path: 'advertisments',
+            builder: (context, state) => const AdvertisingScreen(),
+            routes: [
+              GoRoute(
+                path: ':id',
+                builder: (context, state) => AdvertismentDetalsScreen(
+                    adsId: state.pathParameters['id'].toString()),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: 'ads',
+            builder: (context, state) => const AdvertisingScreen(),
+            routes: [
+              GoRoute(
+                path: ':id',
+                builder: (context, state) => AnotherAdsDetails(
+                    adsId: state.pathParameters['id'].toString()),
+              ),
+            ],
+          ),
+          GoRoute(
             path: 'catagories',
             builder: (context, state) => const CategoriesMainScreen(),
             routes: [
@@ -321,13 +347,13 @@ class MyApp extends StatelessWidget {
                 path: 'delivery_companies',
                 builder: (context, state) =>
                     const DeliveryCompaniesListScreen(),
-                // routes: [
-                //   GoRoute(
-                //     path: ':id',
-                //     builder: (context, state) => LocalCompanyProfileScreen(
-                //         id: state.pathParameters['id'].toString()),
-                //   )
-                // ],
+                routes: [
+                  GoRoute(
+                    path: ':id',
+                    builder: (context, state) => DeliveryCompanyProfileScreen(
+                        id: state.pathParameters['id'].toString()),
+                  )
+                ],
               ),
             ],
           ),

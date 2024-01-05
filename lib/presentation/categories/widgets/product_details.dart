@@ -181,7 +181,7 @@ class Product extends StatelessWidget {
                                       imageUrl: product.imageUrl,
                                       subject: product.name,
                                       description:
-                                          'https://netzoon.com/home/product/${product.id}');
+                                          'https://www.netzoon.com/home/product/${product.id}');
                                 },
                                 icon: const Icon(
                                   Icons.share,

@@ -234,7 +234,7 @@ class _ListSubSectionsWidgetState extends State<ListSubSectionsWidget> {
                                                       subject: widget
                                                           .deviceList.name,
                                                       description:
-                                                          'https://netzoon.com/home/product/${widget.deviceList.id}');
+                                                          'https://www.netzoon.com/home/product/${widget.deviceList.id}');
                                                 },
                                                 child: Icon(
                                                   Icons.share,

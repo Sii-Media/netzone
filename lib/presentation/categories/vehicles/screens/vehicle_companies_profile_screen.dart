@@ -171,7 +171,7 @@ class _VehicleCompaniesProfileScreenState
                           ? await shareImageWithDescription(
                               imageUrl: state.userInfo.profilePhoto ?? '',
                               description:
-                                  'https://netzoon.com/home/catagories/$type/${state.userInfo.id}',
+                                  'https://www.netzoon.com/home/catagories/$type/${state.userInfo.id}',
                               subject: state.userInfo.username,
                             )
                           : null;
@@ -802,7 +802,7 @@ class _VehicleCompaniesProfileScreenState
                                                   width: MediaQuery.of(context)
                                                       .size
                                                       .width,
-                                                  height: 240.h,
+                                                  height: 280.h,
                                                   padding: const EdgeInsets
                                                       .symmetric(horizontal: 8),
                                                   decoration: BoxDecoration(
