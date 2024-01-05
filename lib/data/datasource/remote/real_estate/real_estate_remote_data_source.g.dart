@@ -51,6 +51,33 @@ class _RealEstateRemoteDataSourceImpl
   }
 
   @override
+  Future<RealEstateModel> getRealEstateById(String id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<RealEstateModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/real-estate/getById/${id}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = RealEstateModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<List<UserInfoModel>> getRealEstateCompanies(String country) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'country': country};

@@ -428,6 +428,7 @@ class Advertising extends StatelessWidget {
               ),
               Text(
                 advertisment.name,
+                // maxLines: 1,
                 style: TextStyle(
                     color: AppColor.backgroundColor,
                     fontWeight: FontWeight.bold,
@@ -444,6 +445,7 @@ class Advertising extends StatelessWidget {
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
+                textAlign: TextAlign.center,
               ),
               GestureDetector(
                 onTap: () {

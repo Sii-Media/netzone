@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:netzoon/data/models/auth/user_info/user_info_model.dart';
+import 'package:netzoon/data/models/vehicles/one_vehicle_response_model.dart';
 import 'package:netzoon/data/models/vehicles/vehicle_model.dart';
 import 'package:netzoon/data/models/vehicles/vehicle_reponse_model.dart';
 import 'package:netzoon/injection_container.dart';
@@ -16,6 +17,8 @@ abstract class VehicleRemoteDataSource {
     String? type,
   );
   Future<VehicleResponseModel> getLatestCarByCreator(String country);
+
+  Future<OneVehicleResponseModel> getVehicleById(String id);
 
   Future<VehicleResponseModel> getAllUsedPlanes(String country);
   Future<VehicleResponseModel> getAllNewPlanes(String country);
@@ -78,6 +81,12 @@ abstract class VehicleRemoteDataSourceImpl implements VehicleRemoteDataSource {
   @GET('/categories/cars-companies')
   Future<List<UserInfoModel>> getCarsCompanies(
     @Query('country') String country,
+  );
+
+  @override
+  @GET('/categories/vehicle/{id}')
+  Future<OneVehicleResponseModel> getVehicleById(
+    @Path('id') String id,
   );
 
   @override

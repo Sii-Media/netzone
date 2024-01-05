@@ -164,7 +164,7 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
                                   MaterialPageRoute(
                                     builder: (context) {
                                       return VehicleDetailsScreen(
-                                        vehicle: filteredCars[index],
+                                        vehicleId: filteredCars[index].id ?? '',
                                       );
                                     },
                                   ),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:netzoon/domain/auth/entities/user_info.dart';
+import 'package:netzoon/domain/categories/entities/vehicles/one_vehicle_response.dart';
 import 'package:netzoon/domain/categories/entities/vehicles/vehicle_response.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:share_plus/share_plus.dart';
@@ -31,6 +32,9 @@ abstract class VehicleRepository {
     required int? priceMin,
     required int? priceMax,
     required String? type,
+  });
+  Future<Either<Failure, OneVehicleResponse>> getVehicleById({
+    required String id,
   });
   Future<Either<Failure, List<UserInfo>>> getCarsCompanies({
     required String country,
@@ -76,5 +80,6 @@ abstract class VehicleRepository {
     String? steeringSide,
     bool? guarantee,
     String? forWhat,
+    String? regionalSpecs,
   });
 }

@@ -17,6 +17,12 @@ class GetCompanyRealEstatesEvent extends RealEstateEvent {
   const GetCompanyRealEstatesEvent({required this.id});
 }
 
+class GetRealEstateByIdEvent extends RealEstateEvent {
+  final String id;
+
+  const GetRealEstateByIdEvent({required this.id});
+}
+
 class AddRealEstateEvent extends RealEstateEvent {
   final String title;
   final File image;
@@ -28,7 +34,10 @@ class AddRealEstateEvent extends RealEstateEvent {
   final int bathrooms;
   final List<String>? amenities;
   final List<XFile>? realestateimages;
-
+  final String? type;
+  final String? category;
+  final String? forWhat;
+  final bool? furnishing;
   const AddRealEstateEvent({
     required this.title,
     required this.image,
@@ -40,5 +49,9 @@ class AddRealEstateEvent extends RealEstateEvent {
     required this.bathrooms,
     this.amenities,
     this.realestateimages,
+    this.type,
+    this.category,
+    this.forWhat,
+    this.furnishing,
   });
 }

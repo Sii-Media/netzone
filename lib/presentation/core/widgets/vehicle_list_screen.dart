@@ -131,7 +131,7 @@ class VehicleWidget extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) {
                 return VehicleDetailsScreen(
-                  vehicle: plan,
+                  vehicleId: plan.id ?? '',
                 );
               },
             ),

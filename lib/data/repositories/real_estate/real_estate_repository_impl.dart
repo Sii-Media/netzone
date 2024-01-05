@@ -87,6 +87,10 @@ class RealEstateRepositoryImpl implements RealEstateRepository {
     List<String>? amenities,
     List<XFile>? realestateimages,
     required String country,
+    String? type,
+    String? category,
+    String? forWhat,
+    bool? furnishing,
   }) async {
     try {
       if (await networkInfo.isConnected) {
@@ -106,6 +110,19 @@ class RealEstateRepositoryImpl implements RealEstateRepository {
         if (amenities != null && amenities.isNotEmpty) {
           formData.fields.add(MapEntry('amenities', amenities.toString()));
         }
+        if (type != null) {
+          formData.fields.add(MapEntry('type', type));
+        }
+        if (category != null) {
+          formData.fields.add(MapEntry('category', category));
+        }
+        if (forWhat != null) {
+          formData.fields.add(MapEntry('forWhat', forWhat));
+        }
+        if (furnishing != null) {
+          formData.fields.add(MapEntry('furnishing', furnishing.toString()));
+        }
+
         String fileName = 'image.jpg';
         formData.files.add(MapEntry(
           'image',
@@ -137,6 +154,22 @@ class RealEstateRepositoryImpl implements RealEstateRepository {
         } else {
           return Left(ServerFailure());
         }
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, RealEstate>> getRealEstateById(
+      {required String id}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final realEstate =
+            await realEstateRemoteDataSource.getRealEstateById(id);
+        return Right(realEstate.toDomain());
       } else {
         return Left(OfflineFailure());
       }

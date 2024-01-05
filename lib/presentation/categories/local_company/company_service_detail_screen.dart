@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/company_service/company_service.dart';
 import 'package:netzoon/presentation/chat/screens/chat_page_screen.dart';
 import 'package:netzoon/presentation/core/helpers/connect_send_bird.dart';
+import 'package:netzoon/presentation/core/helpers/show_image_dialog.dart';
 import 'package:netzoon/presentation/home/widgets/auth_alert.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:video_player/video_player.dart';
@@ -45,6 +46,8 @@ class _CompanyServiceDetailsScreenState
   late ChewieController _chewieController;
   @override
   void initState() {
+    print('aaaaaaaaaa');
+    print(widget.callNumber);
     authBloc.add(AuthCheckRequested());
     _videoPlayerController = VideoPlayerController.networkUrl(
         Uri.parse(widget.companyService.vedioUrl ?? ''))
@@ -375,11 +378,21 @@ class _CompanyServiceDetailsScreenState
                                           crossAxisCount: 2,
                                           childAspectRatio: 0.92),
                                   itemBuilder: (BuildContext context, index) {
-                                    return ClipRRect(
-                                      borderRadius: BorderRadius.circular(25.0),
-                                      child: ListOfPictures(
-                                        img: widget.companyService
-                                            .serviceImageList![index],
+                                    return GestureDetector(
+                                      onTap: () {
+                                        showImageDialog(
+                                            context,
+                                            widget.companyService
+                                                .serviceImageList!,
+                                            index);
+                                      },
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(25.0),
+                                        child: ListOfPictures(
+                                          img: widget.companyService
+                                              .serviceImageList![index],
+                                        ),
                                       ),
                                     );
                                   })
@@ -502,7 +515,9 @@ class _CompanyServiceDetailsScreenState
               },
             ),
             WhatsAppButton(
-                whatsappNumber: widget.companyService.whatsAppNumber ?? ''),
+                whatsappNumber: widget.callNumber ??
+                    widget.companyService.whatsAppNumber ??
+                    ''),
           ],
         ),
       ),

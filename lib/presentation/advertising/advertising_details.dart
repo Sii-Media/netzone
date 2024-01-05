@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/categories/widgets/image_free_zone_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/helpers/show_image_dialog.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
@@ -645,13 +646,22 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                                                   childAspectRatio: 0.90),
                                           itemBuilder:
                                               (BuildContext context, index) {
-                                            return ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(25.0),
-                                              child: ListOfPictures(
-                                                img: state.ads
-                                                        .advertisingImageList![
-                                                    index],
+                                            return GestureDetector(
+                                              onTap: () {
+                                                showImageDialog(
+                                                    context,
+                                                    state.ads
+                                                        .advertisingImageList!,
+                                                    index);
+                                              },
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(25.0),
+                                                child: ListOfPictures(
+                                                  img: state.ads
+                                                          .advertisingImageList![
+                                                      index],
+                                                ),
                                               ),
                                             );
                                           })

@@ -9,6 +9,8 @@ part 'real_estate_remote_data_source.g.dart';
 
 abstract class RealEstateRemoteDataSource {
   Future<List<RealEstateModel>> getAllRealEstates(String country);
+  Future<RealEstateModel> getRealEstateById(String id);
+
   Future<List<UserInfoModel>> getRealEstateCompanies(String country);
   Future<List<RealEstateModel>> getCompanyRealEstates(String id);
 }
@@ -30,6 +32,12 @@ abstract class RealEstateRemoteDataSourceImpl
   @GET('/real-estate')
   Future<List<RealEstateModel>> getAllRealEstates(
     @Query('country') String country,
+  );
+
+  @override
+  @GET('/real-estate/getById/{id}')
+  Future<RealEstateModel> getRealEstateById(
+    @Path('id') String id,
   );
 
   @override

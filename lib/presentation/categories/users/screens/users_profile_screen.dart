@@ -135,7 +135,7 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                             ? await shareImageWithDescription(
                                 imageUrl: state.userInfo.profilePhoto ?? '',
                                 description:
-                                    'https://netzoon.com/home/catagories/users/${state.userInfo.id}',
+                                    'https://www.netzoon.com/home/catagories/users/${state.userInfo.id}',
                                 subject: state.userInfo.username,
                               )
                             : null;

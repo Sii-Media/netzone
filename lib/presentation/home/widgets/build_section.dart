@@ -140,7 +140,7 @@ Widget buildVehicleSection(
                               MaterialPageRoute(
                                 builder: (context) {
                                   return VehicleDetailsScreen(
-                                    vehicle: state.vehilces[index],
+                                    vehicleId: state.vehilces[index].id ?? "",
                                   );
                                 },
                               ),

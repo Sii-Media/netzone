@@ -6,9 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/presentation/advertising/advertising.dart';
+import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/categories/vehicles/blocs/bloc/vehicle_bloc.dart';
 import 'package:netzoon/presentation/categories/widgets/info_list_widget.dart';
 import 'package:netzoon/presentation/core/helpers/share_image_function.dart';
+import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/home/widgets/auth_alert.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
@@ -44,21 +47,21 @@ class _VehicleCompaniesProfileScreenState
   final bloc = sl<VehicleBloc>();
   final authBloc = sl<AuthBloc>();
   final visitorBloc = sl<GetUserBloc>();
-
+  final adsBloc = sl<AdsBlocBloc>();
   final userBloc = sl<GetUserBloc>();
   late final CountryBloc countryBloc;
   bool isFollowing = false;
 
   @override
   void initState() {
-    bloc.add(
-        GetCompanyVehiclesEvent(type: widget.userType ?? '', id: widget.id));
+    bloc.add(GetCompanyVehiclesEvent(type: widget.userType, id: widget.id));
     authBloc.add(AuthCheckRequested());
     checkFollowStatus();
     countryBloc = BlocProvider.of<CountryBloc>(context);
     countryBloc.add(GetCountryEvent());
     visitorBloc.add(AddVisitorEvent(userId: widget.id));
     userBloc.add(GetUserByIdEvent(userId: widget.id));
+    adsBloc.add(GetUserAdsEvent(userId: widget.id));
     super.initState();
   }
 
@@ -168,7 +171,7 @@ class _VehicleCompaniesProfileScreenState
                           ? await shareImageWithDescription(
                               imageUrl: state.userInfo.profilePhoto ?? '',
                               description:
-                                  'https://netzoon.com/home/catagories/$type/${state.userInfo.id}',
+                                  'https://www.netzoon.com/home/catagories/$type/${state.userInfo.id}',
                               subject: state.userInfo.username,
                             )
                           : null;
@@ -234,7 +237,7 @@ class _VehicleCompaniesProfileScreenState
               );
             } else if (state is GetUserSuccess) {
               return DefaultTabController(
-                length: 2,
+                length: 3,
                 child: NestedScrollView(
                   headerSliverBuilder: (context, _) {
                     return [
@@ -661,6 +664,13 @@ class _VehicleCompaniesProfileScreenState
                               Tab(
                                 icon: Text(
                                   AppLocalizations.of(context)
+                                      .translate('my_ads'),
+                                  style: TextStyle(fontSize: 10.sp),
+                                ),
+                              ),
+                              Tab(
+                                icon: Text(
+                                  AppLocalizations.of(context)
                                       .translate('about_us'),
                                   style: TextStyle(fontSize: 10.sp),
                                 ),
@@ -736,6 +746,75 @@ class _VehicleCompaniesProfileScreenState
                                                   style: const TextStyle(
                                                       color: AppColor
                                                           .backgroundColor)),
+                                            );
+                                    }
+                                    return Container();
+                                  },
+                                ),
+                              ),
+                              RefreshIndicator(
+                                onRefresh: () async {
+                                  adsBloc
+                                      .add(GetUserAdsEvent(userId: widget.id));
+                                },
+                                color: AppColor.white,
+                                backgroundColor: AppColor.backgroundColor,
+                                child: BlocBuilder<AdsBlocBloc, AdsBlocState>(
+                                  bloc: adsBloc,
+                                  builder: (context, state) {
+                                    if (state is AdsBlocInProgress) {
+                                      return SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height -
+                                                120.h,
+                                        child: const Center(
+                                          child: CircularProgressIndicator(
+                                            color: AppColor.backgroundColor,
+                                          ),
+                                        ),
+                                      );
+                                    } else if (state is AdsBlocFailure) {
+                                      final failure = state.message;
+                                      return FailureWidget(
+                                          failure: failure,
+                                          onPressed: () {
+                                            adsBloc.add(GetUserAdsEvent(
+                                                userId: widget.id));
+                                          });
+                                    } else if (state is AdsBlocSuccess) {
+                                      return state.ads.isEmpty
+                                          ? Text(
+                                              AppLocalizations.of(context)
+                                                  .translate('no_items'),
+                                              style: TextStyle(
+                                                color: AppColor.backgroundColor,
+                                                fontSize: 22.sp,
+                                              ),
+                                            )
+                                          : ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const BouncingScrollPhysics(),
+                                              itemCount: state.ads.length,
+                                              scrollDirection: Axis.vertical,
+                                              itemBuilder: (context, index) {
+                                                return Container(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  height: 280.h,
+                                                  padding: const EdgeInsets
+                                                      .symmetric(horizontal: 8),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                                  20)
+                                                              .w),
+                                                  child: Advertising(
+                                                      advertisment:
+                                                          state.ads[index]),
+                                                );
+                                              },
                                             );
                                     }
                                     return Container();

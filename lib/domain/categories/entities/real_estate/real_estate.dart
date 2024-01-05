@@ -15,6 +15,10 @@ class RealEstate extends Equatable {
   final List<String>? images;
   final UserInfo createdBy;
   final String country;
+  final String? type;
+  final String? category;
+  final String? forWhat;
+  final bool? furnishing;
 
   const RealEstate({
     required this.id,
@@ -30,6 +34,10 @@ class RealEstate extends Equatable {
     this.images,
     required this.createdBy,
     required this.country,
+    this.type,
+    this.category,
+    this.forWhat,
+    this.furnishing,
   });
 
   @override
@@ -47,5 +55,9 @@ class RealEstate extends Equatable {
         images,
         createdBy,
         country,
+        type,
+        category,
+        forWhat,
+        furnishing,
       ];
 }

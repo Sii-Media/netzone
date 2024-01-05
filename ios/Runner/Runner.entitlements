@@ -6,7 +6,7 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:netzoon.com</string>
+		<string>applinks:www.netzoon.com</string>
 	</array>
 </dict>
 </plist>

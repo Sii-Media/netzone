@@ -55,6 +55,31 @@ class _AddRealEstateScreenState extends State<AddRealEstateScreen>
   late TextEditingController locationController = TextEditingController();
   late TextEditingController bedroomsController = TextEditingController();
   late TextEditingController bathroomsController = TextEditingController();
+  List<Map<String, dynamic>> propertyTypes = [
+    {'type': 'residential', 'icon': Icons.home, 'color': Colors.blue},
+    {'type': 'commercial', 'icon': Icons.store, 'color': Colors.green},
+    {'type': 'rooms', 'icon': Icons.hotel, 'color': Colors.orange},
+    {
+      'type': 'monthly_rent',
+      'icon': Icons.calendar_month,
+      'color': Colors.purple
+    },
+    {'type': 'daily_rent', 'icon': Icons.calendar_today, 'color': Colors.pink}
+  ];
+  List<String> resedentialCategories = [
+    'apartment',
+    'villa',
+    'townhouse',
+    'penthouse',
+    'residential_building',
+    'villa_compound',
+    'residential_floor',
+  ];
+
+  String? _selectedType = 'residential';
+  String? _selectedCategory = 'apartment';
+  String? _selectedForWhat;
+  String? _selectedFurnishing;
 
   final realEstateBloc = sl<RealEstateBloc>();
 
@@ -165,6 +190,200 @@ class _AddRealEstateScreenState extends State<AddRealEstateScreen>
                       title:
                           '${AppLocalizations.of(context).translate('area')} :',
                       isNumber: true,
+                    ),
+                    SizedBox(
+                      height: 7.h,
+                    ),
+                    Text(
+                      AppLocalizations.of(context).translate('property_type'),
+                      style: TextStyle(
+                        color: AppColor.backgroundColor,
+                        fontSize: 15.sp,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 80.0,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: propertyTypes.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: ChoiceChip(
+                              label: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    propertyTypes[index]['icon'],
+                                    color: Colors.white,
+                                  ),
+                                  const SizedBox(width: 4.0),
+                                  Text(
+                                    AppLocalizations.of(context).translate(
+                                        propertyTypes[index]['type']),
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                              selected:
+                                  _selectedType == propertyTypes[index]['type'],
+                              onSelected: (bool selected) {
+                                setState(() {
+                                  _selectedType = selected
+                                      ? propertyTypes[index]['type']
+                                      : '';
+                                });
+                              },
+                              backgroundColor: propertyTypes[index]['color'],
+                              selectedColor: propertyTypes[index]['color']
+                                  .withOpacity(0.4),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      height: 7.h,
+                    ),
+                    Text(
+                      AppLocalizations.of(context)
+                          .translate('residential_categories'),
+                      style: TextStyle(
+                        color: AppColor.backgroundColor,
+                        fontSize: 15.sp,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50.0.h,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: propertyTypes.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: ChoiceChip(
+                              checkmarkColor: AppColor.colorOne,
+                              showCheckmark: true,
+                              selectedColor:
+                                  AppColor.backgroundColor.withOpacity(0.5),
+                              backgroundColor: AppColor.backgroundColor,
+                              label: Text(
+                                AppLocalizations.of(context)
+                                    .translate(resedentialCategories[index]),
+                                style: const TextStyle(color: AppColor.white),
+                              ),
+                              selected: _selectedCategory ==
+                                  resedentialCategories[index],
+                              onSelected: (bool selected) {
+                                setState(() {
+                                  _selectedCategory = selected
+                                      ? resedentialCategories[index]
+                                      : '';
+                                });
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    Text(
+                      AppLocalizations.of(context).translate('for_what'),
+                      style: TextStyle(
+                        color: AppColor.backgroundColor,
+                        fontSize: 15.sp,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Row(
+                          children: [
+                            Radio(
+                              value: 'buy',
+                              groupValue: _selectedForWhat,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedForWhat = value ?? '';
+                                });
+                              },
+                              activeColor: AppColor.backgroundColor,
+                            ),
+                            Text(AppLocalizations.of(context).translate('buy'))
+                          ],
+                        ),
+                        SizedBox(
+                          width: 20.w,
+                        ),
+                        Row(
+                          children: [
+                            Radio(
+                              value: 'rent',
+                              groupValue: _selectedForWhat,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedForWhat = value ?? "";
+                                });
+                              },
+                              activeColor: AppColor.backgroundColor,
+                            ),
+                            Text(
+                                AppLocalizations.of(context).translate('rent')),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15.h,
+                    ),
+                    Text(
+                      AppLocalizations.of(context).translate('furnishing_type'),
+                      style: TextStyle(
+                        color: AppColor.backgroundColor,
+                        fontSize: 15.sp,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Row(
+                          children: [
+                            Radio(
+                              value: 'furnished',
+                              groupValue: _selectedFurnishing,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedFurnishing = value ?? '';
+                                });
+                              },
+                              activeColor: AppColor.backgroundColor,
+                            ),
+                            Text(AppLocalizations.of(context)
+                                .translate('furnished'))
+                          ],
+                        ),
+                        SizedBox(
+                          width: 20.w,
+                        ),
+                        Row(
+                          children: [
+                            Radio(
+                              value: 'unfurnished',
+                              groupValue: _selectedFurnishing,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedFurnishing = value ?? "";
+                                });
+                              },
+                              activeColor: AppColor.backgroundColor,
+                            ),
+                            Text(AppLocalizations.of(context)
+                                .translate('unfurnished')),
+                          ],
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: 7.h,
@@ -360,6 +579,13 @@ class _AddRealEstateScreenState extends State<AddRealEstateScreen>
                               location: locationController.text,
                               bedrooms: int.parse(bedroomsController.text),
                               bathrooms: int.parse(bathroomsController.text),
+                              type: _selectedType,
+                              category: _selectedCategory,
+                              forWhat: _selectedForWhat,
+                              furnishing: _selectedFurnishing == 'furnished'
+                                  ? true
+                                  : false,
+                              realestateimages: imageFileList,
                             ));
                           }),
                     ),

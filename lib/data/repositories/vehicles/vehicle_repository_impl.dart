@@ -5,9 +5,11 @@ import 'dart:io';
 import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/remote/vehicles/vehicle_remote_data_source.dart';
 import 'package:netzoon/data/models/auth/user_info/user_info_model.dart';
+import 'package:netzoon/data/models/vehicles/one_vehicle_response_model.dart';
 import 'package:netzoon/data/models/vehicles/vehicle_model.dart';
 import 'package:netzoon/data/models/vehicles/vehicle_reponse_model.dart';
 import 'package:netzoon/domain/auth/entities/user_info.dart';
+import 'package:netzoon/domain/categories/entities/vehicles/one_vehicle_response.dart';
 import 'package:netzoon/domain/categories/entities/vehicles/vehicle.dart';
 import 'package:netzoon/domain/categories/entities/vehicles/vehicle_response.dart';
 import 'package:dartz/dartz.dart';
@@ -208,6 +210,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
     String? steeringSide,
     bool? guarantee,
     String? forWhat,
+    String? regionalSpecs,
   }) async {
     try {
       if (await networkInfo.isConnected) {
@@ -306,6 +309,11 @@ class VehicleRepositoryImpl implements VehicleRepository {
             MapEntry('forWhat', forWhat),
           );
         }
+        if (regionalSpecs != null) {
+          formData.fields.add(
+            MapEntry('regionalSpecs', regionalSpecs),
+          );
+        }
         String fileName = 'image.jpg';
         formData.files.add(MapEntry(
           'image',
@@ -348,6 +356,21 @@ class VehicleRepositoryImpl implements VehicleRepository {
         } else {
           return Left(ServerFailure());
         }
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, OneVehicleResponse>> getVehicleById(
+      {required String id}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final vehicle = await vehicleRemoteDataSource.getVehicleById(id);
+        return Right(vehicle.toDomain());
       } else {
         return Left(OfflineFailure());
       }

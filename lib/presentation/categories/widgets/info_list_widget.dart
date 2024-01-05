@@ -32,9 +32,43 @@ Widget infoListWidget({
               title: AppLocalizations.of(context).translate('company_name'),
               input: username ?? ''),
           description != null && description != ''
-              ? titleAndInput(
-                  title: AppLocalizations.of(context).translate('desc'),
-                  input: description)
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.grey.withOpacity(0.4),
+                          width: 1.0,
+                        ),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppLocalizations.of(context).translate('desc'),
+                          style: TextStyle(
+                            color: AppColor.black,
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            description,
+                            style: TextStyle(
+                              color: AppColor.mainGrey,
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
               : const SizedBox(),
           // titleAndInput(
           //     title: AppLocalizations.of(context).translate('mobile'),
@@ -64,7 +98,7 @@ Widget infoListWidget({
                       ),
                     ),
                     SizedBox(
-                      width: 190.w,
+                      width: 200.w,
                       child: PhoneCallWidget(
                         phonePath: firstMobile,
                         title: firstMobile,
@@ -79,9 +113,43 @@ Widget infoListWidget({
               title: AppLocalizations.of(context).translate('email'),
               input: email),
           bio != null && bio != ''
-              ? titleAndInput(
-                  title: AppLocalizations.of(context).translate('Bio'),
-                  input: bio)
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.grey.withOpacity(0.4),
+                          width: 1.0,
+                        ),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppLocalizations.of(context).translate('Bio'),
+                          style: TextStyle(
+                            color: AppColor.black,
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            bio,
+                            style: TextStyle(
+                              color: AppColor.mainGrey,
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
               : const SizedBox(),
           address != null && address != ''
               ? titleAndInput(

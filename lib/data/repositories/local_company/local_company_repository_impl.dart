@@ -184,12 +184,13 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
       if (await networkInfo.isConnected) {
         final services =
             await localCompanyRemoteDataSource.getCompanyServices(id);
-
+        print(services);
         return Right(services.map((e) => e.toDomain()).toList());
       } else {
         return Left(OfflineFailure());
       }
     } catch (e) {
+      print(e);
       return Left(ServerFailure());
     }
   }

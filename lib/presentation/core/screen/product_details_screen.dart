@@ -12,6 +12,7 @@ import 'package:netzoon/presentation/categories/local_company/local_company_prof
 import 'package:netzoon/presentation/categories/users/screens/users_profile_screen.dart';
 import 'package:netzoon/presentation/categories/widgets/image_free_zone_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/helpers/show_image_dialog.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
@@ -332,7 +333,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                                     .product
                                                                     .name,
                                                                 description:
-                                                                    'https://netzoon.com/home/product/${state.product.id}');
+                                                                    'https://www.netzoon.com/home/product/${state.product.id}');
                                                           },
                                                           icon: Icon(
                                                             Icons.share,
@@ -887,14 +888,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                                       itemBuilder:
                                                           (BuildContext context,
                                                               index) {
-                                                        return ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      25.0),
-                                                          child: ListOfPictures(
-                                                            img: state.product
-                                                                .images![index],
+                                                        return GestureDetector(
+                                                          onTap: () {
+                                                            showImageDialog(
+                                                                context,
+                                                                state.product
+                                                                    .images!,
+                                                                index);
+                                                          },
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        25.0),
+                                                            child:
+                                                                ListOfPictures(
+                                                              img: state.product
+                                                                      .images![
+                                                                  index],
+                                                            ),
                                                           ),
                                                         );
                                                       }),

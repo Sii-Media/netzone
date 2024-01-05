@@ -3,7 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/categories/entities/real_estate/real_estate.dart';
+import 'package:netzoon/injection_container.dart';
+import 'package:netzoon/presentation/auth/blocs/auth_bloc/auth_bloc.dart';
+import 'package:netzoon/presentation/categories/real_estate/blocs/real_estate/real_estate_bloc.dart';
+import 'package:netzoon/presentation/chat/screens/chat_page_screen.dart';
+import 'package:netzoon/presentation/core/helpers/connect_send_bird.dart';
+import 'package:netzoon/presentation/core/helpers/show_image_dialog.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
+import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
+import 'package:netzoon/presentation/core/widgets/phone_call_button.dart';
+import 'package:netzoon/presentation/home/widgets/auth_alert.dart';
 
 import '../../../core/blocs/country_bloc/country_bloc.dart';
 import '../../../core/constant/colors.dart';
@@ -14,8 +23,8 @@ import '../../../utils/app_localizations.dart';
 import '../../widgets/image_free_zone_widget.dart';
 
 class RealEstateDetailsScreen extends StatefulWidget {
-  final RealEstate realEstate;
-  const RealEstateDetailsScreen({super.key, required this.realEstate});
+  final String realEstateId;
+  const RealEstateDetailsScreen({super.key, required this.realEstateId});
 
   @override
   State<RealEstateDetailsScreen> createState() =>
@@ -25,11 +34,14 @@ class RealEstateDetailsScreen extends StatefulWidget {
 class _RealEstateDetailsScreenState extends State<RealEstateDetailsScreen> {
   final TextEditingController input = TextEditingController();
   late final CountryBloc countryBloc;
-
+  final authBloc = sl<AuthBloc>();
+  final realEstateBloc = sl<RealEstateBloc>();
   @override
   void initState() {
+    authBloc.add(AuthCheckRequested());
     countryBloc = BlocProvider.of<CountryBloc>(context);
     countryBloc.add(GetCountryEvent());
+    realEstateBloc.add(GetRealEstateByIdEvent(id: widget.realEstateId));
     super.initState();
   }
 
@@ -45,293 +57,406 @@ class _RealEstateDetailsScreenState extends State<RealEstateDetailsScreen> {
               bloc: countryBloc,
               builder: (context, state) {
                 if (state is CountryInitial) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              width: 7,
-                              color: Colors.grey.withOpacity(0.4),
+                  return BlocBuilder<RealEstateBloc, RealEstateState>(
+                    bloc: realEstateBloc,
+                    builder: (context, realEstateState) {
+                      if (realEstateState is GetRealEstateInProgress) {
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height - 170.h,
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColor.backgroundColor,
                             ),
                           ),
-                        ),
-                        child: Column(
+                        );
+                      } else if (realEstateState is GetRealEstateFailure) {
+                        final failure = realEstateState.message;
+                        return FailureWidget(
+                            failure: failure,
+                            onPressed: () {
+                              realEstateBloc.add(GetRealEstateByIdEvent(
+                                  id: widget.realEstateId));
+                            });
+                      } else if (realEstateState is GetRealEstateByIdSuccess) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CachedNetworkImage(
-                              imageUrl: widget.realEstate.imageUrl,
-                              width: 700.w,
-                              height: 200.h,
-                              fit: BoxFit.cover,
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) => Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 70.0, vertical: 50),
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  color: AppColor.backgroundColor,
-
-                                  // strokeWidth: 10,
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    width: 7,
+                                    color: Colors.grey.withOpacity(0.4),
+                                  ),
                                 ),
                               ),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      // Text(
-                                      //   '${widget.realEstate.price.toString()} \$',
-                                      //   style: TextStyle(
-                                      //       color: AppColor.colorOne,
-                                      //       fontSize: 17.sp,
-                                      //       fontWeight: FontWeight.bold),
-                                      // ),
-                                      RichText(
-                                        text: TextSpan(
-                                            style: TextStyle(
-                                                fontSize: 18.sp,
-                                                color:
-                                                    AppColor.backgroundColor),
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text:
-                                                    '${widget.realEstate.price}',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.w700,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: getCurrencyFromCountry(
-                                                  state.selectedCountry,
-                                                  context,
-                                                ),
-                                                style: TextStyle(
+                                  CachedNetworkImage(
+                                    imageUrl:
+                                        realEstateState.realEstate.imageUrl,
+                                    width: 700.w,
+                                    height: 200.h,
+                                    fit: BoxFit.cover,
+                                    progressIndicatorBuilder:
+                                        (context, url, downloadProgress) =>
+                                            Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 70.0, vertical: 50),
+                                      child: CircularProgressIndicator(
+                                        value: downloadProgress.progress,
+                                        color: AppColor.backgroundColor,
+
+                                        // strokeWidth: 10,
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            // Text(
+                                            //   '${widget.realEstate.price.toString()} \$',
+                                            //   style: TextStyle(
+                                            //       color: AppColor.colorOne,
+                                            //       fontSize: 17.sp,
+                                            //       fontWeight: FontWeight.bold),
+                                            // ),
+                                            RichText(
+                                              text: TextSpan(
+                                                  style: TextStyle(
+                                                      fontSize: 18.sp,
+                                                      color: AppColor
+                                                          .backgroundColor),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text:
+                                                          '${realEstateState.realEstate.price}',
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text:
+                                                          getCurrencyFromCountry(
+                                                        state.selectedCountry,
+                                                        context,
+                                                      ),
+                                                      style: TextStyle(
+                                                          color: AppColor
+                                                              .backgroundColor,
+                                                          fontSize: 14.sp),
+                                                    )
+                                                  ]),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () async {
+                                                    await shareImageWithDescription(
+                                                        imageUrl:
+                                                            realEstateState
+                                                                .realEstate
+                                                                .imageUrl,
+                                                        subject: realEstateState
+                                                            .realEstate.title,
+                                                        description:
+                                                            'https://www.netzoon.com/home/real_estate/${realEstateState.realEstate.id}');
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.share,
                                                     color: AppColor
                                                         .backgroundColor,
-                                                    fontSize: 14.sp),
-                                              )
-                                            ]),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          IconButton(
-                                            onPressed: () async {
-                                              await shareImageWithDescription(
-                                                  imageUrl: widget
-                                                      .realEstate.imageUrl,
-                                                  description: widget
-                                                      .realEstate.description);
-                                            },
-                                            icon: Icon(
-                                              Icons.share,
-                                              color: AppColor.backgroundColor,
-                                              size: 15.sp,
+                                                    size: 15.sp,
+                                                  ),
+                                                ),
+                                                // const Icon(
+                                                //   Icons.favorite_border,
+                                                //   color: AppColor.backgroundColor,
+                                                // ),
+                                              ],
                                             ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 7.h,
+                                        ),
+                                        Text(
+                                          realEstateState.realEstate.title,
+                                          style: TextStyle(
+                                            color: AppColor.black,
+                                            fontSize: 22.sp,
                                           ),
-                                          // const Icon(
-                                          //   Icons.favorite_border,
-                                          //   color: AppColor.backgroundColor,
-                                          // ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 7.h,
-                                  ),
-                                  Text(
-                                    widget.realEstate.title,
-                                    style: TextStyle(
-                                      color: AppColor.black,
-                                      fontSize: 22.sp,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              width: 7,
-                              color: Colors.grey.withOpacity(0.4),
-                            ),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Text(
-                              //   AppLocalizations.of(context).translate('details'),
-                              //   style: TextStyle(
-                              //     color: AppColor.black,
-                              //     fontSize: 17.sp,
-                              //   ),
-                              // ),
-                              SizedBox(
-                                height: 7.h,
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    width: 7,
+                                    color: Colors.grey.withOpacity(0.4),
+                                  ),
+                                ),
                               ),
-                              titleAndInput(
-                                title: AppLocalizations.of(context)
-                                    .translate('owner'),
-                                input:
-                                    widget.realEstate.createdBy.username ?? '',
-                              ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              titleAndInput(
-                                title: AppLocalizations.of(context)
-                                    .translate('area'),
-                                input: widget.realEstate.area.toString(),
-                              ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              titleAndInput(
-                                title: AppLocalizations.of(context)
-                                    .translate('Bathrooms'),
-                                input: widget.realEstate.bathrooms.toString(),
-                              ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              titleAndInput(
-                                title: AppLocalizations.of(context)
-                                    .translate('Bedrooms'),
-                                input: widget.realEstate.bedrooms.toString(),
-                              ),
-                              SizedBox(
-                                height: 7.h,
-                              ),
-                              titleAndInput(
-                                title: AppLocalizations.of(context)
-                                    .translate('address'),
-                                input: widget.realEstate.location,
-                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Text(
+                                    //   AppLocalizations.of(context).translate('details'),
+                                    //   style: TextStyle(
+                                    //     color: AppColor.black,
+                                    //     fontSize: 17.sp,
+                                    //   ),
+                                    // ),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    titleAndInput(
+                                      title: AppLocalizations.of(context)
+                                          .translate('owner'),
+                                      input: realEstateState
+                                              .realEstate.createdBy.username ??
+                                          '',
+                                    ),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    titleAndInput(
+                                      title: AppLocalizations.of(context)
+                                          .translate('area'),
+                                      input: realEstateState.realEstate.area
+                                          .toString(),
+                                    ),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    titleAndInput(
+                                      title: AppLocalizations.of(context)
+                                          .translate('Bathrooms'),
+                                      input: realEstateState
+                                          .realEstate.bathrooms
+                                          .toString(),
+                                    ),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    titleAndInput(
+                                      title: AppLocalizations.of(context)
+                                          .translate('Bedrooms'),
+                                      input: realEstateState.realEstate.bedrooms
+                                          .toString(),
+                                    ),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    titleAndInput(
+                                      title: AppLocalizations.of(context)
+                                          .translate('address'),
+                                      input:
+                                          realEstateState.realEstate.location,
+                                    ),
 
-                              SizedBox(
-                                height: 7.h,
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    realEstateState.realEstate.type != null
+                                        ? titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('property_type'),
+                                            input: AppLocalizations.of(context)
+                                                .translate(realEstateState
+                                                    .realEstate.type!),
+                                          )
+                                        : const SizedBox(),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    realEstateState.realEstate.category != null
+                                        ? titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate(
+                                                    'residential_categories'),
+                                            input: AppLocalizations.of(context)
+                                                .translate(realEstateState
+                                                    .realEstate.category!),
+                                          )
+                                        : const SizedBox(),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    realEstateState.realEstate.furnishing !=
+                                            null
+                                        ? titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('furnishing_type'),
+                                            input: realEstateState.realEstate
+                                                        .furnishing ==
+                                                    true
+                                                ? AppLocalizations.of(context)
+                                                    .translate('furnished')
+                                                : AppLocalizations.of(context)
+                                                    .translate('unfurnished'),
+                                          )
+                                        : const SizedBox(),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    realEstateState.realEstate.forWhat != null
+                                        ? titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('for_what'),
+                                            input: AppLocalizations.of(context)
+                                                .translate(realEstateState
+                                                    .realEstate.forWhat!),
+                                          )
+                                        : const SizedBox(),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              width: 7,
-                              color: Colors.grey.withOpacity(0.4),
                             ),
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              AppLocalizations.of(context).translate('desc'),
-                              style: TextStyle(
-                                color: AppColor.black,
-                                fontSize: 17.sp,
+                            Container(
+                              padding: const EdgeInsets.all(8.0),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    width: 7,
+                                    color: Colors.grey.withOpacity(0.4),
+                                  ),
+                                ),
                               ),
-                            ),
-                            Text(
-                              widget.realEstate.description,
-                              style: TextStyle(
-                                color: AppColor.mainGrey,
-                                fontSize: 15.sp,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              width: 7,
-                              color: Colors.grey.withOpacity(0.4),
-                            ),
-                          ),
-                        ),
-                        child: Column(
-                          // mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${AppLocalizations.of(context).translate('images')} :',
-                              style: TextStyle(
-                                color: AppColor.black,
-                                fontSize: 17.sp,
-                              ),
-                            ),
-                            widget.realEstate.images?.isNotEmpty == true
-                                ? SizedBox(
-                                    height: 200.h,
-                                    // width: 120,
-                                    child: ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: const BouncingScrollPhysics(),
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount:
-                                            widget.realEstate.images!.length,
-                                        // gridDelegate:
-                                        //     const SliverGridDelegateWithFixedCrossAxisCount(
-                                        //         crossAxisCount: 2,
-                                        //         childAspectRatio: 0.94),
-                                        itemBuilder:
-                                            (BuildContext context, index) {
-                                          return ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(25.0),
-                                            child: ListOfPictures(
-                                              img: widget
-                                                  .realEstate.images![index],
-                                            ),
-                                          );
-                                        }),
-                                  )
-                                : Text(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
                                     AppLocalizations.of(context)
-                                        .translate('no_images'),
+                                        .translate('desc'),
+                                    style: TextStyle(
+                                      color: AppColor.black,
+                                      fontSize: 17.sp,
+                                    ),
+                                  ),
+                                  Text(
+                                    realEstateState.realEstate.description,
                                     style: TextStyle(
                                       color: AppColor.mainGrey,
                                       fontSize: 15.sp,
                                     ),
                                   ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(8.0),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    width: 7,
+                                    color: Colors.grey.withOpacity(0.4),
+                                  ),
+                                ),
+                              ),
+                              child: Column(
+                                // mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${AppLocalizations.of(context).translate('images')} :',
+                                    style: TextStyle(
+                                      color: AppColor.black,
+                                      fontSize: 17.sp,
+                                    ),
+                                  ),
+                                  realEstateState
+                                              .realEstate.images?.isNotEmpty ==
+                                          true
+                                      ? SizedBox(
+                                          height: 200.h,
+                                          // width: 120,
+                                          child: ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const BouncingScrollPhysics(),
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount: realEstateState
+                                                  .realEstate.images!.length,
+                                              // gridDelegate:
+                                              //     const SliverGridDelegateWithFixedCrossAxisCount(
+                                              //         crossAxisCount: 2,
+                                              //         childAspectRatio: 0.94),
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      index) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    showImageDialog(
+                                                        context,
+                                                        realEstateState
+                                                            .realEstate.images!,
+                                                        index);
+                                                  },
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25.0),
+                                                    child: ListOfPictures(
+                                                      img: realEstateState
+                                                          .realEstate
+                                                          .images![index],
+                                                    ),
+                                                  ),
+                                                );
+                                              }),
+                                        )
+                                      : Text(
+                                          AppLocalizations.of(context)
+                                              .translate('no_images'),
+                                          style: TextStyle(
+                                            color: AppColor.mainGrey,
+                                            fontSize: 15.sp,
+                                          ),
+                                        ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 140.h,
+                            ),
                           ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 140.h,
-                      ),
-                    ],
+                        );
+                      }
+                      return Container();
+                    },
                   );
                 }
                 return Container();
@@ -340,31 +465,95 @@ class _RealEstateDetailsScreenState extends State<RealEstateDetailsScreen> {
           ),
         ),
       ),
-      // bottomNavigationBar: BottomAppBar(
-      //   height: 60.h,
-      //   child: Row(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     crossAxisAlignment: CrossAxisAlignment.center,
-      //     children: [
-      //       // ElevatedButton(
-      //       //   style: ButtonStyle(
-      //       //     backgroundColor: MaterialStateProperty.all(
-      //       //       AppColor.backgroundColor,
-      //       //     ),
-      //       //     shape: MaterialStateProperty.all(RoundedRectangleBorder(
-      //       //       borderRadius: BorderRadius.circular(18.0),
-      //       //     )),
-      //       //     fixedSize: const MaterialStatePropertyAll(
-      //       //       Size.fromWidth(200),
-      //       //     ),
-      //       //   ),
-      //       //   child: Text(AppLocalizations.of(context).translate('buy')),
-      //       //   onPressed: () {},
-      //       // ),
-      //       PriceSuggestionButton(input: input),
-      //     ],
-      //   ),
-      // ),
+      bottomNavigationBar: BlocBuilder<RealEstateBloc, RealEstateState>(
+        bloc: realEstateBloc,
+        builder: (context, realEstateState) {
+          return realEstateState is GetRealEstateByIdSuccess
+              ? BottomAppBar(
+                  height: 60.h,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      PhoneCallWidget(
+                          phonePath: realEstateState
+                                  .realEstate.createdBy.firstMobile ??
+                              '',
+                          title:
+                              AppLocalizations.of(context).translate('call')),
+                      BlocBuilder<AuthBloc, AuthState>(
+                        bloc: authBloc,
+                        builder: (context, authState) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              if (authState is Authenticated) {
+                                // await SendbirdChat.connect(
+                                //     authState.user.userInfo
+                                //             .username ??
+                                //         '');
+                                connectWithSendbird(
+                                    username:
+                                        authState.user.userInfo.username ?? '');
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) {
+                                    return ChatPageScreen(
+                                      userId:
+                                          authState.user.userInfo.username ??
+                                              '',
+                                      otherUserId: realEstateState
+                                              .realEstate.createdBy.username ??
+                                          '',
+                                      title: realEstateState
+                                              .realEstate.createdBy.username ??
+                                          '',
+                                      image: realEstateState.realEstate
+                                              .createdBy.profilePhoto ??
+                                          '',
+                                    );
+                                  }),
+                                );
+                              } else {
+                                authAlert(context);
+                              }
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                AppColor.backgroundColor,
+                              ),
+                              shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                              )),
+                              fixedSize: MaterialStateProperty.all(
+                                Size.fromWidth(100.w),
+                              ),
+                            ),
+                            child: Text(
+                                AppLocalizations.of(context).translate('chat')),
+                          );
+                        },
+                      ),
+                      // ElevatedButton(
+                      //     onPressed: () {},
+                      //     style: ButtonStyle(
+                      //       backgroundColor: MaterialStateProperty.all(
+                      //         AppColor.backgroundColor,
+                      //       ),
+                      //       shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(18.0),
+                      //       )),
+                      //       fixedSize: MaterialStatePropertyAll(
+                      //         Size.fromWidth(100.w),
+                      //       ),
+                      //     ),
+                      //     child: Text(AppLocalizations.of(context).translate('chat'))),
+                      // PriceSuggestionButton(input: input),
+                    ],
+                  ),
+                )
+              : const SizedBox();
+        },
+      ),
     );
   }
 

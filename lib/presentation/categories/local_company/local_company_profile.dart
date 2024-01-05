@@ -143,7 +143,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                             ? await shareImageWithDescription(
                                 imageUrl: ssstate.userInfo.profilePhoto ?? '',
                                 description:
-                                    'https://netzoon.com/home/catagories/$type/${ssstate.userInfo.id}',
+                                    'https://www.netzoon.com/home/catagories/$type/${ssstate.userInfo.id}',
                                 subject: ssstate.userInfo.username,
                               )
                             : null;
@@ -1120,7 +1120,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                   width: MediaQuery.of(context)
                                                       .size
                                                       .width,
-                                                  height: 240.h,
+                                                  height: 280.h,
                                                   padding: const EdgeInsets
                                                       .symmetric(horizontal: 8),
                                                   decoration: BoxDecoration(

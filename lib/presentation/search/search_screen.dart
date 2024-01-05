@@ -301,14 +301,14 @@ class _SearchPageState extends State<SearchPage> {
                                   Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) {
                                     return VehicleDetailsScreen(
-                                        vehicle: filteredItems[index]);
+                                        vehicleId: filteredItems[index].id);
                                   }));
                                 } else if (selectedCategory ==
                                     'civil_aircraft') {
                                   Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) {
                                     return VehicleDetailsScreen(
-                                        vehicle: filteredItems[index]);
+                                        vehicleId: filteredItems[index].id);
                                   }));
                                 }
                               },

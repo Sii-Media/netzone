@@ -6,7 +6,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/auth/entities/user_info.dart';
+import 'package:netzoon/presentation/advertising/advertising.dart';
+import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
+import 'package:netzoon/presentation/chat/screens/chat_page_screen.dart';
+import 'package:netzoon/presentation/core/helpers/connect_send_bird.dart';
 import 'package:netzoon/presentation/core/helpers/share_image_function.dart';
+import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
+import 'package:netzoon/presentation/core/widgets/phone_call_button.dart';
+import 'package:netzoon/presentation/core/widgets/whatsapp_button.dart';
+import 'package:netzoon/presentation/home/widgets/auth_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../data/core/constants/constants.dart';
@@ -37,6 +45,8 @@ class _DeliveryCompanyProfileScreenState
     with ScreenLoader<DeliveryCompanyProfileScreen> {
   final authBloc = sl<AuthBloc>();
   final userBloc = sl<GetUserBloc>();
+  final adsBloc = sl<AdsBlocBloc>();
+
   final deliveryBloc = sl<DeliveryServiceBloc>();
   late final CountryBloc countryBloc;
   bool isFollowing = false;
@@ -46,7 +56,7 @@ class _DeliveryCompanyProfileScreenState
   void initState() {
     authBloc.add(AuthCheckRequested());
     userBloc.add(GetUserByIdEvent(userId: widget.id));
-
+    adsBloc.add(GetUserAdsEvent(userId: widget.id));
     checkFollowStatus();
     countryBloc = BlocProvider.of<CountryBloc>(context);
     countryBloc.add(GetCountryEvent());
@@ -157,7 +167,7 @@ class _DeliveryCompanyProfileScreenState
                           ? await shareImageWithDescription(
                               imageUrl: ssstate.userInfo.profilePhoto ?? '',
                               description:
-                                  'https://netzoon.com/home/catagories/delivery_companies/${ssstate.userInfo.id}',
+                                  'https://www.netzoon.com/home/catagories/delivery_companies/${ssstate.userInfo.id}',
                               subject: ssstate.userInfo.username,
                             )
                           : null;
@@ -229,7 +239,7 @@ class _DeliveryCompanyProfileScreenState
                 );
               } else if (state is GetUserSuccess) {
                 return DefaultTabController(
-                  length: 2,
+                  length: 3,
                   child: NestedScrollView(
                     headerSliverBuilder: (context, _) {
                       return [
@@ -539,6 +549,13 @@ class _DeliveryCompanyProfileScreenState
                                 Tab(
                                   icon: Text(
                                     AppLocalizations.of(context)
+                                        .translate('my_ads'),
+                                    style: TextStyle(fontSize: 12.sp),
+                                  ),
+                                ),
+                                Tab(
+                                  icon: Text(
+                                    AppLocalizations.of(context)
                                         .translate('about_us'),
                                     style: TextStyle(fontSize: 12.sp),
                                   ),
@@ -715,6 +732,80 @@ class _DeliveryCompanyProfileScreenState
                                     },
                                   ),
                                 ),
+                                RefreshIndicator(
+                                  onRefresh: () async {
+                                    adsBloc.add(
+                                        GetUserAdsEvent(userId: widget.id));
+                                  },
+                                  color: AppColor.white,
+                                  backgroundColor: AppColor.backgroundColor,
+                                  child: BlocBuilder<AdsBlocBloc, AdsBlocState>(
+                                    bloc: adsBloc,
+                                    builder: (context, state) {
+                                      if (state is AdsBlocInProgress) {
+                                        return SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height -
+                                              120.h,
+                                          child: const Center(
+                                            child: CircularProgressIndicator(
+                                              color: AppColor.backgroundColor,
+                                            ),
+                                          ),
+                                        );
+                                      } else if (state is AdsBlocFailure) {
+                                        final failure = state.message;
+                                        return FailureWidget(
+                                            failure: failure,
+                                            onPressed: () {
+                                              adsBloc.add(GetUserAdsEvent(
+                                                  userId: widget.id));
+                                            });
+                                      } else if (state is AdsBlocSuccess) {
+                                        return state.ads.isEmpty
+                                            ? Text(
+                                                AppLocalizations.of(context)
+                                                    .translate('no_items'),
+                                                style: TextStyle(
+                                                  color:
+                                                      AppColor.backgroundColor,
+                                                  fontSize: 22.sp,
+                                                ),
+                                              )
+                                            : ListView.builder(
+                                                shrinkWrap: true,
+                                                physics:
+                                                    const BouncingScrollPhysics(),
+                                                itemCount: state.ads.length,
+                                                scrollDirection: Axis.vertical,
+                                                itemBuilder: (context, index) {
+                                                  return Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    height: 240.h,
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 8),
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                    .circular(
+                                                                        20)
+                                                                .w),
+                                                    child: Advertising(
+                                                        advertisment:
+                                                            state.ads[index]),
+                                                  );
+                                                },
+                                              );
+                                      }
+                                      return Container();
+                                    },
+                                  ),
+                                ),
                                 infoListWidget(
                                   context: context,
                                   username: state.userInfo.username,
@@ -819,6 +910,75 @@ class _DeliveryCompanyProfileScreenState
             },
           ),
         ),
+      ),
+      bottomNavigationBar: BlocBuilder<GetUserBloc, GetUserState>(
+        bloc: userBloc,
+        builder: (context, state) {
+          return state is GetUserSuccess
+              ? BottomAppBar(
+                  height: 60.h,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      PhoneCallWidget(
+                          phonePath: state.userInfo.firstMobile ?? '',
+                          title:
+                              AppLocalizations.of(context).translate('call')),
+                      BlocBuilder<AuthBloc, AuthState>(
+                        bloc: authBloc,
+                        builder: (context, authState) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              if (authState is Authenticated) {
+                                // await SendbirdChat.connect(
+                                //     authState.user.userInfo
+                                //             .username ??
+                                //         '');
+                                connectWithSendbird(
+                                    username:
+                                        authState.user.userInfo.username ?? '');
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) {
+                                    return ChatPageScreen(
+                                      userId:
+                                          authState.user.userInfo.username ??
+                                              '',
+                                      otherUserId:
+                                          state.userInfo.username ?? '',
+                                      title: state.userInfo.username ?? '',
+                                      image: state.userInfo.profilePhoto ?? '',
+                                    );
+                                  }),
+                                );
+                              } else {
+                                authAlert(context);
+                              }
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                AppColor.backgroundColor,
+                              ),
+                              shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                              )),
+                              fixedSize: MaterialStateProperty.all(
+                                Size.fromWidth(100.w),
+                              ),
+                            ),
+                            child: Text(
+                                AppLocalizations.of(context).translate('chat')),
+                          );
+                        },
+                      ),
+                      WhatsAppButton(
+                          whatsappNumber: state.userInfo.firstMobile ?? ''),
+                    ],
+                  ),
+                )
+              : const SizedBox();
+        },
       ),
     );
   }

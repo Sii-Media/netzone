@@ -46,6 +46,12 @@ class GetCompanyVehiclesEvent extends VehicleEvent {
   const GetCompanyVehiclesEvent({required this.type, required this.id});
 }
 
+class GetVehicleByIdEvent extends VehicleEvent {
+  final String id;
+
+  const GetVehicleByIdEvent({required this.id});
+}
+
 class AddVehicleEvent extends VehicleEvent {
   final String name;
   final String description;
@@ -75,6 +81,8 @@ class AddVehicleEvent extends VehicleEvent {
   final String? steeringSide;
   final bool? guarantee;
   final String? forWhat;
+  final String? regionalSpecs;
+
   const AddVehicleEvent({
     required this.name,
     required this.description,
@@ -104,5 +112,6 @@ class AddVehicleEvent extends VehicleEvent {
     this.steeringSide,
     this.guarantee,
     this.forWhat,
+    this.regionalSpecs,
   });
 }

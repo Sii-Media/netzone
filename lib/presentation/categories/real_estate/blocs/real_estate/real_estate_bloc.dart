@@ -6,6 +6,7 @@ import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/real_estate/add_real_estate_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/real_estate/get_all_real_estates_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/real_estate/get_company_real_estates_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/real_estate/get_real_estate_by_id_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/real_estate/get_real_estate_companies_use_case.dart';
 import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
@@ -26,6 +27,7 @@ class RealEstateBloc extends Bloc<RealEstateEvent, RealEstateState> {
   final GetSignedInUserUseCase getSignedInUserUseCase;
   final AddRealEstateUseCase addRealEstateUseCase;
   final GetCountryUseCase getCountryUseCase;
+  final GetRealEstateByIdUseCase getRealEstateByIdUseCase;
   RealEstateBloc({
     required this.getAllRealEstatesUseCase,
     required this.getRealEstateCompaniesUseCase,
@@ -33,6 +35,7 @@ class RealEstateBloc extends Bloc<RealEstateEvent, RealEstateState> {
     required this.getSignedInUserUseCase,
     required this.addRealEstateUseCase,
     required this.getCountryUseCase,
+    required this.getRealEstateByIdUseCase,
   }) : super(RealEstateInitial()) {
     on<GetAllRealEstatesEvent>((event, emit) async {
       emit(GetRealEstateInProgress());
@@ -79,6 +82,13 @@ class RealEstateBloc extends Bloc<RealEstateEvent, RealEstateState> {
         ),
       );
     });
+    on<GetRealEstateByIdEvent>((event, emit) async {
+      emit(GetRealEstateInProgress());
+      final result = await getRealEstateByIdUseCase(event.id);
+      emit(result.fold(
+          (l) => GetRealEstateFailure(message: mapFailureToString(l)),
+          (r) => GetRealEstateByIdSuccess(realEstate: r)));
+    });
     on<AddRealEstateEvent>((event, emit) async {
       emit(AddRealEstateInProgress());
       final result = await getSignedInUserUseCase.call(NoParams());
@@ -102,6 +112,10 @@ class RealEstateBloc extends Bloc<RealEstateEvent, RealEstateState> {
         amenities: event.amenities,
         realestateimages: event.realestateimages,
         country: country,
+        type: event.type,
+        category: event.category,
+        forWhat: event.forWhat,
+        furnishing: event.furnishing,
       ));
 
       emit(

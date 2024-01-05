@@ -48,3 +48,9 @@ class AddRealEstateSuccess extends RealEstateState {
 
   const AddRealEstateSuccess({required this.realEstate});
 }
+
+class GetRealEstateByIdSuccess extends RealEstateState {
+  final RealEstate realEstate;
+
+  const GetRealEstateByIdSuccess({required this.realEstate});
+}

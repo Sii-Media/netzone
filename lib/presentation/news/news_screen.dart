@@ -405,7 +405,7 @@ class _AllNewsWidgetState extends State<AllNewsWidget> {
                                                 subject:
                                                     widget.news[index].title,
                                                 description:
-                                                    'https://netzoon.com/home/news/news_details/${widget.news[index].id}');
+                                                    'https://www.netzoon.com/home/news/news_details/${widget.news[index].id}');
                                           },
                                           child: Icon(
                                             Feather.share_2,

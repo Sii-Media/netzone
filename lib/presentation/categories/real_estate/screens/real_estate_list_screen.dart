@@ -113,7 +113,8 @@ class _RealEstateListScreenState extends State<RealEstateListScreen> {
                                 MaterialPageRoute(
                                   builder: (context) {
                                     return RealEstateDetailsScreen(
-                                        realEstate: filteredRealEstate[index]);
+                                        realEstateId:
+                                            filteredRealEstate[index].id);
                                   },
                                 ),
                               );

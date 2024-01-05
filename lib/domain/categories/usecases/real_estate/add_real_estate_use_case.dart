@@ -25,6 +25,10 @@ class AddRealEstateUseCase extends UseCase<String, AddRealEstateParams> {
       amenities: params.amenities,
       realestateimages: params.realestateimages,
       country: params.country,
+      type: params.type,
+      category: params.category,
+      forWhat: params.forWhat,
+      furnishing: params.furnishing,
     );
   }
 }
@@ -42,6 +46,10 @@ class AddRealEstateParams {
   final List<String>? amenities;
   final List<XFile>? realestateimages;
   final String country;
+  final String? type;
+  final String? category;
+  final String? forWhat;
+  final bool? furnishing;
   AddRealEstateParams({
     required this.createdBy,
     required this.title,
@@ -55,5 +63,9 @@ class AddRealEstateParams {
     this.amenities,
     this.realestateimages,
     required this.country,
+    this.type,
+    this.category,
+    this.forWhat,
+    this.furnishing,
   });
 }

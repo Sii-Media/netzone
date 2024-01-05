@@ -591,8 +591,8 @@ class _HomePageState extends State<HomePage> {
                                         MaterialPageRoute(
                                           builder: (context) {
                                             return RealEstateDetailsScreen(
-                                                realEstate:
-                                                    state.realEstates[index]);
+                                                realEstateId: state
+                                                    .realEstates[index].id);
                                           },
                                         ),
                                       );

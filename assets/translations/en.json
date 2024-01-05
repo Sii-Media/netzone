@@ -667,5 +667,27 @@
     "created an account as":"created an account as",
     "write_your_email_to_send_you_a_message":"Write Your Email to send you a message",
     "forget_password":"Forget Password",
-    "create_new_password":"Create New Password"
+    "create_new_password":"Create New Password",
+    "regional_specs":"Regional specs",
+    "incoming":"Incoming",
+    "gcc":"GCC",
+    "residential":"Realresident",
+    "commercial":"Commercial",
+    "rooms":"Rooms",
+    "monthly_rent":"Monthly Rent",
+    "daily_rent": "Daily rent",
+    "apartment":"Apartment",
+    "villa":"Villa",
+    "townhouse":"Townhouse",
+    "penthouse":"PentHouse",
+    "residential_building":"Residential Building",
+    "villa_compound":"Villa Compound",
+    "residential_floor":"Residential Floor",
+    "property_type":"Property Type",
+    "residential_categories":"Residential Categories",
+    "rent":"Rent",
+    "furnishing_type":"Furnishing Type",
+    "furnished":"Furnished",
+    "unfurnished":"UnFurnished"
+    
 }

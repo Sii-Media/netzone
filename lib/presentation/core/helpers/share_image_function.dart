@@ -17,8 +17,8 @@ Future<void> shareImageWithDescription(
   final path = '${temp.path}/image.jpg';
   File(path).writeAsBytesSync(bytes);
   // ignore: deprecated_member_use
-  await Share.shareFiles(
-    [path],
+  await Share.shareXFiles(
+    [XFile(path)],
     subject: subject,
     text: description,
     sharePositionOrigin: Rect.fromPoints(

@@ -30,12 +30,14 @@ class PhoneCallWidget extends StatelessWidget {
         backgroundColor: MaterialStateProperty.all(
           AppColor.backgroundColor,
         ),
+        padding: MaterialStateProperty.all(
+            const EdgeInsets.symmetric(horizontal: 30)),
         shape: MaterialStateProperty.all(RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
         )),
-        fixedSize: MaterialStatePropertyAll(
-          Size.fromWidth(100.w),
-        ),
+        // fixedSize: MaterialStatePropertyAll(
+        //   Size.fromWidth(100.w),
+        // ),
       ),
       child: Text(
         title,

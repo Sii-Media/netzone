@@ -10,6 +10,9 @@ abstract class RealEstateRepository {
   Future<Either<Failure, List<RealEstate>>> getAllRealEstates({
     required String country,
   });
+  Future<Either<Failure, RealEstate>> getRealEstateById({
+    required String id,
+  });
   Future<Either<Failure, List<UserInfo>>> getRealEstateCompanies({
     required String country,
   });
@@ -29,5 +32,9 @@ abstract class RealEstateRepository {
     List<String>? amenities,
     List<XFile>? realestateimages,
     required String country,
+    String? type,
+    String? category,
+    String? forWhat,
+    bool? furnishing,
   });
 }
