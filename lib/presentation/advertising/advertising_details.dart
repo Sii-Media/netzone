@@ -335,10 +335,12 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                                                 IconButton(
                                                   onPressed: () async {
                                                     await shareImageWithDescription(
-                                                        imageUrl: state.ads
-                                                            .advertisingImage,
-                                                        description:
-                                                            state.ads.name);
+                                                      imageUrl: state
+                                                          .ads.advertisingImage,
+                                                      description:
+                                                          'https://www.netzoon.com/home/advertisments/${state.ads.id}',
+                                                      subject: state.ads.name,
+                                                    );
                                                   },
                                                   icon: Icon(
                                                     Icons.share,

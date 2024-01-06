@@ -314,11 +314,12 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                                       IconButton(
                                         onPressed: () async {
                                           await shareImageWithDescription(
-                                              imageUrl:
-                                                  state.ads.advertisingImage,
-                                              subject: state.ads.name,
-                                              description: state
-                                                  .ads.advertisingDescription);
+                                            imageUrl:
+                                                state.ads.advertisingImage,
+                                            description:
+                                                'https://www.netzoon.com/home/ads/${state.ads.id}',
+                                            subject: state.ads.name,
+                                          );
                                         },
                                         icon: Icon(
                                           Icons.share,
