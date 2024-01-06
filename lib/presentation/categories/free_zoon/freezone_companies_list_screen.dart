@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:netzoon/presentation/categories/local_company/local_company_profile.dart';
 
 import '../../../domain/auth/entities/user_info.dart';
 import '../../../injection_container.dart';
@@ -70,7 +71,7 @@ class _FreeZoneCompaniesListScreenState
                         );
                       } else if (state is GetUsersSuccess) {
                         final filteredUsers = state.users
-                            .where((user) => user.freezoneCity!
+                            .where((user) => user.city!
                                 .toLowerCase()
                                 .contains(controller.text.toLowerCase()))
                             .toList();
@@ -132,10 +133,10 @@ class _FreeZoneCompaniesListScreenState
                                                   Navigator.of(context).push(
                                                     MaterialPageRoute(
                                                         builder: (context) {
-                                                      return FreezoneCompanyProfileScreen(
-                                                          id: filteredUsers[
-                                                                  index]
-                                                              .id);
+                                                      return LocalCompanyProfileScreen(
+                                                        id: filteredUsers[index]
+                                                            .id,
+                                                      );
                                                     }),
                                                   );
                                                 },

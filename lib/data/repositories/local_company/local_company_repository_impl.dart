@@ -196,6 +196,23 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
   }
 
   @override
+  Future<Either<Failure, CompanyService>> getServiceById(
+      {required String id}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final service = await localCompanyRemoteDataSource.getServiceById(id);
+
+        return Right(service.toDomain());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      print(e);
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
   Future<Either<Failure, String>> rateCompanyService(
       {required String id,
       required double rating,

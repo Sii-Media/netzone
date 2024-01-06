@@ -269,11 +269,22 @@ class _AdvertisingScreenState extends State<AdvertisingScreen> {
 
                     const SizedBox(height: 16),
                     // Slider range for price
-                    Text(
-                      '${AppLocalizations.of(context).translate('price')} :',
-                      style: const TextStyle(
-                        color: AppColor.white,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${AppLocalizations.of(context).translate('from')}:   $priceMin',
+                          style: const TextStyle(
+                            color: AppColor.white,
+                          ),
+                        ),
+                        Text(
+                          '${AppLocalizations.of(context).translate('to')}:  $priceMax',
+                          style: const TextStyle(
+                            color: AppColor.white,
+                          ),
+                        ),
+                      ],
                     ),
                     RangeSlider(
                       values: RangeValues(priceMin, priceMax),

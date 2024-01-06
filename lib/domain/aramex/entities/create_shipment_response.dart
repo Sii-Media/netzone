@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:netzoon/domain/aramex/entities/notifications_error.dart';
-import 'package:netzoon/domain/aramex/entities/shipment.dart';
 import 'package:netzoon/domain/aramex/entities/transaction.dart';
 
 class CreateShipmentResponse extends Equatable {

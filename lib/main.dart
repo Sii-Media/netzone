@@ -20,10 +20,9 @@ import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
 import 'package:netzoon/presentation/categories/delivery_company/screens/delivery_companies_list_screen.dart';
 import 'package:netzoon/presentation/categories/delivery_company/screens/delivery_company_profile_screen.dart';
 import 'package:netzoon/presentation/categories/factories/factories_categories.dart';
-import 'package:netzoon/presentation/categories/factories/factories_screen.dart';
 import 'package:netzoon/presentation/categories/factories/factory_profile_screen.dart';
 import 'package:netzoon/presentation/categories/free_zoon/freezone_companies_list_screen.dart';
-import 'package:netzoon/presentation/categories/free_zoon/freezone_company_profile_screen.dart';
+import 'package:netzoon/presentation/categories/local_company/company_service_detail_screen.dart';
 import 'package:netzoon/presentation/categories/local_company/local_companies.dart';
 import 'package:netzoon/presentation/categories/local_company/local_company_profile.dart';
 import 'package:netzoon/presentation/categories/main_categories.dart';
@@ -246,6 +245,11 @@ class MyApp extends StatelessWidget {
             ],
           ),
           GoRoute(
+            path: 'services/:id',
+            builder: (context, state) => CompanyServiceDetailsScreen(
+                companyServiceId: state.pathParameters['id'].toString()),
+          ),
+          GoRoute(
             path: 'catagories',
             builder: (context, state) => const CategoriesMainScreen(),
             routes: [
@@ -286,13 +290,13 @@ class MyApp extends StatelessWidget {
                 ],
               ),
               GoRoute(
-                path: 'free_zone_companies',
+                path: 'freezone',
                 builder: (context, state) =>
                     const FreeZoneCompaniesListScreen(),
                 routes: [
                   GoRoute(
                     path: ':id',
-                    builder: (context, state) => FreezoneCompanyProfileScreen(
+                    builder: (context, state) => LocalCompanyProfileScreen(
                         id: state.pathParameters['id'].toString()),
                   ),
                 ],

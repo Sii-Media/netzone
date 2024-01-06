@@ -8,6 +8,7 @@ import 'package:netzoon/domain/company_service/company_service.dart';
 import 'package:netzoon/presentation/chat/screens/chat_page_screen.dart';
 import 'package:netzoon/presentation/core/helpers/connect_send_bird.dart';
 import 'package:netzoon/presentation/core/helpers/show_image_dialog.dart';
+import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
 import 'package:netzoon/presentation/home/widgets/auth_alert.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:video_player/video_player.dart';
@@ -26,10 +27,10 @@ import 'edit_company_service_screen.dart';
 import 'local_company_bloc/local_company_bloc.dart';
 
 class CompanyServiceDetailsScreen extends StatefulWidget {
-  final CompanyService companyService;
+  final String companyServiceId;
   final String? callNumber;
   const CompanyServiceDetailsScreen(
-      {super.key, required this.companyService, this.callNumber});
+      {super.key, required this.companyServiceId, this.callNumber});
 
   @override
   State<CompanyServiceDetailsScreen> createState() =>
@@ -42,15 +43,14 @@ class _CompanyServiceDetailsScreenState
   final rateBloc = sl<LocalCompanyBloc>();
   final authBloc = sl<AuthBloc>();
   final deleteBloc = sl<LocalCompanyBloc>();
+  final serviceBloc = sl<LocalCompanyBloc>();
   late VideoPlayerController _videoPlayerController;
   late ChewieController _chewieController;
   @override
   void initState() {
-    print('aaaaaaaaaa');
-    print(widget.callNumber);
+    serviceBloc.add(GetServiceByIdEvent(id: widget.companyServiceId));
     authBloc.add(AuthCheckRequested());
-    _videoPlayerController = VideoPlayerController.networkUrl(
-        Uri.parse(widget.companyService.vedioUrl ?? ''))
+    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(''))
       ..initialize().then((_) {
         setState(() {});
       });
@@ -135,391 +135,452 @@ class _CompanyServiceDetailsScreenState
                 ));
               }
             },
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.h),
-              child: SingleChildScrollView(
-                child: Card(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height / 2,
-                        child: CachedNetworkImage(
-                          imageUrl: widget.companyService.imageUrl ?? '',
-                          fit: BoxFit.contain,
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) => Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 70.0, vertical: 50),
-                            child: CircularProgressIndicator(
-                              value: downloadProgress.progress,
-                              color: AppColor.backgroundColor,
-
-                              // strokeWidth: 10,
-                            ),
-                          ),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
+            child: BlocBuilder<LocalCompanyBloc, LocalCompanyState>(
+              bloc: serviceBloc,
+              builder: (context, serviceState) {
+                if (serviceState is GetServiceByIdInProgress) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height - 170.h,
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.backgroundColor,
                       ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                    ),
+                  );
+                } else if (serviceState is GetServiceByIdFailure) {
+                  return FailureWidget(
+                      failure: 'error',
+                      onPressed: () {
+                        serviceBloc.add(
+                            GetServiceByIdEvent(id: widget.companyServiceId));
+                      });
+                } else if (serviceState is GetServiceByIdSuccess) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20.h),
+                    child: SingleChildScrollView(
+                      child: Card(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.companyService.title,
-                                  style: TextStyle(
+                            SizedBox(
+                              width: double.infinity,
+                              height: MediaQuery.of(context).size.height / 2,
+                              child: CachedNetworkImage(
+                                imageUrl: serviceState.service.imageUrl ?? '',
+                                fit: BoxFit.contain,
+                                progressIndicatorBuilder:
+                                    (context, url, downloadProgress) => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 70.0, vertical: 50),
+                                  child: CircularProgressIndicator(
+                                    value: downloadProgress.progress,
                                     color: AppColor.backgroundColor,
-                                    fontSize: 20.sp,
-                                    fontWeight: FontWeight.w600,
+
+                                    // strokeWidth: 10,
                                   ),
                                 ),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width - 16.w,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      widget.companyService.price != null
-                                          ? Text(
-                                              '${AppLocalizations.of(context).translate('price')} : ${widget.companyService.price} AED',
+                                      Text(
+                                        serviceState.service.title,
+                                        style: TextStyle(
+                                          color: AppColor.backgroundColor,
+                                          fontSize: 20.sp,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width -
+                                                16.w,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            serviceState.service.price != null
+                                                ? Text(
+                                                    '${AppLocalizations.of(context).translate('price')} : ${serviceState.service.price} AED',
+                                                    style: TextStyle(
+                                                        color:
+                                                            AppColor.colorOne,
+                                                        fontSize: 17.sp,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  )
+                                                : const SizedBox(),
+                                            Row(
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () async {
+                                                    await shareImageWithDescription(
+                                                      imageUrl: serviceState
+                                                              .service
+                                                              .imageUrl ??
+                                                          '',
+                                                      description:
+                                                          'https://www.netzoon.com/home/services/${serviceState.service.id}',
+                                                      subject: serviceState
+                                                          .service.title,
+                                                    );
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.share,
+                                                    color: AppColor
+                                                        .backgroundColor,
+                                                    size: 22.sp,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 8.w,
+                                                ),
+                                                IconButton(
+                                                  onPressed: () async {},
+                                                  icon: Icon(
+                                                    Icons.favorite,
+                                                    color: AppColor
+                                                        .backgroundColor,
+                                                    size: 22.sp,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width -
+                                                16.w,
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              '${serviceState.service.averageRating}',
                                               style: TextStyle(
-                                                  color: AppColor.colorOne,
-                                                  fontSize: 17.sp,
-                                                  fontWeight: FontWeight.bold),
+                                                  color: AppColor.secondGrey,
+                                                  fontSize: 18.sp,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () => showServiceRating(
+                                                  context: context,
+                                                  serviceBloc: rateBloc,
+                                                  id: serviceState.service.id,
+                                                  userRate: serviceState.service
+                                                          .averageRating ??
+                                                      0),
+                                              child: RatingBar.builder(
+                                                minRating: 1,
+                                                maxRating: 5,
+                                                initialRating: serviceState
+                                                        .service
+                                                        .averageRating ??
+                                                    0,
+                                                itemSize: 18.sp,
+                                                ignoreGestures: true,
+                                                itemBuilder: (context, _) {
+                                                  return const Icon(
+                                                    Icons.star,
+                                                    color: Colors.amber,
+                                                  );
+                                                },
+                                                allowHalfRating: true,
+                                                updateOnDrag: true,
+                                                onRatingUpdate: (rating) {},
+                                              ),
+                                            ),
+                                            Text(
+                                              '(${serviceState.service.totalRatings} ${AppLocalizations.of(context).translate('review')})',
+                                              style: TextStyle(
+                                                color: AppColor.secondGrey,
+                                                fontSize: 14.sp,
+                                              ),
+                                            ),
+                                            BlocBuilder<AuthBloc, AuthState>(
+                                              bloc: authBloc,
+                                              builder: (context, authState) {
+                                                if (authState
+                                                    is Authenticated) {
+                                                  if (authState
+                                                          .user.userInfo.id ==
+                                                      serviceState
+                                                          .service.owner.id) {
+                                                    return Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      children: [
+                                                        IconButton(
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .push(MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) {
+                                                              return EditCompanyServiceScreen(
+                                                                companyService:
+                                                                    serviceState
+                                                                        .service,
+                                                              );
+                                                            }));
+                                                          },
+                                                          icon: const Icon(
+                                                            Icons.edit,
+                                                            color: AppColor
+                                                                .backgroundColor,
+                                                          ),
+                                                        ),
+                                                        IconButton(
+                                                          onPressed: () {
+                                                            deleteBloc.add(
+                                                                DeleteCompanyServiceEvent(
+                                                                    id: serviceState
+                                                                        .service
+                                                                        .id));
+                                                          },
+                                                          icon: const Icon(
+                                                            Icons.delete,
+                                                            color: AppColor.red,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }
+                                                }
+                                                return Container();
+                                              },
                                             )
-                                          : const SizedBox(),
-                                      Row(
-                                        children: [
-                                          IconButton(
-                                            onPressed: () async {
-                                              await shareImageWithDescription(
-                                                  imageUrl: widget
-                                                          .companyService
-                                                          .imageUrl ??
-                                                      '',
-                                                  description: widget
-                                                      .companyService.title);
-                                            },
-                                            icon: Icon(
-                                              Icons.share,
-                                              color: AppColor.backgroundColor,
-                                              size: 22.sp,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 8.w,
-                                          ),
-                                          IconButton(
-                                            onPressed: () async {},
-                                            icon: Icon(
-                                              Icons.favorite,
-                                              color: AppColor.backgroundColor,
-                                              size: 22.sp,
-                                            ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
-                                ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Row(
+                              children: [
                                 SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width - 16.w,
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        '${widget.companyService.averageRating}',
-                                        style: TextStyle(
-                                            color: AppColor.secondGrey,
-                                            fontSize: 18.sp,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () => showServiceRating(
-                                            context: context,
-                                            serviceBloc: rateBloc,
-                                            id: widget.companyService.id,
-                                            userRate: widget.companyService
-                                                    .averageRating ??
-                                                0),
-                                        child: RatingBar.builder(
-                                          minRating: 1,
-                                          maxRating: 5,
-                                          initialRating: widget.companyService
-                                                  .averageRating ??
-                                              0,
-                                          itemSize: 18.sp,
-                                          ignoreGestures: true,
-                                          itemBuilder: (context, _) {
-                                            return const Icon(
-                                              Icons.star,
-                                              color: Colors.amber,
-                                            );
-                                          },
-                                          allowHalfRating: true,
-                                          updateOnDrag: true,
-                                          onRatingUpdate: (rating) {},
-                                        ),
-                                      ),
-                                      Text(
-                                        '(${widget.companyService.totalRatings} ${AppLocalizations.of(context).translate('review')})',
-                                        style: TextStyle(
-                                          color: AppColor.secondGrey,
-                                          fontSize: 14.sp,
-                                        ),
-                                      ),
-                                      BlocBuilder<AuthBloc, AuthState>(
-                                        bloc: authBloc,
-                                        builder: (context, authState) {
-                                          if (authState is Authenticated) {
-                                            if (authState.user.userInfo.id ==
-                                                widget
-                                                    .companyService.owner.id) {
-                                              return Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  IconButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context).push(
-                                                          MaterialPageRoute(
-                                                              builder:
-                                                                  (context) {
-                                                        return EditCompanyServiceScreen(
-                                                          companyService: widget
-                                                              .companyService,
-                                                        );
-                                                      }));
-                                                    },
-                                                    icon: const Icon(
-                                                      Icons.edit,
-                                                      color: AppColor
-                                                          .backgroundColor,
-                                                    ),
-                                                  ),
-                                                  IconButton(
-                                                    onPressed: () {
-                                                      deleteBloc.add(
-                                                          DeleteCompanyServiceEvent(
-                                                              id: widget
-                                                                  .companyService
-                                                                  .id));
-                                                    },
-                                                    icon: const Icon(
-                                                      Icons.delete,
-                                                      color: AppColor.red,
-                                                    ),
-                                                  ),
-                                                ],
-                                              );
-                                            }
-                                          }
-                                          return Container();
-                                        },
-                                      )
-                                    ],
+                                  width: 10.w,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    serviceState.service.description,
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 14.sp),
                                   ),
                                 ),
                               ],
                             ),
+                            const Divider(),
+                            Column(
+                              // mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${AppLocalizations.of(context).translate('images')} :',
+                                  style: TextStyle(
+                                    color: AppColor.black,
+                                    fontSize: 17.sp,
+                                  ),
+                                ),
+                                serviceState.service.serviceImageList
+                                            ?.isNotEmpty ==
+                                        true
+                                    ? GridView.builder(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount: serviceState
+                                            .service.serviceImageList?.length,
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 2,
+                                                childAspectRatio: 0.92),
+                                        itemBuilder:
+                                            (BuildContext context, index) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              showImageDialog(
+                                                  context,
+                                                  serviceState.service
+                                                      .serviceImageList!,
+                                                  index);
+                                            },
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(25.0),
+                                              child: ListOfPictures(
+                                                img: serviceState.service
+                                                    .serviceImageList![index],
+                                              ),
+                                            ),
+                                          );
+                                        })
+                                    : GestureDetector(
+                                        onTap: () {},
+                                        child: Text(
+                                          AppLocalizations.of(context)
+                                              .translate('no_images'),
+                                          style: TextStyle(
+                                            color: AppColor.mainGrey,
+                                            fontSize: 15.sp,
+                                          ),
+                                        ),
+                                      ),
+                                const Divider(),
+                                Text(
+                                  '${AppLocalizations.of(context).translate('vedio')} :',
+                                  style: TextStyle(
+                                    color: AppColor.black,
+                                    fontSize: 17.sp,
+                                  ),
+                                ),
+                                serviceState.service.vedioUrl != null
+                                    ? AspectRatio(
+                                        aspectRatio: 16 / 9,
+                                        child: Chewie(
+                                          controller: _chewieController,
+                                        ),
+                                      )
+                                    : Text(
+                                        AppLocalizations.of(context)
+                                            .translate('no_vedio'),
+                                        style: TextStyle(
+                                          color: AppColor.mainGrey,
+                                          fontSize: 15.sp,
+                                        ),
+                                      ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 120.h,
+                            ),
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          Expanded(
-                            child: Text(
-                              widget.companyService.description,
-                              style: TextStyle(
-                                  color: Colors.grey, fontSize: 14.sp),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Divider(),
-                      Column(
-                        // mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${AppLocalizations.of(context).translate('images')} :',
-                            style: TextStyle(
-                              color: AppColor.black,
-                              fontSize: 17.sp,
-                            ),
-                          ),
-                          widget.companyService.serviceImageList?.isNotEmpty ==
-                                  true
-                              ? GridView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: widget
-                                      .companyService.serviceImageList?.length,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          childAspectRatio: 0.92),
-                                  itemBuilder: (BuildContext context, index) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        showImageDialog(
-                                            context,
-                                            widget.companyService
-                                                .serviceImageList!,
-                                            index);
-                                      },
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(25.0),
-                                        child: ListOfPictures(
-                                          img: widget.companyService
-                                              .serviceImageList![index],
-                                        ),
-                                      ),
-                                    );
-                                  })
-                              : GestureDetector(
-                                  onTap: () {},
-                                  child: Text(
-                                    AppLocalizations.of(context)
-                                        .translate('no_images'),
-                                    style: TextStyle(
-                                      color: AppColor.mainGrey,
-                                      fontSize: 15.sp,
-                                    ),
-                                  ),
-                                ),
-                          const Divider(),
-                          Text(
-                            '${AppLocalizations.of(context).translate('vedio')} :',
-                            style: TextStyle(
-                              color: AppColor.black,
-                              fontSize: 17.sp,
-                            ),
-                          ),
-                          widget.companyService.vedioUrl != null
-                              ? AspectRatio(
-                                  aspectRatio: 16 / 9,
-                                  child: Chewie(
-                                    controller: _chewieController,
-                                  ),
-                                )
-                              : Text(
-                                  AppLocalizations.of(context)
-                                      .translate('no_vedio'),
-                                  style: TextStyle(
-                                    color: AppColor.mainGrey,
-                                    fontSize: 15.sp,
-                                  ),
-                                ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 120.h,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
+                  );
+                }
+                return const SizedBox();
+              },
             ),
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        height: 60.0.h,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            PhoneCallWidget(
-                phonePath: widget.callNumber ??
-                    widget.companyService.whatsAppNumber ??
-                    '',
-                title: AppLocalizations.of(context).translate('call')),
-            // ElevatedButton(
-            //   onPressed: () {
+      bottomNavigationBar: BlocBuilder<LocalCompanyBloc, LocalCompanyState>(
+        bloc: serviceBloc,
+        builder: (context, serviceState) {
+          return serviceState is GetServiceByIdSuccess
+              ? BottomAppBar(
+                  height: 60.0.h,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      PhoneCallWidget(
+                          phonePath: widget.callNumber ??
+                              serviceState.service.whatsAppNumber ??
+                              '',
+                          title:
+                              AppLocalizations.of(context).translate('call')),
+                      // ElevatedButton(
+                      //   onPressed: () {
 
-            //   },
-            //   style: ButtonStyle(
-            //     backgroundColor: MaterialStateProperty.all(
-            //       AppColor.backgroundColor,
-            //     ),
-            //     shape: MaterialStateProperty.all(RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(18.0),
-            //     )),
-            //     fixedSize: MaterialStateProperty.all(
-            //       Size.fromWidth(100.w),
-            //     ),
-            //   ),
-            //   child: Text(AppLocalizations.of(context).translate('chat')),
-            // ),
-            BlocBuilder<AuthBloc, AuthState>(
-              bloc: authBloc,
-              builder: (context, authState) {
-                return ElevatedButton(
-                  onPressed: () {
-                    if (authState is Authenticated) {
-                      // await SendbirdChat.connect(
-                      //     authState.user.userInfo
-                      //             .username ??
-                      //         '');
-                      connectWithSendbird(
-                          username: authState.user.userInfo.username ?? '');
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) {
-                          return ChatPageScreen(
-                            userId: authState.user.userInfo.username ?? '',
-                            otherUserId:
-                                widget.companyService.owner.username ?? '',
-                            title: widget.companyService.owner.username ?? '',
-                            image:
-                                widget.companyService.owner.profilePhoto ?? '',
+                      //   },
+                      //   style: ButtonStyle(
+                      //     backgroundColor: MaterialStateProperty.all(
+                      //       AppColor.backgroundColor,
+                      //     ),
+                      //     shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(18.0),
+                      //     )),
+                      //     fixedSize: MaterialStateProperty.all(
+                      //       Size.fromWidth(100.w),
+                      //     ),
+                      //   ),
+                      //   child: Text(AppLocalizations.of(context).translate('chat')),
+                      // ),
+                      BlocBuilder<AuthBloc, AuthState>(
+                        bloc: authBloc,
+                        builder: (context, authState) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              if (authState is Authenticated) {
+                                // await SendbirdChat.connect(
+                                //     authState.user.userInfo
+                                //             .username ??
+                                //         '');
+                                connectWithSendbird(
+                                    username:
+                                        authState.user.userInfo.username ?? '');
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) {
+                                    return ChatPageScreen(
+                                      userId:
+                                          authState.user.userInfo.username ??
+                                              '',
+                                      otherUserId:
+                                          serviceState.service.owner.username ??
+                                              '',
+                                      title:
+                                          serviceState.service.owner.username ??
+                                              '',
+                                      image: serviceState
+                                              .service.owner.profilePhoto ??
+                                          '',
+                                    );
+                                  }),
+                                );
+                              } else {
+                                authAlert(context);
+                              }
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                AppColor.backgroundColor,
+                              ),
+                              shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                              )),
+                              fixedSize: MaterialStateProperty.all(
+                                Size.fromWidth(100.w),
+                              ),
+                            ),
+                            child: Text(
+                                AppLocalizations.of(context).translate('chat')),
                           );
-                        }),
-                      );
-                    } else {
-                      authAlert(context);
-                    }
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                      AppColor.backgroundColor,
-                    ),
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    )),
-                    fixedSize: MaterialStateProperty.all(
-                      Size.fromWidth(100.w),
-                    ),
+                        },
+                      ),
+                      WhatsAppButton(
+                          whatsappNumber: widget.callNumber ??
+                              serviceState.service.whatsAppNumber ??
+                              ''),
+                    ],
                   ),
-                  child: Text(AppLocalizations.of(context).translate('chat')),
-                );
-              },
-            ),
-            WhatsAppButton(
-                whatsappNumber: widget.callNumber ??
-                    widget.companyService.whatsAppNumber ??
-                    ''),
-          ],
-        ),
+                )
+              : const SizedBox();
+        },
       ),
     );
   }

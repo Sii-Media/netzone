@@ -242,7 +242,7 @@ class _NotificatiionScreenState extends State<NotificatiionScreen> {
                                                         .notifications[index]
                                                         .text ==
                                                     'freezone') {
-                                                  return FreezoneCompanyProfileScreen(
+                                                  return LocalCompanyProfileScreen(
                                                     id: state
                                                         .notifications[index]
                                                         .itemId,

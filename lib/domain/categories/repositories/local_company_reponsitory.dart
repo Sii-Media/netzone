@@ -25,6 +25,10 @@ abstract class LocalCompanyRepository {
     required String id,
   });
 
+  Future<Either<Failure, CompanyService>> getServiceById({
+    required String id,
+  });
+
   Future<Either<Failure, String>> addCompanyService({
     required String category,
     required String country,

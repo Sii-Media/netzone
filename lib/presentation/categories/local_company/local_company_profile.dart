@@ -989,7 +989,7 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
                                                                             MaterialPageRoute(
                                                                               builder: (context) {
                                                                                 return CompanyServiceDetailsScreen(
-                                                                                  companyService: serviceState.services[index],
+                                                                                  companyServiceId: serviceState.services[index].id,
                                                                                   callNumber: state.userInfo.firstMobile,
                                                                                 );
                                                                               },

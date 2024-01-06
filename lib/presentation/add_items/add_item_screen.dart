@@ -63,12 +63,15 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         ? addWidget(
                             title: AppLocalizations.of(context)
                                 .translate('select_from_our_products'),
+                            subTitle: AppLocalizations.of(context)
+                                .translate('select_product_desc'),
                             onTap: () {
                               Navigator.of(context)
                                   .push(MaterialPageRoute(builder: (context) {
                                 return const AllProductsScreen();
                               }));
-                            })
+                            },
+                          )
                         : const SizedBox(),
 
                     state.user.userInfo.userType == 'user' ||
@@ -80,6 +83,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             state.user.userInfo.userType == 'delivery_company'
                         ? const SizedBox()
                         : state.user.userInfo.userType == 'factory' ||
+                                state.user.userInfo.userType == 'freezone' ||
                                 state.user.userInfo.userType == 'trader' ||
                                 state.user.userInfo.userType ==
                                         'local_company' &&
@@ -88,6 +92,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             ? addWidget(
                                 title: AppLocalizations.of(context)
                                     .translate('add_product'),
+                                subTitle: AppLocalizations.of(context)
+                                    .translate('add_product_desc'),
                                 onTap: () {
                                   Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) {
@@ -103,6 +109,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         ? addWidget(
                             title: AppLocalizations.of(context)
                                 .translate('add_service'),
+                            subTitle: AppLocalizations.of(context)
+                                .translate('add_service_desc'),
                             onTap: () {
                               Navigator.of(context)
                                   .push(MaterialPageRoute(builder: (context) {
@@ -114,6 +122,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     addWidget(
                         title:
                             AppLocalizations.of(context).translate('add_ads'),
+                        subTitle: AppLocalizations.of(context)
+                            .translate('add_ads_desc'),
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -127,6 +137,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     addWidget(
                         title:
                             AppLocalizations.of(context).translate('add_deals'),
+                        subTitle: AppLocalizations.of(context)
+                            .translate('add_deals_desc'),
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -141,6 +153,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         ? addWidget(
                             title: AppLocalizations.of(context)
                                 .translate('add_car'),
+                            subTitle: AppLocalizations.of(context)
+                                .translate('add_car_desc'),
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -157,6 +171,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         ? addWidget(
                             title: AppLocalizations.of(context)
                                 .translate('add_airplane'),
+                            subTitle: AppLocalizations.of(context)
+                                .translate('add_airplane_desc'),
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -173,6 +189,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         ? addWidget(
                             title: AppLocalizations.of(context)
                                 .translate('add_real_estate'),
+                            subTitle: AppLocalizations.of(context)
+                                .translate('add_real_estate_desc'),
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -200,6 +218,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         ? addWidget(
                             title: AppLocalizations.of(context)
                                 .translate('add_news'),
+                            subTitle: AppLocalizations.of(context)
+                                .translate('add_news_desc'),
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -214,6 +234,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         ? addWidget(
                             title: AppLocalizations.of(context)
                                 .translate('add_delivery_service'),
+                            subTitle: AppLocalizations.of(context)
+                                .translate('add_delivery_service_desc'),
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -274,7 +296,11 @@ class _AddItemScreenState extends State<AddItemScreen> {
     );
   }
 
-  Widget addWidget({required String title, void Function()? onTap}) {
+  Widget addWidget({
+    required String title,
+    String? subTitle,
+    void Function()? onTap,
+  }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       child: ClipRRect(
@@ -283,19 +309,34 @@ class _AddItemScreenState extends State<AddItemScreen> {
             onTap: onTap,
             child: Container(
               // alignment: Alignment.centerRight,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
 
-              height: 60.h,
+              // height: 80.h,
               width: double.infinity,
               color: AppColor.backgroundColor,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    title,
-                    style: TextStyle(fontSize: 15.sp, color: AppColor.white),
+                  Flexible(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style:
+                              TextStyle(fontSize: 15.sp, color: AppColor.white),
+                        ),
+                        subTitle != null
+                            ? Text(
+                                subTitle,
+                                style: TextStyle(
+                                    fontSize: 11.sp,
+                                    color: AppColor.black.withOpacity(0.5)),
+                              )
+                            : const SizedBox(),
+                      ],
+                    ),
                   ),
                   Icon(
                     Icons.arrow_forward_ios_outlined,

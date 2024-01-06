@@ -66,6 +66,12 @@ class GetCompanyServicesByIdEvent extends LocalCompanyEvent {
   const GetCompanyServicesByIdEvent({required this.id});
 }
 
+class GetServiceByIdEvent extends LocalCompanyEvent {
+  final String id;
+
+  const GetServiceByIdEvent({required this.id});
+}
+
 class RateCompanyServiceEvent extends LocalCompanyEvent {
   final String id;
   final double rating;

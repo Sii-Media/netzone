@@ -24,7 +24,6 @@ import '../auth/blocs/auth_bloc/auth_bloc.dart';
 import '../data/cars.dart';
 import '../notifications/blocs/notifications/notifications_bloc.dart';
 import '../utils/app_localizations.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../utils/convert_date_to_string.dart';
 

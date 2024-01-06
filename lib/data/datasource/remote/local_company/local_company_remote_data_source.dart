@@ -17,6 +17,7 @@ abstract class LocalCompanyRemoteDataSource {
       String country, String userType);
 
   Future<List<CompanyServiceModel>> getCompanyServices(String id);
+  Future<CompanyServiceModel> getServiceById(String id);
 
   Future<List<ServiceCategoryModel>> getServicesCategories();
   Future<ServiceCategoryModel> getServicesByCategories(
@@ -70,6 +71,12 @@ abstract class LocalCompanyRemoteDataSourceImpl
   @override
   @GET('/categories/local-company/get-services/{id}')
   Future<List<CompanyServiceModel>> getCompanyServices(
+    @Path('id') String id,
+  );
+
+  @override
+  @GET('/categories/local-company/get-service/{id}')
+  Future<CompanyServiceModel> getServiceById(
     @Path('id') String id,
   );
 

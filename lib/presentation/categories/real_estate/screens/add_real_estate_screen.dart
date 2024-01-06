@@ -56,28 +56,74 @@ class _AddRealEstateScreenState extends State<AddRealEstateScreen>
   late TextEditingController bedroomsController = TextEditingController();
   late TextEditingController bathroomsController = TextEditingController();
   List<Map<String, dynamic>> propertyTypes = [
-    {'type': 'residential', 'icon': Icons.home, 'color': Colors.blue},
-    {'type': 'commercial', 'icon': Icons.store, 'color': Colors.green},
-    {'type': 'rooms', 'icon': Icons.hotel, 'color': Colors.orange},
+    {
+      'type': 'residential',
+      'icon': Icons.home,
+      'color': Colors.blue,
+      'category': [
+        'apartment',
+        'villa',
+        'townhouse',
+        'penthouse',
+        'residential_building',
+        'villa_compound',
+        'residential_floor',
+      ]
+    },
+    {
+      'type': 'commercial',
+      'icon': Icons.store,
+      'color': Colors.green,
+      'category': [
+        'office',
+        'industrial',
+        'retail',
+        'staff_accom',
+        'shop',
+        'warehouse',
+        'commercial_floot',
+        'commercial_villa',
+        'other',
+        'bulk_unit',
+        'commercial_plot',
+        'factory',
+        'industrial_land',
+        'mixed_use_land',
+        'showroom',
+        'commercial_building'
+      ]
+    },
+    {
+      'type': 'rooms',
+      'icon': Icons.hotel,
+      'color': Colors.orange,
+      'category': [
+        'apartment',
+        'villa',
+      ],
+    },
     {
       'type': 'monthly_rent',
       'icon': Icons.calendar_month,
-      'color': Colors.purple
+      'color': Colors.purple,
+      'category': [
+        'apartment',
+        'villa',
+      ],
     },
-    {'type': 'daily_rent', 'icon': Icons.calendar_today, 'color': Colors.pink}
-  ];
-  List<String> resedentialCategories = [
-    'apartment',
-    'villa',
-    'townhouse',
-    'penthouse',
-    'residential_building',
-    'villa_compound',
-    'residential_floor',
+    {
+      'type': 'daily_rent',
+      'icon': Icons.calendar_today,
+      'color': Colors.pink,
+      'category': [
+        'apartment',
+        'villa',
+      ],
+    }
   ];
 
   String? _selectedType = 'residential';
-  String? _selectedCategory = 'apartment';
+  String? _selectedCategory;
   String? _selectedForWhat;
   String? _selectedFurnishing;
 
@@ -258,8 +304,16 @@ class _AddRealEstateScreenState extends State<AddRealEstateScreen>
                       height: 50.0.h,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: propertyTypes.length,
+                        itemCount: propertyTypes
+                            .firstWhere((type) =>
+                                type['type'] == _selectedType)['category']
+                            .length,
                         itemBuilder: (context, index) {
+                          String selectedType = propertyTypes.firstWhere(
+                              (type) => type['type'] == _selectedType)['type'];
+                          List<String> categories = propertyTypes.firstWhere(
+                              (type) =>
+                                  type['type'] == _selectedType)['category'];
                           return Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 8.0),
@@ -271,16 +325,14 @@ class _AddRealEstateScreenState extends State<AddRealEstateScreen>
                               backgroundColor: AppColor.backgroundColor,
                               label: Text(
                                 AppLocalizations.of(context)
-                                    .translate(resedentialCategories[index]),
+                                    .translate(categories[index]),
                                 style: const TextStyle(color: AppColor.white),
                               ),
-                              selected: _selectedCategory ==
-                                  resedentialCategories[index],
+                              selected: _selectedCategory == categories[index],
                               onSelected: (bool selected) {
                                 setState(() {
-                                  _selectedCategory = selected
-                                      ? resedentialCategories[index]
-                                      : '';
+                                  _selectedCategory =
+                                      selected ? categories[index] : '';
                                 });
                               },
                             ),

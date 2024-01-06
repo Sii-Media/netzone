@@ -9,6 +9,7 @@ import 'package:netzoon/domain/categories/usecases/local_company/edit_company_se
 import 'package:netzoon/domain/categories/usecases/local_company/get_all_local_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_company_products_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_local_companies_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/local_company/get_service_by_id_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_services_by_category_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_services_categories_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/rate_company_service_use_case.dart';
@@ -44,6 +45,7 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
   final DeleteCompanyServiceUseCase deleteCompanyServiceUseCase;
   final GetServicesByCategoryUseCase getServicesByCategoryUseCase;
   final GetServicesCategoriesUseCase getServicesCategoriesUseCase;
+  final GetServiceByIdUseCase getServiceByIdUseCase;
   LocalCompanyBloc({
     required this.getLocalCompaniesUseCase,
     required this.getAllLocalCompaniesUseCase,
@@ -58,6 +60,7 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
     required this.deleteCompanyServiceUseCase,
     required this.getServicesByCategoryUseCase,
     required this.getServicesCategoriesUseCase,
+    required this.getServiceByIdUseCase,
   }) : super(LocalCompanyInitial()) {
     on<GetAllLocalCompaniesEvent>((event, emit) async {
       emit(LocalCompanyInProgress());
@@ -251,6 +254,14 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
               DeleteCompanyServiceFailure(message: mapFailureToString(failure)),
           (message) => DeleteCompanyServiceSuccess(message: message),
         ),
+      );
+    });
+    on<GetServiceByIdEvent>((event, emit) async {
+      emit(GetServiceByIdInProgress());
+      final service = await getServiceByIdUseCase(event.id);
+      emit(
+        service.fold((l) => GetServiceByIdFailure(),
+            (r) => GetServiceByIdSuccess(service: r)),
       );
     });
     on<SearchOnCompanyEvent>((event, emit) {

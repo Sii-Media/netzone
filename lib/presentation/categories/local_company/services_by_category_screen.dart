@@ -114,9 +114,10 @@ class _ServicesByCategoryScreenState extends State<ServicesByCategoryScreen> {
                                             MaterialPageRoute(
                                               builder: (context) {
                                                 return CompanyServiceDetailsScreen(
-                                                  companyService: state
+                                                  companyServiceId: state
                                                       .servicesCategories
-                                                      .services![index],
+                                                      .services![index]
+                                                      .id,
                                                 );
                                               },
                                             ),
