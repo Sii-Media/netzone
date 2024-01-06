@@ -154,7 +154,9 @@ class _AllProductsScreenState extends State<AllProductsScreen>
                                         child: Text(
                                           state.categoryProducts[index]
                                               .description,
+                                          maxLines: 3,
                                           style: const TextStyle(
+                                            overflow: TextOverflow.ellipsis,
                                             color: AppColor.secondGrey,
                                           ),
                                         ),
@@ -166,49 +168,56 @@ class _AllProductsScreenState extends State<AllProductsScreen>
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                if (state
-                                                        .categoryProducts[index]
-                                                        .owner
-                                                        .userType ==
-                                                    'user') {
-                                                  Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) {
-                                                    return UsersProfileScreen(
-                                                        userId: state
-                                                            .categoryProducts[
-                                                                index]
-                                                            .owner
-                                                            .id);
-                                                  }));
-                                                } else if (state
-                                                        .categoryProducts[index]
-                                                        .owner
-                                                        .userType ==
-                                                    'local_company') {
-                                                  Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) {
-                                                    return LocalCompanyProfileScreen(
-                                                        id: state
-                                                            .categoryProducts[
-                                                                index]
-                                                            .owner
-                                                            .id);
-                                                  }));
-                                                }
-                                              },
-                                              child: Text(
-                                                state.categoryProducts[index]
-                                                        .owner.username ??
-                                                    '',
-                                                style: TextStyle(
-                                                    decoration: TextDecoration
-                                                        .underline,
-                                                    color: AppColor.colorOne,
-                                                    fontSize: 11.sp),
+                                            SizedBox(
+                                              width: 70.w,
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  if (state
+                                                          .categoryProducts[
+                                                              index]
+                                                          .owner
+                                                          .userType ==
+                                                      'user') {
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
+                                                      return UsersProfileScreen(
+                                                          userId: state
+                                                              .categoryProducts[
+                                                                  index]
+                                                              .owner
+                                                              .id);
+                                                    }));
+                                                  } else if (state
+                                                          .categoryProducts[
+                                                              index]
+                                                          .owner
+                                                          .userType ==
+                                                      'local_company') {
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
+                                                      return LocalCompanyProfileScreen(
+                                                          id: state
+                                                              .categoryProducts[
+                                                                  index]
+                                                              .owner
+                                                              .id);
+                                                    }));
+                                                  }
+                                                },
+                                                child: Text(
+                                                  state.categoryProducts[index]
+                                                          .owner.username ??
+                                                      '',
+                                                  style: TextStyle(
+                                                      decoration: TextDecoration
+                                                          .underline,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      color: AppColor.colorOne,
+                                                      fontSize: 11.sp),
+                                                ),
                                               ),
                                             ),
                                             RichText(

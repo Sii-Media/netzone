@@ -1057,7 +1057,7 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
                                                                             MaterialPageRoute(
                                                                               builder: (context) {
                                                                                 return CompanyServiceDetailsScreen(
-                                                                                  companyService: serviceState.services[index],
+                                                                                  companyServiceId: serviceState.services[index].id,
                                                                                   callNumber: state.userInfo.firstMobile,
                                                                                 );
                                                                               },

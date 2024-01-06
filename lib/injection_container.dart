@@ -122,6 +122,7 @@ import 'package:netzoon/domain/categories/usecases/local_company/get_all_local_c
 import 'package:netzoon/domain/categories/usecases/local_company/get_company_products_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_company_service_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_local_companies_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/local_company/get_service_by_id_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_services_by_category_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_services_categories_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/rate_company_service_use_case.dart';
@@ -417,6 +418,7 @@ Future<void> init() async {
         editCompanyServiceUseCase: sl(),
         getServicesByCategoryUseCase: sl(),
         getServicesCategoriesUseCase: sl(),
+        getServiceByIdUseCase: sl(),
       ));
 
   sl.registerFactory(() => GovermentalBloc(
@@ -849,6 +851,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton(
       () => GetVehicleByIdUseCase(vehicleRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => GetServiceByIdUseCase(localCompanyRepository: sl()));
 
   //! Repositories
 

@@ -18,7 +18,6 @@ import '../core/constant/colors.dart';
 import '../core/helpers/share_image_function.dart';
 import '../core/widgets/on_failure_widget.dart';
 import '../core/widgets/phone_call_button.dart';
-import '../core/widgets/price_suggestion_button.dart';
 import '../utils/app_localizations.dart';
 import 'blocs/ads/ads_bloc_bloc.dart';
 import 'edit_ads_screen.dart';

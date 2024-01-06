@@ -24,7 +24,6 @@ import '../auth/blocs/auth_bloc/auth_bloc.dart';
 import '../data/cars.dart';
 import '../notifications/blocs/notifications/notifications_bloc.dart';
 import '../utils/app_localizations.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../utils/convert_date_to_string.dart';
 
@@ -182,7 +181,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
         'amount': amount,
         'currency': currency,
       };
-      String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
+      // String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
 
       var response = await http.post(
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
@@ -205,7 +204,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
         'email': email,
         'description': name,
       };
-      String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
+      // String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
       //final response  = await http.post(Uri.parse("https://api.stripe.com/v1/customers"),
       final response = await http.post(
         Uri.parse("https://api.stripe.com/v1/customers"),

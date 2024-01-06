@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:netzoon/data/models/aramex/notifications_error_model.dart';
-import 'package:netzoon/data/models/aramex/shipment_model.dart';
 import 'package:netzoon/data/models/aramex/transactions_model.dart';
 import 'package:netzoon/domain/aramex/entities/create_shipment_response.dart';
 

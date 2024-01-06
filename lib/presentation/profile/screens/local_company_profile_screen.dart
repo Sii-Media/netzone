@@ -16,7 +16,6 @@ import 'package:netzoon/presentation/profile/screens/visitors_screen.dart';
 import '../../../injection_container.dart';
 import '../../categories/local_company/company_service_detail_screen.dart';
 import '../../core/blocs/country_bloc/country_bloc.dart';
-import '../../core/helpers/get_currency_of_country.dart';
 import '../../core/widgets/on_failure_widget.dart';
 import '../../orders/screens/order_screen.dart';
 import '../../utils/app_localizations.dart';
@@ -882,7 +881,7 @@ class _MyLocalCompanyProfileScreenState
                                                                           MaterialPageRoute(
                                                                             builder:
                                                                                 (context) {
-                                                                              return CompanyServiceDetailsScreen(companyService: serviceState.services[index]);
+                                                                              return CompanyServiceDetailsScreen(companyServiceId: serviceState.services[index].id);
                                                                             },
                                                                           ),
                                                                         );

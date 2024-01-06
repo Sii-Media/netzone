@@ -116,3 +116,13 @@ class GetServicesByCategorySuccess extends LocalCompanyState {
 
   const GetServicesByCategorySuccess({required this.servicesCategories});
 }
+
+class GetServiceByIdInProgress extends LocalCompanyState {}
+
+class GetServiceByIdFailure extends LocalCompanyState {}
+
+class GetServiceByIdSuccess extends LocalCompanyState {
+  final CompanyService service;
+
+  const GetServiceByIdSuccess({required this.service});
+}

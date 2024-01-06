@@ -10,7 +10,6 @@ import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/helpers/show_image_dialog.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
-import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
 import 'package:netzoon/presentation/orders/screens/congs_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:video_player/video_player.dart';
@@ -108,11 +107,11 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
       // final customerId = await createcustomer(email: toEmail, name: toName);
       paymentIntent = await createPaymentIntent(amount, currency);
 
-      var gpay = const PaymentSheetGooglePay(
-        merchantCountryCode: "UAE",
-        currencyCode: "aed",
-        testEnv: true,
-      );
+      // var gpay = const PaymentSheetGooglePay(
+      //   merchantCountryCode: "UAE",
+      //   currencyCode: "aed",
+      //   testEnv: true,
+      // );
       var applePay = const PaymentSheetApplePay(
         merchantCountryCode: 'UAE',
         buttonType: PlatformButtonType.pay,
@@ -187,8 +186,6 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
 
   @override
   Widget screen(BuildContext context) {
-    final TextEditingController input = TextEditingController();
-
     return Scaffold(
       body: SizedBox(
         height: MediaQuery.of(context).size.height,

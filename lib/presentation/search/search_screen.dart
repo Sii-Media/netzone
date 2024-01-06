@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
-import 'package:netzoon/presentation/categories/free_zoon/freezone_company_profile_screen.dart';
 import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 
 import '../../injection_container.dart';
@@ -276,7 +275,7 @@ class _SearchPageState extends State<SearchPage> {
                                     'free_zone_companies') {
                                   Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) {
-                                    return FreezoneCompanyProfileScreen(
+                                    return LocalCompanyProfileScreen(
                                         id: filteredItems[index].id);
                                   }));
                                 } else if (selectedCategory == 'real_estate') {
