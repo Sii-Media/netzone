@@ -331,8 +331,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             ? Text(
                                 subTitle,
                                 style: TextStyle(
-                                    fontSize: 11.sp,
-                                    color: AppColor.black.withOpacity(0.5)),
+                                    fontSize: 10.sp,
+                                    color: AppColor.white.withOpacity(0.7)),
                               )
                             : const SizedBox(),
                       ],
