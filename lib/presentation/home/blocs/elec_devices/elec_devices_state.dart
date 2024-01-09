@@ -38,16 +38,22 @@ class DeleteProductSuccess extends ElecDevicesState {}
 
 class DeleteProductFailure extends ElecDevicesState {
   final String message;
-
-  const DeleteProductFailure({required this.message});
+  final Failure failure;
+  const DeleteProductFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class EditProductInProgress extends ElecDevicesState {}
 
 class EditProductFailure extends ElecDevicesState {
   final String message;
-
-  const EditProductFailure({required this.message});
+  final Failure failure;
+  const EditProductFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class EditProductSuccess extends ElecDevicesState {

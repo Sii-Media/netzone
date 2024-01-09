@@ -6,7 +6,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/advertising/blocs/add_ads/add_ads_bloc.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
@@ -248,11 +250,13 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                 } else if (state is AddAdsFailure) {
                   stopLoading();
 
-                  final failure = state.message;
+                  final message = state.message;
+                  final failure = state.failure;
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        failure,
+                        message,
                         style: const TextStyle(
                           color: AppColor.white,
                         ),
@@ -260,6 +264,12 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                       backgroundColor: AppColor.red,
                     ),
                   );
+                  if (failure is UnAuthorizedFailure) {
+                    while (context.canPop()) {
+                      context.pop();
+                    }
+                    context.push('/home');
+                  }
                 } else if (state is AddAdsSuccess) {
                   stopLoading();
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(

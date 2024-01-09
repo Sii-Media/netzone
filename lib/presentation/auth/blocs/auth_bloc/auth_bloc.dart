@@ -78,7 +78,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final deleted = await deleteAccountUseCase(user.userInfo.id);
       await logoutUseCase(NoParams());
       emit(deleted.fold(
-          (l) => DeleteAccountFailure(message: mapFailureToString(l)),
+          (l) => DeleteAccountFailure(
+                message: mapFailureToString(l),
+                failure: l,
+              ),
           (r) => DeleteAccountSuccess()));
     });
     on<SigninWithFacebookEvent>((event, emit) async {

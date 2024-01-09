@@ -19,6 +19,9 @@ class AddRequestSuccess extends AddRequestState {
 
 class AddRequestFailure extends AddRequestState {
   final String message;
-
-  const AddRequestFailure({required this.message});
+  final Failure failure;
+  const AddRequestFailure({
+    required this.message,
+    required this.failure,
+  });
 }

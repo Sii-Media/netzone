@@ -5,8 +5,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:netzoon/domain/company_service/service_category.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/presentation/categories/local_company/local_company_bloc/local_company_bloc.dart';
 import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
@@ -90,11 +92,13 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
               } else if (state is LocalCompanyFailure) {
                 stopLoading();
 
-                final failure = state.message;
+                final message = state.message;
+                final failure = state.failure;
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      failure,
+                      message,
                       style: const TextStyle(
                         color: AppColor.white,
                       ),
@@ -102,6 +106,12 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
                     backgroundColor: AppColor.red,
                   ),
                 );
+                if (failure is UnAuthorizedFailure) {
+                  while (context.canPop()) {
+                    context.pop();
+                  }
+                  context.push('/home');
+                }
               } else if (state is AddCompanyServiceSuccess) {
                 stopLoading();
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(

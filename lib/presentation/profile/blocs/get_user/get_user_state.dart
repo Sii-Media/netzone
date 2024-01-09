@@ -65,8 +65,11 @@ class AddToSelectedProductsInProgress extends GetUserState {}
 
 class AddToSelectedProductsFailure extends GetUserState {
   final String message;
-
-  const AddToSelectedProductsFailure({required this.message});
+  final Failure failure;
+  const AddToSelectedProductsFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class AddToSelectedProductsSuccess extends GetUserState {
@@ -79,8 +82,11 @@ class DeleteFromSelectedProductsInProgress extends GetUserState {}
 
 class DeleteFromSelectedProductsFailure extends GetUserState {
   final String message;
-
-  const DeleteFromSelectedProductsFailure({required this.message});
+  final Failure failure;
+  const DeleteFromSelectedProductsFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class DeleteFromSelectedProductsSuccess extends GetUserState {

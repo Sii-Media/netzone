@@ -206,6 +206,7 @@ import 'package:netzoon/domain/tenders/usecases/get_all_tenders_items.dart';
 import 'package:netzoon/domain/tenders/usecases/get_tenders_cat_use_case.dart';
 import 'package:netzoon/domain/tenders/usecases/get_tenders_items_by_min.dart';
 import 'package:netzoon/domain/tenders/usecases/get_tenders_items_by_max.dart';
+import 'package:netzoon/injectable_module.dart';
 import 'package:netzoon/presentation/add_items/blocs/add_product/add_product_bloc.dart';
 import 'package:netzoon/presentation/advertising/blocs/add_ads/add_ads_bloc.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
@@ -268,8 +269,10 @@ import 'domain/notifications/use_cases/send_notification_use_case.dart';
 import 'domain/send_emails/use_cases/send_email_use_case.dart';
 import 'domain/tenders/usecases/add_tender_use_case.dart';
 
-const String baseUrl = 'https://back.netzoon.com/';
+// const String baseUrl = 'https://back.netzoon.com/';
+const String baseUrl = 'https://www.netzoonback.siidevelopment.com/';
 // const String baseUrl = 'http://10.0.2.2:5000/';
+
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -862,35 +865,59 @@ Future<void> init() async {
 
   sl.registerLazySingleton<AdvertismentRepository>(() =>
       AdvertismentRepositoryImpl(
-          advertismentRemotDataSource: sl(), networkInfo: sl()));
+          advertismentRemotDataSource: sl(),
+          networkInfo: sl(),
+          local: sl(),
+          authRemoteDataSource: sl()));
 
-  sl.registerLazySingleton<NewsRepository>(
-      () => NewsRepositoryImpl(newsRemoteDataSourse: sl(), networkInfo: sl()));
+  sl.registerLazySingleton<NewsRepository>(() => NewsRepositoryImpl(
+      newsRemoteDataSourse: sl(),
+      networkInfo: sl(),
+      authRemoteDataSource: sl(),
+      local: sl()));
 
   sl.registerLazySingleton<TenderRepository>(() =>
       TendersRepositoryImpl(tendersRemoteDataSource: sl(), networkInfo: sl()));
 
-  sl.registerLazySingleton<DealsRepository>(() =>
-      DealsRepositoryImpl(dealsRemoteDataSource: sl(), networkInfo: sl()));
+  sl.registerLazySingleton<DealsRepository>(() => DealsRepositoryImpl(
+      dealsRemoteDataSource: sl(),
+      networkInfo: sl(),
+      authRemoteDataSource: sl(),
+      local: sl()));
 
   sl.registerLazySingleton<DepartmentRepository>(() => DepartmentRepositoryImpl(
-      departmentsRemoteDataSource: sl(), networkInfo: sl()));
+      departmentsRemoteDataSource: sl(),
+      networkInfo: sl(),
+      local: sl(),
+      authRemoteDataSource: sl()));
 
   sl.registerLazySingleton<LegalAdviceRepository>(() =>
       LegalAdviceRepositoryImpl(
           networkInfo: sl(), legalAdviceRemoteDataSource: sl()));
 
   sl.registerLazySingleton<OpenionsRepository>(() => OpenionsRepositoryImpl(
-      networkInfo: sl(), openionsRemoteDataSource: sl()));
+      networkInfo: sl(),
+      openionsRemoteDataSource: sl(),
+      local: sl(),
+      authRemoteDataSource: sl()));
 
   sl.registerLazySingleton<QuestionRepository>(() => QuestionRepositoryImpl(
-      networkInfo: sl(), questionRemoteDataSource: sl()));
+      networkInfo: sl(),
+      questionRemoteDataSource: sl(),
+      local: sl(),
+      authRemoteDataSource: sl()));
 
   sl.registerLazySingleton<RequestsRepository>(() => RequestsRepositoryImpl(
-      networkInfo: sl(), requestsRemoteDataSource: sl()));
+      networkInfo: sl(),
+      requestsRemoteDataSource: sl(),
+      local: sl(),
+      authRemoteDataSource: sl()));
 
   sl.registerLazySingleton<ComplaintsRepository>(() => ComplaintsRepositoryImpl(
-      networkInfo: sl(), complaintsRemoteDataSource: sl()));
+      networkInfo: sl(),
+      complaintsRemoteDataSource: sl(),
+      local: sl(),
+      authRemoteDataSource: sl()));
 
   sl.registerLazySingleton<LangRepository>(
       () => LangRepositoryImpl(langLocalDataResource: sl()));
@@ -906,7 +933,10 @@ Future<void> init() async {
 
   sl.registerLazySingleton<LocalCompanyRepository>(() =>
       LocalCompanyRepositoryImpl(
-          localCompanyRemoteDataSource: sl(), networkInfo: sl()));
+          localCompanyRemoteDataSource: sl(),
+          networkInfo: sl(),
+          authRemoteDataSource: sl(),
+          local: sl()));
 
   sl.registerLazySingleton<CustomsRepository>(() =>
       CustomsRepositoryImpl(customsRemoteDataSource: sl(), networkInfo: sl()));
@@ -916,7 +946,10 @@ Future<void> init() async {
           networkInfo: sl(), govermentalRemoteDataSource: sl()));
 
   sl.registerLazySingleton<FavoriteRepository>(() => FavoriteRepositoryImpl(
-      networkInfo: sl(), favoriteremoteDataSource: sl()));
+      networkInfo: sl(),
+      favoriteremoteDataSource: sl(),
+      local: sl(),
+      authRemoteDataSource: sl()));
 
   sl.registerLazySingleton<SendEmailRepository>(() => SendEmailRepositoryImpl(
       networkInfo: sl(), sendEmailRemoteDataSource: sl()));
@@ -931,18 +964,27 @@ Future<void> init() async {
       () => UsersRepositoryImpl(networkInfo: sl(), userRemoteDataSource: sl()));
 
   sl.registerLazySingleton<RealEstateRepository>(() => RealEstateRepositoryImpl(
-      networkInfo: sl(), realEstateRemoteDataSource: sl()));
+      networkInfo: sl(),
+      realEstateRemoteDataSource: sl(),
+      local: sl(),
+      authRemoteDataSource: sl()));
 
   sl.registerLazySingleton<CountryRepository>(
       () => CountryRepositoryImpl(countryLocalDataSource: sl()));
 
-  sl.registerLazySingleton<DeliveryServiceRepository>(
-      () => DeliveryServiceRepositoryImpl(networkInfo: sl(), dataSource: sl()));
+  sl.registerLazySingleton<DeliveryServiceRepository>(() =>
+      DeliveryServiceRepositoryImpl(
+          networkInfo: sl(),
+          dataSource: sl(),
+          local: sl(),
+          authRemoteDataSource: sl()));
 
   sl.registerLazySingleton<OrderRepository>(
     () => OrderRepositoryImpl(
       networkInfo: sl(),
       orderRemoteDataSource: sl(),
+      authRemoteDataSource: sl(),
+      local: sl(),
     ),
   );
 
@@ -1046,6 +1088,8 @@ Future<void> init() async {
   //! External
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
-  sl.registerLazySingleton(() => dio.Dio());
+  final injectableModule = InjectableModule();
+  sl.registerLazySingleton(() => injectableModule.dioInstance);
+  // sl.registerLazySingleton(() => dio.Dio());
   sl.registerLazySingleton(() => InternetConnectionChecker());
 }

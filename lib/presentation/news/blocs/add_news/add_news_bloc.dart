@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/auth/entities/user.dart';
 import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/domain/news/usecases/add_news_use_case.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
@@ -33,7 +34,8 @@ class AddNewsBloc extends Bloc<AddNewsEvent, AddNewsState> {
 
       emit(
         failureOrNews.fold(
-          (failure) => AddNewsFailure(message: mapFailureToString(failure)),
+          (failure) => AddNewsFailure(
+              message: mapFailureToString(failure), failure: failure),
           (news) => AddNewsSuccess(news: news),
         ),
       );

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:netzoon/data/models/auth/otp_login/otp_login_response_model.dart';
 import 'package:netzoon/data/models/auth/user/user_model.dart';
 import 'package:netzoon/data/models/auth/user_info/user_info_model.dart';
+import 'package:netzoon/data/models/refresh_token_response/refresh_token_response_model.dart';
 import 'package:retrofit/http.dart';
 import '../../../../injection_container.dart';
 
@@ -51,6 +52,8 @@ abstract class AuthRemoteDataSource {
       final String email, final String username, final String password);
 
   Future<List<UserInfoModel>> getUserAccounts(final String email);
+
+  Future<RefreshTokenResponseModel> refreshToken(final String token);
 
   // Future<UserInfoModel> editProfile(
   //     String userId,
@@ -242,5 +245,11 @@ abstract class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<String> resetPassword(
     @Part() String password,
     @Path('token') String token,
+  );
+
+  @override
+  @POST('/user/refreshToken')
+  Future<RefreshTokenResponseModel> refreshToken(
+    @Part() String token,
   );
 }

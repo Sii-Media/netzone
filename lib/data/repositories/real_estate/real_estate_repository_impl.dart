@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:netzoon/data/datasource/local/auth/auth_local_data_source.dart';
+import 'package:netzoon/data/datasource/remote/auth/auth_remote_datasource.dart';
 import 'dart:io';
 
 import 'package:netzoon/data/datasource/remote/real_estate/real_estate_remote_data_source.dart';
@@ -17,9 +20,13 @@ import '../../core/utils/network/network_info.dart';
 class RealEstateRepositoryImpl implements RealEstateRepository {
   final NetworkInfo networkInfo;
   final RealEstateRemoteDataSource realEstateRemoteDataSource;
+  final AuthLocalDatasource local;
+  final AuthRemoteDataSource authRemoteDataSource;
   RealEstateRepositoryImpl({
     required this.networkInfo,
     required this.realEstateRemoteDataSource,
+    required this.local,
+    required this.authRemoteDataSource,
   });
 
   @override
@@ -95,64 +102,90 @@ class RealEstateRepositoryImpl implements RealEstateRepository {
     try {
       if (await networkInfo.isConnected) {
         Dio dio = Dio();
-        FormData formData = FormData();
-        formData.fields.addAll([
-          MapEntry('createdBy', createdBy),
-          MapEntry('title', title),
-          MapEntry('description', description),
-          MapEntry('price', price.toString()),
-          MapEntry('area', area.toString()),
-          MapEntry('location', location),
-          MapEntry('bedrooms', bedrooms.toString()),
-          MapEntry('bathrooms', bathrooms.toString()),
-          MapEntry('country', country),
-        ]);
-        if (amenities != null && amenities.isNotEmpty) {
-          formData.fields.add(MapEntry('amenities', amenities.toString()));
-        }
-        if (type != null) {
-          formData.fields.add(MapEntry('type', type));
-        }
-        if (category != null) {
-          formData.fields.add(MapEntry('category', category));
-        }
-        if (forWhat != null) {
-          formData.fields.add(MapEntry('forWhat', forWhat));
-        }
-        if (furnishing != null) {
-          formData.fields.add(MapEntry('furnishing', furnishing.toString()));
-        }
-
-        String fileName = 'image.jpg';
-        formData.files.add(MapEntry(
-          'image',
-          await MultipartFile.fromFile(
-            image.path,
-            filename: fileName,
-            contentType: MediaType('image', 'jpeg'),
-          ),
-        ));
-        if (realestateimages != null && realestateimages.isNotEmpty) {
-          for (int i = 0; i < realestateimages.length; i++) {
-            String fileName = 'image$i.jpg';
-            File file = File(realestateimages[i].path);
-            formData.files.add(MapEntry(
-              'realestateimages',
-              await MultipartFile.fromFile(
-                file.path,
-                filename: fileName,
-                contentType: MediaType('image', 'jpeg'),
-              ),
-            ));
+        final user = local.getSignedInUser();
+        if (user != null) {
+          if (JwtDecoder.isExpired(user.token)) {
+            try {
+              if (JwtDecoder.isExpired(user.refreshToken)) {
+                local.logout();
+                return Left(UnAuthorizedFailure());
+              }
+            } catch (e) {
+              return Left(UnAuthorizedFailure());
+            }
+            final refreshTokenResponse =
+                await authRemoteDataSource.refreshToken(user.refreshToken);
+            final newUser = user.copyWith(
+                refreshTokenResponse.refreshToken, user.refreshToken);
+            await local.signInUser(newUser);
+            dio.options.headers['Authorization'] = 'Bearer ${newUser.token}';
           }
-        }
-        Response response = await dio.post(
-            'https://back.netzoon.com//real-estate/add-real-estate',
-            data: formData);
-        if (response.statusCode == 201) {
-          return Right(response.data);
+          FormData formData = FormData();
+          formData.fields.addAll([
+            MapEntry('createdBy', createdBy),
+            MapEntry('title', title),
+            MapEntry('description', description),
+            MapEntry('price', price.toString()),
+            MapEntry('area', area.toString()),
+            MapEntry('location', location),
+            MapEntry('bedrooms', bedrooms.toString()),
+            MapEntry('bathrooms', bathrooms.toString()),
+            MapEntry('country', country),
+          ]);
+          if (amenities != null && amenities.isNotEmpty) {
+            formData.fields.add(MapEntry('amenities', amenities.toString()));
+          }
+          if (type != null) {
+            formData.fields.add(MapEntry('type', type));
+          }
+          if (category != null) {
+            formData.fields.add(MapEntry('category', category));
+          }
+          if (forWhat != null) {
+            formData.fields.add(MapEntry('forWhat', forWhat));
+          }
+          if (furnishing != null) {
+            formData.fields.add(MapEntry('furnishing', furnishing.toString()));
+          }
+
+          String fileName = 'image.jpg';
+          formData.files.add(MapEntry(
+            'image',
+            await MultipartFile.fromFile(
+              image.path,
+              filename: fileName,
+              contentType: MediaType('image', 'jpeg'),
+            ),
+          ));
+          if (realestateimages != null && realestateimages.isNotEmpty) {
+            for (int i = 0; i < realestateimages.length; i++) {
+              String fileName = 'image$i.jpg';
+              File file = File(realestateimages[i].path);
+              formData.files.add(MapEntry(
+                'realestateimages',
+                await MultipartFile.fromFile(
+                  file.path,
+                  filename: fileName,
+                  contentType: MediaType('image', 'jpeg'),
+                ),
+              ));
+            }
+          }
+          final user2 = local.getSignedInUser();
+
+          Response response = await dio.post(
+            'https://www.netzoonback.siidevelopment.com//real-estate/add-real-estate',
+            data: formData,
+            options:
+                Options(headers: {'Authorization': 'Bearer ${user2?.token}'}),
+          );
+          if (response.statusCode == 201) {
+            return Right(response.data);
+          } else {
+            return Left(ServerFailure());
+          }
         } else {
-          return Left(ServerFailure());
+          return Left(CredintialFailure());
         }
       } else {
         return Left(OfflineFailure());

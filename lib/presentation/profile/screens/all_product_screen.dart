@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 import 'package:netzoon/presentation/categories/users/screens/users_profile_screen.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
@@ -70,11 +72,13 @@ class _AllProductsScreenState extends State<AllProductsScreen>
               } else if (state is AddToSelectedProductsFailure) {
                 stopLoading();
 
-                final failure = state.message;
+                final message = state.message;
+                final failure = state.failure;
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      failure,
+                      message,
                       style: const TextStyle(
                         color: AppColor.white,
                       ),
@@ -82,6 +86,12 @@ class _AllProductsScreenState extends State<AllProductsScreen>
                     backgroundColor: AppColor.red,
                   ),
                 );
+                if (failure is UnAuthorizedFailure) {
+                  while (context.canPop()) {
+                    context.pop();
+                  }
+                  context.push('/home');
+                }
               } else if (state is AddToSelectedProductsSuccess) {
                 stopLoading();
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:netzoon/data/core/utils/network/network_info.dart';
 import 'package:netzoon/data/datasource/local/auth/auth_local_data_source.dart';
 import 'package:netzoon/data/datasource/remote/auth/auth_remote_datasource.dart';
@@ -272,6 +273,7 @@ class AuthRepositoryImpl implements AuthRepository {
         // SharedPreferences preferences = await SharedPreferences.getInstance();
         // await preferences.setBool('IsLoggedIn', true);
         local.signInUser(user);
+        print(user.refreshToken);
         return Right(user.toDomain());
       } else {
         return Left(OfflineFailure());
@@ -382,178 +384,180 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       if (await networkInfo.isConnected) {
         Dio dio = Dio();
-        FormData formData = FormData.fromMap({
-          'username': username,
-          'email': email,
-          'firstMobile': firstMobile,
-          'contactName': contactName,
-        });
-        if (secondeMobile != null) {
-          formData.fields.add(MapEntry('secondMobile', secondeMobile));
-        }
-        if (thirdMobile != null) {
-          formData.fields.add(MapEntry('thirdMobile', thirdMobile));
-        }
-        if (bio != null) {
-          formData.fields.add(MapEntry('bio', bio));
-        }
-        if (description != null) {
-          formData.fields.add(MapEntry('description', description));
-        }
-        if (website != null) {
-          formData.fields.add(MapEntry('website', website));
-        }
-        if (slogn != null) {
-          formData.fields.add(MapEntry('slogn', slogn));
-        }
-        if (link != null) {
-          formData.fields.add(MapEntry('link', link));
-        }
-        if (address != null) {
-          formData.fields.add(MapEntry('address', address));
-        }
-        if (userType != null) {
-          formData.fields.add(MapEntry('userType', userType));
-        }
-        if (city != null) {
-          formData.fields.add(MapEntry('city', city));
-        }
-        if (addressDetails != null) {
-          formData.fields.add(MapEntry('addressDetails', addressDetails));
-        }
-        if (floorNum != null) {
-          formData.fields.add(MapEntry('floorNum', floorNum.toString()));
-        }
-        if (locationType != null) {
-          formData.fields.add(MapEntry('locationType', locationType));
-        }
-
-        if (profilePhoto != null) {
-          String fileName = profilePhoto.path.split('/').last;
-          formData.files.add(
-            MapEntry(
-              'profilePhoto',
-              await MultipartFile.fromFile(
-                profilePhoto.path,
-                filename: fileName,
-                contentType: MediaType('image', 'jpeg'),
-              ),
-            ),
-          );
-        }
-        if (coverPhoto != null) {
-          String fileName = coverPhoto.path.split('/').last;
-          formData.files.add(
-            MapEntry(
-              'coverPhoto',
-              await MultipartFile.fromFile(
-                coverPhoto.path,
-                filename: fileName,
-                contentType: MediaType('image', 'jpeg'),
-              ),
-            ),
-          );
-        }
-        if (frontIdPhoto != null) {
-          String fileName = frontIdPhoto.path.split('/').last;
-          formData.files.add(
-            MapEntry(
-              'frontIdPhoto',
-              await MultipartFile.fromFile(
-                frontIdPhoto.path,
-                filename: fileName,
-                contentType: MediaType('image', 'jpeg'),
-              ),
-            ),
-          );
-        }
-        if (backIdPhoto != null) {
-          String fileName = backIdPhoto.path.split('/').last;
-          formData.files.add(
-            MapEntry(
-              'backIdPhoto',
-              await MultipartFile.fromFile(
-                backIdPhoto.path,
-                filename: fileName,
-                contentType: MediaType('image', 'jpeg'),
-              ),
-            ),
-          );
-        }
-        if (tradeLicensePhoto != null) {
-          String fileName = tradeLicensePhoto.path.split('/').last;
-          formData.files.add(
-            MapEntry(
-              'tradeLicensePhoto',
-              await MultipartFile.fromFile(
-                tradeLicensePhoto.path,
-                filename: fileName,
-                contentType: MediaType('image', 'jpeg'),
-              ),
-            ),
-          );
-        }
-        if (deliveryPermitPhot != null) {
-          String fileName = deliveryPermitPhot.path.split('/').last;
-          formData.files.add(
-            MapEntry(
-              'deliveryPermitPhot',
-              await MultipartFile.fromFile(
-                deliveryPermitPhot.path,
-                filename: fileName,
-                contentType: MediaType('image', 'jpeg'),
-              ),
-            ),
-          );
-        }
-
-        Response response = await dio.put(
-            'https://back.netzoon.com/user/net-editUser/$userId',
-            data: formData);
-
-        if (response.statusCode == 200) {
-          final user = local.getSignedInUser();
-          late UserModel updatedUser;
-          if (user != null) {
-            updatedUser = UserModel(
-                token: user.token,
-                message: user.message,
-                userInfo: UserInfoModel(
-                  username: username,
-                  email: email,
-                  password: user.userInfo.password,
-                  userType: user.userInfo.userType ?? userType,
-                  firstMobile: firstMobile,
-                  secondeMobile: secondeMobile ?? user.userInfo.secondeMobile,
-                  thirdMobile: thirdMobile ?? user.userInfo.thirdMobile,
-                  profilePhoto: profilePhoto != null
-                      ? profilePhoto.path
-                      : user.userInfo.profilePhoto,
-                  isFreeZoon: user.userInfo.isFreeZoon,
-                  deliverable: user.userInfo.deliverable,
-                  id: user.userInfo.id,
-                  address: user.userInfo.address ?? address,
-                  contactName: user.userInfo.contactName ?? contactName,
-                  addressDetails:
-                      addressDetails ?? user.userInfo.addressDetails,
-                  bio: bio ?? user.userInfo.bio,
-                  city: city ?? user.userInfo.city,
-                  country: user.userInfo.country,
-                  floorNum: floorNum ?? user.userInfo.floorNum,
-                  locationType: locationType ?? user.userInfo.locationType,
-                  link: link ?? user.userInfo.link,
-                  description: description ?? user.userInfo.description,
-                  slogn: slogn ?? user.userInfo.slogn,
-                  website: website ?? user.userInfo.website,
-                ));
+        final user = local.getSignedInUser();
+        if (user != null) {
+          if (JwtDecoder.isExpired(user.token)) {
+            try {
+              if (JwtDecoder.isExpired(user.refreshToken)) {
+                local.logout();
+                return Left(UnAuthorizedFailure());
+              }
+            } catch (e) {
+              return Left(UnAuthorizedFailure());
+            }
+            final refreshTokenResponse =
+                await authRemoteDataSource.refreshToken(user.refreshToken);
+            final newUser = user.copyWith(
+                refreshTokenResponse.refreshToken, user.refreshToken);
+            await local.signInUser(newUser);
+            dio.options.headers['Authorization'] = 'Bearer ${newUser.token}';
           }
-          print(response.data["result"]["_id"]);
-          local.signInUser(updatedUser);
-          // String res = response.data["result"]["_id"];
-          print(response.data);
-          return Right(response.data["result"]["_id"]);
+
+          FormData formData = FormData.fromMap({
+            'username': username,
+            'email': email,
+            'firstMobile': firstMobile,
+            'contactName': contactName,
+          });
+          if (secondeMobile != null) {
+            formData.fields.add(MapEntry('secondMobile', secondeMobile));
+          }
+          if (thirdMobile != null) {
+            formData.fields.add(MapEntry('thirdMobile', thirdMobile));
+          }
+          if (bio != null) {
+            formData.fields.add(MapEntry('bio', bio));
+          }
+          if (description != null) {
+            formData.fields.add(MapEntry('description', description));
+          }
+          if (website != null) {
+            formData.fields.add(MapEntry('website', website));
+          }
+          if (slogn != null) {
+            formData.fields.add(MapEntry('slogn', slogn));
+          }
+          if (link != null) {
+            formData.fields.add(MapEntry('link', link));
+          }
+          if (address != null) {
+            formData.fields.add(MapEntry('address', address));
+          }
+          if (userType != null) {
+            formData.fields.add(MapEntry('userType', userType));
+          }
+          if (city != null) {
+            formData.fields.add(MapEntry('city', city));
+          }
+          if (addressDetails != null) {
+            formData.fields.add(MapEntry('addressDetails', addressDetails));
+          }
+          if (floorNum != null) {
+            formData.fields.add(MapEntry('floorNum', floorNum.toString()));
+          }
+          if (locationType != null) {
+            formData.fields.add(MapEntry('locationType', locationType));
+          }
+
+          if (profilePhoto != null) {
+            String fileName = profilePhoto.path.split('/').last;
+            formData.files.add(
+              MapEntry(
+                'profilePhoto',
+                await MultipartFile.fromFile(
+                  profilePhoto.path,
+                  filename: fileName,
+                  contentType: MediaType('image', 'jpeg'),
+                ),
+              ),
+            );
+          }
+          if (coverPhoto != null) {
+            String fileName = coverPhoto.path.split('/').last;
+            formData.files.add(
+              MapEntry(
+                'coverPhoto',
+                await MultipartFile.fromFile(
+                  coverPhoto.path,
+                  filename: fileName,
+                  contentType: MediaType('image', 'jpeg'),
+                ),
+              ),
+            );
+          }
+          if (frontIdPhoto != null) {
+            String fileName = frontIdPhoto.path.split('/').last;
+            formData.files.add(
+              MapEntry(
+                'frontIdPhoto',
+                await MultipartFile.fromFile(
+                  frontIdPhoto.path,
+                  filename: fileName,
+                  contentType: MediaType('image', 'jpeg'),
+                ),
+              ),
+            );
+          }
+          if (backIdPhoto != null) {
+            String fileName = backIdPhoto.path.split('/').last;
+            formData.files.add(
+              MapEntry(
+                'backIdPhoto',
+                await MultipartFile.fromFile(
+                  backIdPhoto.path,
+                  filename: fileName,
+                  contentType: MediaType('image', 'jpeg'),
+                ),
+              ),
+            );
+          }
+          if (tradeLicensePhoto != null) {
+            String fileName = tradeLicensePhoto.path.split('/').last;
+            formData.files.add(
+              MapEntry(
+                'tradeLicensePhoto',
+                await MultipartFile.fromFile(
+                  tradeLicensePhoto.path,
+                  filename: fileName,
+                  contentType: MediaType('image', 'jpeg'),
+                ),
+              ),
+            );
+          }
+          if (deliveryPermitPhot != null) {
+            String fileName = deliveryPermitPhot.path.split('/').last;
+            formData.files.add(
+              MapEntry(
+                'deliveryPermitPhot',
+                await MultipartFile.fromFile(
+                  deliveryPermitPhot.path,
+                  filename: fileName,
+                  contentType: MediaType('image', 'jpeg'),
+                ),
+              ),
+            );
+          }
+          final user2 = local.getSignedInUser();
+          Response response = await dio.put(
+            'https://www.netzoonback.siidevelopment.com/user/net-editUser/$userId',
+            data: formData,
+            options:
+                Options(headers: {'Authorization': 'Bearer ${user2?.token}'}),
+          );
+
+          if (response.statusCode == 200) {
+            print(response.data['result']);
+            final user = local.getSignedInUser();
+            late UserModel updatedUser;
+            if (user != null) {
+              updatedUser = UserModel(
+                  token: user.token,
+                  refreshToken: user.refreshToken,
+                  message: user.message,
+                  userInfo: UserInfoModel.fromJson(response.data['result']));
+            }
+            print(response.data["result"]["_id"]);
+            local.signInUser(updatedUser);
+            // String res = response.data["result"]["_id"];
+            print(user?.userInfo.username);
+            return Right(response.data["result"]["_id"]);
+          } else if (response.statusCode == 401) {
+            return Left(UnAuthorizedFailure());
+          } else {
+            return Left(ServerFailure());
+          }
         } else {
-          return Left(ServerFailure());
+          return Left(CredintialFailure());
         }
       } else {
         return Left(OfflineFailure());
@@ -586,9 +590,31 @@ class AuthRepositoryImpl implements AuthRepository {
       required String newPassword}) async {
     try {
       if (await networkInfo.isConnected) {
-        final result = await authRemoteDataSource.changePassword(
-            userId, currentPassword, newPassword);
-        return Right(result);
+        final user = local.getSignedInUser();
+        if (user != null) {
+          if (JwtDecoder.isExpired(user.token)) {
+            try {
+              if (JwtDecoder.isExpired(user.refreshToken)) {
+                local.logout();
+                return Left(UnAuthorizedFailure());
+              }
+            } catch (e) {
+              return Left(UnAuthorizedFailure());
+            }
+            final refreshTokenResponse =
+                await authRemoteDataSource.refreshToken(user.refreshToken);
+            final newUser = user.copyWith(
+                refreshTokenResponse.refreshToken, user.refreshToken);
+            await local.signInUser(newUser);
+            final dio = sl<Dio>();
+            dio.options.headers['Authorization'] = 'Bearer ${newUser.token}';
+          }
+          final result = await authRemoteDataSource.changePassword(
+              userId, currentPassword, newPassword);
+          return Right(result);
+        } else {
+          return Left(CredintialFailure());
+        }
       } else {
         return Left(OfflineFailure());
       }
@@ -604,10 +630,32 @@ class AuthRepositoryImpl implements AuthRepository {
       required String password}) async {
     try {
       if (await networkInfo.isConnected) {
-        final user =
-            await authRemoteDataSource.addAccount(email, username, password);
+        final user = local.getSignedInUser();
+        if (user != null) {
+          if (JwtDecoder.isExpired(user.token)) {
+            try {
+              if (JwtDecoder.isExpired(user.refreshToken)) {
+                local.logout();
+                return Left(UnAuthorizedFailure());
+              }
+            } catch (e) {
+              return Left(UnAuthorizedFailure());
+            }
+            final refreshTokenResponse =
+                await authRemoteDataSource.refreshToken(user.refreshToken);
+            final newUser = user.copyWith(
+                refreshTokenResponse.refreshToken, user.refreshToken);
+            await local.signInUser(newUser);
+            final dio = sl<Dio>();
+            dio.options.headers['Authorization'] = 'Bearer ${newUser.token}';
+          }
+          final result =
+              await authRemoteDataSource.addAccount(email, username, password);
 
-        return Right(user.toDomain());
+          return Right(result.toDomain());
+        } else {
+          return Left(CredintialFailure());
+        }
       } else {
         return Left(OfflineFailure());
       }
@@ -747,8 +795,30 @@ class AuthRepositoryImpl implements AuthRepository {
       {required String userId}) async {
     try {
       if (await networkInfo.isConnected) {
-        final result = await authRemoteDataSource.deleteAccount(userId);
-        return Right(result);
+        final user = local.getSignedInUser();
+        if (user != null) {
+          if (JwtDecoder.isExpired(user.token)) {
+            try {
+              if (JwtDecoder.isExpired(user.refreshToken)) {
+                local.logout();
+                return Left(UnAuthorizedFailure());
+              }
+            } catch (e) {
+              return Left(UnAuthorizedFailure());
+            }
+            final refreshTokenResponse =
+                await authRemoteDataSource.refreshToken(user.refreshToken);
+            final newUser = user.copyWith(
+                refreshTokenResponse.refreshToken, user.refreshToken);
+            await local.signInUser(newUser);
+            final dio = sl<Dio>();
+            dio.options.headers['Authorization'] = 'Bearer ${newUser.token}';
+          }
+          final result = await authRemoteDataSource.deleteAccount(userId);
+          return Right(result);
+        } else {
+          return Left(CredintialFailure());
+        }
       } else {
         return Left(OfflineFailure());
       }
@@ -1015,8 +1085,9 @@ class AuthRepositoryImpl implements AuthRepository {
           ));
         }
 
-        Response response = await dio
-            .post('https://back.netzoon.com/user/oauth', data: formData);
+        Response response = await dio.post(
+            'https://www.netzoonback.siidevelopment.com/user/oauth',
+            data: formData);
 
         if (response.statusCode == 201) {
           final UserModel user = UserModel.fromJson(response.data!);

@@ -19,8 +19,11 @@ class AddAccountSuccess extends AddAccountState {
 
 class AddAccountFailure extends AddAccountState {
   final String message;
-
-  const AddAccountFailure({required this.message});
+  final Failure failure;
+  const AddAccountFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class GetUserAccountsInProgress extends AddAccountState {}

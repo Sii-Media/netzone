@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/domain/news/entities/news_info.dart';
 import 'package:netzoon/domain/news/usecases/add_like_use_case.dart';
@@ -114,7 +115,8 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
 
       emit(
         success.fold(
-          (failure) => EditNewsFailure(message: mapFailureToString(failure)),
+          (failure) => EditNewsFailure(
+              message: mapFailureToString(failure), failure: failure),
           (news) => EditNewsSuccess(news: news),
         ),
       );
@@ -124,7 +126,8 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       final result = await deleteNewsUseCase(event.id);
       emit(
         result.fold(
-          (failure) => DeleteNewsFailure(message: mapFailureToString(failure)),
+          (failure) => DeleteNewsFailure(
+              message: mapFailureToString(failure), failure: failure),
           (message) {
             final updatedNews = currentNewsList
                 .where((newsItem) => newsItem.id != event.id)

@@ -13,7 +13,7 @@ class _VehicleRemoteDataSourceImpl implements VehicleRemoteDataSourceImpl {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://back.netzoon.com/';
+    baseUrl ??= 'https://www.netzoonback.siidevelopment.com/';
   }
 
   final Dio _dio;

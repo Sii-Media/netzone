@@ -156,7 +156,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                                   otherUserId: 'Netzoon',
                                   title: 'Netzoon',
                                   image:
-                                      'https://back.netzoon.com/images/1701985456596.jpg',
+                                      'https://www.netzoonback.siidevelopment.com/images/1701985456596.jpg',
                                 );
                               }),
                             );

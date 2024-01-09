@@ -2,6 +2,9 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:netzoon/data/datasource/local/auth/auth_local_data_source.dart';
+import 'package:netzoon/data/datasource/remote/auth/auth_remote_datasource.dart';
 import 'package:netzoon/data/models/order/my_order_model.dart';
 import 'package:netzoon/domain/order/repositories/order_repository.dart';
 
@@ -14,9 +17,14 @@ import '../../datasource/remote/order/order_remote_data_source.dart';
 class OrderRepositoryImpl implements OrderRepository {
   final NetworkInfo networkInfo;
   final OrderRemoteDataSource orderRemoteDataSource;
-
-  OrderRepositoryImpl(
-      {required this.networkInfo, required this.orderRemoteDataSource});
+  final AuthRemoteDataSource authRemoteDataSource;
+  final AuthLocalDatasource local;
+  OrderRepositoryImpl({
+    required this.networkInfo,
+    required this.orderRemoteDataSource,
+    required this.authRemoteDataSource,
+    required this.local,
+  });
   @override
   Future<Either<Failure, List<MyOrder>>> getUserOrders(
       {required String userId}) async {
@@ -48,38 +56,60 @@ class OrderRepositoryImpl implements OrderRepository {
   }) async {
     try {
       Dio dio = Dio();
-      if (await networkInfo.isConnected) {
-        final requestData = {
-          "clientId": clientId,
-          "products": products.map((product) {
-            return {
-              "product": product.product,
-              "amount": product.amount,
-              "qty": product.qty,
-            };
-          }).toList(),
-          "orderStatus": orderStatus,
-          "grandTotal": grandTotal,
-          'shippingAddress': shippingAddress,
-          'mobile': mobile,
-          'subTotal': subTotal,
-          'serviceFee': serviceFee,
-        };
-        final requestDataJson = jsonEncode(requestData);
-        final response = await dio.post(
-            'https://back.netzoon.com//order/save/$userId',
-            data: requestDataJson);
-        // Handle the response as needed
-        if (response.statusCode == 200) {
-          // Request was successful
-          print("Order saved successfully!");
 
-          print(response);
-          return Right(response.data);
+      if (await networkInfo.isConnected) {
+        final user = local.getSignedInUser();
+        if (user != null) {
+          if (JwtDecoder.isExpired(user.token)) {
+            try {
+              if (JwtDecoder.isExpired(user.refreshToken)) {
+                local.logout();
+                return Left(UnAuthorizedFailure());
+              }
+            } catch (e) {
+              return Left(UnAuthorizedFailure());
+            }
+            final refreshTokenResponse =
+                await authRemoteDataSource.refreshToken(user.refreshToken);
+            final newUser = user.copyWith(
+                refreshTokenResponse.refreshToken, user.refreshToken);
+            await local.signInUser(newUser);
+            dio.options.headers['Authorization'] = 'Bearer ${newUser.token}';
+          }
+          final requestData = {
+            "clientId": clientId,
+            "products": products.map((product) {
+              return {
+                "product": product.product,
+                "amount": product.amount,
+                "qty": product.qty,
+              };
+            }).toList(),
+            "orderStatus": orderStatus,
+            "grandTotal": grandTotal,
+            'shippingAddress': shippingAddress,
+            'mobile': mobile,
+            'subTotal': subTotal,
+            'serviceFee': serviceFee,
+          };
+          final requestDataJson = jsonEncode(requestData);
+          final response = await dio.post(
+              'https://www.netzoonback.siidevelopment.com//order/save/$userId',
+              data: requestDataJson);
+          // Handle the response as needed
+          if (response.statusCode == 200) {
+            // Request was successful
+            print("Order saved successfully!");
+
+            print(response);
+            return Right(response.data);
+          } else {
+            print("Request failed with status code: ${response.statusCode}");
+            return Left(response.data);
+            // Handle other status codes if necessary
+          }
         } else {
-          print("Request failed with status code: ${response.statusCode}");
-          return Left(response.data);
-          // Handle other status codes if necessary
+          return Left(CredintialFailure());
         }
       } else {
         return Left(OfflineFailure());

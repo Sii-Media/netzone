@@ -5,7 +5,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -79,11 +81,13 @@ class _EditProductScreenState extends State<EditProductScreen>
               } else if (state is EditProductFailure) {
                 stopLoading();
 
-                final failure = state.message;
+                final message = state.message;
+                final failure = state.failure;
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      failure,
+                      message,
                       style: const TextStyle(
                         color: AppColor.white,
                       ),
@@ -91,6 +95,12 @@ class _EditProductScreenState extends State<EditProductScreen>
                     backgroundColor: AppColor.red,
                   ),
                 );
+                if (failure is UnAuthorizedFailure) {
+                  while (context.canPop()) {
+                    context.pop();
+                  }
+                  context.push('/home');
+                }
               } else if (state is EditProductSuccess) {
                 stopLoading();
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -206,8 +216,10 @@ class _EditProductScreenState extends State<EditProductScreen>
                       label: Text(AppLocalizations.of(context)
                           .translate('description')),
                     ),
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 7,
+                    minLines: 1,
+                    textInputAction: TextInputAction.newline,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
                         return 'field_required_message';
@@ -269,7 +281,7 @@ class _EditProductScreenState extends State<EditProductScreen>
                       label:
                           Text(AppLocalizations.of(context).translate('color')),
                     ),
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
                     validator: (text) {
                       if (text == null || text.isEmpty) {

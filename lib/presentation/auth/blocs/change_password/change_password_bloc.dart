@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/auth/usecases/change_password_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 
 import '../../../../domain/auth/entities/user.dart';
@@ -33,8 +34,8 @@ class ChangePasswordBloc
       );
       emit(
         failureOrSuccess.fold(
-          (failure) =>
-              ChangePasswordFailure(message: mapFailureToString(failure)),
+          (failure) => ChangePasswordFailure(
+              message: mapFailureToString(failure), failure: failure),
           (result) => ChangePasswordSuccess(result: result),
         ),
       );

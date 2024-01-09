@@ -349,7 +349,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
           ));
         }
         Response response = await dio.post(
-            'https://back.netzoon.com//categories/vehicle/create-vehicle',
+            'https://www.netzoonback.siidevelopment.com//categories/vehicle/create-vehicle',
             data: formData);
         if (response.statusCode == 201) {
           return Right(response.data);

@@ -8,6 +8,7 @@ import 'package:netzoon/domain/auth/usecases/get_user_followings_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_user_visitors_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/rate_user_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/toggle_follow_use_case.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/departments/usecases/add_to_selected_products_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/delete_from_selected_products_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/get_selected_products_use_case.dart';
@@ -123,7 +124,9 @@ class GetUserBloc extends Bloc<GetUserEvent, GetUserState> {
       emit(
         products.fold(
           (failure) => AddToSelectedProductsFailure(
-              message: mapFailureToString(failure)),
+            message: mapFailureToString(failure),
+            failure: failure,
+          ),
           (message) => AddToSelectedProductsSuccess(message: message),
         ),
       );
@@ -142,7 +145,9 @@ class GetUserBloc extends Bloc<GetUserEvent, GetUserState> {
       emit(
         products.fold(
           (failure) => DeleteFromSelectedProductsFailure(
-              message: mapFailureToString(failure)),
+            message: mapFailureToString(failure),
+            failure: failure,
+          ),
           (message) => DeleteFromSelectedProductsSuccess(message: message),
         ),
       );

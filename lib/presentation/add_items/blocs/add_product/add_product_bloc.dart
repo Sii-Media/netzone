@@ -121,7 +121,7 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
 //     });
 
 //     Response response = await dio.post(
-//         'https://back.netzoon.com//departments/addProduct',
+//         'https://www.netzoonback.siidevelopment.com//departments/addProduct',
 //         data: formData);
 //     // Handle the response as needed
 
@@ -235,7 +235,7 @@ Future<Response<dynamic>> _uploadFile({
     }
 
     Response response = await dio.post(
-      'https://back.netzoon.com//departments/addProduct',
+      'https://www.netzoonback.siidevelopment.com//departments/addProduct',
       data: formData,
     );
 

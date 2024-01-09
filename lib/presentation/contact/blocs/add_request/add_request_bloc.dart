@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/requests/entities/request.dart';
 import 'package:netzoon/domain/requests/usecases/add_request_use_case.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
@@ -18,8 +19,8 @@ class AddRequestBloc extends Bloc<AddRequestEvent, AddRequestState> {
             AddRequestParams(address: event.address, text: event.text));
         emit(
           failureOrRequest.fold(
-            (failure) =>
-                AddRequestFailure(message: mapFailureToString(failure)),
+            (failure) => AddRequestFailure(
+                message: mapFailureToString(failure), failure: failure),
             (requests) => AddRequestSuccess(requests: requests.requests),
           ),
         );

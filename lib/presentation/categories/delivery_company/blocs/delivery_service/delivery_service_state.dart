@@ -13,8 +13,11 @@ class DeliveryServiceInProgress extends DeliveryServiceState {}
 
 class DeliveryServiceFailure extends DeliveryServiceState {
   final String message;
-
-  const DeliveryServiceFailure({required this.message});
+  final Failure failure;
+  const DeliveryServiceFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class GetDeliveryCompanyServicesSuccess extends DeliveryServiceState {

@@ -13,8 +13,11 @@ class SaveOrderInProgress extends OrderState {}
 
 class SaveOrderFailure extends OrderState {
   final String message;
-
-  const SaveOrderFailure({required this.message});
+  final Failure failure;
+  const SaveOrderFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class SaveOrderSuccess extends OrderState {

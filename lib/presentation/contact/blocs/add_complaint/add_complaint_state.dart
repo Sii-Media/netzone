@@ -19,6 +19,9 @@ class AddComplaintSuccess extends AddComplaintState {
 
 class AddComplaintFailure extends AddComplaintState {
   final String message;
-
-  const AddComplaintFailure({required this.message});
+  final Failure failure;
+  const AddComplaintFailure({
+    required this.message,
+    required this.failure,
+  });
 }

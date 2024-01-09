@@ -39,8 +39,11 @@ class AddRealEstateInProgress extends RealEstateState {}
 
 class AddRealEstateFailure extends RealEstateState {
   final String message;
-
-  const AddRealEstateFailure({required this.message});
+  final Failure failure;
+  const AddRealEstateFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class AddRealEstateSuccess extends RealEstateState {

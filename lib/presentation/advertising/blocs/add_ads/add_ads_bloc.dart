@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/advertisements/usercases/add_ads_use_case.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -53,7 +54,10 @@ class AddAdsBloc extends Bloc<AddAdsEvent, AddAdsState> {
 
         emit(
           failureOrSuccess.fold(
-            (failure) => AddAdsFailure(message: mapFailureToString(failure)),
+            (failure) => AddAdsFailure(
+              message: mapFailureToString(failure),
+              failure: failure,
+            ),
             (msg) => AddAdsSuccess(msg: msg),
           ),
         );

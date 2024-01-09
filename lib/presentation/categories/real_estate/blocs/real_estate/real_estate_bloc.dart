@@ -8,6 +8,7 @@ import 'package:netzoon/domain/categories/usecases/real_estate/get_all_real_esta
 import 'package:netzoon/domain/categories/usecases/real_estate/get_company_real_estates_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/real_estate/get_real_estate_by_id_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/real_estate/get_real_estate_companies_use_case.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
@@ -120,8 +121,8 @@ class RealEstateBloc extends Bloc<RealEstateEvent, RealEstateState> {
 
       emit(
         realEstate.fold(
-          (failure) =>
-              AddRealEstateFailure(message: mapFailureToString(failure)),
+          (failure) => AddRealEstateFailure(
+              message: mapFailureToString(failure), failure: failure),
           (realEstate) => AddRealEstateSuccess(realEstate: realEstate),
         ),
       );

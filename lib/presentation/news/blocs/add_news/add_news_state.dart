@@ -19,6 +19,9 @@ class AddNewsSuccess extends AddNewsState {
 
 class AddNewsFailure extends AddNewsState {
   final String message;
-
-  const AddNewsFailure({required this.message});
+  final Failure failure;
+  const AddNewsFailure({
+    required this.message,
+    required this.failure,
+  });
 }

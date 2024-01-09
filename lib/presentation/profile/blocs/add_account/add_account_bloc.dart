@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/auth/usecases/change_account_use_case.dart';
 import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 
 import '../../../../domain/auth/entities/user.dart';
@@ -42,7 +43,10 @@ class AddAccountBloc extends Bloc<AddAccountEvent, AddAccountState> {
 
       emit(
         userOrFailure.fold(
-          (failure) => AddAccountFailure(message: mapFailureToString(failure)),
+          (failure) => AddAccountFailure(
+            message: mapFailureToString(failure),
+            failure: failure,
+          ),
           (userInfo) => AddAccountSuccess(userInfo: userInfo),
         ),
       );
