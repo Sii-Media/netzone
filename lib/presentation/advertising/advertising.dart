@@ -462,6 +462,7 @@ class Advertising extends StatelessWidget {
                     MaterialPageRoute(builder: (context) {
                       return advertisment.advertisingType == 'car' ||
                               advertisment.advertisingType == 'planes' ||
+                              advertisment.advertisingType == 'sea_companies' ||
                               advertisment.advertisingType == 'real_estate'
                           ? AdvertismentDetalsScreen(adsId: advertisment.id)
                           : AnotherAdsDetails(

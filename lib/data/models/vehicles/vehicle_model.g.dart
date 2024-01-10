@@ -12,7 +12,7 @@ VehicleModel _$VehicleModelFromJson(Map<String, dynamic> json) => VehicleModel(
       imageUrl: json['imageUrl'] as String,
       description: json['description'] as String,
       price: json['price'] as int,
-      kilometers: json['kilometers'] as int,
+      kilometers: json['kilometers'] as int?,
       year: json['year'] as String,
       location: json['location'] as String,
       type: json['type'] as String,
@@ -43,6 +43,13 @@ VehicleModel _$VehicleModelFromJson(Map<String, dynamic> json) => VehicleModel(
       guarantee: json['guarantee'] as bool?,
       forWhat: json['forWhat'] as String?,
       regionalSpecs: json['regionalSpecs'] as String?,
+      aircraftType: json['aircraftType'] as String?,
+      manufacturer: json['manufacturer'] as String?,
+      vehicleModel: json['vehicleModel'] as String?,
+      maxSpeed: json['maxSpeed'] as String?,
+      maxDistance: json['maxDistance'] as String?,
+      shipType: json['shipType'] as String?,
+      shipLength: json['shipLength'] as String?,
     );
 
 Map<String, dynamic> _$VehicleModelToJson(VehicleModel instance) =>
@@ -79,4 +86,11 @@ Map<String, dynamic> _$VehicleModelToJson(VehicleModel instance) =>
       'guarantee': instance.guarantee,
       'forWhat': instance.forWhat,
       'regionalSpecs': instance.regionalSpecs,
+      'aircraftType': instance.aircraftType,
+      'manufacturer': instance.manufacturer,
+      'vehicleModel': instance.vehicleModel,
+      'maxSpeed': instance.maxSpeed,
+      'maxDistance': instance.maxDistance,
+      'shipType': instance.shipType,
+      'shipLength': instance.shipLength,
     };

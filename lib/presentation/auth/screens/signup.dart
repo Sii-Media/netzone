@@ -2347,6 +2347,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
         return 'car';
       case 'الشركات البحرية':
         return 'sea_companies';
+      case 'الطائرات':
+        return 'planes';
       case 'منطقة حرة':
         return 'freezone';
       case 'المصانع':

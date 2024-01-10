@@ -135,7 +135,9 @@ class _FollowingsListScreenState extends State<FollowingsListScreen> {
                                   } else if (state.follows[index].userType ==
                                           'car' ||
                                       state.follows[index].userType ==
-                                          'planes') {
+                                          'planes' ||
+                                      state.follows[index].userType ==
+                                          'sea_companies') {
                                     return VehicleCompaniesProfileScreen(
                                       id: state.follows[index].id,
                                       userType:

@@ -94,7 +94,9 @@ class _VisitorsScreenState extends State<VisitorsScreen> {
                                 } else if (state.visitors[index].userType ==
                                         'car' ||
                                     state.visitors[index].userType ==
-                                        'planes') {
+                                        'planes' ||
+                                    state.visitors[index].userType ==
+                                        'sea_companies') {
                                   return VehicleCompaniesProfileScreen(
                                     id: state.visitors[index].id,
                                     userType:

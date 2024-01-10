@@ -30,6 +30,7 @@ class SliderImages extends StatelessWidget {
               MaterialPageRoute(builder: (context) {
                 return ads.advertisingType == 'car' ||
                         ads.advertisingType == 'planes' ||
+                        ads.advertisingType == 'sea_companies' ||
                         ads.advertisingType == 'real_estate'
                     ? AdvertismentDetalsScreen(adsId: ads.id)
                     : AnotherAdsDetails(

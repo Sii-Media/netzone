@@ -63,10 +63,20 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
   late TextEditingController guaranteeController = TextEditingController();
   late TextEditingController forWhatController = TextEditingController();
   late TextEditingController dateController = TextEditingController();
+  late TextEditingController manufacturerController = TextEditingController();
+  late TextEditingController modelController = TextEditingController();
+  late TextEditingController maxSpeedController = TextEditingController();
+  late TextEditingController maxDistanceController = TextEditingController();
+  late TextEditingController shipLengthController = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isGuarantee = false;
   String? selectedCarType;
   String? selectedCategory;
+  String? selectedPlaneType;
+  String? selectedShipType;
+
+  String? selectedForWhat;
   File? _image;
   Future getImage(ImageSource imageSource) async {
     final image = await ImagePicker().pickImage(source: imageSource);
@@ -79,6 +89,23 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
     });
   }
 
+  final airCraftTypes = [
+    'commercial',
+    'private',
+  ];
+  final shipTypes = [
+    'cargo_ship',
+    'passenger_ship',
+    'fishing_ship',
+    'tugboat_ship',
+    'yacht',
+    'sailboat',
+    'cruise_ship'
+  ];
+  final forWhatType = [
+    'buy',
+    'rent',
+  ];
   File? _video;
   String videoName = '';
   String? _selectedDate;
@@ -268,7 +295,9 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                         : addVehicleFormFeild(
                             context: context,
                             controller: nameController,
-                            title: 'airplane_name',
+                            title: widget.category == 'planes'
+                                ? 'airplane_name'
+                                : 'ship_name',
                             isNumber: false,
                             validator: (val) {
                               if (val!.isEmpty) {
@@ -281,10 +310,137 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                     SizedBox(
                       height: 10.h,
                     ),
+                    widget.category == 'planes'
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)
+                                    .translate('aircraft_type'),
+                                style: TextStyle(
+                                  color: AppColor.backgroundColor,
+                                  fontSize: 15.sp,
+                                ),
+                              ),
+                              Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  // margin: const EdgeInsets.symmetric(
+                                  //         horizontal: 2, vertical: 10)
+                                  //     .r,
+                                  // Add some padding and a background color
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  decoration: BoxDecoration(
+                                      color: Colors.green.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: AppColor.black,
+                                      )),
+                                  // Create the dropdown button
+                                  child: DropdownButton<String>(
+                                    // Set the selected value
+                                    value: selectedPlaneType,
+                                    // // Handle the value change
+                                    menuMaxHeight: 300.h,
+
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        selectedPlaneType = newValue!;
+                                      });
+                                    },
+                                    // onChanged: (String? newValue) => setState(
+                                    //     () => selectedValue = newValue ?? ''),
+                                    // Map each option to a widget
+                                    items: airCraftTypes
+                                        .map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        // Use a colored box to show the option
+                                        child: Text(
+                                          AppLocalizations.of(context)
+                                              .translate(value),
+                                          style: const TextStyle(
+                                              color: Colors.black),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  )),
+                            ],
+                          )
+                        : const SizedBox(),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    widget.category == 'sea_companies'
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)
+                                    .translate('ship_type'),
+                                style: TextStyle(
+                                  color: AppColor.backgroundColor,
+                                  fontSize: 15.sp,
+                                ),
+                              ),
+                              Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  // margin: const EdgeInsets.symmetric(
+                                  //         horizontal: 2, vertical: 10)
+                                  //     .r,
+                                  // Add some padding and a background color
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  decoration: BoxDecoration(
+                                      color: Colors.green.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: AppColor.black,
+                                      )),
+                                  // Create the dropdown button
+                                  child: DropdownButton<String>(
+                                    // Set the selected value
+                                    value: selectedShipType,
+                                    // // Handle the value change
+                                    menuMaxHeight: 300.h,
+
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        selectedShipType = newValue!;
+                                      });
+                                    },
+                                    // onChanged: (String? newValue) => setState(
+                                    //     () => selectedValue = newValue ?? ''),
+                                    // Map each option to a widget
+                                    items: shipTypes
+                                        .map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        // Use a colored box to show the option
+                                        child: Text(
+                                          AppLocalizations.of(context)
+                                              .translate(value),
+                                          style: const TextStyle(
+                                              color: Colors.black),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  )),
+                            ],
+                          )
+                        : const SizedBox(),
+                    SizedBox(
+                      height: 10.h,
+                    ),
                     addVehicleFormFeild(
                       context: context,
                       controller: descController,
                       title: 'desc',
+                      maxLines: 4,
                       isNumber: false,
                       validator: (val) {
                         if (val!.isEmpty) {
@@ -329,19 +485,21 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                     SizedBox(
                       height: 10.h,
                     ),
-                    addVehicleFormFeild(
-                      context: context,
-                      controller: killometersController,
-                      title: 'kilometers',
-                      isNumber: false,
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return 'هذا الحقل مطلوب';
-                        }
+                    widget.category == 'cars'
+                        ? addVehicleFormFeild(
+                            context: context,
+                            controller: killometersController,
+                            title: 'kilometers',
+                            isNumber: false,
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return 'هذا الحقل مطلوب';
+                              }
 
-                        return null;
-                      },
-                    ),
+                              return null;
+                            },
+                          )
+                        : const SizedBox(),
                     SizedBox(
                       height: 10.h,
                     ),
@@ -464,6 +622,96 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                     SizedBox(
                       height: 10.h,
                     ),
+                    widget.category == 'planes' ||
+                            widget.category == 'sea_companies'
+                        ? addVehicleFormFeild(
+                            context: context,
+                            controller: modelController,
+                            title: 'model',
+                            isNumber: false,
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return 'هذا الحقل مطلوب';
+                              }
+
+                              return null;
+                            },
+                          )
+                        : const SizedBox(),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    widget.category == 'planes' ||
+                            widget.category == 'sea_companies'
+                        ? addVehicleFormFeild(
+                            context: context,
+                            controller: manufacturerController,
+                            title: 'manufacturer',
+                            isNumber: false,
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return 'هذا الحقل مطلوب';
+                              }
+
+                              return null;
+                            },
+                          )
+                        : const SizedBox(),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    addVehicleFormFeild(
+                      context: context,
+                      controller: maxSpeedController,
+                      title: 'max_speed',
+                      isNumber: false,
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return 'هذا الحقل مطلوب';
+                        }
+
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    widget.category == 'planes'
+                        ? addVehicleFormFeild(
+                            context: context,
+                            controller: maxDistanceController,
+                            title: 'max_distance',
+                            isNumber: false,
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return 'هذا الحقل مطلوب';
+                              }
+
+                              return null;
+                            },
+                          )
+                        : const SizedBox(),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    widget.category == 'sea_companies'
+                        ? addVehicleFormFeild(
+                            context: context,
+                            controller: shipLengthController,
+                            title: 'ship_length',
+                            isNumber: false,
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return 'هذا الحقل مطلوب';
+                              }
+
+                              return null;
+                            },
+                          )
+                        : const SizedBox(),
+                    SizedBox(
+                      height: 10.h,
+                    ),
                     addVehicleFormFeild(
                       context: context,
                       controller: exteriorColorController,
@@ -488,51 +736,59 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                     SizedBox(
                       height: 10.h,
                     ),
-                    addVehicleFormFeild(
-                      context: context,
-                      controller: doorsController,
-                      title: 'doors',
-                      isNumber: true,
-                      validator: (val) {
-                        return null;
-                      },
-                    ),
+                    widget.category == 'cars'
+                        ? addVehicleFormFeild(
+                            context: context,
+                            controller: doorsController,
+                            title: 'doors',
+                            isNumber: true,
+                            validator: (val) {
+                              return null;
+                            },
+                          )
+                        : const SizedBox(),
                     SizedBox(
                       height: 10.h,
                     ),
-                    addVehicleFormFeild(
-                      context: context,
-                      controller: bodyConditionController,
-                      title: 'body_condition',
-                      isNumber: false,
-                      validator: (val) {
-                        return null;
-                      },
-                    ),
+                    widget.category == 'cars'
+                        ? addVehicleFormFeild(
+                            context: context,
+                            controller: bodyConditionController,
+                            title: 'body_condition',
+                            isNumber: false,
+                            validator: (val) {
+                              return null;
+                            },
+                          )
+                        : const SizedBox(),
                     SizedBox(
                       height: 10.h,
                     ),
-                    addVehicleFormFeild(
-                      context: context,
-                      controller: bodyTypeController,
-                      title: 'body_type',
-                      isNumber: false,
-                      validator: (val) {
-                        return null;
-                      },
-                    ),
+                    widget.category == 'cars'
+                        ? addVehicleFormFeild(
+                            context: context,
+                            controller: bodyTypeController,
+                            title: 'body_type',
+                            isNumber: false,
+                            validator: (val) {
+                              return null;
+                            },
+                          )
+                        : const SizedBox(),
                     SizedBox(
                       height: 10.h,
                     ),
-                    addVehicleFormFeild(
-                      context: context,
-                      controller: mechanicalConditionController,
-                      title: 'mechanical_condition',
-                      isNumber: false,
-                      validator: (val) {
-                        return null;
-                      },
-                    ),
+                    widget.category == 'cars'
+                        ? addVehicleFormFeild(
+                            context: context,
+                            controller: mechanicalConditionController,
+                            title: 'mechanical_condition',
+                            isNumber: false,
+                            validator: (val) {
+                              return null;
+                            },
+                          )
+                        : const SizedBox(),
                     SizedBox(
                       height: 10.h,
                     ),
@@ -548,27 +804,31 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                     SizedBox(
                       height: 10.h,
                     ),
-                    addVehicleFormFeild(
-                      context: context,
-                      controller: numofCylindersController,
-                      title: 'num_of_cylinders',
-                      isNumber: true,
-                      validator: (val) {
-                        return null;
-                      },
-                    ),
+                    widget.category == 'cars'
+                        ? addVehicleFormFeild(
+                            context: context,
+                            controller: numofCylindersController,
+                            title: 'num_of_cylinders',
+                            isNumber: true,
+                            validator: (val) {
+                              return null;
+                            },
+                          )
+                        : const SizedBox(),
                     SizedBox(
                       height: 10.h,
                     ),
-                    addVehicleFormFeild(
-                      context: context,
-                      controller: transmissionTypeController,
-                      title: 'transmission_type',
-                      isNumber: false,
-                      validator: (val) {
-                        return null;
-                      },
-                    ),
+                    widget.category == 'cars'
+                        ? addVehicleFormFeild(
+                            context: context,
+                            controller: transmissionTypeController,
+                            title: 'transmission_type',
+                            isNumber: false,
+                            validator: (val) {
+                              return null;
+                            },
+                          )
+                        : const SizedBox(),
                     SizedBox(
                       height: 10.h,
                     ),
@@ -596,97 +856,105 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                     SizedBox(
                       height: 10.h,
                     ),
-                    addVehicleFormFeild(
-                      context: context,
-                      controller: extrasController,
-                      title: 'extras',
-                      isNumber: false,
-                      validator: (val) {
-                        return null;
-                      },
-                    ),
+                    widget.category == 'cars'
+                        ? addVehicleFormFeild(
+                            context: context,
+                            controller: extrasController,
+                            title: 'extras',
+                            isNumber: false,
+                            validator: (val) {
+                              return null;
+                            },
+                          )
+                        : const SizedBox(),
                     SizedBox(
                       height: 10.h,
                     ),
-                    addVehicleFormFeild(
-                      context: context,
-                      controller: technicalFeaturesController,
-                      title: 'technicalFeatures',
-                      isNumber: false,
-                      validator: (val) {
-                        return null;
-                      },
-                    ),
+                    widget.category == 'cars'
+                        ? addVehicleFormFeild(
+                            context: context,
+                            controller: technicalFeaturesController,
+                            title: 'technicalFeatures',
+                            isNumber: false,
+                            validator: (val) {
+                              return null;
+                            },
+                          )
+                        : const SizedBox(),
                     SizedBox(
                       height: 10.h,
                     ),
-                    addVehicleFormFeild(
-                      context: context,
-                      controller: steeringSideController,
-                      title: 'steering_side',
-                      isNumber: false,
-                      validator: (val) {
-                        return null;
-                      },
-                    ),
+                    widget.category == 'cars'
+                        ? addVehicleFormFeild(
+                            context: context,
+                            controller: steeringSideController,
+                            title: 'steering_side',
+                            isNumber: false,
+                            validator: (val) {
+                              return null;
+                            },
+                          )
+                        : const SizedBox(),
                     SizedBox(
                       height: 7.h,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${AppLocalizations.of(context).translate('regional_specs')} :',
-                          style: TextStyle(
-                            color: AppColor.backgroundColor,
-                            fontSize: 15.sp,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              children: [
-                                Radio(
-                                  value: 'gcc',
-                                  groupValue: _selectedRegion,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _selectedRegion = value ?? '';
-                                    });
-                                  },
-                                  activeColor: AppColor.backgroundColor,
+                    widget.category == 'cars'
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${AppLocalizations.of(context).translate('regional_specs')} :',
+                                style: TextStyle(
+                                  color: AppColor.backgroundColor,
+                                  fontSize: 15.sp,
                                 ),
-                                Text(AppLocalizations.of(context)
-                                    .translate('gcc'))
-                              ],
-                            ),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                            Row(
-                              children: [
-                                Radio(
-                                  value: 'incoming',
-                                  groupValue: _selectedRegion,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _selectedRegion = value ?? "";
-                                    });
-                                  },
-                                  activeColor: AppColor.backgroundColor,
-                                ),
-                                Text(AppLocalizations.of(context)
-                                    .translate('incoming')),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Radio(
+                                        value: 'gcc',
+                                        groupValue: _selectedRegion,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _selectedRegion = value ?? '';
+                                          });
+                                        },
+                                        activeColor: AppColor.backgroundColor,
+                                      ),
+                                      Text(AppLocalizations.of(context)
+                                          .translate('gcc'))
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width: 20.w,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Radio(
+                                        value: 'incoming',
+                                        groupValue: _selectedRegion,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _selectedRegion = value ?? "";
+                                          });
+                                        },
+                                        activeColor: AppColor.backgroundColor,
+                                      ),
+                                      Text(AppLocalizations.of(context)
+                                          .translate('incoming')),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                        : const SizedBox(),
                     SizedBox(
                       height: 7.h,
                     ),
@@ -747,14 +1015,69 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                     SizedBox(
                       height: 10.h,
                     ),
-                    addVehicleFormFeild(
-                      context: context,
-                      controller: forWhatController,
-                      title: 'for_what',
-                      isNumber: false,
-                      validator: (val) {
-                        return null;
-                      },
+                    // addVehicleFormFeild(
+                    //   context: context,
+                    //   controller: forWhatController,
+                    //   title: 'for_what',
+                    //   isNumber: false,
+                    //   validator: (val) {
+                    //     return null;
+                    //   },
+                    // ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppLocalizations.of(context).translate('for_what'),
+                          style: TextStyle(
+                            color: AppColor.backgroundColor,
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                        Container(
+                            width: MediaQuery.of(context).size.width,
+                            // margin: const EdgeInsets.symmetric(
+                            //         horizontal: 2, vertical: 10)
+                            //     .r,
+                            // Add some padding and a background color
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                                color: Colors.green.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: AppColor.black,
+                                )),
+                            // Create the dropdown button
+                            child: DropdownButton<String>(
+                              // Set the selected value
+                              value: selectedForWhat,
+                              // // Handle the value change
+                              menuMaxHeight: 300.h,
+
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  selectedForWhat = newValue!;
+                                });
+                              },
+                              // onChanged: (String? newValue) => setState(
+                              //     () => selectedValue = newValue ?? ''),
+                              // Map each option to a widget
+                              items: forWhatType.map<DropdownMenuItem<String>>(
+                                  (String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  // Use a colored box to show the option
+                                  child: Text(
+                                    AppLocalizations.of(context)
+                                        .translate(value),
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                );
+                              }).toList(),
+                            )),
+                      ],
                     ),
                     SizedBox(
                       height: 10.h,
@@ -978,7 +1301,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                                   : nameController.text,
                               description: descController.text,
                               price: int.parse(priceController.text),
-                              kilometers: int.parse(killometersController.text),
+                              kilometers:
+                                  int.tryParse(killometersController.text),
                               year: DateTime.parse(_selectedDate ?? ''),
                               location: locationController.text,
                               type: _selectedCondition ?? 'new',
@@ -1006,8 +1330,14 @@ class _AddVehicleScreenState extends State<AddVehicleScreen>
                               technicalFeatures:
                                   technicalFeaturesController.text,
                               transmissionType: transmissionTypeController.text,
-                              forWhat: forWhatController.text,
+                              forWhat: selectedForWhat,
                               regionalSpecs: _selectedRegion,
+                              aircraftType: selectedPlaneType,
+                              maxDistance: maxDistanceController.text,
+                              maxSpeed: maxSpeedController.text,
+                              shipLength: shipLengthController.text,
+                              shipType: selectedShipType,
+                              vehicleModel: modelController.text,
                             ));
                           }),
                     ),

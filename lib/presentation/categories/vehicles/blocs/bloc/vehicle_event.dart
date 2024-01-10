@@ -56,7 +56,7 @@ class AddVehicleEvent extends VehicleEvent {
   final String name;
   final String description;
   final int price;
-  final int kilometers;
+  final int? kilometers;
   final DateTime year;
   final String location;
   final String type;
@@ -82,12 +82,19 @@ class AddVehicleEvent extends VehicleEvent {
   final bool? guarantee;
   final String? forWhat;
   final String? regionalSpecs;
+  final String? aircraftType;
+  final String? manufacturer;
+  final String? vehicleModel;
+  final String? maxSpeed;
+  final String? maxDistance;
+  final String? shipType;
+  final String? shipLength;
 
   const AddVehicleEvent({
     required this.name,
     required this.description,
     required this.price,
-    required this.kilometers,
+    this.kilometers,
     required this.year,
     required this.location,
     required this.type,
@@ -113,5 +120,12 @@ class AddVehicleEvent extends VehicleEvent {
     this.guarantee,
     this.forWhat,
     this.regionalSpecs,
+    this.aircraftType,
+    this.manufacturer,
+    this.vehicleModel,
+    this.maxSpeed,
+    this.maxDistance,
+    this.shipType,
+    this.shipLength,
   });
 }

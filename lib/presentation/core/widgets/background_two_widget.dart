@@ -32,6 +32,7 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
     'company',
     'car',
     'planes',
+    'sea_companies',
     'real_estate',
     'product',
     'service'

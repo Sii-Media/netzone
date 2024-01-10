@@ -7,7 +7,7 @@ class Vehicle extends Equatable {
   final String imageUrl;
   final String description;
   final int price;
-  final int kilometers;
+  final int? kilometers;
   final String year;
   final String location;
   final String type;
@@ -34,14 +34,20 @@ class Vehicle extends Equatable {
   final bool? guarantee;
   final String? forWhat;
   final String? regionalSpecs;
-
+  final String? aircraftType;
+  final String? manufacturer;
+  final String? vehicleModel;
+  final String? maxSpeed;
+  final String? maxDistance;
+  final String? shipType;
+  final String? shipLength;
   const Vehicle({
     required this.id,
     required this.name,
     required this.imageUrl,
     required this.description,
     required this.price,
-    required this.kilometers,
+    this.kilometers,
     required this.year,
     required this.location,
     required this.type,
@@ -68,6 +74,13 @@ class Vehicle extends Equatable {
     this.guarantee,
     this.forWhat,
     this.regionalSpecs,
+    this.aircraftType,
+    this.manufacturer,
+    this.vehicleModel,
+    this.maxSpeed,
+    this.maxDistance,
+    this.shipType,
+    this.shipLength,
   });
   @override
   List<Object?> get props => [
@@ -99,6 +112,13 @@ class Vehicle extends Equatable {
         steeringSide,
         guarantee,
         forWhat,
-        regionalSpecs
+        regionalSpecs,
+        aircraftType,
+        manufacturer,
+        vehicleModel,
+        maxSpeed,
+        maxDistance,
+        shipType,
+        shipLength,
       ];
 }

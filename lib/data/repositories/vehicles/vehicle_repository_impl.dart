@@ -183,7 +183,7 @@ class VehicleRepositoryImpl implements VehicleRepository {
     required String name,
     required String description,
     required int price,
-    required int kilometers,
+    int? kilometers,
     required DateTime year,
     required String location,
     required String type,
@@ -211,6 +211,13 @@ class VehicleRepositoryImpl implements VehicleRepository {
     bool? guarantee,
     String? forWhat,
     String? regionalSpecs,
+    String? aircraftType,
+    String? manufacturer,
+    String? vehicleModel,
+    String? maxSpeed,
+    String? maxDistance,
+    String? shipType,
+    String? shipLength,
   }) async {
     try {
       if (await networkInfo.isConnected) {
@@ -220,7 +227,6 @@ class VehicleRepositoryImpl implements VehicleRepository {
           MapEntry('name', name),
           MapEntry('description', description),
           MapEntry('price', price.toString()),
-          MapEntry('kilometers', kilometers.toString()),
           MapEntry('year', year.toString()),
           MapEntry('location', location),
           MapEntry('type', type),
@@ -229,6 +235,11 @@ class VehicleRepositoryImpl implements VehicleRepository {
           MapEntry('country', country),
           MapEntry('contactNumber', contactNumber ?? ""),
         ]);
+        if (kilometers != null) {
+          formData.fields.add(
+            MapEntry('kilometers', kilometers.toString()),
+          );
+        }
         if (exteriorColor != null) {
           formData.fields.add(
             MapEntry('exteriorColor', exteriorColor),
@@ -252,6 +263,11 @@ class VehicleRepositoryImpl implements VehicleRepository {
         if (bodyType != null) {
           formData.fields.add(
             MapEntry('bodyType', bodyType),
+          );
+        }
+        if (manufacturer != null) {
+          formData.fields.add(
+            MapEntry('manufacturer', manufacturer),
           );
         }
         if (mechanicalCondition != null) {
@@ -312,6 +328,36 @@ class VehicleRepositoryImpl implements VehicleRepository {
         if (regionalSpecs != null) {
           formData.fields.add(
             MapEntry('regionalSpecs', regionalSpecs),
+          );
+        }
+        if (aircraftType != null) {
+          formData.fields.add(
+            MapEntry('aircraftType', aircraftType),
+          );
+        }
+        if (vehicleModel != null) {
+          formData.fields.add(
+            MapEntry('vehicleModel', vehicleModel),
+          );
+        }
+        if (shipType != null) {
+          formData.fields.add(
+            MapEntry('shipType', shipType),
+          );
+        }
+        if (shipLength != null) {
+          formData.fields.add(
+            MapEntry('shipLength', shipLength),
+          );
+        }
+        if (maxSpeed != null) {
+          formData.fields.add(
+            MapEntry('maxSpeed', maxSpeed),
+          );
+        }
+        if (maxDistance != null) {
+          formData.fields.add(
+            MapEntry('maxDistance', maxDistance),
           );
         }
         String fileName = 'image.jpg';

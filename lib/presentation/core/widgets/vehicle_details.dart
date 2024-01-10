@@ -268,6 +268,46 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                     SizedBox(
                                       height: 7.h,
                                     ),
+                                    vehicleState.vehicle.aircraftType != null &&
+                                            vehicleState.vehicle.aircraftType !=
+                                                ''
+                                        ? titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('aircraft_type'),
+                                            input: vehicleState
+                                                    .vehicle.aircraftType ??
+                                                '',
+                                          )
+                                        : const SizedBox(),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    vehicleState.vehicle.shipType != null &&
+                                            vehicleState.vehicle.shipType != ''
+                                        ? titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('ship_type'),
+                                            input:
+                                                vehicleState.vehicle.shipType ??
+                                                    '',
+                                          )
+                                        : const SizedBox(),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    vehicleState.vehicle.shipType != null &&
+                                            vehicleState.vehicle.shipType != ''
+                                        ? titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('ship_type'),
+                                            input:
+                                                vehicleState.vehicle.shipType ??
+                                                    '',
+                                          )
+                                        : const SizedBox(),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
                                     titleAndInput(
                                       title: AppLocalizations.of(context)
                                           .translate('contactNumber'),
@@ -287,12 +327,15 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                     SizedBox(
                                       height: 7.h,
                                     ),
-                                    titleAndInput(
-                                      title: AppLocalizations.of(context)
-                                          .translate('kilometers'),
-                                      input: vehicleState.vehicle.kilometers
-                                          .toString(),
-                                    ),
+                                    vehicleState.vehicle.kilometers != null
+                                        ? titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('kilometers'),
+                                            input: vehicleState
+                                                .vehicle.kilometers
+                                                .toString(),
+                                          )
+                                        : const SizedBox(),
                                     SizedBox(
                                       height: 7.h,
                                     ),
@@ -317,7 +360,75 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                           .translate('address'),
                                       input: vehicleState.vehicle.location,
                                     ),
-
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    vehicleState.vehicle.manufacturer != null &&
+                                            vehicleState.vehicle.manufacturer !=
+                                                ''
+                                        ? titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('manufacturer'),
+                                            input: vehicleState
+                                                    .vehicle.manufacturer ??
+                                                '',
+                                          )
+                                        : const SizedBox(),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    vehicleState.vehicle.vehicleModel != null &&
+                                            vehicleState.vehicle.vehicleModel !=
+                                                ''
+                                        ? titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('model'),
+                                            input: vehicleState
+                                                    .vehicle.vehicleModel ??
+                                                '',
+                                          )
+                                        : const SizedBox(),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    vehicleState.vehicle.maxDistance != null &&
+                                            vehicleState.vehicle.maxDistance !=
+                                                ''
+                                        ? titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('max_distance'),
+                                            input: vehicleState
+                                                    .vehicle.maxDistance ??
+                                                '',
+                                          )
+                                        : const SizedBox(),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    vehicleState.vehicle.maxSpeed != null &&
+                                            vehicleState.vehicle.maxSpeed != ''
+                                        ? titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('max_speed'),
+                                            input:
+                                                vehicleState.vehicle.maxSpeed ??
+                                                    '',
+                                          )
+                                        : const SizedBox(),
+                                    SizedBox(
+                                      height: 7.h,
+                                    ),
+                                    vehicleState.vehicle.shipLength != null &&
+                                            vehicleState.vehicle.shipLength !=
+                                                ''
+                                        ? titleAndInput(
+                                            title: AppLocalizations.of(context)
+                                                .translate('ship_length'),
+                                            input: vehicleState
+                                                    .vehicle.shipLength ??
+                                                '',
+                                          )
+                                        : const SizedBox(),
                                     vehicleState.vehicle.exteriorColor != null
                                         ? Padding(
                                             padding: const EdgeInsets.only(
@@ -359,7 +470,11 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                             ),
                                           )
                                         : const SizedBox(),
-                                    vehicleState.vehicle.bodyCondition != null
+                                    vehicleState.vehicle.bodyCondition !=
+                                                null &&
+                                            vehicleState
+                                                    .vehicle.bodyCondition !=
+                                                ''
                                         ? Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 7.0),
@@ -373,7 +488,8 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                             ),
                                           )
                                         : const SizedBox(),
-                                    vehicleState.vehicle.bodyType != null
+                                    vehicleState.vehicle.bodyType != null &&
+                                            vehicleState.vehicle.bodyType != ''
                                         ? Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 7.0),
@@ -388,7 +504,10 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                           )
                                         : const SizedBox(),
                                     vehicleState.vehicle.mechanicalCondition !=
-                                            null
+                                                null &&
+                                            vehicleState.vehicle
+                                                    .mechanicalCondition !=
+                                                ''
                                         ? Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 7.0),
@@ -403,7 +522,11 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                             ),
                                           )
                                         : const SizedBox(),
-                                    vehicleState.vehicle.seatingCapacity != null
+                                    vehicleState.vehicle.seatingCapacity !=
+                                                null &&
+                                            vehicleState
+                                                    .vehicle.seatingCapacity !=
+                                                0
                                         ? Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 7.0),
@@ -432,7 +555,10 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                           )
                                         : const SizedBox(),
                                     vehicleState.vehicle.transmissionType !=
-                                            null
+                                                null &&
+                                            vehicleState
+                                                    .vehicle.transmissionType !=
+                                                ''
                                         ? Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 7.0),
@@ -447,7 +573,9 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                             ),
                                           )
                                         : const SizedBox(),
-                                    vehicleState.vehicle.horsepower != null
+                                    vehicleState.vehicle.horsepower != null &&
+                                            vehicleState.vehicle.horsepower !=
+                                                ''
                                         ? Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 7.0),
@@ -461,7 +589,8 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                             ),
                                           )
                                         : const SizedBox(),
-                                    vehicleState.vehicle.fuelType != null
+                                    vehicleState.vehicle.fuelType != null &&
+                                            vehicleState.vehicle.fuelType != ''
                                         ? Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 7.0),
@@ -475,7 +604,8 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                             ),
                                           )
                                         : const SizedBox(),
-                                    vehicleState.vehicle.extras != null
+                                    vehicleState.vehicle.extras != null &&
+                                            vehicleState.vehicle.extras != ''
                                         ? Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 7.0),
@@ -490,7 +620,10 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                           )
                                         : const SizedBox(),
                                     vehicleState.vehicle.technicalFeatures !=
-                                            null
+                                                null &&
+                                            vehicleState.vehicle
+                                                    .technicalFeatures !=
+                                                ''
                                         ? Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 7.0),
@@ -505,7 +638,9 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                             ),
                                           )
                                         : const SizedBox(),
-                                    vehicleState.vehicle.steeringSide != null
+                                    vehicleState.vehicle.steeringSide != null &&
+                                            vehicleState.vehicle.steeringSide !=
+                                                ''
                                         ? Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 7.0),
@@ -535,21 +670,17 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                                             ),
                                           )
                                         : const SizedBox(),
-                                    vehicleState.vehicle.guarantee != null
-                                        ? Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 7.0),
-                                            child: titleAndInput(
-                                              title:
-                                                  AppLocalizations.of(context)
-                                                      .translate('condition'),
-                                              input:
-                                                  AppLocalizations.of(context)
-                                                      .translate(vehicleState
-                                                          .vehicle.type),
-                                            ),
-                                          )
-                                        : const SizedBox(),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 7.0),
+                                      child: titleAndInput(
+                                        title: AppLocalizations.of(context)
+                                            .translate('condition'),
+                                        input: AppLocalizations.of(context)
+                                            .translate(
+                                                vehicleState.vehicle.type),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
