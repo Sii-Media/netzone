@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 import 'package:netzoon/domain/departments/entities/departments_categories/departments_categories.dart';
@@ -135,8 +136,8 @@ class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
 
       emit(
         result.fold(
-          (failure) =>
-              DeleteProductFailure(message: mapFailureToString(failure)),
+          (failure) => DeleteProductFailure(
+              message: mapFailureToString(failure), failure: failure),
           (r) => DeleteProductSuccess(),
         ),
       );
@@ -161,7 +162,10 @@ class ElecDevicesBloc extends Bloc<ElecDevicesEvent, ElecDevicesState> {
       ));
       emit(
         result.fold(
-          (failure) => EditProductFailure(message: mapFailureToString(failure)),
+          (failure) => EditProductFailure(
+            message: mapFailureToString(failure),
+            failure: failure,
+          ),
           (message) => EditProductSuccess(message: message),
         ),
       );

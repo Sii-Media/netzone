@@ -19,6 +19,6 @@ class EditProfileSuccess extends EditProfileState {
 
 class EditProfileFailure extends EditProfileState {
   final String message;
-
-  const EditProfileFailure({required this.message});
+  final Failure failure;
+  const EditProfileFailure({required this.message, required this.failure});
 }

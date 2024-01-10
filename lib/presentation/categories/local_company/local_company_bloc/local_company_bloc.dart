@@ -14,6 +14,7 @@ import 'package:netzoon/domain/categories/usecases/local_company/get_services_by
 import 'package:netzoon/domain/categories/usecases/local_company/get_services_categories_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/rate_company_service_use_case.dart';
 import 'package:netzoon/domain/company_service/service_category.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
@@ -68,8 +69,8 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
       final failureOrCompanies = await getAllLocalCompaniesUseCase(NoParams());
       emit(
         failureOrCompanies.fold(
-          (failure) =>
-              LocalCompanyFailure(message: mapFailureToString(failure)),
+          (failure) => LocalCompanyFailure(
+              message: mapFailureToString(failure), failure: failure),
           (localCompanies) =>
               LocalCompanySuccess(localCompanies: localCompanies),
         ),
@@ -80,8 +81,10 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
       final failureOrProducts = await getCompanyProductsUseCase(event.id);
       emit(
         failureOrProducts.fold(
-          (failure) =>
-              LocalCompanyFailure(message: mapFailureToString(failure)),
+          (failure) => LocalCompanyFailure(
+            message: mapFailureToString(failure),
+            failure: failure,
+          ),
           (categoryProducts) {
             return LocalCompanyProductsSuccess(products: categoryProducts);
           },
@@ -126,8 +129,10 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
       // );
       emit(
         companies.fold(
-          (failure) =>
-              LocalCompanyFailure(message: mapFailureToString(failure)),
+          (failure) => LocalCompanyFailure(
+            message: mapFailureToString(failure),
+            failure: failure,
+          ),
           (companies) {
             return GetLocalCompaniesSuccess(companies: companies);
           },
@@ -147,8 +152,10 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
       final products = await getUserProductsUseCase(event.username);
       emit(
         products.fold(
-          (failure) =>
-              LocalCompanyFailure(message: mapFailureToString(failure)),
+          (failure) => LocalCompanyFailure(
+            message: mapFailureToString(failure),
+            failure: failure,
+          ),
           (categoryProducts) =>
               LocalCompanyProductsSuccess(products: categoryProducts),
         ),
@@ -178,8 +185,10 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
       ));
       emit(
         success.fold(
-          (failure) =>
-              LocalCompanyFailure(message: mapFailureToString(failure)),
+          (failure) => LocalCompanyFailure(
+            message: mapFailureToString(failure),
+            failure: failure,
+          ),
           (message) => AddCompanyServiceSuccess(message: message),
         ),
       );
@@ -192,8 +201,10 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
       final services = await getCompanyServicesUseCase(user?.userInfo.id ?? '');
       emit(
         services.fold(
-          (failure) =>
-              LocalCompanyFailure(message: mapFailureToString(failure)),
+          (failure) => LocalCompanyFailure(
+            message: mapFailureToString(failure),
+            failure: failure,
+          ),
           (services) => GetCompanyServiceSuccess(services: services),
         ),
       );
@@ -204,8 +215,10 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
       final services = await getCompanyServicesUseCase(event.id);
       emit(
         services.fold(
-          (failure) =>
-              LocalCompanyFailure(message: mapFailureToString(failure)),
+          (failure) => LocalCompanyFailure(
+            message: mapFailureToString(failure),
+            failure: failure,
+          ),
           (services) => GetCompanyServiceSuccess(services: services),
         ),
       );
@@ -239,8 +252,10 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
       ));
       emit(
         result.fold(
-          (failure) =>
-              EditCompanyServiceFailure(message: mapFailureToString(failure)),
+          (failure) => EditCompanyServiceFailure(
+            message: mapFailureToString(failure),
+            failure: failure,
+          ),
           (message) => EditCompanyServiceSuccess(message: message),
         ),
       );
@@ -250,8 +265,10 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
       final result = await deleteCompanyServiceUseCase(event.id);
       emit(
         result.fold(
-          (failure) =>
-              DeleteCompanyServiceFailure(message: mapFailureToString(failure)),
+          (failure) => DeleteCompanyServiceFailure(
+            message: mapFailureToString(failure),
+            failure: failure,
+          ),
           (message) => DeleteCompanyServiceSuccess(message: message),
         ),
       );

@@ -25,8 +25,11 @@ class LocalCompanyProductsSuccess extends LocalCompanyState {
 
 class LocalCompanyFailure extends LocalCompanyState {
   final String message;
-
-  const LocalCompanyFailure({required this.message});
+  final Failure failure;
+  const LocalCompanyFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class GetLocalCompaniesSuccess extends LocalCompanyState {
@@ -65,8 +68,11 @@ class EditCompanyServiceInProgress extends LocalCompanyState {}
 
 class EditCompanyServiceFailure extends LocalCompanyState {
   final String message;
-
-  const EditCompanyServiceFailure({required this.message});
+  final Failure failure;
+  const EditCompanyServiceFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class EditCompanyServiceSuccess extends LocalCompanyState {
@@ -79,8 +85,11 @@ class DeleteCompanyServiceInProgress extends LocalCompanyState {}
 
 class DeleteCompanyServiceFailure extends LocalCompanyState {
   final String message;
-
-  const DeleteCompanyServiceFailure({required this.message});
+  final Failure failure;
+  const DeleteCompanyServiceFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class DeleteCompanyServiceSuccess extends LocalCompanyState {

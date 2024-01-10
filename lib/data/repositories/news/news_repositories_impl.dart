@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:netzoon/data/core/utils/network/network_info.dart';
+import 'package:netzoon/data/datasource/local/auth/auth_local_data_source.dart';
+import 'package:netzoon/data/datasource/remote/auth/auth_remote_datasource.dart';
 import 'package:netzoon/data/datasource/remote/news/news_remote_data_source.dart';
 import 'package:netzoon/data/models/news/news/news_model.dart';
 import 'package:netzoon/data/models/news/news_comment/news_comment_model.dart';
@@ -13,14 +16,18 @@ import 'package:dartz/dartz.dart';
 import 'package:netzoon/domain/news/entities/news_comment.dart';
 import 'package:netzoon/domain/news/entities/news_info.dart';
 import 'package:netzoon/domain/news/repositories/news_repository.dart';
+import 'package:netzoon/injection_container.dart';
 
 class NewsRepositoryImpl implements NewsRepository {
   final NewsRemoteDataSourse newsRemoteDataSourse;
   final NetworkInfo networkInfo;
-
+  final AuthRemoteDataSource authRemoteDataSource;
+  final AuthLocalDatasource local;
   NewsRepositoryImpl({
     required this.newsRemoteDataSourse,
     required this.networkInfo,
+    required this.authRemoteDataSource,
+    required this.local,
   });
 
   @override
@@ -48,23 +55,48 @@ class NewsRepositoryImpl implements NewsRepository {
     try {
       if (await networkInfo.isConnected) {
         Dio dio = Dio();
-        FormData formData = FormData.fromMap({
-          'title': title,
-          'description': description,
-          'image': await MultipartFile.fromFile(image.path,
-              filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
-          'ownerName': ownerName,
-          'ownerImage': ownerImage,
-          'creator': creator,
-        });
-
-        Response response = await dio
-            .post('https://back.netzoon.com//news/createNews', data: formData);
-        // Handle the response as needed
-        if (response.statusCode == 201) {
-          return Right(response.data);
+        final user = local.getSignedInUser();
+        if (user != null) {
+          if (JwtDecoder.isExpired(user.token)) {
+            try {
+              if (JwtDecoder.isExpired(user.refreshToken)) {
+                local.logout();
+                return Left(UnAuthorizedFailure());
+              }
+            } catch (e) {
+              return Left(UnAuthorizedFailure());
+            }
+            final refreshTokenResponse =
+                await authRemoteDataSource.refreshToken(user.refreshToken);
+            final newUser = user.copyWith(
+                refreshTokenResponse.refreshToken, user.refreshToken);
+            await local.signInUser(newUser);
+            dio.options.headers['Authorization'] = 'Bearer ${newUser.token}';
+          }
+          FormData formData = FormData.fromMap({
+            'title': title,
+            'description': description,
+            'image': await MultipartFile.fromFile(image.path,
+                filename: 'image.jpg', contentType: MediaType('image', 'jpeg')),
+            'ownerName': ownerName,
+            'ownerImage': ownerImage,
+            'creator': creator,
+          });
+          final user2 = local.getSignedInUser();
+          Response response = await dio.post(
+            'https://www.netzoonback.siidevelopment.com//news/createNews',
+            data: formData,
+            options:
+                Options(headers: {'Authorization': 'Bearer ${user2?.token}'}),
+          );
+          // Handle the response as needed
+          if (response.statusCode == 201) {
+            return Right(response.data);
+          } else {
+            return Left(ServerFailure());
+          }
         } else {
-          return Left(ServerFailure());
+          return Left(CredintialFailure());
         }
       } else {
         return Left(OfflineFailure());
@@ -157,8 +189,30 @@ class NewsRepositoryImpl implements NewsRepository {
   Future<Either<Failure, String>> deleteNews({required String id}) async {
     try {
       if (await networkInfo.isConnected) {
-        final news = await newsRemoteDataSourse.deleteNews(id);
-        return Right(news);
+        final user = local.getSignedInUser();
+        if (user != null) {
+          if (JwtDecoder.isExpired(user.token)) {
+            try {
+              if (JwtDecoder.isExpired(user.refreshToken)) {
+                local.logout();
+                return Left(UnAuthorizedFailure());
+              }
+            } catch (e) {
+              return Left(UnAuthorizedFailure());
+            }
+            final refreshTokenResponse =
+                await authRemoteDataSource.refreshToken(user.refreshToken);
+            final newUser = user.copyWith(
+                refreshTokenResponse.refreshToken, user.refreshToken);
+            await local.signInUser(newUser);
+            final dio = sl<Dio>();
+            dio.options.headers['Authorization'] = 'Bearer ${newUser.token}';
+          }
+          final news = await newsRemoteDataSourse.deleteNews(id);
+          return Right(news);
+        } else {
+          return Left(CredintialFailure());
+        }
       } else {
         return Left(OfflineFailure());
       }
@@ -176,33 +230,54 @@ class NewsRepositoryImpl implements NewsRepository {
       required String creator}) async {
     try {
       if (await networkInfo.isConnected) {
+        final user = local.getSignedInUser();
         Dio dio = Dio();
-        FormData formData = FormData();
-        formData.fields.addAll([
-          MapEntry('id', id),
-          MapEntry('title', title),
-          MapEntry('description', description),
-          MapEntry('creator', creator),
-        ]);
-        if (image != null) {
-          String fileName = 'image.jpg';
-          formData.files.add(MapEntry(
-            'image',
-            await MultipartFile.fromFile(
-              image.path,
-              filename: fileName,
-              contentType: MediaType('image', 'jpeg'),
-            ),
-          ));
+        if (user != null) {
+          if (JwtDecoder.isExpired(user.token)) {
+            try {
+              if (JwtDecoder.isExpired(user.refreshToken)) {
+                local.logout();
+                return Left(UnAuthorizedFailure());
+              }
+            } catch (e) {
+              return Left(UnAuthorizedFailure());
+            }
+            final refreshTokenResponse =
+                await authRemoteDataSource.refreshToken(user.refreshToken);
+            final newUser = user.copyWith(
+                refreshTokenResponse.refreshToken, user.refreshToken);
+            await local.signInUser(newUser);
+            dio.options.headers['Authorization'] = 'Bearer ${newUser.token}';
+          }
+          FormData formData = FormData();
+          formData.fields.addAll([
+            MapEntry('id', id),
+            MapEntry('title', title),
+            MapEntry('description', description),
+            MapEntry('creator', creator),
+          ]);
+          if (image != null) {
+            String fileName = 'image.jpg';
+            formData.files.add(MapEntry(
+              'image',
+              await MultipartFile.fromFile(
+                image.path,
+                filename: fileName,
+                contentType: MediaType('image', 'jpeg'),
+              ),
+            ));
+          }
+          final user2 = local.getSignedInUser();
+          Response response = await dio.put(
+            'https://www.netzoonback.siidevelopment.com//news/$id',
+            data: formData,
+            options:
+                Options(headers: {'Authorization': 'Bearer ${user2?.token}'}),
+          );
+          return Right(response.data);
+        } else {
+          return Left(CredintialFailure());
         }
-        Response response = await dio.put(
-          'https://back.netzoon.com//news/$id',
-          data: formData,
-        );
-        return Right(response.data);
-        // final news = await newsRemoteDataSourse.editNews(
-        //     id, title, description, image, creator);
-        // return Right(news.toDomain());
       } else {
         return Left(OfflineFailure());
       }

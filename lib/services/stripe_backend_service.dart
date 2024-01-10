@@ -18,7 +18,8 @@ class CheckoutSessionResponse {
 }
 
 class StripeBackendService {
-  static String apiBase = 'https://back.netzoon.com//user/api/stripe';
+  static String apiBase =
+      'https://www.netzoonback.siidevelopment.com//user/api/stripe';
   static String createAccountUrl =
       '${StripeBackendService.apiBase}/account?mobile=true';
   static Map<String, String> headers = {'Content-Type': 'application/json'};

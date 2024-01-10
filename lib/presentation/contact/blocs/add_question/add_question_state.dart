@@ -19,6 +19,9 @@ class AddQuestionSuccess extends AddQuestionState {
 
 class AddQuestionFailure extends AddQuestionState {
   final String message;
-
-  const AddQuestionFailure({required this.message});
+  final Failure failure;
+  const AddQuestionFailure({
+    required this.message,
+    required this.failure,
+  });
 }

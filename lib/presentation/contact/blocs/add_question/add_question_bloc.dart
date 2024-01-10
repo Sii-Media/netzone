@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/questions/entities/question.dart';
 import 'package:netzoon/domain/questions/usecases/add_question_use_case.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
@@ -18,7 +19,10 @@ class AddQuestionBloc extends Bloc<AddQuestionEvent, AddQuestionState> {
 
       emit(
         failureOrQuestion.fold(
-          (failure) => AddQuestionFailure(message: mapFailureToString(failure)),
+          (failure) => AddQuestionFailure(
+            message: mapFailureToString(failure),
+            failure: failure,
+          ),
           (question) => AddQuestionSuccess(question: question.question),
         ),
       );

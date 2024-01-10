@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:netzoon/data/core/utils/network/network_info.dart';
+import 'package:netzoon/data/datasource/local/auth/auth_local_data_source.dart';
+import 'package:netzoon/data/datasource/remote/auth/auth_remote_datasource.dart';
 import 'package:netzoon/data/datasource/remote/departments/departments_remote_data_source.dart';
 import 'package:netzoon/data/models/departments/category_products/category_products_model.dart';
 import 'package:netzoon/data/models/departments/category_products/category_products_response_model.dart';
@@ -18,9 +21,14 @@ import 'package:netzoon/injection_container.dart';
 class DepartmentRepositoryImpl implements DepartmentRepository {
   final DepartmentsRemoteDataSource departmentsRemoteDataSource;
   final NetworkInfo networkInfo;
-
-  DepartmentRepositoryImpl(
-      {required this.departmentsRemoteDataSource, required this.networkInfo});
+  final AuthLocalDatasource local;
+  final AuthRemoteDataSource authRemoteDataSource;
+  DepartmentRepositoryImpl({
+    required this.departmentsRemoteDataSource,
+    required this.networkInfo,
+    required this.local,
+    required this.authRemoteDataSource,
+  });
 
   @override
   Future<Either<Failure, DepartmentsCategoriesResponse>>
@@ -158,9 +166,31 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
       {required String productId}) async {
     try {
       if (await networkInfo.isConnected) {
-        final result =
-            await departmentsRemoteDataSource.deleteProduct(productId);
-        return Right(result);
+        final user = local.getSignedInUser();
+        if (user != null) {
+          if (JwtDecoder.isExpired(user.token)) {
+            try {
+              if (JwtDecoder.isExpired(user.refreshToken)) {
+                local.logout();
+                return Left(UnAuthorizedFailure());
+              }
+            } catch (e) {
+              return Left(UnAuthorizedFailure());
+            }
+            final refreshTokenResponse =
+                await authRemoteDataSource.refreshToken(user.refreshToken);
+            final newUser = user.copyWith(
+                refreshTokenResponse.refreshToken, user.refreshToken);
+            await local.signInUser(newUser);
+            final dio = sl<Dio>();
+            dio.options.headers['Authorization'] = 'Bearer ${newUser.token}';
+          }
+          final result =
+              await departmentsRemoteDataSource.deleteProduct(productId);
+          return Right(result);
+        } else {
+          return Left(CredintialFailure());
+        }
       } else {
         return Left(OfflineFailure());
       }
@@ -188,48 +218,72 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
     try {
       if (await networkInfo.isConnected) {
         Dio dio = Dio();
-        FormData formData = FormData();
+        final user = local.getSignedInUser();
+        if (user != null) {
+          if (JwtDecoder.isExpired(user.token)) {
+            try {
+              if (JwtDecoder.isExpired(user.refreshToken)) {
+                local.logout();
+                return Left(UnAuthorizedFailure());
+              }
+            } catch (e) {
+              return Left(UnAuthorizedFailure());
+            }
+            final refreshTokenResponse =
+                await authRemoteDataSource.refreshToken(user.refreshToken);
+            final newUser = user.copyWith(
+                refreshTokenResponse.refreshToken, user.refreshToken);
+            await local.signInUser(newUser);
+            dio.options.headers['Authorization'] = 'Bearer ${newUser.token}';
+          }
+          FormData formData = FormData();
 
-        formData.fields.addAll([
-          MapEntry('name', name),
-          MapEntry('description', description),
-          MapEntry('price', price.toString()),
-          MapEntry('quantity', quantity.toString()),
-          MapEntry('weight', weight.toString()),
-          MapEntry('guarantee', guarantee.toString()),
-          MapEntry('madeIn', madeIn ?? ''),
-          MapEntry('address', address ?? ''),
-          MapEntry('discountPercentage', discountPercentage.toString()),
-          MapEntry('color', color ?? ''),
-        ]);
+          formData.fields.addAll([
+            MapEntry('name', name),
+            MapEntry('description', description),
+            MapEntry('price', price.toString()),
+            MapEntry('quantity', quantity.toString()),
+            MapEntry('weight', weight.toString()),
+            MapEntry('guarantee', guarantee.toString()),
+            MapEntry('madeIn', madeIn ?? ''),
+            MapEntry('address', address ?? ''),
+            MapEntry('discountPercentage', discountPercentage.toString()),
+            MapEntry('color', color ?? ''),
+          ]);
 
-        if (image != null) {
-          String fileName = 'image.jpg';
-          formData.files.add(MapEntry(
-            'image',
-            await MultipartFile.fromFile(
-              image.path,
-              filename: fileName,
-              contentType: MediaType('image', 'jpeg'),
-            ),
-          ));
+          if (image != null) {
+            String fileName = 'image.jpg';
+            formData.files.add(MapEntry(
+              'image',
+              await MultipartFile.fromFile(
+                image.path,
+                filename: fileName,
+                contentType: MediaType('image', 'jpeg'),
+              ),
+            ));
+          }
+          if (video != null) {
+            String fileName = 'video.mp4';
+            formData.files.add(MapEntry(
+              'video',
+              await MultipartFile.fromFile(
+                video.path,
+                filename: fileName,
+                contentType: MediaType('video', 'mp4'),
+              ),
+            ));
+          }
+          final user2 = local.getSignedInUser();
+          Response response = await dio.put(
+            '$baseUrl/departments/editProduct/$productId',
+            data: formData,
+            options:
+                Options(headers: {'Authorization': 'Bearer ${user2?.token}'}),
+          );
+          return Right(response.data);
+        } else {
+          return Left(CredintialFailure());
         }
-        if (video != null) {
-          String fileName = 'video.mp4';
-          formData.files.add(MapEntry(
-            'video',
-            await MultipartFile.fromFile(
-              video.path,
-              filename: fileName,
-              contentType: MediaType('video', 'mp4'),
-            ),
-          ));
-        }
-        Response response = await dio.put(
-          '$baseUrl/departments/editProduct/$productId',
-          data: formData,
-        );
-        return Right(response.data);
       } else {
         return Left(OfflineFailure());
       }
@@ -277,9 +331,31 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
       {required String userId, required List<String> productIds}) async {
     try {
       if (await networkInfo.isConnected) {
-        final products = await departmentsRemoteDataSource
-            .addToSelectedProducts(userId, productIds);
-        return Right(products);
+        final user = local.getSignedInUser();
+        if (user != null) {
+          if (JwtDecoder.isExpired(user.token)) {
+            try {
+              if (JwtDecoder.isExpired(user.refreshToken)) {
+                local.logout();
+                return Left(UnAuthorizedFailure());
+              }
+            } catch (e) {
+              return Left(UnAuthorizedFailure());
+            }
+            final refreshTokenResponse =
+                await authRemoteDataSource.refreshToken(user.refreshToken);
+            final newUser = user.copyWith(
+                refreshTokenResponse.refreshToken, user.refreshToken);
+            await local.signInUser(newUser);
+            final dio = sl<Dio>();
+            dio.options.headers['Authorization'] = 'Bearer ${newUser.token}';
+          }
+          final products = await departmentsRemoteDataSource
+              .addToSelectedProducts(userId, productIds);
+          return Right(products);
+        } else {
+          return Left(CredintialFailure());
+        }
       } else {
         return Left(OfflineFailure());
       }
@@ -293,9 +369,31 @@ class DepartmentRepositoryImpl implements DepartmentRepository {
       {required String userId, required String productId}) async {
     try {
       if (await networkInfo.isConnected) {
-        final products = await departmentsRemoteDataSource
-            .deleteFromSelectedProducts(userId, productId);
-        return Right(products);
+        final user = local.getSignedInUser();
+        if (user != null) {
+          if (JwtDecoder.isExpired(user.token)) {
+            try {
+              if (JwtDecoder.isExpired(user.refreshToken)) {
+                local.logout();
+                return Left(UnAuthorizedFailure());
+              }
+            } catch (e) {
+              return Left(UnAuthorizedFailure());
+            }
+            final refreshTokenResponse =
+                await authRemoteDataSource.refreshToken(user.refreshToken);
+            final newUser = user.copyWith(
+                refreshTokenResponse.refreshToken, user.refreshToken);
+            await local.signInUser(newUser);
+            final dio = sl<Dio>();
+            dio.options.headers['Authorization'] = 'Bearer ${newUser.token}';
+          }
+          final products = await departmentsRemoteDataSource
+              .deleteFromSelectedProducts(userId, productId);
+          return Right(products);
+        } else {
+          return Left(CredintialFailure());
+        }
       } else {
         return Left(OfflineFailure());
       }

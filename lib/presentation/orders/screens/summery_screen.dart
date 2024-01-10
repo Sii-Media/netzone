@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:netzoon/domain/aramex/entities/actual_weight.dart';
 import 'package:netzoon/domain/aramex/entities/client_info.dart';
 import 'package:netzoon/domain/aramex/entities/contact.dart';
@@ -19,6 +20,7 @@ import 'package:netzoon/domain/aramex/entities/shipment_dimensions.dart';
 import 'package:netzoon/domain/aramex/entities/shipment_items.dart';
 import 'package:netzoon/domain/aramex/entities/total_amount.dart';
 import 'package:netzoon/domain/aramex/entities/transaction.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 import 'package:netzoon/domain/order/entities/order_input.dart';
 import 'package:netzoon/injection_container.dart';
@@ -448,17 +450,26 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
             } else if (orderState is SaveOrderFailure) {
               stopLoading();
 
+              final message = orderState.message;
+              final failure = orderState.failure;
+
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
+                SnackBar(
                   content: Text(
-                    'failure',
-                    style: TextStyle(
+                    message,
+                    style: const TextStyle(
                       color: AppColor.white,
                     ),
                   ),
                   backgroundColor: AppColor.red,
                 ),
               );
+              if (failure is UnAuthorizedFailure) {
+                while (context.canPop()) {
+                  context.pop();
+                }
+                context.push('/home');
+              }
             } else if (orderState is SaveOrderSuccess) {
               stopLoading();
               // ScaffoldMessenger.of(context).showSnackBar(SnackBar(

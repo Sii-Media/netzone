@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/complaints/usecases/add_complaints_usecase.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 
 part 'add_complaint_event.dart';
@@ -16,8 +17,10 @@ class AddComplaintBloc extends Bloc<AddComplaintEvent, AddComplaintState> {
           AddComplaintsParams(address: event.address, text: event.text));
       emit(
         failureOrSuccess.fold(
-          (failure) =>
-              AddComplaintFailure(message: mapFailureToString(failure)),
+          (failure) => AddComplaintFailure(
+            message: mapFailureToString(failure),
+            failure: failure,
+          ),
           (complaints) => AddComplaintSuccess(complaints: complaints),
         ),
       );

@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/order/usecases/get_client_orders_use_case.dart';
 import 'package:netzoon/domain/order/usecases/get_user_orders_use_case.dart';
 import 'package:netzoon/domain/order/usecases/save_order_use_case.dart';
@@ -46,7 +47,8 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       );
       emit(
         order.fold(
-            (failure) => SaveOrderFailure(message: mapFailureToString(failure)),
+            (failure) => SaveOrderFailure(
+                message: mapFailureToString(failure), failure: failure),
             (order) => SaveOrderSuccess(order: order)),
       );
     });

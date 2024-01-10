@@ -10,6 +10,7 @@ import 'package:netzoon/domain/advertisements/usercases/get_ads_by_id_use_case.d
 import 'package:netzoon/domain/advertisements/usercases/get_ads_by_type_use_case.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_advertisements_usecase.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_user_ads_use_case.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -112,7 +113,8 @@ class AdsBlocBloc extends Bloc<AdsBlocEvent, AdsBlocState> {
       ));
       emit(
         ads.fold(
-          (failure) => EditAdsFailure(message: mapFailureToString(failure)),
+          (failure) => EditAdsFailure(
+              message: mapFailureToString(failure), failure: failure),
           (message) => EditAdsSuccess(message: message),
         ),
       );
@@ -122,7 +124,8 @@ class AdsBlocBloc extends Bloc<AdsBlocEvent, AdsBlocState> {
       final result = await deleteAdsUseCase(event.id);
       emit(
         result.fold(
-          (failure) => DeleteAdsFailure(message: mapFailureToString(failure)),
+          (failure) => DeleteAdsFailure(
+              message: mapFailureToString(failure), failure: failure),
           (message) => DeleteAdsSuccess(message: message),
         ),
       );

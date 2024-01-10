@@ -19,6 +19,9 @@ class AddAdsSuccess extends AddAdsState {
 
 class AddAdsFailure extends AddAdsState {
   final String message;
-
-  const AddAdsFailure({required this.message});
+  final Failure failure;
+  const AddAdsFailure({
+    required this.message,
+    required this.failure,
+  });
 }

@@ -19,6 +19,9 @@ class AddOpenionSuccess extends AddOpenionState {
 
 class AddOpenionFailure extends AddOpenionState {
   final String message;
-
-  const AddOpenionFailure({required this.message});
+  final Failure failure;
+  const AddOpenionFailure({
+    required this.message,
+    required this.failure,
+  });
 }

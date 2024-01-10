@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 
 import '../../../domain/auth/entities/user_info.dart';
@@ -95,11 +97,13 @@ class _EditLocalCompanyprofileScreenState
           } else if (state is EditProfileFailure) {
             stopLoading();
 
-            final failure = state.message;
+            final message = state.message;
+            final failure = state.failure;
+
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  failure,
+                  message,
                   style: const TextStyle(
                     color: AppColor.white,
                   ),
@@ -107,6 +111,12 @@ class _EditLocalCompanyprofileScreenState
                 backgroundColor: AppColor.red,
               ),
             );
+            if (failure is UnAuthorizedFailure) {
+              while (context.canPop()) {
+                context.pop();
+              }
+              context.push('/home');
+            }
           } else if (state is EditProfileSuccess) {
             stopLoading();
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -463,8 +473,11 @@ class _EditLocalCompanyprofileScreenState
                           padding: EdgeInsets.all(8.0),
                           child: Icon(Icons.add_outlined)),
                     ),
-                    keyboardType: TextInputType.name,
-                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 3,
+                    enableIMEPersonalizedLearning: true,
+                    minLines: 1,
+                    textInputAction: TextInputAction.newline,
                     validator: (text) {
                       return null;
                     },
@@ -482,11 +495,11 @@ class _EditLocalCompanyprofileScreenState
                           padding: EdgeInsets.all(8.0),
                           child: Icon(Icons.add_outlined)),
                     ),
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.multiline,
                     maxLines: 3,
                     enableIMEPersonalizedLearning: true,
                     minLines: 1,
-                    textInputAction: TextInputAction.next,
+                    textInputAction: TextInputAction.newline,
                     validator: (text) {
                       return null;
                     },

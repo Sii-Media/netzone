@@ -20,6 +20,8 @@ String mapFailureToString(Failure failure) {
       return 'You have already rated this';
     case ExictUserFailure:
       return 'You have already added this user';
+    case UnAuthorizedFailure:
+      return 'UnAuthorized !, You have to Log in again.';
     default:
       return "UnExpected Error, Please try again later.";
   }

@@ -47,8 +47,11 @@ class EditNewsInProgress extends NewsState {}
 
 class EditNewsFailure extends NewsState {
   final String message;
-
-  const EditNewsFailure({required this.message});
+  final Failure failure;
+  const EditNewsFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class EditNewsSuccess extends NewsState {
@@ -61,8 +64,11 @@ class DeleteNewsInProgress extends NewsState {}
 
 class DeleteNewsFailure extends NewsState {
   final String message;
-
-  const DeleteNewsFailure({required this.message});
+  final Failure failure;
+  const DeleteNewsFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class DeleteNewsSuccess extends NewsState {

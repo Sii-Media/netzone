@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/helpers/calculate_fee.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
+import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:netzoon/presentation/utils/convert_date_to_string.dart';
 
@@ -28,8 +31,9 @@ class DealDetails extends StatefulWidget {
   State<DealDetails> createState() => _DealDetailsState();
 }
 
-class _DealDetailsState extends State<DealDetails> {
-  // String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
+class _DealDetailsState extends State<DealDetails>
+    with ScreenLoader<DealDetails> {
+  String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
 
   Map<String, dynamic>? paymentIntent;
   late String email;
@@ -137,264 +141,307 @@ class _DealDetailsState extends State<DealDetails> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget screen(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: BackgroundWidget(
           isHome: false,
-          widget: BlocBuilder<DealsItemsBloc, DealsItemsState>(
+          widget: BlocListener<DealsItemsBloc, DealsItemsState>(
             bloc: dealBloc,
-            builder: (context, state) {
-              if (state is DealsItemsInProgress) {
-                return SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  child: const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColor.backgroundColor,
+            listener: (context, dealState) {
+              if (dealState is DeleteDealInProgress) {
+                startLoading();
+              } else if (dealState is DeleteDealFailure) {
+                stopLoading();
+
+                final message = dealState.message;
+                final failure = dealState.failure;
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      message,
+                      style: const TextStyle(
+                        color: AppColor.white,
+                      ),
                     ),
+                    backgroundColor: AppColor.red,
                   ),
                 );
-              } else if (state is DealsItemsFailure) {
-                final failure = state.message;
-                return FailureWidget(
-                  failure: failure,
-                  onPressed: () {
-                    dealBloc.add(GetDealByIdEvent(id: widget.dealsInfoId));
-                  },
-                );
-              } else if (state is GetDealByIdSuccess) {
-                return RefreshIndicator(
-                  onRefresh: () async {
-                    dealBloc.add(GetDealByIdEvent(id: widget.dealsInfoId));
-                  },
-                  color: AppColor.white,
-                  backgroundColor: AppColor.backgroundColor,
-                  child: ListView(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        height: size.height * 0.30,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(25.0),
-                          child: CachedNetworkImage(
-                            imageUrl: state.deal.imgUrl,
-                            fit: BoxFit.cover,
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) => Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 70.0, vertical: 50),
-                              child: CircularProgressIndicator(
-                                value: downloadProgress.progress,
-                                color: AppColor.backgroundColor,
+                if (failure is UnAuthorizedFailure) {
+                  while (context.canPop()) {
+                    context.pop();
+                  }
+                  context.push('/home');
+                }
+              } else if (dealState is DeleteDealSuccess) {
+                stopLoading();
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                    AppLocalizations.of(context).translate('success'),
+                  ),
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                ));
+                Navigator.of(context).pop();
+              }
+            },
+            child: BlocBuilder<DealsItemsBloc, DealsItemsState>(
+              bloc: dealBloc,
+              builder: (context, state) {
+                if (state is DealsItemsInProgress) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.backgroundColor,
+                      ),
+                    ),
+                  );
+                } else if (state is DealsItemsFailure) {
+                  final failure = state.message;
+                  return FailureWidget(
+                    failure: failure,
+                    onPressed: () {
+                      dealBloc.add(GetDealByIdEvent(id: widget.dealsInfoId));
+                    },
+                  );
+                } else if (state is GetDealByIdSuccess) {
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      dealBloc.add(GetDealByIdEvent(id: widget.dealsInfoId));
+                    },
+                    color: AppColor.white,
+                    backgroundColor: AppColor.backgroundColor,
+                    child: ListView(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.all(8),
+                          height: size.height * 0.30,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(25.0),
+                            child: CachedNetworkImage(
+                              imageUrl: state.deal.imgUrl,
+                              fit: BoxFit.cover,
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 70.0, vertical: 50),
+                                child: CircularProgressIndicator(
+                                  value: downloadProgress.progress,
+                                  color: AppColor.backgroundColor,
 
-                                // strokeWidth: 10,
+                                  // strokeWidth: 10,
+                                ),
                               ),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
                             ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
                           ),
                         ),
-                      ),
-                      BlocBuilder<AuthBloc, AuthState>(
-                        bloc: authBloc,
-                        builder: (context, authState) {
-                          if (authState is Authenticated) {
-                            email = authState.user.userInfo.email ?? '';
-                            name = authState.user.userInfo.username ?? '';
-                            if (authState.user.userInfo.id ==
-                                state.deal.owner.id) {
-                              return Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(builder: (context) {
-                                        return EditDealScreen(
-                                          deal: state.deal,
-                                        );
-                                      }));
-                                    },
-                                    icon: Icon(
-                                      Icons.edit,
-                                      color: AppColor.backgroundColor,
-                                      size: 23.sp,
-                                    ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      dealBloc.add(DeleteDealEvent(
-                                          id: state.deal.id ?? ''));
-                                    },
-                                    icon: Icon(
-                                      Icons.delete,
-                                      color: AppColor.red,
-                                      size: 23.sp,
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }
-                          }
-                          return Container();
-                        },
-                      ),
-                      titleAndInput(
-                        title:
-                            "${AppLocalizations.of(context).translate('اسم الصفقة')} : ",
-                        input: state.deal.name,
-                      ),
-                      titleAndInput(
-                        title:
-                            "${AppLocalizations.of(context).translate('اسم البائع')} : ",
-                        input: state.deal.companyName,
-                      ),
-                      state.deal.description != null &&
-                              state.deal.description != ''
-                          ? titleAndInput(
-                              title:
-                                  "${AppLocalizations.of(context).translate('deal_desc')} : ",
-                              input: state.deal.description ?? '',
-                            )
-                          : const SizedBox(),
-                      titleAndInput(
-                        title:
-                            "${AppLocalizations.of(context).translate('تاريخ بدء الصفقة')} : ",
-                        input: convertDateToString(state.deal.startDate),
-                      ),
-                      titleAndInput(
-                        title:
-                            "${AppLocalizations.of(context).translate('تاريخ انتهاء الصفقة')}: ",
-                        input: convertDateToString(state.deal.endDate),
-                      ),
-                      titleAndInput(
-                        title:
-                            "${AppLocalizations.of(context).translate('السعر قبل')}:",
-                        input: state.deal.prevPrice.toString(),
-                      ),
-                      titleAndInput(
-                        title:
-                            "${AppLocalizations.of(context).translate('السعر بعد')} : ",
-                        input: state.deal.currentPrice.toString(),
-                      ),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 4.h),
-                        width: MediaQuery.of(context).size.width,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              calculateRemainingDays(state.deal.endDate) >= 0
-                                  ? showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text(
-                                            AppLocalizations.of(context)
-                                                .translate('service_fee'),
-                                            style: const TextStyle(
-                                                color: AppColor.backgroundColor,
-                                                fontWeight: FontWeight.w700),
-                                          ),
-                                          content: Text(
-                                            '${AppLocalizations.of(context).translate('you_should_pay')} ${calculateDealsFee(price: state.deal.currentPrice)} ${AppLocalizations.of(context).translate('AED')}',
-                                            style: const TextStyle(
-                                              color: AppColor.backgroundColor,
-                                            ),
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context)
-                                                    .pop(false);
-                                              },
-                                              child: Text(
-                                                AppLocalizations.of(context)
-                                                    .translate('cancel'),
-                                                style: const TextStyle(
-                                                    color: AppColor.red),
-                                              ),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                                double serviceFee =
-                                                    calculateDealsFee(
-                                                        price: state
-                                                            .deal.currentPrice);
-                                                double total = serviceFee +
-                                                    state.deal.currentPrice;
-                                                String amount =
-                                                    (total.toInt() * 100)
-                                                        .toString();
-                                                makePayment(
-                                                  amount: amount,
-                                                  currency: 'aed',
-                                                  email: email,
-                                                  name: name,
-                                                );
-                                              },
-                                              child: Text(
-                                                AppLocalizations.of(context)
-                                                    .translate('submit'),
-                                                style: const TextStyle(
-                                                    color: AppColor
-                                                        .backgroundColor),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      })
-                                  : showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text(
-                                            'Sorry, You can not buy this deal',
-                                            style: TextStyle(
-                                                color:
-                                                    AppColor.backgroundColor),
-                                          ),
-                                          content: const Text(
-                                            'Someone else bought the deal',
-                                            style: TextStyle(
-                                                color: AppColor.secondGrey),
-                                          ),
-                                          actions: [
-                                            ElevatedButton(
-                                              child: Text(
-                                                AppLocalizations.of(context)
-                                                    .translate('ok'),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          ],
-                                        );
+                        BlocBuilder<AuthBloc, AuthState>(
+                          bloc: authBloc,
+                          builder: (context, authState) {
+                            if (authState is Authenticated) {
+                              email = authState.user.userInfo.email ?? '';
+                              name = authState.user.userInfo.username ?? '';
+                              if (authState.user.userInfo.id ==
+                                  state.deal.owner.id) {
+                                return Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return EditDealScreen(
+                                            deal: state.deal,
+                                          );
+                                        }));
                                       },
-                                    );
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColor.backgroundColor,
-                                padding: EdgeInsets.symmetric(horizontal: 20.h),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
-                                textStyle: TextStyle(fontSize: 15.sp)),
-                            child: Text(AppLocalizations.of(context)
-                                .translate('اشتري الان'))),
-                      ),
-                      SizedBox(
-                        height: 100.h,
-                      ),
-                    ],
-                  ),
-                );
-              }
-              return Container();
-            },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        color: AppColor.backgroundColor,
+                                        size: 23.sp,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        dealBloc.add(DeleteDealEvent(
+                                            id: state.deal.id ?? ''));
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: AppColor.red,
+                                        size: 23.sp,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }
+                            }
+                            return Container();
+                          },
+                        ),
+                        titleAndInput(
+                          title:
+                              "${AppLocalizations.of(context).translate('اسم الصفقة')} : ",
+                          input: state.deal.name,
+                        ),
+                        titleAndInput(
+                          title:
+                              "${AppLocalizations.of(context).translate('اسم البائع')} : ",
+                          input: state.deal.companyName,
+                        ),
+                        state.deal.description != null &&
+                                state.deal.description != ''
+                            ? titleAndInput(
+                                title:
+                                    "${AppLocalizations.of(context).translate('deal_desc')} : ",
+                                input: state.deal.description ?? '',
+                              )
+                            : const SizedBox(),
+                        titleAndInput(
+                          title:
+                              "${AppLocalizations.of(context).translate('تاريخ بدء الصفقة')} : ",
+                          input: convertDateToString(state.deal.startDate),
+                        ),
+                        titleAndInput(
+                          title:
+                              "${AppLocalizations.of(context).translate('تاريخ انتهاء الصفقة')}: ",
+                          input: convertDateToString(state.deal.endDate),
+                        ),
+                        titleAndInput(
+                          title:
+                              "${AppLocalizations.of(context).translate('السعر قبل')}:",
+                          input: state.deal.prevPrice.toString(),
+                        ),
+                        titleAndInput(
+                          title:
+                              "${AppLocalizations.of(context).translate('السعر بعد')} : ",
+                          input: state.deal.currentPrice.toString(),
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 4.h),
+                          width: MediaQuery.of(context).size.width,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                calculateRemainingDays(state.deal.endDate) >= 0
+                                    ? showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text(
+                                              AppLocalizations.of(context)
+                                                  .translate('service_fee'),
+                                              style: const TextStyle(
+                                                  color:
+                                                      AppColor.backgroundColor,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            content: Text(
+                                              '${AppLocalizations.of(context).translate('you_should_pay')} ${calculateDealsFee(price: state.deal.currentPrice)} ${AppLocalizations.of(context).translate('AED')}',
+                                              style: const TextStyle(
+                                                color: AppColor.backgroundColor,
+                                              ),
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context)
+                                                      .pop(false);
+                                                },
+                                                child: Text(
+                                                  AppLocalizations.of(context)
+                                                      .translate('cancel'),
+                                                  style: const TextStyle(
+                                                      color: AppColor.red),
+                                                ),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                  double serviceFee =
+                                                      calculateDealsFee(
+                                                          price: state.deal
+                                                              .currentPrice);
+                                                  double total = serviceFee +
+                                                      state.deal.currentPrice;
+                                                  String amount =
+                                                      (total.toInt() * 100)
+                                                          .toString();
+                                                  makePayment(
+                                                    amount: amount,
+                                                    currency: 'aed',
+                                                    email: email,
+                                                    name: name,
+                                                  );
+                                                },
+                                                child: Text(
+                                                  AppLocalizations.of(context)
+                                                      .translate('submit'),
+                                                  style: const TextStyle(
+                                                      color: AppColor
+                                                          .backgroundColor),
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        })
+                                    : showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text(
+                                              'Sorry, You can not buy this deal',
+                                              style: TextStyle(
+                                                  color:
+                                                      AppColor.backgroundColor),
+                                            ),
+                                            content: const Text(
+                                              'Someone else bought the deal',
+                                              style: TextStyle(
+                                                  color: AppColor.secondGrey),
+                                            ),
+                                            actions: [
+                                              ElevatedButton(
+                                                child: Text(
+                                                  AppLocalizations.of(context)
+                                                      .translate('ok'),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColor.backgroundColor,
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 20.h),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  textStyle: TextStyle(fontSize: 15.sp)),
+                              child: Text(AppLocalizations.of(context)
+                                  .translate('اشتري الان'))),
+                        ),
+                        SizedBox(
+                          height: 100.h,
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                return Container();
+              },
+            ),
           ),
         ),
       ),

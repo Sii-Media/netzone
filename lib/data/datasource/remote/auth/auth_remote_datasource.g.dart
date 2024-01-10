@@ -13,7 +13,7 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://back.netzoon.com/';
+    baseUrl ??= 'https://www.netzoonback.siidevelopment.com/';
   }
 
   final Dio _dio;
@@ -671,6 +671,37 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
           baseUrl,
         ))));
     final value = _result.data!;
+    return value;
+  }
+
+  @override
+  Future<RefreshTokenResponseModel> refreshToken(String token) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'token',
+      token,
+    ));
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<RefreshTokenResponseModel>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/user/refreshToken',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = RefreshTokenResponseModel.fromJson(_result.data!);
     return value;
   }
 

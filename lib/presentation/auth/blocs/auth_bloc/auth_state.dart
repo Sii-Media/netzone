@@ -33,8 +33,11 @@ class DeleteAccountInProgress extends AuthState {}
 
 class DeleteAccountFailure extends AuthState {
   final String message;
-
-  const DeleteAccountFailure({required this.message});
+  final Failure failure;
+  const DeleteAccountFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class DeleteAccountSuccess extends AuthState {}

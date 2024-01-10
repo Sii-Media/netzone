@@ -33,8 +33,11 @@ class EditAdsInProgress extends AdsBlocState {}
 
 class EditAdsFailure extends AdsBlocState {
   final String message;
-
-  const EditAdsFailure({required this.message});
+  final Failure failure;
+  const EditAdsFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class EditAdsSuccess extends AdsBlocState {
@@ -47,8 +50,11 @@ class DeleteAdsInProgress extends AdsBlocState {}
 
 class DeleteAdsFailure extends AdsBlocState {
   final String message;
-
-  const DeleteAdsFailure({required this.message});
+  final Failure failure;
+  const DeleteAdsFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class DeleteAdsSuccess extends AdsBlocState {

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/categories/entities/delivery_service/delivery_service.dart';
 import 'package:netzoon/domain/categories/usecases/delivery_services/add_delivery_service_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/delivery_services/get_delivery_company_services_use_case.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 
 import '../../../../../domain/auth/entities/user.dart';
@@ -33,8 +34,10 @@ class DeliveryServiceBloc
 
       emit(
         services.fold(
-          (failure) =>
-              DeliveryServiceFailure(message: mapFailureToString(failure)),
+          (failure) => DeliveryServiceFailure(
+            message: mapFailureToString(failure),
+            failure: failure,
+          ),
           (services) => GetDeliveryCompanyServicesSuccess(services: services),
         ),
       );
@@ -54,8 +57,8 @@ class DeliveryServiceBloc
       ));
       emit(
         message.fold(
-          (failure) =>
-              DeliveryServiceFailure(message: mapFailureToString(failure)),
+          (failure) => DeliveryServiceFailure(
+              message: mapFailureToString(failure), failure: failure),
           (message) => AddDeliverServiceSuccess(message: message),
         ),
       );

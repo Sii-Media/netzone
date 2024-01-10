@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/openions/entities/openion.dart';
 import 'package:netzoon/domain/openions/usecases/add_openion_use_case.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
@@ -17,7 +18,10 @@ class AddOpenionBloc extends Bloc<AddOpenionEvent, AddOpenionState> {
           await addOpenionUseCase(AddOpenionParams(text: event.text));
       emit(
         failureOrOpenion.fold(
-          (failure) => AddOpenionFailure(message: mapFailureToString(failure)),
+          (failure) => AddOpenionFailure(
+            message: mapFailureToString(failure),
+            failure: failure,
+          ),
           (openion) => AddOpenionSuccess(openion: openion.openions),
         ),
       );

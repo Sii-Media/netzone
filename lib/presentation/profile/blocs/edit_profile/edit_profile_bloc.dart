@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/auth/entities/user.dart';
 
 import 'package:netzoon/domain/auth/usecases/edit_profile_use_case.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 
 import '../../../../domain/auth/usecases/get_signed_in_user_use_case.dart';
@@ -54,9 +55,10 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
       );
       emit(
         response.fold(
-            (failure) =>
-                EditProfileFailure(message: mapFailureToString(failure)),
-            (userInfo) {
+            (failure) => EditProfileFailure(
+                  message: mapFailureToString(failure),
+                  failure: failure,
+                ), (userInfo) {
           return EditProfileSuccess(userInfo: userInfo);
         }),
       );

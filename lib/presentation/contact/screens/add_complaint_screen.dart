@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/contact/blocs/add_request/add_request_bloc.dart';
 import 'package:netzoon/presentation/contact/widgets/questionformfield.dart';
@@ -43,11 +45,13 @@ class _AddComplaintScreenState extends State<AddComplaintScreen>
               } else if (state is AddRequestFailure) {
                 stopLoading();
 
-                final failure = state.message;
+                final message = state.message;
+                final failure = state.failure;
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      failure,
+                      message,
                       style: const TextStyle(
                         color: AppColor.white,
                       ),
@@ -55,6 +59,12 @@ class _AddComplaintScreenState extends State<AddComplaintScreen>
                     backgroundColor: AppColor.red,
                   ),
                 );
+                if (failure is UnAuthorizedFailure) {
+                  while (context.canPop()) {
+                    context.pop();
+                  }
+                  context.push('/home');
+                }
               } else if (state is AddRequestSuccess) {
                 stopLoading();
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(

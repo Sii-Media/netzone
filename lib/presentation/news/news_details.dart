@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/news/entities/news_info.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
@@ -49,11 +51,13 @@ class _NewsDetailsState extends State<NewsDetails>
             } else if (state is DeleteNewsFailure) {
               stopLoading();
 
-              final failure = state.message;
+              final message = state.message;
+              final failure = state.failure;
+
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    failure,
+                    message,
                     style: const TextStyle(
                       color: AppColor.white,
                     ),
@@ -61,6 +65,12 @@ class _NewsDetailsState extends State<NewsDetails>
                   backgroundColor: AppColor.red,
                 ),
               );
+              if (failure is UnAuthorizedFailure) {
+                while (context.canPop()) {
+                  context.pop();
+                }
+                context.push('/home');
+              }
             } else if (state is NewsSuccess) {
               stopLoading();
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(

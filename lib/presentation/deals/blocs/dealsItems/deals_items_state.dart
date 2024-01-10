@@ -19,8 +19,11 @@ class DealsItemsSuccess extends DealsItemsState {
 
 class DealsItemsFailure extends DealsItemsState {
   final String message;
-
-  const DealsItemsFailure({required this.message});
+  final Failure failure;
+  const DealsItemsFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class AddDealSuccess extends DealsItemsState {
@@ -39,8 +42,11 @@ class EditDealInProgress extends DealsItemsState {}
 
 class EditDealFailure extends DealsItemsState {
   final String message;
-
-  const EditDealFailure({required this.message});
+  final Failure failure;
+  const EditDealFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class EditDealSuccess extends DealsItemsState {
@@ -53,8 +59,11 @@ class DeleteDealInProgress extends DealsItemsState {}
 
 class DeleteDealFailure extends DealsItemsState {
   final String message;
-
-  const DeleteDealFailure({required this.message});
+  final Failure failure;
+  const DeleteDealFailure({
+    required this.message,
+    required this.failure,
+  });
 }
 
 class DeleteDealSuccess extends DealsItemsState {

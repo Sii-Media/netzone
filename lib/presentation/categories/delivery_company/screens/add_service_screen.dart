@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/presentation/core/widgets/add_photo_button.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 
@@ -47,11 +49,13 @@ class _AddServiceScreenState extends State<AddServiceScreen>
               } else if (state is DeliveryServiceFailure) {
                 stopLoading();
 
-                final failure = state.message;
+                final message = state.message;
+                final failure = state.failure;
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      failure,
+                      message,
                       style: const TextStyle(
                         color: AppColor.white,
                       ),
@@ -59,6 +63,12 @@ class _AddServiceScreenState extends State<AddServiceScreen>
                     backgroundColor: AppColor.red,
                   ),
                 );
+                if (failure is UnAuthorizedFailure) {
+                  while (context.canPop()) {
+                    context.pop();
+                  }
+                  context.push('/home');
+                }
               } else if (state is AddDeliverServiceSuccess) {
                 stopLoading();
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(

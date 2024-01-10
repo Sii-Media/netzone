@@ -19,6 +19,9 @@ class ChangePasswordSuccess extends ChangePasswordState {
 
 class ChangePasswordFailure extends ChangePasswordState {
   final String message;
-
-  const ChangePasswordFailure({required this.message});
+  final Failure failure;
+  const ChangePasswordFailure({
+    required this.message,
+    required this.failure,
+  });
 }

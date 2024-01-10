@@ -7,6 +7,8 @@ part 'user_model.g.dart';
 class UserModel {
   @JsonKey(name: 'token')
   final String token;
+  @JsonKey(name: 'refreshToken')
+  final String refreshToken;
   @JsonKey(name: 'message')
   final String message;
   @JsonKey(name: 'result')
@@ -14,6 +16,7 @@ class UserModel {
 
   UserModel({
     required this.token,
+    required this.refreshToken,
     required this.message,
     required this.userInfo,
   });
@@ -22,11 +25,19 @@ class UserModel {
       _$UserModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
+  UserModel copyWith(String token, String refreshToken) {
+    return UserModel(
+        token: token,
+        refreshToken: refreshToken,
+        message: message,
+        userInfo: userInfo);
+  }
 }
 
 extension MapToDomain on UserModel {
   User toDomain() => User(
         token: token,
+        refreshToken: refreshToken,
         message: message,
         userInfo: userInfo.toDomain(),
       );

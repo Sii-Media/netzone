@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/auth/usecases/get_signed_in_user_use_case.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/domain/deals/entities/dealsItems/deals_items.dart';
@@ -59,7 +60,10 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
       ));
       emit(
         failureOrDealsItems.fold(
-          (failure) => DealsItemsFailure(message: mapFailureToString(failure)),
+          (failure) => DealsItemsFailure(
+            message: mapFailureToString(failure),
+            failure: failure,
+          ),
           (dealsItems) {
             return DealsItemsSuccess(dealsItems: dealsItems.dealsItems);
           },
@@ -75,9 +79,10 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
         final failureOrDealsItems = await getDealsItemUsecase(country);
         emit(
           failureOrDealsItems.fold(
-              (failure) =>
-                  DealsItemsFailure(message: mapFailureToString(failure)),
-              (dealsItems) {
+              (failure) => DealsItemsFailure(
+                    message: mapFailureToString(failure),
+                    failure: failure,
+                  ), (dealsItems) {
             return DealsItemsSuccess(dealsItems: dealsItems.dealsItems);
           }),
         );
@@ -110,7 +115,8 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
 
       emit(
         failureOrDealsItems.fold(
-          (failure) => DealsItemsFailure(message: mapFailureToString(failure)),
+          (failure) => DealsItemsFailure(
+              message: mapFailureToString(failure), failure: failure),
           (message) => AddDealSuccess(message: message),
         ),
       );
@@ -122,7 +128,8 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
 
       emit(
         deal.fold(
-          (failure) => DealsItemsFailure(message: mapFailureToString(failure)),
+          (failure) => DealsItemsFailure(
+              message: mapFailureToString(failure), failure: failure),
           (deal) => GetDealByIdSuccess(deal: deal),
         ),
       );
@@ -145,7 +152,8 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
       ));
       emit(
         result.fold(
-          (failure) => EditDealFailure(message: mapFailureToString(failure)),
+          (failure) => EditDealFailure(
+              message: mapFailureToString(failure), failure: failure),
           (message) => EditDealSuccess(message: message),
         ),
       );
@@ -155,7 +163,10 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
       final result = await deleteDealUseCase(event.id);
       emit(
         result.fold(
-          (failure) => DeleteDealFailure(message: mapFailureToString(failure)),
+          (failure) => DeleteDealFailure(
+            message: mapFailureToString(failure),
+            failure: failure,
+          ),
           (message) => DeleteDealSuccess(message: message),
         ),
       );

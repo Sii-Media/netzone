@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/presentation/cart/blocs/cart_bloc/cart_bloc_bloc.dart';
 import 'package:netzoon/presentation/cart/helpers/handle_add_to_cart_fun.dart';
 import 'package:netzoon/presentation/categories/factories/factory_profile_screen.dart';
@@ -149,11 +151,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                       } else if (state is DeleteProductFailure) {
                         stopLoading();
 
-                        final failure = state.message;
+                        final message = state.message;
+                        final failure = state.failure;
+
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
-                              failure,
+                              message,
                               style: const TextStyle(
                                 color: AppColor.white,
                               ),
@@ -161,6 +165,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                             backgroundColor: AppColor.red,
                           ),
                         );
+                        if (failure is UnAuthorizedFailure) {
+                          while (context.canPop()) {
+                            context.pop();
+                          }
+                          context.push('/home');
+                        }
                       } else if (state is DeleteProductSuccess) {
                         stopLoading();
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
