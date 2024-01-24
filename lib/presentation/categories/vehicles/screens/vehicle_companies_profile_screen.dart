@@ -656,8 +656,12 @@ class _VehicleCompaniesProfileScreenState
                             tabs: [
                               Tab(
                                 icon: Text(
-                                  AppLocalizations.of(context)
-                                      .translate(state.userInfo.userType ?? ''),
+                                  AppLocalizations.of(context).translate(
+                                      state.userInfo.userType == 'planes'
+                                          ? 'planes'
+                                          : widget.userType == 'car'
+                                              ? 'cars'
+                                              : 'ships'),
                                   style: TextStyle(fontSize: 10.sp),
                                 ),
                               ),

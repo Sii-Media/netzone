@@ -185,6 +185,24 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               );
                             })
                         : const SizedBox(),
+                    state.user.userInfo.userType == 'sea_companies'
+                        ? addWidget(
+                            title: AppLocalizations.of(context)
+                                .translate('add_ship'),
+                            subTitle: AppLocalizations.of(context)
+                                .translate('add_ship_desc'),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const AddVehicleScreen(
+                                      category: 'sea_companies',
+                                    );
+                                  },
+                                ),
+                              );
+                            })
+                        : const SizedBox(),
                     state.user.userInfo.userType == 'real_estate'
                         ? addWidget(
                             title: AppLocalizations.of(context)

@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dynamic_height_grid_view/dynamic_height_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:netzoon/presentation/categories/vehicles/widgets/vehicle_widget.dart';
+import 'package:netzoon/presentation/core/blocs/country_bloc/country_bloc.dart';
 import 'package:netzoon/presentation/profile/screens/visitors_screen.dart';
 
 import '../../../injection_container.dart';
@@ -37,9 +40,11 @@ class _MyVehicleProfileScreenState extends State<MyVehicleProfileScreen>
   final userBloc = sl<GetUserBloc>();
   final getAccountsBloc = sl<AddAccountBloc>();
   final bloc = sl<VehicleBloc>();
-
+  late final CountryBloc countryBloc;
   @override
   void initState() {
+    countryBloc = BlocProvider.of<CountryBloc>(context);
+    countryBloc.add(GetCountryEvent());
     userBloc.add(GetUserByIdEvent(userId: widget.userId));
     bloc.add(GetCompanyVehiclesEvent(type: widget.type, id: widget.userId));
     super.initState();
@@ -148,7 +153,10 @@ class _MyVehicleProfileScreenState extends State<MyVehicleProfileScreen>
                                           context: context,
                                           text: state.userInfo.userType == 'car'
                                               ? 'sold_cars'
-                                              : 'sold_airplanes',
+                                              : state.userInfo.userType ==
+                                                      'planes'
+                                                  ? 'sold_airplanes'
+                                                  : 'solded_ships',
                                           icon:
                                               Icons.production_quantity_limits,
                                         ),
@@ -337,8 +345,11 @@ class _MyVehicleProfileScreenState extends State<MyVehicleProfileScreen>
                                 text: state.userInfo.userType == 'car'
                                     ? AppLocalizations.of(context)
                                         .translate('cars')
-                                    : AppLocalizations.of(context)
-                                        .translate('planes'),
+                                    : state.userInfo.userType == 'planes'
+                                        ? AppLocalizations.of(context)
+                                            .translate('planes')
+                                        : AppLocalizations.of(context)
+                                            .translate('ships'),
                                 height: 35.h,
                               ),
                             ],
@@ -465,145 +476,33 @@ class _MyVehicleProfileScreenState extends State<MyVehicleProfileScreen>
                                       } else if (state
                                           is GetCompanyVehiclesSuccess) {
                                         return state.companyVehicles.isNotEmpty
-                                            ? GridView.builder(
-                                                gridDelegate:
-                                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                            ? BlocBuilder<CountryBloc,
+                                                CountryState>(
+                                                bloc: countryBloc,
+                                                builder:
+                                                    (context, countryState) {
+                                                  if (countryState
+                                                      is CountryInitial) {
+                                                    return DynamicHeightGridView(
+                                                        itemCount: state
+                                                            .companyVehicles
+                                                            .length,
                                                         crossAxisCount: 2,
-                                                        childAspectRatio: 0.95,
-                                                        crossAxisSpacing: 10.w,
-                                                        mainAxisSpacing: 10.h),
-                                                shrinkWrap: true,
-                                                physics:
-                                                    const BouncingScrollPhysics(),
-                                                itemCount: state
-                                                    .companyVehicles.length,
-                                                itemBuilder: (context, index) {
-                                                  return Container(
-                                                    margin: const EdgeInsets
-                                                        .symmetric(vertical: 8),
-                                                    decoration: BoxDecoration(
-                                                        color: AppColor.white,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20),
-                                                        boxShadow: [
-                                                          BoxShadow(
-                                                            color: AppColor
-                                                                .secondGrey
-                                                                .withOpacity(
-                                                                    0.5),
-                                                            blurRadius: 10,
-                                                            spreadRadius: 2,
-                                                            offset:
-                                                                const Offset(
-                                                                    0, 3),
-                                                          ),
-                                                        ]),
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          const BorderRadius
-                                                              .all(
-                                                              Radius.circular(
-                                                                  20)),
-                                                      child: GestureDetector(
-                                                        onTap: () {
-                                                          Navigator.of(context)
-                                                              .push(
-                                                            MaterialPageRoute(
-                                                              builder:
-                                                                  (context) {
-                                                                return VehicleDetailsScreen(
-                                                                    vehicleId: state
-                                                                            .companyVehicles[index]
-                                                                            .id ??
-                                                                        '');
-                                                              },
-                                                            ),
+                                                        crossAxisSpacing: 10,
+                                                        mainAxisSpacing: 10,
+                                                        builder: (ctx, index) {
+                                                          return VehicleWidget(
+                                                            vehicle: state
+                                                                    .companyVehicles[
+                                                                index],
+                                                            countryState:
+                                                                countryState,
                                                           );
-                                                        },
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            CachedNetworkImage(
-                                                              imageUrl: state
-                                                                  .companyVehicles[
-                                                                      index]
-                                                                  .imageUrl,
-                                                              height: 120.h,
-                                                              width: 200.w,
-                                                              fit: BoxFit.cover,
-                                                              progressIndicatorBuilder:
-                                                                  (context, url,
-                                                                          downloadProgress) =>
-                                                                      Padding(
-                                                                padding: const EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal:
-                                                                        70.0,
-                                                                    vertical:
-                                                                        50),
-                                                                child:
-                                                                    CircularProgressIndicator(
-                                                                  value: downloadProgress
-                                                                      .progress,
-                                                                  color: AppColor
-                                                                      .backgroundColor,
 
-                                                                  // strokeWidth: 10,
-                                                                ),
-                                                              ),
-                                                              errorWidget: (context,
-                                                                      url,
-                                                                      error) =>
-                                                                  const Icon(Icons
-                                                                      .error),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      right:
-                                                                          9.0,
-                                                                      left: 9.0,
-                                                                      bottom:
-                                                                          8.0),
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Text(
-                                                                    state
-                                                                        .companyVehicles[
-                                                                            index]
-                                                                        .name,
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      color: AppColor
-                                                                          .backgroundColor,
-                                                                    ),
-                                                                  ),
-                                                                  Text(
-                                                                    '${state.companyVehicles[index].price} \$',
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      color: AppColor
-                                                                          .colorTwo,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  );
+                                                          /// return your widget here.
+                                                        });
+                                                  }
+                                                  return Container();
                                                 },
                                               )
                                             : Center(

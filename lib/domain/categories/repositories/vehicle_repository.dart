@@ -53,7 +53,7 @@ abstract class VehicleRepository {
     required String name,
     required String description,
     required int price,
-    required int kilometers,
+    int? kilometers,
     required DateTime year,
     required String location,
     required String type,
@@ -81,5 +81,12 @@ abstract class VehicleRepository {
     bool? guarantee,
     String? forWhat,
     String? regionalSpecs,
+    String? aircraftType,
+    String? manufacturer,
+    String? vehicleModel,
+    String? maxSpeed,
+    String? maxDistance,
+    String? shipType,
+    String? shipLength,
   });
 }

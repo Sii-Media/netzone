@@ -12,7 +12,7 @@ class VehicleModel {
   final String imageUrl;
   final String description;
   final int price;
-  final int kilometers;
+  final int? kilometers;
   final String year;
   final String location;
   final String type;
@@ -39,14 +39,20 @@ class VehicleModel {
   final bool? guarantee;
   final String? forWhat;
   final String? regionalSpecs;
-
+  final String? aircraftType;
+  final String? manufacturer;
+  final String? vehicleModel;
+  final String? maxSpeed;
+  final String? maxDistance;
+  final String? shipType;
+  final String? shipLength;
   VehicleModel({
     this.id,
     required this.name,
     required this.imageUrl,
     required this.description,
     required this.price,
-    required this.kilometers,
+    this.kilometers,
     required this.year,
     required this.location,
     required this.type,
@@ -73,6 +79,13 @@ class VehicleModel {
     this.guarantee,
     this.forWhat,
     this.regionalSpecs,
+    this.aircraftType,
+    this.manufacturer,
+    this.vehicleModel,
+    this.maxSpeed,
+    this.maxDistance,
+    this.shipType,
+    this.shipLength,
   });
 
   factory VehicleModel.fromJson(Map<String, dynamic> json) =>
@@ -115,5 +128,12 @@ extension MapToDomain on VehicleModel {
         guarantee: guarantee,
         forWhat: forWhat,
         regionalSpecs: regionalSpecs,
+        aircraftType: aircraftType,
+        manufacturer: manufacturer,
+        maxDistance: maxDistance,
+        maxSpeed: maxSpeed,
+        shipLength: shipLength,
+        shipType: shipType,
+        vehicleModel: vehicleModel,
       );
 }

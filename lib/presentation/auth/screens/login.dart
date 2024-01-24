@@ -158,7 +158,8 @@ class _LogInScreenState extends State<LogInScreen> {
             return MyRealEstateCompanyProfileScreen(
                 userId: state.user.userInfo.id);
           } else if (state.user.userInfo.userType == 'car' ||
-              state.user.userInfo.userType == 'planes') {
+              state.user.userInfo.userType == 'planes' ||
+              state.user.userInfo.userType == 'sea_companies') {
             return MyVehicleProfileScreen(
                 userId: state.user.userInfo.id,
                 type: state.user.userInfo.userType ?? '');

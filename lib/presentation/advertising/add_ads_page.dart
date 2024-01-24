@@ -74,6 +74,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
     'company',
     'car',
     'planes',
+    'sea_companies',
     'real_estate',
     'product',
     'service'

@@ -246,6 +246,13 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
         transmissionType: event.transmissionType,
         forWhat: event.forWhat,
         regionalSpecs: event.regionalSpecs,
+        aircraftType: event.aircraftType,
+        manufacturer: event.manufacturer,
+        vehicleModel: event.vehicleModel,
+        maxDistance: event.maxDistance,
+        maxSpeed: event.maxSpeed,
+        shipLength: event.shipLength,
+        shipType: event.shipType,
       ));
       emit(
         response.fold(
