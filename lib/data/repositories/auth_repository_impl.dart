@@ -529,7 +529,7 @@ class AuthRepositoryImpl implements AuthRepository {
           }
           final user2 = local.getSignedInUser();
           Response response = await dio.put(
-            'https://www.netzoonback.siidevelopment.com/user/net-editUser/$userId',
+            'http://10.0.2.2:5000/user/net-editUser/$userId',
             data: formData,
             options:
                 Options(headers: {'Authorization': 'Bearer ${user2?.token}'}),
@@ -777,10 +777,11 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, List<UserInfo>>> getAllUsers() async {
+  Future<Either<Failure, List<UserInfo>>> getAllUsers(
+      {required String? name}) async {
     try {
       if (await networkInfo.isConnected) {
-        final users = await authRemoteDataSource.getAllUsers();
+        final users = await authRemoteDataSource.getAllUsers(name);
         return Right(users.map((e) => e.toDomain()).toList());
       } else {
         return Left(OfflineFailure());
@@ -814,8 +815,18 @@ class AuthRepositoryImpl implements AuthRepository {
             final dio = sl<Dio>();
             dio.options.headers['Authorization'] = 'Bearer ${newUser.token}';
           }
-          final result = await authRemoteDataSource.deleteAccount(userId);
-          return Right(result);
+          Dio dio = Dio();
+          dio.options.headers['Api-Token'] =
+              '8431b9677570a63562158dc40c06675cdfc12c47';
+          Response response = await dio.delete(
+            'https://api-D27C6110-9DB9-4EBE-AA85-CF39E2AF562E.sendbird.com/v3/users/${user.userInfo.username}',
+          );
+          if (response.statusCode == 200) {
+            final result = await authRemoteDataSource.deleteAccount(userId);
+            return Right(result);
+          } else {
+            return Left(ServerFailure());
+          }
         } else {
           return Left(CredintialFailure());
         }
@@ -1085,9 +1096,8 @@ class AuthRepositoryImpl implements AuthRepository {
           ));
         }
 
-        Response response = await dio.post(
-            'https://www.netzoonback.siidevelopment.com/user/oauth',
-            data: formData);
+        Response response =
+            await dio.post('http://10.0.2.2:5000/user/oauth', data: formData);
 
         if (response.statusCode == 201) {
           final UserModel user = UserModel.fromJson(response.data!);

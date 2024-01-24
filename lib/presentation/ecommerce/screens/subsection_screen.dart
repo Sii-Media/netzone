@@ -27,13 +27,18 @@ class SubSectionsScreen extends StatefulWidget {
 
 class _SubSectionsScreenState extends State<SubSectionsScreen> {
   final elcDeviceBloc = sl<ElecDevicesBloc>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController searchController = TextEditingController();
+  TextEditingController minPriceController = TextEditingController();
+  TextEditingController maxPriceController = TextEditingController();
   String? ownerName;
   double priceMin = 0;
   double priceMax = 1000000;
   String? condition;
   @override
   void initState() {
+    minPriceController.text = priceMin.toString();
+    maxPriceController.text = priceMax.toString();
     elcDeviceBloc.add(GetElcCategoryProductsEvent(
         department: widget.filter, category: widget.category));
     super.initState();
@@ -224,164 +229,292 @@ class _SubSectionsScreenState extends State<SubSectionsScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return SingleChildScrollView(
-              child: Container(
-                padding: const EdgeInsets.all(26),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Text field to write owner name
-                    TextFormField(
-                      onChanged: (value) {
-                        setState(() {
-                          ownerName = value;
-                        });
-                      },
-                      style: const TextStyle(color: AppColor.white),
-                      decoration: InputDecoration(
-                        filled: true,
-                        hintText: AppLocalizations.of(context)
-                            .translate('search_by_owner_name'),
-                        hintStyle: const TextStyle(color: AppColor.white),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 30)
-                            .flipped,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: AppColor
-                                  .white), //<-- Set border color for focused state
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: Colors
-                                  .white), //<-- Set border color for enabled state
-                          borderRadius: BorderRadius.circular(20),
+              child: Form(
+                key: formKey,
+                child: Container(
+                  padding: const EdgeInsets.all(26),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Text field to write owner name
+                      TextFormField(
+                        onChanged: (value) {
+                          setState(() {
+                            ownerName = value;
+                          });
+                        },
+                        style: const TextStyle(color: AppColor.white),
+                        decoration: InputDecoration(
+                          filled: true,
+                          hintText: AppLocalizations.of(context)
+                              .translate('search_by_owner_name'),
+                          hintStyle: const TextStyle(color: AppColor.white),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 30)
+                              .flipped,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: AppColor
+                                    .white), //<-- Set border color for focused state
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Colors
+                                    .white), //<-- Set border color for enabled state
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                         ),
                       ),
-                    ),
 
-                    const SizedBox(height: 16),
-                    // Slider range for price
-                    Text(
-                      '${AppLocalizations.of(context).translate('price')} :',
-                      style: const TextStyle(
-                        color: AppColor.white,
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${AppLocalizations.of(context).translate('from')}:   $priceMin',
-                          style: const TextStyle(
-                            color: AppColor.white,
-                          ),
-                        ),
-                        Text(
-                          '${AppLocalizations.of(context).translate('to')}:  $priceMax',
-                          style: const TextStyle(
-                            color: AppColor.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                    RangeSlider(
-                      values: RangeValues(priceMin, priceMax),
-                      min: 0,
-                      max: 1000000,
-                      onChanged: (RangeValues values) {
-                        setState(() {
-                          priceMin = values.start;
-                          priceMax = values.end;
-                        });
-                      },
-                      activeColor: AppColor.white,
-                      divisions: 1000,
-                      labels:
-                          RangeLabels(priceMin.toString(), priceMax.toString()),
-                    ),
-                    const SizedBox(height: 16),
-                    // Radio buttons for condition
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${AppLocalizations.of(context).translate('condition')} :',
-                          style: const TextStyle(
-                            color: AppColor.white,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Radio<String>(
-                              value: 'new',
-                              groupValue: condition,
-                              onChanged: (value) {
-                                setState(() {
-                                  condition = value;
-                                });
-                              },
-                              activeColor: AppColor.white,
-                            ),
-                            Text(
-                              AppLocalizations.of(context).translate('new'),
-                              style: const TextStyle(
-                                color: AppColor.white,
-                              ),
-                            ),
-                            Radio<String>(
-                              value: 'used',
-                              groupValue: condition,
-                              focusColor: AppColor.white,
-                              onChanged: (value) {
-                                setState(() {
-                                  condition = value;
-                                });
-                              },
-                              activeColor: AppColor.white,
-                            ),
-                            Text(
-                              AppLocalizations.of(context).translate('used'),
-                              style: const TextStyle(
-                                color: AppColor.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          AppColor.white,
-                        ),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        )),
-                      ),
-                      onPressed: () {
-                        elcDeviceBloc.add(GetElcCategoryProductsEvent(
-                          department: widget.filter,
-                          category: widget.category,
-                          owner: ownerName,
-                          priceMin: priceMin,
-                          priceMax: priceMax,
-                          condition: condition,
-                        ));
-                        // Close the bottom sheet after applying filters
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(
-                        AppLocalizations.of(context).translate('apply_filters'),
+                      const SizedBox(height: 16),
+                      // Slider range for price
+                      Text(
+                        '${AppLocalizations.of(context).translate('price')} :',
                         style: const TextStyle(
-                            color: AppColor.backgroundColor,
-                            fontWeight: FontWeight.bold),
+                          color: AppColor.white,
+                        ),
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        height: 14.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: 100.w,
+                            child: TextFormField(
+                              controller: minPriceController,
+                              onChanged: (value) {
+                                // setState(() {
+                                //   priceMin = double.tryParse(value) ?? 1000000.0;
+                                // });
+                                setState(() {
+                                  if (double.tryParse(value)! > 0 &&
+                                      double.tryParse(value)! < priceMax) {
+                                    priceMin = double.tryParse(value) ?? 0.0;
+                                  }
+                                });
+                              },
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return AppLocalizations.of(context)
+                                      .translate('required');
+                                }
+                                if (double.tryParse(value)! > priceMax) {
+                                  return 'should be less than $priceMax';
+                                }
+                                return null;
+                              },
+                              style: const TextStyle(color: AppColor.white),
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                filled: true,
+                                hintText: AppLocalizations.of(context)
+                                    .translate('from'),
+                                labelText: AppLocalizations.of(context)
+                                    .translate('from'),
+                                labelStyle:
+                                    const TextStyle(color: AppColor.white),
+                                hintStyle:
+                                    const TextStyle(color: AppColor.white),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 5)
+                                    .flipped,
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: AppColor
+                                          .white), //<-- Set border color for focused state
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors
+                                          .white), //<-- Set border color for enabled state
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 6.w,
+                          ),
+                          // Text(
+                          //   '${AppLocalizations.of(context).translate('from')}:   $priceMin',
+                          //   style: const TextStyle(
+                          //     color: AppColor.white,
+                          //   ),
+                          // ),
+                          // Text(
+                          //   '${AppLocalizations.of(context).translate('to')}:  $priceMax',
+                          //   style: const TextStyle(
+                          //     color: AppColor.white,
+                          //   ),
+                          // ),
+                          SizedBox(
+                            width: 100.w,
+                            child: TextFormField(
+                              controller: maxPriceController,
+                              onChanged: (value) {
+                                setState(() {
+                                  if (double.tryParse(value)! > priceMin &&
+                                      double.tryParse(value)! < 1000000) {
+                                    priceMax =
+                                        double.tryParse(value) ?? 1000000.0;
+                                  }
+                                });
+                              },
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return AppLocalizations.of(context)
+                                      .translate('required');
+                                }
+                                if (double.tryParse(value)! < priceMin) {
+                                  return 'should be greater than $priceMin';
+                                }
+                                return null;
+                              },
+                              style: const TextStyle(color: AppColor.white),
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                filled: true,
+                                hintText: AppLocalizations.of(context)
+                                    .translate('to'),
+                                labelText: AppLocalizations.of(context)
+                                    .translate('to'),
+                                labelStyle:
+                                    const TextStyle(color: AppColor.white),
+                                hintStyle:
+                                    const TextStyle(color: AppColor.white),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 5)
+                                    .flipped,
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: AppColor
+                                          .white), //<-- Set border color for focused state
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors
+                                          .white), //<-- Set border color for enabled state
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      RangeSlider(
+                        values: RangeValues(priceMin, priceMax),
+                        min: 0,
+                        max: 1000000,
+                        onChanged: (RangeValues values) {
+                          setState(() {
+                            priceMin = values.start;
+                            priceMax = values.end;
+                            minPriceController.text = priceMin.toString();
+                            maxPriceController.text = priceMax.toString();
+                          });
+                        },
+                        activeColor: AppColor.white,
+                        divisions: 10000,
+                        // labels:
+                        //     RangeLabels(priceMin.toString(), priceMax.toString()),
+                      ),
+                      const SizedBox(height: 16),
+                      // Radio buttons for condition
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${AppLocalizations.of(context).translate('condition')} :',
+                            style: const TextStyle(
+                              color: AppColor.white,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Radio<String>(
+                                value: 'new',
+                                groupValue: condition,
+                                onChanged: (value) {
+                                  setState(() {
+                                    condition = value;
+                                  });
+                                },
+                                activeColor: AppColor.white,
+                              ),
+                              Text(
+                                AppLocalizations.of(context).translate('new'),
+                                style: const TextStyle(
+                                  color: AppColor.white,
+                                ),
+                              ),
+                              Radio<String>(
+                                value: 'used',
+                                groupValue: condition,
+                                focusColor: AppColor.white,
+                                onChanged: (value) {
+                                  setState(() {
+                                    condition = value;
+                                  });
+                                },
+                                activeColor: AppColor.white,
+                              ),
+                              Text(
+                                AppLocalizations.of(context).translate('used'),
+                                style: const TextStyle(
+                                  color: AppColor.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            AppColor.white,
+                          ),
+                          shape:
+                              MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          )),
+                        ),
+                        onPressed: () {
+                          if (!formKey.currentState!.validate()) {
+                            return;
+                          }
+                          elcDeviceBloc.add(GetElcCategoryProductsEvent(
+                            department: widget.filter,
+                            category: widget.category,
+                            owner: ownerName,
+                            priceMin: priceMin,
+                            priceMax: priceMax,
+                            condition: condition,
+                          ));
+                          // Close the bottom sheet after applying filters
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)
+                              .translate('apply_filters'),
+                          style: const TextStyle(
+                              color: AppColor.backgroundColor,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );

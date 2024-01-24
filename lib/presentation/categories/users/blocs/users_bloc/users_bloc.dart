@@ -65,7 +65,8 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     });
     on<GetAllUsersEvent>((event, emit) async {
       emit(GetAllUsersInProgress());
-      final users = await getAllUsersUseCase(NoParams());
+      final users =
+          await getAllUsersUseCase(GetAllUsersParams(name: event.name));
       final result = await getSignedInUser.call(NoParams());
       late User? user;
 

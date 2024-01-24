@@ -13,7 +13,7 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://www.netzoonback.siidevelopment.com/';
+    baseUrl ??= 'http://10.0.2.2:5000/';
   }
 
   final Dio _dio;
@@ -583,9 +583,10 @@ class _AuthRemoteDataSourceImpl implements AuthRemoteDataSourceImpl {
   }
 
   @override
-  Future<List<UserInfoModel>> getAllUsers() async {
+  Future<List<UserInfoModel>> getAllUsers(String? name) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'name': name};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio

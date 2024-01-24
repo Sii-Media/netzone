@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -114,16 +115,30 @@ class _ContactsListWidgetState extends State<ContactsListWidget> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          widget.users[index].username ??
-                                              'person',
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                          style: TextStyle(
-                                            color: AppColor.backgroundColor,
-                                            fontSize: 18.sp,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              widget.users[index].username ??
+                                                  'person',
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                color: AppColor.backgroundColor,
+                                                fontSize: 15.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 12.w,
+                                            ),
+                                            CountryFlag.fromCountryCode(
+                                              widget.users[index].country ??
+                                                  'AE',
+                                              height: 22.h,
+                                              width: 22.w,
+                                              borderRadius: 8,
+                                            ),
+                                          ],
                                         ),
                                         SizedBox(
                                           width: MediaQuery.of(context)
@@ -137,7 +152,7 @@ class _ContactsListWidgetState extends State<ContactsListWidget> {
                                                 'this is a bio',
                                             style: TextStyle(
                                               color: AppColor.mainGrey,
-                                              fontSize: 14.sp,
+                                              fontSize: 12.sp,
                                             ),
                                           ),
                                         ),

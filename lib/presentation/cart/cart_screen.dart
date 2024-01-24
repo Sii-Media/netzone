@@ -252,12 +252,40 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                       totalAmount = state.totalPrice;
 
                       return Center(
-                        child: Text(
-                          AppLocalizations.of(context).translate('empty_cart'),
-                          style: TextStyle(
-                            color: AppColor.backgroundColor,
-                            fontSize: 22.sp,
-                          ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // Icon(
+                            //   Icons.shopping_cart_checkout,
+                            //   color: AppColor.backgroundColor.withOpacity(0.3),
+                            //   size: 70,
+                            // ),
+                            Image.asset(
+                              'assets/images/empty-cart.png',
+                              width: 250.w,
+                            ),
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('empty_cart'),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color:
+                                    AppColor.backgroundColor.withOpacity(0.3),
+                                fontSize: 23.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              '${AppLocalizations.of(context).translate('start_shopping')}!',
+                              style: TextStyle(
+                                color:
+                                    AppColor.backgroundColor.withOpacity(0.3),
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     }
@@ -364,9 +392,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                     builder: (context, state) {
                       String cc = state is CartLoaded
                           ? getCurrencyFromCountry(
-                              state.items.isNotEmpty
-                                  ? state.items.first.owner.country ?? 'AE'
-                                  : 'AE',
+                              countryState.selectedCountry,
                               context,
                             )
                           : 'AE';
@@ -377,265 +403,288 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                       serviceFee = state is CartLoaded
                           ? calculatePurchaseFee(state.totalPrice)
                           : 0;
-                      return BottomAppBar(
-                        // elevation: 1,
-                        // color: Colors.red,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 10,
-                          ),
-                          height: 220.h,
-                          decoration: const BoxDecoration(
-                              color: AppColor.backgroundColor,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                topRight: Radius.circular(30),
-                              )),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)
-                                        .translate('order_total'),
-                                    style: TextStyle(
-                                      color: AppColor.white,
-                                      fontSize: 17.sp,
-                                      fontWeight: FontWeight.bold,
+                      print(cc);
+                      return state is CartLoaded
+                          ? state.items.isNotEmpty
+                              ? BottomAppBar(
+                                  // elevation: 1,
+                                  // color: Colors.red,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      vertical: 10,
                                     ),
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                        style: TextStyle(
-                                          fontSize: 17.sp,
-                                          color: AppColor.white,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: state is CartLoaded
-                                                ? '${state.totalPrice}'
-                                                : '0',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: cc,
-                                            style: TextStyle(
-                                                color: AppColor.white,
-                                                fontSize: 10.sp),
-                                          )
-                                        ]),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)
-                                        .translate('service_fee'),
-                                    style: TextStyle(
-                                      color: AppColor.white,
-                                      fontSize: 17.sp,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  // Text(
-                                  //   state is CartLoaded
-                                  //       ? authState.user.userInfo.userType ==
-                                  //               'local_company'
-                                  //           ? '${calculateTraderFee(items: state.items)}AED'
-                                  //           : '${calculatePurchaseFee(state.totalPrice)}'
-                                  //       : '0',
-                                  //   style: TextStyle(
-                                  //     color: AppColor.white,
-                                  //     fontSize: 17.sp,
-                                  //     fontWeight: FontWeight.w700,
-                                  //   ),
-                                  // ),
-                                  RichText(
-                                    text: TextSpan(
-                                        style: TextStyle(
-                                          fontSize: 17.sp,
-                                          color: AppColor.white,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: state is CartLoaded
-                                                ? '${calculatePurchaseFee(state.totalPrice)}'
-                                                : '0',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: cc,
-                                            style: TextStyle(
-                                                color: AppColor.white,
-                                                fontSize: 10.sp),
-                                          )
-                                        ]),
-                                  ),
-                                ],
-                              ),
-                              const Divider(
-                                color: AppColor.mainGrey,
-                                thickness: 1,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)
-                                        .translate('total_amount'),
-                                    style: TextStyle(
-                                      color: AppColor.white,
-                                      fontSize: 17.sp,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  // Text(
-                                  //   state is CartLoaded
-                                  //       ? authState.user.userInfo.userType ==
-                                  //                   'trader' ||
-                                  //               authState.user.userInfo
-                                  //                       .userType ==
-                                  //                   'local_company'
-                                  //           ? '${state.totalPrice + calculateTraderFee(items: state.items)} AED'
-                                  //           : '${state.totalPrice + calculatePurchaseFee(state.totalPrice)}AED'
-                                  //       : '0AED',
-                                  //   style: TextStyle(
-                                  //     color: AppColor.white,
-                                  //     fontSize: 17.sp,
-                                  //     fontWeight: FontWeight.w700,
-                                  //   ),
-                                  // ),
-                                  RichText(
-                                    text: TextSpan(
-                                        style: TextStyle(
-                                          fontSize: 17.sp,
-                                          color: AppColor.white,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: state is CartLoaded
-                                                ? '${state.totalPrice + calculatePurchaseFee(state.totalPrice)}'
-                                                : '0',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: cc,
-                                            style: TextStyle(
-                                                color: AppColor.white,
-                                                fontSize: 10.sp),
-                                          )
-                                        ]),
-                                  ),
-                                ],
-                              ),
-                              state is CartLoaded
-                                  ? state.items.isEmpty
-                                      ? const SizedBox()
-                                      : InkWell(
-                                          onTap: () {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) {
-                                              return DeliveryDetailsScreen(
-                                                totalWeight: state.totalWeight,
-                                                userInfo: userInfo,
-                                                from: from.join(' / '),
-                                                products: state.props,
-                                                serviceFee: serviceFee,
-                                                subTotal:
-                                                    totalAmount - serviceFee,
-                                                totalAmount: totalAmount,
-                                                totalQuantity:
-                                                    state.totalQuantity,
-                                                productsNames: products
-                                                    .map((e) => e.name)
-                                                    .toList()
-                                                    .join(' - '),
-                                              );
-                                            }));
-                                            // String amount =
-                                            //     (totalAmount.toInt() * 100).toString();
-                                            // makePayment(
-                                            //   amount: amount,
-                                            //   currency: 'AED',
-                                            //   toName:
-                                            //       authState.user.userInfo.username ??
-                                            //           '',
-                                            //   toEmail:
-                                            //       authState.user.userInfo.email ?? '',
-                                            //   userMobile:
-                                            //       authState.user.userInfo.firstMobile ??
-                                            //           '',
-                                            //   productsNames: products
-                                            //       .map((e) => e.name)
-                                            //       .toList()
-                                            //       .join(' - '),
-                                            //   grandTotal: totalAmount.toString(),
-                                            //   serviceFee: serviceFee.toString(),
-                                            // );
-                                            // double g = totalAmount;
-                                            // double s = serviceFee;
-
-                                            // sendBloc.add(SendEmailPaymentRequestEvent(
-                                            //   toName:
-                                            //       authState.user.userInfo.username ??
-                                            //           '',
-                                            //   toEmail:
-                                            //       authState.user.userInfo.email ?? '',
-                                            //   userMobile:
-                                            //       authState.user.userInfo.firstMobile ??
-                                            //           '',
-                                            //   productsNames: products
-                                            //       .map((e) => e.name)
-                                            //       .toList()
-                                            //       .join(' - '),
-                                            //   grandTotal: totalAmount.toString(),
-                                            //   serviceFee: serviceFee.toString(),
-                                            //   subTotal: g - s,
-                                            // ));
-                                          },
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            width: double.infinity,
-                                            height: 50.h,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                                border: Border.all(
-                                                    color: AppColor.white)),
-                                            child: Text(
+                                    height: 220.h,
+                                    decoration: const BoxDecoration(
+                                        color: AppColor.backgroundColor,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(30),
+                                          topRight: Radius.circular(30),
+                                        )),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
                                               AppLocalizations.of(context)
-                                                  .translate('confirm'),
+                                                  .translate('order_total'),
                                               style: TextStyle(
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.bold,
                                                 color: AppColor.white,
+                                                fontSize: 17.sp,
+                                                fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                          ),
-                                        )
-                                  : const SizedBox(),
-                            ],
-                          ),
-                        ),
-                      );
+                                            RichText(
+                                              text: TextSpan(
+                                                  style: TextStyle(
+                                                    fontSize: 17.sp,
+                                                    color: AppColor.white,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text: state is CartLoaded
+                                                          ? '${state.totalPrice}'
+                                                          : '0',
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: cc,
+                                                      style: TextStyle(
+                                                          color: AppColor.white,
+                                                          fontSize: 10.sp),
+                                                    )
+                                                  ]),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              AppLocalizations.of(context)
+                                                  .translate('service_fee'),
+                                              style: TextStyle(
+                                                color: AppColor.white,
+                                                fontSize: 17.sp,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                            // Text(
+                                            //   state is CartLoaded
+                                            //       ? authState.user.userInfo.userType ==
+                                            //               'local_company'
+                                            //           ? '${calculateTraderFee(items: state.items)}AED'
+                                            //           : '${calculatePurchaseFee(state.totalPrice)}'
+                                            //       : '0',
+                                            //   style: TextStyle(
+                                            //     color: AppColor.white,
+                                            //     fontSize: 17.sp,
+                                            //     fontWeight: FontWeight.w700,
+                                            //   ),
+                                            // ),
+                                            RichText(
+                                              text: TextSpan(
+                                                  style: TextStyle(
+                                                    fontSize: 17.sp,
+                                                    color: AppColor.white,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text: state is CartLoaded
+                                                          ? '${calculatePurchaseFee(state.totalPrice)}'
+                                                          : '0',
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: cc,
+                                                      style: TextStyle(
+                                                          color: AppColor.white,
+                                                          fontSize: 10.sp),
+                                                    )
+                                                  ]),
+                                            ),
+                                          ],
+                                        ),
+                                        const Divider(
+                                          color: AppColor.mainGrey,
+                                          thickness: 1,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              AppLocalizations.of(context)
+                                                  .translate('total_amount'),
+                                              style: TextStyle(
+                                                color: AppColor.white,
+                                                fontSize: 17.sp,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                            // Text(
+                                            //   state is CartLoaded
+                                            //       ? authState.user.userInfo.userType ==
+                                            //                   'trader' ||
+                                            //               authState.user.userInfo
+                                            //                       .userType ==
+                                            //                   'local_company'
+                                            //           ? '${state.totalPrice + calculateTraderFee(items: state.items)} AED'
+                                            //           : '${state.totalPrice + calculatePurchaseFee(state.totalPrice)}AED'
+                                            //       : '0AED',
+                                            //   style: TextStyle(
+                                            //     color: AppColor.white,
+                                            //     fontSize: 17.sp,
+                                            //     fontWeight: FontWeight.w700,
+                                            //   ),
+                                            // ),
+                                            RichText(
+                                              text: TextSpan(
+                                                  style: TextStyle(
+                                                    fontSize: 17.sp,
+                                                    color: AppColor.white,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text: state is CartLoaded
+                                                          ? '${state.totalPrice + calculatePurchaseFee(state.totalPrice)}'
+                                                          : '0',
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: cc,
+                                                      style: TextStyle(
+                                                          color: AppColor.white,
+                                                          fontSize: 10.sp),
+                                                    )
+                                                  ]),
+                                            ),
+                                          ],
+                                        ),
+                                        state is CartLoaded
+                                            ? state.items.isEmpty
+                                                ? const SizedBox()
+                                                : InkWell(
+                                                    onTap: () {
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (context) {
+                                                        return DeliveryDetailsScreen(
+                                                          totalWeight:
+                                                              state.totalWeight,
+                                                          userInfo: userInfo,
+                                                          from:
+                                                              from.join(' / '),
+                                                          products: state.props,
+                                                          serviceFee:
+                                                              serviceFee,
+                                                          subTotal:
+                                                              totalAmount -
+                                                                  serviceFee,
+                                                          totalAmount:
+                                                              totalAmount,
+                                                          totalQuantity: state
+                                                              .totalQuantity,
+                                                          productsNames:
+                                                              products
+                                                                  .map((e) =>
+                                                                      e.name)
+                                                                  .toList()
+                                                                  .join(' - '),
+                                                        );
+                                                      }));
+                                                      // String amount =
+                                                      //     (totalAmount.toInt() * 100).toString();
+                                                      // makePayment(
+                                                      //   amount: amount,
+                                                      //   currency: 'AED',
+                                                      //   toName:
+                                                      //       authState.user.userInfo.username ??
+                                                      //           '',
+                                                      //   toEmail:
+                                                      //       authState.user.userInfo.email ?? '',
+                                                      //   userMobile:
+                                                      //       authState.user.userInfo.firstMobile ??
+                                                      //           '',
+                                                      //   productsNames: products
+                                                      //       .map((e) => e.name)
+                                                      //       .toList()
+                                                      //       .join(' - '),
+                                                      //   grandTotal: totalAmount.toString(),
+                                                      //   serviceFee: serviceFee.toString(),
+                                                      // );
+                                                      // double g = totalAmount;
+                                                      // double s = serviceFee;
+
+                                                      // sendBloc.add(SendEmailPaymentRequestEvent(
+                                                      //   toName:
+                                                      //       authState.user.userInfo.username ??
+                                                      //           '',
+                                                      //   toEmail:
+                                                      //       authState.user.userInfo.email ?? '',
+                                                      //   userMobile:
+                                                      //       authState.user.userInfo.firstMobile ??
+                                                      //           '',
+                                                      //   productsNames: products
+                                                      //       .map((e) => e.name)
+                                                      //       .toList()
+                                                      //       .join(' - '),
+                                                      //   grandTotal: totalAmount.toString(),
+                                                      //   serviceFee: serviceFee.toString(),
+                                                      //   subTotal: g - s,
+                                                      // ));
+                                                    },
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      width: double.infinity,
+                                                      height: 50.h,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          border: Border.all(
+                                                              color: AppColor
+                                                                  .white)),
+                                                      child: Text(
+                                                        AppLocalizations.of(
+                                                                context)
+                                                            .translate(
+                                                                'confirm'),
+                                                        style: TextStyle(
+                                                          fontSize: 16.sp,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: AppColor.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                            : const SizedBox(),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox()
+                          : const SizedBox();
                     },
                   );
                 },

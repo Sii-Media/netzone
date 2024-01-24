@@ -314,4 +314,24 @@ class DealsRepositoryImpl implements DealsRepository {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, String>> savePurchDeal(
+      {required String userId,
+      required String buyerId,
+      required String deal,
+      required double grandTotal}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final result = await dealsRemoteDataSource.savePurchDeal(
+            userId, buyerId, deal, grandTotal);
+        return Right(result);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      print(e);
+      return Left(ServerFailure());
+    }
+  }
 }

@@ -93,3 +93,12 @@ class GetUserDealsEvent extends DealsItemsEvent {
 
   const GetUserDealsEvent({required this.userId});
 }
+
+class PurchaseDealEvent extends DealsItemsEvent {
+  final String userId;
+  final String deal;
+  final double grandTotal;
+
+  const PurchaseDealEvent(
+      {required this.userId, required this.deal, required this.grandTotal});
+}

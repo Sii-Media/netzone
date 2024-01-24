@@ -22,4 +22,8 @@ class SearchUsersEvent extends UsersEvent {
   List<Object> get props => [searchQuery];
 }
 
-class GetAllUsersEvent extends UsersEvent {}
+class GetAllUsersEvent extends UsersEvent {
+  final String? name;
+
+  const GetAllUsersEvent({this.name});
+}

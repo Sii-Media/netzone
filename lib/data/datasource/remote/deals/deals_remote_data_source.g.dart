@@ -13,7 +13,7 @@ class _DealsRemoteDataSourceImpl implements DealsRemoteDataSourceImpl {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://www.netzoonback.siidevelopment.com/';
+    baseUrl ??= 'http://10.0.2.2:5000/';
   }
 
   final Dio _dio;
@@ -193,6 +193,49 @@ class _DealsRemoteDataSourceImpl implements DealsRemoteDataSourceImpl {
     var value = _result.data!
         .map((dynamic i) => DealsItemsModel.fromJson(i as Map<String, dynamic>))
         .toList();
+    return value;
+  }
+
+  @override
+  Future<String> savePurchDeal(
+    String userId,
+    String buyerId,
+    String deal,
+    double grandTotal,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.fields.add(MapEntry(
+      'buyerId',
+      buyerId,
+    ));
+    _data.fields.add(MapEntry(
+      'deal',
+      deal,
+    ));
+    _data.fields.add(MapEntry(
+      'grandTotal',
+      grandTotal.toString(),
+    ));
+    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'deals/purch/save/${userId}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+    final value = _result.data!;
     return value;
   }
 

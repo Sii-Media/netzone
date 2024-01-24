@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -99,11 +100,32 @@ class _RealEstateCompanyProfileScreenState
           title: BlocBuilder<GetUserBloc, GetUserState>(
             bloc: userBloc,
             builder: (context, state) {
-              return Text(
-                state is GetUserSuccess ? state.userInfo.username ?? '' : '',
-                style: const TextStyle(
-                  color: AppColor.backgroundColor,
-                ),
+              return Row(
+                children: [
+                  CountryFlag.fromCountryCode(
+                    state is GetUserSuccess
+                        ? state.userInfo.country ?? 'AE'
+                        : 'AE',
+                    height: 22.h,
+                    width: 22.w,
+                    borderRadius: 8,
+                  ),
+                  SizedBox(
+                    width: 5.w,
+                  ),
+                  Expanded(
+                    child: Text(
+                      state is GetUserSuccess
+                          ? state.userInfo.username ?? ''
+                          : '',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: AppColor.backgroundColor,
+                      ),
+                    ),
+                  ),
+                ],
               );
             },
           ),

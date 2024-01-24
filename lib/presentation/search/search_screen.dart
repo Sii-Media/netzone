@@ -3,7 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
+import 'package:netzoon/presentation/categories/delivery_company/screens/delivery_company_profile_screen.dart';
+import 'package:netzoon/presentation/categories/users/screens/users_profile_screen.dart';
+import 'package:netzoon/presentation/categories/vehicles/screens/vehicle_companies_profile_screen.dart';
 import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
+import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
 
 import '../../injection_container.dart';
 import '../advertising/advertising_details.dart';
@@ -40,20 +44,24 @@ class _SearchPageState extends State<SearchPage> {
   ];
   late String selectedCategory;
   late String searchText;
+  late String searchName;
   String? selectedCarType;
   String? selectedCat;
   String? data = '';
   List<dynamic> items = [];
 
   List<dynamic> filteredItems = [];
+  final TextEditingController controller1 = TextEditingController();
   final TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
     selectedCategory = '';
     searchText = '';
+    searchName = '';
     super.initState();
     filteredItems = [];
+    userbloc.add(const GetAllUsersEvent(name: ''));
   }
 
   void filterItems(String cat) {
@@ -80,6 +88,15 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
+  void filterUsers() {
+    setState(() {
+      filteredItems = items
+          .where((item) =>
+              item.username.toLowerCase().contains(searchName.toLowerCase()))
+          .toList();
+    });
+  }
+
   final factoryBloc = sl<UsersBloc>();
   final freeZoneBloc = sl<UsersBloc>();
   final productBloc = sl<ElecDevicesBloc>();
@@ -87,6 +104,7 @@ class _SearchPageState extends State<SearchPage> {
   final adsBloc = sl<AdsBlocBloc>();
   final vehicleBloc = sl<VehicleBloc>();
   final estateBloc = sl<RealEstateBloc>();
+  final userbloc = sl<UsersBloc>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,6 +133,117 @@ class _SearchPageState extends State<SearchPage> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
+                Text(
+                  AppLocalizations.of(context).translate('search_by_name'),
+                  style: const TextStyle(
+                    color: AppColor.backgroundColor,
+                  ),
+                ),
+                SizedBox(
+                  height: 8.h,
+                ),
+                BlocBuilder<UsersBloc, UsersState>(
+                  bloc: userbloc,
+                  builder: (context, userState) {
+                    if (userState is GetAllUsersInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (userState is GetAllUsersFailure) {
+                      final failure = userState.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {
+                          userbloc.add(const GetAllUsersEvent());
+                        },
+                      );
+                    } else if (userState is GetAllUsersSuccess) {
+                      items = userState.users;
+                      return TypeAheadField(
+                        hideSuggestionsOnKeyboardHide: false,
+                        textFieldConfiguration: TextFieldConfiguration(
+                          controller: controller1,
+                          onChanged: (value) {
+                            setState(() {
+                              searchName = value;
+                              selectedCategory = '';
+                            });
+                          },
+                          decoration: const InputDecoration(
+                            labelText: 'Search',
+                          ),
+                        ),
+                        suggestionsCallback: (pattern) {
+                          return userState.users.where((item) => item.username!
+                              .toLowerCase()
+                              .contains(pattern.toLowerCase()));
+                        },
+                        itemBuilder: (context, suggestion) {
+                          return ListTile(
+                            title: Text(suggestion.username ?? ''),
+                          );
+                        },
+                        onSuggestionSelected: (suggestion) {
+                          setState(() {
+                            searchName = suggestion.username ?? '';
+                            selectedCategory = '';
+                          });
+                          controller1.text = searchName;
+                          controller1.selection = TextSelection.fromPosition(
+                            TextPosition(offset: controller1.text.length),
+                          );
+                        },
+                      );
+                    }
+                    return const SizedBox();
+                    // return TypeAheadField(
+                    //   loadingBuilder: (context) => const Text('Loading...'),
+                    //   errorBuilder: (context, error) => const Text('Error!'),
+                    //   hideSuggestionsOnKeyboardHide: false,
+                    //   textFieldConfiguration: TextFieldConfiguration(
+                    //     controller: controller1,
+                    //     onChanged: (value) {
+                    //       // Instead of using setState, add the event to the bloc
+                    //       userbloc.add(GetAllUsersEvent(name: value));
+                    //     },
+                    //     decoration: const InputDecoration(
+                    //       labelText: 'Search',
+                    //     ),
+                    //   ),
+                    //   suggestionsCallback: (pattern) {
+                    //     return userState is GetAllUsersSuccess
+                    //         ? userState.users
+                    //         : [];
+                    //   },
+                    //   itemBuilder: (context, suggestion) {
+                    //     return userState is GetAllUsersSuccess
+                    //         ? ListTile(
+                    //             title: Text(suggestion.username),
+                    //           )
+                    //         : const SizedBox();
+                    //   },
+                    //   onSuggestionSelected: (suggestion) {
+                    //     // Update the text field and selection when a suggestion is selected
+                    //     controller1.text = suggestion.username;
+                    //     controller1.selection = TextSelection.fromPosition(
+                    //       TextPosition(offset: controller1.text.length),
+                    //     );
+                    //   },
+                    // );
+                  },
+                ),
+
+                SizedBox(
+                  height: 20.h,
+                ),
+                Text(
+                  AppLocalizations.of(context).translate('or'),
+                  style: const TextStyle(
+                    color: AppColor.backgroundColor,
+                  ),
+                ),
                 Text(
                   AppLocalizations.of(context)
                       .translate('Choose what you want to search for'),
@@ -175,6 +304,7 @@ class _SearchPageState extends State<SearchPage> {
                                     vehicleBloc.add(GetAllNewPlanesEvent());
                                   }
                                   controller.text = '';
+                                  controller1.text = '';
                                 });
                               },
                               child: Column(
@@ -236,7 +366,9 @@ class _SearchPageState extends State<SearchPage> {
                     )),
                   ),
                   onPressed: () {
-                    filterItems(selectedCategory);
+                    selectedCategory == ''
+                        ? filterUsers()
+                        : filterItems(selectedCategory);
                   },
                   child: Text(AppLocalizations.of(context).translate('Search')),
                 ),
@@ -247,7 +379,7 @@ class _SearchPageState extends State<SearchPage> {
                     //     style: TextStyle(color: Colors.red),
                     //   )
                     ? Text(
-                        searchText.isEmpty
+                        searchText.isEmpty && searchName.isEmpty
                             ? ''
                             : AppLocalizations.of(context)
                                 .translate('no_items'),
@@ -258,57 +390,166 @@ class _SearchPageState extends State<SearchPage> {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
-                                if (selectedCategory == 'Products') {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) {
-                                    return ProductDetailScreen(
-                                        item: filteredItems[index].id);
-                                  }));
-                                } else if (selectedCategory ==
-                                    'local_companies') {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) {
-                                    return LocalCompanyProfileScreen(
-                                        id: filteredItems[index].id);
-                                  }));
-                                } else if (selectedCategory ==
-                                    'free_zone_companies') {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) {
-                                    return LocalCompanyProfileScreen(
-                                        id: filteredItems[index].id);
-                                  }));
-                                } else if (selectedCategory == 'real_estate') {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) {
-                                    return RealEstateCompanyProfileScreen(
-                                        id: filteredItems[index].id);
-                                  }));
-                                } else if (selectedCategory == 'factories') {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) {
-                                    return FactoryProfileScreen(
-                                        id: filteredItems[index].id);
-                                  }));
-                                } else if (selectedCategory == 'advertiments') {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) {
-                                    return AdvertismentDetalsScreen(
-                                        adsId: filteredItems[index].id);
-                                  }));
-                                } else if (selectedCategory == 'cars') {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) {
-                                    return VehicleDetailsScreen(
-                                        vehicleId: filteredItems[index].id);
-                                  }));
-                                } else if (selectedCategory ==
-                                    'civil_aircraft') {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) {
-                                    return VehicleDetailsScreen(
-                                        vehicleId: filteredItems[index].id);
-                                  }));
+                                if (selectedCategory != '') {
+                                  if (selectedCategory == 'Products') {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return ProductDetailScreen(
+                                          item: filteredItems[index].id);
+                                    }));
+                                  } else if (selectedCategory ==
+                                      'local_companies') {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return LocalCompanyProfileScreen(
+                                          id: filteredItems[index].id);
+                                    }));
+                                  } else if (selectedCategory ==
+                                      'free_zone_companies') {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return LocalCompanyProfileScreen(
+                                          id: filteredItems[index].id);
+                                    }));
+                                  } else if (selectedCategory ==
+                                      'real_estate') {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return RealEstateCompanyProfileScreen(
+                                          id: filteredItems[index].id);
+                                    }));
+                                  } else if (selectedCategory == 'factories') {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return FactoryProfileScreen(
+                                          id: filteredItems[index].id);
+                                    }));
+                                  } else if (selectedCategory ==
+                                      'advertiments') {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return AdvertismentDetalsScreen(
+                                          adsId: filteredItems[index].id);
+                                    }));
+                                  } else if (selectedCategory == 'cars') {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return VehicleDetailsScreen(
+                                          vehicleId: filteredItems[index].id);
+                                    }));
+                                  } else if (selectedCategory ==
+                                      'civil_aircraft') {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return VehicleDetailsScreen(
+                                          vehicleId: filteredItems[index].id);
+                                    }));
+                                  }
+                                } else {
+                                  if (filteredItems[index].userType ==
+                                      'local_company') {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return LocalCompanyProfileScreen(
+                                              id: filteredItems[index].id);
+                                        },
+                                      ),
+                                    );
+                                  } else if (filteredItems[index].userType ==
+                                      'freezone') {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return LocalCompanyProfileScreen(
+                                              id: filteredItems[index].id);
+                                        },
+                                      ),
+                                    );
+                                  } else if (filteredItems[index].userType ==
+                                      'factory') {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return FactoryProfileScreen(
+                                              id: filteredItems[index].id);
+                                        },
+                                      ),
+                                    );
+                                  } else if (filteredItems[index].userType ==
+                                      'planes') {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return VehicleCompaniesProfileScreen(
+                                              id: filteredItems[index].id,
+                                              userType: 'planes');
+                                        },
+                                      ),
+                                    );
+                                  } else if (filteredItems[index].userType ==
+                                      'car') {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return VehicleCompaniesProfileScreen(
+                                              id: filteredItems[index].id,
+                                              userType: 'car');
+                                        },
+                                      ),
+                                    );
+                                  } else if (filteredItems[index].userType ==
+                                      'sea_companies') {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return VehicleCompaniesProfileScreen(
+                                              id: filteredItems[index].id,
+                                              userType: 'sea_companies');
+                                        },
+                                      ),
+                                    );
+                                  } else if (filteredItems[index].userType ==
+                                      'user') {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return UsersProfileScreen(
+                                              userId: filteredItems[index].id);
+                                        },
+                                      ),
+                                    );
+                                  } else if (filteredItems[index].userType ==
+                                      'real_estate') {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return RealEstateCompanyProfileScreen(
+                                              id: filteredItems[index].id);
+                                        },
+                                      ),
+                                    );
+                                  } else if (filteredItems[index].userType ==
+                                      'delivery_company') {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return DeliveryCompanyProfileScreen(
+                                              id: filteredItems[index].id);
+                                        },
+                                      ),
+                                    );
+                                  } else if (filteredItems[index].userType ==
+                                      'trader') {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return LocalCompanyProfileScreen(
+                                              id: filteredItems[index].id);
+                                        },
+                                      ),
+                                    );
+                                  }
                                 }
                               },
                               child: Container(
@@ -329,13 +570,17 @@ class _SearchPageState extends State<SearchPage> {
                                 ),
                                 child: ListTile(
                                   title: Text(
-                                    selectedCategory == 'local_companies' ||
-                                            selectedCategory ==
-                                                'free_zone_companies' ||
-                                            selectedCategory == 'factories' ||
-                                            selectedCategory == 'real_estate'
-                                        ? filteredItems[index].username
-                                        : filteredItems[index].name,
+                                    selectedCategory != ''
+                                        ? selectedCategory == 'local_companies' ||
+                                                selectedCategory ==
+                                                    'free_zone_companies' ||
+                                                selectedCategory ==
+                                                    'factories' ||
+                                                selectedCategory ==
+                                                    'real_estate'
+                                            ? filteredItems[index].username
+                                            : filteredItems[index].name
+                                        : filteredItems[index].username,
                                     style: TextStyle(
                                         color: AppColor.backgroundColor,
                                         fontSize: 17.sp,

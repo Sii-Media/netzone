@@ -8,10 +8,14 @@ import 'package:go_router/go_router.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
 import 'package:netzoon/presentation/categories/widgets/image_free_zone_widget.dart';
+import 'package:netzoon/presentation/chat/screens/chat_page_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/helpers/connect_send_bird.dart';
 import 'package:netzoon/presentation/core/helpers/show_image_dialog.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
+import 'package:netzoon/presentation/core/widgets/phone_call_button.dart';
+import 'package:netzoon/presentation/home/widgets/auth_alert.dart';
 import 'package:netzoon/presentation/orders/screens/congs_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:video_player/video_player.dart';
@@ -115,7 +119,7 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
       //   testEnv: true,
       // );
       var applePay = const PaymentSheetApplePay(
-        merchantCountryCode: 'UAE',
+        merchantCountryCode: 'AE',
         buttonType: PlatformButtonType.pay,
       );
       print(paymentIntent!['client_secret']);
@@ -742,44 +746,80 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
           if (state is GetAdsByIdSuccess) {
             return BottomAppBar(
               height: 60.h,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    state.ads.purchasable
-                        ? ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                AppColor.backgroundColor,
-                              ),
-                              shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              )),
-                              fixedSize: MaterialStatePropertyAll(
-                                Size.fromWidth(200.w),
-                              ),
-                            ),
-                            child: Text(AppLocalizations.of(context)
-                                .translate('شراء المنتج')),
-                            onPressed: () {
-                              String amount =
-                                  (int.parse(state.ads.advertisingPrice) * 100)
-                                      .toString();
-                              makePayment(amount: amount, currency: 'aed');
-                            },
-                          )
-                        : Container(),
-                    // PriceSuggestionButton(input: input),
-                  ],
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  PhoneCallWidget(
+                      phonePath: state.ads.owner.firstMobile ?? "",
+                      title: AppLocalizations.of(context).translate('call')),
+                  BlocBuilder<AuthBloc, AuthState>(
+                    bloc: authBloc,
+                    builder: (context, authState) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          if (authState is Authenticated) {
+                            // await SendbirdChat.connect(
+                            //     authState.user.userInfo
+                            //             .username ??
+                            //         '');
+                            connectWithSendbird(
+                                username:
+                                    authState.user.userInfo.username ?? '');
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) {
+                                return ChatPageScreen(
+                                  userId:
+                                      authState.user.userInfo.username ?? '',
+                                  otherUserId: state.ads.owner.username ?? '',
+                                  title: state.ads.owner.username ?? '',
+                                  image: state.ads.owner.profilePhoto ?? '',
+                                );
+                              }),
+                            );
+                          } else {
+                            authAlert(context);
+                          }
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            AppColor.backgroundColor,
+                          ),
+                          shape:
+                              MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          )),
+                          fixedSize: MaterialStateProperty.all(
+                            Size.fromWidth(100.w),
+                          ),
+                        ),
+                        child: Text(
+                            AppLocalizations.of(context).translate('chat')),
+                      );
+                    },
+                  ),
+                  // ElevatedButton(
+                  //     onPressed: () {},
+                  //     style: ButtonStyle(
+                  //       backgroundColor: MaterialStateProperty.all(
+                  //         AppColor.backgroundColor,
+                  //       ),
+                  //       shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(18.0),
+                  //       )),
+                  //       fixedSize: MaterialStatePropertyAll(
+                  //         Size.fromWidth(100.w),
+                  //       ),
+                  //     ),
+                  //     child:
+                  //         Text(AppLocalizations.of(context).translate('chat'))),
+                  // PriceSuggestionButton(input: input),
+                ],
               ),
             );
           } else if (state is AdsBlocInProgress) {
             return SizedBox(
-              height: MediaQuery.of(context).size.height - 200.h,
+              height: MediaQuery.of(context).size.height - 200,
               child: const Center(
                 child: CircularProgressIndicator(
                   color: AppColor.backgroundColor,

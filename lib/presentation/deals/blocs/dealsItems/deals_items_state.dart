@@ -85,3 +85,17 @@ class GetUserDealsSuccess extends DealsItemsState {
 
   const GetUserDealsSuccess({required this.deals});
 }
+
+class PurchaseDealInProgress extends DealsItemsState {}
+
+class PurchaseDealFailure extends DealsItemsState {
+  final Failure failure;
+
+  const PurchaseDealFailure({required this.failure});
+}
+
+class PurchaseDealSuccess extends DealsItemsState {
+  final String message;
+
+  const PurchaseDealSuccess({required this.message});
+}

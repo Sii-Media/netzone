@@ -135,7 +135,7 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
                             child: Text(
                               AppLocalizations.of(context).translate(item),
                               style: TextStyle(
-                                fontSize: 8.sp,
+                                fontSize: 10.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               ),

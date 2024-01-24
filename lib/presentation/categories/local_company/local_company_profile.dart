@@ -34,6 +34,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../../profile/screens/followings_list_screen.dart';
 import '../widgets/build_rating.dart';
 import '../widgets/info_list_widget.dart';
+import 'package:country_flags/country_flags.dart';
 
 class LocalCompanyProfileScreen extends StatefulWidget {
   // final LocalCompany localCompany;
@@ -112,11 +113,32 @@ class _LocalCompanyProfileScreenState extends State<LocalCompanyProfileScreen>
           title: BlocBuilder<GetUserBloc, GetUserState>(
             bloc: userBloc,
             builder: (context, sstate) {
-              return Text(
-                sstate is GetUserSuccess ? sstate.userInfo.username ?? '' : '',
-                style: const TextStyle(
-                  color: AppColor.backgroundColor,
-                ),
+              return Row(
+                children: [
+                  CountryFlag.fromCountryCode(
+                    sstate is GetUserSuccess
+                        ? sstate.userInfo.country ?? 'AE'
+                        : 'AE',
+                    height: 22.h,
+                    width: 22.w,
+                    borderRadius: 8,
+                  ),
+                  SizedBox(
+                    width: 5.w,
+                  ),
+                  Expanded(
+                    child: Text(
+                      sstate is GetUserSuccess
+                          ? sstate.userInfo.username ?? ''
+                          : '',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: AppColor.backgroundColor,
+                      ),
+                    ),
+                  ),
+                ],
               );
             },
           ),

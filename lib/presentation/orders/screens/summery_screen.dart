@@ -117,9 +117,9 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
       paymentIntent = await createPaymentIntent(amount, currency);
 
       var gpay = const PaymentSheetGooglePay(
-        merchantCountryCode: "UAE",
+        merchantCountryCode: "AE",
         currencyCode: "aed",
-        testEnv: true,
+        testEnv: false,
       );
       print('jasdjajsdajdsjasd');
       print(paymentIntent);
@@ -133,7 +133,7 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
               style: ThemeMode.light,
               merchantDisplayName: 'Netzoon',
               // customerId: customerId['id'],
-              // googlePay: gpay,
+              googlePay: gpay,
               allowsDelayedPaymentMethods: true,
               // billingDetails: const BillingDetails(
               //   name: 'adams',

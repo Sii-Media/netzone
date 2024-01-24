@@ -255,6 +255,16 @@ class _CompleteSignupScreenState extends State<CompleteSignupScreen>
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Text(
+                    AppLocalizations.of(context).translate('who_are_you'),
+                    style: const TextStyle(color: AppColor.backgroundColor),
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
                   Center(
                     // width: MediaQuery.of(context).size.width,
                     child: DropdownButton2(

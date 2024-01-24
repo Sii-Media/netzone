@@ -154,6 +154,7 @@ import 'package:netzoon/domain/deals/usecases/get_all_deals_items_use_case.dart'
 import 'package:netzoon/domain/deals/usecases/get_deals_cat_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_deals_items_by_cat_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_user_deals_use_case.dart';
+import 'package:netzoon/domain/deals/usecases/save_purch-deal_use_case.dart';
 import 'package:netzoon/domain/departments/repositories/departments_repository.dart';
 import 'package:netzoon/domain/departments/usecases/add_product_use_case.dart';
 import 'package:netzoon/domain/departments/usecases/add_to_selected_products_use_case.dart';
@@ -270,8 +271,8 @@ import 'domain/send_emails/use_cases/send_email_use_case.dart';
 import 'domain/tenders/usecases/add_tender_use_case.dart';
 
 // const String baseUrl = 'https://back.netzoon.com/';
-const String baseUrl = 'https://www.netzoonback.siidevelopment.com/';
-// const String baseUrl = 'http://10.0.2.2:5000/';
+// const String baseUrl = 'https://www.netzoonback.siidevelopment.com/';
+const String baseUrl = 'http://10.0.2.2:5000/';
 
 final sl = GetIt.instance;
 
@@ -323,6 +324,7 @@ Future<void> init() async {
         deleteDealUseCase: sl(),
         editDealUseCase: sl(),
         getUserDealsUseCase: sl(),
+        savePurchDealUseCase: sl(),
       ));
 
   sl.registerFactory(() => ElecDevicesBloc(
@@ -857,6 +859,8 @@ Future<void> init() async {
 
   sl.registerLazySingleton(
       () => GetServiceByIdUseCase(localCompanyRepository: sl()));
+
+  sl.registerLazySingleton(() => SavePurchDealUseCase(dealsRepository: sl()));
 
   //! Repositories
 

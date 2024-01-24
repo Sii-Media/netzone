@@ -123,8 +123,8 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
 
       var gpay = const flutter_stripe.PaymentSheetGooglePay(
         merchantCountryCode: "AE",
-        currencyCode: "AED",
-        testEnv: true,
+        currencyCode: "aed",
+        testEnv: false,
       );
 
       //STEP 2: Initialize Payment Sheet

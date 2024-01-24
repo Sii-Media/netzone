@@ -29,15 +29,20 @@ class ViewAllDealsScreen extends StatefulWidget {
 
 class _ViewAllDealsScreenState extends State<ViewAllDealsScreen> {
   final dealsItemBloc = sl<DealsItemsBloc>();
+  TextEditingController searchController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  TextEditingController minPriceController = TextEditingController();
+  TextEditingController maxPriceController = TextEditingController();
+  String? companyName;
 
   @override
   void initState() {
+    minPriceController.text = priceMin.toString();
+    maxPriceController.text = priceMax.toString();
     dealsItemBloc.add(DealsItemsByCatEvent(category: widget.category));
     super.initState();
   }
 
-  TextEditingController searchController = TextEditingController();
-  String? companyName;
   double priceMin = 0;
   double priceMax = 1000000;
   @override
@@ -227,16 +232,129 @@ class _ViewAllDealsScreenState extends State<ViewAllDealsScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          '${AppLocalizations.of(context).translate('from')}:   $priceMin',
-                          style: const TextStyle(
-                            color: AppColor.white,
+                        SizedBox(
+                          width: 100.w,
+                          child: TextFormField(
+                            controller: minPriceController,
+                            onChanged: (value) {
+                              // setState(() {
+                              //   priceMin = double.tryParse(value) ?? 1000000.0;
+                              // });
+                              setState(() {
+                                if (double.tryParse(value)! > 0 &&
+                                    double.tryParse(value)! < priceMax) {
+                                  priceMin = double.tryParse(value) ?? 0.0;
+                                }
+                              });
+                            },
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return AppLocalizations.of(context)
+                                    .translate('required');
+                              }
+                              if (double.tryParse(value)! > priceMax) {
+                                return 'should be less than $priceMax';
+                              }
+                              return null;
+                            },
+                            style: const TextStyle(color: AppColor.white),
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              filled: true,
+                              hintText: AppLocalizations.of(context)
+                                  .translate('from'),
+                              labelText: AppLocalizations.of(context)
+                                  .translate('from'),
+                              labelStyle:
+                                  const TextStyle(color: AppColor.white),
+                              hintStyle: const TextStyle(color: AppColor.white),
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 5)
+                                  .flipped,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: AppColor
+                                        .white), //<-- Set border color for focused state
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors
+                                        .white), //<-- Set border color for enabled state
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
                           ),
                         ),
-                        Text(
-                          '${AppLocalizations.of(context).translate('to')}:  $priceMax',
-                          style: const TextStyle(
-                            color: AppColor.white,
+                        SizedBox(
+                          width: 6.w,
+                        ),
+                        // Text(
+                        //   '${AppLocalizations.of(context).translate('from')}:   $priceMin',
+                        //   style: const TextStyle(
+                        //     color: AppColor.white,
+                        //   ),
+                        // ),
+                        // Text(
+                        //   '${AppLocalizations.of(context).translate('to')}:  $priceMax',
+                        //   style: const TextStyle(
+                        //     color: AppColor.white,
+                        //   ),
+                        // ),
+                        SizedBox(
+                          width: 100.w,
+                          child: TextFormField(
+                            controller: maxPriceController,
+                            onChanged: (value) {
+                              setState(() {
+                                if (double.tryParse(value)! > priceMin &&
+                                    double.tryParse(value)! < 1000000) {
+                                  priceMax =
+                                      double.tryParse(value) ?? 1000000.0;
+                                }
+                              });
+                            },
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return AppLocalizations.of(context)
+                                    .translate('required');
+                              }
+                              if (double.tryParse(value)! < priceMin) {
+                                return 'should be greater than $priceMin';
+                              }
+                              return null;
+                            },
+                            style: const TextStyle(color: AppColor.white),
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              filled: true,
+                              hintText:
+                                  AppLocalizations.of(context).translate('to'),
+                              labelText:
+                                  AppLocalizations.of(context).translate('to'),
+                              labelStyle:
+                                  const TextStyle(color: AppColor.white),
+                              hintStyle: const TextStyle(color: AppColor.white),
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 5)
+                                  .flipped,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: AppColor
+                                        .white), //<-- Set border color for focused state
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors
+                                        .white), //<-- Set border color for enabled state
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -249,12 +367,12 @@ class _ViewAllDealsScreenState extends State<ViewAllDealsScreen> {
                         setState(() {
                           priceMin = values.start;
                           priceMax = values.end;
+                          minPriceController.text = priceMin.toString();
+                          maxPriceController.text = priceMax.toString();
                         });
                       },
                       activeColor: AppColor.white,
                       divisions: 1000,
-                      labels:
-                          RangeLabels(priceMin.toString(), priceMax.toString()),
                     ),
 
                     const SizedBox(height: 16),
