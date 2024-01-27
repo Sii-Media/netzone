@@ -12,7 +12,7 @@ class AddAdsRequestedEvent extends AddAdsEvent {
   final String advertisingStartDate;
   final String advertisingEndDate;
   final String advertisingDescription;
-  final File image;
+  final File? image;
   final String advertisingYear;
   final String advertisingLocation;
   final double advertisingPrice;
@@ -25,12 +25,15 @@ class AddAdsRequestedEvent extends AddAdsEvent {
   final String? color;
   final bool? guarantee;
   final String? contactNumber;
+  final String? imagePath;
+  final String? productId;
+  final bool? forPurchase;
   const AddAdsRequestedEvent({
     required this.advertisingTitle,
     required this.advertisingStartDate,
     required this.advertisingEndDate,
     required this.advertisingDescription,
-    required this.image,
+    this.image,
     required this.advertisingYear,
     required this.advertisingLocation,
     required this.advertisingPrice,
@@ -43,5 +46,8 @@ class AddAdsRequestedEvent extends AddAdsEvent {
     this.color,
     this.guarantee,
     this.contactNumber,
+    this.imagePath,
+    this.productId,
+    this.forPurchase,
   });
 }

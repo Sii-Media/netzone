@@ -529,7 +529,7 @@ class AuthRepositoryImpl implements AuthRepository {
           }
           final user2 = local.getSignedInUser();
           Response response = await dio.put(
-            'http://10.0.2.2:5000/user/net-editUser/$userId',
+            'https://www.netzoonback.siidevelopment.com/user/net-editUser/$userId',
             data: formData,
             options:
                 Options(headers: {'Authorization': 'Bearer ${user2?.token}'}),
@@ -1096,8 +1096,9 @@ class AuthRepositoryImpl implements AuthRepository {
           ));
         }
 
-        Response response =
-            await dio.post('http://10.0.2.2:5000/user/oauth', data: formData);
+        Response response = await dio.post(
+            'https://www.netzoonback.siidevelopment.com/user/oauth',
+            data: formData);
 
         if (response.statusCode == 201) {
           final UserModel user = UserModel.fromJson(response.data!);

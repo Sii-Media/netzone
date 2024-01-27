@@ -13,7 +13,7 @@ class _CustomsRemoteDataSourceImpl implements CustomsRemoteDataSourceImpl {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://10.0.2.2:5000/';
+    baseUrl ??= 'https://www.netzoonback.siidevelopment.com/';
   }
 
   final Dio _dio;

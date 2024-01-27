@@ -434,24 +434,74 @@ class _SignInScreenState extends State<SignInScreen>
                               SizedBox(
                                 height: 10.h,
                               ),
-                              Row(
+                              Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  SocialIcon(
-                                    imagePath: 'assets/images/google_icon.png',
-                                    onTap: () {
+                                  // SocialIcon(
+                                  //   imagePath: 'assets/images/google_icon.png',
+                                  //   onTap: () {
+                                  //     authBloc.add(SigninWithGoogleEvent());
+                                  //   },
+                                  // ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColor.white,
+                                      foregroundColor: AppColor.black,
+                                      shadowColor: AppColor.secondGrey,
+                                      minimumSize: Size(double.infinity, 50.h),
+                                    ),
+                                    onPressed: () {
                                       authBloc.add(SigninWithGoogleEvent());
                                     },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/google_icon.png',
+                                          height: 40.h,
+                                          width: 40.w,
+                                        ),
+                                        Text(AppLocalizations.of(context)
+                                            .translate('sign_in_with_google')),
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(
-                                    width: 7.w,
+                                    height: 12.w,
                                   ),
-                                  SocialIcon(
-                                    imagePath:
-                                        'assets/images/facebook_icon.png',
-                                    onTap: () {
+                                  // SocialIcon(
+                                  //   imagePath:
+                                  //       'assets/images/facebook_icon.png',
+                                  //   onTap: () {
+                                  //     authBloc.add(SigninWithFacebookEvent());
+                                  //   },
+                                  // ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColor.white,
+                                      foregroundColor: AppColor.black,
+                                      shadowColor: AppColor.secondGrey,
+                                      minimumSize: Size(double.infinity, 50.h),
+                                    ),
+                                    onPressed: () {
                                       authBloc.add(SigninWithFacebookEvent());
                                     },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/facebook_icon.png',
+                                          height: 40.h,
+                                          width: 40.w,
+                                        ),
+                                        Text(AppLocalizations.of(context)
+                                            .translate(
+                                                'sign_in_with_facebook')),
+                                      ],
+                                    ),
                                   ),
                                   // SizedBox(
                                   //   width: 7.w,

@@ -11,6 +11,7 @@ import 'package:netzoon/presentation/categories/widgets/image_free_zone_widget.d
 import 'package:netzoon/presentation/chat/screens/chat_page_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/helpers/connect_send_bird.dart';
+import 'package:netzoon/presentation/core/helpers/navigate_to_profile_screen.dart';
 import 'package:netzoon/presentation/core/helpers/show_image_dialog.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
@@ -66,10 +67,8 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
     super.dispose();
   }
 
-  Container titleAndInput({
-    required String title,
-    required String input,
-  }) {
+  Container titleAndInput(
+      {required String title, required String input, void Function()? onTap}) {
     return Container(
       height: 40.h,
       width: double.infinity,
@@ -82,24 +81,27 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
         ),
       ),
       child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              AppLocalizations.of(context).translate(title),
-              style: TextStyle(
-                color: AppColor.black,
-                fontSize: 15.sp,
+        child: GestureDetector(
+          onTap: onTap,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                AppLocalizations.of(context).translate(title),
+                style: TextStyle(
+                  color: AppColor.black,
+                  fontSize: 15.sp,
+                ),
               ),
-            ),
-            Text(
-              input,
-              style: TextStyle(
-                color: AppColor.mainGrey,
-                fontSize: 15.sp,
+              Text(
+                input,
+                style: TextStyle(
+                  color: AppColor.mainGrey,
+                  fontSize: 15.sp,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -118,9 +120,10 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
       //   currencyCode: "aed",
       //   testEnv: true,
       // );
-      var applePay = const PaymentSheetApplePay(
-        merchantCountryCode: 'AE',
-        buttonType: PlatformButtonType.pay,
+      var gpay = const PaymentSheetGooglePay(
+        merchantCountryCode: "AE",
+        currencyCode: "aed",
+        testEnv: false,
       );
       print(paymentIntent!['client_secret']);
       print(paymentIntent);
@@ -129,11 +132,10 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
       await Stripe.instance
           .initPaymentSheet(
             paymentSheetParameters: SetupPaymentSheetParameters(
-              paymentIntentClientSecret:
-                  paymentIntent!['client_secret'], //Gotten from payment intent
+              paymentIntentClientSecret: paymentIntent!['client_secret'],
               style: ThemeMode.light,
               merchantDisplayName: 'Netzoon',
-              applePay: applePay,
+              googlePay: gpay,
               // customerId: customerId['id'],
               // googlePay: gpay,
               // allowsDelayedPaymentMethods: true,
@@ -507,6 +509,13 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                                     titleAndInput(
                                       title: 'owner',
                                       input: state.ads.owner.username ?? '',
+                                      onTap: () {
+                                        navigateToProfileScreen(
+                                            context: context,
+                                            userType:
+                                                state.ads.owner.userType ?? '',
+                                            userId: state.ads.owner.id);
+                                      },
                                     ),
                                     SizedBox(
                                       height: 7.h,

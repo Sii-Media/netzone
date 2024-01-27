@@ -118,6 +118,8 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                       width: 120.w,
                       child: Text(
                         widget.cart.description,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             color: AppColor.mainGrey, fontSize: 12.sp),
                       ),

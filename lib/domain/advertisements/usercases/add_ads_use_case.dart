@@ -31,6 +31,9 @@ class AddAdvertisementUseCase extends UseCase<String, AddAdvertisementParams> {
       color: params.color,
       guarantee: params.guarantee,
       contactNumber: params.contactNumber,
+      imagePath: params.imagePath,
+      productId: params.productId,
+      forPurchase: params.forPurchase,
     );
   }
 }
@@ -41,7 +44,7 @@ class AddAdvertisementParams {
   final String advertisingStartDate;
   final String advertisingEndDate;
   final String advertisingDescription;
-  final File image;
+  final File? image;
   final String advertisingYear;
   final String advertisingLocation;
   final double advertisingPrice;
@@ -54,13 +57,16 @@ class AddAdvertisementParams {
   final String? color;
   final bool? guarantee;
   final String? contactNumber;
+  final String? imagePath;
+  final String? productId;
+  final bool? forPurchase;
   AddAdvertisementParams({
     required this.owner,
     required this.advertisingTitle,
     required this.advertisingStartDate,
     required this.advertisingEndDate,
     required this.advertisingDescription,
-    required this.image,
+    this.image,
     required this.advertisingYear,
     required this.advertisingLocation,
     required this.advertisingPrice,
@@ -73,5 +79,8 @@ class AddAdvertisementParams {
     this.color,
     this.guarantee,
     this.contactNumber,
+    this.imagePath,
+    this.productId,
+    this.forPurchase,
   });
 }

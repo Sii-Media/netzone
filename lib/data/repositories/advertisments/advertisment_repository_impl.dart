@@ -81,7 +81,7 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
     required String advertisingStartDate,
     required String advertisingEndDate,
     required String advertisingDescription,
-    required File image,
+    File? image,
     required String advertisingYear,
     required String advertisingLocation,
     required double advertisingPrice,
@@ -94,8 +94,12 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
     String? color,
     bool? guarantee,
     String? contactNumber,
+    String? imagePath,
+    String? productId,
+    bool? forPurchase,
   }) async {
     try {
+      print(imagePath);
       if (await networkInfo.isConnected) {
         Dio dio = Dio();
         final user = local.getSignedInUser();
@@ -129,6 +133,7 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
             MapEntry('advertisingType', advertisingType),
             MapEntry('purchasable', purchasable.toString()),
           ]);
+
           if (type != null) {
             formData.fields.add(
               MapEntry('type', type),
@@ -154,7 +159,21 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
               MapEntry('contactNumber', contactNumber),
             );
           }
-          // ignore: unnecessary_null_comparison
+          if (imagePath != null) {
+            formData.fields.add(
+              MapEntry('imagePath', imagePath),
+            );
+          }
+          if (productId != null) {
+            formData.fields.add(
+              MapEntry('productId', productId),
+            );
+          }
+          if (forPurchase != null) {
+            formData.fields.add(
+              MapEntry('forPurchase', forPurchase.toString()),
+            );
+          }
           if (image != null) {
             String fileName = 'image.jpg';
             formData.files.add(MapEntry(

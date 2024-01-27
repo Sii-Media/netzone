@@ -24,6 +24,8 @@ class Advertisement extends Equatable {
   final bool? guarantee;
   final String? contactNumber;
   final int? adsViews;
+  final String? productId;
+  final bool? forPurchase;
   const Advertisement({
     required this.owner,
     required this.id,
@@ -46,6 +48,8 @@ class Advertisement extends Equatable {
     this.guarantee,
     this.contactNumber,
     this.adsViews,
+    this.productId,
+    this.forPurchase,
   });
 
   @override
@@ -67,5 +71,7 @@ class Advertisement extends Equatable {
         guarantee,
         contactNumber,
         adsViews,
+        productId,
+        forPurchase,
       ];
 }

@@ -68,9 +68,9 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
       paymentIntent = await createPaymentIntent(amount, currency);
 
       var gpay = const PaymentSheetGooglePay(
-        merchantCountryCode: "UAE",
+        merchantCountryCode: "AE",
         currencyCode: "aed",
-        testEnv: true,
+        testEnv: false,
       );
       print(paymentIntent!['client_secret']);
       //STEP 2: Initialize Payment Sheet
@@ -82,7 +82,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
               style: ThemeMode.light,
               merchantDisplayName: 'Netzoon',
               // customerId: customerId['id'],
-              // googlePay: gpay,
+              googlePay: gpay,
               allowsDelayedPaymentMethods: true,
               // billingDetails: const BillingDetails(
               //   name: 'adams',
@@ -331,7 +331,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                   return Container();
                 },
               );
-            } else {
+            } else if (authState is Unauthenticated) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -376,6 +376,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                 ],
               );
             }
+            return const SizedBox();
           },
         ),
       ),

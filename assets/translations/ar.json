@@ -735,6 +735,12 @@
     "sailboat":"مركب شراعي",
     "cruise_ship":"سفينة شراعية",
     "ship_length":"طول السفينة",
-    "search_by_name":"ابحث عن طريق الاسم"
+    "search_by_name":"ابحث عن طريق الاسم",
+    "sorry_you_can_not_buy_this_deal":"عذراً، لا يمكنك شراء الصفقة",
+    "someone_else_bought_the_deal":"قام شخص اخر بشراء هذه الصفقة",
+    "sign_in_with_google":"تسجيل الدخول عبر جوجل",
+    "sign_in_with_facebook":"تسجيل الدخول عبر فيسبوك",
+    "add_your_product_to_ad":"أضف منتجك الى الاعلانات",
+    "shop_now":"تسوق الان"
     
 }

@@ -50,6 +50,9 @@ class AddAdsBloc extends Bloc<AddAdsEvent, AddAdsState> {
           color: event.color,
           guarantee: event.guarantee,
           contactNumber: event.contactNumber,
+          imagePath: event.imagePath,
+          productId: event.productId,
+          forPurchase: event.forPurchase,
         ));
 
         emit(

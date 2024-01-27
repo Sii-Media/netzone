@@ -377,92 +377,111 @@ class _DealDetailsState extends State<DealDetails>
                             width: MediaQuery.of(context).size.width,
                             child: ElevatedButton(
                                 onPressed: () {
+                                  double total =
+                                      state.deal.currentPrice.toDouble();
+
+                                  String amount =
+                                      (total.toInt() * 100).toString();
                                   calculateRemainingDays(state.deal.endDate) >=
                                           0
-                                      ? showDialog(
+                                      ? makePayment(
+                                          amount: amount,
+                                          currency: 'aed',
+                                          email: email,
+                                          name: name,
+                                          userId: state.deal.owner.id,
+                                          deal: state.deal.id ?? '',
+                                          grandTotal: state.deal.currentPrice
+                                              .toDouble(),
+                                        )
+                                      // ? showDialog(
+                                      //     context: context,
+                                      //     builder: (BuildContext context) {
+                                      //       return AlertDialog(
+                                      //         title: Text(
+                                      //           AppLocalizations.of(context)
+                                      //               .translate('service_fee'),
+                                      //           style: const TextStyle(
+                                      //               color: AppColor
+                                      //                   .backgroundColor,
+                                      //               fontWeight:
+                                      //                   FontWeight.w700),
+                                      //         ),
+                                      //         content: Text(
+                                      //           '${AppLocalizations.of(context).translate('you_should_pay')} ${state.deal.currentPrice} ${AppLocalizations.of(context).translate('AED')}',
+                                      //           style: const TextStyle(
+                                      //             color:
+                                      //                 AppColor.backgroundColor,
+                                      //           ),
+                                      //         ),
+                                      //         actions: [
+                                      //           TextButton(
+                                      //             onPressed: () {
+                                      //               Navigator.of(context)
+                                      //                   .pop(false);
+                                      //             },
+                                      //             child: Text(
+                                      //               AppLocalizations.of(context)
+                                      //                   .translate('cancel'),
+                                      //               style: const TextStyle(
+                                      //                   color: AppColor.red),
+                                      //             ),
+                                      //           ),
+                                      //           TextButton(
+                                      //             onPressed: () {
+                                      //               Navigator.of(context).pop();
+                                      //               double serviceFee =
+                                      //                   calculateDealsFee(
+                                      //                       price: state.deal
+                                      //                           .currentPrice);
+                                      //               double total = state
+                                      //                   .deal.currentPrice
+                                      //                   .toDouble();
+
+                                      //               String amount =
+                                      //                   (total.toInt() * 100)
+                                      //                       .toString();
+                                      //               makePayment(
+                                      //                 amount: amount,
+                                      //                 currency: 'aed',
+                                      //                 email: email,
+                                      //                 name: name,
+                                      //                 userId:
+                                      //                     state.deal.owner.id,
+                                      //                 deal: state.deal.id ?? '',
+                                      //                 grandTotal: state
+                                      //                     .deal.currentPrice
+                                      //                     .toDouble(),
+                                      //               );
+                                      //             },
+                                      //             child: Text(
+                                      //               AppLocalizations.of(context)
+                                      //                   .translate('submit'),
+                                      //               style: const TextStyle(
+                                      //                   color: AppColor
+                                      //                       .backgroundColor),
+                                      //             ),
+                                      //           ),
+                                      //         ],
+                                      //       );
+                                      //     })
+                                      : showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
                                             return AlertDialog(
                                               title: Text(
                                                 AppLocalizations.of(context)
-                                                    .translate('service_fee'),
+                                                    .translate(
+                                                        'sorry_you_can_not_buy_this_deal'),
                                                 style: const TextStyle(
-                                                    color: AppColor
-                                                        .backgroundColor,
-                                                    fontWeight:
-                                                        FontWeight.w700),
-                                              ),
-                                              content: Text(
-                                                '${AppLocalizations.of(context).translate('you_should_pay')} ${state.deal.currentPrice} ${AppLocalizations.of(context).translate('AED')}',
-                                                style: const TextStyle(
-                                                  color:
-                                                      AppColor.backgroundColor,
-                                                ),
-                                              ),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context)
-                                                        .pop(false);
-                                                  },
-                                                  child: Text(
-                                                    AppLocalizations.of(context)
-                                                        .translate('cancel'),
-                                                    style: const TextStyle(
-                                                        color: AppColor.red),
-                                                  ),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                    double serviceFee =
-                                                        calculateDealsFee(
-                                                            price: state.deal
-                                                                .currentPrice);
-                                                    double total = state
-                                                        .deal.currentPrice
-                                                        .toDouble();
-
-                                                    String amount =
-                                                        (total.toInt() * 100)
-                                                            .toString();
-                                                    makePayment(
-                                                      amount: amount,
-                                                      currency: 'aed',
-                                                      email: email,
-                                                      name: name,
-                                                      userId:
-                                                          state.deal.owner.id,
-                                                      deal: state.deal.id ?? '',
-                                                      grandTotal: state
-                                                          .deal.currentPrice
-                                                          .toDouble(),
-                                                    );
-                                                  },
-                                                  child: Text(
-                                                    AppLocalizations.of(context)
-                                                        .translate('submit'),
-                                                    style: const TextStyle(
-                                                        color: AppColor
-                                                            .backgroundColor),
-                                                  ),
-                                                ),
-                                              ],
-                                            );
-                                          })
-                                      : showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text(
-                                                'Sorry, You can not buy this deal',
-                                                style: TextStyle(
                                                     color: AppColor
                                                         .backgroundColor),
                                               ),
-                                              content: const Text(
-                                                'Someone else bought the deal',
-                                                style: TextStyle(
+                                              content: Text(
+                                                AppLocalizations.of(context)
+                                                    .translate(
+                                                        'someone_else_bought_the_deal'),
+                                                style: const TextStyle(
                                                     color: AppColor.secondGrey),
                                               ),
                                               actions: [

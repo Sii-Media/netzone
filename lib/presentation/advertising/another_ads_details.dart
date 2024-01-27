@@ -2,12 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/presentation/chat/screens/chat_page_screen.dart';
 import 'package:netzoon/presentation/core/helpers/connect_send_bird.dart';
+import 'package:netzoon/presentation/core/helpers/navigate_to_profile_screen.dart';
 import 'package:netzoon/presentation/core/helpers/show_image_dialog.dart';
+import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/home/widgets/auth_alert.dart';
@@ -142,70 +145,129 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: CachedNetworkImage(
-                                  width: 35.r,
-                                  height: 35.r,
-                                  fit: BoxFit.cover,
-                                  progressIndicatorBuilder:
-                                      (context, url, downloadProgress) =>
-                                          Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 70.0, vertical: 50),
-                                    child: CircularProgressIndicator(
-                                      value: downloadProgress.progress,
-                                      color: AppColor.backgroundColor,
+                          child: GestureDetector(
+                            onTap: () {
+                              navigateToProfileScreen(
+                                  context: context,
+                                  userType: state.ads.owner.userType ?? '',
+                                  userId: state.ads.owner.id);
+                            },
+                            child: Row(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: CachedNetworkImage(
+                                    width: 35.r,
+                                    height: 35.r,
+                                    fit: BoxFit.cover,
+                                    progressIndicatorBuilder:
+                                        (context, url, downloadProgress) =>
+                                            Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 70.0, vertical: 50),
+                                      child: CircularProgressIndicator(
+                                        value: downloadProgress.progress,
+                                        color: AppColor.backgroundColor,
 
-                                      // strokeWidth: 10,
+                                        // strokeWidth: 10,
+                                      ),
                                     ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
+                                    imageUrl: state.ads.owner.profilePhoto ??
+                                        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                                   ),
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
-                                  imageUrl: state.ads.owner.profilePhoto ??
-                                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                                 ),
-                              ),
-                              SizedBox(
-                                width: 6.w,
-                              ),
-                              Text(
-                                state.ads.owner.username ?? '',
-                                style: TextStyle(
-                                  color: AppColor.backgroundColor,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.bold,
+                                SizedBox(
+                                  width: 6.w,
                                 ),
-                              ),
-                            ],
+                                Text(
+                                  state.ads.owner.username ?? '',
+                                  style: TextStyle(
+                                    color: AppColor.backgroundColor,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        ClipRRect(
-                          // borderRadius: const BorderRadius.only(
-                          //   bottomLeft: Radius.circular(50),
-                          //   bottomRight: Radius.circular(50),
-                          // ),
-                          child: CachedNetworkImage(
-                            height: MediaQuery.of(context).size.height / 2.2,
-                            width: MediaQuery.of(context).size.width,
-                            imageUrl: state.ads.advertisingImage,
-                            fit: BoxFit.contain,
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) => Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 70.0, vertical: 50),
-                              child: CircularProgressIndicator(
-                                value: downloadProgress.progress,
-                                color: AppColor.backgroundColor,
+                        Stack(
+                          children: [
+                            ClipRRect(
+                              // borderRadius: const BorderRadius.only(
+                              //   bottomLeft: Radius.circular(50),
+                              //   bottomRight: Radius.circular(50),
+                              // ),
+                              child: CachedNetworkImage(
+                                height:
+                                    MediaQuery.of(context).size.height / 2.2,
+                                width: MediaQuery.of(context).size.width,
+                                imageUrl: state.ads.advertisingImage,
+                                fit: BoxFit.contain,
+                                progressIndicatorBuilder:
+                                    (context, url, downloadProgress) => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 70.0, vertical: 50),
+                                  child: CircularProgressIndicator(
+                                    value: downloadProgress.progress,
+                                    color: AppColor.backgroundColor,
 
-                                // strokeWidth: 10,
+                                    // strokeWidth: 10,
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
                               ),
                             ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                          ),
+                            state.ads.forPurchase == true
+                                ? Positioned(
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) {
+                                            return ProductDetailScreen(
+                                                item:
+                                                    state.ads.productId ?? '');
+                                          },
+                                        ));
+                                      },
+                                      splashColor: AppColor.backgroundColor,
+                                      child: Container(
+                                        height: 40.h,
+                                        width: double.infinity,
+                                        color: Colors.grey[200],
+                                        child: Center(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                AppLocalizations.of(context)
+                                                    .translate('shop_now'),
+                                                style: TextStyle(
+                                                  color: AppColor.black,
+                                                  fontSize: 15.sp,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 8.w,
+                                              ),
+                                              const Icon(Feather.shopping_cart),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(),
+                          ],
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -233,7 +295,7 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                                             icon: Icon(
                                               Icons.edit,
                                               color: AppColor.backgroundColor,
-                                              size: 15.sp,
+                                              size: 22.sp,
                                             ),
                                           ),
                                           IconButton(
@@ -244,7 +306,7 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                                             icon: Icon(
                                               Icons.delete,
                                               color: AppColor.red,
-                                              size: 15.sp,
+                                              size: 22.sp,
                                             ),
                                           ),
                                         ],
