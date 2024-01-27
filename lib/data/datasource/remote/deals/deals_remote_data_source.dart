@@ -21,6 +21,9 @@ abstract class DealsRemoteDataSource {
   Future<DealsItemsModel> getDealById(String id);
 
   Future<String> deleteDeal(String id);
+  Future<String> savePurchDeal(
+      String userId, String buyerId, String deal, double grandTotal);
+
   Future<List<DealsItemsModel>> getUserDeals(String userId);
 }
 
@@ -72,5 +75,14 @@ abstract class DealsRemoteDataSourceImpl implements DealsRemoteDataSource {
   @GET('/deals/userDeals/{userId}')
   Future<List<DealsItemsModel>> getUserDeals(
     @Path('userId') String userId,
+  );
+
+  @override
+  @POST('deals/purch/save/{userId}')
+  Future<String> savePurchDeal(
+    @Path('userId') String userId,
+    @Part() String buyerId,
+    @Part() String deal,
+    @Part() double grandTotal,
   );
 }

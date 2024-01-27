@@ -15,6 +15,7 @@ import 'package:netzoon/domain/deals/usecases/get_all_deals_items_use_case.dart'
 import 'package:netzoon/domain/deals/usecases/get_deal_by_id_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_deals_items_by_cat_use_case.dart';
 import 'package:netzoon/domain/deals/usecases/get_user_deals_use_case.dart';
+import 'package:netzoon/domain/deals/usecases/save_purch-deal_use_case.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 
 import '../../../../domain/auth/entities/user.dart';
@@ -33,6 +34,7 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
   final EditDealUseCase editDealUseCase;
   final DeleteDealUseCase deleteDealUseCase;
   final GetUserDealsUseCase getUserDealsUseCase;
+  final SavePurchDealUseCase savePurchDealUseCase;
   DealsItemsBloc({
     required this.getSignedInUser,
     required this.addDealUseCase,
@@ -43,6 +45,7 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
     required this.editDealUseCase,
     required this.deleteDealUseCase,
     required this.getUserDealsUseCase,
+    required this.savePurchDealUseCase,
   }) : super(DealsItemsInitial()) {
     on<DealsItemsByCatEvent>((event, emit) async {
       emit(DealsItemsInProgress());
@@ -178,6 +181,23 @@ class DealsItemsBloc extends Bloc<DealsItemsEvent, DealsItemsState> {
       emit(deals.fold(
           (l) => GetUserDealsFailure(message: mapFailureToString(l)),
           (r) => GetUserDealsSuccess(deals: r)));
+    });
+    on<PurchaseDealEvent>((event, emit) async {
+      emit(PurchaseDealInProgress());
+      final result2 = await getSignedInUser.call(NoParams());
+      late User user;
+      result2.fold((l) => null, (r) => user = r!);
+      final response = await savePurchDealUseCase(SavePurchDealParams(
+          userId: event.userId,
+          buyerId: user.userInfo.id,
+          deal: event.deal,
+          grandTotal: event.grandTotal));
+      emit(
+        response.fold(
+          (l) => PurchaseDealFailure(failure: l),
+          (r) => PurchaseDealSuccess(message: r),
+        ),
+      );
     });
   }
 }

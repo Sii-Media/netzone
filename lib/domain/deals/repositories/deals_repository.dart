@@ -57,4 +57,11 @@ abstract class DealsRepository {
   Future<Either<Failure, String>> deleteDeal({
     required String id,
   });
+
+  Future<Either<Failure, String>> savePurchDeal({
+    required final String userId,
+    required final String buyerId,
+    required final String deal,
+    required final double grandTotal,
+  });
 }

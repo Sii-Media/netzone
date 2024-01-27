@@ -28,6 +28,10 @@ class SigninWithFacebookEvent extends AuthEvent {}
 
 class SigninWithGoogleEvent extends AuthEvent {}
 
+
+class SigninWithAppleEvent extends AuthEvent {}
+
+
 class OAuthSignEvent extends AuthEvent {
   final String email;
   final String username;

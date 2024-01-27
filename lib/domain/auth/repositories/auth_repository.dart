@@ -203,7 +203,9 @@ abstract class AuthRepository {
     required String id,
   });
 
-  Future<Either<Failure, List<UserInfo>>> getAllUsers();
+  Future<Either<Failure, List<UserInfo>>> getAllUsers({
+    required String? name,
+  });
 
   Future<Either<Failure, String>> forgetPassword({
     required String email,

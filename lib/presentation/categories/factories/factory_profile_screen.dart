@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:country_flags/country_flags.dart';
 import 'package:dynamic_height_grid_view/dynamic_height_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -142,10 +143,31 @@ class _FactoryProfileScreenState extends State<FactoryProfileScreen>
           title: BlocBuilder<GetUserBloc, GetUserState>(
             bloc: userBloc,
             builder: (context, state) {
-              return Text(
-                state is GetUserSuccess ? state.userInfo.username ?? '' : '',
-                style:
-                    TextStyle(color: AppColor.backgroundColor, fontSize: 15.sp),
+              return Row(
+                children: [
+                  CountryFlag.fromCountryCode(
+                    state is GetUserSuccess
+                        ? state.userInfo.country ?? 'AE'
+                        : 'AE',
+                    height: 22.h,
+                    width: 22.w,
+                  ),
+                  SizedBox(
+                    width: 5.w,
+                  ),
+                  Expanded(
+                    child: Text(
+                      state is GetUserSuccess
+                          ? state.userInfo.username ?? ''
+                          : '',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: AppColor.backgroundColor,
+                      ),
+                    ),
+                  ),
+                ],
               );
             },
           ),

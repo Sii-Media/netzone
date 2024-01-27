@@ -123,10 +123,13 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
 
       var gpay = const flutter_stripe.PaymentSheetGooglePay(
         merchantCountryCode: "AE",
-        currencyCode: "AED",
-        testEnv: true,
+        currencyCode: "aed",
+        testEnv: false,
       );
-
+      var applePay = const flutter_stripe.PaymentSheetApplePay(
+        merchantCountryCode: 'AE',
+        buttonType: flutter_stripe.PlatformButtonType.pay,
+      );
       //STEP 2: Initialize Payment Sheet
       await flutter_stripe.Stripe.instance
           .initPaymentSheet(
@@ -137,7 +140,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
             style: ThemeMode.light,
             merchantDisplayName: 'Netzoon',
             // customerId: customerId['id'],
-
+            applePay: applePay,
             googlePay: gpay,
           ))
           .then((value) {});

@@ -51,7 +51,7 @@
     "add_ads": "Add Ads",
     "ads_desc": "Ads Description",
     "num_of_viewers": "Number of Viewers",
-    "empty_cart": "The Cart is empty",
+    "empty_cart": "Your shopping cart is empty",
     "order_total": "Order Total",
     "check_out": "Check Out",
     "success": "Success",
@@ -734,6 +734,6 @@
     "yacht":"Yacht",
     "sailboat":"Sailboat",
     "cruise_ship":"Cruise Ship",
-    "ship_length":"Ship Length"
-    
+    "ship_length":"Ship Length",
+    "search_by_name":"Search by name"
 }

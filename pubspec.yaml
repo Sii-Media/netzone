@@ -2,7 +2,7 @@ name: netzoon
 description: A new Flutter project.
 
 
-version: 1.0.11+01
+version: 1.0.12+01
 publish_to: 'none'
 
 environment:
@@ -78,6 +78,8 @@ dependencies:
   flutter_facebook_auth: ^5.0.11
   photo_view: ^0.14.0
   jwt_decoder: ^2.0.1
+  country_flags: ^2.2.0
+  sign_in_with_apple: ^5.0.0
 
 
 

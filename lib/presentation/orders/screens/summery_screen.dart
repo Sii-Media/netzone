@@ -117,13 +117,14 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
       paymentIntent = await createPaymentIntent(amount, currency);
 
       var gpay = const PaymentSheetGooglePay(
-        merchantCountryCode: "UAE",
+        merchantCountryCode: "AE",
         currencyCode: "aed",
-        testEnv: true,
+        testEnv: false,
       );
-      print('jasdjajsdajdsjasd');
-      print(paymentIntent);
-      print(paymentIntent!['client_secret']);
+      var applePay = const PaymentSheetApplePay(
+        merchantCountryCode: 'AE',
+        buttonType: PlatformButtonType.pay,
+      );
       //STEP 2: Initialize Payment Sheet
       await Stripe.instance
           .initPaymentSheet(
@@ -133,7 +134,8 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
               style: ThemeMode.light,
               merchantDisplayName: 'Netzoon',
               // customerId: customerId['id'],
-              // googlePay: gpay,
+              googlePay: gpay,
+              applePay: applePay,
               allowsDelayedPaymentMethods: true,
               // billingDetails: const BillingDetails(
               //   name: 'adams',

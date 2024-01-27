@@ -15,6 +15,7 @@ import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -108,6 +109,41 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
                 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'));
       } else {
         emit(SigninWithGoogleFailure());
+      }
+    });
+    on<SigninWithAppleEvent>((event, emit) async {
+      emit(SigninWithAppleInProgress());
+      try {
+        final credential = await SignInWithApple.getAppleIDCredential(
+          scopes: [
+            AppleIDAuthorizationScopes.email,
+            AppleIDAuthorizationScopes.fullName,
+          ],
+          webAuthenticationOptions: WebAuthenticationOptions(
+            clientId: 'sign.com.netzoon',
+            redirectUri: Uri.parse(
+              'https://secret-maddening-mango.glitch.me/callbacks/sign_in_with_apple',
+            ),
+          ),
+        );
+
+        print('Received Apple ID Credential: $credential');
+
+        // Check if email and fullName are not null before processing
+        if (credential.email != null && credential.givenName != null) {
+          // Handle the received data
+          print('Email: ${credential.email}');
+          print('Full Name: ${credential.givenName} ${credential.familyName}');
+          emit(SigninWithAppleSuccess(
+              email: credential.email ?? '',
+              username: credential.givenName ?? ''));
+        } else {
+          print('Email or Full Name is null');
+          emit(SigninWithAppleFailure());
+        }
+      } catch (error) {
+        print('Error during Apple Sign In: $error');
+        emit(SigninWithAppleFailure());
       }
     });
     on<OAuthSignEvent>((event, emit) async {

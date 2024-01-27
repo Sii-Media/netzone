@@ -75,6 +75,17 @@ class SigninWithGoogleSuccess extends AuthState {
       {required this.email, required this.username, required this.profile});
 }
 
+class SigninWithAppleInProgress extends AuthState {}
+
+class SigninWithAppleFailure extends AuthState {}
+
+class SigninWithAppleSuccess extends AuthState {
+  final String email;
+  final String username;
+
+  const SigninWithAppleSuccess({required this.email, required this.username});
+}
+
 class ForgetPasswordInProgress extends AuthState {}
 
 class ForgetPasswordFailure extends AuthState {}

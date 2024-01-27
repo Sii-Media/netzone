@@ -66,7 +66,7 @@ abstract class AuthRemoteDataSource {
 
   Future<List<UserInfoModel>> getUserFollowings(final String userId);
   Future<List<UserInfoModel>> getUserFollowers(final String userId);
-  Future<List<UserInfoModel>> getAllUsers();
+  Future<List<UserInfoModel>> getAllUsers(String? name);
 
   Future<String> toggleFollow(
     final String currentUserId,
@@ -233,7 +233,9 @@ abstract class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   );
   @override
   @GET('/user/get-all-users')
-  Future<List<UserInfoModel>> getAllUsers();
+  Future<List<UserInfoModel>> getAllUsers(
+    @Query('name') String? name,
+  );
 
   @override
   @POST('/user/forget-password')
