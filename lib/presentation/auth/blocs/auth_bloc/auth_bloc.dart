@@ -15,8 +15,11 @@ import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:http/http.dart' as http;
 
+import '../../../../injection_container.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
 
@@ -128,18 +131,30 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
 
         print('Received Apple ID Credential: $credential');
-
+        final SharedPreferences preferences = sl<SharedPreferences>();
         // Check if email and fullName are not null before processing
         if (credential.email != null && credential.givenName != null) {
           // Handle the received data
+
           print('Email: ${credential.email}');
           print('Full Name: ${credential.givenName} ${credential.familyName}');
+          final String fullName =
+              '${credential.givenName} ${credential.familyName}';
+
+          preferences.setString('email_apple', credential.email!);
+          preferences.setString('full_name', fullName);
+          print('successss saved locally');
           emit(SigninWithAppleSuccess(
-              email: credential.email ?? '',
-              username: credential.givenName ?? ''));
+              email: credential.email ?? '', username: fullName));
         } else {
           print('Email or Full Name is null');
-          emit(SigninWithAppleFailure());
+          final email = preferences.getString('email_apple');
+          final fullName = preferences.getString('full_name');
+          if (email != null && fullName != null) {
+            emit(SigninWithAppleSuccess(email: email, username: fullName));
+          } else {
+            emit(SigninWithAppleFailure());
+          }
         }
       } catch (error) {
         print('Error during Apple Sign In: $error');

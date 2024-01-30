@@ -28,6 +28,8 @@ class AdvertisemenetModel {
   final bool? guarantee;
   final String? contactNumber;
   final int? adsViews;
+  final String? productId;
+  final bool? forPurchase;
   AdvertisemenetModel({
     required this.id,
     required this.owner,
@@ -50,6 +52,8 @@ class AdvertisemenetModel {
     this.guarantee,
     this.contactNumber,
     this.adsViews,
+    this.productId,
+    this.forPurchase,
   });
 
   factory AdvertisemenetModel.fromJson(Map<String, dynamic> json) =>
@@ -81,5 +85,7 @@ extension MapToDomain on AdvertisemenetModel {
         guarantee: guarantee,
         contactNumber: contactNumber,
         adsViews: adsViews,
+        productId: productId,
+        forPurchase: forPurchase,
       );
 }

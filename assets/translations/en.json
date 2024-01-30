@@ -735,5 +735,11 @@
     "sailboat":"Sailboat",
     "cruise_ship":"Cruise Ship",
     "ship_length":"Ship Length",
-    "search_by_name":"Search by name"
+    "search_by_name":"Search by name",
+    "sorry_you_can_not_buy_this_deal":"Sorry, You can not buy this deal",
+    "someone_else_bought_the_deal":"Someone else bought the deal",
+    "sign_in_with_google":"Sign in with Google",
+    "sign_in_with_facebook":"Sign in with Facebook",
+    "add_your_product_to_ad":"add your product to AD",
+    "shop_now":"Shop Now"
 }

@@ -68,9 +68,9 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
       paymentIntent = await createPaymentIntent(amount, currency);
 
       var gpay = const PaymentSheetGooglePay(
-        merchantCountryCode: "UAE",
+        merchantCountryCode: "AE",
         currencyCode: "aed",
-        testEnv: true,
+        testEnv: false,
       );
       var applePay = const PaymentSheetApplePay(
         merchantCountryCode: 'AE',
@@ -278,7 +278,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                               style: TextStyle(
                                 color:
                                     AppColor.backgroundColor.withOpacity(0.3),
-                                fontSize: 23.sp,
+                                fontSize: 17.sp,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -287,7 +287,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                               style: TextStyle(
                                 color:
                                     AppColor.backgroundColor.withOpacity(0.3),
-                                fontSize: 20.sp,
+                                fontSize: 19.sp,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -337,7 +337,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                   return Container();
                 },
               );
-            } else {
+            } else if (authState is Unauthenticated) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -382,6 +382,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                 ],
               );
             }
+            return const SizedBox();
           },
         ),
       ),

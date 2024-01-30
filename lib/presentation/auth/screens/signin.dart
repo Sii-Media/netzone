@@ -475,53 +475,87 @@ class _SignInScreenState extends State<SignInScreen>
                                 SizedBox(
                                   height: 10.h,
                                 ),
-                                Row(
+                                Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    SocialIcon(
-                                      imagePath:
-                                          'assets/images/google_icon.png',
-                                      onTap: () {
-                                        authBloc.add(SigninWithGoogleEvent());
-                                      },
-                                    ),
-                                    SizedBox(
-                                      width: 7.w,
-                                    ),
-                                    SocialIcon(
-                                      imagePath:
-                                          'assets/images/facebook_icon.png',
-                                      onTap: () {
-                                        authBloc.add(SigninWithFacebookEvent());
-                                      },
-                                    ),
-                                    SizedBox(
-                                      width: 7.w,
-                                    ),
-                                    SocialIcon(
-                                      imagePath: 'assets/images/mac_icon.png',
-                                      onTap: () {
+                                    SignInWithAppleButton(
+                                      style: SignInWithAppleButtonStyle
+                                          .whiteOutlined,
+                                      onPressed: () {
                                         authBloc.add(SigninWithAppleEvent());
                                       },
                                     ),
+                                    SizedBox(
+                                      height: 12.w,
+                                    ),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        side: const BorderSide(
+                                          width: 1,
+                                          color: AppColor.backgroundColor,
+                                        ),
+                                        backgroundColor: AppColor.white,
+                                        foregroundColor: AppColor.black,
+                                        shadowColor: AppColor.secondGrey
+                                            .withOpacity(0.5),
+                                        minimumSize:
+                                            Size(double.infinity, 40.h),
+                                      ),
+                                      onPressed: () {
+                                        authBloc.add(SigninWithGoogleEvent());
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/google_icon.png',
+                                            height: 40.h,
+                                            width: 40.w,
+                                          ),
+                                          Text(AppLocalizations.of(context)
+                                              .translate(
+                                                  'sign_in_with_google')),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 12.w,
+                                    ),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        side: const BorderSide(
+                                          width: 1,
+                                          color: AppColor.backgroundColor,
+                                        ),
+                                        backgroundColor: AppColor.white,
+                                        foregroundColor: AppColor.black,
+                                        shadowColor: AppColor.secondGrey
+                                            .withOpacity(0.5),
+                                        minimumSize:
+                                            Size(double.infinity, 40.h),
+                                      ),
+                                      onPressed: () {
+                                        authBloc.add(SigninWithFacebookEvent());
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/facebook_icon.png',
+                                            height: 40.h,
+                                            width: 40.w,
+                                          ),
+                                          Text(AppLocalizations.of(context)
+                                              .translate(
+                                                  'sign_in_with_facebook')),
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
-                                // SignInWithAppleButton(
-                                //   onPressed: () async {
-                                //     final credential = await SignInWithApple
-                                //         .getAppleIDCredential(
-                                //       scopes: [
-                                //         AppleIDAuthorizationScopes.email,
-                                //         AppleIDAuthorizationScopes.fullName,
-                                //       ],
-                                //     );
-
-                                //     print(credential);
-
-                                //     // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
-                                //     // after they have been validated with Apple (see `Integration` section for more information on how to do this)
-                                //   },
-                                // ),
                               ],
                             ),
                           ),

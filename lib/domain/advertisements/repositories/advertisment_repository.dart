@@ -32,7 +32,7 @@ abstract class AdvertismentRepository {
     required String advertisingStartDate,
     required String advertisingEndDate,
     required String advertisingDescription,
-    required File image,
+    File? image,
     required String advertisingYear,
     required String advertisingLocation,
     required double advertisingPrice,
@@ -45,6 +45,9 @@ abstract class AdvertismentRepository {
     String? color,
     bool? guarantee,
     String? contactNumber,
+    String? imagePath,
+    String? productId,
+    bool? forPurchase,
   });
 
   Future<Either<Failure, String>> editAdvertisement({
