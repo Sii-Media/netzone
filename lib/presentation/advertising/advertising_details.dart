@@ -3,10 +3,13 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/presentation/advertising/blocs/ads/ads_bloc_bloc.dart';
+import 'package:netzoon/presentation/categories/real_estate/screens/real_estate_details_screen.dart';
+import 'package:netzoon/presentation/categories/vehicles/screens/vehicle_companies_profile_screen.dart';
 import 'package:netzoon/presentation/categories/widgets/image_free_zone_widget.dart';
 import 'package:netzoon/presentation/chat/screens/chat_page_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
@@ -16,6 +19,7 @@ import 'package:netzoon/presentation/core/helpers/show_image_dialog.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
 import 'package:netzoon/presentation/core/widgets/phone_call_button.dart';
+import 'package:netzoon/presentation/core/widgets/vehicle_details.dart';
 import 'package:netzoon/presentation/home/widgets/auth_alert.dart';
 import 'package:netzoon/presentation/orders/screens/congs_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
@@ -297,26 +301,156 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                               ),
                               child: Column(
                                 children: [
-                                  CachedNetworkImage(
-                                    imageUrl: state.ads.advertisingImage,
-                                    width: 700.w,
-                                    height: 200.h,
-                                    fit: BoxFit.contain,
-                                    progressIndicatorBuilder:
-                                        (context, url, downloadProgress) =>
-                                            Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 70.0, vertical: 50),
-                                      child: CircularProgressIndicator(
-                                        value: downloadProgress.progress,
-                                        color: AppColor.backgroundColor,
+                                  Stack(
+                                    children: [
+                                      ClipRRect(
+                                        // borderRadius: const BorderRadius.only(
+                                        //   bottomLeft: Radius.circular(50),
+                                        //   bottomRight: Radius.circular(50),
+                                        // ),
+                                        child: CachedNetworkImage(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              2.2,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          imageUrl: state.ads.advertisingImage,
+                                          fit: BoxFit.contain,
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 70.0, vertical: 50),
+                                            child: CircularProgressIndicator(
+                                              value: downloadProgress.progress,
+                                              color: AppColor.backgroundColor,
 
-                                        // strokeWidth: 10,
+                                              // strokeWidth: 10,
+                                            ),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
+                                        ),
                                       ),
-                                    ),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
+                                      state.ads.itemId != null &&
+                                              state.ads.itemId != ''
+                                          ? Positioned(
+                                              bottom: 0,
+                                              left: 0,
+                                              right: 0,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  if (state.ads
+                                                          .advertisingType ==
+                                                      'car') {
+                                                    Navigator.of(context)
+                                                        .push(MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return VehicleDetailsScreen(
+                                                            vehicleId: state.ads
+                                                                    .itemId ??
+                                                                '');
+                                                      },
+                                                    ));
+                                                  } else if (state.ads
+                                                          .advertisingType ==
+                                                      'planes') {
+                                                    Navigator.of(context)
+                                                        .push(MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return VehicleDetailsScreen(
+                                                            vehicleId: state.ads
+                                                                    .itemId ??
+                                                                '');
+                                                      },
+                                                    ));
+                                                  } else if (state.ads
+                                                          .advertisingType ==
+                                                      'sea_companies') {
+                                                    Navigator.of(context)
+                                                        .push(MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return VehicleDetailsScreen(
+                                                            vehicleId: state.ads
+                                                                    .itemId ??
+                                                                '');
+                                                      },
+                                                    ));
+                                                  } else if (state.ads
+                                                          .advertisingType ==
+                                                      'real_estate') {
+                                                    Navigator.of(context)
+                                                        .push(MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return RealEstateDetailsScreen(
+                                                            realEstateId: state
+                                                                    .ads
+                                                                    .itemId ??
+                                                                '');
+                                                      },
+                                                    ));
+                                                  }
+                                                },
+                                                splashColor:
+                                                    AppColor.backgroundColor,
+                                                child: Container(
+                                                  height: 40.h,
+                                                  width: double.infinity,
+                                                  color: Colors.grey[200],
+                                                  child: Center(
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                          AppLocalizations.of(
+                                                                  context)
+                                                              .translate(
+                                                                  'show_details'),
+                                                          style: TextStyle(
+                                                            color:
+                                                                AppColor.black,
+                                                            fontSize: 15.sp,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 8.w,
+                                                        ),
+                                                        const Icon(Feather
+                                                            .more_horizontal),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          : const SizedBox(),
+                                    ],
                                   ),
+                                  // CachedNetworkImage(
+                                  //   imageUrl: state.ads.advertisingImage,
+                                  //   width: 700.w,
+                                  //   height: 200.h,
+                                  //   fit: BoxFit.contain,
+                                  //   progressIndicatorBuilder:
+                                  //       (context, url, downloadProgress) =>
+                                  //           Padding(
+                                  //     padding: const EdgeInsets.symmetric(
+                                  //         horizontal: 70.0, vertical: 50),
+                                  //     child: CircularProgressIndicator(
+                                  //       value: downloadProgress.progress,
+                                  //       color: AppColor.backgroundColor,
+
+                                  //       // strokeWidth: 10,
+                                  //     ),
+                                  //   ),
+                                  //   errorWidget: (context, url, error) =>
+                                  //       const Icon(Icons.error),
+                                  // ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
@@ -447,7 +581,7 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                                                             Icons.edit,
                                                             color: AppColor
                                                                 .backgroundColor,
-                                                            size: 15.sp,
+                                                            size: 22.sp,
                                                           ),
                                                         ),
                                                         IconButton(
@@ -461,7 +595,7 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                                                           icon: Icon(
                                                             Icons.delete,
                                                             color: AppColor.red,
-                                                            size: 15.sp,
+                                                            size: 22.sp,
                                                           ),
                                                         ),
                                                       ],

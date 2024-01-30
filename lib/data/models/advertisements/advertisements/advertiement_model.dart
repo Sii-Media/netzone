@@ -28,7 +28,7 @@ class AdvertisemenetModel {
   final bool? guarantee;
   final String? contactNumber;
   final int? adsViews;
-  final String? productId;
+  final String? itemId;
   final bool? forPurchase;
   AdvertisemenetModel({
     required this.id,
@@ -52,7 +52,7 @@ class AdvertisemenetModel {
     this.guarantee,
     this.contactNumber,
     this.adsViews,
-    this.productId,
+    this.itemId,
     this.forPurchase,
   });
 
@@ -85,7 +85,7 @@ extension MapToDomain on AdvertisemenetModel {
         guarantee: guarantee,
         contactNumber: contactNumber,
         adsViews: adsViews,
-        productId: productId,
+        itemId: itemId,
         forPurchase: forPurchase,
       );
 }

@@ -438,18 +438,16 @@ class _SignInScreenState extends State<SignInScreen>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  // SocialIcon(
-                                  //   imagePath: 'assets/images/google_icon.png',
-                                  //   onTap: () {
-                                  //     authBloc.add(SigninWithGoogleEvent());
-                                  //   },
-                                  // ),
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: AppColor.white,
                                       foregroundColor: AppColor.black,
-                                      shadowColor: AppColor.secondGrey,
-                                      minimumSize: Size(double.infinity, 50.h),
+                                      shadowColor:
+                                          AppColor.secondGrey.withOpacity(0.5),
+                                      minimumSize: Size(double.infinity, 40.h),
+                                      side: const BorderSide(
+                                          width: 1,
+                                          color: AppColor.backgroundColor),
                                     ),
                                     onPressed: () {
                                       authBloc.add(SigninWithGoogleEvent());
@@ -471,19 +469,17 @@ class _SignInScreenState extends State<SignInScreen>
                                   SizedBox(
                                     height: 12.w,
                                   ),
-                                  // SocialIcon(
-                                  //   imagePath:
-                                  //       'assets/images/facebook_icon.png',
-                                  //   onTap: () {
-                                  //     authBloc.add(SigninWithFacebookEvent());
-                                  //   },
-                                  // ),
+
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: AppColor.white,
                                       foregroundColor: AppColor.black,
-                                      shadowColor: AppColor.secondGrey,
-                                      minimumSize: Size(double.infinity, 50.h),
+                                      shadowColor:
+                                          AppColor.secondGrey.withOpacity(0.5),
+                                      minimumSize: Size(double.infinity, 40.h),
+                                      side: const BorderSide(
+                                          width: 1,
+                                          color: AppColor.backgroundColor),
                                     ),
                                     onPressed: () {
                                       authBloc.add(SigninWithFacebookEvent());
@@ -537,27 +533,6 @@ class _SignInScreenState extends State<SignInScreen>
     } catch (error) {
       print(error);
     }
-  }
-}
-
-class SocialIcon extends StatelessWidget {
-  const SocialIcon({
-    super.key,
-    required this.imagePath,
-    this.onTap,
-  });
-  final String imagePath;
-  final void Function()? onTap;
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Image.asset(
-        imagePath,
-        height: 40.h,
-        width: 40.w,
-      ),
-    );
   }
 }
 

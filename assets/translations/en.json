@@ -741,5 +741,8 @@
     "sign_in_with_google":"Sign in with Google",
     "sign_in_with_facebook":"Sign in with Facebook",
     "add_your_product_to_ad":"add your product to AD",
-    "shop_now":"Shop Now"
+    "shop_now":"Shop Now",
+    "delivery_service":"Delivery Service",
+    "user":"User",
+    "pick_vedio":"Pick vedio"
 }

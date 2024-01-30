@@ -26,7 +26,7 @@ class AddAdsRequestedEvent extends AddAdsEvent {
   final bool? guarantee;
   final String? contactNumber;
   final String? imagePath;
-  final String? productId;
+  final String? itemId;
   final bool? forPurchase;
   const AddAdsRequestedEvent({
     required this.advertisingTitle,
@@ -47,7 +47,7 @@ class AddAdsRequestedEvent extends AddAdsEvent {
     this.guarantee,
     this.contactNumber,
     this.imagePath,
-    this.productId,
+    this.itemId,
     this.forPurchase,
   });
 }

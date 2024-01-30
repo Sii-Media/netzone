@@ -31,7 +31,7 @@ AdvertisemenetModel _$AdvertisemenetModelFromJson(Map<String, dynamic> json) =>
       guarantee: json['guarantee'] as bool?,
       contactNumber: json['contactNumber'] as String?,
       adsViews: json['adsViews'] as int?,
-      productId: json['productId'] as String?,
+      itemId: json['itemId'] as String?,
       forPurchase: json['forPurchase'] as bool?,
     );
 
@@ -59,6 +59,6 @@ Map<String, dynamic> _$AdvertisemenetModelToJson(
       'guarantee': instance.guarantee,
       'contactNumber': instance.contactNumber,
       'adsViews': instance.adsViews,
-      'productId': instance.productId,
+      'itemId': instance.itemId,
       'forPurchase': instance.forPurchase,
     };

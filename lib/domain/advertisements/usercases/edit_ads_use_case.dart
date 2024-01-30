@@ -15,18 +15,24 @@ class EditAdsUseCase extends UseCase<String, EditAdsParams> {
   @override
   Future<Either<Failure, String>> call(EditAdsParams params) {
     return advertismentRepository.editAdvertisement(
-      id: params.id,
-      advertisingTitle: params.advertisingTitle,
-      advertisingStartDate: params.advertisingStartDate,
-      advertisingEndDate: params.advertisingEndDate,
-      advertisingDescription: params.advertisingDescription,
-      image: params.image,
-      advertisingYear: params.advertisingYear,
-      advertisingLocation: params.advertisingLocation,
-      advertisingPrice: params.advertisingPrice,
-      advertisingType: params.advertisingType,
-      purchasable: params.purchasable,
-    );
+        id: params.id,
+        advertisingTitle: params.advertisingTitle,
+        advertisingStartDate: params.advertisingStartDate,
+        advertisingEndDate: params.advertisingEndDate,
+        advertisingDescription: params.advertisingDescription,
+        image: params.image,
+        advertisingYear: params.advertisingYear,
+        advertisingLocation: params.advertisingLocation,
+        advertisingPrice: params.advertisingPrice,
+        advertisingType: params.advertisingType,
+        purchasable: params.purchasable,
+        color: params.color,
+        category: params.category,
+        contactNumber: params.contactNumber,
+        type: params.type,
+        guarantee: params.guarantee,
+        advertisingImageList: params.advertisingImageList,
+        video: params.video);
   }
 }
 

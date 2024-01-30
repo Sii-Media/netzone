@@ -51,7 +51,7 @@ class AddAdsBloc extends Bloc<AddAdsEvent, AddAdsState> {
           guarantee: event.guarantee,
           contactNumber: event.contactNumber,
           imagePath: event.imagePath,
-          productId: event.productId,
+          itemId: event.itemId,
           forPurchase: event.forPurchase,
         ));
 

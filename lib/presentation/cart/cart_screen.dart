@@ -272,7 +272,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                               style: TextStyle(
                                 color:
                                     AppColor.backgroundColor.withOpacity(0.3),
-                                fontSize: 23.sp,
+                                fontSize: 17.sp,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -281,7 +281,7 @@ class _CartScreenState extends State<CartScreen> with ScreenLoader<CartScreen> {
                               style: TextStyle(
                                 color:
                                     AppColor.backgroundColor.withOpacity(0.3),
-                                fontSize: 20.sp,
+                                fontSize: 19.sp,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
