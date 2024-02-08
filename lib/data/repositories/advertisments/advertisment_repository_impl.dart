@@ -95,7 +95,7 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
     bool? guarantee,
     String? contactNumber,
     String? imagePath,
-    String? productId,
+    String? itemId,
     bool? forPurchase,
   }) async {
     try {
@@ -164,9 +164,9 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
               MapEntry('imagePath', imagePath),
             );
           }
-          if (productId != null) {
+          if (itemId != null) {
             formData.fields.add(
-              MapEntry('productId', productId),
+              MapEntry('itemId', itemId),
             );
           }
           if (forPurchase != null) {
@@ -214,7 +214,7 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
           }
           final user2 = local.getSignedInUser();
           Response response = await dio.post(
-            'https://www.netzoonback.siidevelopment.com/advertisements/createAds',
+            "https://www.netzoonback.siidevelopment.com/advertisements/createAds",
             data: formData,
             options:
                 Options(headers: {'Authorization': 'Bearer ${user2?.token}'}),
@@ -232,6 +232,7 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
         return Left(OfflineFailure());
       }
     } catch (e) {
+      print(e);
       return Left(ServerFailure());
     }
   }

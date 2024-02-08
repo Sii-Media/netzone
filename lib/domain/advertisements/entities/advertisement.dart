@@ -24,7 +24,7 @@ class Advertisement extends Equatable {
   final bool? guarantee;
   final String? contactNumber;
   final int? adsViews;
-  final String? productId;
+  final String? itemId;
   final bool? forPurchase;
   const Advertisement({
     required this.owner,
@@ -48,7 +48,7 @@ class Advertisement extends Equatable {
     this.guarantee,
     this.contactNumber,
     this.adsViews,
-    this.productId,
+    this.itemId,
     this.forPurchase,
   });
 
@@ -71,7 +71,7 @@ class Advertisement extends Equatable {
         guarantee,
         contactNumber,
         adsViews,
-        productId,
+        itemId,
         forPurchase,
       ];
 }

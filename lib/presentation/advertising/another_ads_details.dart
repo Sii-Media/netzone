@@ -6,6 +6,7 @@ import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
+import 'package:netzoon/presentation/categories/local_company/company_service_detail_screen.dart';
 import 'package:netzoon/presentation/chat/screens/chat_page_screen.dart';
 import 'package:netzoon/presentation/core/helpers/connect_send_bird.dart';
 import 'package:netzoon/presentation/core/helpers/navigate_to_profile_screen.dart';
@@ -18,6 +19,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../injection_container.dart';
 import '../auth/blocs/auth_bloc/auth_bloc.dart';
+import '../categories/delivery_company/screens/delivery_company_profile_screen.dart';
 import '../categories/widgets/image_free_zone_widget.dart';
 import '../core/constant/colors.dart';
 import '../core/helpers/share_image_function.dart';
@@ -221,21 +223,52 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                                     const Icon(Icons.error),
                               ),
                             ),
-                            state.ads.forPurchase == true
+                            state.ads.itemId != null && state.ads.itemId != ''
                                 ? Positioned(
                                     bottom: 0,
                                     left: 0,
                                     right: 0,
                                     child: InkWell(
                                       onTap: () {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (context) {
-                                            return ProductDetailScreen(
-                                                item:
-                                                    state.ads.productId ?? '');
-                                          },
-                                        ));
+                                        if (state.ads.advertisingType ==
+                                            'product') {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            builder: (context) {
+                                              return ProductDetailScreen(
+                                                  item: state.ads.itemId ?? '');
+                                            },
+                                          ));
+                                        } else if (state.ads.advertisingType ==
+                                            'service') {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            builder: (context) {
+                                              return CompanyServiceDetailsScreen(
+                                                  companyServiceId:
+                                                      state.ads.itemId ?? '');
+                                            },
+                                          ));
+                                        } else if (state.ads.advertisingType ==
+                                            'delivery_service') {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            builder: (context) {
+                                              return DeliveryCompanyProfileScreen(
+                                                id: state.ads.owner.id,
+                                              );
+                                            },
+                                          ));
+                                        } else if (state.ads.advertisingType ==
+                                            'user') {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            builder: (context) {
+                                              return ProductDetailScreen(
+                                                  item: state.ads.itemId ?? '');
+                                            },
+                                          ));
+                                        }
                                       },
                                       splashColor: AppColor.backgroundColor,
                                       child: Container(
@@ -248,8 +281,18 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                                                 MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                AppLocalizations.of(context)
-                                                    .translate('shop_now'),
+                                                state.ads.advertisingType ==
+                                                            'product' ||
+                                                        state.ads
+                                                                .advertisingType ==
+                                                            'user'
+                                                    ? AppLocalizations.of(
+                                                            context)
+                                                        .translate('shop_now')
+                                                    : AppLocalizations.of(
+                                                            context)
+                                                        .translate(
+                                                            'show_details'),
                                                 style: TextStyle(
                                                   color: AppColor.black,
                                                   fontSize: 15.sp,
@@ -259,7 +302,13 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                                               SizedBox(
                                                 width: 8.w,
                                               ),
-                                              const Icon(Feather.shopping_cart),
+                                              Icon(state.ads.advertisingType ==
+                                                          'product' ||
+                                                      state.ads
+                                                              .advertisingType ==
+                                                          'user'
+                                                  ? Feather.shopping_cart
+                                                  : Feather.more_horizontal),
                                             ],
                                           ),
                                         ),

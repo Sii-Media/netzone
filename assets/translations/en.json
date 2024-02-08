@@ -741,5 +741,11 @@
     "sign_in_with_google":"Sign in with Google",
     "sign_in_with_facebook":"Sign in with Facebook",
     "add_your_product_to_ad":"add your product to AD",
-    "shop_now":"Shop Now"
+    "shop_now":"Shop Now",
+    "delivery_service":"Delivery Service",
+    "user":"User",
+    "pick_vedio":"Pick vedio",
+    "add_ads_head":"please select if you want to add advertising from your profile our you want to add something new",
+    "select_from_my_profile":"Select from my profile",
+    "add_something_new":"Add something new"
 }

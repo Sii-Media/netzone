@@ -19,6 +19,7 @@ import 'package:netzoon/presentation/categories/local_company/local_company_prof
 import 'package:netzoon/presentation/categories/users/screens/users_profile_screen.dart';
 import 'package:netzoon/presentation/categories/widgets/image_free_zone_widget.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/helpers/calculate_ads_price.dart';
 import 'package:netzoon/presentation/core/helpers/pick_date_time.dart';
 import 'package:netzoon/presentation/core/helpers/show_image_dialog.dart';
 import 'package:netzoon/presentation/core/widgets/add_photo_button.dart';
@@ -37,6 +38,7 @@ import '../../home/blocs/elec_devices/elec_devices_bloc.dart';
 import '../blocs/country_bloc/country_bloc.dart';
 import '../helpers/get_currency_of_country.dart';
 import '../helpers/share_image_function.dart';
+import '../helpers/show_submit_ads_pay_dialog.dart';
 import 'edit_product_screen.dart';
 import 'package:http/http.dart' as http;
 
@@ -78,7 +80,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
     required String location,
     required String imagePath,
     required double price,
-    required String productId,
+    required String itemId,
   }) async {
     try {
       // final customerId = await createcustomer(email: email, name: name);
@@ -111,7 +113,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
           location: location,
           imagePath: imagePath,
           price: price,
-          productId: productId);
+          itemId: itemId);
     } catch (err) {
       print(err);
     }
@@ -123,7 +125,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
     required String location,
     required String imagePath,
     required double price,
-    required String productId,
+    required String itemId,
   }) async {
     try {
       await Stripe.instance.presentPaymentSheet().then((value) {
@@ -139,7 +141,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
           advertisingPrice: price,
           advertisingType: 'product',
           purchasable: true,
-          productId: productId,
+          itemId: itemId,
           forPurchase: true,
         ));
       });
@@ -188,18 +190,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
 
   late final CountryBloc countryBloc;
   int _totalPrice = 0;
-
-  void _calculateTotalPrice() {
-    if (_selectedStartDate != null && _selectedEndDate != null) {
-      DateTime startDate = DateTime.parse(_selectedStartDate!);
-      DateTime endDate = DateTime.parse(_selectedEndDate!);
-      Duration difference = endDate.difference(startDate);
-      int totalPrice = difference.inDays * 5;
-      setState(() {
-        _totalPrice = totalPrice;
-      });
-    }
-  }
 
   @override
   void initState() {
@@ -1311,7 +1301,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                     imagePath: state.product.imageUrl,
                                     price: state.product.priceAfterDiscount ??
                                         state.product.price,
-                                    productId: state.product.id);
+                                    itemId: state.product.id);
                               }
                             },
                             child: Row(
@@ -1511,7 +1501,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                   _selectedStartDate = date.toIso8601String();
                                   startDateController.text =
                                       convertDateToString(date.toString());
-                                  _calculateTotalPrice();
+                                  _totalPrice = calculateTotalAdsPrice(
+                                      selectedStartDate: _selectedStartDate,
+                                      SelectedendDate: _selectedEndDate);
                                 });
                               },
                             ),
@@ -1567,7 +1559,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                   _selectedEndDate = date.toIso8601String();
                                   endDateController.text =
                                       convertDateToString(date.toString());
-                                  _calculateTotalPrice();
+                                  _totalPrice = calculateTotalAdsPrice(
+                                      selectedStartDate: _selectedStartDate,
+                                      SelectedendDate: _selectedEndDate);
                                 });
                               },
                             ),
@@ -1665,7 +1659,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
                                         return;
                                       }
 
-                                      bool submit = await _showSubmitPay();
+                                      bool submit = await showSubmitAdsPay(
+                                          context: context,
+                                          totalPrice: _totalPrice);
                                       if (submit == true) {
                                         Navigator.of(context).pop(true);
                                       } else {
@@ -1686,60 +1682,60 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
     );
   }
 
-  Future<bool> _showSubmitPay() async {
-    return await showDialog<bool>(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text(
-                  AppLocalizations.of(context).translate('service_fee'),
-                  style: const TextStyle(
-                      color: AppColor.backgroundColor,
-                      fontWeight: FontWeight.w700),
-                ),
-                content: Text(
-                  '${AppLocalizations.of(context).translate('you_should_pay')} $_totalPrice',
-                  style: const TextStyle(
-                    color: AppColor.backgroundColor,
-                  ),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                    },
-                    child: Text(
-                      AppLocalizations.of(context).translate('cancel'),
-                      style: const TextStyle(color: AppColor.red),
-                    ),
-                  ),
-                  BlocBuilder<AuthBloc, AuthState>(
-                    bloc: authBloc,
-                    builder: (context, authState) {
-                      return TextButton(
-                        onPressed: () {
-                          // String amount = (_totalPrice * 100).toString();
-                          // makePayment(
-                          //   amount: amount,
-                          //   currency: 'aed',
-                          //   email: authState is Authenticated ? authState.user.userInfo.email ?? '' : '',
-                          //   name: authState is Authenticated ? authState.user.userInfo.username ?? '' : '',
-                          // );
-                          Navigator.of(context).pop(true);
-                        },
-                        child: Text(
-                          AppLocalizations.of(context).translate('submit'),
-                          style:
-                              const TextStyle(color: AppColor.backgroundColor),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              );
-            }) ??
-        false;
-  }
+  // Future<bool> _showSubmitPay() async {
+  //   return await showDialog<bool>(
+  //           context: context,
+  //           builder: (BuildContext context) {
+  //             return AlertDialog(
+  //               title: Text(
+  //                 AppLocalizations.of(context).translate('service_fee'),
+  //                 style: const TextStyle(
+  //                     color: AppColor.backgroundColor,
+  //                     fontWeight: FontWeight.w700),
+  //               ),
+  //               content: Text(
+  //                 '${AppLocalizations.of(context).translate('you_should_pay')} $_totalPrice',
+  //                 style: const TextStyle(
+  //                   color: AppColor.backgroundColor,
+  //                 ),
+  //               ),
+  //               actions: [
+  //                 TextButton(
+  //                   onPressed: () {
+  //                     Navigator.of(context).pop(false);
+  //                   },
+  //                   child: Text(
+  //                     AppLocalizations.of(context).translate('cancel'),
+  //                     style: const TextStyle(color: AppColor.red),
+  //                   ),
+  //                 ),
+  //                 BlocBuilder<AuthBloc, AuthState>(
+  //                   bloc: authBloc,
+  //                   builder: (context, authState) {
+  //                     return TextButton(
+  //                       onPressed: () {
+  //                         // String amount = (_totalPrice * 100).toString();
+  //                         // makePayment(
+  //                         //   amount: amount,
+  //                         //   currency: 'aed',
+  //                         //   email: authState is Authenticated ? authState.user.userInfo.email ?? '' : '',
+  //                         //   name: authState is Authenticated ? authState.user.userInfo.username ?? '' : '',
+  //                         // );
+  //                         Navigator.of(context).pop(true);
+  //                       },
+  //                       child: Text(
+  //                         AppLocalizations.of(context).translate('submit'),
+  //                         style:
+  //                             const TextStyle(color: AppColor.backgroundColor),
+  //                       ),
+  //                     );
+  //                   },
+  //                 ),
+  //               ],
+  //             );
+  //           }) ??
+  //       false;
+  // }
 
   Container titleAndInput(
       {required String title, required String input, void Function()? onTap}) {

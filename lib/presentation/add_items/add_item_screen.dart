@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/presentation/add_items/add_product_screen.dart';
+import 'package:netzoon/presentation/advertising/advertising_type_screen.dart';
 import 'package:netzoon/presentation/auth/screens/signin.dart';
 
 import '../../injection_container.dart';
@@ -128,7 +129,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) {
-                                return const AddAdsPage();
+                                return const AdvertisingTypeScreen();
                               },
                             ),
                           );

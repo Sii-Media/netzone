@@ -29,13 +29,14 @@ class _BackgroundTwoWidgetState extends State<BackgroundTwoWidget> {
   // final List<String> list = <String>['One', 'Two', 'Three', 'Four', 'Five'];
   final List<String> items = [
     'show_all',
-    'company',
     'car',
     'planes',
     'sea_companies',
     'real_estate',
     'product',
-    'service'
+    'service',
+    "delivery_service",
+    "user",
   ];
 
   @override

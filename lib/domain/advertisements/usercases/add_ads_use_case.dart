@@ -32,7 +32,7 @@ class AddAdvertisementUseCase extends UseCase<String, AddAdvertisementParams> {
       guarantee: params.guarantee,
       contactNumber: params.contactNumber,
       imagePath: params.imagePath,
-      productId: params.productId,
+      itemId: params.itemId,
       forPurchase: params.forPurchase,
     );
   }
@@ -58,7 +58,7 @@ class AddAdvertisementParams {
   final bool? guarantee;
   final String? contactNumber;
   final String? imagePath;
-  final String? productId;
+  final String? itemId;
   final bool? forPurchase;
   AddAdvertisementParams({
     required this.owner,
@@ -80,7 +80,7 @@ class AddAdvertisementParams {
     this.guarantee,
     this.contactNumber,
     this.imagePath,
-    this.productId,
+    this.itemId,
     this.forPurchase,
   });
 }

@@ -46,7 +46,7 @@ abstract class AdvertismentRepository {
     bool? guarantee,
     String? contactNumber,
     String? imagePath,
-    String? productId,
+    String? itemId,
     bool? forPurchase,
   });
 
