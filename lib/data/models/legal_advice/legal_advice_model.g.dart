@@ -11,6 +11,8 @@ LegalAdviceModel _$LegalAdviceModelFromJson(Map<String, dynamic> json) =>
       id: json['_id'] as String?,
       text: json['text'] as String,
       textEn: json['textEn'] as String,
+      termofUse: json['termofUse'] as String,
+      termofUseEn: json['termofUseEn'] as String,
     );
 
 Map<String, dynamic> _$LegalAdviceModelToJson(LegalAdviceModel instance) =>
@@ -18,4 +20,6 @@ Map<String, dynamic> _$LegalAdviceModelToJson(LegalAdviceModel instance) =>
       '_id': instance.id,
       'text': instance.text,
       'textEn': instance.textEn,
+      'termofUse': instance.termofUse,
+      'termofUseEn': instance.termofUseEn,
     };

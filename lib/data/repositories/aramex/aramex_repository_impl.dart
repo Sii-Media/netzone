@@ -510,7 +510,7 @@ class AramexRespositoryImpl implements AramexRepository {
         // FormData formData = FormData();
 
         Response response = await dio.post(
-          '$baseUrl/aramex/fetchCities?countryCode=$country',
+          'https://www.netzoonback.siidevelopment.com/aramex/fetchCities?countryCode=$country',
           // data: formData,
         );
 

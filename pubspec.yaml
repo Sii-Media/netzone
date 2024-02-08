@@ -4,7 +4,7 @@ description: A new Flutter project.
 publish_to: 'none'
 
 
-version: 1.0.0+33
+version: 1.0.0+34
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
@@ -80,6 +80,7 @@ dependencies:
   photo_view: ^0.14.0
   jwt_decoder: ^2.0.1
   country_flags: ^2.2.0
+  smooth_page_indicator: ^1.1.0
 
 
 

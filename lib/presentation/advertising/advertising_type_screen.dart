@@ -72,7 +72,7 @@ class _AdvertisingTypeScreenState extends State<AdvertisingTypeScreen> {
                     height: 5.h,
                   ),
                   Text(
-                    'please select if you want to add advertising from your profile our you want to add something new',
+                    AppLocalizations.of(context).translate('add_ads_head'),
                     style: TextStyle(
                       color: AppColor.colorOne,
                       fontSize: 11.sp,
@@ -154,9 +154,9 @@ class _AdvertisingTypeScreenState extends State<AdvertisingTypeScreen> {
                       ),
                       fixedSize: Size(double.maxFinite, 40.h),
                     ),
-                    child: const Text(
-                      'Select from my profile',
-                      style: TextStyle(),
+                    child: Text(
+                      AppLocalizations.of(context)
+                          .translate('select_from_my_profile'),
                     ),
                   ),
                   SizedBox(
@@ -190,9 +190,9 @@ class _AdvertisingTypeScreenState extends State<AdvertisingTypeScreen> {
                       ),
                       fixedSize: Size(double.maxFinite, 40.h),
                     ),
-                    child: const Text(
-                      'Add Something New',
-                      style: TextStyle(),
+                    child: Text(
+                      AppLocalizations.of(context)
+                          .translate('add_something_new'),
                     ),
                   ),
                 ],

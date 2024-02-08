@@ -2434,7 +2434,7 @@ class _PriveryPolicyWidgetState extends State<PriveryPolicyWidget> {
                           children: [
                             Text(
                               AppLocalizations.of(context)
-                                  .translate('privacy_policy'),
+                                  .translate('terms_of_use'),
                               style: TextStyle(
                                 color: AppColor.backgroundColor,
                                 fontSize: 16.sp,
@@ -2446,8 +2446,8 @@ class _PriveryPolicyWidgetState extends State<PriveryPolicyWidget> {
                                 children: [
                                   ReadMoreText(
                                     langState is EnglishState
-                                        ? state.legalAdvices.first.textEn
-                                        : state.legalAdvices.first.text,
+                                        ? state.legalAdvices.first.termofUseEn
+                                        : state.legalAdvices.first.termofUse,
                                     trimLines: 2,
                                     colorClickableText: Colors.pink,
                                     trimMode: TrimMode.Line,

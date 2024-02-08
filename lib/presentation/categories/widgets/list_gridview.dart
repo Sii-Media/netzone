@@ -172,19 +172,21 @@ class GridCategory extends StatelessWidget {
                 },
               ),
             );
-          } else if (category.name == 'government_institutions') {
-            if (state.selectedCountry == 'AE') {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const GovermentalCategoryScreen();
-                  },
-                ),
-              );
-            } else {
-              notNowAlert(context);
-            }
-          } else if (category.name == 'factories') {
+          }
+          //  else if (category.name == 'government_institutions') {
+          //   if (state.selectedCountry == 'AE') {
+          //     Navigator.of(context).push(
+          //       MaterialPageRoute(
+          //         builder: (context) {
+          //           return const GovermentalCategoryScreen();
+          //         },
+          //       ),
+          //     );
+          //   } else {
+          //     notNowAlert(context);
+          //   }
+          // }
+          else if (category.name == 'factories') {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {

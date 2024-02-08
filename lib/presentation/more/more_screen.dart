@@ -13,6 +13,7 @@ import 'package:netzoon/presentation/contact/screens/contact_us_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
+import 'package:netzoon/presentation/onboarding/onboarding_screen.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
@@ -168,200 +169,246 @@ class _MoreScreenState extends State<MoreScreen> with ScreenLoader<MoreScreen> {
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            SettingsCategory(
-              name: AppLocalizations.of(context).translate('privacy_policy'),
-              icon: Icons.policy_outlined,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const LegalAdviceScreen();
-                      // return const StripeTestScreen();
-                    },
-                  ),
-                );
-              },
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            SettingsCategory(
-              name: AppLocalizations.of(context).translate('language'),
-              icon: Icons.language,
-              onTap: () {
-                showLanguageDialog(context);
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) {
-                //       return const LanguagesScreen();
-                //     },
-                //   ),
-                // );
-              },
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            SettingsCategory(
-              name: AppLocalizations.of(context).translate('contact_us'),
-              icon: Icons.email,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const ContactUsScreen();
-                    },
-                  ),
-                );
-              },
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            Builder(builder: (context) {
-              return SettingsCategory(
-                name:
-                    AppLocalizations.of(context).translate('share_netzoon_app'),
-                icon: Icons.share,
-                onTap: () async {
-                  // Determine the current platform
-                  String appStoreLink;
-                  if (Platform.isIOS) {
-                    appStoreLink =
-                        'https://apps.apple.com/ae/app/netzoon/id6467718964';
-                  } else if (Platform.isAndroid) {
-                    appStoreLink =
-                        'https://play.google.com/store/apps/details?id=com.netzoon.netzoon_app';
-                  } else {
-                    return;
-                  }
-
-                  await Share.share(
-                    'Download netzoon app: $appStoreLink',
-                    subject: 'Share netzoon app link',
-                    sharePositionOrigin: Rect.fromPoints(
-                      const Offset(2, 2),
-                      const Offset(3, 3),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SettingsCategory(
+                name: AppLocalizations.of(context).translate('privacy_policy'),
+                icon: Icons.policy_outlined,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const LegalAdviceScreen(
+                          type: 'policy',
+                        );
+                        // return const StripeTestScreen();
+                      },
                     ),
                   );
                 },
-              );
-            }),
-            // Builder(builder: (context) {
-            //   return SettingsCategory(
-            //     name:
-            //         AppLocalizations.of(context).translate('share_netzoon_app'),
-            //     icon: Icons.share,
-            //     onTap: () async {
-            //       showModalBottomSheet(
-            //         context: context,
-            //         builder: (BuildContext context) {
-            //           return Column(
-            //             mainAxisSize: MainAxisSize.min,
-            //             children: <Widget>[
-            //               ListTile(
-            //                 leading: const Icon(Icons.android),
-            //                 title: Text(AppLocalizations.of(context)
-            //                     .translate('play_store')),
-            //                 onTap: () {
-            //                   Navigator.pop(context);
-            //                   _shareLink('Android');
-            //                 },
-            //               ),
-            //               ListTile(
-            //                 leading: const Icon(Icons.phone_iphone),
-            //                 title: Text(AppLocalizations.of(context)
-            //                     .translate('apple_store')),
-            //                 onTap: () {
-            //                   Navigator.pop(context);
-            //                   _shareLink('iOS');
-            //                 },
-            //               ),
-            //             ],
-            //           );
-            //         },
-            //       );
-            //     },
-            //   );
-            // }),
-            SizedBox(
-              height: 10.h,
-            ),
-            isLoggedIn != null && isLoggedIn != ''
-                ? SettingsCategory(
-                    name: AppLocalizations.of(context).translate('logout'),
-                    icon: Icons.logout,
-                    onTap: () {
-                      final cartBloc = context.read<CartBlocBloc>();
-                      cartBloc.add(ClearCart());
-                      authBloc.add(AuthLogout());
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              SettingsCategory(
+                name: AppLocalizations.of(context).translate('terms_of_use'),
+                icon: Icons.verified_user_outlined,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const LegalAdviceScreen(
+                          type: 'term',
+                        );
+                        // return const StripeTestScreen();
+                      },
+                    ),
+                  );
+                },
+              ),
+              // SizedBox(
+              //   height: 10.h,
+              // ),
+              // SettingsCategory(
+              //   name: AppLocalizations.of(context).translate('app_overview'),
+              //   icon: Icons.app_shortcut,
+              //   onTap: () {
+              //     Navigator.of(context).push(
+              //       MaterialPageRoute(
+              //         builder: (context) {
+              //           return const OnBoardingScreen(
+              //             fromMore: true,
+              //           );
+              //           // return const StripeTestScreen();
+              //         },
+              //       ),
+              //     );
+              //   },
+              // ),
 
-                      // Navigator.of(context, rootNavigator: true)
-                      //     .pushAndRemoveUntil(
-                      //         CupertinoPageRoute(builder: (context) {
-                      //   return const StartScreen();
-                      // }), (route) => false);
-                      while (context.canPop()) {
-                        context.pop();
-                      }
-                      context.push('/start');
-                    },
-                  )
-                : const SizedBox(),
-            SizedBox(
-              height: 10.h,
-            ),
-            isLoggedIn != null && isLoggedIn != ''
-                // ? SettingsCategory(
-                //     name: AppLocalizations.of(context)
-                //         .translate('delete_my_account'),
-                //     icon: Icons.remove_circle,
-                //     onTap: () {
-                //       authBloc.add(DeleteMyAccountEvent());
-                //     },
-                //   )
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: InkWell(
-                        onTap: () async {
-                          bool isSubmit = await _showDeleteAccountDialog();
-                          isSubmit == true
-                              ? authBloc.add(DeleteMyAccountEvent())
-                              : null;
-                        },
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          height: 60.h,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                              color: AppColor.white,
-                              borderRadius: BorderRadius.circular(10.0),
-                              border: Border.all(color: AppColor.red)),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.remove_circle_rounded,
-                                color: AppColor.red,
-                                size: 20.sp,
-                              ),
-                              SizedBox(
-                                width: 5.w,
-                              ),
-                              Text(
-                                AppLocalizations.of(context)
-                                    .translate('delete_my_account'),
-                                style: TextStyle(
-                                    fontSize: 15.sp, color: AppColor.red),
-                              ),
-                            ],
-                          ),
-                        )),
-                  )
-                : const SizedBox(),
-          ],
+              SizedBox(
+                height: 10.h,
+              ),
+              SettingsCategory(
+                name: AppLocalizations.of(context).translate('language'),
+                icon: Icons.language,
+                onTap: () {
+                  showLanguageDialog(context);
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (context) {
+                  //       return const LanguagesScreen();
+                  //     },
+                  //   ),
+                  // );
+                },
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              SettingsCategory(
+                name: AppLocalizations.of(context).translate('contact_us'),
+                icon: Icons.email,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const ContactUsScreen();
+                      },
+                    ),
+                  );
+                },
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              Builder(builder: (context) {
+                return SettingsCategory(
+                  name: AppLocalizations.of(context)
+                      .translate('share_netzoon_app'),
+                  icon: Icons.share,
+                  onTap: () async {
+                    // Determine the current platform
+                    String appStoreLink;
+                    if (Platform.isIOS) {
+                      appStoreLink =
+                          'https://apps.apple.com/ae/app/netzoon/id6467718964';
+                    } else if (Platform.isAndroid) {
+                      appStoreLink =
+                          'https://play.google.com/store/apps/details?id=com.netzoon.netzoon_app';
+                    } else {
+                      return;
+                    }
+
+                    await Share.share(
+                      'Download netzoon app: $appStoreLink',
+                      subject: 'Share netzoon app link',
+                      sharePositionOrigin: Rect.fromPoints(
+                        const Offset(2, 2),
+                        const Offset(3, 3),
+                      ),
+                    );
+                  },
+                );
+              }),
+              // Builder(builder: (context) {
+              //   return SettingsCategory(
+              //     name:
+              //         AppLocalizations.of(context).translate('share_netzoon_app'),
+              //     icon: Icons.share,
+              //     onTap: () async {
+              //       showModalBottomSheet(
+              //         context: context,
+              //         builder: (BuildContext context) {
+              //           return Column(
+              //             mainAxisSize: MainAxisSize.min,
+              //             children: <Widget>[
+              //               ListTile(
+              //                 leading: const Icon(Icons.android),
+              //                 title: Text(AppLocalizations.of(context)
+              //                     .translate('play_store')),
+              //                 onTap: () {
+              //                   Navigator.pop(context);
+              //                   _shareLink('Android');
+              //                 },
+              //               ),
+              //               ListTile(
+              //                 leading: const Icon(Icons.phone_iphone),
+              //                 title: Text(AppLocalizations.of(context)
+              //                     .translate('apple_store')),
+              //                 onTap: () {
+              //                   Navigator.pop(context);
+              //                   _shareLink('iOS');
+              //                 },
+              //               ),
+              //             ],
+              //           );
+              //         },
+              //       );
+              //     },
+              //   );
+              // }),
+              SizedBox(
+                height: 10.h,
+              ),
+              isLoggedIn != null && isLoggedIn != ''
+                  ? SettingsCategory(
+                      name: AppLocalizations.of(context).translate('logout'),
+                      icon: Icons.logout,
+                      onTap: () {
+                        final cartBloc = context.read<CartBlocBloc>();
+                        cartBloc.add(ClearCart());
+                        authBloc.add(AuthLogout());
+
+                        // Navigator.of(context, rootNavigator: true)
+                        //     .pushAndRemoveUntil(
+                        //         CupertinoPageRoute(builder: (context) {
+                        //   return const StartScreen();
+                        // }), (route) => false);
+                        while (context.canPop()) {
+                          context.pop();
+                        }
+                        context.push('/start');
+                      },
+                    )
+                  : const SizedBox(),
+              SizedBox(
+                height: 10.h,
+              ),
+              isLoggedIn != null && isLoggedIn != ''
+                  // ? SettingsCategory(
+                  //     name: AppLocalizations.of(context)
+                  //         .translate('delete_my_account'),
+                  //     icon: Icons.remove_circle,
+                  //     onTap: () {
+                  //       authBloc.add(DeleteMyAccountEvent());
+                  //     },
+                  //   )
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: InkWell(
+                          onTap: () async {
+                            bool isSubmit = await _showDeleteAccountDialog();
+                            isSubmit == true
+                                ? authBloc.add(DeleteMyAccountEvent())
+                                : null;
+                          },
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            height: 60.h,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                color: AppColor.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(color: AppColor.red)),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.remove_circle_rounded,
+                                  color: AppColor.red,
+                                  size: 20.sp,
+                                ),
+                                SizedBox(
+                                  width: 5.w,
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)
+                                      .translate('delete_my_account'),
+                                  style: TextStyle(
+                                      fontSize: 15.sp, color: AppColor.red),
+                                ),
+                              ],
+                            ),
+                          )),
+                    )
+                  : const SizedBox(),
+              SizedBox(
+                height: 82.h,
+              ),
+            ],
+          ),
         ),
       ),
     );

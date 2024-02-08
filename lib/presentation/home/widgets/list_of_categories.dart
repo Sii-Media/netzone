@@ -132,20 +132,22 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                   },
                                 ),
                               );
-                            } else if (widget.categories[index].name ==
-                                'government_institutions') {
-                              if (state.selectedCountry == 'AE') {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return const GovermentalCategoryScreen();
-                                    },
-                                  ),
-                                );
-                              } else {
-                                notNowAlert(context);
-                              }
-                            } else if (widget.categories[index].name ==
+                            }
+                            // else if (widget.categories[index].name ==
+                            //     'government_institutions') {
+                            //   if (state.selectedCountry == 'AE') {
+                            //     Navigator.of(context).push(
+                            //       MaterialPageRoute(
+                            //         builder: (context) {
+                            //           return const GovermentalCategoryScreen();
+                            //         },
+                            //       ),
+                            //     );
+                            //   } else {
+                            //     notNowAlert(context);
+                            //   }
+                            // }
+                            else if (widget.categories[index].name ==
                                 'factories') {
                               Navigator.of(context).push(
                                 MaterialPageRoute(

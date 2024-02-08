@@ -241,8 +241,9 @@ class AuthRepositoryImpl implements AuthRepository {
           ));
         }
 
-        Response response =
-            await dio.post('$baseUrl/user/register', data: formData);
+        Response response = await dio.post(
+            'https://www.netzoonback.siidevelopment.com/user/register',
+            data: formData);
 
         if (response.statusCode == 201) {
           final UserModel user = UserModel.fromJson(response.data!);

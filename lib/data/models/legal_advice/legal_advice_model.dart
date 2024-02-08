@@ -9,11 +9,15 @@ class LegalAdviceModel {
   final String? id;
   final String text;
   final String textEn;
+  final String termofUse;
+  final String termofUseEn;
 
   LegalAdviceModel({
     this.id,
     required this.text,
     required this.textEn,
+    required this.termofUse,
+    required this.termofUseEn,
   });
 
   factory LegalAdviceModel.fromJson(Map<String, dynamic> json) =>
@@ -24,7 +28,8 @@ class LegalAdviceModel {
 
 extension MapToDomain on LegalAdviceModel {
   LegalAdvice toDomain() => LegalAdvice(
-        text: text,
-        textEn: textEn,
-      );
+      text: text,
+      textEn: textEn,
+      termofUse: termofUse,
+      termofUseEn: termofUseEn);
 }
