@@ -4,7 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/favorites/entities/favorite_items.dart';
 import 'package:netzoon/injection_container.dart';
+import 'package:netzoon/presentation/core/blocs/country_bloc/country_bloc.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
+import 'package:netzoon/presentation/core/helpers/get_currency_of_country.dart';
+import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/favorites/favorite_blocs/favorites_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
@@ -18,10 +21,12 @@ class FavoriteScreen extends StatefulWidget {
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
   final favBloc = sl<FavoritesBloc>();
-
+  late final CountryBloc countryBloc;
   @override
   void initState() {
     favBloc.add(GetFavoriteItemsEvent(userId: widget.userId));
+    countryBloc = BlocProvider.of<CountryBloc>(context);
+    countryBloc.add(GetCountryEvent());
     super.initState();
   }
 
@@ -67,134 +72,198 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                         physics: const BouncingScrollPhysics(),
                         itemCount: state.favoriteItems.length,
                         itemBuilder: (context, index) {
-                          return Card(
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 6,
-                            ),
-                            child: Container(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: ClipRRect(
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(4),
-                                      ),
-                                      child: CachedNetworkImage(
-                                        imageUrl:
-                                            state.favoriteItems[index].imageUrl,
-                                        fit: BoxFit.cover,
-                                        progressIndicatorBuilder:
-                                            (context, url, downloadProgress) =>
-                                                Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 70.0, vertical: 50),
-                                          child: CircularProgressIndicator(
-                                            value: downloadProgress.progress,
-                                            color: AppColor.backgroundColor,
-
-                                            // strokeWidth: 10,
-                                          ),
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) {
+                                  return ProductDetailScreen(
+                                      item: state.favoriteItems[index].id);
+                                },
+                              ));
+                            },
+                            child: Card(
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 6,
+                              ),
+                              child: Container(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: ClipRRect(
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(4),
                                         ),
-                                        errorWidget: (context, url, error) =>
-                                            const Icon(Icons.error),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 6,
-                                    child: Container(
-                                      padding: const EdgeInsets.only(bottom: 6),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                              left: 8.0,
-                                              right: 8.0,
-                                            ),
-                                            child: Text(
-                                              state.favoriteItems[index].name,
-                                              style: TextStyle(
-                                                  fontSize: 16.sp,
-                                                  fontWeight: FontWeight.bold,
-                                                  color:
-                                                      AppColor.backgroundColor),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
+                                        child: CachedNetworkImage(
+                                          imageUrl: state
+                                              .favoriteItems[index].imageUrl,
+                                          fit: BoxFit.cover,
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 70.0, vertical: 50),
+                                            child: CircularProgressIndicator(
+                                              value: downloadProgress.progress,
+                                              color: AppColor.backgroundColor,
+
+                                              // strokeWidth: 10,
                                             ),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                              left: 8.0,
-                                              right: 8.0,
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 6,
+                                      child: Container(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 6),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 8.0,
+                                                right: 8.0,
+                                              ),
+                                              child: Text(
+                                                state.favoriteItems[index].name,
+                                                style: TextStyle(
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: AppColor
+                                                        .backgroundColor),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
                                             ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  '${state.favoriteItems[index].price} \$',
-                                                  style: TextStyle(
-                                                      fontSize: 16.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: AppColor
-                                                          .backgroundColor),
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                                IconButton(
-                                                  onPressed: () {
-                                                    favBloc.add(RemoveItemFromFavoritesEvent(
-                                                        product: FavoriteItems(
-                                                            id: state
-                                                                .favoriteItems[
-                                                                    index]
-                                                                .id,
-                                                            name: state
-                                                                .favoriteItems[
-                                                                    index]
-                                                                .name,
-                                                            imageUrl: state
-                                                                .favoriteItems[
-                                                                    index]
-                                                                .imageUrl,
-                                                            description: state
-                                                                .favoriteItems[
-                                                                    index]
-                                                                .description,
-                                                            price: state
-                                                                .favoriteItems[
-                                                                    index]
-                                                                .price,
-                                                            category: state
-                                                                .favoriteItems[
-                                                                    index]
-                                                                .category)));
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.favorite,
-                                                    color: AppColor.red,
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 8.0,
+                                                right: 8.0,
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  // Text(
+                                                  //   '${state.favoriteItems[index].price} \$',
+                                                  //   style: TextStyle(
+                                                  //       fontSize: 16.sp,
+                                                  //       fontWeight:
+                                                  //           FontWeight.bold,
+                                                  //       color: AppColor
+                                                  //           .backgroundColor),
+                                                  //   maxLines: 2,
+                                                  //   overflow:
+                                                  //       TextOverflow.ellipsis,
+                                                  // ),
+                                                  BlocBuilder<CountryBloc,
+                                                      CountryState>(
+                                                    bloc: countryBloc,
+                                                    builder: (context,
+                                                        countryState) {
+                                                      return RichText(
+                                                        text: TextSpan(
+                                                            style: TextStyle(
+                                                                fontSize: 16.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: AppColor
+                                                                    .backgroundColor),
+                                                            children: <TextSpan>[
+                                                              TextSpan(
+                                                                  text:
+                                                                      '${state.favoriteItems[index].price}',
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                  )),
+                                                              TextSpan(
+                                                                text:
+                                                                    getCurrencyFromCountry(
+                                                                  countryState
+                                                                      .selectedCountry,
+                                                                  context,
+                                                                ),
+                                                                style: TextStyle(
+                                                                    color: AppColor
+                                                                        .backgroundColor,
+                                                                    fontSize:
+                                                                        12.sp),
+                                                              ),
+                                                              // TextSpan(
+                                                              //   text:
+                                                              //       '  ${state.favoriteItems[index].?.round().toString()}% ${AppLocalizations.of(context).translate('OFF')}',
+                                                              //   style: TextStyle(
+                                                              //       color: Colors
+                                                              //           .green,
+                                                              //       fontWeight:
+                                                              //           FontWeight
+                                                              //               .w700,
+                                                              //       fontSize:
+                                                              //           14.sp),
+                                                              // )
+                                                            ]),
+                                                      );
+                                                    },
                                                   ),
-                                                ),
-                                              ],
+                                                  IconButton(
+                                                    onPressed: () {
+                                                      favBloc.add(RemoveItemFromFavoritesEvent(
+                                                          product: FavoriteItems(
+                                                              id: state
+                                                                  .favoriteItems[
+                                                                      index]
+                                                                  .id,
+                                                              name: state
+                                                                  .favoriteItems[
+                                                                      index]
+                                                                  .name,
+                                                              imageUrl: state
+                                                                  .favoriteItems[
+                                                                      index]
+                                                                  .imageUrl,
+                                                              description: state
+                                                                  .favoriteItems[
+                                                                      index]
+                                                                  .description,
+                                                              price: state
+                                                                  .favoriteItems[
+                                                                      index]
+                                                                  .price,
+                                                              category: state
+                                                                  .favoriteItems[
+                                                                      index]
+                                                                  .category)));
+                                                    },
+                                                    icon: const Icon(
+                                                      Icons.favorite,
+                                                      color: AppColor.red,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           );
