@@ -2,7 +2,7 @@ name: netzoon
 description: A new Flutter project.
 
 
-version: 1.0.12+01
+version: 1.0.13+01
 publish_to: 'none'
 
 environment:
@@ -80,6 +80,7 @@ dependencies:
   jwt_decoder: ^2.0.1
   country_flags: ^2.2.0
   sign_in_with_apple: ^5.0.0
+  smooth_page_indicator: ^1.1.0
 
 
 

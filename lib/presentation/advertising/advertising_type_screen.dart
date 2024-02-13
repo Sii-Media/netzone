@@ -154,8 +154,10 @@ class _AdvertisingTypeScreenState extends State<AdvertisingTypeScreen> {
                       ),
                       fixedSize: Size(double.maxFinite, 40.h),
                     ),
-                    child: Text(AppLocalizations.of(context)
-                        .translate('select_from_my_profile')),
+                    child: Text(
+                      AppLocalizations.of(context)
+                          .translate('select_from_my_profile'),
+                    ),
                   ),
                   SizedBox(
                     height: 10.h,
@@ -188,8 +190,10 @@ class _AdvertisingTypeScreenState extends State<AdvertisingTypeScreen> {
                       ),
                       fixedSize: Size(double.maxFinite, 40.h),
                     ),
-                    child: Text(AppLocalizations.of(context)
-                        .translate('add_something_new')),
+                    child: Text(
+                      AppLocalizations.of(context)
+                          .translate('add_something_new'),
+                    ),
                   ),
                 ],
               );

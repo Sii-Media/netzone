@@ -10,7 +10,8 @@ import '../core/widgets/custom_appbar.dart';
 import '../language_screen/blocs/language_bloc/language_bloc.dart';
 
 class LegalAdviceScreen extends StatefulWidget {
-  const LegalAdviceScreen({super.key});
+  final String type;
+  const LegalAdviceScreen({super.key, required this.type});
 
   @override
   State<LegalAdviceScreen> createState() => _LegalAdviceScreenState();
@@ -125,7 +126,11 @@ class _LegalAdviceScreenState extends State<LegalAdviceScreen> {
                   top: 150.h,
                   child: Center(
                     child: Text(
-                      AppLocalizations.of(context).translate('privacy_policy'),
+                      widget.type == 'policy'
+                          ? AppLocalizations.of(context)
+                              .translate('privacy_policy')
+                          : AppLocalizations.of(context)
+                              .translate('terms_of_use'),
                       style: TextStyle(
                           fontSize: 22.sp, color: AppColor.backgroundColor),
                     ),
@@ -168,8 +173,14 @@ class _LegalAdviceScreenState extends State<LegalAdviceScreen> {
                                 itemBuilder: (BuildContext context, index) {
                                   return Text(
                                     langState is EnglishState
-                                        ? state.legalAdvices[index].textEn
-                                        : state.legalAdvices[index].text,
+                                        ? widget.type == 'policy'
+                                            ? state.legalAdvices[index].textEn
+                                            : state
+                                                .legalAdvices[index].termofUseEn
+                                        : widget.type == 'policy'
+                                            ? state.legalAdvices[index].text
+                                            : state
+                                                .legalAdvices[index].termofUse,
                                     style: TextStyle(
                                       color: AppColor.black,
                                       fontSize: 14.sp,

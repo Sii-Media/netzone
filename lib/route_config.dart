@@ -24,6 +24,7 @@ import 'package:netzoon/presentation/core/widgets/vehicle_details.dart';
 import 'package:netzoon/presentation/home/test.dart';
 import 'package:netzoon/presentation/news/news_details.dart';
 import 'package:netzoon/presentation/news/news_screen.dart';
+import 'package:netzoon/presentation/onboarding/onboarding_screen.dart';
 import 'package:netzoon/presentation/splash/splash_screen.dart';
 import 'package:netzoon/presentation/start_screen.dart';
 
@@ -39,6 +40,10 @@ class RouteConfig {
               path: 'start',
               builder: (context, state) => const StartScreen(),
             ),
+            // GoRoute(
+            //   path: 'onboarding',
+            //   builder: (context, state) => const OnBoardingScreen(),
+            // ),
           ],
         ),
         GoRoute(

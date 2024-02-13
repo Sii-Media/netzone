@@ -107,7 +107,7 @@ class _HomePageState extends State<HomePage> {
   List imgs = [
     {"id": 1, "image": 'assets/images/aramex.png'},
     {"id": 2, "image": 'assets/images/payments.png'},
-    {"id": 3, "image": 'assets/images/netzoon_download.png'},
+    // {"id": 3, "image": 'assets/images/netzoon_download.png'},
     {"id": 4, "image": 'assets/images/comp.png'}
   ];
 

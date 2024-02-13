@@ -746,6 +746,8 @@
     "user":"User",
     "pick_vedio":"Pick vedio",
     "add_ads_head":"please select if you want to add advertising from your profile our you want to add something new",
-    "select_from_my_profile":"Select from my profile",
-    "add_something_new":"Add something new"
+    "select_from_my_profile":"Select from your profile",
+    "add_something_new":"Add something new",
+    "terms_of_use":"Terms of use",
+    "app_overview":"App Overview"
 }

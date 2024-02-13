@@ -534,7 +534,7 @@
     "to_home": "الى الرئيسية",
     "service_fee": "رسوم الخدمة",
     "Arabic": "العربية",
-    "English": "الانكليزية",
+    "English": "English",
     "review": "تقييم",
     "visitors": "الزائرون",
     "search_by_company_name": "البحث عن طريق اسم الشركة",
@@ -747,5 +747,8 @@
     "pick_vedio":"اضافة فيديو",
     "add_ads_head":"الرجاء الاختيار اذا تريد اضافة اعلان من صفحتك أو تريد اضافة شيء جديد",
     "select_from_my_profile":"اختر من صفحتك الشخصية",
-    "add_something_new":"إضافة شيء جديد"
+    "add_something_new":"إضافة شيء جديد",
+    "terms_of_use":"شروط الاستخدام",
+    "app_overview":"نظرة عامة على التطبيق"
+
 }
