@@ -10,6 +10,7 @@ import 'package:netzoon/presentation/core/helpers/share_image_function.dart';
 import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/price_suggestion_button.dart';
+import 'package:netzoon/presentation/favorites/favorite_blocs/favorites_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -87,12 +88,28 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 }
 
-class Product extends StatelessWidget {
+class Product extends StatefulWidget {
   const Product({
     super.key,
     required this.product,
   });
   final CategoryProducts product;
+
+  @override
+  State<Product> createState() => _ProductState();
+}
+
+class _ProductState extends State<Product> {
+  bool isFavorite = false;
+  late FavoritesBloc favBloc;
+
+  @override
+  void initState() {
+    favBloc = BlocProvider.of<FavoritesBloc>(context);
+    favBloc.add(IsFavoriteEvent(productId: widget.product.id));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextEditingController input = TextEditingController();
@@ -106,7 +123,7 @@ class Product extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return ProductDetailScreen(item: product.id);
+              return ProductDetailScreen(item: widget.product.id);
             }));
           },
           child: Card(
@@ -117,7 +134,7 @@ class Product extends StatelessWidget {
                   width: double.infinity,
                   height: MediaQuery.of(context).size.height / 2,
                   child: CachedNetworkImage(
-                    imageUrl: product.imageUrl,
+                    imageUrl: widget.product.imageUrl,
                     fit: BoxFit.contain,
                     progressIndicatorBuilder:
                         (context, url, downloadProgress) => Padding(
@@ -149,11 +166,46 @@ class Product extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.favorite_border,
-                                ),
+                              // IconButton(
+                              //   onPressed: () {},
+                              //   icon: const Icon(
+                              //     Icons.favorite_border,
+                              //   ),
+                              // ),
+                              BlocBuilder<FavoritesBloc, FavoritesState>(
+                                builder: (context, state) {
+                                  if (state is IsFavoriteState) {
+                                    isFavorite = state.isFavorite;
+                                  }
+                                  return IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        if (isFavorite) {
+                                          context.read<FavoritesBloc>().add(
+                                                RemoveItemEvent(
+                                                    productId:
+                                                        widget.product.id),
+                                              );
+                                        } else {
+                                          context.read<FavoritesBloc>().add(
+                                                AddItemToFavoritesEvent(
+                                                  productId: widget.product.id,
+                                                ),
+                                              );
+                                        }
+                                      });
+                                    },
+                                    icon: Icon(
+                                      isFavorite
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      size: 22.sp,
+                                      color: isFavorite
+                                          ? AppColor.red
+                                          : AppColor.backgroundColor,
+                                    ),
+                                  );
+                                },
                               ),
                               SizedBox(
                                 width: 10.w,
@@ -178,10 +230,10 @@ class Product extends StatelessWidget {
                                   //   ),
                                   // );
                                   await shareImageWithDescription(
-                                      imageUrl: product.imageUrl,
-                                      subject: product.name,
+                                      imageUrl: widget.product.imageUrl,
+                                      subject: widget.product.name,
                                       description:
-                                          'https://www.netzoon.com/home/product/${product.id}');
+                                          'https://www.netzoon.com/home/product/${widget.product.id}');
                                 },
                                 icon: const Icon(
                                   Icons.share,
@@ -190,7 +242,7 @@ class Product extends StatelessWidget {
                             ],
                           ),
                           Text(
-                            '${AppLocalizations.of(context).translate('price')} : ${product.price}',
+                            '${AppLocalizations.of(context).translate('price')} : ${widget.product.price}',
                             style: TextStyle(
                                 color: AppColor.colorOne,
                                 fontSize: 17.sp,
@@ -215,7 +267,7 @@ class Product extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        product.description,
+                        widget.product.description,
                         maxLines: 4,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -251,7 +303,8 @@ class Product extends StatelessWidget {
                         // final cartBloc = sl<CartBlocBloc>();
                         final cartBloc = context.read<CartBlocBloc>();
                         final cartItems = cartBloc.state.props;
-                        if (cartItems.any((elm) => elm.id == product.id)) {
+                        if (cartItems
+                            .any((elm) => elm.id == widget.product.id)) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
                               AppLocalizations.of(context)
@@ -262,7 +315,7 @@ class Product extends StatelessWidget {
                             duration: const Duration(seconds: 2),
                           ));
                         } else {
-                          cartBloc.add(AddToCart(product: product));
+                          cartBloc.add(AddToCart(product: widget.product));
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(AppLocalizations.of(context)
                                 .translate('Product_added_to_cart')),
