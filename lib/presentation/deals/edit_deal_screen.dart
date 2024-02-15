@@ -63,8 +63,8 @@ class _EditDealScreenState extends State<EditDealScreen>
   Widget screen(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Edit Deal',
+        title: Text(
+          AppLocalizations.of(context).translate('edit_deal'),
         ),
         // leading: Icon(Icons.arrow_back_ios_new),
         backgroundColor: AppColor.backgroundColor,
@@ -303,6 +303,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                       controller: startDateController,
                       style: const TextStyle(color: Colors.black),
                       keyboardType: TextInputType.datetime,
+                      readOnly: true,
                       validator: (val) {
                         if (val!.isEmpty) {
                           return 'هذا الحقل مطلوب';
@@ -367,6 +368,7 @@ class _EditDealScreenState extends State<EditDealScreen>
                       controller: endDateController,
                       style: const TextStyle(color: Colors.black),
                       keyboardType: TextInputType.datetime,
+                      readOnly: true,
                       validator: (val) {
                         if (val!.isEmpty) {
                           return 'هذا الحقل مطلوب';

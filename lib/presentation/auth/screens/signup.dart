@@ -1793,53 +1793,65 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   SizedBox(
                     height: 10.h,
                   ),
-                  TextSignup(
-                    text: AppLocalizations.of(context).translate('cover_photo'),
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      addPhotoButton(
-                          context: context,
-                          text: 'add_from_camera',
-                          onPressed: () {
-                            getCoverImage(ImageSource.camera);
-                          }),
-                      addPhotoButton(
-                          context: context,
-                          text: 'add_from_gallery',
-                          onPressed: () {
-                            getCoverImage(ImageSource.gallery);
-                          }),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  coverImage != null
-                      ? Center(
-                          child: Image.file(
-                            coverImage!,
-                            width: 250.w,
-                            height: 250.h,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : Center(
-                          child: Center(
-                            child: Container(
-                              height: MediaQuery.of(context).size.height * 0.5,
-                              decoration: BoxDecoration(
-                                  color: Colors.green.withOpacity(0.1),
-                                  image: const DecorationImage(
-                                      image:
-                                          AssetImage("assets/images/logo.png"),
-                                      fit: BoxFit.cover)),
+                  widget.accountTitle == 'المستهلك'
+                      ? const SizedBox()
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextSignup(
+                              text: AppLocalizations.of(context)
+                                  .translate('cover_photo'),
                             ),
-                          ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                addPhotoButton(
+                                    context: context,
+                                    text: 'add_from_camera',
+                                    onPressed: () {
+                                      getCoverImage(ImageSource.camera);
+                                    }),
+                                addPhotoButton(
+                                    context: context,
+                                    text: 'add_from_gallery',
+                                    onPressed: () {
+                                      getCoverImage(ImageSource.gallery);
+                                    }),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            coverImage != null
+                                ? Center(
+                                    child: Image.file(
+                                      coverImage!,
+                                      width: 250.w,
+                                      height: 250.h,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : Center(
+                                    child: Center(
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.5,
+                                        decoration: BoxDecoration(
+                                            color:
+                                                Colors.green.withOpacity(0.1),
+                                            image: const DecorationImage(
+                                                image: AssetImage(
+                                                    "assets/images/logo.png"),
+                                                fit: BoxFit.cover)),
+                                      ),
+                                    ),
+                                  ),
+                          ],
                         ),
                   // widget.accountTitle == 'المستهلك' ||
                   //         widget.accountTitle == 'جهة إخبارية'
