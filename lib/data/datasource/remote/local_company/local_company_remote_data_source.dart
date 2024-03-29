@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:netzoon/data/models/company_service/service_category_model.dart';
 import 'package:netzoon/data/models/departments/category_products/category_products_model.dart';
+import 'package:netzoon/data/models/local_company/local_company_category_model.dart';
 import 'package:netzoon/data/models/local_company/local_company_model.dart';
 import 'package:retrofit/http.dart';
 
@@ -12,6 +13,8 @@ part 'local_company_remote_data_source.g.dart';
 
 abstract class LocalCompanyRemoteDataSource {
   Future<List<LocalCompanyModel>> getAllLocalCompanies();
+  Future<List<LocalCompanyCategoryModel>> getAllLocalCompaniesCategories();
+
   Future<List<CategoryProductsModel>> getCompanyProducts(String id);
   Future<List<UserInfoModel>> getLocalCompanies(
       String country, String userType);
@@ -54,6 +57,10 @@ abstract class LocalCompanyRemoteDataSourceImpl
   @override
   @GET('/categories/local-company')
   Future<List<LocalCompanyModel>> getAllLocalCompanies();
+
+  @override
+  @GET('/categories/local-company')
+  Future<List<LocalCompanyCategoryModel>> getAllLocalCompaniesCategories();
 
   @override
   @GET('/categories/local-company/get-products/{id}')

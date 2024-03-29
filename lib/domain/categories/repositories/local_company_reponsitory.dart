@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:netzoon/domain/categories/entities/local_company/local_company.dart';
+import 'package:netzoon/domain/categories/entities/local_company/local_company_category.dart';
 import 'package:netzoon/domain/company_service/service_category.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
@@ -68,4 +69,6 @@ abstract class LocalCompanyRepository {
   Future<Either<Failure, String>> deleteCompanyService({
     required String id,
   });
+  Future<Either<Failure, List<LocalCompanyCategory>>>
+      getAllLocalCompanyCategories();
 }

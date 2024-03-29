@@ -9,6 +9,8 @@ abstract class LocalCompanyEvent extends Equatable {
 
 class GetAllLocalCompaniesEvent extends LocalCompanyEvent {}
 
+class GetAllLocalCompaniesCategoriesEvent extends LocalCompanyEvent {}
+
 class GetLocalCompanyProductsEvent extends LocalCompanyEvent {
   final String id;
 

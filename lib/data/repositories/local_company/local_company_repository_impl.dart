@@ -11,10 +11,12 @@ import 'package:netzoon/data/models/auth/user_info/user_info_model.dart';
 import 'package:netzoon/data/models/company_service/company_service_model.dart';
 import 'package:netzoon/data/models/company_service/service_category_model.dart';
 import 'package:netzoon/data/models/departments/category_products/category_products_model.dart';
+import 'package:netzoon/data/models/local_company/local_company_category_model.dart';
 import 'package:netzoon/data/models/local_company/local_company_model.dart';
 import 'package:netzoon/domain/auth/entities/user_info.dart';
 import 'package:netzoon/domain/categories/entities/local_company/local_company.dart';
 import 'package:dartz/dartz.dart';
+import 'package:netzoon/domain/categories/entities/local_company/local_company_category.dart';
 import 'package:netzoon/domain/categories/repositories/local_company_reponsitory.dart';
 import 'package:netzoon/domain/company_service/company_service.dart';
 import 'package:netzoon/domain/company_service/service_category.dart';
@@ -428,6 +430,24 @@ class LocalCompanyRepositoryImpl implements LocalCompanyRepository {
       if (await networkInfo.isConnected) {
         final result =
             await localCompanyRemoteDataSource.getServicesCategories();
+        print(result);
+        return Right(result.map((e) => e.toDomain()).toList());
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      print(e);
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<LocalCompanyCategory>>>
+      getAllLocalCompanyCategories() async {
+    try {
+      if (await networkInfo.isConnected) {
+        final result =
+            await localCompanyRemoteDataSource.getAllLocalCompaniesCategories();
         print(result);
         return Right(result.map((e) => e.toDomain()).toList());
       } else {
