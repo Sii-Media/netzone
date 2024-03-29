@@ -16,11 +16,13 @@ import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
 import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dart';
 import 'package:netzoon/presentation/deals/view_all_deals.dart';
 import 'package:netzoon/presentation/ecommerce/widgets/listsubsectionswidget.dart';
+import 'package:netzoon/presentation/utils/remaining_date.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../data/core/constants/constants.dart';
 import '../../../../data/models/auth/user/user_model.dart';
+import '../../../../domain/deals/entities/dealsItems/deals_items.dart';
 import '../../../../injection_container.dart';
 import '../../../auth/blocs/auth_bloc/auth_bloc.dart';
 import '../../../chat/screens/chat_page_screen.dart';
@@ -1242,46 +1244,95 @@ class _UsersProfileScreenState extends State<UsersProfileScreen>
                                               });
                                         } else if (dealState
                                             is GetUserDealsSuccess) {
-                                          return dealState.deals.isEmpty
-                                              ? Text(
-                                                  AppLocalizations.of(context)
-                                                      .translate('no_items'),
-                                                  style: TextStyle(
+                                          return BlocBuilder<AuthBloc,
+                                              AuthState>(
+                                            bloc: authBloc,
+                                            builder: (context, checkState) {
+                                              if (checkState
+                                                  is AuthInProgress) {
+                                                return const Center(
+                                                  child:
+                                                      CircularProgressIndicator(
                                                     color: AppColor
                                                         .backgroundColor,
-                                                    fontSize: 22.sp,
                                                   ),
-                                                )
-                                              : ListView.builder(
-                                                  shrinkWrap: true,
-                                                  physics:
-                                                      const BouncingScrollPhysics(),
-                                                  itemCount:
-                                                      dealState.deals.length,
-                                                  scrollDirection:
-                                                      Axis.vertical,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 5),
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      20)),
-                                                      child: Deals(
-                                                        dealsInfo: dealState
-                                                            .deals[index],
-                                                      ),
-                                                    );
-                                                  },
                                                 );
+                                              } else {
+                                                List<DealsItems?> finalDeals =
+                                                    dealState.deals
+                                                        .map((e) {
+                                                          final int days =
+                                                              calculateRemainingDays(
+                                                                  e.endDate);
+                                                          if (days >= 0) {
+                                                            return e;
+                                                          } else {
+                                                            if (checkState
+                                                                is Authenticated) {
+                                                              if (checkState
+                                                                      .user
+                                                                      .userInfo
+                                                                      .id ==
+                                                                  e.owner.id) {
+                                                                return e;
+                                                              }
+                                                            }
+                                                            return null;
+                                                          }
+                                                        })
+                                                        .where((element) =>
+                                                            element != null)
+                                                        .toList();
+
+                                                return finalDeals.isEmpty
+                                                    ? Text(
+                                                        AppLocalizations.of(
+                                                                context)
+                                                            .translate(
+                                                                'no_items'),
+                                                        style: TextStyle(
+                                                          color: AppColor
+                                                              .backgroundColor,
+                                                          fontSize: 22.sp,
+                                                        ),
+                                                      )
+                                                    : ListView.builder(
+                                                        shrinkWrap: true,
+                                                        physics:
+                                                            const BouncingScrollPhysics(),
+                                                        itemCount:
+                                                            finalDeals.length,
+                                                        scrollDirection:
+                                                            Axis.vertical,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          return Container(
+                                                            width:
+                                                                MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width,
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        5),
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            20)),
+                                                            child: Deals(
+                                                              dealsInfo:
+                                                                  finalDeals[
+                                                                      index]!,
+                                                            ),
+                                                          );
+                                                        },
+                                                      );
+                                              }
+                                            },
+                                          );
                                         }
                                         return Container();
                                       },

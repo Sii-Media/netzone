@@ -15,6 +15,7 @@ import 'package:netzoon/presentation/core/screen/product_details_screen.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/home/widgets/auth_alert.dart';
+import 'package:netzoon/presentation/utils/remaining_date.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../injection_container.dart';
@@ -132,6 +133,8 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                           adsBloc.add(GetAdsByIdEvent(id: widget.adsId));
                         });
                   } else if (state is GetAdsByIdSuccess) {
+                    final int days =
+                        calculateRemainingDays(state.ads.advertisingEndDate);
                     _videoPlayerController = VideoPlayerController.networkUrl(
                         Uri.parse(state.ads.advertisingVedio ?? ''))
                       ..initialize().then((_) {
@@ -223,98 +226,110 @@ class _AnotherAdsDetailsState extends State<AnotherAdsDetails>
                                     const Icon(Icons.error),
                               ),
                             ),
-                            state.ads.itemId != null && state.ads.itemId != ''
-                                ? Positioned(
-                                    bottom: 0,
-                                    left: 0,
-                                    right: 0,
-                                    child: InkWell(
-                                      onTap: () {
-                                        if (state.ads.advertisingType ==
-                                            'product') {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            builder: (context) {
-                                              return ProductDetailScreen(
-                                                  item: state.ads.itemId ?? '');
-                                            },
-                                          ));
-                                        } else if (state.ads.advertisingType ==
-                                            'service') {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            builder: (context) {
-                                              return CompanyServiceDetailsScreen(
-                                                  companyServiceId:
-                                                      state.ads.itemId ?? '');
-                                            },
-                                          ));
-                                        } else if (state.ads.advertisingType ==
-                                            'delivery_service') {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            builder: (context) {
-                                              return DeliveryCompanyProfileScreen(
-                                                id: state.ads.owner.id,
-                                              );
-                                            },
-                                          ));
-                                        } else if (state.ads.advertisingType ==
-                                            'user') {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            builder: (context) {
-                                              return ProductDetailScreen(
-                                                  item: state.ads.itemId ?? '');
-                                            },
-                                          ));
-                                        }
-                                      },
-                                      splashColor: AppColor.backgroundColor,
-                                      child: Container(
-                                        height: 40.h,
-                                        width: double.infinity,
-                                        color: Colors.grey[200],
-                                        child: Center(
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                state.ads.advertisingType ==
-                                                            'product' ||
-                                                        state.ads
-                                                                .advertisingType ==
-                                                            'user'
-                                                    ? AppLocalizations.of(
-                                                            context)
-                                                        .translate('shop_now')
-                                                    : AppLocalizations.of(
-                                                            context)
-                                                        .translate(
-                                                            'show_details'),
-                                                style: TextStyle(
-                                                  color: AppColor.black,
-                                                  fontSize: 15.sp,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
+                            days > 0
+                                ? state.ads.itemId != null &&
+                                        state.ads.itemId != ''
+                                    ? Positioned(
+                                        bottom: 0,
+                                        left: 0,
+                                        right: 0,
+                                        child: InkWell(
+                                          onTap: () {
+                                            if (state.ads.advertisingType ==
+                                                'product') {
+                                              Navigator.of(context)
+                                                  .push(MaterialPageRoute(
+                                                builder: (context) {
+                                                  return ProductDetailScreen(
+                                                      item: state.ads.itemId ??
+                                                          '');
+                                                },
+                                              ));
+                                            } else if (state
+                                                    .ads.advertisingType ==
+                                                'service') {
+                                              Navigator.of(context)
+                                                  .push(MaterialPageRoute(
+                                                builder: (context) {
+                                                  return CompanyServiceDetailsScreen(
+                                                      companyServiceId:
+                                                          state.ads.itemId ??
+                                                              '');
+                                                },
+                                              ));
+                                            } else if (state
+                                                    .ads.advertisingType ==
+                                                'delivery_service') {
+                                              Navigator.of(context)
+                                                  .push(MaterialPageRoute(
+                                                builder: (context) {
+                                                  return DeliveryCompanyProfileScreen(
+                                                    id: state.ads.owner.id,
+                                                  );
+                                                },
+                                              ));
+                                            } else if (state
+                                                    .ads.advertisingType ==
+                                                'user') {
+                                              Navigator.of(context)
+                                                  .push(MaterialPageRoute(
+                                                builder: (context) {
+                                                  return ProductDetailScreen(
+                                                      item: state.ads.itemId ??
+                                                          '');
+                                                },
+                                              ));
+                                            }
+                                          },
+                                          splashColor: AppColor.backgroundColor,
+                                          child: Container(
+                                            height: 40.h,
+                                            width: double.infinity,
+                                            color: Colors.grey[200],
+                                            child: Center(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    state.ads.advertisingType ==
+                                                                'product' ||
+                                                            state.ads
+                                                                    .advertisingType ==
+                                                                'user'
+                                                        ? AppLocalizations.of(
+                                                                context)
+                                                            .translate(
+                                                                'shop_now')
+                                                        : AppLocalizations.of(
+                                                                context)
+                                                            .translate(
+                                                                'show_details'),
+                                                    style: TextStyle(
+                                                      color: AppColor.black,
+                                                      fontSize: 15.sp,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 8.w,
+                                                  ),
+                                                  Icon(state.ads.advertisingType ==
+                                                              'product' ||
+                                                          state.ads
+                                                                  .advertisingType ==
+                                                              'user'
+                                                      ? Feather.shopping_cart
+                                                      : Feather
+                                                          .more_horizontal),
+                                                ],
                                               ),
-                                              SizedBox(
-                                                width: 8.w,
-                                              ),
-                                              Icon(state.ads.advertisingType ==
-                                                          'product' ||
-                                                      state.ads
-                                                              .advertisingType ==
-                                                          'user'
-                                                  ? Feather.shopping_cart
-                                                  : Feather.more_horizontal),
-                                            ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  )
+                                      )
+                                    : const SizedBox()
                                 : const SizedBox(),
                           ],
                         ),

@@ -272,7 +272,7 @@ import 'domain/tenders/usecases/add_tender_use_case.dart';
 
 // const String baseUrl = 'https://back.netzoon.com/';
 const String baseUrl = 'https://www.netzoonback.siidevelopment.com/';
-// const String baseUrl = 'http://192.168.0.76:5000/';
+// const String baseUrl = 'http://192.168.0.62:5000/';
 
 final sl = GetIt.instance;
 

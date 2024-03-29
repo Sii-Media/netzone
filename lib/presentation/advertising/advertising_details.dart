@@ -23,6 +23,7 @@ import 'package:netzoon/presentation/core/widgets/vehicle_details.dart';
 import 'package:netzoon/presentation/home/widgets/auth_alert.dart';
 import 'package:netzoon/presentation/orders/screens/congs_screen.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
+import 'package:netzoon/presentation/utils/remaining_date.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../injection_container.dart';
@@ -272,6 +273,8 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                               adsBloc.add(GetAdsByIdEvent(id: widget.adsId));
                             });
                       } else if (state is GetAdsByIdSuccess) {
+                        final int days = calculateRemainingDays(
+                            state.ads.advertisingEndDate);
                         _videoPlayerController =
                             VideoPlayerController.networkUrl(
                                 Uri.parse(state.ads.advertisingVedio ?? ''))
@@ -333,101 +336,111 @@ class _AdvertismentDetalsScreenState extends State<AdvertismentDetalsScreen>
                                               const Icon(Icons.error),
                                         ),
                                       ),
-                                      state.ads.itemId != null &&
-                                              state.ads.itemId != ''
-                                          ? Positioned(
-                                              bottom: 0,
-                                              left: 0,
-                                              right: 0,
-                                              child: InkWell(
-                                                onTap: () {
-                                                  if (state.ads
-                                                          .advertisingType ==
-                                                      'car') {
-                                                    Navigator.of(context)
-                                                        .push(MaterialPageRoute(
-                                                      builder: (context) {
-                                                        return VehicleDetailsScreen(
-                                                            vehicleId: state.ads
-                                                                    .itemId ??
-                                                                '');
-                                                      },
-                                                    ));
-                                                  } else if (state.ads
-                                                          .advertisingType ==
-                                                      'planes') {
-                                                    Navigator.of(context)
-                                                        .push(MaterialPageRoute(
-                                                      builder: (context) {
-                                                        return VehicleDetailsScreen(
-                                                            vehicleId: state.ads
-                                                                    .itemId ??
-                                                                '');
-                                                      },
-                                                    ));
-                                                  } else if (state.ads
-                                                          .advertisingType ==
-                                                      'sea_companies') {
-                                                    Navigator.of(context)
-                                                        .push(MaterialPageRoute(
-                                                      builder: (context) {
-                                                        return VehicleDetailsScreen(
-                                                            vehicleId: state.ads
-                                                                    .itemId ??
-                                                                '');
-                                                      },
-                                                    ));
-                                                  } else if (state.ads
-                                                          .advertisingType ==
-                                                      'real_estate') {
-                                                    Navigator.of(context)
-                                                        .push(MaterialPageRoute(
-                                                      builder: (context) {
-                                                        return RealEstateDetailsScreen(
-                                                            realEstateId: state
-                                                                    .ads
-                                                                    .itemId ??
-                                                                '');
-                                                      },
-                                                    ));
-                                                  }
-                                                },
-                                                splashColor:
-                                                    AppColor.backgroundColor,
-                                                child: Container(
-                                                  height: 40.h,
-                                                  width: double.infinity,
-                                                  color: Colors.grey[200],
-                                                  child: Center(
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Text(
-                                                          AppLocalizations.of(
-                                                                  context)
-                                                              .translate(
-                                                                  'show_details'),
-                                                          style: TextStyle(
-                                                            color:
-                                                                AppColor.black,
-                                                            fontSize: 15.sp,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                          ),
+                                      days > 0
+                                          ? state.ads.itemId != null &&
+                                                  state.ads.itemId != ''
+                                              ? Positioned(
+                                                  bottom: 0,
+                                                  left: 0,
+                                                  right: 0,
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      if (state.ads
+                                                              .advertisingType ==
+                                                          'car') {
+                                                        Navigator.of(context)
+                                                            .push(
+                                                                MaterialPageRoute(
+                                                          builder: (context) {
+                                                            return VehicleDetailsScreen(
+                                                                vehicleId: state
+                                                                        .ads
+                                                                        .itemId ??
+                                                                    '');
+                                                          },
+                                                        ));
+                                                      } else if (state.ads
+                                                              .advertisingType ==
+                                                          'planes') {
+                                                        Navigator.of(context)
+                                                            .push(
+                                                                MaterialPageRoute(
+                                                          builder: (context) {
+                                                            return VehicleDetailsScreen(
+                                                                vehicleId: state
+                                                                        .ads
+                                                                        .itemId ??
+                                                                    '');
+                                                          },
+                                                        ));
+                                                      } else if (state.ads
+                                                              .advertisingType ==
+                                                          'sea_companies') {
+                                                        Navigator.of(context)
+                                                            .push(
+                                                                MaterialPageRoute(
+                                                          builder: (context) {
+                                                            return VehicleDetailsScreen(
+                                                                vehicleId: state
+                                                                        .ads
+                                                                        .itemId ??
+                                                                    '');
+                                                          },
+                                                        ));
+                                                      } else if (state.ads
+                                                              .advertisingType ==
+                                                          'real_estate') {
+                                                        Navigator.of(context)
+                                                            .push(
+                                                                MaterialPageRoute(
+                                                          builder: (context) {
+                                                            return RealEstateDetailsScreen(
+                                                                realEstateId: state
+                                                                        .ads
+                                                                        .itemId ??
+                                                                    '');
+                                                          },
+                                                        ));
+                                                      }
+                                                    },
+                                                    splashColor: AppColor
+                                                        .backgroundColor,
+                                                    child: Container(
+                                                      height: 40.h,
+                                                      width: double.infinity,
+                                                      color: Colors.grey[200],
+                                                      child: Center(
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              AppLocalizations.of(
+                                                                      context)
+                                                                  .translate(
+                                                                      'show_details'),
+                                                              style: TextStyle(
+                                                                color: AppColor
+                                                                    .black,
+                                                                fontSize: 15.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              width: 8.w,
+                                                            ),
+                                                            const Icon(Feather
+                                                                .more_horizontal),
+                                                          ],
                                                         ),
-                                                        SizedBox(
-                                                          width: 8.w,
-                                                        ),
-                                                        const Icon(Feather
-                                                            .more_horizontal),
-                                                      ],
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              ),
-                                            )
+                                                )
+                                              : const SizedBox()
                                           : const SizedBox(),
                                     ],
                                   ),
