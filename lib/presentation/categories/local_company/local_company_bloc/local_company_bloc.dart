@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/categories/entities/local_company/local_company.dart';
+import 'package:netzoon/domain/categories/entities/local_company/local_company_category.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/add_company_service_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/delete_company_service_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/edit_company_service_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_all_local_companies_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_company_products_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_local_companies_use_case.dart';
+import 'package:netzoon/domain/categories/usecases/local_company/get_local_company_categories_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_service_by_id_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_services_by_category_use_case.dart';
 import 'package:netzoon/domain/categories/usecases/local_company/get_services_categories_use_case.dart';
@@ -47,6 +49,7 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
   final GetServicesByCategoryUseCase getServicesByCategoryUseCase;
   final GetServicesCategoriesUseCase getServicesCategoriesUseCase;
   final GetServiceByIdUseCase getServiceByIdUseCase;
+  final GetLocalCompanyCategoriesUseCase getLocalCompanyCategoriesUseCase;
   LocalCompanyBloc({
     required this.getLocalCompaniesUseCase,
     required this.getAllLocalCompaniesUseCase,
@@ -62,6 +65,7 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
     required this.getServicesByCategoryUseCase,
     required this.getServicesCategoriesUseCase,
     required this.getServiceByIdUseCase,
+    required this.getLocalCompanyCategoriesUseCase,
   }) : super(LocalCompanyInitial()) {
     on<GetAllLocalCompaniesEvent>((event, emit) async {
       emit(LocalCompanyInProgress());
@@ -73,6 +77,20 @@ class LocalCompanyBloc extends Bloc<LocalCompanyEvent, LocalCompanyState> {
               message: mapFailureToString(failure), failure: failure),
           (localCompanies) =>
               LocalCompanySuccess(localCompanies: localCompanies),
+        ),
+      );
+    });
+    on<GetAllLocalCompaniesCategoriesEvent>((event, emit) async {
+      emit(GetAllLocalComapaniesCategoriesInProgress());
+      final failureOrCompanies =
+          await getLocalCompanyCategoriesUseCase(NoParams());
+
+      emit(
+        failureOrCompanies.fold(
+          (l) => GetAllLocalComapaniesCategoriesFailure(
+              message: mapFailureToString(l)),
+          (r) =>
+              GetAllLocalComapaniesCategoriesSuccess(localCompanyCategories: r),
         ),
       );
     });

@@ -135,3 +135,18 @@ class GetServiceByIdSuccess extends LocalCompanyState {
 
   const GetServiceByIdSuccess({required this.service});
 }
+
+class GetAllLocalComapaniesCategoriesInProgress extends LocalCompanyState {}
+
+class GetAllLocalComapaniesCategoriesFailure extends LocalCompanyState {
+  final String message;
+
+  const GetAllLocalComapaniesCategoriesFailure({required this.message});
+}
+
+class GetAllLocalComapaniesCategoriesSuccess extends LocalCompanyState {
+  final List<LocalCompanyCategory> localCompanyCategories;
+
+  const GetAllLocalComapaniesCategoriesSuccess(
+      {required this.localCompanyCategories});
+}

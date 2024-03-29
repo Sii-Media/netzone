@@ -6,6 +6,7 @@ import 'package:netzoon/domain/categories/entities/categories.dart';
 import 'package:netzoon/presentation/categories/customs_screen/customs_category.dart';
 import 'package:netzoon/presentation/categories/factories/factories_categories.dart';
 import 'package:netzoon/presentation/categories/local_company/local_companies.dart';
+import 'package:netzoon/presentation/categories/local_company/local_company_categoty_screen.dart';
 import 'package:netzoon/presentation/categories/real_estate/screens/real_estate_companies_list_screen.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
@@ -70,9 +71,7 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                 'local_companies') {
                               Navigator.of(context)
                                   .push(MaterialPageRoute(builder: (context) {
-                                return const GovernmentalCompanies(
-                                  userType: 'local_company',
-                                );
+                                return const LocalCompanyCategoryScreen();
                               }));
                             } else if (widget.categories[index].name ==
                                 'free_zone_companies') {
