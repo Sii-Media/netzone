@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
@@ -189,13 +190,12 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
         'amount': amount,
         'currency': currency,
       };
-      // String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
+      String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
 
       var response = await http.post(
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
-          'Authorization':
-              'Bearer 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',
+          'Authorization': 'Bearer $secretKey',
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: body,
@@ -212,14 +212,13 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
         'email': email,
         'description': name,
       };
-      // String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
+      String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
       //final response  = await http.post(Uri.parse("https://api.stripe.com/v1/customers"),
       final response = await http.post(
         Uri.parse("https://api.stripe.com/v1/customers"),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
-          "Authorization":
-              "Bearer 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",
+          "Authorization": "Bearer $secretKey",
         },
         body: body,
       );
