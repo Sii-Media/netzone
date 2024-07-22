@@ -5,7 +5,7 @@ import '../constant/colors.dart';
 
 Future<bool> showSubmitAdsPay({
   required BuildContext context,
-  required int totalPrice,
+  required double totalPrice,
 }) async {
   return await showDialog<bool>(
           context: context,

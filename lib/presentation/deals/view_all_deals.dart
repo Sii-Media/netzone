@@ -37,6 +37,8 @@ class _ViewAllDealsScreenState extends State<ViewAllDealsScreen> {
 
   @override
   void initState() {
+    print('aaaaaaaaaaaaa');
+    print(widget.category);
     minPriceController.text = priceMin.toString();
     maxPriceController.text = priceMax.toString();
     dealsItemBloc.add(DealsItemsByCatEvent(category: widget.category));

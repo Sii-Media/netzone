@@ -30,6 +30,8 @@ class AdvertisemenetModel {
   final int? adsViews;
   final String? itemId;
   final bool? forPurchase;
+  final String? country;
+  final double? cost;
   AdvertisemenetModel({
     required this.id,
     required this.owner,
@@ -54,6 +56,8 @@ class AdvertisemenetModel {
     this.adsViews,
     this.itemId,
     this.forPurchase,
+    this.country,
+    this.cost,
   });
 
   factory AdvertisemenetModel.fromJson(Map<String, dynamic> json) =>
@@ -64,28 +68,29 @@ class AdvertisemenetModel {
 
 extension MapToDomain on AdvertisemenetModel {
   Advertisement toDomain() => Advertisement(
-        id: id,
-        owner: owner.toDomain(),
-        name: advertisingTitle,
-        advertisingStartDate: advertisingStartDate,
-        advertisingEndDate: advertisingEndDate,
-        advertisingDescription: advertisingDescription,
-        advertisingImage: advertisingImage,
-        advertisingViews: advertisingViews,
-        advertisingYear: advertisingYear,
-        advertisingLocation: advertisingLocation,
-        advertisingPrice: advertisingPrice.toString(),
-        advertisingImageList: advertisingImageList,
-        advertisingVedio: advertisingVedio,
-        advertisingType: advertisingType,
-        purchasable: purchasable,
-        type: type,
-        category: category,
-        color: color,
-        guarantee: guarantee,
-        contactNumber: contactNumber,
-        adsViews: adsViews,
-        itemId: itemId,
-        forPurchase: forPurchase,
-      );
+      id: id,
+      owner: owner.toDomain(),
+      name: advertisingTitle,
+      advertisingStartDate: advertisingStartDate,
+      advertisingEndDate: advertisingEndDate,
+      advertisingDescription: advertisingDescription,
+      advertisingImage: advertisingImage,
+      advertisingViews: advertisingViews,
+      advertisingYear: advertisingYear,
+      advertisingLocation: advertisingLocation,
+      advertisingPrice: advertisingPrice.toString(),
+      advertisingImageList: advertisingImageList,
+      advertisingVedio: advertisingVedio,
+      advertisingType: advertisingType,
+      purchasable: purchasable,
+      type: type,
+      category: category,
+      color: color,
+      guarantee: guarantee,
+      contactNumber: contactNumber,
+      adsViews: adsViews,
+      itemId: itemId,
+      forPurchase: forPurchase,
+      country: country,
+      cost: cost);
 }

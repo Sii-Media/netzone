@@ -11,6 +11,7 @@ DepartmentsCategoryModel _$DepartmentsCategoryModelFromJson(
     DepartmentsCategoryModel(
       id: json['_id'] as String?,
       name: json['name'] as String,
+      nameAr: json['nameAr'] as String?,
       department: json['department'] as String?,
       imageUrl: json['imageUrl'] as String?,
       products: (json['products'] as List<dynamic>?)
@@ -23,6 +24,7 @@ Map<String, dynamic> _$DepartmentsCategoryModelToJson(
     <String, dynamic>{
       '_id': instance.id,
       'name': instance.name,
+      'nameAr': instance.nameAr,
       'department': instance.department,
       'imageUrl': instance.imageUrl,
       'products': instance.products,

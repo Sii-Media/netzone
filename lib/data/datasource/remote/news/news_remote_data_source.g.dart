@@ -21,9 +21,9 @@ class _NewsRemoteDataSourseImpl implements NewsRemoteDataSourseImpl {
   String? baseUrl;
 
   @override
-  Future<NewsModel> getAllNews() async {
+  Future<NewsModel> getAllNews(String country) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'country': country};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio

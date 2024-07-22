@@ -18,6 +18,7 @@ import 'package:netzoon/presentation/categories/factories/factory_profile_screen
 import 'package:netzoon/presentation/categories/local_company/local_company_profile.dart';
 import 'package:netzoon/presentation/categories/users/screens/users_profile_screen.dart';
 import 'package:netzoon/presentation/categories/widgets/image_free_zone_widget.dart';
+import 'package:netzoon/presentation/core/blocs/fees_bloc/fees_bloc.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/helpers/calculate_ads_price.dart';
 import 'package:netzoon/presentation/core/helpers/pick_date_time.dart';
@@ -71,6 +72,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
   String? _selectedEndDate;
   Map<String, dynamic>? paymentIntent;
   final addAdsbloc = sl<AddAdsBloc>();
+  final feesBloc = sl<FeesBloc>();
 
   Future<void> makePayment({
     required String amount,
@@ -105,7 +107,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
             googlePay: gpay,
           ))
           .then((value) {});
-
+      final double cost = double.parse(amount) / 100;
       //STEP 3: Display Payment sheet
       displayPaymentSheet(
           title: title,
@@ -113,7 +115,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
           location: location,
           imagePath: imagePath,
           price: price,
-          itemId: itemId);
+          itemId: itemId,
+          cost: cost);
     } catch (err) {
       print(err);
     }
@@ -126,24 +129,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
     required String imagePath,
     required double price,
     required String itemId,
+    required double cost,
   }) async {
     try {
       await Stripe.instance.presentPaymentSheet().then((value) {
         print("Payment Successfully");
         addAdsbloc.add(AddAdsRequestedEvent(
-          advertisingTitle: title,
-          advertisingStartDate: _selectedStartDate ?? '',
-          advertisingEndDate: _selectedEndDate ?? '',
-          advertisingDescription: description,
-          advertisingYear: yearController.text,
-          advertisingLocation: locationController.text,
-          imagePath: imagePath,
-          advertisingPrice: price,
-          advertisingType: 'product',
-          purchasable: true,
-          itemId: itemId,
-          forPurchase: true,
-        ));
+            advertisingTitle: title,
+            advertisingStartDate: _selectedStartDate ?? '',
+            advertisingEndDate: _selectedEndDate ?? '',
+            advertisingDescription: description,
+            advertisingYear: yearController.text,
+            advertisingLocation: locationController.text,
+            imagePath: imagePath,
+            advertisingPrice: price,
+            advertisingType: 'product',
+            purchasable: true,
+            itemId: itemId,
+            forPurchase: true,
+            cost: cost));
       });
     } catch (e) {
       print('$e');
@@ -162,7 +166,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
           'Authorization':
-              'Bearer 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',
+              'Bearer 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',
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: body,
@@ -189,10 +193,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
   final rateBloc = sl<ElecDevicesBloc>();
 
   late final CountryBloc countryBloc;
-  int _totalPrice = 0;
+  double _totalPrice = 0;
 
   @override
   void initState() {
+    feesBloc.add(GetFeesInfoEvent());
     productBloc.add(GetProductByIdEvent(productId: widget.item));
     favBloc = BlocProvider.of<FavoritesBloc>(context);
     favBloc.add(IsFavoriteEvent(productId: widget.item));
@@ -1427,256 +1432,303 @@ class _ProductDetailScreenState extends State<ProductDetailScreen>
     return await showDialog(
       context: context,
       builder: (context) {
-        return Dialog(
-          backgroundColor: AppColor.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
-          child: StatefulBuilder(
-            builder: (context, setState) {
-              return SingleChildScrollView(
-                child: Form(
-                    key: _formKey,
-                    child: Container(
-                      padding: const EdgeInsets.all(26),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context)
-                                .translate('add_your_product_to_ad'),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: AppColor.backgroundColor,
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20.h,
-                          ),
-                          Text(
-                            '${AppLocalizations.of(context).translate('start_date')} :',
-                            style: TextStyle(
-                              color: AppColor.backgroundColor,
-                              fontSize: 14.sp,
-                            ),
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            margin: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 2),
-                            child: TextFormField(
-                              controller: startDateController,
-                              style: const TextStyle(color: Colors.black),
-                              keyboardType: TextInputType.datetime,
-                              validator: (val) {
-                                if (val!.isEmpty) {
-                                  return 'Please select a date';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                filled: true,
-                                //<-- SEE HERE
-                                fillColor: Colors.green.withOpacity(0.1),
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.always,
-                                contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 30)
-                                    .flipped,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(2),
-                                ),
-                              ),
-                              onTap: () async {
-                                final date = await pickDate(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                );
-                                if (date == null) {
-                                  return;
-                                }
-                                setState(() {
-                                  _selectedStartDate = date.toIso8601String();
-                                  startDateController.text =
-                                      convertDateToString(date.toString());
-                                  _totalPrice = calculateTotalAdsPrice(
-                                      selectedStartDate: _selectedStartDate,
-                                      SelectedendDate: _selectedEndDate);
-                                });
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          Text(
-                            '${AppLocalizations.of(context).translate('end_date')} :',
-                            style: TextStyle(
-                              color: AppColor.backgroundColor,
-                              fontSize: 14.sp,
-                            ),
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            margin: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 2),
-                            child: TextFormField(
-                              controller: endDateController,
-                              style: const TextStyle(color: Colors.black),
-                              keyboardType: TextInputType.datetime,
-                              validator: (val) {
-                                if (val!.isEmpty) {
-                                  return 'Please select a date';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                filled: true,
-                                //<-- SEE HERE
-                                fillColor: Colors.green.withOpacity(0.1),
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.always,
-                                contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 30)
-                                    .flipped,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(2),
-                                ),
-                              ),
-                              onTap: () async {
-                                final date = await pickDate(
-                                  context: context,
-                                  initialDate: DateTime.parse(
-                                      _selectedEndDate ??
-                                          DateTime.now().toIso8601String()),
-                                );
-                                if (date == null) {
-                                  return;
-                                }
-                                setState(() {
-                                  _selectedEndDate = date.toIso8601String();
-                                  endDateController.text =
-                                      convertDateToString(date.toString());
-                                  _totalPrice = calculateTotalAdsPrice(
-                                      selectedStartDate: _selectedStartDate,
-                                      SelectedendDate: _selectedEndDate);
-                                });
-                              },
-                            ),
-                          ),
-                          Text(
-                            '${AppLocalizations.of(context).translate('total_amount')}: $_totalPrice AED',
-                            style: TextStyle(
-                              color: AppColor.colorOne,
-                              fontSize: 14.sp,
-                            ),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                AppLocalizations.of(context).translate('year'),
-                                style: TextStyle(
-                                  color: AppColor.backgroundColor,
-                                  fontSize: 16.sp,
-                                ),
-                              ),
-                              TextFormField(
-                                controller: yearController,
-                                style: const TextStyle(color: Colors.black),
-                                keyboardType:
-                                    const TextInputType.numberWithOptions(
-                                        decimal: true),
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  //<-- SEE HERE
-                                  fillColor: Colors.green.withOpacity(0.1),
-                                  floatingLabelBehavior:
-                                      FloatingLabelBehavior.always,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                          vertical: 5, horizontal: 30)
-                                      .flipped,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(2),
+        return BlocBuilder<FeesBloc, FeesState>(
+          bloc: feesBloc,
+          builder: (context, feesState) {
+            if (feesState is GetFeesInProgress) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: AppColor.backgroundColor,
+                ),
+              );
+            } else if (feesState is GetFeesFailure) {
+              final failure = feesState.message;
+              return Center(
+                child: Text(
+                  failure,
+                  style: const TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
+              );
+            } else if (feesState is GetFeesSuccess) {
+              return Dialog(
+                backgroundColor: AppColor.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(26)),
+                child: StatefulBuilder(
+                  builder: (context, setState) {
+                    return SingleChildScrollView(
+                      child: Form(
+                          key: _formKey,
+                          child: Container(
+                            padding: const EdgeInsets.all(26),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)
+                                      .translate('add_your_product_to_ad'),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: AppColor.backgroundColor,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'required';
-                                  }
-
-                                  return null;
-                                },
-                              ),
-                              SizedBox(
-                                height: 12.h,
-                              ),
-                              Text(
-                                AppLocalizations.of(context)
-                                    .translate('الموقع'),
-                                style: TextStyle(
-                                  color: AppColor.backgroundColor,
-                                  fontSize: 16.sp,
+                                SizedBox(
+                                  height: 20.h,
                                 ),
-                              ),
-                              TextFormField(
-                                controller: locationController,
-                                style: const TextStyle(color: Colors.black),
-                                keyboardType: TextInputType.text,
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  //<-- SEE HERE
-                                  fillColor: Colors.green.withOpacity(0.1),
-                                  floatingLabelBehavior:
-                                      FloatingLabelBehavior.always,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                          vertical: 5, horizontal: 30)
-                                      .flipped,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(2),
+                                Text(
+                                  '${AppLocalizations.of(context).translate('start_date')} :',
+                                  style: TextStyle(
+                                    color: AppColor.backgroundColor,
+                                    fontSize: 14.sp,
                                   ),
                                 ),
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'required';
-                                  }
-
-                                  return null;
-                                },
-                              ),
-                              SizedBox(
-                                height: 12.h,
-                              ),
-                              Center(
-                                child: addPhotoButton(
-                                    context: context,
-                                    text: 'add_ads',
-                                    onPressed: () async {
-                                      if (!_formKey.currentState!.validate()) {
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 2),
+                                  child: TextFormField(
+                                    controller: startDateController,
+                                    style: const TextStyle(color: Colors.black),
+                                    keyboardType: TextInputType.datetime,
+                                    validator: (val) {
+                                      if (val!.isEmpty) {
+                                        return 'Please select a date';
+                                      }
+                                      return null;
+                                    },
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      //<-- SEE HERE
+                                      fillColor: Colors.green.withOpacity(0.1),
+                                      floatingLabelBehavior:
+                                          FloatingLabelBehavior.always,
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                                  vertical: 5, horizontal: 30)
+                                              .flipped,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(2),
+                                      ),
+                                    ),
+                                    onTap: () async {
+                                      final date = await pickDate(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                      );
+                                      if (date == null) {
                                         return;
                                       }
-
-                                      bool submit = await showSubmitAdsPay(
-                                          context: context,
-                                          totalPrice: _totalPrice);
-                                      if (submit == true) {
-                                        Navigator.of(context).pop(true);
-                                      } else {
-                                        Navigator.of(context).pop(false);
+                                      setState(() {
+                                        _selectedStartDate =
+                                            date.toIso8601String();
+                                        startDateController.text =
+                                            convertDateToString(
+                                                date.toString());
+                                        _totalPrice = calculateTotalAdsPrice(
+                                            selectedStartDate:
+                                                _selectedStartDate,
+                                            selectedendDate: _selectedEndDate,
+                                            value: feesState.fees.adsFees ?? 5);
+                                      });
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10.h,
+                                ),
+                                Text(
+                                  '${AppLocalizations.of(context).translate('end_date')} :',
+                                  style: TextStyle(
+                                    color: AppColor.backgroundColor,
+                                    fontSize: 14.sp,
+                                  ),
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 2),
+                                  child: TextFormField(
+                                    controller: endDateController,
+                                    style: const TextStyle(color: Colors.black),
+                                    keyboardType: TextInputType.datetime,
+                                    validator: (val) {
+                                      if (val!.isEmpty) {
+                                        return 'Please select a date';
                                       }
-                                    }),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )),
+                                      return null;
+                                    },
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      //<-- SEE HERE
+                                      fillColor: Colors.green.withOpacity(0.1),
+                                      floatingLabelBehavior:
+                                          FloatingLabelBehavior.always,
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                                  vertical: 5, horizontal: 30)
+                                              .flipped,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(2),
+                                      ),
+                                    ),
+                                    onTap: () async {
+                                      final date = await pickDate(
+                                        context: context,
+                                        initialDate: DateTime.parse(
+                                            _selectedEndDate ??
+                                                DateTime.now()
+                                                    .toIso8601String()),
+                                      );
+                                      if (date == null) {
+                                        return;
+                                      }
+                                      setState(() {
+                                        _selectedEndDate =
+                                            date.toIso8601String();
+                                        endDateController.text =
+                                            convertDateToString(
+                                                date.toString());
+                                        _totalPrice = calculateTotalAdsPrice(
+                                            selectedStartDate:
+                                                _selectedStartDate,
+                                            selectedendDate: _selectedEndDate,
+                                            value: feesState.fees.adsFees ?? 5);
+                                      });
+                                    },
+                                  ),
+                                ),
+                                Text(
+                                  '${AppLocalizations.of(context).translate('total_amount')}: $_totalPrice AED',
+                                  style: TextStyle(
+                                    color: AppColor.colorOne,
+                                    fontSize: 14.sp,
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      AppLocalizations.of(context)
+                                          .translate('year'),
+                                      style: TextStyle(
+                                        color: AppColor.backgroundColor,
+                                        fontSize: 16.sp,
+                                      ),
+                                    ),
+                                    TextFormField(
+                                      controller: yearController,
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                      keyboardType:
+                                          const TextInputType.numberWithOptions(
+                                              decimal: true),
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        //<-- SEE HERE
+                                        fillColor:
+                                            Colors.green.withOpacity(0.1),
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.always,
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                    vertical: 5, horizontal: 30)
+                                                .flipped,
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                        ),
+                                      ),
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return 'required';
+                                        }
+
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: 12.h,
+                                    ),
+                                    Text(
+                                      AppLocalizations.of(context)
+                                          .translate('الموقع'),
+                                      style: TextStyle(
+                                        color: AppColor.backgroundColor,
+                                        fontSize: 16.sp,
+                                      ),
+                                    ),
+                                    TextFormField(
+                                      controller: locationController,
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                      keyboardType: TextInputType.text,
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        //<-- SEE HERE
+                                        fillColor:
+                                            Colors.green.withOpacity(0.1),
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.always,
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                    vertical: 5, horizontal: 30)
+                                                .flipped,
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                        ),
+                                      ),
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return 'required';
+                                        }
+
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: 12.h,
+                                    ),
+                                    Center(
+                                      child: addPhotoButton(
+                                          context: context,
+                                          text: 'add_ads',
+                                          onPressed: () async {
+                                            if (!_formKey.currentState!
+                                                .validate()) {
+                                              return;
+                                            }
+
+                                            bool submit =
+                                                await showSubmitAdsPay(
+                                                    context: context,
+                                                    totalPrice: _totalPrice);
+                                            if (submit == true) {
+                                              Navigator.of(context).pop(true);
+                                            } else {
+                                              Navigator.of(context).pop(false);
+                                            }
+                                          }),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )),
+                    );
+                  },
+                ),
               );
-            },
-          ),
+            } else {
+              return const SizedBox();
+            }
+          },
         );
       },
     );

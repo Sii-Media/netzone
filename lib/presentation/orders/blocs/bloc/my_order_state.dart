@@ -53,3 +53,17 @@ class GetClientOrdersSuccess extends OrderState {
 
   const GetClientOrdersSuccess({required this.orderList});
 }
+
+class UpdateOrderPickupInProgress extends OrderState {}
+
+class UpdateOrderPickupFailure extends OrderState {
+  final String message;
+
+  const UpdateOrderPickupFailure({required this.message});
+}
+
+class UpdateOrderPickupSuccess extends OrderState {
+  final String message;
+
+  const UpdateOrderPickupSuccess({required this.message});
+}

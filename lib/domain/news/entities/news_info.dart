@@ -12,6 +12,7 @@ class News extends Equatable {
   final List<String>? likes;
   final List<NewsComment>? comments;
   final String? createdAt;
+  final String? country;
 
   const News({
     this.id,
@@ -22,8 +23,18 @@ class News extends Equatable {
     this.likes,
     this.comments,
     this.createdAt,
+    this.country,
   });
   @override
-  List<Object?> get props =>
-      [id, title, description, imgUrl, creator, likes, comments, createdAt];
+  List<Object?> get props => [
+        id,
+        title,
+        description,
+        imgUrl,
+        creator,
+        likes,
+        comments,
+        createdAt,
+        country
+      ];
 }

@@ -1,10 +1,12 @@
-int calculateTotalAdsPrice(
-    {required String? selectedStartDate, required String? SelectedendDate}) {
-  if (selectedStartDate != null && SelectedendDate != null) {
+double calculateTotalAdsPrice(
+    {required String? selectedStartDate,
+    required String? selectedendDate,
+    required double value}) {
+  if (selectedStartDate != null && selectedendDate != null) {
     DateTime startDate = DateTime.parse(selectedStartDate);
-    DateTime endDate = DateTime.parse(SelectedendDate);
+    DateTime endDate = DateTime.parse(selectedendDate);
     Duration difference = endDate.difference(startDate);
-    int totalPrice = difference.inDays * 5;
+    double totalPrice = difference.inDays * value;
     return totalPrice;
   } else {
     return 0;

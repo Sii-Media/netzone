@@ -8,11 +8,13 @@ class DealsResultModel {
   @JsonKey(name: '_id')
   final String? id;
   final String name;
+  final String? nameAr;
   final List<String> dealsItems;
 
   DealsResultModel({
     this.id,
     required this.name,
+    this.nameAr,
     required this.dealsItems,
   });
 
@@ -24,7 +26,9 @@ class DealsResultModel {
 
 extension MapToDomain on DealsResultModel {
   DealsResult toDomain() => DealsResult(
+        id: id,
         name: name,
+        nameAr: nameAr,
         dealsItems: dealsItems,
       );
 }

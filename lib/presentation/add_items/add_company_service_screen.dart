@@ -12,6 +12,7 @@ import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/presentation/categories/local_company/local_company_bloc/local_company_bloc.dart';
 import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
+import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -74,6 +75,7 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
 
   @override
   Widget screen(BuildContext context) {
+    var language = context.read<LanguageBloc>().state;
     return Scaffold(
       body: BackgroundWidget(
         isHome: false,
@@ -210,8 +212,9 @@ class _AddCompanyServiceScreenState extends State<AddCompanyServiceScreen>
                                         value: value,
                                         // Use a colored box to show the option
                                         child: Text(
-                                          AppLocalizations.of(context)
-                                              .translate(value.title),
+                                          language is EnglishState
+                                              ? value.title
+                                              : value.titleAr ?? value.title,
                                           style: const TextStyle(
                                               color: Colors.black),
                                         ),

@@ -144,7 +144,7 @@ class DealsRepositoryImpl implements DealsRepository {
           }
           final user2 = local.getSignedInUser();
           Response response = await dio.post(
-            'https://www.netzoonback.siidevelopment.com//deals/addDeal',
+            'https://www.netzoonback.siidevelopment.com/deals/addDeal',
             data: formData,
             options:
                 Options(headers: {'Authorization': 'Bearer ${user2?.token}'}),

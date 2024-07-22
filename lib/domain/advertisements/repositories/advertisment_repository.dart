@@ -13,6 +13,7 @@ abstract class AdvertismentRepository {
     int? priceMax,
     bool? purchasable,
     String? year,
+    String? country,
   });
 
   Future<Either<Failure, Advertising>> getUserAds({
@@ -23,9 +24,8 @@ abstract class AdvertismentRepository {
     required String id,
   });
 
-  Future<Either<Failure, Advertising>> getAdvertisementByType({
-    required String userAdvertisingType,
-  });
+  Future<Either<Failure, Advertising>> getAdvertisementByType(
+      {required String userAdvertisingType, required String country});
   Future<Either<Failure, String>> addAdvertisement({
     required String owner,
     required String advertisingTitle,
@@ -48,6 +48,8 @@ abstract class AdvertismentRepository {
     String? imagePath,
     String? itemId,
     bool? forPurchase,
+    required String country,
+    required double cost,
   });
 
   Future<Either<Failure, String>> editAdvertisement({

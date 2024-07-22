@@ -22,6 +22,8 @@ abstract class OrderRemoteDataSource {
     final String orderStatus,
     final double grandTotal,
   );
+
+  Future<String> updateOrderPickup(final String id, final String pickupId);
 }
 
 @RestApi(baseUrl: baseUrl)
@@ -55,5 +57,12 @@ abstract class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
     @Field() List<OrderInputModel> products,
     @Field() String orderStatus,
     @Field() double grandTotal,
+  );
+
+  @override
+  @PUT('/order/edit-pickup/{id}')
+  Future<String> updateOrderPickup(
+    @Path('id') String id,
+    @Field() String pickupId,
   );
 }

@@ -16,6 +16,7 @@ import 'package:netzoon/data/datasource/remote/delivery_service/delivery_service
 import 'package:netzoon/data/datasource/remote/departments/departments_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/factories/factories_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/favorites/favorite_remote_data_source.dart';
+import 'package:netzoon/data/datasource/remote/fees/fees_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/freezones/freezone_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/govermental/govermental_data_source.dart';
 import 'package:netzoon/data/datasource/remote/legal_advice/legal_advice_remote_data_source.dart';
@@ -28,6 +29,7 @@ import 'package:netzoon/data/datasource/remote/questions/question_remote_data_so
 import 'package:netzoon/data/datasource/remote/real_estate/real_estate_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/requests/requests_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/send_email/send_email_remote_data_sourse.dart';
+import 'package:netzoon/data/datasource/remote/slider/slider_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/tenders/tenders_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/users/users_remote_data_source.dart';
 import 'package:netzoon/data/datasource/remote/vehicles/vehicle_remote_data_source.dart';
@@ -42,6 +44,7 @@ import 'package:netzoon/data/repositories/delivery_service/delivery_service_repo
 import 'package:netzoon/data/repositories/departments/departments_repository_impl.dart';
 import 'package:netzoon/data/repositories/factories/factories_repository_impl.dart';
 import 'package:netzoon/data/repositories/favorites/favorite_repository_impl.dart';
+import 'package:netzoon/data/repositories/fees/fees_repository_impl.dart';
 import 'package:netzoon/data/repositories/freezones/freezone_repository_impl.dart';
 import 'package:netzoon/data/repositories/govermental/govermental_repository_impl.dart';
 import 'package:netzoon/data/repositories/lang/lang_repository_impl.dart';
@@ -55,6 +58,7 @@ import 'package:netzoon/data/repositories/questions/question_repository_impl.dar
 import 'package:netzoon/data/repositories/real_estate/real_estate_repository_impl.dart';
 import 'package:netzoon/data/repositories/requests/requests_repository_impl.dart';
 import 'package:netzoon/data/repositories/send_emails/send_email_repository_impl.dart';
+import 'package:netzoon/data/repositories/slider/slider_repository_impl.dart';
 import 'package:netzoon/data/repositories/tenders/tenders_repository_impl.dart';
 import 'package:netzoon/data/repositories/users/users_repository_impl.dart';
 import 'package:netzoon/data/repositories/vehicles/vehicle_repository_impl.dart';
@@ -172,6 +176,8 @@ import 'package:netzoon/domain/favorites/repositories/favorite_repository.dart';
 import 'package:netzoon/domain/favorites/usecases/clear_favorite_use_case.dart';
 import 'package:netzoon/domain/favorites/usecases/get_favorite_items_use_case.dart';
 import 'package:netzoon/domain/favorites/usecases/remove_from_favorite_use_case.dart';
+import 'package:netzoon/domain/fees/repositories/fees_repository.dart';
+import 'package:netzoon/domain/fees/usecases/get_fees_info_use_case.dart';
 import 'package:netzoon/domain/lang/repositories/lang_repository.dart';
 import 'package:netzoon/domain/lang/usecases/change_language.dart';
 import 'package:netzoon/domain/lang/usecases/get_init_language.dart';
@@ -195,6 +201,7 @@ import 'package:netzoon/domain/order/repositories/order_repository.dart';
 import 'package:netzoon/domain/order/usecases/get_client_orders_use_case.dart';
 import 'package:netzoon/domain/order/usecases/get_user_orders_use_case.dart';
 import 'package:netzoon/domain/order/usecases/save_order_use_case.dart';
+import 'package:netzoon/domain/order/usecases/update_order_pickup_use_case.dart';
 import 'package:netzoon/domain/questions/repositories/question_repository.dart';
 import 'package:netzoon/domain/questions/usecases/add_question_use_case.dart';
 import 'package:netzoon/domain/requests/repositories/requests_repository.dart';
@@ -203,6 +210,8 @@ import 'package:netzoon/domain/send_emails/repositories/send_email_repository.da
 import 'package:netzoon/domain/send_emails/use_cases/send_email_balance_use_case.dart';
 import 'package:netzoon/domain/send_emails/use_cases/send_email_delivery_use_case.dart';
 import 'package:netzoon/domain/send_emails/use_cases/send_email_payment_use_case.dart';
+import 'package:netzoon/domain/slider/repositories/slider_repository.dart';
+import 'package:netzoon/domain/slider/usecases/get_images_sliders_use_case.dart';
 import 'package:netzoon/domain/tenders/repositories/tenders_repository.dart';
 import 'package:netzoon/domain/tenders/usecases/get_all_tenders_items.dart';
 import 'package:netzoon/domain/tenders/usecases/get_tenders_cat_use_case.dart';
@@ -237,10 +246,12 @@ import 'package:netzoon/presentation/contact/blocs/add_request/add_request_bloc.
 import 'package:netzoon/presentation/contact/blocs/get_complaints/get_complaint_bloc.dart';
 import 'package:netzoon/presentation/contact/blocs/send_email/send_email_bloc.dart';
 import 'package:netzoon/presentation/core/blocs/country_bloc/country_bloc.dart';
+import 'package:netzoon/presentation/core/blocs/fees_bloc/fees_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/deals_category/deals_categoty_bloc.dart';
 import 'package:netzoon/presentation/favorites/favorite_blocs/favorites_bloc.dart';
 import 'package:netzoon/presentation/home/blocs/elec_devices/elec_devices_bloc.dart';
+import 'package:netzoon/presentation/home/blocs/images_sliders/images_sliders_bloc.dart';
 import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
 import 'package:netzoon/presentation/legal_advice/blocs/legal_advice/legal_advice_bloc.dart';
 import 'package:netzoon/presentation/news/blocs/add_news/add_news_bloc.dart';
@@ -286,15 +297,15 @@ Future<void> init() async {
       ));
   sl.registerFactory(() => SignInBloc(signInUseCase: sl()));
   sl.registerFactory(() => AdsBlocBloc(
-        getAdvertismentsUseCase: sl(),
-        getAdsByTypeUseCase: sl(),
-        getAdsByIdUseCase: sl(),
-        getSignedInUser: sl(),
-        getUserAdsUseCase: sl(),
-        deleteAdsUseCase: sl(),
-        editAdsUseCase: sl(),
-        addAdsVisitorUseCase: sl(),
-      ));
+      getAdvertismentsUseCase: sl(),
+      getAdsByTypeUseCase: sl(),
+      getAdsByIdUseCase: sl(),
+      getSignedInUser: sl(),
+      getUserAdsUseCase: sl(),
+      deleteAdsUseCase: sl(),
+      editAdsUseCase: sl(),
+      addAdsVisitorUseCase: sl(),
+      getCountryUseCase: sl()));
   sl.registerFactory(() => NewsBloc(
         getAllNewsUseCase: sl(),
         getSignedInUser: sl(),
@@ -303,9 +314,15 @@ Future<void> init() async {
         getCompanyNewsUseCase: sl(),
         editNewsUseCase: sl(),
         deleteNewsUseCase: sl(),
+        getCountryUseCase: sl(),
       ));
   sl.registerFactory(
-      () => AddNewsBloc(addNewsUseCase: sl(), getSignedInUser: sl()));
+    () => AddNewsBloc(
+      addNewsUseCase: sl(),
+      getSignedInUser: sl(),
+      getCountryUseCase: sl(),
+    ),
+  );
   sl.registerFactory(() => TenderCatBloc(getTendersCategoriesUseCase: sl()));
   sl.registerFactory(() => TendersItemBloc(
         getTendersItemByMin: sl(),
@@ -362,6 +379,7 @@ Future<void> init() async {
   sl.registerFactory(() => AddAdsBloc(
         addAdvertisementUseCase: sl(),
         getSignedInUser: sl(),
+        getCountryUseCase: sl(),
       ));
 
   sl.registerFactory(() => AuthBloc(
@@ -525,6 +543,7 @@ Future<void> init() async {
       getSignedInUser: sl(),
       getUserOrdersUseCase: sl(),
       getClientOrdersUseCase: sl(),
+      updateOrderPickupUseCase: sl(),
     ),
   );
 
@@ -537,6 +556,10 @@ Future<void> init() async {
       getCountryUseCase: sl(),
     ),
   );
+
+  sl.registerFactory(() => ImagesSlidersBloc(getImagesSlidersUseCase: sl()));
+
+  sl.registerFactory(() => FeesBloc(getFeesInfoUseCase: sl()));
 
   //! UseCases
   sl.registerLazySingleton(() => GetSignedInUserUseCase(authRepository: sl()));
@@ -867,6 +890,14 @@ Future<void> init() async {
   sl.registerLazySingleton(
       () => GetLocalCompanyCategoriesUseCase(localCompanyRepository: sl()));
 
+  sl.registerLazySingleton(
+      () => GetImagesSlidersUseCase(sliderRepository: sl()));
+
+  sl.registerLazySingleton(() => GetFeesInfoUseCase(feesRepository: sl()));
+
+  sl.registerLazySingleton(
+      () => UpdateOrderPickupUseCase(orderRepository: sl()));
+
   //! Repositories
 
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
@@ -1000,6 +1031,12 @@ Future<void> init() async {
   sl.registerLazySingleton<AramexRepository>(() =>
       AramexRespositoryImpl(aramexRemoteDataSource: sl(), networkInfo: sl()));
 
+  sl.registerLazySingleton<SliderRepository>(() =>
+      SliderRepositoryImpl(networkInfo: sl(), sliderRemoteDataSource: sl()));
+
+  sl.registerLazySingleton<FeesRepository>(
+      () => FeesRepositoryImpl(networkInfo: sl(), feesRemoteDataSource: sl()));
+
   //! DataSourses
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
@@ -1089,6 +1126,12 @@ Future<void> init() async {
       sl(),
       baseUrl:
           'https://ws.aramex.net/shippingapi.v2/shipping/service_1_0.svc/json'));
+
+  sl.registerLazySingleton<SliderRemoteDataSource>(
+      () => SliderRemoteDataSourceImpl(sl(), baseUrl: baseUrl));
+
+  sl.registerLazySingleton<FeesRemoteDataSource>(
+      () => FeesRemoteDataSourceImpl(sl(), baseUrl: baseUrl));
 
   //! Core
 

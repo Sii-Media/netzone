@@ -36,8 +36,8 @@ class _PasswordControlState extends State<PasswordControl> {
     return TextFormField(
       key: _passwordFormFieldKey,
       controller: widget.controller,
-      autofillHints: const [AutofillHints.password],
-      onEditingComplete: () => TextInput.finishAutofillContext(),
+      // autofillHints: const [AutofillHints.password],
+      // onEditingComplete: () => TextInput.finishAutofillContext(),
       style: const TextStyle(color: AppColor.black),
       decoration: InputDecoration(
         hintText: widget.hintText,

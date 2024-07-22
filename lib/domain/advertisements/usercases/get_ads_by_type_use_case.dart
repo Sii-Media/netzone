@@ -12,12 +12,18 @@ class GetAdsByTypeUseCase extends UseCase<Advertising, GetAdsByTypeParams> {
   @override
   Future<Either<Failure, Advertising>> call(GetAdsByTypeParams params) {
     return advertismentRepository.getAdvertisementByType(
-        userAdvertisingType: params.userAdvertisingType);
+      userAdvertisingType: params.userAdvertisingType,
+      country: params.country,
+    );
   }
 }
 
 class GetAdsByTypeParams {
   final String userAdvertisingType;
+  final String country;
 
-  GetAdsByTypeParams({required this.userAdvertisingType});
+  GetAdsByTypeParams({
+    required this.userAdvertisingType,
+    required this.country,
+  });
 }

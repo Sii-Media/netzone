@@ -1,6 +1,6 @@
 import 'package:netzoon/domain/departments/entities/category_products/category_products.dart';
 
-double calculatePurchaseFee(double amount) {
+double calculatePurchaseFee({required double amount, required double value}) {
   double fee;
   // if (amount >= 1000) {
   //   fee = 10;
@@ -9,7 +9,7 @@ double calculatePurchaseFee(double amount) {
   // } else {
   //   fee = 0;
   // }
-  fee = 10;
+  fee = value;
   return fee;
 }
 

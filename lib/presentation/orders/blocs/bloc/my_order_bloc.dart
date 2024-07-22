@@ -5,6 +5,7 @@ import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/order/usecases/get_client_orders_use_case.dart';
 import 'package:netzoon/domain/order/usecases/get_user_orders_use_case.dart';
 import 'package:netzoon/domain/order/usecases/save_order_use_case.dart';
+import 'package:netzoon/domain/order/usecases/update_order_pickup_use_case.dart';
 
 import '../../../../domain/auth/entities/user.dart';
 import '../../../../domain/core/usecase/usecase.dart';
@@ -20,11 +21,13 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   final GetSignedInUserUseCase getSignedInUser;
   final GetUserOrdersUseCase getUserOrdersUseCase;
   final GetClientOrdersUseCase getClientOrdersUseCase;
+  final UpdateOrderPickupUseCase updateOrderPickupUseCase;
   OrderBloc({
     required this.saveOrderUseCase,
     required this.getSignedInUser,
     required this.getUserOrdersUseCase,
     required this.getClientOrdersUseCase,
+    required this.updateOrderPickupUseCase,
   }) : super(OrderInitial()) {
     on<SaveOrderEvent>((event, emit) async {
       emit(SaveOrderInProgress());
@@ -83,6 +86,15 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           ),
         ),
       );
+    });
+    on<UpdateOrderPickupEvent>((event, emit) async {
+      emit(UpdateOrderPickupInProgress());
+      final result = await updateOrderPickupUseCase(
+          UpdateOrderPickupParams(id: event.id, pickupId: event.pickupId));
+
+      emit(result.fold(
+          (l) => UpdateOrderPickupFailure(message: mapFailureToString(l)),
+          (r) => UpdateOrderPickupSuccess(message: r)));
     });
   }
 }

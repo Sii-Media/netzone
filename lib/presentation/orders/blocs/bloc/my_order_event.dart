@@ -31,3 +31,10 @@ class SaveOrderEvent extends OrderEvent {
 class GetUserOrdersEvent extends OrderEvent {}
 
 class GetClientOrdersEvent extends OrderEvent {}
+
+class UpdateOrderPickupEvent extends OrderEvent {
+  final String id;
+  final String pickupId;
+
+  const UpdateOrderPickupEvent({required this.id, required this.pickupId});
+}

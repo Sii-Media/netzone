@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/departments/entities/departments_categories/departments_categories.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/ecommerce/screens/subsection_screen.dart';
+import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class ListCategoriesEcommerce extends StatelessWidget {
@@ -13,6 +15,7 @@ class ListCategoriesEcommerce extends StatelessWidget {
   final String filter;
   @override
   Widget build(BuildContext context) {
+    var language = BlocProvider.of<LanguageBloc>(context).state;
     return Scaffold(
       body: Container(
         margin: EdgeInsets.only(bottom: 80.h),
@@ -85,8 +88,9 @@ class ListCategoriesEcommerce extends StatelessWidget {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Text(
-                        AppLocalizations.of(context)
-                            .translate(items[index].name),
+                        language is EnglishState
+                            ? items[index].name
+                            : items[index].nameAr ?? items[index].name,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 14.0.sp,

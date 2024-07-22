@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/domain/deals/entities/deals/deals_result.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
+import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
 
 import '../../injection_container.dart';
 import '../core/constant/colors.dart';
@@ -73,6 +74,7 @@ class _AddDealScreenState extends State<AddDealScreen>
 
   @override
   Widget screen(BuildContext context) {
+    var language = context.read<LanguageBloc>().state;
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
@@ -225,8 +227,9 @@ class _AddDealScreenState extends State<AddDealScreen>
                                           value: value,
                                           // Use a colored box to show the option
                                           child: Text(
-                                            AppLocalizations.of(context)
-                                                .translate(value.name),
+                                            language is EnglishState
+                                                ? value.name
+                                                : value.nameAr ?? value.name,
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 12.sp),
@@ -583,7 +586,7 @@ class _AddDealScreenState extends State<AddDealScreen>
                                             startDate: _selectedStartDate,
                                             endDate: _selectedEndDate,
                                             location: locationController.text,
-                                            category: selectCat?.name ?? '',
+                                            category: selectCat?.id ?? '',
                                             description:
                                                 descriptionController.text));
                                       }),

@@ -89,7 +89,8 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
   final aramexBloc = sl<AramexBloc>();
   final aramexBloc2 = sl<AramexBloc>();
   late final CountryBloc countryBloc;
-
+  late final String orderId;
+  late final String pickupId;
   late final CartBlocBloc cartBloc;
 
   String secretKey = dotenv.get('STRIPE_LIVE_SEC_KEY', fallback: '');
@@ -251,7 +252,7 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
           'Authorization':
-              'Bearer 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',
+              'Bearer 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',
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: body,
@@ -275,7 +276,7 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "Authorization":
-              "Bearer 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",
+              "Bearer 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",
         },
         body: body,
       );
@@ -471,6 +472,7 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
                 context.push('/home');
               }
             } else if (orderState is SaveOrderSuccess) {
+              orderId = orderState.order;
               stopLoading();
               // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               //   content: Text(
@@ -615,6 +617,7 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
                 //   ),
                 //   backgroundColor: Theme.of(context).colorScheme.secondary,
                 // ));
+                pickupId = pickupState.createPickUpResponse.processedPickup.id;
                 double totalWeight = 0.0;
                 for (CategoryProducts product in widget.products) {
                   totalWeight += product.weight ?? 0;
@@ -624,6 +627,8 @@ class _SummeryOrderScreenState extends State<SummeryOrderScreen>
 
                 DateTime dueDate =
                     shippingDateTime.add(const Duration(days: 3));
+                orderBloc.add(
+                    UpdateOrderPickupEvent(id: orderId, pickupId: pickupId));
                 aramexBloc2.add(CreateShipmentEvent(
                     createShipmentInputData: CreateShipmentInputData(
                         shipments: [

@@ -33,6 +33,8 @@ AdvertisemenetModel _$AdvertisemenetModelFromJson(Map<String, dynamic> json) =>
       adsViews: json['adsViews'] as int?,
       itemId: json['itemId'] as String?,
       forPurchase: json['forPurchase'] as bool?,
+      country: json['country'] as String?,
+      cost: (json['cost'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$AdvertisemenetModelToJson(
@@ -61,4 +63,6 @@ Map<String, dynamic> _$AdvertisemenetModelToJson(
       'adsViews': instance.adsViews,
       'itemId': instance.itemId,
       'forPurchase': instance.forPurchase,
+      'country': instance.country,
+      'cost': instance.cost,
     };

@@ -136,4 +136,22 @@ class OrderRepositoryImpl implements OrderRepository {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, String>> updateOrderPickup(
+      {required String id, required String pickupId}) async {
+    try {
+      if (await networkInfo.isConnected) {
+        final pickupresult =
+            await orderRemoteDataSource.updateOrderPickup(id, pickupId);
+
+        return Right(pickupresult);
+      } else {
+        return Left(OfflineFailure());
+      }
+    } catch (e) {
+      print(e);
+      return Left(ServerFailure());
+    }
+  }
 }

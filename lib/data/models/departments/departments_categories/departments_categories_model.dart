@@ -8,6 +8,7 @@ class DepartmentsCategoryModel {
   @JsonKey(name: '_id')
   final String? id;
   final String name;
+  final String? nameAr;
   final String? department;
   final String? imageUrl;
   final List<String>? products;
@@ -15,6 +16,7 @@ class DepartmentsCategoryModel {
   DepartmentsCategoryModel({
     this.id,
     required this.name,
+    this.nameAr,
     this.department,
     this.imageUrl,
     this.products,
@@ -30,6 +32,7 @@ extension MapToDomain on DepartmentsCategoryModel {
   DepartmentsCategories toDomain() => DepartmentsCategories(
         id: id,
         name: name,
+        nameAr: nameAr,
         department: department,
         imageUrl: imageUrl,
         products: products,

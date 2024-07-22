@@ -28,26 +28,27 @@ class AddAdsRequestedEvent extends AddAdsEvent {
   final String? imagePath;
   final String? itemId;
   final bool? forPurchase;
-  const AddAdsRequestedEvent({
-    required this.advertisingTitle,
-    required this.advertisingStartDate,
-    required this.advertisingEndDate,
-    required this.advertisingDescription,
-    this.image,
-    required this.advertisingYear,
-    required this.advertisingLocation,
-    required this.advertisingPrice,
-    required this.advertisingType,
-    this.advertisingImageList,
-    this.video,
-    required this.purchasable,
-    this.type,
-    this.category,
-    this.color,
-    this.guarantee,
-    this.contactNumber,
-    this.imagePath,
-    this.itemId,
-    this.forPurchase,
-  });
+  final double cost;
+  const AddAdsRequestedEvent(
+      {required this.advertisingTitle,
+      required this.advertisingStartDate,
+      required this.advertisingEndDate,
+      required this.advertisingDescription,
+      this.image,
+      required this.advertisingYear,
+      required this.advertisingLocation,
+      required this.advertisingPrice,
+      required this.advertisingType,
+      this.advertisingImageList,
+      this.video,
+      required this.purchasable,
+      this.type,
+      this.category,
+      this.color,
+      this.guarantee,
+      this.contactNumber,
+      this.imagePath,
+      this.itemId,
+      this.forPurchase,
+      required this.cost});
 }

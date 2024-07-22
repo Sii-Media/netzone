@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:netzoon/domain/deals/entities/deals/deals_result.dart';
 import 'package:netzoon/domain/tenders/entities/tender_result.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/deals/view_all_deals.dart';
+import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
 import 'package:netzoon/presentation/tenders/tenders_categories.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
@@ -41,7 +43,7 @@ class _CategoriesState extends State<Categories> {
                   if (widget.category == 'فئات الصفقات') {
                     return ViewAllDealsScreen(
                       // dealsInfoList: widget.dealsCategory!.dealsItems,
-                      category: widget.dealsCategory?.name ?? '',
+                      category: widget.dealsCategory?.id ?? '',
                     );
                   } else if (widget.category == 'فئات المناقصات') {
                     return TendersCategoriesScreen(
@@ -64,8 +66,10 @@ class _CategoriesState extends State<Categories> {
             color: AppColor.backgroundColor,
             child: Text(
               widget.dealsCategory != null
-                  ? AppLocalizations.of(context)
-                      .translate(widget.dealsCategory!.name)
+                  ? context.read<LanguageBloc>().state is EnglishState
+                      ? widget.dealsCategory!.name
+                      : widget.dealsCategory!.nameAr ??
+                          widget.dealsCategory!.name
                   : AppLocalizations.of(context)
                       .translate(widget.tendersCategory!.name),
               style: TextStyle(fontSize: 15.sp, color: AppColor.white),

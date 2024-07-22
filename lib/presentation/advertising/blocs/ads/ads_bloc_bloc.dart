@@ -11,6 +11,7 @@ import 'package:netzoon/domain/advertisements/usercases/get_ads_by_type_use_case
 import 'package:netzoon/domain/advertisements/usercases/get_advertisements_usecase.dart';
 import 'package:netzoon/domain/advertisements/usercases/get_user_ads_use_case.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
+import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/presentation/core/helpers/map_failure_to_string.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -30,6 +31,7 @@ class AdsBlocBloc extends Bloc<AdsBlocEvent, AdsBlocState> {
   final EditAdsUseCase editAdsUseCase;
   final DeleteAdsUseCase deleteAdsUseCase;
   final AddAdsVisitorUseCase addAdsVisitorUseCase;
+  final GetCountryUseCase getCountryUseCase;
   AdsBlocBloc({
     required this.getAdvertismentsUseCase,
     required this.getAdsByTypeUseCase,
@@ -39,17 +41,22 @@ class AdsBlocBloc extends Bloc<AdsBlocEvent, AdsBlocState> {
     required this.editAdsUseCase,
     required this.deleteAdsUseCase,
     required this.addAdsVisitorUseCase,
+    required this.getCountryUseCase,
   }) : super(AdsBlocInitial()) {
     on<GetAllAdsEvent>(
       (event, emit) async {
+        late String country;
+        final result = await getCountryUseCase(NoParams());
+        result.fold((l) => null, (r) => country = r ?? 'AE');
+
         emit(AdsBlocInProgress());
         final ads = await getAdvertismentsUseCase(GetAdsParams(
-          owner: event.owner,
-          priceMax: event.priceMax,
-          priceMin: event.priceMin,
-          purchasable: event.purchasable,
-          year: event.year,
-        ));
+            owner: event.owner,
+            priceMax: event.priceMax,
+            priceMin: event.priceMin,
+            purchasable: event.purchasable,
+            year: event.year,
+            country: country));
 
         emit(ads.fold(
             (failure) => AdsBlocFailure(message: mapFailureToString(failure)),
@@ -68,10 +75,12 @@ class AdsBlocBloc extends Bloc<AdsBlocEvent, AdsBlocState> {
 
     on<GetAdsByType>((event, emit) async {
       emit(AdsBlocInProgress());
+      late String country;
+      final result = await getCountryUseCase(NoParams());
+      result.fold((l) => null, (r) => country = r ?? 'AE');
       final ads = await getAdsByTypeUseCase(
         GetAdsByTypeParams(
-          userAdvertisingType: event.userAdvertisingType,
-        ),
+            userAdvertisingType: event.userAdvertisingType, country: country),
       );
 
       emit(ads.fold(

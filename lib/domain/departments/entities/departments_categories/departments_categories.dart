@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 class DepartmentsCategories extends Equatable {
   final String? id;
   final String name;
+  final String? nameAr;
   final String? department;
   final String? imageUrl;
   final List<String>? products;
@@ -10,10 +11,11 @@ class DepartmentsCategories extends Equatable {
   const DepartmentsCategories({
     this.id,
     required this.name,
+    this.nameAr,
     this.department,
     this.imageUrl,
     this.products,
   });
   @override
-  List<Object?> get props => [id, name, department, imageUrl, products];
+  List<Object?> get props => [id, name, nameAr, department, imageUrl, products];
 }

@@ -11,7 +11,7 @@ import '../../../models/news/news_info/news_info_model.dart';
 part 'news_remote_data_source.g.dart';
 
 abstract class NewsRemoteDataSourse {
-  Future<NewsModel> getAllNews();
+  Future<NewsModel> getAllNews(String country);
 
   Future<NewsInfoModel> getNewsById(String id);
 
@@ -66,7 +66,9 @@ abstract class NewsRemoteDataSourseImpl implements NewsRemoteDataSourse {
 
   @override
   @GET('/news')
-  Future<NewsModel> getAllNews();
+  Future<NewsModel> getAllNews(
+    @Query('country') String country,
+  );
 
   @override
   @POST('/news/createNews')

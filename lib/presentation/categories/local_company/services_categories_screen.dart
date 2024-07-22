@@ -7,6 +7,7 @@ import 'package:netzoon/presentation/categories/local_company/services_by_catego
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/on_failure_widget.dart';
+import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 
 class ServicesCategoriesScreen extends StatefulWidget {
@@ -57,6 +58,7 @@ class _ServicesCategoriesScreenState extends State<ServicesCategoriesScreen> {
                   },
                 );
               } else if (state is GetServicesCategoriesSuccess) {
+                var language = context.read<LanguageBloc>().state;
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -139,10 +141,14 @@ class _ServicesCategoriesScreenState extends State<ServicesCategoriesScreen> {
                                       // ),
                                       child: Center(
                                         child: Text(
-                                          AppLocalizations.of(context)
-                                              .translate(state
-                                                  .servicesCategories[index]
-                                                  .title),
+                                          language is EnglishState
+                                              ? state.servicesCategories[index]
+                                                  .title
+                                              : state.servicesCategories[index]
+                                                      .titleAr ??
+                                                  state
+                                                      .servicesCategories[index]
+                                                      .title,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               color: AppColor.backgroundColor,

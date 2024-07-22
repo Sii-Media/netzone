@@ -13,12 +13,14 @@ abstract class AdvertismentRemotDataSource {
     int? priceMax,
     bool? purchasable,
     String? year,
+    String? country,
   );
   Future<AdvertisingModel> getUserAds(String userId);
 
   Future<AdvertisemenetModel> getAdsById(String id);
   Future<AdvertisingModel> getAdvertisementByType(
     final String userAdvertisingType,
+    final String country,
   );
   Future<String> deleteAdvertisement(String id);
 
@@ -49,12 +51,14 @@ abstract class AdvertismentRemotDataSourceImpl
     @Query('priceMax') int? priceMax,
     @Query('purchasable') bool? purchasable,
     @Query('year') String? year,
+    @Query('country') String? country,
   );
 
   @override
   @GET('/advertisements/getbytype/{userAdvertisingType}')
   Future<AdvertisingModel> getAdvertisementByType(
     @Path("userAdvertisingType") String userAdvertisingType,
+    @Query('country') String country,
   );
 
   @override

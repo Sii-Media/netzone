@@ -36,6 +36,7 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
     int? priceMax,
     bool? purchasable,
     String? year,
+    String? country,
   }) async {
     try {
       if (await networkInfo.isConnected) {
@@ -45,6 +46,7 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
           priceMax,
           purchasable,
           year,
+          country,
         );
 
         return Right(ads.toDomain());
@@ -57,12 +59,14 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
   }
 
   @override
-  Future<Either<Failure, Advertising>> getAdvertisementByType(
-      {required String userAdvertisingType}) async {
+  Future<Either<Failure, Advertising>> getAdvertisementByType({
+    required String userAdvertisingType,
+    required String country,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
-        final ads = await advertismentRemotDataSource
-            .getAdvertisementByType(userAdvertisingType);
+        final ads = await advertismentRemotDataSource.getAdvertisementByType(
+            userAdvertisingType, country);
 
         return Right(ads.toDomain());
       } else {
@@ -97,6 +101,8 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
     String? imagePath,
     String? itemId,
     bool? forPurchase,
+    required String country,
+    required double cost,
   }) async {
     try {
       print(imagePath);
@@ -132,6 +138,8 @@ class AdvertismentRepositoryImpl implements AdvertismentRepository {
             MapEntry('advertisingPrice', advertisingPrice.toString()),
             MapEntry('advertisingType', advertisingType),
             MapEntry('purchasable', purchasable.toString()),
+            MapEntry('country', country.toString()),
+            MapEntry('cost', cost.toString()),
           ]);
 
           if (type != null) {

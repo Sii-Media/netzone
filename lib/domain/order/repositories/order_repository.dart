@@ -24,4 +24,9 @@ abstract class OrderRepository {
   Future<Either<Failure, List<MyOrder>>> getClientOrders({
     required final String clientId,
   });
+
+  Future<Either<Failure, String>> updateOrderPickup({
+    required final String id,
+    required final String pickupId,
+  });
 }

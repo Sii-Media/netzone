@@ -9,10 +9,14 @@ class ServiceCategoryModel {
   @JsonKey(name: '_id')
   final String id;
   final String title;
+  final String? titleAr;
   final List<CompanyServiceModel>? services;
 
   ServiceCategoryModel(
-      {required this.id, required this.title, required this.services});
+      {required this.id,
+      required this.title,
+      this.titleAr,
+      required this.services});
 
   factory ServiceCategoryModel.fromJson(Map<String, dynamic> json) =>
       _$ServiceCategoryModelFromJson(json);
@@ -24,6 +28,7 @@ extension MapToDomain on ServiceCategoryModel {
   ServiceCategory toDomain() => ServiceCategory(
         id: id,
         title: title,
+        titleAr: titleAr,
         services: services?.map((e) => e.toDomain()).toList(),
       );
 }

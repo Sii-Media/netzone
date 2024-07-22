@@ -17,6 +17,7 @@ class AddNewsUseCase extends UseCase<String, AddNewsParams> {
       ownerName: params.ownerName,
       ownerImage: params.ownerImage,
       creator: params.creator,
+      country: params.country,
     );
   }
 }
@@ -28,6 +29,7 @@ class AddNewsParams {
   final String ownerName;
   final String ownerImage;
   final String creator;
+  final String country;
 
   AddNewsParams({
     required this.title,
@@ -36,5 +38,6 @@ class AddNewsParams {
     required this.ownerName,
     required this.ownerImage,
     required this.creator,
+    required this.country,
   });
 }

@@ -10,6 +10,7 @@ DealsResultModel _$DealsResultModelFromJson(Map<String, dynamic> json) =>
     DealsResultModel(
       id: json['_id'] as String?,
       name: json['name'] as String,
+      nameAr: json['nameAr'] as String?,
       dealsItems: (json['dealsItems'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
@@ -19,5 +20,6 @@ Map<String, dynamic> _$DealsResultModelToJson(DealsResultModel instance) =>
     <String, dynamic>{
       '_id': instance.id,
       'name': instance.name,
+      'nameAr': instance.nameAr,
       'dealsItems': instance.dealsItems,
     };

@@ -71,7 +71,10 @@ class _ListOfCategoriesState extends State<ListOfCategories> {
                                 'local_companies') {
                               Navigator.of(context)
                                   .push(MaterialPageRoute(builder: (context) {
-                                return const LocalCompanyCategoryScreen();
+                                // return const LocalCompanyCategoryScreen();
+                                return const GovernmentalCompanies(
+                                  userType: 'local_company',
+                                );
                               }));
                             } else if (widget.categories[index].name ==
                                 'free_zone_companies') {

@@ -31,10 +31,11 @@ class NewsRepositoryImpl implements NewsRepository {
   });
 
   @override
-  Future<Either<Failure, NewsBasic>> getAllNews() async {
+  Future<Either<Failure, NewsBasic>> getAllNews(
+      {required String country}) async {
     try {
       if (await networkInfo.isConnected) {
-        final news = await newsRemoteDataSourse.getAllNews();
+        final news = await newsRemoteDataSourse.getAllNews(country);
         return Right(news.toDomain());
       } else {
         return Left(OfflineFailure());
@@ -45,13 +46,15 @@ class NewsRepositoryImpl implements NewsRepository {
   }
 
   @override
-  Future<Either<Failure, String>> addNews(
-      {required String title,
-      required String description,
-      required File image,
-      required String ownerName,
-      required String ownerImage,
-      required String creator}) async {
+  Future<Either<Failure, String>> addNews({
+    required String title,
+    required String description,
+    required File image,
+    required String ownerName,
+    required String ownerImage,
+    required String creator,
+    required String country,
+  }) async {
     try {
       if (await networkInfo.isConnected) {
         Dio dio = Dio();
@@ -81,10 +84,11 @@ class NewsRepositoryImpl implements NewsRepository {
             'ownerName': ownerName,
             'ownerImage': ownerImage,
             'creator': creator,
+            'country': country,
           });
           final user2 = local.getSignedInUser();
           Response response = await dio.post(
-            'https://www.netzoonback.siidevelopment.com//news/createNews',
+            'https://www.netzoonback.siidevelopment.com/news/createNews',
             data: formData,
             options:
                 Options(headers: {'Authorization': 'Bearer ${user2?.token}'}),

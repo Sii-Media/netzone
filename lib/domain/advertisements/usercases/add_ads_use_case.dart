@@ -34,6 +34,8 @@ class AddAdvertisementUseCase extends UseCase<String, AddAdvertisementParams> {
       imagePath: params.imagePath,
       itemId: params.itemId,
       forPurchase: params.forPurchase,
+      country: params.country,
+      cost: params.cost,
     );
   }
 }
@@ -60,6 +62,8 @@ class AddAdvertisementParams {
   final String? imagePath;
   final String? itemId;
   final bool? forPurchase;
+  final String country;
+  final double cost;
   AddAdvertisementParams({
     required this.owner,
     required this.advertisingTitle,
@@ -82,5 +86,7 @@ class AddAdvertisementParams {
     this.imagePath,
     this.itemId,
     this.forPurchase,
+    required this.country,
+    required this.cost,
   });
 }

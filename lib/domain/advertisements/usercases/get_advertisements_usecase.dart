@@ -16,6 +16,7 @@ class GetAdvertismentsUseCase extends UseCase<Advertising, GetAdsParams> {
       priceMax: params.priceMax,
       purchasable: params.purchasable,
       year: params.year,
+      country: params.country,
     );
   }
 }
@@ -26,7 +27,13 @@ class GetAdsParams {
   final int? priceMax;
   final bool? purchasable;
   final String? year;
+  final String? country;
 
   GetAdsParams(
-      {this.owner, this.priceMin, this.priceMax, this.purchasable, this.year});
+      {this.owner,
+      this.priceMin,
+      this.priceMax,
+      this.purchasable,
+      this.year,
+      this.country});
 }

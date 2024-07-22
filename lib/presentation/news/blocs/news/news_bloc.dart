@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
+import 'package:netzoon/domain/core/usecase/get_country_use_case.dart';
 import 'package:netzoon/domain/core/usecase/usecase.dart';
 import 'package:netzoon/domain/news/entities/news_info.dart';
 import 'package:netzoon/domain/news/usecases/add_like_use_case.dart';
@@ -27,6 +28,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   final GetCompanyNewsUseCase getCompanyNewsUseCase;
   final EditNewsUseCase editNewsUseCase;
   final DeleteNewsUseCase deleteNewsUseCase;
+  final GetCountryUseCase getCountryUseCase;
   List<News> currentNewsList = [];
   NewsBloc({
     required this.getAllNewsUseCase,
@@ -36,11 +38,18 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
     required this.getCompanyNewsUseCase,
     required this.editNewsUseCase,
     required this.deleteNewsUseCase,
+    required this.getCountryUseCase,
   }) : super(NewsInitial()) {
     on<GetAllNewsEvent>(
       (event, emit) async {
         emit(NewsInProgress());
-        final news = await getAllNewsUseCase(NoParams());
+
+        late String country;
+        final result1 = await getCountryUseCase(NoParams());
+        result1.fold((l) => null, (r) => country = r ?? 'AE');
+
+        final news =
+            await getAllNewsUseCase(GetAllNewsParams(country: country));
         final result = await getSignedInUser.call(NoParams());
         late User? user;
         result.fold((l) => null, (r) => user = r);

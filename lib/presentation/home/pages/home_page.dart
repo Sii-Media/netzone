@@ -2,23 +2,11 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dio/dio.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:netzoon/domain/aramex/entities/actual_weight.dart';
-import 'package:netzoon/domain/aramex/entities/calculate_rate_input_data.dart';
-import 'package:netzoon/domain/aramex/entities/client_info.dart';
-import 'package:netzoon/domain/aramex/entities/contact.dart';
-import 'package:netzoon/domain/aramex/entities/create_pickup_input_data.dart';
-import 'package:netzoon/domain/aramex/entities/label_info.dart';
-import 'package:netzoon/domain/aramex/entities/party_address.dart';
-import 'package:netzoon/domain/aramex/entities/pickup.dart';
-import 'package:netzoon/domain/aramex/entities/pickup_items.dart';
-import 'package:netzoon/domain/aramex/entities/rate_shipment_details.dart';
-import 'package:netzoon/domain/aramex/entities/shipment_dimensions.dart';
-import 'package:netzoon/domain/aramex/entities/transaction.dart';
 import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/advertising/advertising.dart';
 import 'package:netzoon/presentation/aramex/blocs/aramex_bloc/aramex_bloc.dart';
@@ -28,16 +16,18 @@ import 'package:netzoon/presentation/categories/local_company/services_by_catego
 import 'package:netzoon/presentation/categories/local_company/services_categories_screen.dart';
 import 'package:netzoon/presentation/categories/main_categories.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
-import 'package:netzoon/presentation/data/advertisments.dart';
+
 import 'package:netzoon/presentation/data/categories.dart';
 import 'package:netzoon/presentation/deals/blocs/dealsItems/deals_items_bloc.dart';
 import 'package:netzoon/presentation/deals/blocs/deals_list_widget.dart';
 import 'package:netzoon/presentation/deals/deals_screen.dart';
 import 'package:netzoon/presentation/home/blocs/elec_devices/elec_devices_bloc.dart';
+import 'package:netzoon/presentation/home/blocs/images_sliders/images_sliders_bloc.dart';
 import 'package:netzoon/presentation/home/widgets/images_slider.dart';
 import 'package:netzoon/presentation/home/widgets/list_of_categories.dart';
 import 'package:netzoon/presentation/home/widgets/slider_news_widget.dart';
 import 'package:netzoon/presentation/home/widgets/title_and_button.dart';
+import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
 import 'package:netzoon/presentation/news/blocs/news/news_bloc.dart';
 import 'package:netzoon/presentation/news/news_screen.dart';
 import 'package:netzoon/presentation/tenders/blocs/tendersItem/tenders_item_bloc.dart';
@@ -74,7 +64,7 @@ class _HomePageState extends State<HomePage> {
 
   final newsBloc = sl<NewsBloc>();
   final adsBloc = sl<AdsBlocBloc>();
-
+  final sliderBloc = sl<ImagesSlidersBloc>();
   final tenderItemBloc = sl<TendersItemBloc>();
   final dealsItemBloc = sl<DealsItemsBloc>();
   final elcDeviceBloc = sl<ElecDevicesBloc>();
@@ -154,6 +144,7 @@ class _HomePageState extends State<HomePage> {
     authBloc.add(AuthCheckRequested());
     newsBloc.add(GetAllNewsEvent());
     adsBloc.add(const GetAllAdsEvent());
+    sliderBloc.add(GetImagesSlidersEvent());
     // tenderItemBloc.add(const GetTendersItemEvent());
     dealsItemBloc.add(GetDealsItemEvent());
     elcDeviceBloc.add(const GetElcDevicesEvent(department: 'الكترونيات'));
@@ -188,10 +179,109 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: AppColor.backgroundColor,
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(top: 15.0, bottom: 12),
+            padding: const EdgeInsets.only(bottom: 12),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                BlocBuilder<ImagesSlidersBloc, ImagesSlidersState>(
+                  bloc: sliderBloc,
+                  builder: (context, sliderState) {
+                    if (sliderState is GetImagesSlidersInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (sliderState is GetImagesSlidersFailure) {
+                      final failure = sliderState.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {},
+                      );
+                    } else if (sliderState is GetImagesSlidersSuccess) {
+                      return Stack(
+                        children: [
+                          InkWell(
+                            onTap: () {},
+                            child: sliderState.sliders.secondSlider!.isNotEmpty
+                                ? CarouselSlider(
+                                    carouselController: carouselController,
+                                    items: sliderState.sliders.secondSlider
+                                        ?.map((img) {
+                                      return Builder(
+                                          builder: (BuildContext context) {
+                                        return CachedNetworkImage(
+                                          imageUrl: img,
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                        );
+                                      });
+                                    }).toList(),
+                                    options: CarouselOptions(
+                                      height: 70.h,
+                                      scrollPhysics:
+                                          const BouncingScrollPhysics(),
+                                      autoPlay: true,
+                                      // aspectRatio: 3,
+                                      viewportFraction: 1,
+                                      // scrollDirection: Axis.horizontal,
+                                      // enableInfiniteScroll: true,
+                                      autoPlayCurve: Curves.easeInOut,
+                                      autoPlayAnimationDuration:
+                                          const Duration(milliseconds: 300),
+                                      onPageChanged: (index, reason) {
+                                        setState(() {
+                                          currentIndex = index;
+                                        });
+                                      },
+                                    ),
+                                  )
+                                : const SizedBox(),
+                          ),
+                          sliderState.sliders.secondSlider!.isNotEmpty
+                              ? Positioned(
+                                  bottom: 2,
+                                  right: 0,
+                                  left: 0,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: sliderState.sliders.secondSlider!
+                                        .asMap()
+                                        .entries
+                                        .map((entry) {
+                                      return GestureDetector(
+                                        onTap: () => carouselController
+                                            .animateToPage(entry.key),
+                                        child: Container(
+                                          width: currentIndex == entry.key
+                                              ? 17
+                                              : 7,
+                                          height: 7.0,
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 3.0),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: currentIndex == entry.key
+                                                ? Colors.red
+                                                : AppColor.backgroundColor,
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                )
+                              : const SizedBox(),
+                        ],
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  },
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
                 TitleAndButton(
                   title: AppLocalizations.of(context).translate('category'),
                   icon: true,
@@ -208,71 +298,6 @@ class _HomePageState extends State<HomePage> {
                   child: ListOfCategories(
                     categories: categories,
                   ),
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Stack(
-                  children: [
-                    InkWell(
-                      onTap: () {},
-                      child: CarouselSlider(
-                        carouselController: carouselController,
-                        items: imgs.map((img) {
-                          return Builder(builder: (BuildContext context) {
-                            return Image.asset(
-                              img["image"],
-                              fit: BoxFit.fill,
-                              width: double.infinity,
-                            );
-                          });
-                        }).toList(),
-                        options: CarouselOptions(
-                          height: 160.h,
-                          scrollPhysics: const BouncingScrollPhysics(),
-                          autoPlay: true,
-                          // aspectRatio: 3,
-                          viewportFraction: 1,
-                          // scrollDirection: Axis.horizontal,
-                          // enableInfiniteScroll: true,
-                          autoPlayCurve: Curves.easeInOut,
-                          autoPlayAnimationDuration:
-                              const Duration(milliseconds: 300),
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              currentIndex = index;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 5,
-                      right: 0,
-                      left: 0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: imgs.asMap().entries.map((entry) {
-                          return GestureDetector(
-                            onTap: () =>
-                                carouselController.animateToPage(entry.key),
-                            child: Container(
-                              width: currentIndex == entry.key ? 17 : 7,
-                              height: 7.0,
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 3.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: currentIndex == entry.key
-                                    ? Colors.red
-                                    : AppColor.backgroundColor,
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ],
                 ),
                 const SizedBox(
                   height: 10.0,
@@ -294,6 +319,105 @@ class _HomePageState extends State<HomePage> {
                   title: 'officeDevices',
                   bloc: deviceBloc,
                   context: context,
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                BlocBuilder<ImagesSlidersBloc, ImagesSlidersState>(
+                  bloc: sliderBloc,
+                  builder: (context, sliderState) {
+                    if (sliderState is GetImagesSlidersInProgress) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.backgroundColor,
+                        ),
+                      );
+                    } else if (sliderState is GetImagesSlidersFailure) {
+                      final failure = sliderState.message;
+                      return FailureWidget(
+                        failure: failure,
+                        onPressed: () {},
+                      );
+                    } else if (sliderState is GetImagesSlidersSuccess) {
+                      return Stack(
+                        children: [
+                          InkWell(
+                            onTap: () {},
+                            child: sliderState.sliders.mainSlider!.isNotEmpty
+                                ? CarouselSlider(
+                                    carouselController: carouselController,
+                                    items: sliderState.sliders.mainSlider
+                                        ?.map((img) {
+                                      return Builder(
+                                          builder: (BuildContext context) {
+                                        return CachedNetworkImage(
+                                          imageUrl: img,
+                                          fit: BoxFit.fill,
+                                          width: double.infinity,
+                                        );
+                                      });
+                                    }).toList(),
+                                    options: CarouselOptions(
+                                      height: 160.h,
+                                      scrollPhysics:
+                                          const BouncingScrollPhysics(),
+                                      autoPlay: true,
+                                      // aspectRatio: 3,
+                                      viewportFraction: 1,
+                                      // scrollDirection: Axis.horizontal,
+                                      // enableInfiniteScroll: true,
+                                      autoPlayCurve: Curves.easeInOut,
+                                      autoPlayAnimationDuration:
+                                          const Duration(milliseconds: 300),
+                                      onPageChanged: (index, reason) {
+                                        setState(() {
+                                          currentIndex = index;
+                                        });
+                                      },
+                                    ),
+                                  )
+                                : const SizedBox(),
+                          ),
+                          sliderState.sliders.mainSlider!.isNotEmpty
+                              ? Positioned(
+                                  bottom: 5,
+                                  right: 0,
+                                  left: 0,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: sliderState.sliders.mainSlider!
+                                        .asMap()
+                                        .entries
+                                        .map((entry) {
+                                      return GestureDetector(
+                                        onTap: () => carouselController
+                                            .animateToPage(entry.key),
+                                        child: Container(
+                                          width: currentIndex == entry.key
+                                              ? 17
+                                              : 7,
+                                          height: 7.0,
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 3.0),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: currentIndex == entry.key
+                                                ? Colors.red
+                                                : AppColor.backgroundColor,
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                )
+                              : const SizedBox(),
+                        ],
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  },
                 ),
                 const SizedBox(
                   height: 10.0,
@@ -395,6 +519,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 10.0,
                 ),
+
                 TitleAndButton(
                   title: AppLocalizations.of(context).translate('services'),
                   icon: true,
@@ -424,6 +549,7 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {},
                       );
                     } else if (serviceState is GetServicesCategoriesSuccess) {
+                      var language = context.read<LanguageBloc>().state;
                       return Container(
                         padding: const EdgeInsets.symmetric(
                           vertical: 3.0,
@@ -504,9 +630,15 @@ class _HomePageState extends State<HomePage> {
                                   // ),
                                   child: Center(
                                     child: Text(
-                                      AppLocalizations.of(context).translate(
-                                          serviceState
-                                              .servicesCategories[index].title),
+                                      language is EnglishState
+                                          ? serviceState
+                                              .servicesCategories[index].title
+                                          : serviceState
+                                                  .servicesCategories[index]
+                                                  .titleAr ??
+                                              serviceState
+                                                  .servicesCategories[index]
+                                                  .title,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: AppColor.backgroundColor,

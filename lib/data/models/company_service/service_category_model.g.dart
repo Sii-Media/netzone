@@ -11,6 +11,7 @@ ServiceCategoryModel _$ServiceCategoryModelFromJson(
     ServiceCategoryModel(
       id: json['_id'] as String,
       title: json['title'] as String,
+      titleAr: json['titleAr'] as String?,
       services: (json['services'] as List<dynamic>?)
           ?.map((e) => CompanyServiceModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -21,5 +22,6 @@ Map<String, dynamic> _$ServiceCategoryModelToJson(
     <String, dynamic>{
       '_id': instance.id,
       'title': instance.title,
+      'titleAr': instance.titleAr,
       'services': instance.services,
     };

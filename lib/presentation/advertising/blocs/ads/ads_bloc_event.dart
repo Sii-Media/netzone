@@ -13,9 +13,15 @@ class GetAllAdsEvent extends AdsBlocEvent {
   final int? priceMax;
   final bool? purchasable;
   final String? year;
+  final String? country;
 
   const GetAllAdsEvent(
-      {this.owner, this.priceMin, this.priceMax, this.purchasable, this.year});
+      {this.owner,
+      this.priceMin,
+      this.priceMax,
+      this.purchasable,
+      this.year,
+      this.country});
 }
 
 class GetAdsByType extends AdsBlocEvent {

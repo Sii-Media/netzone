@@ -13,6 +13,7 @@ import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/widgets/background_widget.dart';
 import 'package:netzoon/presentation/core/widgets/screen_loader.dart';
 import 'package:netzoon/presentation/home/blocs/elec_devices/elec_devices_bloc.dart';
+import 'package:netzoon/presentation/language_screen/blocs/language_bloc/language_bloc.dart';
 import 'package:netzoon/presentation/notifications/blocs/notifications/notifications_bloc.dart';
 import 'package:netzoon/presentation/utils/app_localizations.dart';
 import 'package:open_file/open_file.dart';
@@ -109,9 +110,11 @@ class _AddProductScreenState extends State<AddProductScreen>
   bool _isGuarantee = false;
 
   final notifiBloc = sl<NotificationsBloc>();
+
   @override
   void initState() {
     catBloc.add(const GetElcDevicesEvent(department: 'الكترونيات'));
+
     // selectCat = DepartmentsCategories(
     //     name: 'جوالات', department: '', imageUrl: '', products: []);
     super.initState();
@@ -119,6 +122,7 @@ class _AddProductScreenState extends State<AddProductScreen>
 
   @override
   Widget screen(BuildContext context) {
+    var language = BlocProvider.of<LanguageBloc>(context).state;
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
@@ -325,8 +329,11 @@ class _AddProductScreenState extends State<AddProductScreen>
                                         value: value,
                                         // Use a colored box to show the option
                                         child: Text(
-                                          AppLocalizations.of(context)
-                                              .translate(value.name),
+                                          // AppLocalizations.of(context)
+                                          //     .translate(value.name),
+                                          language is EnglishState
+                                              ? value.name
+                                              : value.nameAr ?? value.name,
                                           style: const TextStyle(
                                               color: Colors.black),
                                         ),

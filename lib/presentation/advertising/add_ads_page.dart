@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:netzoon/domain/core/error/failures.dart';
 import 'package:netzoon/injection_container.dart';
 import 'package:netzoon/presentation/advertising/blocs/add_ads/add_ads_bloc.dart';
+import 'package:netzoon/presentation/core/blocs/fees_bloc/fees_bloc.dart';
 import 'package:netzoon/presentation/core/constant/colors.dart';
 import 'package:netzoon/presentation/core/helpers/pick_date_time.dart';
 import 'package:netzoon/presentation/core/widgets/add_photo_button.dart';
@@ -96,14 +97,14 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
     setState(() {});
   }
 
-  int _totalPrice = 0;
+  double _totalPrice = 0;
 
-  void _calculateTotalPrice() {
+  void _calculateTotalPrice({required double value}) {
     if (_selectedStartDate != null && _selectedEndDate != null) {
       DateTime startDate = DateTime.parse(_selectedStartDate!);
       DateTime endDate = DateTime.parse(_selectedEndDate!);
       Duration difference = endDate.difference(startDate);
-      int totalPrice = difference.inDays * 5;
+      double totalPrice = difference.inDays * value;
       setState(() {
         _totalPrice = totalPrice;
       });
@@ -114,6 +115,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
   final notifiBloc = sl<NotificationsBloc>();
   bool _purchasable = false;
   final authBloc = sl<AuthBloc>();
+  final feesBloc = sl<FeesBloc>();
   Future<void> makePayment(
       {required String amount,
       required String currency,
@@ -143,15 +145,15 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
             googlePay: gpay,
           ))
           .then((value) {});
-
+      final double cost = double.parse(amount) / 100;
       //STEP 3: Display Payment sheet
-      displayPaymentSheet();
+      displayPaymentSheet(cost);
     } catch (err) {
       print(err);
     }
   }
 
-  displayPaymentSheet() async {
+  displayPaymentSheet(double cost) async {
     try {
       await flutter_stripe.Stripe.instance.presentPaymentSheet().then((value) {
         print("Payment Successfully");
@@ -173,6 +175,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
           color: colorController.text,
           contactNumber: contactNumberController.text,
           guarantee: _isGuarantee,
+          cost: cost,
         ));
       });
     } catch (e) {
@@ -192,7 +195,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
           'Authorization':
-              'Bearer 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',
+              'Bearer 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',
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: body,
@@ -216,7 +219,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "Authorization":
-              "Bearer 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",
+              "Bearer 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",
         },
         body: body,
       );
@@ -231,6 +234,7 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
   void initState() {
     super.initState();
     authBloc.add(AuthCheckRequested());
+    feesBloc.add(GetFeesInfoEvent());
   }
 
   @override
@@ -292,316 +296,53 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                   });
                 }
               },
-              child: SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: GestureDetector(
-                    onTap: () => FocusScope.of(context).unfocus(),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: Text(
-                            AppLocalizations.of(context).translate('add_ads'),
-                            style: TextStyle(
-                              color: AppColor.backgroundColor,
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+              child: BlocBuilder<FeesBloc, FeesState>(
+                bloc: feesBloc,
+                builder: (context, feesState) {
+                  if (feesState is GetFeesInProgress) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.backgroundColor,
+                      ),
+                    );
+                  } else if (feesState is GetFeesFailure) {
+                    final failure = feesState.message;
+                    return Center(
+                      child: Text(
+                        failure,
+                        style: const TextStyle(
+                          color: Colors.red,
                         ),
-                        const Divider(
-                          color: AppColor.secondGrey,
-                          thickness: 0.2,
-                          endIndent: 30,
-                          indent: 30,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              '${AppLocalizations.of(context).translate('department')} :',
-                              style: TextStyle(
-                                color: AppColor.backgroundColor,
-                                fontSize: 16.sp,
+                      ),
+                    );
+                  } else if (feesState is GetFeesSuccess) {
+                    return SingleChildScrollView(
+                      child: Form(
+                        key: _formKey,
+                        child: GestureDetector(
+                          onTap: () => FocusScope.of(context).unfocus(),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: Text(
+                                  AppLocalizations.of(context)
+                                      .translate('add_ads'),
+                                  style: TextStyle(
+                                    color: AppColor.backgroundColor,
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 8.w,
-                            ),
-                            Text(
-                              AppLocalizations.of(context)
-                                  .translate(widget.department),
-                              style: TextStyle(
-                                  color: AppColor.backgroundColor,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-
-                        // Container(
-                        //     width: MediaQuery.of(context).size.width,
-                        //     margin: const EdgeInsets.symmetric(
-                        //             horizontal: 2, vertical: 10)
-                        //         .r,
-                        //     // Add some padding and a background color
-                        //     padding: const EdgeInsets.symmetric(
-                        //         horizontal: 10, vertical: 5),
-                        //     decoration: BoxDecoration(
-                        //         color: Colors.green.withOpacity(0.1),
-                        //         borderRadius: BorderRadius.circular(10),
-                        //         border: Border.all(
-                        //           color: AppColor.black,
-                        //         )),
-                        //     // Create the dropdown button
-                        //     child: DropdownButton<String>(
-                        //       itemHeight: 45.h,
-                        //       // Set the selected value
-                        //       value: selectedValue,
-                        //       // Handle the value change
-                        //       onChanged: (String? newValue) {
-                        //         setState(() => selectedValue = newValue ?? '');
-                        //       },
-                        //       // Map each option to a widget
-                        //       items: items
-                        //           .map<DropdownMenuItem<String>>((String value) {
-                        //         return DropdownMenuItem<String>(
-                        //           value: value,
-                        //           // Use a colored box to show the option
-                        //           child: Text(
-                        //             AppLocalizations.of(context).translate(value),
-                        //             style: const TextStyle(color: Colors.black),
-                        //           ),
-                        //         );
-                        //       }).toList(),
-                        //     )),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        addAdsFormFeild(
-                          context: context,
-                          controller: titleController,
-                          title: 'title',
-                          isNumber: false,
-                          validator: (val) {
-                            if (val!.isEmpty) {
-                              return 'هذا الحقل مطلوب';
-                            }
-
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        addAdsFormFeild(
-                          context: context,
-                          controller: descController,
-                          title: 'description',
-                          isNumber: false,
-                          maxLines: 3,
-                          validator: (val) {
-                            if (val!.isEmpty) {
-                              return 'هذا الحقل مطلوب';
-                            }
-
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Text(
-                          '${AppLocalizations.of(context).translate('start_date')} :',
-                          style: TextStyle(
-                            color: AppColor.backgroundColor,
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 2),
-                          child: TextFormField(
-                            controller: startDateController,
-                            style: const TextStyle(color: Colors.black),
-                            keyboardType: TextInputType.datetime,
-                            readOnly: true,
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                return 'Please select a date';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              filled: true,
-                              //<-- SEE HERE
-                              fillColor: Colors.green.withOpacity(0.1),
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
-                              contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 30)
-                                  .flipped,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(2),
+                              const Divider(
+                                color: AppColor.secondGrey,
+                                thickness: 0.2,
+                                endIndent: 30,
+                                indent: 30,
                               ),
-                            ),
-                            onTap: () async {
-                              final date = await pickDate(
-                                context: context,
-                                initialDate: DateTime.now(),
-                              );
-                              if (date == null) {
-                                return;
-                              }
-                              setState(() {
-                                _selectedStartDate = date.toIso8601String();
-                                startDateController.text =
-                                    convertDateToString(date.toString());
-                                _calculateTotalPrice();
-                              });
-                            },
-                          ),
-                        ),
-                        // DateTimePicker(
-                        //   decoration: InputDecoration(
-                        //     filled: true,
-                        //     //<-- SEE HERE
-                        //     fillColor: Colors.green.withOpacity(0.1),
-                        //     floatingLabelBehavior: FloatingLabelBehavior.always,
-                        //     contentPadding: const EdgeInsets.symmetric(
-                        //             vertical: 5, horizontal: 30)
-                        //         .flipped,
-                        //     border: OutlineInputBorder(
-                        //       borderRadius: BorderRadius.circular(2),
-                        //     ),
-                        //   ),
-                        //   type: DateTimePickerType.date,
-                        //   firstDate: DateTime(2000),
-                        //   lastDate: DateTime(2100),
-                        //   dateLabelText: 'Date',
-                        //   style: const TextStyle(
-                        //     color: AppColor.black,
-                        //   ),
-                        //   onChanged: (selectedDate) {
-                        //     setState(() {
-                        //       _selectedStartDate = selectedDate;
-                        //       _calculateTotalPrice();
-                        //     });
-                        //   },
-                        //   validator: (value) {
-                        //     if (value == null) {
-                        //       return 'Please select a date';
-                        //     }
-                        //     return null;
-                        //   },
-                        //   // onSaved: (val) => print(val),
-                        // ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Text(
-                          '${AppLocalizations.of(context).translate('end_date')} :',
-                          style: TextStyle(
-                            color: AppColor.backgroundColor,
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 2),
-                          child: TextFormField(
-                            controller: endDateController,
-                            style: const TextStyle(color: Colors.black),
-                            keyboardType: TextInputType.datetime,
-                            readOnly: true,
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                return 'Please select a date';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              filled: true,
-                              //<-- SEE HERE
-                              fillColor: Colors.green.withOpacity(0.1),
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
-                              contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 30)
-                                  .flipped,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                            ),
-                            onTap: () async {
-                              final date = await pickDate(
-                                context: context,
-                                initialDate: DateTime.parse(_selectedEndDate ??
-                                    DateTime.now().toIso8601String()),
-                              );
-                              if (date == null) {
-                                return;
-                              }
-                              setState(() {
-                                _selectedEndDate = date.toIso8601String();
-                                endDateController.text =
-                                    convertDateToString(date.toString());
-                                _calculateTotalPrice();
-                              });
-                            },
-                          ),
-                        ),
-                        // DateTimePicker(
-                        //   decoration: InputDecoration(
-                        //     filled: true,
-                        //     //<-- SEE HERE
-                        //     fillColor: Colors.green.withOpacity(0.1),
-                        //     floatingLabelBehavior: FloatingLabelBehavior.always,
-                        //     contentPadding: const EdgeInsets.symmetric(
-                        //             vertical: 5, horizontal: 30)
-                        //         .flipped,
-                        //     border: OutlineInputBorder(
-                        //       borderRadius: BorderRadius.circular(2),
-                        //     ),
-                        //   ),
-                        //   type: DateTimePickerType.date,
-                        //   firstDate: DateTime(2000),
-                        //   lastDate: DateTime(2100),
-                        //   dateLabelText: 'Date',
-                        //   style: const TextStyle(
-                        //     color: AppColor.black,
-                        //   ),
-                        //   onChanged: (selectedDate) {
-                        //     setState(() {
-                        //       _selectedEndDate = selectedDate;
-                        //       _calculateTotalPrice();
-                        //     });
-                        //   },
-                        //   validator: (value) {
-                        //     if (value == null) {
-                        //       return 'Please select a date';
-                        //     }
-                        //     return null;
-                        //   },
-                        //   // onSaved: (val) => print(val),
-                        // ),
-                        Text(
-                          '${AppLocalizations.of(context).translate('total_amount')}: $_totalPrice AED',
-                          style: TextStyle(
-                            color: AppColor.colorOne,
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        widget.department == 'car'
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              Row(
                                 children: [
                                   Text(
                                     '${AppLocalizations.of(context).translate('department')} :',
@@ -610,480 +351,803 @@ class _AddAdsPageState extends State<AddAdsPage> with ScreenLoader<AddAdsPage> {
                                       fontSize: 16.sp,
                                     ),
                                   ),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    margin: const EdgeInsets.symmetric(
-                                            horizontal: 2, vertical: 10)
-                                        .r,
-                                    // Add some padding and a background color
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 5),
-                                    decoration: BoxDecoration(
-                                        color: Colors.green.withOpacity(0.1),
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                          color: AppColor.black,
-                                        )),
-                                    child: DropdownButton<String>(
-                                      itemHeight: 45.h,
-                                      value: selectedCarType,
-                                      hint: const Text('Select car type'),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          selectedCarType = value;
-                                          selectedCategory =
-                                              null; // Reset the selected category when the car type changes
-                                        });
-                                      },
-                                      items: carTypes.map((carType) {
-                                        return DropdownMenuItem<String>(
-                                          value: carType.name,
-                                          child: Text(carType.name),
-                                        );
-                                      }).toList(),
+                                  SizedBox(
+                                    width: 8.w,
+                                  ),
+                                  Text(
+                                    AppLocalizations.of(context)
+                                        .translate(widget.department),
+                                    style: TextStyle(
+                                        color: AppColor.backgroundColor,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+
+                              // Container(
+                              //     width: MediaQuery.of(context).size.width,
+                              //     margin: const EdgeInsets.symmetric(
+                              //             horizontal: 2, vertical: 10)
+                              //         .r,
+                              //     // Add some padding and a background color
+                              //     padding: const EdgeInsets.symmetric(
+                              //         horizontal: 10, vertical: 5),
+                              //     decoration: BoxDecoration(
+                              //         color: Colors.green.withOpacity(0.1),
+                              //         borderRadius: BorderRadius.circular(10),
+                              //         border: Border.all(
+                              //           color: AppColor.black,
+                              //         )),
+                              //     // Create the dropdown button
+                              //     child: DropdownButton<String>(
+                              //       itemHeight: 45.h,
+                              //       // Set the selected value
+                              //       value: selectedValue,
+                              //       // Handle the value change
+                              //       onChanged: (String? newValue) {
+                              //         setState(() => selectedValue = newValue ?? '');
+                              //       },
+                              //       // Map each option to a widget
+                              //       items: items
+                              //           .map<DropdownMenuItem<String>>((String value) {
+                              //         return DropdownMenuItem<String>(
+                              //           value: value,
+                              //           // Use a colored box to show the option
+                              //           child: Text(
+                              //             AppLocalizations.of(context).translate(value),
+                              //             style: const TextStyle(color: Colors.black),
+                              //           ),
+                              //         );
+                              //       }).toList(),
+                              //     )),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              addAdsFormFeild(
+                                context: context,
+                                controller: titleController,
+                                title: 'title',
+                                isNumber: false,
+                                validator: (val) {
+                                  if (val!.isEmpty) {
+                                    return 'هذا الحقل مطلوب';
+                                  }
+
+                                  return null;
+                                },
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              addAdsFormFeild(
+                                context: context,
+                                controller: descController,
+                                title: 'description',
+                                isNumber: false,
+                                maxLines: 3,
+                                validator: (val) {
+                                  if (val!.isEmpty) {
+                                    return 'هذا الحقل مطلوب';
+                                  }
+
+                                  return null;
+                                },
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              Text(
+                                '${AppLocalizations.of(context).translate('start_date')} :',
+                                style: TextStyle(
+                                  color: AppColor.backgroundColor,
+                                  fontSize: 16.sp,
+                                ),
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 2),
+                                child: TextFormField(
+                                  controller: startDateController,
+                                  style: const TextStyle(color: Colors.black),
+                                  keyboardType: TextInputType.datetime,
+                                  readOnly: true,
+                                  validator: (val) {
+                                    if (val!.isEmpty) {
+                                      return 'Please select a date';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    //<-- SEE HERE
+                                    fillColor: Colors.green.withOpacity(0.1),
+                                    floatingLabelBehavior:
+                                        FloatingLabelBehavior.always,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                            vertical: 5, horizontal: 30)
+                                        .flipped,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(2),
                                     ),
                                   ),
-                                  const SizedBox(height: 16.0),
-                                  if (selectedCarType != null)
-                                    Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      margin: const EdgeInsets.symmetric(
-                                              horizontal: 2, vertical: 10)
-                                          .r,
-                                      // Add some padding and a background color
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 5),
-                                      decoration: BoxDecoration(
-                                          color: Colors.green.withOpacity(0.1),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                            color: AppColor.black,
-                                          )),
-                                      child: DropdownButton<String>(
-                                        itemHeight: 45.h,
-                                        value: selectedCategory,
-                                        hint: const Text('Select category'),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            selectedCategory = value;
-                                          });
-                                        },
-                                        items: carTypes
-                                            .firstWhere((carType) =>
-                                                carType.name == selectedCarType)
-                                            .categories
-                                            .map((category) {
-                                          return DropdownMenuItem<String>(
-                                            value: category,
-                                            child: Text(category),
-                                          );
-                                        }).toList(),
-                                      ),
+                                  onTap: () async {
+                                    final date = await pickDate(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                    );
+                                    if (date == null) {
+                                      return;
+                                    }
+                                    setState(() {
+                                      _selectedStartDate =
+                                          date.toIso8601String();
+                                      startDateController.text =
+                                          convertDateToString(date.toString());
+                                      _calculateTotalPrice(
+                                          value: feesState.fees.adsFees ?? 5);
+                                    });
+                                  },
+                                ),
+                              ),
+                              // DateTimePicker(
+                              //   decoration: InputDecoration(
+                              //     filled: true,
+                              //     //<-- SEE HERE
+                              //     fillColor: Colors.green.withOpacity(0.1),
+                              //     floatingLabelBehavior: FloatingLabelBehavior.always,
+                              //     contentPadding: const EdgeInsets.symmetric(
+                              //             vertical: 5, horizontal: 30)
+                              //         .flipped,
+                              //     border: OutlineInputBorder(
+                              //       borderRadius: BorderRadius.circular(2),
+                              //     ),
+                              //   ),
+                              //   type: DateTimePickerType.date,
+                              //   firstDate: DateTime(2000),
+                              //   lastDate: DateTime(2100),
+                              //   dateLabelText: 'Date',
+                              //   style: const TextStyle(
+                              //     color: AppColor.black,
+                              //   ),
+                              //   onChanged: (selectedDate) {
+                              //     setState(() {
+                              //       _selectedStartDate = selectedDate;
+                              //       _calculateTotalPrice();
+                              //     });
+                              //   },
+                              //   validator: (value) {
+                              //     if (value == null) {
+                              //       return 'Please select a date';
+                              //     }
+                              //     return null;
+                              //   },
+                              //   // onSaved: (val) => print(val),
+                              // ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              Text(
+                                '${AppLocalizations.of(context).translate('end_date')} :',
+                                style: TextStyle(
+                                  color: AppColor.backgroundColor,
+                                  fontSize: 16.sp,
+                                ),
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 2),
+                                child: TextFormField(
+                                  controller: endDateController,
+                                  style: const TextStyle(color: Colors.black),
+                                  keyboardType: TextInputType.datetime,
+                                  readOnly: true,
+                                  validator: (val) {
+                                    if (val!.isEmpty) {
+                                      return 'Please select a date';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    //<-- SEE HERE
+                                    fillColor: Colors.green.withOpacity(0.1),
+                                    floatingLabelBehavior:
+                                        FloatingLabelBehavior.always,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                            vertical: 5, horizontal: 30)
+                                        .flipped,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(2),
                                     ),
-                                ],
-                              )
-                            : const SizedBox(),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        widget.department == 'car'
-                            ? addAdsFormFeild(
+                                  ),
+                                  onTap: () async {
+                                    final date = await pickDate(
+                                      context: context,
+                                      initialDate: DateTime.parse(
+                                          _selectedEndDate ??
+                                              DateTime.now().toIso8601String()),
+                                    );
+                                    if (date == null) {
+                                      return;
+                                    }
+                                    setState(() {
+                                      _selectedEndDate = date.toIso8601String();
+                                      endDateController.text =
+                                          convertDateToString(date.toString());
+                                      _calculateTotalPrice(
+                                          value: feesState.fees.adsFees ?? 5);
+                                    });
+                                  },
+                                ),
+                              ),
+                              // DateTimePicker(
+                              //   decoration: InputDecoration(
+                              //     filled: true,
+                              //     //<-- SEE HERE
+                              //     fillColor: Colors.green.withOpacity(0.1),
+                              //     floatingLabelBehavior: FloatingLabelBehavior.always,
+                              //     contentPadding: const EdgeInsets.symmetric(
+                              //             vertical: 5, horizontal: 30)
+                              //         .flipped,
+                              //     border: OutlineInputBorder(
+                              //       borderRadius: BorderRadius.circular(2),
+                              //     ),
+                              //   ),
+                              //   type: DateTimePickerType.date,
+                              //   firstDate: DateTime(2000),
+                              //   lastDate: DateTime(2100),
+                              //   dateLabelText: 'Date',
+                              //   style: const TextStyle(
+                              //     color: AppColor.black,
+                              //   ),
+                              //   onChanged: (selectedDate) {
+                              //     setState(() {
+                              //       _selectedEndDate = selectedDate;
+                              //       _calculateTotalPrice();
+                              //     });
+                              //   },
+                              //   validator: (value) {
+                              //     if (value == null) {
+                              //       return 'Please select a date';
+                              //     }
+                              //     return null;
+                              //   },
+                              //   // onSaved: (val) => print(val),
+                              // ),
+                              Text(
+                                '${AppLocalizations.of(context).translate('total_amount')}: $_totalPrice AED',
+                                style: TextStyle(
+                                  color: AppColor.colorOne,
+                                  fontSize: 16.sp,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              widget.department == 'car'
+                                  ? Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${AppLocalizations.of(context).translate('department')} :',
+                                          style: TextStyle(
+                                            color: AppColor.backgroundColor,
+                                            fontSize: 16.sp,
+                                          ),
+                                        ),
+                                        Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          margin: const EdgeInsets.symmetric(
+                                                  horizontal: 2, vertical: 10)
+                                              .r,
+                                          // Add some padding and a background color
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 5),
+                                          decoration: BoxDecoration(
+                                              color:
+                                                  Colors.green.withOpacity(0.1),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                color: AppColor.black,
+                                              )),
+                                          child: DropdownButton<String>(
+                                            itemHeight: 45.h,
+                                            value: selectedCarType,
+                                            hint: const Text('Select car type'),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                selectedCarType = value;
+                                                selectedCategory =
+                                                    null; // Reset the selected category when the car type changes
+                                              });
+                                            },
+                                            items: carTypes.map((carType) {
+                                              return DropdownMenuItem<String>(
+                                                value: carType.name,
+                                                child: Text(carType.name),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 16.0),
+                                        if (selectedCarType != null)
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            margin: const EdgeInsets.symmetric(
+                                                    horizontal: 2, vertical: 10)
+                                                .r,
+                                            // Add some padding and a background color
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 5),
+                                            decoration: BoxDecoration(
+                                                color: Colors.green
+                                                    .withOpacity(0.1),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                border: Border.all(
+                                                  color: AppColor.black,
+                                                )),
+                                            child: DropdownButton<String>(
+                                              itemHeight: 45.h,
+                                              value: selectedCategory,
+                                              hint:
+                                                  const Text('Select category'),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  selectedCategory = value;
+                                                });
+                                              },
+                                              items: carTypes
+                                                  .firstWhere((carType) =>
+                                                      carType.name ==
+                                                      selectedCarType)
+                                                  .categories
+                                                  .map((category) {
+                                                return DropdownMenuItem<String>(
+                                                  value: category,
+                                                  child: Text(category),
+                                                );
+                                              }).toList(),
+                                            ),
+                                          ),
+                                      ],
+                                    )
+                                  : const SizedBox(),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              widget.department == 'car'
+                                  ? addAdsFormFeild(
+                                      context: context,
+                                      controller: colorController,
+                                      title: 'color',
+                                      isNumber: false,
+                                      validator: (val) {
+                                        return null;
+                                      },
+                                    )
+                                  : const SizedBox(),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              addAdsFormFeild(
                                 context: context,
-                                controller: colorController,
-                                title: 'color',
+                                controller: locController,
+                                title: 'الموقع',
                                 isNumber: false,
+                                validator: (val) {
+                                  if (val!.isEmpty) {
+                                    return 'هذا الحقل مطلوب';
+                                  }
+
+                                  return null;
+                                },
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              addAdsFormFeild(
+                                context: context,
+                                controller: priceController,
+                                title: 'price',
+                                isNumber: true,
+                                validator: (val) {
+                                  if (val!.isEmpty) {
+                                    return 'هذا الحقل مطلوب';
+                                  }
+
+                                  return null;
+                                },
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              addAdsFormFeild(
+                                context: context,
+                                controller: contactNumberController,
+                                title: 'contactNumber',
+                                isNumber: true,
                                 validator: (val) {
                                   return null;
                                 },
-                              )
-                            : const SizedBox(),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        addAdsFormFeild(
-                          context: context,
-                          controller: locController,
-                          title: 'الموقع',
-                          isNumber: false,
-                          validator: (val) {
-                            if (val!.isEmpty) {
-                              return 'هذا الحقل مطلوب';
-                            }
-
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        addAdsFormFeild(
-                          context: context,
-                          controller: priceController,
-                          title: 'price',
-                          isNumber: true,
-                          validator: (val) {
-                            if (val!.isEmpty) {
-                              return 'هذا الحقل مطلوب';
-                            }
-
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        addAdsFormFeild(
-                          context: context,
-                          controller: contactNumberController,
-                          title: 'contactNumber',
-                          isNumber: true,
-                          validator: (val) {
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        addAdsFormFeild(
-                          context: context,
-                          controller: yearController,
-                          title: 'year',
-                          isNumber: true,
-                          validator: (val) {
-                            if (val!.isEmpty) {
-                              return 'هذا الحقل مطلوب';
-                            }
-
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        CheckboxListTile(
-                          title: Text(
-                            AppLocalizations.of(context)
-                                .translate('is_purchasable'),
-                            style: TextStyle(
-                              color: AppColor.backgroundColor,
-                              fontSize: 15.sp,
-                            ),
-                          ),
-                          activeColor: AppColor.backgroundColor,
-                          value: _purchasable,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              _purchasable = value ?? false;
-                            });
-                          },
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        CheckboxListTile(
-                          title: Text(
-                            AppLocalizations.of(context)
-                                .translate('is_guarantee'),
-                            style: TextStyle(
-                              color: AppColor.backgroundColor,
-                              fontSize: 15.sp,
-                            ),
-                          ),
-                          activeColor: AppColor.backgroundColor,
-                          value: _isGuarantee,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              _isGuarantee = value ?? false;
-                            });
-                          },
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        addPhotoButton(
-                          context: context,
-                          text: 'add_from_gallery',
-                          onPressed: () {
-                            getImage(ImageSource.gallery);
-                          },
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        _image != null
-                            ? Center(
-                                child: Image.file(
-                                  _image!,
-                                  width: 250.w,
-                                  height: 250.h,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            : Center(
-                                child: CachedNetworkImage(
-                                  imageUrl:
-                                      'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
-                                  width: 250.w,
-                                  height: 250.h,
-                                  fit: BoxFit.cover,
-                                  progressIndicatorBuilder:
-                                      (context, url, downloadProgress) =>
-                                          Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 70.0, vertical: 50),
-                                    child: CircularProgressIndicator(
-                                      value: downloadProgress.progress,
-                                      color: AppColor.backgroundColor,
-
-                                      // strokeWidth: 10,
-                                    ),
-                                  ),
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
-                                ),
                               ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              addAdsFormFeild(
+                                context: context,
+                                controller: yearController,
+                                title: 'year',
+                                isNumber: true,
+                                validator: (val) {
+                                  if (val!.isEmpty) {
+                                    return 'هذا الحقل مطلوب';
+                                  }
+
+                                  return null;
+                                },
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              CheckboxListTile(
+                                title: Text(
                                   AppLocalizations.of(context)
-                                      .translate('add product images'),
+                                      .translate('is_purchasable'),
                                   style: TextStyle(
                                     color: AppColor.backgroundColor,
                                     fontSize: 15.sp,
                                   ),
                                 ),
-                                Text(
-                                  '${AppLocalizations.of(context).translate('maximum images')} : 6',
-                                  style: TextStyle(
-                                    color: AppColor.secondGrey,
-                                    fontSize: 11.sp,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            addPhotoButton(
-                                context: context,
-                                text: 'Selecte Images',
-                                onPressed: () {
-                                  selectImages();
-                                }),
-                          ],
-                        ),
-                        SizedBox(
-                          height: imageFileList.isNotEmpty ? 200.h : 10.h,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: imageFileList.length,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Card(
-                                  child: SizedBox(
-                                    height: 200.h,
-                                    width: MediaQuery.of(context).size.width.w -
-                                        85,
-                                    child: Image.file(
-                                      File(imageFileList[index].path),
-                                      fit: BoxFit.contain,
-                                      // height: 100,
-                                      // width: 100,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(250.0).w,
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: <Color>[
-                                    Colors.greenAccent.withOpacity(0.9),
-                                    AppColor.backgroundColor
-                                  ],
-                                ),
-                              ),
-                              child: RawMaterialButton(
-                                onPressed: () async {
-                                  final result =
-                                      await FilePicker.platform.pickFiles(
-                                    type: FileType.custom,
-                                    allowedExtensions: ['mp4'],
-                                  );
-
-                                  if (result == null) return;
-                                  //Open Single File
-                                  final file = result.files.first;
-                                  // openFile(file);
+                                activeColor: AppColor.backgroundColor,
+                                value: _purchasable,
+                                onChanged: (bool? value) {
                                   setState(() {
-                                    videoName = file.name;
-                                  });
-                                  final newFile =
-                                      await saveFilePermanently(file);
-
-                                  setState(() {
-                                    _video = newFile;
+                                    _purchasable = value ?? false;
                                   });
                                 },
-                                child: Text(
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              CheckboxListTile(
+                                title: Text(
                                   AppLocalizations.of(context)
-                                      .translate('pick_vedio'),
-                                  style: const TextStyle(color: AppColor.white),
+                                      .translate('is_guarantee'),
+                                  style: TextStyle(
+                                    color: AppColor.backgroundColor,
+                                    fontSize: 15.sp,
+                                  ),
+                                ),
+                                activeColor: AppColor.backgroundColor,
+                                value: _isGuarantee,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    _isGuarantee = value ?? false;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              addPhotoButton(
+                                context: context,
+                                text: 'add_from_gallery',
+                                onPressed: () {
+                                  getImage(ImageSource.gallery);
+                                },
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              _image != null
+                                  ? Center(
+                                      child: Image.file(
+                                        _image!,
+                                        width: 250.w,
+                                        height: 250.h,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : Center(
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            'https://lh3.googleusercontent.com/EbXw8rOdYxOGdXEFjgNP8lh-YAuUxwhOAe2jhrz3sgqvPeMac6a6tHvT35V6YMbyNvkZL4R_a2hcYBrtfUhLvhf-N2X3OB9cvH4uMw=w1064-v0',
+                                        width: 250.w,
+                                        height: 250.h,
+                                        fit: BoxFit.cover,
+                                        progressIndicatorBuilder:
+                                            (context, url, downloadProgress) =>
+                                                Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 70.0, vertical: 50),
+                                          child: CircularProgressIndicator(
+                                            value: downloadProgress.progress,
+                                            color: AppColor.backgroundColor,
+
+                                            // strokeWidth: 10,
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            const Icon(Icons.error),
+                                      ),
+                                    ),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        AppLocalizations.of(context)
+                                            .translate('add product images'),
+                                        style: TextStyle(
+                                          color: AppColor.backgroundColor,
+                                          fontSize: 15.sp,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${AppLocalizations.of(context).translate('maximum images')} : 6',
+                                        style: TextStyle(
+                                          color: AppColor.secondGrey,
+                                          fontSize: 11.sp,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  addPhotoButton(
+                                      context: context,
+                                      text: 'Selecte Images',
+                                      onPressed: () {
+                                        selectImages();
+                                      }),
+                                ],
+                              ),
+                              SizedBox(
+                                height: imageFileList.isNotEmpty ? 200.h : 10.h,
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount: imageFileList.length,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Card(
+                                        child: SizedBox(
+                                          height: 200.h,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width
+                                                  .w -
+                                              85,
+                                          child: Image.file(
+                                            File(imageFileList[index].path),
+                                            fit: BoxFit.contain,
+                                            // height: 100,
+                                            // width: 100,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              videoName,
-                              style: const TextStyle(
-                                color: AppColor.backgroundColor,
+                              SizedBox(
+                                height: 10.h,
                               ),
-                            ),
-                          ],
-                        ),
-                        Center(
-                          child: addPhotoButton(
-                              context: context,
-                              text: 'add_ads',
-                              onPressed: () {
-                                if (!_formKey.currentState!.validate()) return;
-                                if (_image == null) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text(
-                                          AppLocalizations.of(context)
-                                              .translate('no_image_selected'),
-                                          style: const TextStyle(
-                                              color: AppColor.red),
-                                        ),
-                                        content: Text(
-                                          AppLocalizations.of(context).translate(
-                                              'please_select_an_image_before_uploading'),
-                                          style: const TextStyle(
-                                              color: AppColor.red),
-                                        ),
-                                        actions: [
-                                          ElevatedButton(
-                                            child: const Text('OK'),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
+                              Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.circular(250.0).w,
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: <Color>[
+                                          Colors.greenAccent.withOpacity(0.9),
+                                          AppColor.backgroundColor
                                         ],
-                                      );
-                                    },
-                                  );
-                                  return;
-                                }
-                                showDialog(
+                                      ),
+                                    ),
+                                    child: RawMaterialButton(
+                                      onPressed: () async {
+                                        final result =
+                                            await FilePicker.platform.pickFiles(
+                                          type: FileType.custom,
+                                          allowedExtensions: ['mp4'],
+                                        );
+
+                                        if (result == null) return;
+                                        //Open Single File
+                                        final file = result.files.first;
+                                        // openFile(file);
+                                        setState(() {
+                                          videoName = file.name;
+                                        });
+                                        final newFile =
+                                            await saveFilePermanently(file);
+
+                                        setState(() {
+                                          _video = newFile;
+                                        });
+                                      },
+                                      child: Text(
+                                        AppLocalizations.of(context)
+                                            .translate('pick_vedio'),
+                                        style: const TextStyle(
+                                            color: AppColor.white),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    videoName,
+                                    style: const TextStyle(
+                                      color: AppColor.backgroundColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Center(
+                                child: addPhotoButton(
                                     context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text(
-                                          AppLocalizations.of(context)
-                                              .translate('service_fee'),
-                                          style: const TextStyle(
-                                              color: AppColor.backgroundColor,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                        content: Text(
-                                          '${AppLocalizations.of(context).translate('you_should_pay')} $_totalPrice',
-                                          style: const TextStyle(
-                                            color: AppColor.backgroundColor,
-                                          ),
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop(false);
-                                            },
-                                            child: Text(
-                                              AppLocalizations.of(context)
-                                                  .translate('cancel'),
-                                              style: const TextStyle(
-                                                  color: AppColor.red),
-                                            ),
-                                          ),
-                                          BlocBuilder<AuthBloc, AuthState>(
-                                            bloc: authBloc,
-                                            builder: (context, authState) {
-                                              return TextButton(
-                                                onPressed: () {
-                                                  String amount =
-                                                      (_totalPrice * 100)
-                                                          .toString();
-                                                  makePayment(
-                                                    amount: amount,
-                                                    currency: 'aed',
-                                                    email: authState
-                                                            is Authenticated
-                                                        ? authState
-                                                                .user
-                                                                .userInfo
-                                                                .email ??
-                                                            ''
-                                                        : '',
-                                                    name: authState
-                                                            is Authenticated
-                                                        ? authState
-                                                                .user
-                                                                .userInfo
-                                                                .username ??
-                                                            ''
-                                                        : '',
-                                                  );
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: Text(
-                                                  AppLocalizations.of(context)
-                                                      .translate('submit'),
-                                                  style: const TextStyle(
-                                                      color: AppColor
-                                                          .backgroundColor),
+                                    text: 'add_ads',
+                                    onPressed: () {
+                                      if (!_formKey.currentState!.validate()) {
+                                        return;
+                                      }
+                                      if (_image == null) {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                AppLocalizations.of(context)
+                                                    .translate(
+                                                        'no_image_selected'),
+                                                style: const TextStyle(
+                                                    color: AppColor.red),
+                                              ),
+                                              content: Text(
+                                                AppLocalizations.of(context)
+                                                    .translate(
+                                                        'please_select_an_image_before_uploading'),
+                                                style: const TextStyle(
+                                                    color: AppColor.red),
+                                              ),
+                                              actions: [
+                                                ElevatedButton(
+                                                  child: const Text('OK'),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
                                                 ),
-                                              );
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    });
-                              }),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                        return;
+                                      }
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                AppLocalizations.of(context)
+                                                    .translate('service_fee'),
+                                                style: const TextStyle(
+                                                    color: AppColor
+                                                        .backgroundColor,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
+                                              content: Text(
+                                                '${AppLocalizations.of(context).translate('you_should_pay')} $_totalPrice',
+                                                style: const TextStyle(
+                                                  color:
+                                                      AppColor.backgroundColor,
+                                                ),
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context)
+                                                        .pop(false);
+                                                  },
+                                                  child: Text(
+                                                    AppLocalizations.of(context)
+                                                        .translate('cancel'),
+                                                    style: const TextStyle(
+                                                        color: AppColor.red),
+                                                  ),
+                                                ),
+                                                BlocBuilder<AuthBloc,
+                                                    AuthState>(
+                                                  bloc: authBloc,
+                                                  builder:
+                                                      (context, authState) {
+                                                    return TextButton(
+                                                      onPressed: () {
+                                                        String amount =
+                                                            (_totalPrice * 100)
+                                                                .toString();
+                                                        makePayment(
+                                                          amount: amount,
+                                                          currency: 'aed',
+                                                          email: authState
+                                                                  is Authenticated
+                                                              ? authState
+                                                                      .user
+                                                                      .userInfo
+                                                                      .email ??
+                                                                  ''
+                                                              : '',
+                                                          name: authState
+                                                                  is Authenticated
+                                                              ? authState
+                                                                      .user
+                                                                      .userInfo
+                                                                      .username ??
+                                                                  ''
+                                                              : '',
+                                                        );
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text(
+                                                        AppLocalizations.of(
+                                                                context)
+                                                            .translate(
+                                                                'submit'),
+                                                        style: const TextStyle(
+                                                            color: AppColor
+                                                                .backgroundColor),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          });
+                                    }),
+                              ),
+                              SizedBox(
+                                height: 100.h,
+                              ),
+                            ],
+                          ),
                         ),
-                        SizedBox(
-                          height: 100.h,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                      ),
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                },
               ),
             )),
       ),
